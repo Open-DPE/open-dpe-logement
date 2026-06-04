@@ -53,15 +53,12 @@ oneOf:
     required:
       - type
       - signaletique
-  - title: Poèle bouilleur
+  - title: Poêle bouilleur
     properties:
       type:
         const: poele_bouilleur
       energie:
         enum: [bois_buche, bois_plaquette, bois_granule]
-      bienergie:
-        const: null
-        default: null
       signaletique:
         type: object
         properties:
@@ -72,16 +69,16 @@ oneOf:
       - type
       - energie
       - signaletique
-  - title: Poèle / Insert
+  - title: Poêle / Insert
     properties:
       type:
         enum: [cuisiniere, foyer_ferme, insert, poele]
-      bienergie:
-        const: null
-        default: null
       position:
         type: object
         properties:
+          cascade:
+            const: null
+            default: null
           position_chaudiere:
             const: null
             default: null
@@ -138,9 +135,6 @@ oneOf:
     properties:
       type:
         const: generateur_air_chaud
-      bienergie:
-        const: null
-        default: null
       signaletique:
         type: object
         properties:
@@ -160,12 +154,12 @@ oneOf:
         const: radiateur_gaz
       energie:
         enum: [gaz_naturel, gpl]
-      bienergie:
-        const: null
-        default: null
       position:
         type: object
         properties:
+          cascade:
+            const: null
+            default: null
           position_chaudiere:
             const: null
             default: null

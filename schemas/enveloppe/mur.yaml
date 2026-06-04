@@ -9,49 +9,10 @@ properties:
   description:
     $ref: /common/primitives#/$defs/description
   structures:
-    title: Structures connus et justifiés
+    title: Structures connues et justifiées
     type: array
     items:
-      type: object
-      additionalProperties: false
-      properties:
-        materiau:
-          title: Matériau
-          type: [string, "null"]
-          x-enum: enveloppe:mur:type
-          enum:
-            - pierre_moellons
-            - pierre_moellons_avec_remplissage
-            - pise_ou_beton_terre
-            - pan_bois_sans_remplissage
-            - pan_bois_avec_remplissage
-            - bois_rondin
-            - brique_pleine_simple
-            - brique_pleine_double_avec_lame_air
-            - brique_creuse
-            - bloc_beton_plein
-            - bloc_beton_creux
-            - beton_banche
-            - beton_machefer
-            - brique_terre_cuite_alveolaire
-            - sandwich_beton_isolant_beton_sans_isolation_rapportee
-            - cloison_platre
-            - ossature_bois_sans_remplissage
-            - ossature_bois_avec_remplissage_tout_venant
-            - ossature_bois_avec_remplissage_isolant
-            - beton_cellulaire
-            - null
-        epaisseur:
-          title: Epaisseur du mur non isolé en mm
-          type: [number, "null"]
-          exclusiveMinimum: 0
-        materiau_ancien:
-          title: Matériau ancien
-          type: [boolean, "null"]
-      required:
-        - materiau
-        - epaisseur
-        - materiau_ancien
+      $ref: "#/$defs/structure"
   type_doublage:
     title: Type de doublage
     type: [string, "null"]
@@ -123,3 +84,46 @@ required:
   - u
   - position
   - isolation
+$defs:
+  structure:
+    title: Structure
+    type: object
+    additionalProperties: false
+    properties:
+      materiau:
+        title: Matériau
+        type: [string, "null"]
+        x-enum: enveloppe:mur:type
+        enum:
+          - pierre_moellons
+          - pierre_moellons_avec_remplissage
+          - pise_ou_beton_terre
+          - pan_bois_sans_remplissage
+          - pan_bois_avec_remplissage
+          - bois_rondin
+          - brique_pleine_simple
+          - brique_pleine_double_avec_lame_air
+          - brique_creuse
+          - bloc_beton_plein
+          - bloc_beton_creux
+          - beton_banche
+          - beton_machefer
+          - brique_terre_cuite_alveolaire
+          - sandwich_beton_isolant_beton_sans_isolation_rapportee
+          - cloison_platre
+          - ossature_bois_sans_remplissage
+          - ossature_bois_avec_remplissage_tout_venant
+          - ossature_bois_avec_remplissage_isolant
+          - beton_cellulaire
+          - null
+      epaisseur:
+        title: Epaisseur du mur non isolé en mm
+        type: [number, "null"]
+        exclusiveMinimum: 0
+      materiau_ancien:
+        title: Matériau ancien
+        type: [boolean, "null"]
+    required:
+      - materiau
+      - epaisseur
+      - materiau_ancien

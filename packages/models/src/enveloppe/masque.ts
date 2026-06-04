@@ -61,6 +61,14 @@ export const TYPES_MASQUES = [
 export type TypeMasque = (typeof TYPES_MASQUES)[number];
 export const TypeMasqueEnum = buildEnum(TYPES_MASQUES);
 
+export const TYPES_MASQUES_PROCHES: TypeMasque[] = [
+	"fond_balcon",
+	"fond_et_flanc_loggias",
+	"balcon_ou_auvent",
+	"paroi_laterale_sans_obstacle_au_sud",
+	"paroi_laterale_avec_obstacle_au_sud",
+] as const;
+
 export const SECTEURS = [
 	"lateral",
 	"lateral_sud",

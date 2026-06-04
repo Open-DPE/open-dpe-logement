@@ -1,11 +1,1 @@
 export * from "./enveloppe.js";
-export * as Common from "./common.js";
-export * as Baie from "./baie.js";
-export * as Mur from "./mur.js";
-export * as PlancherBas from "./plancher-bas.js";
-export * as PlancherHaut from "./plancher-haut.js";
-export * as Porte from "./porte.js";
-export * as PontThermique from "./pont-thermique.js";
-export * as Masque from "./masque.js";
-export * as Niveau from "./niveau.js";
-export * as LocalNonChauffe from "./local-non-chauffe.js";

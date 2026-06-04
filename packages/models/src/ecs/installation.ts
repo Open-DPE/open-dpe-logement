@@ -1,6 +1,11 @@
-import type { Consommations, Pertes, UUID } from "../common/common.js";
+import type {
+	Consommations,
+	Pertes,
+	PositiveNumber,
+	UUID,
+} from "../common/common.js";
 import { buildEnum } from "../utils.js";
-import type { Systeme } from "./systeme.js";
+import * as systeme from "./systeme.js";
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/installation
@@ -8,8 +13,9 @@ import type { Systeme } from "./systeme.js";
 export type Installation = {
 	id: UUID;
 	description: string;
-	surface: number;
-	systemes: [Systeme] | [Systeme, Systeme];
+	surface: PositiveNumber;
+	installation_collective: boolean;
+	systemes: [systeme.Systeme] | [systeme.Systeme, systeme.Systeme];
 	solaire_thermique: SolaireThermique | null;
 };
 

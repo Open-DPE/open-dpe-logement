@@ -1,18 +1,43 @@
 # Calcul des consommations de chauffage
 
-Les consommations de chauffage sont la somme des consommations des générateurs de chauffage associés à une ou plusieurs installations.
+---
+
+Dans ce qui suit :
+
+- Une **installation** correspond à une surface chauffée par un ou plusieurs **systèmes**.
+- Un **système** correspond à un générateur de chauffage associé à N émetteurs.
+- Un **système de chauffage central** comporte un générateur central, individuel ou collectif, et une distribution par fluide chauffant : air ou eau.
+- Un **système de chauffage divisé** est un système pour lequel la génération et l’émission sont confondues. C’est le cas des convecteurs électriques, planchers chauffants électriques...
+
+---
+
+Les consommations de chauffage sont la somme des consommations des systèmes de chauffage :
 
 $$Cch = \sum_{i,k} Cch_{i,k}$$
-$$Cch_{i,k} = \sum_{i,k} Bch \cdot (1 - Fch_i) \cdot Rdim_{i,k} \cdot INT_{i,k} \cdot Ich_{i,k}$$
+$$Cch_{i,k} = \sum_{i,k} Bch \cdot (1 - Fch_i) \cdot Rdim_i \cdot Rdim_{i,k} \cdot INT_{i,k} \cdot Ich_{i,k}$$
 
 Avec :
 
 - $Bch$ : Besoins de chauffage exprimés en kWh (voir 9.1.1)
-- $Cch_{i,k}$ : Consommations de chauffage du générateur $k$ associé à l'installation $i$
+- $Cch_{i,k}$ : Consommations de chauffage du système $k$ associé à l'installation $i$
 - $Fch_i$ : Facteur de couverture solaire de l'installation $i$
-- $Rdim_{i,k}$ : Ratio de dimensionnement du générateur $k$ associé à l'installation $i$
-- $INT_{i,k}$ : Facteur d'intermittence du générateur $k$ associé à l'installation $i$
-- $Ich_{i,k}$ : Inverse du rendement du générateur $k$ associé à l'installation $i$
+- $Rdim_{i,k}$ : Ratio de dimensionnement du système $k$ associé à l'installation $i$
+- $INT_{i,k}$ : Facteur d'intermittence du système $k$ associé à l'installation $i$
+- $Ich_{i,k}$ : Inverse du rendement du système $k$ associé à l'installation $i$
+
+## Systèmes avec plusieurs émissions différentes
+
+Ce cas correspond aux systèmes de chauffage central avec plusieurs émetteurs de types différents.
+
+Les consommations associées à ces systèmes sont :
+
+$$Cch_{i,k} = \sum_e Bch \cdot (1 - Fch_i) \cdot Rdim_i \cdot Rdim_{i,k} \cdot INT_{i,k,e} \cdot Ich_{i,k,e} \cdot \frac{1}{N}$$
+
+Avec :
+
+- $N$ : Nombre d'émetteurs associés au système
+- $INT_{i,k,e}$ : Facteur d'intermittence du système $k$ associé à l'installation $i$ pour l'émetteur $e$
+- $Ich_{i,k,e}$ : Inverse du rendement du système $k$ associé à l'installation $i$ pour l'émetteur $e$
 
 ## Générateur bi-énergie
 
@@ -86,12 +111,11 @@ Avec :
 
 Le ratio de dimensionnement $Rdim$ détermine la contribution de chaque installation et de chaque générateur associé à la couverture des besoins de chauffage.
 
-$$Rdim_{i,k} = Rdim_i \cdot Rdim_k \qquad Rdim_i = \frac{Sh_i}{Sh}$$
+$$Rdim_i = \frac{Sh_i}{Sh}$$
 
 Avec :
 
 - $Rdim_i$ : Ratio de dimensionnement de l'installation $i$
-- $Rdim_k$ : Ratio de dimensionnement du système  $k$
 - $Sh_i$ : Surface habitable chauffée par l'installation $i$ en m²
 - $Sh$ : Surface habitable totale en m²
 
@@ -133,7 +157,7 @@ Avec $N_{base}$ le nombre de systèmes en base.
 
 Sont considérés en relève :
 
-- Les **PAC en relève d'une chaudière bois** (chaudière bois en base) ;
+- Les **PAC ou chaudières en relève d'une chaudière bois** (chaudière bois en base) ;
 - Les **chaudières en relève de PAC** (PAC en base).
 
 Toutes les autres configurations de systèmes de chauffage central sont considérés en base.
@@ -220,7 +244,7 @@ Le besoin de chauffage est partagé entre générateurs collectifs et individuel
 
 $$Bch_{coll} = Bch \cdot (1 - \frac{DHT}{DH14}) \qquad Bch_{ind} = Bch - Bch_{coll}$$
 
-Les systèmes collectifs et individuels couplés ou divisés constituent deux installations de chauffage relevant des paragraphes précédents.
+Les systèmes collectifs et individuels couplés ou divisés constituent deux configurations de chauffage relevant des paragraphes précédents.
 
 ### Installation principale avec chauffage électrique dans la salle de bains
 

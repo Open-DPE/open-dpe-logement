@@ -1,19 +1,25 @@
 id: enveloppe:masque:omb
 name: omb
-description: Ombrage des masques lointains non homogènes
+description: Coefficient d'ombrage des masques lointains non homogènes
 fields:
+  - name: type_masque
+    title: Type de masque
+    type: string
+    format: enums
+    x-enum: enveloppe:masque:type
+    required: true
   - name: orientation_facade
     title: Orientation de la façade
     type: string
     format: enums
-    x-enum: orientation
-    required: true
+    x-enum: enveloppe:paroi:orientation
+    required: false
   - name: secteur_orientation
     title: Secteur d'orientation du masque
     type: string
     format: enums
     x-enum: enveloppe:masque:secteur
-    required: true
+    required: false
   - name: hauteur_alpha_masque/gte
     title: Hauteur angulaire du masque (supérieure ou égale à) en degrés
     type: number

@@ -47,7 +47,7 @@ properties:
         title: Liste des émetteurs
         type: array
         items:
-          $ref: /chauffage/emetteur
+          $ref: /common/primitives#/$defs/id
     required:
       - type_distribution
       - presence_fluide_frigorigene

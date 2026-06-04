@@ -1,5 +1,6 @@
-import type { NonEmptyArray } from "#/utils.js";
-import type { Consommations, UUID } from "../common/common.js";
+import { EntityNotFoundError } from "#/errors.js";
+import type { Consommations, UUID, NonEmptyArray } from "../common/common.js";
+import type { Generateur } from "./generateur.js";
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement/installation
@@ -19,3 +20,9 @@ export type InstallationData = {
 	rdim: number;
 	consommations: Consommations;
 };
+
+export function get_generateur(collection: Generateur[], id: UUID): Generateur {
+	const e = collection.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Generateur", id);
+	return e;
+}

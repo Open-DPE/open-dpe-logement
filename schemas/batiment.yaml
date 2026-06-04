@@ -43,9 +43,9 @@ properties:
     items:
       $ref: /batiment/appartement
   logement:
-    logement:
     title: Logement de référence
     type: [object, "null"]
+    additionalProperties: false
     properties:
       description:
         $ref: /common/primitives#/$defs/description

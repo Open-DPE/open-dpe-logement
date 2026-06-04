@@ -2,7 +2,8 @@ import data from "#data/enveloppe/masque/fe2.js";
 import { type AbaqueQuery, filter } from "#filter.js";
 
 export type Fe2Schema = {
-	orientation_facade: string;
+	type_masque: string;
+	orientation_facade: string | null;
 	"hauteur_masque_alpha/gte": number | null;
 	"hauteur_masque_alpha/lt": number | null;
 	hauteur_alpha_defaut: number | null;

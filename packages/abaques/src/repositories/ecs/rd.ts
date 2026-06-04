@@ -2,7 +2,7 @@ import data from "#data/ecs/rd.js";
 import { type AbaqueQuery, filter } from "#filter.js";
 
 export type EcsRdSchema = {
-	reseau_collectif: boolean;
+	installation_collective: boolean;
 	bouclage_reseau: string | null;
 	alimentation_contigue: boolean | null;
 	production_volume_habitable: boolean | null;

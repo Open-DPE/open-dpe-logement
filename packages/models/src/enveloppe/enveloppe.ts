@@ -1,14 +1,29 @@
-import { buildEnum, type NonEmptyArray } from "../utils.js";
-import type { Baie } from "./baie.js";
-import type { Inertie } from "./common.js";
-import type { LocalNonChauffe } from "./local-non-chauffe.js";
-import type { Masque } from "./masque.js";
-import type { Mur } from "./mur.js";
-import type { Niveau } from "./niveau.js";
-import type { PlancherBas } from "./plancher-bas.js";
-import type { PlancherHaut } from "./plancher-haut.js";
-import type { PontThermique } from "./pont-thermique.js";
-import type { Porte } from "./porte.js";
+import * as baie from "./baie.js";
+import * as common from "./common.js";
+import * as localNonChauffe from "./local-non-chauffe.js";
+import * as masque from "./masque.js";
+import * as mur from "./mur.js";
+import * as niveau from "./niveau.js";
+import * as plancherBas from "./plancher-bas.js";
+import * as plancherHaut from "./plancher-haut.js";
+import * as pontThermique from "./pont-thermique.js";
+import * as porte from "./porte.js";
+import type { UUID, NonEmptyArray } from "#/common/common.js";
+import { EntityNotFoundError } from "#/errors.js";
+import { buildEnum } from "#/utils.js";
+
+export {
+	baie,
+	common,
+	localNonChauffe,
+	masque,
+	mur,
+	niveau,
+	plancherBas,
+	plancherHaut,
+	pontThermique,
+	porte,
+};
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe
@@ -17,15 +32,15 @@ export type Enveloppe = {
 	exposition: Exposition;
 	q4pa_conv: number | null;
 	presence_brasseurs_air: boolean;
-	niveaux: NonEmptyArray<Niveau>;
-	locaux_non_chauffes: LocalNonChauffe[];
-	murs: Mur[];
-	planchers_hauts: PlancherHaut[];
-	planchers_bas: PlancherBas[];
-	baies: Baie[];
-	portes: Porte[];
-	ponts_thermiques: PontThermique[];
-	masques: Masque[];
+	niveaux: NonEmptyArray<niveau.Niveau>;
+	locaux_non_chauffes: localNonChauffe.LocalNonChauffe[];
+	murs: mur.Mur[];
+	planchers_hauts: plancherHaut.PlancherHaut[];
+	planchers_bas: plancherBas.PlancherBas[];
+	baies: baie.Baie[];
+	portes: porte.Porte[];
+	ponts_thermiques: pontThermique.PontThermique[];
+	masques: masque.Masque[];
 };
 
 export type EnveloppeWithData<T extends Enveloppe = Enveloppe> = T & {
@@ -33,7 +48,7 @@ export type EnveloppeWithData<T extends Enveloppe = Enveloppe> = T & {
 };
 
 export type EnveloppeData = {
-	inertie: Inertie;
+	inertie: common.Inertie;
 	parois_anciennes_lourdes: boolean;
 	deperditions: Deperditions;
 	permeabilite: Permeabilite;
@@ -72,6 +87,119 @@ export type ConfortEte = {
 	presence_brasseurs_air: boolean | null;
 };
 
+export type Paroi =
+	| baie.Baie
+	| mur.Mur
+	| plancherHaut.PlancherHaut
+	| plancherBas.PlancherBas
+	| porte.Porte;
+
 export const EXPOSITIONS = ["simple", "multiple"] as const;
 export type Exposition = (typeof EXPOSITIONS)[number];
 export const ExpositionEnum = buildEnum(EXPOSITIONS);
+
+export function get_parois_local_non_chauffe(
+	enveloppe: Enveloppe,
+	id: UUID,
+): Paroi[] {
+	const parois: Paroi[] = [
+		...enveloppe.murs,
+		...enveloppe.planchers_hauts,
+		...enveloppe.planchers_bas,
+		...enveloppe.baies,
+		...enveloppe.portes,
+	];
+	return parois.filter((i) => {
+		return i.position.local_non_chauffe_id === id;
+	});
+}
+
+export function get_baies_local_non_chauffe(
+	enveloppe: Enveloppe,
+	id: UUID,
+): baie.Baie[] {
+	return enveloppe.baies.filter((i) => {
+		return i.position.local_non_chauffe_id === id;
+	});
+}
+
+export function get_portes_local_non_chauffe(
+	enveloppe: Enveloppe,
+	id: UUID,
+): porte.Porte[] {
+	return enveloppe.portes.filter((i) => {
+		return i.position.local_non_chauffe_id === id;
+	});
+}
+
+export function get_murs_local_non_chauffe(
+	enveloppe: Enveloppe,
+	id: UUID,
+): mur.Mur[] {
+	return enveloppe.murs.filter((i) => {
+		return i.position.local_non_chauffe_id === id;
+	});
+}
+
+export function get_planchers_hauts_local_non_chauffe(
+	enveloppe: Enveloppe,
+	id: UUID,
+): plancherHaut.PlancherHaut[] {
+	return enveloppe.planchers_hauts.filter((i) => {
+		return i.position.local_non_chauffe_id === id;
+	});
+}
+
+export function get_planchers_bas_local_non_chauffe(
+	enveloppe: Enveloppe,
+	id: UUID,
+): plancherBas.PlancherBas[] {
+	return enveloppe.planchers_bas.filter(
+		(i) => i.position.local_non_chauffe_id === id,
+	);
+}
+
+export function get_local_non_chauffe(
+	enveloppe: Enveloppe,
+	id: UUID,
+): localNonChauffe.LocalNonChauffe {
+	const e = enveloppe.locaux_non_chauffes.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Local non chauffé", id);
+	return e;
+}
+
+export function get_baie(enveloppe: Enveloppe, id: UUID): baie.Baie {
+	const e = enveloppe.baies.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Baie", id);
+	return e;
+}
+
+export function get_porte(enveloppe: Enveloppe, id: UUID): porte.Porte {
+	const e = enveloppe.portes.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Porte", id);
+	return e;
+}
+
+export function get_mur(enveloppe: Enveloppe, id: UUID): mur.Mur {
+	const e = enveloppe.murs.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Mur", id);
+	return e;
+}
+
+export function get_plancher_haut(
+	enveloppe: Enveloppe,
+	id: UUID,
+): plancherHaut.PlancherHaut {
+	const e = enveloppe.planchers_hauts.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Plancher haut", id);
+	return e;
+}
+
+export function get_plancher_bas(
+	enveloppe: Enveloppe,
+	id: UUID,
+): plancherBas.PlancherBas {
+	const e = enveloppe.planchers_bas.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Plancher bas", id);
+	return e;
+}

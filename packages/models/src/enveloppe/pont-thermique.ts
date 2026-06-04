@@ -32,9 +32,9 @@ export type Liaison =
 
 type LiaisonBase = {
 	type: TypeLiaison;
-	mur_id: string;
-	plancher_id: string | null;
-	ouverture_id: string | null;
+	mur_id: UUID;
+	plancher_id: UUID | null;
+	ouverture_id: UUID | null;
 	pont_thermique_partiel: boolean | null;
 };
 
@@ -42,6 +42,7 @@ export type RefendMur = LiaisonBase & {
 	type: typeof TypeLiaisonEnum.refend_mur;
 	plancher_id: null;
 	ouverture_id: null;
+	pont_thermique_partiel: boolean;
 };
 
 export type PlancherBasMur = LiaisonBase & {
@@ -62,6 +63,7 @@ export type PlancherIntermediaireMur = LiaisonBase & {
 	type: typeof TypeLiaisonEnum.plancher_intermediaire_mur;
 	plancher_id: null;
 	ouverture_id: null;
+	pont_thermique_partiel: boolean;
 };
 
 export type PorteMur = LiaisonBase & {

@@ -1,26 +1,10 @@
-﻿ventilation.cef_aux:
-  id: ventilation.cef_aux
-  description: Consommation d'énergie finale des auxiliaires de ventilation
+﻿ventilation.caux:
+  id: ventilation.caux
+  description: Consommations des auxiliaires de ventilation
   type: number
   unite: kWh/an
   dependances:
-    - ventilation.auxiliaire.cef
-
-ventilation.cep_aux:
-  id: ventilation.cep_aux
-  description: Consommation d'énergie primaire des auxiliaires de ventilation
-  type: number
-  unite: kWh/an
-  dependances:
-    - ventilation.auxiliaire.cep
-
-ventilation.eges_aux:
-  id: ventilation.eges_aux
-  description: Emissions de gaz à effet de serre des auxiliaires de ventilation
-  type: number
-  unite: kgCO2e/an
-  dependances:
-    - ventilation.auxiliaire.eges
+    - ventilation.installation.caux
 
 ventilation.hvent:
   id: ventilation.hvent
@@ -59,6 +43,16 @@ ventilation.qvasouf_conv:
 
 # <-- Installation de ventilation -->
 
+ventilation.installation.caux:
+  id: ventilation.installation.caux
+  description: Consommation de l'auxiliaire de ventilation
+  type: number
+  unite: kWh/an
+  dependances:
+    - ventilation.installation.rdim
+    - ventilation.installation.pvent_moy
+    - ventilation.installation.rut
+
 ventilation.installation.rdim:
   id: ventilation.installation.rdim
   description: Ratio de dimensionnement de l'installation de ventilation
@@ -90,43 +84,14 @@ ventilation.installation.hvent:
   dependances:
     - ventilation.installation.rdim
     - ventilation.installation.qvarep_conv
-    - batiment.sh
 
-# <-- Auxiliaire de ventilation -->
-
-ventilation.auxiliaire.cef:
-  id: ventilation.auxiliaire.cef
-  description: Consommation d'énergie finale de l'auxiliaire de ventilation
-  type: number
-  unite: kWh/an
-  dependances:
-    - ventilation.auxiliaire.rdim
-    - ventilation.auxiliaire.pvent_moy
-    - ventilation.auxiliaire.rut
-
-ventilation.auxiliaire.cep:
-  id: ventilation.auxiliaire.cep
-  description: Consommation d'énergie primaire de l'auxiliaire de ventilation
-  type: number
-  unite: kWh/an
-  dependances:
-    - ventilation.auxiliaire.cef
-
-ventilation.auxiliaire.eges:
-  id: ventilation.auxiliaire.eges
-  description: Emissions de gaz à effet de serre de l'auxiliaire de ventilation
-  type: number
-  unite: kgCO2e/an
-  dependances:
-    - ventilation.auxiliaire.cef
-
-ventilation.auxiliaire.rut:
-  id: ventilation.auxiliaire.rut
+ventilation.installation.rut:
+  id: ventilation.installation.rut
   description: Ratio du temps d'utilisation du mode mécanique de l'auxiliaire de ventilation
   type: number
 
-ventilation.auxiliaire.pvent_moy:
-  id: ventilation.auxiliaire.pvent_moy
+ventilation.installation.pvent_moy:
+  id: ventilation.installation.pvent_moy
   description: Puissance moyenne de l'auxiliaire de ventilation
   type: number
   unite: W

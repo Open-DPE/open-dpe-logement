@@ -31,7 +31,7 @@ properties:
         title: Coefficient d'occupation maximal
         type: number
         minimum: 0
-      bef:
+      becs:
         $ref: /common/primitives#/$defs/bef
       iecs:
         title: Inverse du rendement moyen
@@ -44,15 +44,9 @@ properties:
     required:
       - nadeq
       - nmax
-      - bef
-      - iecs
-      - rd
-      - rs
-      - rg
-      - rgs
+      - becs
       - pertes
       - consommations
 required:
   - generateurs
   - installations
-  - systemes

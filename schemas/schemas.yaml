@@ -2,15 +2,18 @@ $id: https://schemas.open-dpe.fr/schemas
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Schémas de données publiques
 anyOf:
+  - $ref: /diagnostic
   - $ref: /batiment
   - $ref: /batiment/appartement
   - $ref: /chauffage
   - $ref: /chauffage/emetteur
   - $ref: /chauffage/generateur
   - $ref: /chauffage/installation
+  - $ref: /chauffage/systeme
   - $ref: /ecs
   - $ref: /ecs/generateur
   - $ref: /ecs/installation
+  - $ref: /ecs/systeme
   - $ref: /refroidissement
   - $ref: /refroidissement/generateur
   - $ref: /refroidissement/installation

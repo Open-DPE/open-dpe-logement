@@ -1,6 +1,10 @@
-import type { UUID } from "../common/common.js";
-import { buildEnum, type NonEmptyArray } from "../utils.js";
-import type { Mitoyennete, Orientation, OrientationEnum } from "./common.js";
+import type { UUID, NonEmptyArray } from "../common/common.js";
+import { buildEnum } from "../utils.js";
+import type {
+	Mitoyennete,
+	Orientation,
+	OrientationHorizontale,
+} from "./common.js";
 import type { Materiau, TypeVitrage, TypeVitrageEnum } from "./baie.js";
 
 /**
@@ -79,17 +83,17 @@ export type PositionBaie = PositionBaieHorizontale | PositionBaieVerticale;
 type PositionBaieBase = {
 	mitoyennete: Mitoyennete;
 	surface: number;
-	orientation: Orientation | null;
+	orientation: Orientation;
 	inclinaison: number;
 };
 
 export type PositionBaieHorizontale = PositionBaieBase & {
-	orientation: typeof OrientationEnum.horizontale;
+	orientation: typeof OrientationHorizontale;
 	inclinaison: 0;
 };
 
 export type PositionBaieVerticale = PositionBaieBase & {
-	orientation: Exclude<Orientation, typeof OrientationEnum.horizontale>;
+	orientation: Exclude<Orientation, typeof OrientationHorizontale>;
 	inclinaison: number;
 };
 

@@ -1,0 +1,247 @@
+import { abaques } from "@open-dpe-logement/abaques";
+import * as models from "@open-dpe-logement/models";
+import * as baie from "./baie/formulas.js";
+import * as paroi from "./paroi/formulas.js";
+import { calcule_aiu as calcule_aiu_paroi } from "#rules/enveloppe/paroi/formulas.js";
+import { calcule_b as calcule_b_paroi } from "#rules/enveloppe/paroi/formulas.js";
+import { calcule_sse as calcule_sse_baie } from "#rules/enveloppe/baie/formulas.js";
+import { calcule_isolation_aiu as calcule_isolation_aiu_baie } from "#rules/enveloppe/baie/formulas.js";
+import { calcule_isolation_aiu as calcule_isolation_aiu_mur } from "#rules/enveloppe/mur/formulas.js";
+import { calcule_isolation_aiu as calcule_isolation_aiu_pb } from "#rules/enveloppe/plancher-bas/formulas.js";
+import { calcule_isolation_aiu as calcule_isolation_aiu_ph } from "#rules/enveloppe/plancher-haut/formulas.js";
+import { calcule_isolation_aiu as calcule_isolation_aiu_porte } from "#rules/enveloppe/porte/formulas.js";
+import { ValeurForfaitaireError } from "#utils/errors.js";
+import { createParMois, mergeParMois } from "#utils/helpers.js";
+
+export { baie, paroi };
+
+/**
+ * @doctrine enveloppe.local_non_chauffe.b
+ * @return Coefficient de réduction des déperditions thermiques du local non chauffé
+ */
+export function calcule_b(
+	props:
+		| Parameters<typeof calcule_blnc>[0]
+		| Parameters<typeof calcule_bver>[0],
+): number {
+	const { type_local_non_chauffe } = props;
+	return type_local_non_chauffe ===
+		models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
+		? calcule_bver(props)
+		: calcule_blnc(props);
+}
+
+/**
+ * @see abaques.enveloppe.localNonChauffe.b
+ * @throws {ValeurForfaitaireError}
+ * @return Coefficient de réduction des déperditions thermiques du local non chauffé
+ */
+function calcule_blnc(props: {
+	type_local_non_chauffe: Exclude<
+		models.enveloppe.localNonChauffe.TypeLnc,
+		typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
+	>;
+	aue: ReturnType<typeof calcule_aue>;
+	aiu: ReturnType<typeof calcule_aiu>;
+	isolation_aue: ReturnType<typeof calcule_isolation_aue>;
+	isolation_aiu: ReturnType<typeof calcule_isolation_aiu>;
+	uvue: ReturnType<typeof calcule_uvue>;
+}): number {
+	const { aue, aiu, isolation_aue, isolation_aiu, uvue } = props;
+	const aiu_aue = aiu / aue;
+	const abaque = abaques.enveloppe.localNonChauffe.b;
+	const query = { uvue, aiu_aue, isolation_aue, isolation_aiu };
+	const match = abaque.search(query, abaque.load()).at(0);
+	if (!match) throw new ValeurForfaitaireError(query);
+	return match.b;
+}
+
+/**
+ * @see https://github.com/dpe-audit/dpe-logement/issues/45
+ * @param props.parois : Liste des parois déperditives donnant sur l'espace tampon solarisé
+ * @param props.parois[].surface : Surface de la paroi en m²
+ * @returns Coefficient de réduction des déperditions thermiques de l'espace tampon solarisé
+ */
+function calcule_bver(props: {
+	type_local_non_chauffe: typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise;
+	parois: {
+		surface: number;
+		b: ReturnType<typeof calcule_b_paroi>;
+	}[];
+}): number {
+	const { parois } = props;
+	const s = parois.reduce((acc, paroi) => acc + paroi.surface, 0);
+	const w = parois.reduce((acc, paroi) => acc + paroi.surface * paroi.b, 0);
+	return w / s;
+}
+
+/**
+ * @param props.type_local_non_chauffe : Type du local non chauffé
+ * @see abaques.enveloppe.localNonChauffe.uvue
+ * @throws {ValeurForfaitaireError}
+ * @return Coefficient de transmission thermique équivalent du local non chauffé en W/m².K
+ */
+export function calcule_uvue(props: {
+	type_local_non_chauffe: Exclude<
+		models.enveloppe.localNonChauffe.TypeLnc,
+		typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
+	>;
+}): number {
+	const abaque = abaques.enveloppe.localNonChauffe.uvue;
+	const match = abaque.search(props, abaque.load()).at(0);
+	if (!match) throw new ValeurForfaitaireError(props);
+	return match.uvue;
+}
+
+/**
+ * @doctrine enveloppe.local_non_chauffe.aue
+ * @return Surface des parois du local non chauffé donnant sur l'extérieur en m²
+ */
+export function calcule_aue(props: {
+	baies: {
+		aue: ReturnType<typeof baie.calcule_aue>;
+		isolation: ReturnType<typeof baie.set_isolation>;
+	}[];
+	parois: {
+		aue: ReturnType<typeof paroi.calcule_aue>;
+		isolation: ReturnType<typeof paroi.set_isolation>;
+	}[];
+}): number {
+	const parois = [...props.baies, ...props.parois];
+	return parois.reduce((s, { aue }) => s + aue, 0);
+}
+
+/**
+ * @return État d'isolation des parois du local non chauffé donnant sur l'extérieur
+ */
+export function calcule_isolation_aue(
+	props: Parameters<typeof calcule_aue>[0],
+): boolean {
+	const parois = [...props.baies, ...props.parois];
+	const aue = parois.reduce((s, { aue }) => s + aue, 0);
+	const aue_isole = parois.reduce(
+		(s, { isolation, aue }) => (isolation ? s + aue : s),
+		0,
+	);
+	return aue_isole > 0.5 * aue;
+}
+
+/**
+ * @doctrine enveloppe.local_non_chauffe.aiu
+ * @return Surface des parois du local non chauffé donnant sur un espace chauffé en m²
+ */
+export function calcule_aiu(props: {
+	parois_mitoyennes: {
+		aiu: ReturnType<typeof calcule_aiu_paroi>;
+		isolation:
+			| ReturnType<typeof calcule_isolation_aiu_mur>
+			| ReturnType<typeof calcule_isolation_aiu_ph>
+			| ReturnType<typeof calcule_isolation_aiu_pb>
+			| ReturnType<typeof calcule_isolation_aiu_baie>
+			| ReturnType<typeof calcule_isolation_aiu_porte>;
+	}[];
+	baies: {
+		aiu: ReturnType<typeof baie.calcule_aiu>;
+		isolation: ReturnType<typeof baie.set_isolation>;
+	}[];
+	parois: {
+		aiu: ReturnType<typeof paroi.calcule_aiu>;
+		isolation: ReturnType<typeof paroi.set_isolation>;
+	}[];
+}): number {
+	const parois = [...props.baies, ...props.parois, ...props.parois_mitoyennes];
+	return parois.reduce((s, { aiu }) => s + aiu, 0);
+}
+
+/**
+ * @return État d'isolation des parois du local non chauffé donnant sur un espace chauffé
+ */
+export function calcule_isolation_aiu(
+	props: Parameters<typeof calcule_aiu>[0],
+): boolean {
+	const parois = [...props.baies, ...props.parois, ...props.parois_mitoyennes];
+	const aiu = parois.reduce((s, { aiu }) => s + aiu, 0);
+	const aiu_isole = parois.reduce(
+		(s, { isolation, aiu }) => (isolation ? s + aiu : s),
+		0,
+	);
+	return aiu_isole > 0.5 * aiu;
+}
+
+/**
+ * @doctrine enveloppe.local_non_chauffe.sse
+ * @see https://github.com/dpe-audit/dpe-logement/discussions/48
+ * @returns Surface sud équivalente de l'espace tampon solarisé en m²/mois
+ */
+export function calcule_sse(props: {
+	baies: { sst: ReturnType<typeof baie.calcule_sst> }[];
+	sse: ReturnType<typeof calcule_sse_baie>[];
+	b: ReturnType<typeof calcule_b>;
+}): models.common.ParMois<number> {
+	const sst = mergeParMois(props.baies.map((baie) => baie.sst));
+	return createParMois((mois: models.common.Mois) => {
+		const sse = props.sse.reduce((acc, sse) => acc + sse[mois], 0);
+		return (sst[mois] - sse) * props.b;
+	});
+}
+
+/**
+ * @doctrine enveloppe.local_non_chauffe.t
+ * @param props.baies : Liste des baies du local non chauffé
+ * @param props.baies[].surface : Surface de la baie en m²
+ * @returns Coefficient de transparence moyen du local non chauffé
+ */
+export function calcule_t(props: {
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLnc;
+	baies: {
+		mitoyennete: models.enveloppe.common.Mitoyennete;
+		surface: number;
+		t: ReturnType<typeof baie.calcule_t>;
+	}[];
+}): number {
+	if (
+		props.type_local_non_chauffe !==
+		models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
+	)
+		return 0;
+
+	const baies = props.baies.filter(
+		({ mitoyennete }) =>
+			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur,
+	);
+	const s = baies.reduce((acc, baie) => acc + baie.surface, 0);
+	const w = baies.reduce((acc, baie) => acc + baie.surface * baie.t, 0);
+	return w / s;
+}
+
+/**
+ * @doctrine enveloppe.local_non_chauffe.orientations
+ * @param props.baies : Liste des baies de l'espace tampon solarisé
+ * @return Orientations majoritaires du local non chauffé
+ */
+export function calcule_orientations(props: {
+	baies: {
+		mitoyennete: models.enveloppe.common.Mitoyennete;
+		surface: number;
+		orientation: models.enveloppe.common.Orientation;
+	}[];
+}): models.common.OrientationCardinale[] {
+	const baies = props.baies.filter(
+		({ mitoyennete }) =>
+			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur,
+	);
+
+	const parOrientation = new Map<models.common.OrientationCardinale, number>();
+	for (const baie of baies) {
+		if (baie.orientation === models.enveloppe.common.OrientationHorizontale)
+			continue;
+		const current = parOrientation.get(baie.orientation) ?? 0;
+		parOrientation.set(baie.orientation, current + baie.surface);
+	}
+
+	if (parOrientation.size === 0) return [];
+	const maxAue = Math.max(...parOrientation.values());
+	return [...parOrientation.entries()]
+		.filter(([, aue]) => aue === maxAue)
+		.map(([orientation]) => orientation);
+}

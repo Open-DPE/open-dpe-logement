@@ -67,6 +67,16 @@ properties:
         type: [string, "null"]
         x-enum: chauffage:position-chaudiere
         enum: [chaudiere_murale, chaudiere_sol, null]
+      cascade:
+        title: Générateur en cascade
+        description: >
+          Ordre de priorité du générateur en cascade :
+          - 0 : Absence de priorité
+          - 1 : Générateur principal
+          - 2 : Générateur secondaire
+        type: [integer, "null"]
+        enum: [0, 1, 2, null]
+        default: null
       generateur_collectif:
         title: Générateur collectif d'eau chaude sanitaire
         type: boolean
@@ -243,6 +253,6 @@ required:
 oneOf:
   - $ref: /chauffage/generateur/generateur-combustion
   - $ref: /chauffage/generateur/generateur-electrique
-  - $ref: /chauffage/generateur/chaudiere-thermodynamique
+  - $ref: /chauffage/generateur/generateur-thermodynamique
   - $ref: /chauffage/generateur/reseau-chaleur
   - $ref: /chauffage/generateur/generateur-inconnu

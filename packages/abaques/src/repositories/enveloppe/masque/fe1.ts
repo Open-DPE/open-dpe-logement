@@ -5,10 +5,9 @@ export type Fe1Schema = {
 	type_masque: string;
 	orientation_facade: string | null;
 	"avancee_masque/gte": number | null;
-	"avancee_masque/le": number | null;
+	"avancee_masque/lte": number | null;
 	avancee_defaut: number | null;
 	fe1: number;
-	tv_coef_masque_proche_id: number;
 };
 
 export const load = (): Fe1Schema[] => data as Fe1Schema[];

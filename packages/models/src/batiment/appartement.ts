@@ -1,4 +1,4 @@
-import type { UUID } from "../common/common";
+import type { PositiveNumber, UUID } from "../common/common";
 import { buildEnum } from "../utils";
 
 /**
@@ -7,8 +7,8 @@ import { buildEnum } from "../utils";
 export type Appartement = {
 	id: UUID;
 	description: string;
-	surface_habitable: number;
-	hauteur_sous_plafond: number;
+	surface_habitable: PositiveNumber;
+	hauteur_sous_plafond: PositiveNumber;
 	position: Position;
 	typologie: Typologie;
 };

@@ -10,15 +10,24 @@ enveloppe.parois_anciennes:
   description: Présence majoritaire de parois anciennes
   type: boolean
 
-enveloppe.sse_j:
-  id: enveloppe.sse_j
+enveloppe.presence_joints:
+  id: enveloppe.presence_joints
+  description: Présence de joints d'étanchéité au niveau des menuiseries extérieures
+  type: boolean
+
+enveloppe.isolation_murs_plafonds:
+  id: enveloppe.isolation_murs_plafonds
+  description: Isolation majoritaire des murs et des plafonds
+  type: boolean
+
+enveloppe.sse:
+  id: enveloppe.sse
   description: Surface sud équivalente de l'enveloppe
   type: number
-  unite: m²
-  scopes: [mois]
+  unite: m²/mois
   dependances:
-    - enveloppe.baie.sse_j
-    - enveloppe.local_non_chauffe.sse_j
+    - enveloppe.baie.sse
+    - enveloppe.local_non_chauffe.sse
 
 # <-- Enveloppe - Déperditions -->
 
@@ -50,8 +59,8 @@ enveloppe.sdep:
     - enveloppe.sdep.baies
     - enveloppe.sdep.portes
     - enveloppe.sdep.murs
-    - enveloppe.sdep.plancher_haut
-    - enveloppe.sdep.plancher_bas
+    - enveloppe.sdep.planchers_hauts
+    - enveloppe.sdep.planchers_bas
 
 enveloppe.sdep.baies:
   id: enveloppe.sdep.baies
@@ -77,16 +86,16 @@ enveloppe.sdep.murs:
   dependances:
     - enveloppe.mur.sdep
 
-enveloppe.sdep.plancher_haut:
-  id: enveloppe.sdep.plancher_haut
+enveloppe.sdep.planchers_hauts:
+  id: enveloppe.sdep.planchers_hauts
   description: Surface déperditive des planchers hauts
   type: number
   unite: m²
   dependances:
     - enveloppe.plancher_haut.sdep
 
-enveloppe.sdep.plancher_bas:
-  id: enveloppe.sdep.plancher_bas
+enveloppe.sdep.planchers_bas:
+  id: enveloppe.sdep.planchers_bas
   description: Surface déperditive des planchers bas
   type: number
   unite: m²
@@ -159,22 +168,11 @@ enveloppe.dr:
   type: number
   unite: W/K
   dependances:
-    - enveloppe.permeabilite.hperm
+    - enveloppe.hperm
     - ventilation.hvent
 
-# <-- Enveloppe - Perméabilité -->
-
-enveloppe.permeabilite.sdep:
-  id: enveloppe.permeabilite.sdep
-  description: Surface des parois déperditives hors plancher bas
-  type: number
-  unite: m²
-  dependances:
-    - enveloppe.sdep
-    - enveloppe.sdep.plancher_bas
-
-enveloppe.permeabilite.q4paconv:
-  id: enveloppe.permeabilite.q4paconv
+enveloppe.q4paconv:
+  id: enveloppe.q4paconv
   description: Débit d'air conventionnel à 4 Pa
   type: number
   unite: m3/h
@@ -184,54 +182,55 @@ enveloppe.permeabilite.q4paconv:
     - enveloppe.plancher_haut.sdep
     - enveloppe.plancher_haut.isolation
 
-enveloppe.permeabilite.q4paenv:
-  id: enveloppe.permeabilite.q4paenv
+enveloppe.q4paenv:
+  id: enveloppe.q4paenv
   description: Perméabilité de l'enveloppe
   type: number
   unite: m3/h
   dependances:
-    - enveloppe.permeabilite.q4paconv
-    - enveloppe.permeabilite.sdep
+    - enveloppe.q4paconv
+    - enveloppe.sdep
+    - enveloppe.sdep_planchers_bas
 
-enveloppe.permeabilite.q4pa:
-  id: enveloppe.permeabilite.q4pa
+enveloppe.q4pa:
+  id: enveloppe.q4pa
   description: Perméabilité de la zone sous 4Pa
   type: number
   unite: m3/(h.m²)
   dependances:
     - batiment.sh
     - ventilation.smea_conv
-    - enveloppe.permeabilite.q4paenv
+    - enveloppe.q4paenv
 
-enveloppe.permeabilite.n50:
-  id: enveloppe.permeabilite.n50
+enveloppe.n50:
+  id: enveloppe.n50
   description: Renouvellement d'air sous 50 Pascals
   type: number
   unite: h-1
   dependances:
     - batiment.sh
     - batiment.hsp
-    - enveloppe.permeabilite.q4pa
+    - enveloppe.q4pa
 
-enveloppe.permeabilite.qvinf:
-  id: enveloppe.permeabilite.qvinf
+enveloppe.qvinf:
+  id: enveloppe.qvinf
   description: Débit d'air dû aux infiltrations liées au vent
   type: number
   unite: m3/h
   dependances:
     - batiment.sh
     - batiment.hsp
+    - enveloppe.n50
     - ventilation.qvarep_conv
     - ventilation.qvasouf_conv
-    - enveloppe.permeabilite.n50
 
-enveloppe.permeabilite.hperm:
-  id: enveloppe.permeabilite.hperm
+enveloppe.hperm:
+  id: enveloppe.hperm
   description: Déperditions thermiques par renouvellement d'air due au vent
   type: number
   unite: W/K
   dependances:
-    - enveloppe.permeabilite.qvinf
+    - enveloppe.qvinf
 
 # <-- Enveloppe - Niveau -->
 
@@ -259,43 +258,23 @@ enveloppe.masque.omb:
 
 # <-- Enveloppe - Local non chauffé -->
 
-enveloppe.local_non_chauffe.sse_j:
-  id: enveloppe.local_non_chauffe.sse_j
+enveloppe.local_non_chauffe.sse:
+  id: enveloppe.local_non_chauffe.sse
   description: Surface sud équivalente du local non chauffé
   type: number
-  unite: m²
-  scopes: [mois]
-
-enveloppe.local_non_chauffe.sst:
-  id: enveloppe.local_non_chauffe.sst
-  description: Surface sud équivalente des apports totaux dans la véranda
-  type: number
-  unite: m²
-  scopes: [mois]
+  unite: m²/mois
   dependances:
+    - enveloppe.baie.sse
+    - enveloppe.local_non_chauffe.b
     - enveloppe.local_non_chauffe.baie.sst
 
-enveloppe.local_non_chauffe.ssd:
-  id: enveloppe.local_non_chauffe.ssd
-  description: Surface sud équivalente représentant des apports directs dans la véranda
+enveloppe.local_non_chauffe.b:
+  id: enveloppe.local_non_chauffe.b
+  description: Coefficient de réduction des déperditions thermiques du local non chauffé
   type: number
-  unite: m²
-  scopes: [mois]
   dependances:
-    - enveloppe.local_non_chauffe.t
-    - enveloppe.baie.c1
-    - enveloppe.baie.sw
-    - enveloppe.baie.fe
-
-enveloppe.local_non_chauffe.ssind:
-  id: enveloppe.local_non_chauffe.ssind
-  description: Surface sud équivalente représentant des apports indirects dans la véranda
-  type: number
-  unite: m²
-  scopes: [mois]
-  dependances:
-    - enveloppe.local_non_chauffe.sst
-    - enveloppe.local_non_chauffe.ssd
+    - enveloppe.local_non_chauffe.aue
+    - enveloppe.local_non_chauffe.aiu
 
 enveloppe.local_non_chauffe.t:
   id: enveloppe.local_non_chauffe.t
@@ -304,38 +283,10 @@ enveloppe.local_non_chauffe.t:
   dependances:
     - enveloppe.local_non_chauffe.baie.t
 
-enveloppe.local_non_chauffe.b:
-  id: enveloppe.local_non_chauffe.b
-  description: Coefficient de réduction des déperditions thermiques du local non chauffé
-  type: number
-  dependances:
-    - enveloppe.local_non_chauffe.isolation_aue
-    - enveloppe.local_non_chauffe.isolation_aiu
-    - enveloppe.local_non_chauffe.aue
-    - enveloppe.local_non_chauffe.aiu
-
-enveloppe.local_non_chauffe.baie.sst:
-  id: enveloppe.local_non_chauffe.baie.sst
-  description: Surface sud équivalente des apports de la baie du local non chauffé
-  type: number
-  unite: m²
-  scopes: [mois]
-  dependances:
-    - enveloppe.local_non_chauffe.baie.t
-    - enveloppe.local_non_chauffe.baie.c1
-
-enveloppe.local_non_chauffe.baie.t:
-  id: enveloppe.local_non_chauffe.baie.t
-  description: Coefficient de transparence de la baie du local non chauffé
-  type: number
-
-enveloppe.local_non_chauffe.baie.c1:
-  id: enveloppe.local_non_chauffe.baie.c1
-  description: Coefficient d'orientation et d'inclinaison de la baie du local non chauffé
-  type: number
-  scopes: [mois]
-  dependances:
-    - climat.zone_climatique
+enveloppe.local_non_chauffe.orientations:
+  id: enveloppe.local_non_chauffe.orientations
+  description: Orientations majoritaires du local non chauffé
+  type: string[]
 
 enveloppe.local_non_chauffe.aue:
   id: enveloppe.local_non_chauffe.aue
@@ -354,31 +305,11 @@ enveloppe.local_non_chauffe.aiu:
   dependances:
     - enveloppe.local_non_chauffe.baie.aiu
     - enveloppe.local_non_chauffe.paroi.aiu
-
-enveloppe.local_non_chauffe.isolation_aue:
-  id: enveloppe.local_non_chauffe.isolation_aue
-  description: État d'isolation des parois du local non chauffé en contact avec l'extérieur
-  type: boolean
-  dependances:
-    - enveloppe.local_non_chauffe.baie.aue
-    - enveloppe.local_non_chauffe.paroi.aue
-    - enveloppe.local_non_chauffe.baie.isolation
-    - enveloppe.local_non_chauffe.paroi.isolation
-
-enveloppe.local_non_chauffe.isolation_aiu:
-  id: enveloppe.local_non_chauffe.isolation_aiu
-  description: État d'isolation des parois du local non chauffé en contact avec l'espace chauffé
-  type: boolean
-  dependances:
-    - enveloppe.local_non_chauffe.baie.aiu
-    - enveloppe.local_non_chauffe.paroi.aiu
-    - enveloppe.local_non_chauffe.baie.isolation
-    - enveloppe.local_non_chauffe.paroi.isolation
-
-enveloppe.local_non_chauffe.baie.isolation:
-  id: enveloppe.local_non_chauffe.baie.isolation
-  description: État d'isolation de la baie du local non chauffé
-  type: boolean
+    - enveloppe.baie.aiu
+    - enveloppe.mur.aiu
+    - enveloppe.plancher_haut.aiu
+    - enveloppe.plancher_bas.aiu
+    - enveloppe.porte.aiu
 
 enveloppe.local_non_chauffe.baie.aue:
   id: enveloppe.local_non_chauffe.baie.aue
@@ -388,14 +319,31 @@ enveloppe.local_non_chauffe.baie.aue:
 
 enveloppe.local_non_chauffe.baie.aiu:
   id: enveloppe.local_non_chauffe.baie.aiu
-  description: Surface de la baie du local non chauffé en contact avec l'espace chauffé
+  description: Surface de la baie du local non chauffé en contact avec un espace chauffé
   type: number
   unite: m²
 
-enveloppe.local_non_chauffe.paroi.isolation:
-  id: enveloppe.local_non_chauffe.paroi.isolation
-  description: État d'isolation de la paroi du local non chauffé
-  type: boolean
+enveloppe.local_non_chauffe.baie.sst:
+  id: enveloppe.local_non_chauffe.baie.sst
+  description: Surface sud équivalente des apports de la baie du local non chauffé
+  type: number
+  unite: m²/mois
+  dependances:
+    - enveloppe.local_non_chauffe.baie.t
+    - enveloppe.local_non_chauffe.baie.c1
+
+enveloppe.local_non_chauffe.baie.t:
+  id: enveloppe.local_non_chauffe.baie.t
+  description: Coefficient de transparence de la baie du local non chauffé
+  type: number
+
+enveloppe.local_non_chauffe.baie.c1:
+  id: enveloppe.local_non_chauffe.baie.c1
+  description: Coefficient d'orientation et d'inclinaison de la baie du local non chauffé
+  type: number
+  scopes: [mois]
+  dependances:
+    - climat.zone_climatique
 
 enveloppe.local_non_chauffe.paroi.aue:
   id: enveloppe.local_non_chauffe.paroi.aue
@@ -434,15 +382,16 @@ enveloppe.baie.b:
   dependances:
     - enveloppe.local_non_chauffe.b
 
-enveloppe.baie.isolation:
-  id: enveloppe.baie.isolation
-  description: État d'isolation de la baie
-  type: boolean
-
 enveloppe.baie.isolation_aiu:
   id: enveloppe.baie.isolation_aiu
   description: État d'isolation de la baie en contact avec un local non chauffé
   type: boolean
+
+enveloppe.baie.aiu:
+  id: enveloppe.baie.aiu
+  description: Surface de la baie en contact avec un local non chauffé
+  type: number
+  unite: m²
 
 enveloppe.baie.u:
   id: enveloppe.baie.u
@@ -459,14 +408,6 @@ enveloppe.baie.ug:
   type: number
   unite: W/(m².K)
 
-enveloppe.baie.uw0:
-  id: enveloppe.baie.uw0
-  description: Coefficient de transmission thermique de la baie sans double vitrage
-  type: number
-  unite: W/(m².K)
-  dependances:
-    - enveloppe.baie.ug
-
 enveloppe.baie.uw:
   id: enveloppe.baie.uw
   description: Coefficient de transmission thermique de la baie avec double vitrage
@@ -475,23 +416,31 @@ enveloppe.baie.uw:
   dependances:
     - enveloppe.baie.uw0
 
+enveloppe.baie.uw0:
+  id: enveloppe.baie.uw0
+  description: Coefficient de transmission thermique de la baie sans double vitrage
+  type: number
+  unite: W/(m².K)
+  dependances:
+    - enveloppe.baie.ug
+
 enveloppe.baie.deltar:
   id: enveloppe.baie.deltar
   description: Résistance thermique additionnelle de la baie dûe à la présence de protections solaires
   type: number
   unite: m².K/W
 
-enveloppe.baie.sse_j:
-  id: enveloppe.baie.sse_j
+enveloppe.baie.sse:
+  id: enveloppe.baie.sse
   description: Surface sud équivalente de la baie
   type: number
-  unite: m²
-  scopes: [mois]
+  unite: m²/mois
   dependances:
     - enveloppe.baie.u
     - enveloppe.baie.c1
     - enveloppe.baie.fe
     - enveloppe.baie.sw
+    - enveloppe.local_non_chauffe.baie.t
 
 enveloppe.baie.sw:
   id: enveloppe.baie.sw
@@ -510,7 +459,21 @@ enveloppe.baie.fe:
   description: Facteur d'ensoleillement de la baie
   type: number
   dependances:
+    - enveloppe.baie.fe1
+    - enveloppe.baie.fe2
+
+enveloppe.baie.fe1:
+  id: enveloppe.baie.fe1
+  description: Facteur d'ensoleillement de la baie dû aux masques proches
+  type: number
+  dependances:
     - enveloppe.masque.fe1
+
+enveloppe.baie.fe2:
+  id: enveloppe.baie.fe2
+  description: Facteur d'ensoleillement de la baie dû aux masques lointains
+  type: number
+  dependances:
     - enveloppe.masque.fe2
     - enveloppe.masque.omb
 
@@ -563,10 +526,11 @@ enveloppe.mur.u0:
   type: number
   unite: W/(m².K)
 
-enveloppe.mur.isolation:
-  id: enveloppe.mur.isolation
-  description: État d'isolation du mur
-  type: boolean
+enveloppe.mur.aiu:
+  id: enveloppe.mur.aiu
+  description: Surface du mur en contact avec un local non chauffé
+  type: number
+  unite: m²
 
 enveloppe.mur.isolation_aiu:
   id: enveloppe.mur.isolation_aiu
@@ -614,10 +578,11 @@ enveloppe.plancher_bas.u0:
   type: number
   unite: W/(m².K)
 
-enveloppe.plancher_bas.isolation:
-  id: enveloppe.plancher_bas.isolation
-  description: État d'isolation du plancher bas
-  type: boolean
+enveloppe.plancher_bas.aiu:
+  id: enveloppe.plancher_bas.aiu
+  description: Surface du plancher bas en contact avec un local non chauffé
+  type: number
+  unite: m²
 
 enveloppe.plancher_bas.isolation_aiu:
   id: enveloppe.plancher_bas.isolation_aiu
@@ -665,15 +630,32 @@ enveloppe.plancher_haut.u0:
   type: number
   unite: W/(m².K)
 
-enveloppe.plancher_haut.isolation:
-  id: enveloppe.plancher_haut.isolation
-  description: État d'isolation du plancher haut
-  type: boolean
+enveloppe.plancher_haut.aiu:
+  id: enveloppe.plancher_haut.aiu
+  description: Surface du plancher haut en contact avec un local non chauffé
+  type: number
+  unite: m²
 
 enveloppe.plancher_haut.isolation_aiu:
   id: enveloppe.plancher_haut.isolation_aiu
   description: État d'isolation du plancher haut en contact avec un local non chauffé
   type: boolean
+
+# <-- Enveloppe - Pont thermique -->
+
+enveloppe.pont_thermique.kpt:
+  id: enveloppe.pont_thermique.kpt
+  description: Valeur du pont thermique
+  type: number
+  unite: W/(m.K)
+
+enveloppe.pont_thermique.pt:
+  id: enveloppe.pont_thermique.pt
+  description: Déperditions thermiques du pont thermique
+  type: number
+  unite: W/K
+  dependances:
+    - enveloppe.pont_thermique.k
 
 # <-- Enveloppe - Porte -->
 
@@ -706,26 +688,13 @@ enveloppe.porte.u:
   type: number
   unite: W/(m².K)
 
-enveloppe.porte.isolation:
-  id: enveloppe.porte.isolation
-  description: État d'isolation de la porte
-  type: boolean
+enveloppe.porte.aiu:
+  id: enveloppe.porte.aiu
+  description: Surface de la porte en contact avec un local non chauffé
+  type: number
+  unite: m²
 
 enveloppe.porte.isolation_aiu:
   id: enveloppe.porte.isolation_aiu
   description: État d'isolation de la porte en contact avec un local non chauffé
   type: boolean
-
-# <-- Enveloppe - Pont thermique -->
-
-enveloppe.pont_thermique.k:
-  description: Valeur du pont thermique
-  type: number
-  unite: W/(m.K)
-
-enveloppe.pont_thermique.pt:
-  description: Déperditions thermiques du pont thermique
-  type: number
-  unite: W/K
-  dependances:
-    - enveloppe.pont_thermique.k

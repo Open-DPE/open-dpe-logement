@@ -1,5 +1,26 @@
 import { buildEnum } from "../utils";
 
+export type NonEmptyArray<T> = [T, ...T[]];
+
+export function toNonEmptyArray<T>(arr: T[]): NonEmptyArray<T> {
+	if (arr.length === 0) throw new Error("Array is empty");
+	return arr as NonEmptyArray<T>;
+}
+
+export type PositiveNumber = number & { readonly _brand: "positive" };
+
+export function toPositive(n: number): PositiveNumber {
+	if (n <= 0) throw new Error(`${n} n'est pas positif`);
+	return n as PositiveNumber;
+}
+
+export type NonNegativeNumber = number & { readonly _brand: "nonNegative" };
+
+export function toNonNegative(n: number): NonNegativeNumber {
+	if (n < 0) throw new Error(`${n} n'est pas non négatif`);
+	return n as NonNegativeNumber;
+}
+
 /**
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/id
  */
@@ -58,7 +79,12 @@ export const OrientationEnum = buildEnum(ORIENTATIONS);
 /**
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/orientation_cardinale
  */
-export const ORIENTATIONS_CARDINALES = ["nord", "sud", "est", "ouest"] as const;
+export const ORIENTATIONS_CARDINALES = [
+	OrientationEnum.nord,
+	OrientationEnum.sud,
+	OrientationEnum.est,
+	OrientationEnum.ouest,
+] as const satisfies readonly Orientation[];
 export type OrientationCardinale = (typeof ORIENTATIONS_CARDINALES)[number];
 export const OrientationCardinaleEnum = buildEnum(ORIENTATIONS_CARDINALES);
 
@@ -99,7 +125,12 @@ export const ENERGIES_BOIS: readonly Energie[] = [
 	"bois_plaquette",
 	"bois_granule",
 ] as const satisfies readonly Energie[];
-export type EnergieBois = (typeof ENERGIES_BOIS)[number];
+export type EnergieBois = Extract<
+	Energie,
+	| typeof EnergieEnum.bois_buche
+	| typeof EnergieEnum.bois_plaquette
+	| typeof EnergieEnum.bois_granule
+>;
 export const EnergieBoisEnum = buildEnum(ENERGIES_BOIS);
 
 export const ENERGIES_COMBUSTION: readonly Energie[] = [
@@ -111,7 +142,14 @@ export const ENERGIES_COMBUSTION: readonly Energie[] = [
 	"bois_granule",
 	"charbon",
 ] as const satisfies readonly Energie[];
-export type EnergieCombustion = (typeof ENERGIES_COMBUSTION)[number];
+
+export type EnergieCombustion = Exclude<
+	Energie,
+	| typeof EnergieEnum.electricite
+	| typeof EnergieEnum.electricite_renouvelable
+	| typeof EnergieEnum.reseau_chaleur
+	| typeof EnergieEnum.reseau_froid
+>;
 export const EnergieCombustionEnum = buildEnum(ENERGIES_COMBUSTION);
 
 /**

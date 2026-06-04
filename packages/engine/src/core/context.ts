@@ -1,11 +1,14 @@
-import { Common, Diagnostic } from "@open-dpe-logement/models";
+import { common, diagnostic } from "@open-dpe-logement/models";
 import type { Results } from "./results.js";
 
 export type Thunk<T> = () => T;
 
 export interface Context {
-	readonly diagnostic: Diagnostic.Diagnostic;
-	readonly scenario: Common.Scenario;
+	readonly diagnostic: diagnostic.Diagnostic;
+	readonly scenario: common.Scenario;
+
+	once<T>(key: string, value: string, thunk: Thunk<T>): T;
+	once<T>(key: string, value: string, item: { id: string }, thunk: Thunk<T>): T;
 
 	register<K extends keyof Results, V extends keyof Results[K]>(
 		key: K,

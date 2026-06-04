@@ -1,12 +1,24 @@
 id: ecs:cr
 name: cr
 fields:
+  - name: type_generateur
+    title: Type de générateur
+    type: string
+    format: enums
+    x-enum: ecs:type-generateur
+    required: true
+  - name: energie_generateur
+    title: Énergie du générateur
+    type: string
+    format: enums
+    x-enum: energie
+    required: false
   - name: position_chauffe_eau
     title: Position du chauffe-eau
     type: string
     format: enums
     x-enum: ecs:position-chauffe-eau
-    required: true
+    required: false
   - name: label_generateur
     title: Label du générateur
     type: string

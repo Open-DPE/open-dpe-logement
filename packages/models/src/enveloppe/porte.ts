@@ -50,7 +50,7 @@ export type Vitrage = {
 	type: TypeVitrage | null;
 };
 
-export const MATERIAUX = ["bois", "metal", "pvc", "autre"] as const;
+export const MATERIAUX = ["bois", "metal", "pvc"] as const;
 export type Materiau = (typeof MATERIAUX)[number];
 export const MateriauEnum = buildEnum(MATERIAUX);
 

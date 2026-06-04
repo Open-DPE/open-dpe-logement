@@ -15,6 +15,9 @@ properties:
   position:
     type: object
     properties:
+      cascade:
+        const: null
+        default: null
       reseau_chaleur_id:
         const: null
         default: null
@@ -25,11 +28,11 @@ required:
 discriminator:
   propertyName: bienergie
 oneOf:
-  - title: Pompe à chaleur
+  - title: Pompe à chaleur classique
     type: object
     properties:
       bienergie:
-        const:
+        const: null
         default: null
       position:
         type: object

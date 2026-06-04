@@ -1,6 +1,5 @@
-import type { Consommations, UUID } from "../common/common.js";
-import { buildEnum, type NonEmptyArray } from "../utils.js";
-import type { Emetteur } from "./emetteur.js";
+import type { Consommations, UUID, NonEmptyArray } from "#/common/common.js";
+import { buildEnum } from "#/utils.js";
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/systeme
@@ -47,13 +46,13 @@ type ReseauBase = {
 	presence_circulateur_externe: boolean;
 	niveaux_desservis: number;
 	isolation: boolean | null;
-	emetteurs: Emetteur[];
+	emetteurs: UUID[];
 };
 
 export type ReseauHydraulique = ReseauBase & {
 	type_distribution: typeof TypeDistributionEnum.hydraulique;
 	temperature_distribution: TemperatureDistribution | null;
-	emetteurs: NonEmptyArray<Emetteur>;
+	emetteurs: NonEmptyArray<UUID>;
 };
 
 export type ReseauAeraulique = ReseauBase & {

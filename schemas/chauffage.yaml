@@ -4,6 +4,11 @@ title: Chauffage
 type: object
 additionalProperties: false
 properties:
+  emetteurs:
+    title: Liste des émetteurs
+    type: array
+    items:
+      $ref: /chauffage/emetteur
   generateurs:
     title: Liste des générateurs
     type: array
@@ -22,6 +27,9 @@ properties:
     readOnly: true
     additionalProperties: false
     properties:
+      effet_joule:
+        title: Effet Joule
+        type: boolean
       f:
         title: Fraction des besoins de chauffage couverts par les apports gratuits
         type: number
@@ -53,5 +61,6 @@ properties:
       - pertes
       - consommations
 required:
+  - emetteurs
   - generateurs
   - installations

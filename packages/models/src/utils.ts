@@ -7,5 +7,3 @@ export function buildEnum<T extends string | number>(
 ): { [K in T]: K } {
 	return Object.fromEntries(values.map((v) => [v, v])) as { [K in T]: K };
 }
-
-export type NonEmptyArray<T> = [T, ...T[]];

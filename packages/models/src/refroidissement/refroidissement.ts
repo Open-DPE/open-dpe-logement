@@ -1,13 +1,15 @@
 import type { Consommations } from "../common/common.js";
-import type { Generateur } from "./generateur.js";
-import type { Installation } from "./installation.js";
+import * as generateur from "./generateur.js";
+import * as installation from "./installation.js";
+
+export { generateur, installation };
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement
  */
 export type Refroidissement = {
-	generateurs: Generateur[];
-	installations: Installation[];
+	generateurs: generateur.Generateur[];
+	installations: installation.Installation[];
 };
 
 export type RefroidissementWithData<

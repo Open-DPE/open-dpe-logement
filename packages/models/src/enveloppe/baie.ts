@@ -1,8 +1,9 @@
 import type { UUID } from "../common/common";
 import { buildEnum } from "../utils";
+import type { Masque } from "./masque";
 import type {
 	Orientation,
-	OrientationEnum,
+	OrientationHorizontale,
 	Position as BasePosition,
 	TypePose,
 } from "./common";
@@ -30,7 +31,6 @@ type BaieBase = {
 	menuiserie: Menuiserie | null;
 	vitrage: Vitrage;
 	survitrage: Survitrage | null;
-	masques: string[];
 };
 
 export type BaieBriqueVerre = BaieBase & {
@@ -85,14 +85,17 @@ export type Position = BasePosition & {
 	type_pose: TypePose;
 	inclinaison: number;
 	orientation: Orientation;
+	masques: Masque[];
 } & (PositionHorizontale | PositionVerticale);
+
 export type PositionHorizontale = {
 	inclinaison: 0;
-	orientation: typeof OrientationEnum.horizontale;
+	orientation: typeof OrientationHorizontale;
 };
+
 export type PositionVerticale = {
 	inclinaison: number;
-	orientation: Exclude<Orientation, typeof OrientationEnum.horizontale>;
+	orientation: Exclude<Orientation, typeof OrientationHorizontale>;
 };
 
 export type Menuiserie = {

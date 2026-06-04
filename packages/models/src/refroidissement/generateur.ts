@@ -72,7 +72,7 @@ const TYPES_GENERATEUR_PAC = [
 ] as const satisfies readonly TypeGenerateur[];
 type TYPE_GENERATEUR_PAC = (typeof TYPES_GENERATEUR_PAC)[number];
 
-export const ENERGIES_REFROIDISSEMENT = [
+export const ENERGIES_REFROIDISSEMENT: readonly Energie[] = [
 	"electricite",
 	"gaz_naturel",
 	"gpl",

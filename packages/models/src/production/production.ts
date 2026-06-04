@@ -1,11 +1,13 @@
 import { buildEnum } from "#/utils.js";
-import type { PanneauPhotovoltaique } from "./panneau-photovoltaique.js";
+import * as panneauPhotovoltaique from "./panneau-photovoltaique.js";
+
+export { panneauPhotovoltaique };
 
 /**
  * @see https://schemas.open-dpe.fr/production
  */
 export type Production = {
-	panneaux_photovoltaiques: PanneauPhotovoltaique[];
+	panneaux_photovoltaiques: panneauPhotovoltaique.PanneauPhotovoltaique[];
 };
 
 export type ProductionWithData<T extends Production = Production> = T & {

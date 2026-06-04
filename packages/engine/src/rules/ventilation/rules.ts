@@ -1,81 +1,75 @@
 import type { Context } from "#core/context.js";
-import * as functions from "./functions.js";
-import * as Installation from "./installation/rules.js";
-
-export type VentilationResults = {
-	caux: ReturnType<typeof functions.calcule_caux>;
-	qvarep_conv: ReturnType<typeof functions.calcule_qvarep_conv>;
-	qvasouf_conv: ReturnType<typeof functions.calcule_qvasouf_conv>;
-	smea_conv: ReturnType<typeof functions.calcule_smea_conv>;
-	hvent: ReturnType<typeof functions.calcule_hvent>;
-};
-
-export const ID = "ventilation";
-
-export const RULES = {
-	caux: "caux",
-	qvarep_conv: "qvarep_conv",
-	qvasouf_conv: "qvasouf_conv",
-	smea_conv: "smea_conv",
-	hvent: "hvent",
-} as const;
+import * as installation from "./installation/index.js";
+import * as formulas from "./formulas.js";
+import { ID, RULES } from "./registry.js";
 
 export function register(ctx: Context): void {
-	Installation.register(ctx);
-
-	ctx.register(ID, RULES.caux, () => get_caux(ctx));
-	ctx.register(ID, RULES.qvarep_conv, () => get_qvarep_conv(ctx));
-	ctx.register(ID, RULES.qvasouf_conv, () => get_qvasouf_conv(ctx));
-	ctx.register(ID, RULES.smea_conv, () => get_smea_conv(ctx));
-	ctx.register(ID, RULES.hvent, () => get_hvent(ctx));
+	installation.rules.register(ctx);
+	ctx.register(ID, RULES.caux, () => caux(ctx));
+	ctx.register(ID, RULES.qvarep_conv, () => qvarep_conv(ctx));
+	ctx.register(ID, RULES.qvasouf_conv, () => qvasouf_conv(ctx));
+	ctx.register(ID, RULES.smea_conv, () => smea_conv(ctx));
+	ctx.register(ID, RULES.hvent, () => hvent(ctx));
 }
 
-function get_caux(ctx: Context): VentilationResults["caux"] {
-	return functions.calcule_caux({
+export function caux(ctx: Context): ReturnType<typeof formulas.calcule_caux> {
+	return formulas.calcule_caux({
 		caux: ctx.diagnostic.ventilation.installations.map((item) =>
-			ctx.resolve(Installation.ID, Installation.RULES.caux, item),
+			ctx.resolve(installation.ID, installation.RULES.caux, item),
 		),
 	});
 }
 
-function get_qvarep_conv(ctx: Context): VentilationResults["qvarep_conv"] {
-	return functions.calcule_qvarep_conv({
+export function qvarep_conv(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_qvarep_conv> {
+	return formulas.calcule_qvarep_conv({
 		installations: ctx.diagnostic.ventilation.installations.map((item) => ({
-			qvarep_conv: ctx.resolve(Installation.ID, Installation.RULES.debits, item)
-				.qvarep_conv,
-			rdim: ctx.resolve(Installation.ID, Installation.RULES.rdim, item),
+			qvarep_conv: ctx.resolve(
+				installation.ID,
+				installation.RULES.qvarep_conv,
+				item,
+			),
+			rdim: ctx.resolve(installation.ID, installation.RULES.rdim, item),
 		})),
 	});
 }
 
-function get_qvasouf_conv(ctx: Context): VentilationResults["qvasouf_conv"] {
-	return functions.calcule_qvasouf_conv({
+export function qvasouf_conv(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_qvasouf_conv> {
+	return formulas.calcule_qvasouf_conv({
 		installations: ctx.diagnostic.ventilation.installations.map((item) => ({
 			qvasouf_conv: ctx.resolve(
-				Installation.ID,
-				Installation.RULES.debits,
+				installation.ID,
+				installation.RULES.qvasouf_conv,
 				item,
-			).qvasouf_conv,
-			rdim: ctx.resolve(Installation.ID, Installation.RULES.rdim, item),
+			),
+			rdim: ctx.resolve(installation.ID, installation.RULES.rdim, item),
 		})),
 	});
 }
 
-function get_smea_conv(ctx: Context): VentilationResults["smea_conv"] {
-	return functions.calcule_smea_conv({
+export function smea_conv(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_smea_conv> {
+	return formulas.calcule_smea_conv({
 		installations: ctx.diagnostic.ventilation.installations.map((item) => ({
-			smea_conv: ctx.resolve(Installation.ID, Installation.RULES.debits, item)
-				.smea_conv,
-			rdim: ctx.resolve(Installation.ID, Installation.RULES.rdim, item),
+			smea_conv: ctx.resolve(
+				installation.ID,
+				installation.RULES.smea_conv,
+				item,
+			),
+			rdim: ctx.resolve(installation.ID, installation.RULES.rdim, item),
 		})),
 	});
 }
 
-function get_hvent(ctx: Context): VentilationResults["hvent"] {
-	return functions.calcule_hvent({
+export function hvent(ctx: Context): ReturnType<typeof formulas.calcule_hvent> {
+	return formulas.calcule_hvent({
 		installations: ctx.diagnostic.ventilation.installations.map((item) => ({
-			hvent: ctx.resolve(Installation.ID, Installation.RULES.hvent, item),
-			rdim: ctx.resolve(Installation.ID, Installation.RULES.rdim, item),
+			hvent: ctx.resolve(installation.ID, installation.RULES.hvent, item),
+			rdim: ctx.resolve(installation.ID, installation.RULES.rdim, item),
 		})),
 	});
 }

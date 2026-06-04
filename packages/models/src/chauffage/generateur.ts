@@ -1,4 +1,5 @@
 import type { Consommations, Energie, Pertes, UUID } from "../common/common.js";
+import type { NonNegativeNumber, PositiveNumber } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 
 /**
@@ -45,9 +46,10 @@ export type GenerateurGeneric<
 		NonNullable<T["position"]>;
 	signaletique: Omit<Signaletique, keyof NonNullable<T["signaletique"]>> &
 		NonNullable<T["signaletique"]>;
-};
+} & T;
 
 export type Position = {
+	cascade: Cascade | null;
 	position_chaudiere: PositionChaudiere | null;
 	generateur_collectif: boolean;
 	generateur_multi_batiment: boolean;
@@ -57,18 +59,18 @@ export type Position = {
 };
 
 export type Signaletique = {
-	pn: number | null;
+	pn: PositiveNumber | null;
 	label: Label | null;
-	scop: number | null;
+	scop: PositiveNumber | null;
 	mode_combustion: ModeCombustion | null;
 	presence_ventouse: boolean | null;
 	presence_regulation: boolean | null;
-	pveilleuse: number | null;
-	qp0: number | null;
-	rpn: number | null;
-	rpint: number | null;
-	tfonc30: number | null;
-	tfonc100: number | null;
+	pveilleuse: NonNegativeNumber | null;
+	qp0: NonNegativeNumber | null;
+	rpn: PositiveNumber | null;
+	rpint: PositiveNumber | null;
+	tfonc30: PositiveNumber | null;
+	tfonc100: PositiveNumber | null;
 };
 
 export type GenerateurData = {
@@ -96,7 +98,8 @@ export type GenerateurCombustion = GenerateurGeneric<{
 		| typeof TypeGenerateurEnum.insert
 		| typeof TypeGenerateurEnum.poele
 		| typeof TypeGenerateurEnum.poele_bouilleur
-		| typeof TypeGenerateurEnum.radiateur_gaz;
+		| typeof TypeGenerateurEnum.radiateur_gaz
+		| typeof TypeGenerateurEnum.generateur_air_chaud;
 	energie: Exclude<
 		EnergieChauffage,
 		| typeof EnergieChauffageEnum.electricite
@@ -141,6 +144,7 @@ export type PoeleInsert = GenerateurGeneric<
 			| typeof TypeGenerateurEnum.foyer_ferme
 			| typeof TypeGenerateurEnum.poele;
 		position: {
+			cascade: null;
 			position_chaudiere: null;
 			generateur_collectif: false;
 			generateur_multi_batiment: false;
@@ -175,6 +179,7 @@ export type RadiateurGaz = GenerateurGeneric<
 			| typeof EnergieChauffageEnum.gaz_naturel
 			| typeof EnergieChauffageEnum.gpl;
 		position: {
+			cascade: null;
 			position_chaudiere: null;
 			generateur_collectif: false;
 			generateur_multi_batiment: false;
@@ -203,6 +208,7 @@ export type GenerateurElectrique = GenerateurGeneric<{
 	energie: typeof EnergieChauffageEnum.electricite;
 	bienergie: null;
 	position: {
+		cascade: null;
 		reseau_chaleur_id: null;
 	};
 	signaletique: {
@@ -223,15 +229,10 @@ export type ChaudiereElectrique = GenerateurGeneric<
 
 export type EmetteurElectrique = GenerateurGeneric<
 	GenerateurElectrique & {
-		type:
-			| typeof TypeGenerateurEnum.generateur_air_chaud
-			| typeof TypeGenerateurEnum.convecteur_bi_jonction
-			| typeof TypeGenerateurEnum.convecteur_electrique
-			| typeof TypeGenerateurEnum.panneau_rayonnant_electrique
-			| typeof TypeGenerateurEnum.plafond_rayonnant_electrique
-			| typeof TypeGenerateurEnum.plancher_rayonnant_electrique
-			| typeof TypeGenerateurEnum.radiateur_electrique
-			| typeof TypeGenerateurEnum.radiateur_electrique_accumulation;
+		type: Exclude<
+			GenerateurElectrique["type"],
+			typeof TypeGenerateurEnum.chaudiere
+		>;
 	}
 >;
 
@@ -244,6 +245,7 @@ export type GenerateurThermodynamique = GenerateurGeneric<{
 		| typeof TypeGenerateurEnum.pac_geothermique;
 	energie: typeof EnergieChauffageEnum.electricite;
 	position: {
+		cascade: null;
 		reseau_chaleur_id: null;
 	};
 }>;
@@ -279,6 +281,7 @@ export type ReseauChaleur = GenerateurGeneric<{
 	energie: typeof EnergieChauffageEnum.reseau_chaleur;
 	bienergie: null;
 	position: {
+		cascade: null;
 		position_chaudiere: null;
 		generateur_collectif: true;
 		generateur_multi_batiment: true;
@@ -295,6 +298,7 @@ export type GenerateurCollectifInconnu = GenerateurGeneric<{
 	energie: null;
 	bienergie: null;
 	position: {
+		cascade: null;
 		position_chaudiere: null;
 		generateur_collectif: true;
 		position_volume_chauffe: false;
@@ -331,30 +335,6 @@ export const TYPES_GENERATEUR = [
 ] as const;
 export type TypeGenerateur = (typeof TYPES_GENERATEUR)[number];
 export const TypeGenerateurEnum = buildEnum(TYPES_GENERATEUR);
-
-export const TYPES_PAC: TypeGenerateur[] = [
-	TypeGenerateurEnum.pac_air_air,
-	TypeGenerateurEnum.pac_air_eau,
-	TypeGenerateurEnum.pac_eau_eau,
-	TypeGenerateurEnum.pac_eau_glycolee_eau,
-	TypeGenerateurEnum.pac_geothermique,
-] as const;
-export type TypePAC = (typeof TYPES_PAC)[number];
-export const TypePACEnum = buildEnum(TYPES_PAC);
-
-export const TYPES_GENERATEUR_COMBUSTION = [
-	"chaudiere_standard",
-	"chaudiere_basse_temperature",
-	"chaudiere_condensation",
-	"generateur_air_chaud",
-	"chaudiere_bois",
-	"radiateur_gaz",
-] as const;
-export type TypeGenerateurCombustion =
-	(typeof TYPES_GENERATEUR_COMBUSTION)[number];
-export const TypeGenerateurCombustionEnum = buildEnum(
-	TYPES_GENERATEUR_COMBUSTION,
-);
 
 export const ENERGIES_CHAUFFAGE = [
 	"electricite",
@@ -396,3 +376,5 @@ export const MODES_COMBUSTION = [
 ] as const;
 export type ModeCombustion = (typeof MODES_COMBUSTION)[number];
 export const ModeCombustionEnum = buildEnum(MODES_COMBUSTION);
+
+export type Cascade = 0 | 1 | 2;

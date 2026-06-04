@@ -5,3 +5,9 @@ export class ValeurForfaitaireError extends Error {
 	}
 }
 
+export class UnprocessableValeurError extends Error {
+	constructor(props: object) {
+		super(`Valeur non traitable pour : ${JSON.stringify(props)}`);
+		this.name = "UnprocessableValeurError";
+	}
+}

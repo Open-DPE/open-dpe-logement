@@ -1,5 +1,7 @@
-import type { Consommations, Pertes, UUID } from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import type { Consommations, Pertes, UUID } from "#/common/common.js";
+import type { Generateur } from "./generateur.js";
+import { EntityNotFoundError } from "#/errors.js";
+import { buildEnum } from "#/utils.js";
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/systeme
@@ -36,3 +38,9 @@ export type Reseau = {
 export const BOUCLAGES = ["non_boucle", "boucle", "trace"] as const;
 export type Bouclage = (typeof BOUCLAGES)[number];
 export const BouclageEnum = buildEnum(BOUCLAGES);
+
+export function get_generateur(collection: Generateur[], id: UUID): Generateur {
+	const e = collection.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Generateur", id);
+	return e;
+}

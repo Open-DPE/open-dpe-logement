@@ -9,32 +9,24 @@
 
 ## Organisation
 
-```
+```text
 /engine
 ├── src/
 │   ├── index.ts                        # exports publics : Engine, interfaces, engine (instance)
 │   ├── core/
-│   │   ├── interfaces.ts               # Regle, RegleIterable, RegleStrategy, ResolvedDeps, ExecutionContext
-│   │   ├── engine.ts                   # classe Engine
-│   │   ├── cache.ts                    # EngineCache
-│   │   └── dag.ts                      # DependencyGraph
+│   │   ├── contexte.ts                 # Registre des règles, résolution des dépendances
+│   │   ├── engine.ts                   # Initialisation du contexte
+│   │   ├── index.ts                    # 
+│   │   └── results.ts                  # Typage des résultats (cache + output)
 │   ├── utils/
-│   │   ├── energie.ts                  # fonctions pures génériques uniquement
-│   │   ├── climatique.ts
-│   │   └── surface.ts
+│   │   ├── errors.ts                   # Erreurs
+│   │   ├── helpers.ts                  # Fonctions génériques
+│   │   └── math.ts                     # Fonctions mathématiques
 │   └── rules/
-│       ├── index.ts                    # createEngine() → instanciation + injection
-│       ├── enveloppe/
-│       │   ├── mur/
-│       │   │   ├── regle-mur-u.ts
-│       │   │   ├── regle-mur-sdep.ts
-│       │   │   └── regle-mur-dp.ts
-│       │   ├── baie/
-│       │   └── pont-thermique/
-│       │       ├── regle-pont-thermique-valeur.ts  # RegleStrategy
-│       │       └── strategies/
-│       │           ├── pont-thermique-refend-mur.ts
-│       │           └── pont-thermique-menuiserie-mur.ts
+│       ├── [domaine]/
+│       │   ├── formulas.ts             # Formules de calcul réglementaires
+│       │   ├── registry.ts             # Registre des règles et des résultats
+│       │   └── rules.ts                # Implémentation des formules de calcul
 │       ├── chauffage/
 │       └── etiquette/
 └── tests/

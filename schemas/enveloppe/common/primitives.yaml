@@ -27,9 +27,11 @@ $defs:
       - local_non_accessible
   orientation:
     title: Orientation
-    type: [string]
+    type: string
     x-enum: enveloppe:paroi:orientation
-    enum: [nord, est, sud, ouest, horizontale]
+    oneOf:
+      - $ref: "/common/primitives#/$defs/orientation_cardinale"
+      - const: horizontale
   type_pose:
     title: Type de pose
     type: string
@@ -69,3 +71,4 @@ $defs:
   sse:
     title: Surface sud équivalente en m²
     type: number
+    minimum: 0

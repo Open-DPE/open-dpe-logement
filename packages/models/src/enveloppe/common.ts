@@ -1,6 +1,9 @@
-import type { UUID } from "../common/common.js";
-import { buildEnum } from "../utils.js";
-
+import type {
+	UUID,
+	OrientationCardinale,
+	PositiveNumber,
+} from "#/common/common.js";
+import { buildEnum } from "#/utils.js";
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/inertie
  */
@@ -35,15 +38,8 @@ export const MitoyenneteEnum = buildEnum(MITOYENNETES);
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/orientation
  */
-export const ORIENTATIONS = [
-	"nord",
-	"sud",
-	"est",
-	"ouest",
-	"horizontale",
-] as const;
-export type Orientation = (typeof ORIENTATIONS)[number];
-export const OrientationEnum = buildEnum(ORIENTATIONS);
+export type Orientation = OrientationCardinale | typeof OrientationHorizontale;
+export const OrientationHorizontale = "horizontale" as const;
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/type_pose
@@ -73,7 +69,7 @@ export const TypeIsolationEnum = buildEnum(TYPES_ISOLATION);
 export type Position = PositionParoiLocalNonChauffe | PositionParoiAutres;
 
 export type PositionBase = {
-	surface: number;
+	surface: PositiveNumber;
 	mitoyennete: Mitoyennete;
 	local_non_chauffe_id: UUID | null;
 };
@@ -108,6 +104,6 @@ export type IsolationConnue = {
 	etat: true;
 	type: TypeIsolation;
 	annee_installation: number | null;
-	epaisseur: number | null;
-	resistance_thermique: number | null;
+	epaisseur: PositiveNumber | null;
+	resistance_thermique: PositiveNumber | null;
 };

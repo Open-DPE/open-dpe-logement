@@ -55,19 +55,19 @@ export const linearInterpolate = (
 	if (match) return match.y;
 
 	if (points.length < 2) {
-		throw new Error("La liste des points doivent contenir deux valeurs.");
+		throw new Error("La liste des points doit contenir au moins deux valeurs.");
 	}
-	const sorted = points.sort((a, b) => Math.abs(a.x - x) - Math.abs(b.x - x));
-	const [p0, p1] = sorted;
-	const [x0, x1] = p0!.x < p1!.x ? [p0!.x, p1!.x] : [p1!.x, p0!.x];
-	const [y0, y1] = p0!.x < p1!.x ? [p0!.y, p1!.y] : [p1!.y, p0!.y];
 
-	if (x1 === x0) {
-		throw new Error(
-			"Deux points ont la même valeur de x, impossible d'effectuer l'interpolation.",
-		);
-	}
-	return y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
+	const sorted = [...points].sort((a, b) => a.x - b.x);
+
+	let i = sorted.findIndex((p) => p.x > x);
+	if (i === -1) i = sorted.length - 1;
+	if (i === 0) i = 1;
+
+	const p0 = sorted[i - 1]!;
+	const p1 = sorted[i]!;
+
+	return p0.y + ((p1.y - p0.y) * (x - p0.x)) / (p1.x - p0.x);
 };
 
 /**
@@ -82,23 +82,37 @@ export const bilinearInterpolate = (
 	if (match) return match.q;
 
 	if (points.length < 4) {
-		throw new Error("La liste des points doivent contenir quatre valeurs.");
+		throw new Error(
+			"La liste des points doit contenir au moins quatre valeurs.",
+		);
 	}
-	const xs = [...new Set(points.map((p) => p.x))]
-		.sort((a, b) => Math.abs(a - x) - Math.abs(b - x))
-		.slice(0, 2);
-	const ys = [...new Set(points.map((p) => p.y))]
-		.sort((a, b) => Math.abs(a - y) - Math.abs(b - y))
-		.slice(0, 2);
 
-	const sorted = points.filter((p) => xs.includes(p.x) && ys.includes(p.y));
-	const [p1, p2] = sorted;
-	const [x1, x2] = p1!.x < p2!.x ? [p1!.x, p2!.x] : [p2!.x, p1!.x];
-	const [y1, y2] = p1!.x < p2!.x ? [p1!.y, p2!.y] : [p2!.y, p1!.y];
-	const q11 = sorted.find((p) => p.x === x1 && p.y === y1)!.q;
-	const q21 = sorted.find((p) => p.x === x2 && p.y === y1)!.q;
-	const q12 = sorted.find((p) => p.x === x1 && p.y === y2)!.q;
-	const q22 = sorted.find((p) => p.x === x2 && p.y === y2)!.q;
+	const sortedXs = [...new Set(points.map((p) => p.x))].sort((a, b) => a - b);
+	const sortedYs = [...new Set(points.map((p) => p.y))].sort((a, b) => a - b);
+
+	let xi = sortedXs.findIndex((v) => v > x);
+	if (xi === -1) xi = sortedXs.length - 1;
+	if (xi === 0) xi = 1;
+	const x1 = sortedXs[xi - 1]!;
+	const x2 = sortedXs[xi]!;
+
+	let yi = sortedYs.findIndex((v) => v > y);
+	if (yi === -1) yi = sortedYs.length - 1;
+	if (yi === 0) yi = 1;
+	const y1 = sortedYs[yi - 1]!;
+	const y2 = sortedYs[yi]!;
+
+	const findQ = (px: number, py: number): number => {
+		const p = points.find((pt) => pt.x === px && pt.y === py);
+		if (!p)
+			throw new Error(`Point (${px}, ${py}) absent de la grille d'abaque.`);
+		return p.q;
+	};
+
+	const q11 = findQ(x1, y1);
+	const q21 = findQ(x2, y1);
+	const q12 = findQ(x1, y2);
+	const q22 = findQ(x2, y2);
 
 	let q = (((x2 - x) * (y2 - y)) / ((x2 - x1) * (y2 - y1))) * q11;
 	q += (((x - x1) * (y2 - y)) / ((x2 - x1) * (y2 - y1))) * q21;

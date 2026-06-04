@@ -1,0 +1,81 @@
+import { chauffage } from "@open-dpe-logement/models";
+
+/**
+ * @doctrine chauffage.emetteur.delta_pem
+ * @return Perte de charge de l'émetteur en kPa
+ */
+export function calcule_delta_pem(props: {
+	type_emetteur: chauffage.emetteur.TypeEmetteur;
+}): number {
+	const { type_emetteur } = props;
+	switch (type_emetteur) {
+		case chauffage.emetteur.TypeEmetteurEnum.plancher_chauffant:
+		case chauffage.emetteur.TypeEmetteurEnum.plafond_chauffant:
+			return 15;
+		case chauffage.emetteur.TypeEmetteurEnum.radiateur_monotube:
+			return 30;
+		case chauffage.emetteur.TypeEmetteurEnum.radiateur_bitube:
+		case chauffage.emetteur.TypeEmetteurEnum.radiateur:
+			return 10;
+		case chauffage.emetteur.TypeEmetteurEnum.autres:
+			return 35;
+	}
+}
+
+/**
+ * @returns Facteur de correction
+ */
+export function calcule_fcot(props: {
+	type_emetteur: chauffage.emetteur.TypeEmetteur;
+}): number {
+	const { type_emetteur } = props;
+	switch (type_emetteur) {
+		case chauffage.emetteur.TypeEmetteurEnum.plancher_chauffant:
+			return 0.156;
+		default:
+			return 0.802;
+	}
+}
+
+/**
+ * @doctrine chauffage.emetteur.dtheta_dim
+ * @return Chute nominale de température de dimensionnement en °C
+ */
+export function calcule_dtheta_dim(props: {
+	temperature_distribution: ReturnType<typeof set_temperature_distribution>;
+}): number {
+	const { temperature_distribution } = props;
+	switch (temperature_distribution) {
+		case chauffage.emetteur.TemperatureDistributionEnum.haute:
+			return 15;
+		default:
+			return 7.5;
+	}
+}
+
+/**
+ * @param props.temperature_distribution : Température de distribution de l'émetteur de chauffage saisie
+ * @return Température de distribution de l'émetteur de chauffage retenue
+ */
+export function set_temperature_distribution(props: {
+	temperature_distribution: chauffage.emetteur.TemperatureDistribution | null;
+}): chauffage.emetteur.TemperatureDistribution {
+	const { temperature_distribution } = props;
+	return (
+		temperature_distribution ??
+		chauffage.emetteur.TemperatureDistributionEnum.haute
+	);
+}
+
+/**
+ * @param props.annee_installation : Année d'installation de l'émetteur de chauffage saisie
+ * @param props.annee_construction_batiment : Année de construction du bâtiment
+ * @return Année d'installation de l'émetteur de chauffage retenue
+ */
+export function set_annee_installation(props: {
+	annee_installation: number | null;
+	annee_construction_batiment: number;
+}): number {
+	const { annee_installation, annee_construction_batiment } = props;
+	return annee_installation ?? annee_construction_batiment;
+}

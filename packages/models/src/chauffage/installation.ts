@@ -1,6 +1,11 @@
-import type { Consommations, UUID } from "../common/common.js";
-import { buildEnum, type NonEmptyArray } from "../utils.js";
-import type { Systeme } from "./systeme.js";
+import type {
+	Consommations,
+	UUID,
+	NonEmptyArray,
+	PositiveNumber,
+} from "#/common/common.js";
+import { buildEnum } from "#/utils.js";
+import * as systeme from "./systeme.js";
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/installation
@@ -8,15 +13,14 @@ import type { Systeme } from "./systeme.js";
 export type Installation = {
 	id: UUID;
 	description: string;
-	surface: number;
+	surface: PositiveNumber;
 	type: TypeInstallation;
 	installation_collective: boolean;
 	comptage_individuel: boolean | null;
 	regulation_terminale: boolean | null;
-	programmation_centrale: TypeProgrammationCentrale;
-	programmation_terminale: TypeProgrammationTerminale | null;
+	programmation: TypeProgrammation;
 	solaire_thermique: SolaireThermique | null;
-	systemes: NonEmptyArray<Systeme>;
+	systemes: NonEmptyArray<systeme.Systeme>;
 };
 
 export type InstallationWithData<T extends Installation = Installation> = T & {
@@ -54,22 +58,15 @@ export const TYPES_PROGRAMMATION = [
 export type TypeProgrammation = (typeof TYPES_PROGRAMMATION)[number];
 export const TypeProgrammationEnum = buildEnum(TYPES_PROGRAMMATION);
 
-export type TypeProgrammationCentrale = Extract<
-	TypeProgrammation,
-	| "absent"
-	| "central_sans_minimum_temperature"
-	| "central_avec_minimum_temperature"
-	| "central_collectif_sans_detection_presence"
-	| "central_collectif_avec_detection_presence"
->;
-
-export type TypeProgrammationTerminale = Extract<
-	TypeProgrammation,
-	| "absent"
-	| "terminal_avec_minimum_temperature"
-	| "terminal_avec_minimum_temperature_detection_presence"
->;
-
 export const USAGES_SOLAIRE = ["chauffage", "chauffage_ecs"] as const;
 export type UsageSolaire = (typeof USAGES_SOLAIRE)[number];
 export const UsageSolaireEnum = buildEnum(USAGES_SOLAIRE);
+
+export const CONFIGURATIONS = [
+	"base",
+	"base_appoint",
+	"base_releve",
+	"base_releve_appoint",
+] as const;
+export type Configuration = (typeof CONFIGURATIONS)[number];
+export const ConfigurationEnum = buildEnum(CONFIGURATIONS);

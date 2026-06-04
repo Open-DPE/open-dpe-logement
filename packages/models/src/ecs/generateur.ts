@@ -1,5 +1,12 @@
-import type { Consommations, Energie, Pertes, UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
+import type {
+	Consommations,
+	Energie,
+	EnergieBois,
+	EnergieCombustion,
+	Pertes,
+	UUID,
+} from "../common/common.js";
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/generateur
@@ -93,14 +100,7 @@ export type GenerateurCombustion = {
 		| typeof TypeGenerateurEnum.chaudiere
 		| typeof TypeGenerateurEnum.poele_bouilleur
 		| typeof TypeGenerateurEnum.chauffe_eau;
-	energie:
-		| typeof EnergieEcsEnum.gaz_naturel
-		| typeof EnergieEcsEnum.gpl
-		| typeof EnergieEcsEnum.fioul
-		| typeof EnergieEcsEnum.charbon
-		| typeof EnergieEcsEnum.bois_buche
-		| typeof EnergieEcsEnum.bois_plaquette
-		| typeof EnergieEcsEnum.bois_granule;
+	energie: EnergieCombustion;
 	bienergie: null;
 	position: {
 		reseau_chaleur_id: null;
@@ -123,10 +123,7 @@ export type ChaudiereCombustion = GenerateurGeneric<
 export type PoeleBoisBouilleur = GenerateurGeneric<
 	GenerateurCombustion & {
 		type: typeof TypeGenerateurEnum.poele_bouilleur;
-		energie:
-			| typeof EnergieEcsEnum.bois_buche
-			| typeof EnergieEcsEnum.bois_plaquette
-			| typeof EnergieEcsEnum.bois_granule;
+		energie: EnergieBois;
 		position: {
 			position_chauffe_eau: null;
 			generateur_collectif: false;
@@ -313,6 +310,15 @@ export const TYPES_GENERATEUR = [
 ] as const;
 export type TypeGenerateur = (typeof TYPES_GENERATEUR)[number];
 export const TypeGenerateurEnum = buildEnum(TYPES_GENERATEUR);
+
+export const TYPES_PAC: readonly TypeGenerateur[] = [
+	TypeGenerateurEnum.cet_air_ambiant,
+	TypeGenerateurEnum.cet_air_exterieur,
+	TypeGenerateurEnum.cet_air_extrait,
+	TypeGenerateurEnum.pac_double_service,
+] as const satisfies readonly TypeGenerateur[];
+export type TypePac = (typeof TYPES_PAC)[number];
+export const TypePacEnum = buildEnum(TYPES_PAC);
 
 export const ENERGIES_ECS = [
 	"electricite",

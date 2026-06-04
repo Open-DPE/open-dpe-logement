@@ -30,131 +30,12 @@ properties:
     title: Liste des parois
     type: array
     items:
-      title: Paroi
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          $ref: /common/primitives#/$defs/id
-        description:
-          $ref: /common/primitives#/$defs/description
-        isolation:
-          title: État d'isolation de la paroi
-          type: [boolean, "null"]
-        position:
-          title: Position
-          type: object
-          properties:
-            mitoyennete:
-              $ref: /enveloppe/common/primitives#/$defs/mitoyennete
-            surface:
-              $ref: /common/primitives#/$defs/surface
-          required:
-            - mitoyennete
-            - surface
-      required:
-        - id
-        - description
-        - isolation
-        - position
+      $ref: "#/$defs/paroi"
   baies:
     title: Liste des baies
     type: array
     items:
-      title: Baie
-      type: object
-      unevaluatedProperties: false
-      properties:
-        id:
-          $ref: /common/primitives#/$defs/id
-        description:
-          $ref: /common/primitives#/$defs/description
-        type_vitrage:
-          title: Type
-          type: [string, "null"]
-          x-enum: enveloppe:baie:type-vitrage
-          enum:
-            - brique_verre
-            - polycarbonate
-            - simple_vitrage
-            - double_vitrage
-            - double_vitrage_fe
-            - triple_vitrage
-            - triple_vitrage_fe
-            - null
-        materiau_menuiserie:
-          title: Matériau
-          type: [string, "null"]
-          x-enum: enveloppe:baie:materiau
-          enum: [pvc, bois, bois_metal, metal, null]
-        presence_rupteur_pont_thermique:
-          title: Présence d'un rupteur de pont thermique
-          type: [boolean, "null"]
-        position:
-          title: Position de la baie
-          type: object
-          unevaluatedProperties: false
-          properties:
-            surface:
-              $ref: /common/primitives#/$defs/surface
-            mitoyennete:
-              $ref: /enveloppe/common/primitives#/$defs/mitoyennete
-            orientation:
-              $ref: /enveloppe/common/primitives#/$defs/orientation
-            inclinaison:
-              $ref: /common/primitives#/$defs/inclinaison
-          required:
-            - surface
-            - mitoyennete
-            - inclinaison
-            - orientation
-          oneOf:
-            - title: Baie horizontale
-              type: object
-              properties:
-                inclinaison:
-                  const: 0
-                orientation:
-                  const: horizontale
-              required:
-                - inclinaison
-                - orientation
-            - title: Autres cas
-              type: object
-              properties:
-                inclinaison:
-                  exclusiveMinimum: 0
-                orientation:
-                  enum: [nord, est, sud, ouest]
-              required:
-                - inclinaison
-                - orientation
-      required:
-        - id
-        - description
-        - materiau_menuiserie
-        - type_vitrage
-        - position
-      discriminator:
-        propertyName: type
-      oneOf:
-        - title: Baie vitrée
-          type: object
-          properties:
-            type_vitrage:
-              enum: [brique_verre, polycarbonate]
-            materiau_menuiserie:
-              const: null
-          required:
-            - type_vitrage
-        - title: Autres cas
-          type: object
-          properties:
-            type_vitrage:
-              not:
-                enum: [brique_verre, polycarbonate]
-          required:
-            - type_vitrage
+      $ref: "#/$defs/baie"
   data:
     title: Données calculées
     type: object
@@ -179,3 +60,138 @@ required:
   - type
   - parois
   - baies
+anyOf:
+  - properties:
+      parois:
+        minItems: 1
+    required:
+      - parois
+  - properties:
+      baies:
+        minItems: 1
+    required:
+      - baies
+$defs:
+  paroi:
+    title: Paroi
+    type: object
+    additionalProperties: false
+    properties:
+      id:
+        $ref: /common/primitives#/$defs/id
+      description:
+        $ref: /common/primitives#/$defs/description
+      isolation:
+        title: État d'isolation de la paroi
+        type: [boolean, "null"]
+      position:
+        title: Position
+        type: object
+        properties:
+          mitoyennete:
+            $ref: /enveloppe/common/primitives#/$defs/mitoyennete
+          surface:
+            $ref: /common/primitives#/$defs/surface
+        required:
+          - mitoyennete
+          - surface
+    required:
+      - id
+      - description
+      - isolation
+      - position
+  baie:
+    title: Baie
+    type: object
+    unevaluatedProperties: false
+    properties:
+      id:
+        $ref: /common/primitives#/$defs/id
+      description:
+        $ref: /common/primitives#/$defs/description
+      type_vitrage:
+        title: Type
+        type: [string, "null"]
+        x-enum: enveloppe:baie:type-vitrage
+        enum:
+          - brique_verre
+          - polycarbonate
+          - simple_vitrage
+          - double_vitrage
+          - double_vitrage_fe
+          - triple_vitrage
+          - triple_vitrage_fe
+          - null
+      materiau_menuiserie:
+        title: Matériau
+        type: [string, "null"]
+        x-enum: enveloppe:baie:materiau
+        enum: [pvc, bois, bois_metal, metal, null]
+      presence_rupteur_pont_thermique:
+        title: Présence d'un rupteur de pont thermique
+        type: [boolean, "null"]
+      position:
+        title: Position de la baie
+        type: object
+        unevaluatedProperties: false
+        properties:
+          surface:
+            $ref: /common/primitives#/$defs/surface
+          mitoyennete:
+            $ref: /enveloppe/common/primitives#/$defs/mitoyennete
+          orientation:
+            $ref: /enveloppe/common/primitives#/$defs/orientation
+          inclinaison:
+            $ref: /common/primitives#/$defs/inclinaison
+        required:
+          - surface
+          - mitoyennete
+          - inclinaison
+          - orientation
+        oneOf:
+          - title: Baie horizontale
+            type: object
+            properties:
+              inclinaison:
+                const: 0
+              orientation:
+                const: horizontale
+            required:
+              - inclinaison
+              - orientation
+          - title: Autres cas
+            type: object
+            properties:
+              inclinaison:
+                exclusiveMinimum: 0
+              orientation:
+                enum: [nord, est, sud, ouest]
+            required:
+              - inclinaison
+              - orientation
+    required:
+      - id
+      - description
+      - materiau_menuiserie
+      - type_vitrage
+      - position
+    discriminator:
+      propertyName: type_vitrage
+    oneOf:
+      - title: Baie vitrée
+        type: object
+        properties:
+          type_vitrage:
+            enum: [brique_verre, polycarbonate]
+          materiau_menuiserie:
+            const: null
+        required:
+          - type_vitrage
+      - title: Autres cas
+        type: object
+        properties:
+          type_vitrage:
+            not:
+              enum: [brique_verre, polycarbonate]
+        required:
+          - type_vitrage

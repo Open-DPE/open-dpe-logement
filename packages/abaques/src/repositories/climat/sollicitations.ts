@@ -10,7 +10,7 @@ export type SollicitationsSchema = {
 	parois_anciennes: boolean;
 	inertie: string;
 	mois: string;
-	tefs: number | null;
+	tefs: number;
 	e: number;
 	efr26: number;
 	efr28: number;

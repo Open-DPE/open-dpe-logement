@@ -15,114 +15,21 @@ climat.nj:
   id: climat.nj
   description: Nombre de jours
   type: number
-  unite: j
-  scopes: [mois]
+  unite: jours/mois
 
 climat.epv:
   id: climat.epv
   description: Ensoleillement potentiel
   type: number
-  unite: kWh/m²
-  scopes: [mois]
+  unite: kWh/m²/mois
   dependances:
     - climat.zone_climatique
     - enveloppe.inertie
     - enveloppe.parois_anciennes
 
-climat.e_ch:
-  id: climat.e_ch
-  description: Ensoleillement reçu en période de chauffage
-  type: number
-  unite: kWh/m²
-  scopes: [mois, scenario]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.e_fr:
-  id: climat.e_fr
-  description: Ensoleillement reçu en période de refroidissement
-  type: number
-  unite: kWh/m²
-  scopes: [mois, scenario]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.nref_ch:
-  id: climat.nref_ch
-  description: Nombre d'heures de chauffage
-  type: number
-  unite: h
-  scopes: [mois, scenario]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.nref_fr:
-  id: climat.nref_fr
-  description: Nombre d'heures de refroidissement
-  type: number
-  unite: h
-  scopes: [mois, scenario]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.dh_ch:
-  id: climat.dh_ch
-  description: Degrés-heures de chauffage
-  type: number
-  unite: °C.h
-  scopes: [mois, scenario]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.dh14:
-  id: climat.dh14
-  description: Degrés-heures de base 14 sur la saison de chauffe complète
-  type: number
-  unite: °C.h
-  scopes: [mois]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.tefs:
-  id: climat.tefs
-  description: Température moyenne d'eau froide sanitaire
-  type: number
-  unite: °C
-  scopes: [mois]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.text_ch:
-  id: climat.text_ch
-  description: Température extérieure moyenne en période de chauffage
-  type: number
-  unite: °C
-  scopes: [mois]
-  dependances:
-    - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
-
-climat.text_fr:
-  id: climat.text_fr
-  description: Température extérieure moyenne en période de refroidissement
-  type: number
-  unite: °C
-  scopes: [mois]
+climat.sollicitations:
+  id: climat.sollicitations
+  description: Sollicitations climatiques pour chaque mois de l'année
   dependances:
     - climat.zone_climatique
     - enveloppe.inertie

@@ -60,6 +60,58 @@ properties:
     minimum: 0
     maximum: 1
   position:
+    $ref: "#/$defs/position"
+  menuiserie:
+    oneOf:
+      - $ref: "#/$defs/menuiserie"
+      - const: null
+  vitrage:
+    $ref: "#/$defs/vitrage"
+  survitrage:
+    oneOf:
+      - $ref: "#/$defs/survitrage"
+      - const: null
+  data:
+    title: Données calculées
+    description: >
+      En présence d'une double fenêtre (`position.baie_id` renseigné), les données de chaque baie sont calculées. Cependant,
+      `sse` et `dp` sont divisées par 2 pour refléter la répartition des apports solaires et des déperditions entre les deux baies.
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      sw:
+        title: Proportion d'énergie solaire transmise par la baie
+        type: number
+        minimum: 0
+        maximum: 1
+      sse:
+        $ref: /enveloppe/common/primitives#/$defs/sse
+      u:
+        $ref: /enveloppe/common/primitives#/$defs/u
+      b:
+        $ref: /enveloppe/common/primitives#/$defs/b
+      sdep:
+        $ref: /enveloppe/common/primitives#/$defs/sdep
+      dp:
+        $ref: /enveloppe/common/primitives#/$defs/deperditions
+    required:
+      - sw
+      - sse
+      - u
+      - b
+      - sdep
+      - dp
+required:
+  - id
+  - description
+  - type
+  - presence_protection_solaire
+  - type_fermeture
+  - position
+  - vitrage
+$defs:
+  position:
     title: Position
     type: object
     unevaluatedProperties: false
@@ -144,7 +196,7 @@ properties:
           - orientation
   menuiserie:
     title: Menuiserie
-    type: [object, "null"]
+    type: object
     additionalProperties: false
     properties:
       materiau:
@@ -234,7 +286,7 @@ properties:
           - type
   survitrage:
     title: Survitrage
-    type: [object, "null"]
+    type: object
     additionalProperties: false
     properties:
       type:
@@ -249,46 +301,6 @@ properties:
     required:
       - type
       - epaisseur_lame
-  data:
-    title: Données calculées
-    description: >
-      Lorsque `position.baie_id` est renseigné et que cette baie est la double fenêtre (baie le moins performante du complexe), 
-      `u` est le Uw de cette baie et toutes les autres valeurs sont retournées à 0. Lorsque cette baie est la baie principale 
-      du complexe, `u` est le Uw du complexe et toutes les autres valeurs sont calculées pour cette baie.
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      sw:
-        title: Proportion d'énergie solaire transmise par la baie
-        type: number
-        minimum: 0
-        maximum: 1
-      sse:
-        $ref: /enveloppe/common/primitives#/$defs/sse
-      u:
-        $ref: /enveloppe/common/primitives#/$defs/u
-      b:
-        $ref: /enveloppe/common/primitives#/$defs/b
-      sdep:
-        $ref: /enveloppe/common/primitives#/$defs/sdep
-      dp:
-        $ref: /enveloppe/common/primitives#/$defs/deperditions
-    required:
-      - sw
-      - sse
-      - u
-      - b
-      - sdep
-      - dp
-required:
-  - id
-  - description
-  - type
-  - presence_protection_solaire
-  - type_fermeture
-  - position
-  - vitrage
 discriminator:
   propertyName: type
 oneOf:

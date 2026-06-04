@@ -23,6 +23,7 @@ properties:
       - reseau_froid
   energie:
     title: Énergie utilisée par le générateur
+    type: string
     x-enum: energie
     enum: [electricite, gaz_naturel, gpl, reseau_froid]
   annee_installation:

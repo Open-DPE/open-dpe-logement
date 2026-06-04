@@ -1,5 +1,5 @@
 import type { UUID } from "../common/common.js";
-import { buildEnum, type NonEmptyArray } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import type {
 	InertieParoi,
 	Isolation,
@@ -13,7 +13,7 @@ import type {
 export type Mur = {
 	id: UUID;
 	description: string;
-	structures: NonEmptyArray<Structure>;
+	structures: Structure[];
 	type_doublage: TypeDoublage | null;
 	presence_enduit_isolant: boolean | null;
 	inertie: InertieParoi | null;
