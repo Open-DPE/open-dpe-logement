@@ -1,11 +1,14 @@
-import type { UUID, NonEmptyArray } from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { UUID, NonEmptyArray, OrientationCardinale } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
 import type {
 	Mitoyennete,
 	Orientation,
 	OrientationHorizontale,
 } from "./common.js";
 import type { Materiau, TypeVitrage, TypeVitrageEnum } from "./baie.js";
+
+export const isLocalNonChauffe = createGuard<LocalNonChauffe>(SCHEMA_KEYS["enveloppe/local-non-chauffe"]);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/local-non-chauffe
@@ -38,7 +41,13 @@ export type LocalNonChauffeWithData<
 
 export type LocalNonChauffeData = {
 	b: number;
+	aiu: number;
+	aue: number;
+	isolation_aiu: boolean;
+	isolation_aue: boolean;
 	sse: number;
+	orientations: OrientationCardinale[];
+	t: number;
 };
 
 export type Paroi = {

@@ -1,10 +1,13 @@
-import type { UUID } from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { UUID } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
 import type {
 	Orientation,
 	Position as PositionBase,
 	TypePose,
 } from "./common.js";
+
+export const isPorte = createGuard<Porte>(SCHEMA_KEYS["enveloppe/porte"]);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/porte

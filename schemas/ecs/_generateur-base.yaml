@@ -1,0 +1,255 @@
+$id: https://schemas.open-dpe.fr/ecs/generateur-base
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Template des générateurs d'eau chaude sanitaire
+type: object
+unevaluatedProperties: false
+properties:
+  id:
+    $ref: /common#/$defs/id
+  description:
+    $ref: /common#/$defs/description
+  type:
+    title: Type de générateur d'eau chaude sanitaire
+    type: [string, "null"]
+    x-enum: ecs:type-generateur
+    enum:
+      - chauffe_eau
+      - chaudiere
+      - cet_air_ambiant
+      - cet_air_exterieur
+      - cet_air_extrait
+      - pac_double_service
+      - poele_bouilleur
+      - reseau_chaleur
+      - null
+  energie:
+    title: Energie
+    type: [string, "null"]
+    x-enum: energie
+    enum:
+      - electricite
+      - gaz_naturel
+      - gpl
+      - fioul
+      - charbon
+      - bois_buche
+      - bois_plaquette
+      - bois_granule
+      - reseau_chaleur
+      - null
+  bienergie:
+    title: Energie secondaire
+    type: [string, "null"]
+    x-enum: energie
+    enum: [gaz_naturel, gpl, fioul, null]
+  annee_installation:
+    $ref: /common#/$defs/annee_installation
+  position:
+    title: Position
+    type: object
+    unevaluatedProperties: false
+    properties:
+      position_chauffe_eau:
+        title: Position du chauffe-eau
+        type: [string, "null"]
+        x-enum: ecs:position-chauffe-eau
+        enum: [chauffe_eau_vertical, chauffe_eau_horizontal, null]
+      generateur_collectif:
+        title: Générateur collectif d'eau chaude sanitaire
+        type: boolean
+      generateur_multi_batiment:
+        title: Générateur multi bâtiment
+        type: boolean
+      position_volume_chauffe:
+        title: Position du générateur à l'intérieur du volume chauffé
+        type: boolean
+      generateur_mixte_id:
+        title: Identifiant du générateur mixte
+        anyOf:
+          - $ref: /common#/$defs/id
+          - const: null
+      reseau_chaleur_id:
+        title: Identifiant du réseau de chaleur
+        type: [string, "null"]
+    required:
+      - generateur_collectif
+      - generateur_multi_batiment
+      - position_volume_chauffe
+    oneOf:
+      - title: Générateur individuel
+        type: object
+        properties:
+          generateur_collectif:
+            const: false
+          generateur_multi_batiment:
+            const: false
+        required:
+          - generateur_collectif
+          - generateur_multi_batiment
+
+      - title: Générateur collectif
+        type: object
+        properties:
+          generateur_collectif:
+            const: true
+          position_volume_chauffe:
+            const: false
+        required:
+          - generateur_collectif
+          - position_volume_chauffe
+  stockage:
+    title: Stockage
+    type: [object, "null"]
+    additionalProperties: false
+    properties:
+      type:
+        title: Type de stockage
+        type: [string, "null"]
+        x-enum: ecs:type-stockage
+        enum: [integre, independant, null]
+      volume:
+        title: Volume de stockage en l
+        type: integer
+        exclusiveMinimum: 0
+      position_volume_chauffe:
+        title: Position à l'intérieur volume chauffé
+        type: boolean
+    required:
+      - type
+      - volume
+      - position_volume_chauffe
+  signaletique:
+    title: Fiche signalétique
+    type: object
+    additionalProperties: false
+    properties:
+      pn:
+        title: Puissance nominale en kW
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
+      label:
+        title: Label
+        type: [string, "null"]
+        x-enum: ecs:label-generateur
+        enum:
+          - ne_performance_a
+          - ne_performance_b
+          - ne_performance_c
+          - null
+      cop:
+        title: Coefficient de performance énergétique
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
+        maximum: 10
+      mode_combustion:
+        title: Mode de combustion
+        type: [string, "null"]
+        x-enum: ecs:mode-combustion
+        enum:
+          - standard
+          - basse_temperature
+          - condensation
+          - null
+      presence_ventouse:
+        title: Présence d'une ventouse
+        type: [boolean, "null"]
+      pveilleuse:
+        title: Puissance de la veilleuse en W
+        oneOf:
+          - $ref: /common#/$defs/nombre
+          - const: null
+      qp0:
+        title: Pertes à l'arrêt en kW
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
+      rpn:
+        title: Rendement à puissance nominale sur PCI
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
+        maximum: 150
+    required:
+      - pn
+      - label
+      - cop
+      - mode_combustion
+      - presence_ventouse
+      - pveilleuse
+      - qp0
+      - rpn
+  data:
+    $ref: "#/$defs/data"
+required:
+  - id
+  - description
+  - type
+  - energie
+  - bienergie
+  - annee_installation
+  - position
+  - stockage
+  - signaletique
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      consommations:
+        title: Consommations par usage et par énergie du générateur d'eau chaude sanitaire
+        $ref: /common#/$defs/consommations
+      rdim:
+        title: Ratio de dimensionnement du générateur d'eau chaude sanitaire
+        type: number
+      pn:
+        title: Puissance nominale du générateur d'eau chaude sanitaire en kW
+        type: number
+      pdim:
+        title: Puissance de dimensionnement du générateur d'eau chaude sanitaire en kW
+        type: number
+      pecs:
+        title: Puissance de chauffage du générateur d'eau chaude sanitaire en kW
+        type: number
+      paux:
+        title: Puissance de l'auxiliaire de génération d'eau chaude sanitaire en kW
+        type: number
+      cop:
+        title: Coefficient de performance énergétique du générateur d'eau chaude sanitaire
+        type: [number, "null"]
+      qp0:
+        title: Pertes à l'arrêt du générateur d'eau chaude sanitaire à combustion en kW
+        type: [number, "null"]
+      rpn:
+        title: Rendement à pleine charge nominale du générateur d'eau chaude sanitaire à combustion
+        type: [number, "null"]
+      pveilleuse:
+        title: Puissance de la veilleuse du générateur d'eau chaude sanitaire à combustion en kW
+        type: [number, "null"]
+      cr:
+        title: Coefficient de perte du ballon de stockage en Wh/(l.°C.jour)
+        type: number
+      qgw:
+        title: Pertes de stockage du générateur d'eau chaude sanitaire en Wh/an
+        type: number
+      qgen:
+        title: Pertes de génération du générateur d'eau chaude sanitaire en Wh/an
+        type: number
+    required:
+      - consommations
+      - rdim
+      - pn
+      - pdim
+      - pecs
+      - paux
+      - cop
+      - qp0
+      - rpn
+      - pveilleuse
+      - cr
+      - qgw
+      - qgen

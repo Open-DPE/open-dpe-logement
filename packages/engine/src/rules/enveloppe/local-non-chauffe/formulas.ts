@@ -11,7 +11,7 @@ import { calcule_isolation_aiu as calcule_isolation_aiu_pb } from "#rules/envelo
 import { calcule_isolation_aiu as calcule_isolation_aiu_ph } from "#rules/enveloppe/plancher-haut/formulas.js";
 import { calcule_isolation_aiu as calcule_isolation_aiu_porte } from "#rules/enveloppe/porte/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois, mergeParMois } from "#utils/helpers.js";
+import { createParMois } from "#utils/helpers.js";
 
 export { baie, paroi };
 
@@ -178,7 +178,7 @@ export function calcule_sse(props: {
 	sse: ReturnType<typeof calcule_sse_baie>[];
 	b: ReturnType<typeof calcule_b>;
 }): models.common.ParMois<number> {
-	const sst = mergeParMois(props.baies.map((baie) => baie.sst));
+	const sst = models.common.mergeParMois(props.baies.map((baie) => baie.sst));
 	return createParMois((mois: models.common.Mois) => {
 		const sse = props.sse.reduce((acc, sse) => acc + sse[mois], 0);
 		return (sst[mois] - sse) * props.b;

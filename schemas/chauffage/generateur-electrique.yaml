@@ -1,0 +1,157 @@
+$id: https://schemas.open-dpe.fr/chauffage/generateur-electrique
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Générateur électrique
+type: object
+unevaluatedProperties: false
+
+allOf:
+  - $ref: /chauffage/generateur-base
+
+properties:
+  type:
+    enum:
+      - chaudiere
+      - generateur_air_chaud
+      - convecteur_bi_jonction
+      - convecteur_electrique
+      - panneau_rayonnant_electrique
+      - plafond_rayonnant_electrique
+      - plancher_rayonnant_electrique
+      - radiateur_electrique
+      - radiateur_electrique_accumulation
+  energie:
+    const: electricite
+  bienergie:
+    const: null
+    default: null
+  position:
+    type: object
+    properties:
+      cascade:
+        const: null
+        default: null
+      reseau_chaleur_id:
+        const: null
+        default: null
+    required:
+      - cascade
+      - reseau_chaleur_id
+  signaletique:
+    type: object
+    properties:
+      scop:
+        const: null
+        default: null
+      mode_combustion:
+        const: null
+        default: null
+      presence_ventouse:
+        const: null
+        default: null
+      presence_regulation:
+        const: null
+        default: null
+      pveilleuse:
+        const: null
+        default: null
+      qp0:
+        const: null
+        default: null
+      rpn:
+        const: null
+        default: null
+      rpint:
+        const: null
+        default: null
+      tfonc30:
+        const: null
+        default: null
+      tfonc100:
+        const: null
+        default: null
+    required:
+      - scop
+      - mode_combustion
+      - presence_ventouse
+      - presence_regulation
+      - pveilleuse
+      - qp0
+      - rpn
+      - rpint
+      - tfonc30
+      - tfonc100
+required:
+  - type
+  - energie
+  - bienergie
+  - position
+  - signaletique
+
+oneOf:
+  - title: Chaudière électrique
+    properties:
+      type:
+        enum: [chaudiere, generateur_air_chaud]
+      signaletique:
+        type: object
+        properties:
+          label:
+            const: null
+            default: null
+        required:
+          - label
+    required:
+      - type
+      - signaletique
+
+  - title: Emetteur électrique
+    type: object
+    properties:
+      type:
+        enum:
+          - generateur_air_chaud
+          - convecteur_bi_jonction
+          - convecteur_electrique
+          - panneau_rayonnant_electrique
+          - plafond_rayonnant_electrique
+          - plancher_rayonnant_electrique
+          - radiateur_electrique
+          - radiateur_electrique_accumulation
+
+      position:
+        type: object
+        properties:
+          position_chaudiere:
+            const: null
+            default: null
+          generateur_collectif:
+            const: false
+            default: false
+          generateur_multi_batiment:
+            const: false
+            default: false
+          position_volume_chauffe:
+            const: true
+            default: true
+          generateur_mixte_id:
+            const: null
+            default: null
+        required:
+          - position_chaudiere
+          - generateur_collectif
+          - generateur_multi_batiment
+          - position_volume_chauffe
+          - generateur_mixte_id
+      signaletique:
+        type: object
+        properties:
+          label:
+            title: Label
+            type: [string, "null"]
+            enum: [nf_performance, null]
+        required:
+          - label
+    required:
+      - type
+      - position
+      - signaletique

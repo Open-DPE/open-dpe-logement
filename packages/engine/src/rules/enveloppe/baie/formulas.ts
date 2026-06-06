@@ -285,7 +285,7 @@ export function calcule_omb(props: {
 	omb: ReturnType<typeof masque.calcule_omb>[];
 }): number {
 	const omb = props.omb.reduce((sum, value) => sum + value, 0);
-	return Math.max(omb, 100);
+	return Math.min(omb, 100);
 }
 
 /**

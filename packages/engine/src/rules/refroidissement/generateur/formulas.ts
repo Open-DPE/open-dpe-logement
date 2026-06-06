@@ -1,9 +1,42 @@
 import { abaques } from "@open-dpe-logement/abaques";
+import * as models from "@open-dpe-logement/models";
+import * as common from "#rules/common/formulas.js";
 import * as climat from "#rules/climat/formulas.js";
+import * as production from "#rules/production/formulas.js";
 import * as refroidissement from "#rules/refroidissement/formulas.js";
 import * as installation from "#rules/refroidissement/installation/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
-import { reduceParMois } from "#utils/helpers.js";
+
+/**
+ * @doctrine refroidissement.generateur.cef
+ * @doctrine refroidissement.generateur.cep
+ * @doctrine refroidissement.generateur.eges
+ * @return Consommations par usage et par énergie du générateur de refroidissement
+ */
+export function calcule_consommations(props: {
+	cfr: ReturnType<typeof calcule_cfr>;
+	cfr_enr: ReturnType<typeof calcule_cfr_enr>;
+	caux: ReturnType<typeof calcule_caux>;
+	energie: models.refroidissement.generateur.EnergieRefroidissement;
+	reseau_id: string | null;
+}): models.common.Consommations {
+	return models.common.mergeConsommations(
+		common.calcule_consommations({
+			cef: props.cfr,
+			cef_enr: props.cfr_enr,
+			usage: models.common.UsageEnum.refroidissement,
+			energie: props.energie,
+			reseau_id: props.reseau_id,
+		}),
+		common.calcule_consommations({
+			cef: props.caux,
+			cef_enr: 0,
+			usage: models.common.UsageEnum.auxiliaire,
+			energie: models.common.EnergieEnum.electricite,
+			reseau_id: null,
+		}),
+	);
+}
 
 /**
  * @doctrine refroidissement.generateur.cfr
@@ -15,8 +48,37 @@ export function calcule_cfr(props: {
 	eer: ReturnType<typeof calcule_eer>;
 }): number {
 	const { rdim, eer } = props;
-	const bfr = reduceParMois(props.bfr);
+	const bfr = models.common.reduceParMois(props.bfr);
 	return 0.9 * (bfr / eer) * rdim;
+}
+
+/**
+ * @doctrine refroidissement.generateur.cfr_enr
+ * @return Consommations d'électricité renouvelable du générateur de refroidissement en kWh/an
+ */
+export function calcule_cfr_enr(props: {
+	celec: ReturnType<typeof production.calcule_celec>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+	cfr_elec: ReturnType<typeof calcule_cfr_elec>;
+}): number {
+	const cfr_elec = props.cfr_elec;
+	const celec = props.celec.refroidissement;
+	const celec_ac = props.celec_ac.refroidissement;
+	const p_celec_ac = celec ? cfr_elec / celec : 0;
+	return celec_ac * p_celec_ac;
+}
+
+/**
+ * @doctrine refroidissement.generateur.cfr_elec
+ * @return Consommation d'électricité du générateur de refroidissement en kWh/an
+ */
+export function calcule_cfr_elec(props: {
+	cfr: ReturnType<typeof calcule_cfr>;
+	energie_generateur: models.refroidissement.generateur.EnergieRefroidissement;
+}): number {
+	return props.energie_generateur === models.common.EnergieEnum.electricite
+		? props.cfr
+		: 0;
 }
 
 /**

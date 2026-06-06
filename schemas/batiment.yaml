@@ -14,12 +14,12 @@ properties:
     x-enum: type-batiment
   annee_construction:
     title: Année de construction
-    $ref: /common/primitives#/$defs/annee
+    $ref: /common#/$defs/annee
   annee_renovation:
-    $ref: /common/primitives#/$defs/annee_renovation
+    $ref: /common#/$defs/annee_renovation
   altitude:
     title: Altitude du bâtiment en mètres
-    type: number
+    type: integer
     minimum: -1000
     maximum: 10000
   logements:
@@ -28,50 +28,27 @@ properties:
     exclusiveMinimum: 0
   surface_habitable:
     title: Surface habitable en m²
-    $ref: /common/primitives#/$defs/surface
+    $ref: /common#/$defs/surface
   hauteur_sous_plafond:
     title: Hauteur moyenne sous plafond en m
-    $ref: /common/primitives#/$defs/hauteur
+    $ref: /common#/$defs/hauteur
   materiaux_anciens:
     title: Bâtiment majoritairement composé de matériaux anciens
     type: boolean
   adresse:
-    $ref: /common/components#/$defs/adresse
+    $ref: /common#/$defs/adresse
   appartements_visites:
     title: Appartements visités
     type: array
     items:
       $ref: /batiment/appartement
   logement:
-    title: Logement de référence
-    type: [object, "null"]
-    additionalProperties: false
-    properties:
-      description:
-        $ref: /common/primitives#/$defs/description
-      surface_habitable:
-        title: Surface habitable en m²
-        $ref: /common/primitives#/$defs/surface
-      hauteur_sous_plafond:
-        title: Hauteur sous plafond moyenne en m
-        $ref: /common/primitives#/$defs/hauteur
-    required:
-      - description
-      - surface_habitable
-      - hauteur_sous_plafond
+    oneOf:
+      - $ref: "#/$defs/logement"
+      - const: null
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      zone_climatique:
-        title: Zone climatique
-        type: string
-        x-enum: zone-climatique
-        enum: [H1a, H1b, H1c, H2a, H2b, H2c, H2d, H3]
-    required:
-      - zone_climatique
+    $ref: "#/$defs/data"
+
 required:
   - rnb_id
   - type
@@ -85,6 +62,7 @@ required:
   - adresse
   - appartements_visites
   - logement
+
 oneOf:
   - title: Maison individuelle
     properties:
@@ -98,6 +76,7 @@ oneOf:
       - type
       - logements
       - appartements_visites
+
   - title: Immeuble - Bâtiment
     properties:
       type:
@@ -110,18 +89,43 @@ oneOf:
       - type
       - logements
       - appartements_visites
-  - title: Immeuble - Appartement
+
+$defs:
+  logement:
+    title: Logement de référence
+    type: object
+    additionalProperties: false
     properties:
-      type:
-        const: immeuble
-      logements:
-        minimum: 3
-      logement:
-        type: object
-      appartements_visites:
-        const: []
+      description:
+        $ref: /common#/$defs/description
+      surface_habitable:
+        title: Surface habitable en m²
+        $ref: /common#/$defs/surface
+      hauteur_sous_plafond:
+        title: Hauteur sous plafond moyenne en m
+        $ref: /common#/$defs/hauteur
     required:
-      - type
-      - logements
-      - logement
-      - appartements_visites
+      - description
+      - surface_habitable
+      - hauteur_sous_plafond
+
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      zone_climatique:
+        title: Zone climatique
+        type: string
+        x-enum: zone-climatique
+      sh:
+        title: Surface habitable de référence en m²
+        type: number
+      hsp:
+        title: Hauteur sous plafond de référence en m
+        type: number
+      ratio_proratisation:
+        title: Ratio de proratisation
+        type: number
+    required: [zone_climatique, sh, hsp, ratio_proratisation]

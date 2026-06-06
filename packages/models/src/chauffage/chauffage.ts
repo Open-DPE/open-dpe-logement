@@ -1,17 +1,15 @@
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import { EntityNotFoundError } from "#/errors.js";
-import type {
-	Consommations,
-	Pertes,
-	NonEmptyArray,
-	UUID,
-} from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import type { NonEmptyArray, UUID } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
 import * as emetteur from "./emetteur.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
 import * as systeme from "./systeme.js";
 
 export { generateur, installation, emetteur, systeme };
+
+export const isChauffage = createGuard<Chauffage>(SCHEMA_KEYS["chauffage"]);
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage
@@ -27,13 +25,14 @@ export type ChauffageWithData<T extends Chauffage = Chauffage> = T & {
 };
 
 export type ChauffageData = {
-	f: number;
+	bch: number;
+	pch: number;
 	as: number;
 	ai: number;
-	bef: number;
-	ich: number;
-	pertes: Pertes;
-	consommations: Consommations;
+	qgw_rec: number;
+	qdw_rec: number;
+	qgen_ecs_rec: number;
+	effet_joule: boolean;
 };
 
 export const TAUX_CHARGE = [5, 15, 25, 35, 45, 55, 65, 75, 85, 95] as const;

@@ -23,3 +23,12 @@ export function rdim(
 		),
 	});
 }
+
+export function applique(ctx: Context, item: Installation): models.refroidissement.installation.InstallationWithData {
+	return {
+		...item,
+		data: {
+			rdim: ctx.resolve(ID, RULES.rdim, item),
+		},
+	};
+}

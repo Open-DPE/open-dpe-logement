@@ -47,11 +47,22 @@ export type Mois = (typeof MOIS)[number];
 export const MoisEnum = buildEnum(MOIS);
 
 /**
- * @see https://schemas.open-dpe.fr/common/components#/$defs/moisItem
+ * Données mensuelles aggrégées sur l'année
  */
-export type ParMois<T> = {
-	[K in Mois]: T;
-};
+export function reduceParMois(values: ParMois<number>): number {
+	return Object.values(values).reduce((acc: number, v: number) => acc + v, 0);
+}
+
+/**
+ * Fusionne plusieurs valeurs mensuelles
+ */
+export function mergeParMois(values: ParMois<number>[]): ParMois<number> {
+	const result: ParMois<number> = {} as ParMois<number>;
+	for (const mois of MOIS) {
+		result[mois] = values.reduce((acc, v) => acc + v[mois], 0);
+	}
+	return result;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/scenario
@@ -105,8 +116,8 @@ export const UsageEnum = buildEnum(USAGES);
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/energie
  */
 export const ENERGIES = [
-	"electricite",
 	"electricite_renouvelable",
+	"electricite",
 	"gaz_naturel",
 	"gpl",
 	"fioul",
@@ -174,33 +185,128 @@ export type Adresse = {
 	commune: string;
 };
 
-/**
- * @see https://schemas.open-dpe.fr/common/components#/$defs/consommationsItem
- */
-export type Consommation = {
-	usage: Usage;
-	energie: Energie;
-	cef: number;
-	cep: number;
-	eges: number;
+export type ParMois<T> = {
+	[K in Mois]: T;
+};
+
+export type ParUsage<T> = {
+	[K in Usage]?: T;
+};
+
+export type ParEnergie<T> = {
+	[K in Energie]?: T;
 };
 
 /**
  * @see https://schemas.open-dpe.fr/common/components#/$defs/consommations
  */
-export type Consommations = Consommation[];
-
-/**
- * @see https://schemas.open-dpe.fr/common/components#/$defs/pertesItem
- */
-export type Perte = {
-	usage: Usage;
-	type: TypePertes;
-	pertes: number;
-	pertes_recuperables: number;
+export type Consommations = {
+	[U in Usage]?: {
+		[E in Energie]?: Consommation;
+	};
 };
 
+export type ConsommationParEnergie = ParEnergie<Consommation>;
+export type ConsommationParUsage = ParUsage<Consommation>;
+
+export type Consommation = {
+	cef: number;
+	cep: number;
+	eges: number;
+};
+
+const zeroConsommation: Consommation = { cef: 0, cep: 0, eges: 0 };
+
+function addConsommation(a: Consommation, b: Consommation): Consommation {
+	return {
+		cef: a.cef + b.cef,
+		cep: a.cep + b.cep,
+		eges: a.eges + b.eges,
+	};
+}
+
 /**
- * @see https://schemas.open-dpe.fr/common/components#/$defs/pertes
+ * @return Consommations par usage et par énergie aggrégées
  */
-export type Pertes = Perte[];
+export function reduceConsommations(values: Consommations): Consommation {
+	let result = zeroConsommation;
+	for (const parEnergie of Object.values(values)) {
+		for (const valeurs of Object.values(parEnergie)) {
+			result = addConsommation(result, valeurs);
+		}
+	}
+	return result;
+}
+
+/**
+ * @return Consommations par usage et par énergie aggrégées par énergie
+ */
+export function reduceConsommationsParEnergie(
+	values: Consommations,
+): ConsommationParEnergie {
+	const result: ConsommationParEnergie = {};
+
+	for (const parEnergie of Object.values(values)) {
+		for (const [energie, valeurs] of Object.entries(parEnergie) as [
+			Energie,
+			Consommation,
+		][]) {
+			result[energie] = addConsommation(
+				result[energie] ?? zeroConsommation,
+				valeurs,
+			);
+		}
+	}
+
+	return result;
+}
+
+/**
+ * @return Consommations par usage et par énergie aggrégées par usage
+ */
+export function reduceConsommationsParUsage(
+	values: Consommations,
+): ConsommationParUsage {
+	const result: ConsommationParUsage = {};
+
+	for (const [usage, parEnergie] of Object.entries(values) as [
+		Usage,
+		ConsommationParEnergie,
+	][]) {
+		for (const valeurs of Object.values(parEnergie) as Consommation[]) {
+			result[usage] = addConsommation(
+				result[usage] ?? zeroConsommation,
+				valeurs,
+			);
+		}
+	}
+
+	return result;
+}
+
+/**
+ * Fusionne plusieurs consommations par usage et par énergie
+ */
+export function mergeConsommations(...values: Consommations[]): Consommations {
+	const result: Consommations = {};
+
+	for (const consommations of values) {
+		for (const [usage, parEnergie] of Object.entries(consommations) as [
+			Usage,
+			ConsommationParEnergie,
+		][]) {
+			result[usage] ??= {};
+			for (const [energie, valeurs] of Object.entries(parEnergie) as [
+				Energie,
+				Consommation,
+			][]) {
+				result[usage]![energie] = addConsommation(
+					result[usage]![energie] ?? zeroConsommation,
+					valeurs,
+				);
+			}
+		}
+	}
+
+	return result;
+}

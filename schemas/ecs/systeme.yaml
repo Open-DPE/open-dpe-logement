@@ -5,11 +5,11 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   generateur_id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   reseau:
     title: Réseau de distribution d'eau chaude sanitaire
     type: object
@@ -36,43 +36,54 @@ properties:
       - isolation
       - bouclage
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      iecs:
-        title: Inverse du rendement moyen
-        type: number
-      rd:
-        title: Rendement de distribution moyen
-        type: number
-      rs:
-        title: Rendement de stockage moyen
-        type: number
-      rg:
-        title: Rendement de génération moyen
-        type: number
-      rgs:
-        title: Rendement de génération et de stockage moyen
-        type: number
-      rdim:
-        $ref: /common/primitives#/$defs/rdim
-      pertes:
-        $ref: /common/components#/$defs/pertes
-      consommations:
-        $ref: /common/components#/$defs/consommations
-    required:
-      - iecs
-      - rd
-      - rs
-      - rg
-      - rgs
-      - rdim
-      - pertes
-      - consommations
+    $ref: "#/$defs/data"
 required:
   - id
   - description
   - generateur_id
   - reseau
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      consommations:
+        title: Consommations par usage et par énergie du système d'eau chaude sanitaire
+        $ref: /common#/$defs/consommations
+      qcirb:
+        title: Consommations du circulateur d'eau chaude sanitaire en Wh/an
+        type: number
+      qtrac:
+        title: Consommation du traçeur d'eau chaude sanitaire en Wh/an
+        type: number
+      rdim:
+        title: Ratio de dimensionnement du système d'eau chaude sanitaire
+        type: number
+      iecs:
+        title: Inverse du rendement du système d'eau chaude sanitaire
+        type: number
+      rd:
+        title: Rendement de distribution du système d'eau chaude sanitaire
+        type: number
+      rg:
+        title: Rendement de génération du système d'eau chaude sanitaire
+        type: number
+      rs:
+        title: Rendement de stockage du système d'eau chaude sanitaire
+        type: number
+      rgs:
+        title: Rendement de génération et de stockage du système d'eau chaude sanitaire
+        type: number
+    required:
+      - consommations
+      - qcirb
+      - qtrac
+      - rdim
+      - iecs
+      - rd
+      - rg
+      - rs
+      - rgs

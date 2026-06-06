@@ -3,8 +3,11 @@ import * as rules from "./rules.js";
 export const ID = "ecs:generateur";
 
 export const RULES = {
+	consommations: "consommations",
 	cecs: "cecs",
-	caux: "caux",
+	cecs_elec: "cecs_elec",
+	caux_gen: "caux_gen",
+	caux_gen_enr: "caux_gen_enr",
 	rdim: "rdim",
 	pn: "pn",
 	pdim: "pdim",
@@ -23,8 +26,11 @@ export type Results = {
 	[ID]: Record<
 		string,
 		{
+			[RULES.consommations]: ReturnType<typeof rules.consommations>;
 			[RULES.cecs]: ReturnType<typeof rules.cecs>;
-			[RULES.caux]: ReturnType<typeof rules.caux>;
+			[RULES.cecs_elec]: ReturnType<typeof rules.cecs_elec>;
+			[RULES.caux_gen]: ReturnType<typeof rules.caux_gen>;
+			[RULES.caux_gen_enr]: ReturnType<typeof rules.caux_gen_enr>;
 			[RULES.rdim]: ReturnType<typeof rules.rdim>;
 			[RULES.pn]: ReturnType<typeof rules.pn>;
 			[RULES.pdim]: ReturnType<typeof rules.pdim>;

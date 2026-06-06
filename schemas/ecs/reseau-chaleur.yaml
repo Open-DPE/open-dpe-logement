@@ -1,0 +1,81 @@
+$id: https://schemas.open-dpe.fr/ecs/reseau-chaleur
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Réseau de chaleur
+type: object
+unevaluatedProperties: false
+
+allOf:
+  - $ref: /ecs/generateur-base
+
+properties:
+  type:
+    const: reseau_chaleur
+  energie:
+    const: reseau_chaleur
+  bienergie:
+    const: null
+    default: null
+  position:
+    type: object
+    properties:
+      generateur_collectif:
+        const: true
+        default: true
+      generateur_multi_batiment:
+        const: true
+        default: true
+      position_volume_chauffe:
+        const: false
+        default: false
+      generateur_mixte_id:
+        const: null
+        default: null
+      reseau_chaleur_id:
+        type: [string, "null"]
+    required:
+      - generateur_collectif
+      - generateur_multi_batiment
+      - position_volume_chauffe
+      - generateur_mixte_id
+      - reseau_chaleur_id
+  signaletique:
+    type: object
+    properties:
+      pn:
+        const: null
+        default: null
+      cop:
+        const: null
+        default: null
+      label:
+        const: null
+        default: null
+      mode_combustion:
+        const: null
+        default: null
+      presence_ventouse:
+        const: null
+        default: null
+      pveilleuse:
+        const: null
+        default: null
+      qp0:
+        const: null
+        default: null
+      rpn:
+        const: null
+        default: null
+    required:
+      - pn
+      - cop
+      - label
+      - mode_combustion
+      - presence_ventouse
+      - pveilleuse
+      - qp0
+      - rpn
+required:
+  - type
+  - energie
+  - position
+  - signaletique

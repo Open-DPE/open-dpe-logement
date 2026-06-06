@@ -1,4 +1,6 @@
+import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
+import * as climat from "#rules/climat/registry.js";
 import * as formulas from "./formulas.js";
 import { ID, RULES } from "./registry.js";
 
@@ -6,6 +8,18 @@ export function register(ctx: Context): void {
 	ctx.register(ID, RULES.sh, () => sh(ctx));
 	ctx.register(ID, RULES.hsp, () => hsp(ctx));
 	ctx.register(ID, RULES.ratio_proratisation, () => ratio_proratisation(ctx));
+}
+
+export function applique(ctx: Context): models.batiment.BatimentWithData {
+	return {
+		...ctx.diagnostic.batiment,
+		data: {
+			sh: ctx.resolve(ID, RULES.sh),
+			hsp: ctx.resolve(ID, RULES.hsp),
+			ratio_proratisation: ctx.resolve(ID, RULES.ratio_proratisation),
+			zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+		},
+	};
 }
 
 export function sh(ctx: Context): ReturnType<typeof formulas.calcule_sh> {

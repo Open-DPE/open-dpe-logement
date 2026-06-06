@@ -5,7 +5,16 @@ import * as enveloppe from "#rules/enveloppe/formulas.js";
 import * as ecs from "#rules/ecs/formulas.js";
 import * as generateur from "#rules/chauffage/generateur/formulas.js";
 import * as installation from "#rules/chauffage/installation/formulas.js";
-import { createParMois, mergeParMois } from "#utils/helpers.js";
+import { createParMois } from "#utils/helpers.js";
+
+/**
+ * @return Consommations par usage et par énergie
+ */
+export function calcule_consommations(props: {
+	consommations: ReturnType<typeof generateur.calcule_consommations>[];
+}): models.common.Consommations {
+	return models.common.mergeConsommations(...props.consommations);
+}
 
 /**
  * @doctrine chauffage.cch
@@ -43,7 +52,7 @@ export function calcule_caux(props: {
  * @return Consommations des auxiliaires de génération en kWh/an
  */
 export function calcule_caux_gen(props: {
-	caux_gen: ReturnType<typeof generateur.calcule_caux>[];
+	caux_gen: ReturnType<typeof generateur.calcule_caux_gen>[];
 }): number {
 	return props.caux_gen.reduce((acc, val) => acc + val, 0);
 }
@@ -222,7 +231,7 @@ export function calcule_qgen_rec(props: {
 	qgen_ch_rec: ReturnType<typeof generateur.calcule_qgen_rec>[];
 	qgen_ecs_rec: ReturnType<typeof calcule_qgen_ecs_rec>;
 }): models.common.ParMois<number> {
-	const qgen_ch_rec = mergeParMois(props.qgen_ch_rec);
+	const qgen_ch_rec = models.common.mergeParMois(props.qgen_ch_rec);
 	return createParMois((mois) => {
 		return qgen_ch_rec[mois] + props.qgen_ecs_rec[mois];
 	});

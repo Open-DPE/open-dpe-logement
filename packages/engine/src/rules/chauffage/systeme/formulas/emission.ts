@@ -6,7 +6,6 @@ import * as enveloppe from "#rules/enveloppe/formulas.js";
 import * as generateur from "#rules/chauffage/generateur/formulas.js";
 import * as installation from "#rules/chauffage/installation/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
-import { reduceParMois } from "#utils/helpers.js";
 import {
 	calcule_bch,
 	calcule_rdim,
@@ -46,6 +45,7 @@ export function calcule_cch(props: {
  */
 export function calcule_cch1(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
+	pac_hybride: boolean;
 	bch: ReturnType<typeof calcule_bch>;
 	fch: ReturnType<typeof installation.calcule_fch>;
 	rdim_i: ReturnType<typeof installation.calcule_rdim>;
@@ -54,10 +54,10 @@ export function calcule_cch1(props: {
 	ich1: ReturnType<typeof calcule_ich1>;
 	n: number;
 }): number {
-	const { fch, rdim_i, rdim, int, ich1, n } = props;
-	const bch = reduceParMois(props.bch);
+	const { fch, rdim_i, rdim, int, ich1, n, pac_hybride } = props;
+	const bch = models.common.reduceParMois(props.bch);
 	const cch = bch * (1 - fch) * int * ich1 * rdim_i * rdim * (1 / n);
-	return cch * FUT_PAC_HYBRIDE[props.zone_climatique];
+	return pac_hybride ? cch * FUT_PAC_HYBRIDE[props.zone_climatique] : cch;
 }
 
 /**
@@ -66,6 +66,7 @@ export function calcule_cch1(props: {
  */
 export function calcule_cch2(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
+	pac_hybride: boolean;
 	bch: ReturnType<typeof calcule_bch>;
 	fch: ReturnType<typeof installation.calcule_fch>;
 	rdim_i: ReturnType<typeof installation.calcule_rdim>;
@@ -74,10 +75,10 @@ export function calcule_cch2(props: {
 	ich2: ReturnType<typeof calcule_ich2>;
 	n: number;
 }): number {
-	const { fch, rdim_i, rdim, int, ich2, n } = props;
-	const bch = reduceParMois(props.bch);
+	const { fch, rdim_i, rdim, int, ich2, n, pac_hybride } = props;
+	const bch = models.common.reduceParMois(props.bch);
 	const cch = bch * (1 - fch) * int * ich2 * rdim_i * rdim * (1 / n);
-	return cch * (1 - FUT_PAC_HYBRIDE[props.zone_climatique]);
+	return pac_hybride ? cch * (1 - FUT_PAC_HYBRIDE[props.zone_climatique]) : cch;
 }
 
 /**
@@ -143,11 +144,13 @@ export function calcule_i0(props: {
  */
 export function calcule_ich(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
+	pac_hybride: boolean;
 	ich1: ReturnType<typeof calcule_ich1>;
 	ich2: ReturnType<typeof calcule_ich2> | null;
 }): number {
 	const { ich1, ich2 } = props;
 	if (null === ich2) return ich1;
+	if (false === props.pac_hybride) return ich1;
 	const fut = FUT_PAC_HYBRIDE[props.zone_climatique];
 	return ich1 * fut + ich2 * (1 - fut);
 }

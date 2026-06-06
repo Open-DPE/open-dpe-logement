@@ -16,26 +16,43 @@ properties:
     items:
       $ref: /refroidissement/installation
   data:
+    $ref: "#/$defs/data"
+required:
+  - generateurs
+  - installations
+
+anyOf:
+  - title: Aucune installation de refroidissement
+    properties:
+      installations:
+        maxItems: 0
+      generateurs:
+        maxItems: 0
+
+  - title: Au moins une installation de refroidissement
+    properties:
+      installations:
+        minItems: 1
+      generateurs:
+        minItems: 1
+
+$defs:
+  data:
     title: Données calculées
     type: object
     readOnly: true
     additionalProperties: false
     properties:
-      ai:
-        title: Apports internes
-        $ref: /common/primitives#/$defs/apports
+      bfr:
+        title: Besoins de refroidissement en kWh/an
+        type: number
       as:
-        title: Apports solaires
-        $ref: /common/primitives#/$defs/apports
-      bef:
-        $ref: /common/primitives#/$defs/bef
-      consommations:
-        $ref: /common/components#/$defs/consommations
+        title: Apports solaires en période de refroidissement en kWh/an
+        type: number
+      ai:
+        title: Apports internes en période de refroidissement en kWh/an
+        type: number
     required:
-      - ai
+      - bfr
       - as
-      - bef
-      - consommations
-required:
-  - generateurs
-  - installations
+      - ai

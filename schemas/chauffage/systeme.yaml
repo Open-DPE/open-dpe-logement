@@ -5,19 +5,56 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   type:
     title: Type de système
     type: string
     x-enum: chauffage:type
     enum: [central, divise]
   generateur_id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
+  reseau:
+    oneOf:
+      - $ref: "#/$defs/reseau"
+      - const: null
+  data:
+    $ref: "#/$defs/data"
+
+required:
+  - id
+  - description
+  - type
+  - generateur_id
+  - reseau
+
+oneOf:
+  - title: Système de chauffage central
+    properties:
+      type:
+        const: central
+      reseau:
+        type: object
+    required:
+      - type
+      - reseau
+
+  - title: Système de chauffage divisé
+    properties:
+      type:
+        const: divise
+      reseau:
+        const: null
+        default: null
+    required:
+      - type
+      - reseau
+
+$defs:
   reseau:
     title: Réseau de distribution
-    type: [object, "null"]
+    type: object
     unevaluatedProperties: false
     properties:
       type_distribution:
@@ -47,7 +84,7 @@ properties:
         title: Liste des émetteurs
         type: array
         items:
-          $ref: /common/primitives#/$defs/id
+          $ref: /common#/$defs/id
     required:
       - type_distribution
       - presence_fluide_frigorigene
@@ -55,8 +92,7 @@ properties:
       - niveaux_desservis
       - isolation
       - emetteurs
-    discriminator:
-      propertyName: type_distribution
+
     oneOf:
       - title: Chauffage central avec distribution hydraulique
         type: object
@@ -70,6 +106,7 @@ properties:
           - type_distribution
           - temperature_distribution
           - emetteurs
+
       - title: Chauffage central avec distribution aéraulique
         type: object
         properties:
@@ -84,63 +121,53 @@ properties:
             maxItems: 0
         required:
           - type_distribution
+          - temperature_distribution
           - emetteurs
+
   data:
     title: Données calculées
     type: object
     readOnly: true
     additionalProperties: false
     properties:
+      consommations:
+        title: Consommations par usage et par énergie du système de chauffage
+        $ref: /common#/$defs/consommations
+      rdim:
+        title: Ratio de dimensionnement du système de chauffage
+        type: number
+      pch:
+        title: Puissance du système de chauffage collectif en kW
+        type: number
+      int:
+        title: Facteur d'intermittence moyen du système de chauffage
+        type: number
       ich:
-        title: Inverse du rendement du système
+        title: Inverse du rendement moyen du système de chauffage
         type: number
       rd:
-        title: Rendement de distribution
+        title: Rendement de distribution du système de chauffage
         type: number
       re:
-        title: Rendement d'émission
+        title: Rendement d'émission moyen du système de chauffage
         type: number
       rg:
-        title: Rendement de génération
+        title: Rendement de génération du système de chauffage
         type: number
       rr:
-        title: Rendement de régulation
+        title: Rendement de régulation moyen du système de chauffage
         type: number
-      rdim:
-        $ref: /common/primitives#/$defs/rdim
-      consommations:
-        $ref: /common/components#/$defs/consommations
+      pcircem:
+        title: Puissance du circulateur de l'installation de chauffage en W
+        type: number
     required:
+      - consommations
+      - rdim
+      - pch
+      - int
       - ich
       - rd
       - re
       - rg
       - rr
-      - rdim
-      - consommations
-required:
-  - id
-  - description
-  - type
-  - generateur_id
-discriminator:
-  propertyName: type
-oneOf:
-  - title: Système de chauffage central
-    properties:
-      type:
-        const: central
-      reseau:
-        type: object
-    required:
-      - type
-      - reseau
-  - title: Système de chauffage divisé
-    properties:
-      type:
-        const: divise
-      reseau:
-        type: null
-        default: null
-    required:
-      - type
+      - pcircem

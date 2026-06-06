@@ -62,3 +62,15 @@ export function isolation(
 		isolation: item.isolation,
 	});
 }
+
+export function applique(ctx: Context, item: Porte): models.enveloppe.porte.PorteWithData {
+	return {
+		...item,
+		data: {
+			u: ctx.resolve(ID, RULES.u, item),
+			b: ctx.resolve(ID, RULES.b, item),
+			sdep: ctx.resolve(ID, RULES.sdep, item),
+			dp: ctx.resolve(ID, RULES.dp, item),
+		},
+	};
+}

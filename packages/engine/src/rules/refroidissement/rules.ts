@@ -1,3 +1,4 @@
+import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as batiment from "#rules/batiment/registry.js";
 import * as climat from "#rules/climat/registry.js";
@@ -12,6 +13,7 @@ export function register(ctx: Context): void {
 	generateur.rules.register(ctx);
 	installation.rules.register(ctx);
 
+	ctx.register(ID, RULES.consommations, () => consommations(ctx));
 	ctx.register(ID, RULES.cfr, () => cfr(ctx));
 	ctx.register(ID, RULES.cfr_elec, () => cfr_elec(ctx));
 	ctx.register(ID, RULES.caux, () => caux(ctx));
@@ -28,6 +30,16 @@ export function register(ctx: Context): void {
 	ctx.register(ID, RULES.cin, () => cin(ctx));
 }
 
+export function consommations(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_consommations> {
+	return formulas.calcule_consommations({
+		consommations: ctx.diagnostic.refroidissement.generateurs.map((item) =>
+			ctx.resolve(generateur.ID, generateur.RULES.consommations, item),
+		),
+	});
+}
+
 export function cfr(ctx: Context): ReturnType<typeof formulas.calcule_cfr> {
 	return formulas.calcule_cfr({
 		cfr: ctx.diagnostic.refroidissement.generateurs.map((item) =>
@@ -40,10 +52,9 @@ export function cfr_elec(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_cfr_elec> {
 	return formulas.calcule_cfr_elec({
-		generateurs: ctx.diagnostic.refroidissement.generateurs.map((item) => ({
-			cfr: ctx.resolve(generateur.ID, generateur.RULES.cfr, item),
-			energie: item.energie,
-		})),
+		cfr_elec: ctx.diagnostic.refroidissement.generateurs.map((item) =>
+			ctx.resolve(generateur.ID, generateur.RULES.cfr_elec, item),
+		),
 	});
 }
 
@@ -141,4 +152,17 @@ export function cin(ctx: Context): ReturnType<typeof formulas.calcule_cin> {
 		sh: ctx.resolve(batiment.ID, batiment.RULES.sh),
 		inertie: ctx.resolve(enveloppe.ID, enveloppe.RULES.inertie),
 	});
+}
+
+export function applique(ctx: Context): models.refroidissement.RefroidissementWithData {
+	const sumMois = (v: models.common.ParMois<number>): number =>
+		Object.values(v).reduce((s: number, n: number) => s + n, 0);
+	return {
+		...ctx.diagnostic.refroidissement,
+		data: {
+			bfr: sumMois(ctx.resolve(ID, RULES.bfr)),
+			as: sumMois(ctx.resolve(ID, RULES.as)),
+			ai: sumMois(ctx.resolve(ID, RULES.ai)),
+		},
+	};
 }

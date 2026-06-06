@@ -1,5 +1,8 @@
-import type { Consommations, UUID, NonEmptyArray } from "#/common/common.js";
-import { buildEnum } from "#/utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { Consommations, UUID, NonEmptyArray } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils.js";
+
+export const isSysteme = createGuard<Systeme>(SCHEMA_KEYS["chauffage/systeme"]);
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/systeme
@@ -12,11 +15,14 @@ export type SystemeWithData<T extends Systeme = Systeme> = T & {
 
 export type SystemeData = {
 	rdim: number;
+	pch: number;
+	int: number;
 	ich: number;
 	rd: number;
 	re: number;
 	rg: number;
 	rr: number;
+	pcircem: number;
 	consommations: Consommations;
 };
 

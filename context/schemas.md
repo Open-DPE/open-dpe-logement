@@ -8,19 +8,23 @@ Standard de données publiques du Diagnostic de Performance Energétique.
 
 ## Usages
 
+- Validation des données depuis le package `packages/schemas`
+- Typage des données depuis le package `packages/models`
+
+## Commandes
+
 ```text
-npm run schemas:validate        # Valide les exemples de données
-npm run schemas:build           # Déréférence le schéma de données aux formats JSON et YAML
+npm run generate:schemas           # Déréférence les schémas de données publiques vers /packages/schemas
 ```
 
 ## Organisation
 
 ```text
 schemas/
-├── common/                     # Définitions globales
 ├── batiment/
 ├── chauffage/
 ├── ecs/
+├── enveloppe/
 ├── production/
 ├── refroidissement/
 ├── ventilation/
@@ -40,6 +44,11 @@ Les schémas publics sont **contractuels et stables**.
 - Compilation en YAML et JSON
 - UTF-8
 
+## Schémas publics et privés
+
+- `_*.yaml` -> schémas privés
+- `*.yaml` -> schémas publics
+
 ## Keywords
 
 Mots-clés JSON Schema personnalisés.
@@ -55,10 +64,6 @@ Identifie une valeur énumérable dans le [dictionnaire](../doctrine/dict/enums.
 La valeur énumérable DOIT exister dans le dictionnaire.
 
 Les énumérations DOIVENT exister dans le dictionnaires, sans exception ni ajout.
-
-### `discriminator`
-
-[Open API Spec](https://spec.openapis.org/oas/v3.2.0.html#discriminator-object)
 
 ### `readOnly`
 
@@ -80,56 +85,19 @@ Une propriété `readOnly` ne DOIT PAS être présent dans le bloc `required`.
 
 - snake_case
 
-### Polymorphisme
-
 ### Valeurs `null`
 
-#### Propriété non applicable
-
-La propriété n'est pas applicable au sous-schéma courant et DOIT être renseignée comme `null` OU ignorée.
-
-Ces propriétés sont **systématiquement déclarées dans le schéma principal** pour faciliter la lisibilité du contrat et ne **sont pas listées dans le bloc `required`** :
-
 ```yaml
 type: object
 properties:
+  # Valeur applicable qui peut être inconnue
   foo:
-    enum: [option-1, option-2]
+    type: [number, "null"]
+  # Valeur non applicable
   bar:
-    type: [string, "null"]
+    const: null
+    default: null
 required:
   - foo
-oneOf:
-  - title: `bar` est applicable
-    type: object
-    properties:
-      foo:
-        const: option-1
-    required:
-      - foo
-      - bar
-  - title: `bar` n'est pas applicable
-    type: object
-    properties:
-      foo:
-        const: option-2
-      bar:
-        const: null
-    required:
-      - foo
-```
-
-#### Propriété applicable mais inconnue
-
-La propriété est applicable et DOIT être renseignée.
-
-Ces propriétés sont déclarées dans le schéma principal et listées dans le bloc `required` :
-
-```yaml
-type: object
-properties:
-  foo:
-    type: [string, "null"]
-required:
-  - foo
+  - bar
 ```

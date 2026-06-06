@@ -15,6 +15,7 @@ export function register(ctx: Context): void {
 		ctx.register(ID, RULES.dp, item, () => dp(ctx, item));
 		ctx.register(ID, RULES.u0, item, () => u0(ctx, item));
 		ctx.register(ID, RULES.u, item, () => u(ctx, item));
+		ctx.register(ID, RULES.paroi_ancienne, item, () => paroi_ancienne(item));
 	});
 }
 
@@ -56,10 +57,19 @@ export function u0(
 	ctx: Context,
 	item: Mur,
 ): ReturnType<typeof formulas.calcule_u0> {
+	const u0_enduit_isolant = formulas.calcule_u0_enduit_isolant({
+		paroi_ancienne: ctx.resolve(ID, RULES.paroi_ancienne, item),
+		presence_enduit_isolant: item.presence_enduit_isolant,
+	});
+	const u0_doublage = formulas.calcule_u0_doublage({
+		type_doublage: item.type_doublage,
+	});
 	return formulas.calcule_u0({
 		u0_saisi: item.u0,
 		annee_construction: paroi.annee_construction(ctx, item),
 		structures: item.structures,
+		u0_enduit_isolant,
+		u0_doublage,
 	});
 }
 
@@ -81,6 +91,16 @@ export function u(
 	});
 }
 
+export function paroi_ancienne(
+	item: Mur,
+): ReturnType<typeof formulas.calcule_paroi_ancienne> {
+	return formulas.calcule_paroi_ancienne({
+		structures: item.structures.map((structure) => ({
+			materiau_ancien: structure.materiau_ancien,
+		})),
+	});
+}
+
 export function isolation(
 	ctx: Context,
 	item: Mur,
@@ -89,4 +109,18 @@ export function isolation(
 		isolation: item.isolation.etat,
 		annee_construction: paroi.annee_construction(ctx, item),
 	});
+}
+
+export function applique(ctx: Context, item: Mur): models.enveloppe.mur.MurWithData {
+	return {
+		...item,
+		data: {
+			u0: ctx.resolve(ID, RULES.u0, item),
+			u: ctx.resolve(ID, RULES.u, item),
+			b: ctx.resolve(ID, RULES.b, item),
+			sdep: ctx.resolve(ID, RULES.sdep, item),
+			dp: ctx.resolve(ID, RULES.dp, item),
+			paroi_ancienne: ctx.resolve(ID, RULES.paroi_ancienne, item),
+		},
+	};
 }

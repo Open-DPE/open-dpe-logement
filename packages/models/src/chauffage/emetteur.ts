@@ -1,9 +1,22 @@
-import type { UUID } from "../common/common";
-import { buildEnum } from "../utils";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { UUID } from "#/common/common";
+import { buildEnum, createGuard } from "../utils";
+
+export const isEmetteur = createGuard<Emetteur>(SCHEMA_KEYS["chauffage/emetteur"]);
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/emetteur
  */
+export type EmetteurWithData<T extends Emetteur = Emetteur> = T & {
+	data: EmetteurData;
+};
+
+export type EmetteurData = {
+	delta_pem: number;
+	fcot: number;
+	dtheta_dim: number;
+};
+
 export type Emetteur = {
 	id: UUID;
 	description: string;

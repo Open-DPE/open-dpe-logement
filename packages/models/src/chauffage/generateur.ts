@@ -1,6 +1,9 @@
-import type { Consommations, Energie, Pertes, UUID } from "../common/common.js";
-import type { NonNegativeNumber, PositiveNumber } from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { Consommations, Energie, UUID } from "#/common/common";
+import type { NonNegativeNumber, PositiveNumber } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
+
+export const isGenerateur = createGuard<Generateur>(SCHEMA_KEYS["chauffage/generateur"]);
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/generateur
@@ -78,7 +81,7 @@ export type GenerateurData = {
 	pn: number;
 	pdim: number;
 	pch: number;
-	rg: number;
+	paux: number;
 	scop: number | null;
 	rpn: number | null;
 	rpint: number | null;
@@ -86,7 +89,8 @@ export type GenerateurData = {
 	pveilleuse: number | null;
 	tfonc30: number | null;
 	tfonc100: number | null;
-	pertes: Pertes;
+	qgen_rec: number;
+	qgen: number;
 	consommations: Consommations;
 };
 

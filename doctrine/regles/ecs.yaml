@@ -1,3 +1,27 @@
+ecs.cef:
+  id: ecs.cef
+  description: Consommations d'énergie finale d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.generateur.cef
+
+ecs.cep:
+  id: ecs.cep
+  description: Consommations d'énergie primaire d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.generateur.cep
+
+ecs.eges:
+  id: ecs.eges
+  description: Emissions de gaz à effet de serre d'eau chaude sanitaire
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - ecs.generateur.eges
+
 ecs.cecs:
   id: ecs.cecs
   description: Consommations d'eau chaude sanitaire
@@ -12,7 +36,7 @@ ecs.cecs_elec:
   type: number
   unite: kWh/an
   dependances:
-    - ecs.generateur.cecs
+    - ecs.generateur.cecs_elec
 
 ecs.caux:
   id: ecs.caux
@@ -168,6 +192,39 @@ ecs.installation.qdw_col_hvc:
 
 # <-- Systèmes d'eau chaude sanitaire -->
 
+ecs.systeme.cef:
+  id: ecs.systeme.cef
+  description: Consommations d'énergie finale du système d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs
+    - ecs.systeme.cecs_enr
+    - ecs.systeme.caux_dist
+    - ecs.systeme.caux_dist_enr
+
+ecs.systeme.cep:
+  id: ecs.systeme.cep
+  description: Consommations d'énergie primaire du système d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs
+    - ecs.systeme.cecs_enr
+    - ecs.systeme.caux_dist
+    - ecs.systeme.caux_dist_enr
+
+ecs.systeme.eges:
+  id: ecs.systeme.eges
+  description: Emissions de gaz à effet de serre du système d'eau chaude sanitaire
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - ecs.systeme.cecs
+    - ecs.systeme.cecs_enr
+    - ecs.systeme.caux_dist
+    - ecs.systeme.caux_dist_enr
+
 ecs.systeme.cecs:
   id: ecs.systeme.cecs
   description: Consommations du système d'eau chaude sanitaire
@@ -179,6 +236,24 @@ ecs.systeme.cecs:
     - ecs.systeme.iecs
     - ecs.systeme.rdim
 
+ecs.systeme.cecs_elec:
+  id: ecs.systeme.cecs_elec
+  description: Consommations d'électricité du système d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs
+
+ecs.systeme.cecs_enr:
+  id: ecs.systeme.cecs_enr
+  description: Consommations d'électricité renouvelable du système d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - ecs.systeme.cecs
+
 ecs.systeme.caux_dist:
   id: ecs.systeme.caux_dist
   description: Consommations des auxiliaires de distribution d'eau chaude sanitaire
@@ -187,6 +262,16 @@ ecs.systeme.caux_dist:
   dependances:
     - ecs.systeme.qcirb
     - ecs.systeme.qtrac
+
+ecs.systeme.caux_dist_enr:
+  id: ecs.systeme.caux_dist_enr
+  description: Consommations d'électricité renouvelable des auxiliaires de distribution d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - ecs.systeme.caux_dist
 
 ecs.systeme.qcirb:
   id: ecs.systeme.qcirb
@@ -258,6 +343,36 @@ ecs.systeme.rs:
 
 # <-- Générateurs d'eau chaude sanitaire -->
 
+ecs.generateur.cef:
+  id: ecs.generateur.cef
+  description: Consommations d'énergie finale du générateur d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cef
+    - ecs.generateur.caux_gen
+    - ecs.generateur.caux_gen_enr
+
+ecs.generateur.cep:
+  id: ecs.generateur.cep
+  description: Consommations d'énergie primaire du générateur d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cep
+    - ecs.generateur.caux_gen
+    - ecs.generateur.caux_gen_enr
+
+ecs.generateur.eges:
+  id: ecs.generateur.eges
+  description: Emissions de gaz à effet de serre du générateur d'eau chaude sanitaire
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - ecs.systeme.eges
+    - ecs.generateur.caux_gen
+    - ecs.generateur.caux_gen_enr
+
 ecs.generateur.cecs:
   id: ecs.generateur.cecs
   description: Consommations du générateur d'eau chaude sanitaire
@@ -266,9 +381,17 @@ ecs.generateur.cecs:
   dependances:
     - ecs.systeme.cecs
 
-ecs.generateur.caux:
-  id: ecs.generateur.caux
-  description: Consommations de l'auxiliaire de production d'eau chaude sanitaire
+ecs.generateur.cecs_elec:
+  id: ecs.generateur.cecs_elec
+  description: Consommations d'électricité du générateur d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs_elec
+
+ecs.generateur.caux_gen:
+  id: ecs.generateur.caux_gen
+  description: Consommations de l'auxiliaire de génération d'eau chaude sanitaire
   type: number
   unite: kWh/an
   dependances:
@@ -276,6 +399,16 @@ ecs.generateur.caux:
     - ecs.generateur.pn
     - ecs.generateur.paux
     - ecs.generateur.rdim
+
+ecs.generateur.caux_gen_enr:
+  id: ecs.generateur.caux_gen_enr
+  description: Consommations d'électricité renouvelable de l'auxiliaire de génération d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - ecs.generateur.caux_gen
 
 ecs.generateur.rdim:
   id: ecs.generateur.rdim

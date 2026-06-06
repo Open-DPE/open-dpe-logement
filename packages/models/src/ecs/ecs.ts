@@ -1,15 +1,17 @@
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type {
-	Consommations,
-	Pertes,
 	NonEmptyArray,
 	UUID,
-} from "#/common/common.js";
+} from "#/common/common";
 import { EntityNotFoundError } from "#/errors.js";
+import { createGuard } from "#/utils.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
 import * as systeme from "./systeme.js";
 
 export { generateur, installation, systeme };
+
+export const isEcs = createGuard<Ecs>(SCHEMA_KEYS["ecs"]);
 
 /**
  * @see https://schemas.open-dpe.fr/ecs
@@ -24,12 +26,14 @@ export type EcsWithData<T extends Ecs = Ecs> = T & {
 };
 
 export type EcsData = {
-	nmax: number;
+	qgw: number;
+	qgen: number;
+	qdw_ind_vc: number;
+	qdw_col_vc: number;
+	qdw_col_hvc: number;
+	becs: number;
 	nadeq: number;
-	bef: number;
-	iecs: number;
-	pertes: Pertes;
-	consommations: Consommations;
+	nmax: number;
 };
 
 export function get_systemes(ecs: Ecs): systeme.Systeme[] {

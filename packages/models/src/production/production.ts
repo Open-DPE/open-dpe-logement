@@ -1,7 +1,10 @@
-import { buildEnum } from "#/utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import { buildEnum, createGuard } from "#/utils.js";
 import * as panneauPhotovoltaique from "./panneau-photovoltaique.js";
 
 export { panneauPhotovoltaique };
+
+export const isProduction = createGuard<Production>(SCHEMA_KEYS["production"]);
 
 /**
  * @see https://schemas.open-dpe.fr/production
@@ -16,6 +19,8 @@ export type ProductionWithData<T extends Production = Production> = T & {
 
 export type ProductionData = {
 	ppv: number;
+	celec_ac: number;
+	tapl: number;
 };
 
 export const USAGES_ELECTRICITE = [
@@ -29,3 +34,7 @@ export const USAGES_ELECTRICITE = [
 ] as const;
 export type UsageElectricite = (typeof USAGES_ELECTRICITE)[number];
 export const UsageElectriciteEnum = buildEnum(USAGES_ELECTRICITE);
+
+export type ParUsageElectricite<T> = {
+	[usage in UsageElectricite]: T;
+};

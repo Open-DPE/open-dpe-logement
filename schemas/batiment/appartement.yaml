@@ -5,15 +5,15 @@ type: object
 additionalProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   surface_habitable:
     title: Surface habitable en m²
-    $ref: /common/primitives#/$defs/surface
+    $ref: /common#/$defs/surface
   hauteur_sous_plafond:
     title: Hauteur sous plafond moyenne en m
-    $ref: /common/primitives#/$defs/hauteur
+    $ref: /common#/$defs/hauteur
   position:
     title: Position de l'appartement dans le bâtiment
     type: string

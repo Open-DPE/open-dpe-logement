@@ -1,3 +1,4 @@
+import * as models from "@open-dpe-logement/models";
 import { enveloppe } from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as formulas from "./formulas.js";
@@ -25,4 +26,13 @@ export function inertie(
 			inertie: item.inertie_plancher_bas,
 		}),
 	});
+}
+
+export function applique(ctx: Context, item: Niveau): enveloppe.niveau.NiveauWithData {
+	return {
+		...item,
+		data: {
+			inertie: ctx.resolve(ID, RULES.inertie, item),
+		},
+	};
 }

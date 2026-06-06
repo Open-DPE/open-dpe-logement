@@ -1,5 +1,10 @@
-import type { PositiveNumber, UUID } from "../common/common";
-import { buildEnum } from "../utils";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { PositiveNumber, UUID } from "#/common/common";
+import { createGuard, buildEnum } from "#/utils";
+
+export const isAppartement = createGuard<Appartement>(
+	SCHEMA_KEYS["batiment/appartement"],
+);
 
 /**
  * @see https://schemas.open-dpe.fr/batiment/appartement

@@ -1,0 +1,35 @@
+diagnostic.cef:
+  id: diagnostic.cef
+  description: Consommations d'énergie finale
+  type: number
+  unite: kWh/m²/an
+  dependances:
+    - batiment.sh
+    - chauffage.cef
+    - ecs.cef
+    - refroidissement.cef
+    - ventilation.cef
+
+diagnostic.cep:
+  id: diagnostic.cep
+  description: Consommations d'énergie primaire
+  type: number
+  unite: kWh/m²/an
+  dependances:
+    - batiment.sh
+    - chauffage.cep
+    - ecs.cep
+    - refroidissement.cep
+    - ventilation.cep
+
+diagnostic.eges:
+  id: diagnostic.eges
+  description: Emissions de gaz à effet de serre
+  type: number
+  unite: kgCO2/m²/an
+  dependances:
+    - batiment.sh
+    - chauffage.eges
+    - ecs.eges
+    - refroidissement.eges
+    - ventilation.eges

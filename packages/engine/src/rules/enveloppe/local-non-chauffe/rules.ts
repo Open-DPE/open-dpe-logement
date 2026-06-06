@@ -279,3 +279,19 @@ function _portes(ctx: Context, item: LocalNonChauffe) {
 			isolation: ctx.resolve(porteRule.ID, porteRule.RULES.isolation_aiu, i),
 		}));
 }
+
+export function applique(ctx: Context, item: LocalNonChauffe): models.enveloppe.localNonChauffe.LocalNonChauffeWithData {
+	return {
+		...item,
+		data: {
+			b: ctx.resolve(ID, RULES.b, item),
+			aiu: ctx.resolve(ID, RULES.aiu, item),
+			aue: ctx.resolve(ID, RULES.aue, item),
+			isolation_aiu: ctx.resolve(ID, RULES.isolation_aiu, item),
+			isolation_aue: ctx.resolve(ID, RULES.isolation_aue, item),
+			sse: Object.values(ctx.resolve(ID, RULES.sse, item)).reduce((s: number, n: number) => s + n, 0),
+			orientations: ctx.resolve(ID, RULES.orientations, item),
+			t: ctx.resolve(ID, RULES.t, item),
+		},
+	};
+}

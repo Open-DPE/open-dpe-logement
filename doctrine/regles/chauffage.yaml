@@ -1,3 +1,27 @@
+chauffage.cef:
+  id: chauffage.cef
+  description: Consommations d'énergie finale du chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cef
+
+chauffage.cep:
+  id: chauffage.cep
+  description: Consommations d'énergie primaire du chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cep
+
+chauffage.eges:
+  id: chauffage.eges
+  description: Émissions de gaz à effet de serre du chauffage
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - chauffage.systeme.eges
+
 chauffage.cch:
   id: chauffage.cch
   description: Consommations de chauffage
@@ -29,7 +53,7 @@ chauffage.caux_gen:
   type: number
   unite: kWh/an
   dependances:
-    - chauffage.generateur.caux
+    - chauffage.generateur.caux_gen
 
 chauffage.caux_dist:
   id: chauffage.caux_dist
@@ -178,6 +202,36 @@ chauffage.emetteur.dtheta_dim:
 
 # <-- Générateurs de chauffage -->
 
+chauffage.generateur.cef:
+  id: chauffage.generateur.cef
+  description: Consommations d'énergie finale du générateur de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cef
+    - chauffage.generateur.caux_gen
+    - chauffage.generateur.caux_gen_enr
+
+chauffage.generateur.cep:
+  id: chauffage.generateur.cep
+  description: Consommations d'énergie primaire du générateur de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cep
+    - chauffage.generateur.caux_gen
+    - chauffage.generateur.caux_gen_enr
+
+chauffage.generateur.eges:
+  id: chauffage.generateur.eges
+  description: Émissions de gaz à effet de serre du générateur de chauffage
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - chauffage.systeme.eges
+    - chauffage.generateur.caux_gen
+    - chauffage.generateur.caux_gen_enr
+
 chauffage.generateur.cch:
   id: chauffage.generateur.cch
   description: Consommations de chauffage du générateur
@@ -188,15 +242,15 @@ chauffage.generateur.cch:
 
 chauffage.generateur.cch_elec:
   id: chauffage.generateur.cch_elec
-  description: Consommations d'électricité de chauffage du générateur
+  description: Consommations d'électricité du générateur de chauffage
   type: number
   unite: kWh/an
   dependances:
-    - chauffage.generateur.cch
+    - chauffage.systeme.cch_elec
 
-chauffage.generateur.caux:
-  id: chauffage.generateur.caux
-  description: Consommations des auxiliaires de chauffage du générateur
+chauffage.generateur.caux_gen:
+  id: chauffage.generateur.caux_gen
+  description: Consommations des auxiliaires de génération du générateur de chauffage
   type: number
   unite: kWh/an
   dependances:
@@ -204,6 +258,16 @@ chauffage.generateur.caux:
     - chauffage.generateur.pn
     - chauffage.generateur.paux
     - chauffage.generateur.rdim
+
+chauffage.generateur.caux_gen_enr:
+  id: chauffage.generateur.caux_gen_enr
+  description: Consommations d'électricité renouvelable des auxiliaires de génération du générateur de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.generateur.caux_gen
+    - production.celec
+    - production.celec_ac
 
 chauffage:generateur:rdim:
   id: chauffage.generateur.rdim
@@ -353,13 +417,81 @@ chauffage.installation.fch:
 
 # <-- Systèmes de chauffage -->
 
+chauffage.systeme.cef:
+  id: chauffage.systeme.cef
+  description: Consommations d'énergie finale du système de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch
+    - chauffage.systeme.cch_enr
+    - chauffage.systeme.caux_dist
+    - chauffage.systeme.caux_dist_enr
+
+chauffage.systeme.cep:
+  id: chauffage.systeme.cep
+  description: Consommations d'énergie primaire du système de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch
+    - chauffage.systeme.cch_enr
+    - chauffage.systeme.caux_dist
+    - chauffage.systeme.caux_dist_enr
+
+chauffage.systeme.eges:
+  id: chauffage.systeme.eges
+  description: Émissions de gaz à effet de serre du système de chauffage
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - chauffage.systeme.cch
+    - chauffage.systeme.cch_enr
+    - chauffage.systeme.caux_dist
+    - chauffage.systeme.caux_dist_enr
+
 chauffage.systeme.cch:
   id: chauffage.systeme.cch
   description: Consommations de chauffage du système
   type: number
   unite: kWh/an
   dependances:
-    - chauffage.systeme.emission.cch
+    - chauffage.systeme.cch1
+    - chauffage.systeme.cch2
+
+chauffage.systeme.cch_elec:
+  id: chauffage.systeme.cch_elec
+  description: Consommations d'électricité du système de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch
+
+chauffage.systeme.cch_enr:
+  id: chauffage.systeme.cch_enr
+  description: Consommations d'électricité renouvelable du système de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - chauffage.systeme.cch_elec
+
+chauffage.systeme.cch1:
+  id: chauffage.systeme.cch1
+  description: Consommations de chauffage du système de chauffage (partie PAC pour les PAC hybrides)
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.emission.cch1
+
+chauffage.systeme.cch2:
+  id: chauffage.systeme.cch2
+  description: Consommations de chauffage du système de chauffage de la partie chaudière des PAC hybrides
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.emission.cch2
 
 chauffage.systeme.caux_dist:
   id: chauffage.systeme.caux_dist
@@ -369,6 +501,16 @@ chauffage.systeme.caux_dist:
   dependances:
     - chauffage.nref
     - chauffage.systeme.pcircem
+
+chauffage.systeme.caux_dist_enr:
+  id: chauffage.systeme.caux_dist_enr
+  description: Consommations d'électricité renouvelable des auxiliaires de distribution du système de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.caux_dist
+    - production.celec
+    - production.celec_ac
 
 chauffage.systeme.rdim:
   id: chauffage.systeme.rdim
@@ -448,12 +590,36 @@ chauffage.systeme.emission.cch:
   type: number
   unite: kWh/an
   dependances:
+    - chauffage.systeme.emission.cch1
+    - chauffage.systeme.emission.cch2
+
+chauffage.systeme.emission.cch1:
+  id: chauffage.systeme.emission.cch1
+  description: Consommations de chauffage du couple système/émission de chauffage (partie PAC pour les PAC hybrides)
+  type: number
+  unite: kWh/an
+  dependances:
+    - climat.zone_climatique
     - chauffage.bch
     - chauffage.installation.fch
     - chauffage.installation.rdim
     - chauffage.systeme.rdim
     - chauffage.systeme.emission.int
-    - chauffage.systeme.emission.ich
+    - chauffage.systeme.emission.ich1
+
+chauffage.systeme.emission.cch2:
+  id: chauffage.systeme.emission.cch2
+  description: Consommations de chauffage du couple système/émission de chauffage de la partie chaudière des PAC hybrides
+  type: number
+  unite: kWh/an
+  dependances:
+    - climat.zone_climatique
+    - chauffage.bch
+    - chauffage.installation.fch
+    - chauffage.installation.rdim
+    - chauffage.systeme.rdim
+    - chauffage.systeme.emission.int
+    - chauffage.systeme.emission.ich2
 
 chauffage.systeme.emission.int:
   id: chauffage.systeme.emission.int
@@ -475,6 +641,26 @@ chauffage.systeme.emission.i0:
 chauffage.systeme.emission.ich:
   id: chauffage.systeme.emission.ich
   description: Inverse du rendement du couple système/émission de chauffage
+  type: number
+  dependances:
+    - climat.zone_climatique
+    - chauffage.systeme.emission.ich1
+    - chauffage.systeme.emission.ich2
+
+chauffage.systeme.emission.ich1:
+  id: chauffage.systeme.emission.ich1
+  description: Inverse du rendement du couple système/émission de chauffage (partie PAC pour les PAC hybrides)
+  type: number
+  dependances:
+    - chauffage.systeme.rd
+    - chauffage.systeme.rg
+    - chauffage.systeme.emission.re
+    - chauffage.systeme.emission.rr
+    - chauffage.generateur.scop
+
+chauffage.systeme.emission.ich2:
+  id: chauffage.systeme.emission.ich2
+  description: Inverse du rendement du couple système/émission de chauffage de la partie chaudière des PAC hybrides
   type: number
   dependances:
     - chauffage.systeme.rd

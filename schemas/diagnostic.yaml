@@ -5,18 +5,18 @@ type: object
 additionalProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
     readOnly: true
   date:
     title: Date d'enregistrement
-    $ref: /common/primitives#/$defs/date
+    $ref: /common#/$defs/date
     readOnly: true
   date_visite:
     title: Date de visite du logement
-    $ref: /common/primitives#/$defs/date
+    $ref: /common#/$defs/date
   date_etablissement:
     title: Date d'établissement
-    $ref: /common/primitives#/$defs/date
+    $ref: /common#/$defs/date
   batiment:
     $ref: /batiment
   enveloppe:
@@ -32,30 +32,8 @@ properties:
   production:
     $ref: /production
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      cef:
-        title: Consommation d'énergie finale en kWh/m²/an
-        type: number
-        minimum: 0
-      cep:
-        title: Consommation d'énergie primaire en kWh/m²/an
-        type: number
-        minimum: 0
-      eges:
-        title: Émissions de gaz à effet de serre en kgCO2/m²/an
-        type: number
-        minimum: 0
-      consommations:
-        $ref: /common/components#/$defs/consommations
-    required:
-      - cef
-      - cep
-      - eges
-      - consommations
+    $ref: "#/$defs/data"
+
 required:
   - date_visite
   - date_etablissement
@@ -66,3 +44,24 @@ required:
   - ventilation
   - refroidissement
   - production
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      consommations:
+        title: Consommations par usage et par énergie
+        $ref: /common#/$defs/consommations
+      cef:
+        title: Consommation d'énergie finale en kWh/m².an
+        type: number
+      cep:
+        title: Consommation d'énergie primaire en kWh/m².an
+        type: number
+      eges:
+        title: Émissions de gaz à effet de serre en kgCO2/m².an
+        type: number
+    required: [consommations, cef, cep, eges]

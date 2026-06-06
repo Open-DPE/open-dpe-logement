@@ -10,6 +10,7 @@ export const RULES = {
 	dp: "dp",
 	u: "u",
 	u0: "u0",
+	paroi_ancienne: "paroi_ancienne",
 } as const;
 
 export type Results = {
@@ -23,6 +24,7 @@ export type Results = {
 			[RULES.dp]: ReturnType<typeof rules.dp>;
 			[RULES.u]: ReturnType<typeof rules.u>;
 			[RULES.u0]: ReturnType<typeof rules.u0>;
+			[RULES.paroi_ancienne]: ReturnType<typeof rules.paroi_ancienne>;
 		}
 	>;
 };

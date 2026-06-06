@@ -1,7 +1,10 @@
-import type { Consommations, Pertes, UUID } from "#/common/common.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { Consommations, UUID } from "#/common/common";
 import type { Generateur } from "./generateur.js";
 import { EntityNotFoundError } from "#/errors.js";
-import { buildEnum } from "#/utils.js";
+import { buildEnum, createGuard } from "#/utils.js";
+
+export const isSysteme = createGuard<Systeme>(SCHEMA_KEYS["ecs/systeme"]);
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/systeme
@@ -24,7 +27,8 @@ export type SystemeData = {
 	rs: number;
 	rg: number;
 	rgs: number;
-	pertes: Pertes;
+	qcirb: number;
+	qtrac: number;
 	consommations: Consommations;
 };
 

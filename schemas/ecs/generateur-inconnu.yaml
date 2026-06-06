@@ -1,0 +1,82 @@
+$id: https://schemas.open-dpe.fr/ecs/generateur-inconnu
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Générateur collectif inconnu
+type: object
+additionalProperties: false
+
+allOf:
+  - $ref: /ecs/generateur-base
+
+properties:
+  type:
+    const: null
+  energie:
+    const: null
+  bienergie:
+    const: null
+    default: null
+  position:
+    type: object
+    properties:
+      generateur_collectif:
+        const: true
+        default: true
+      position_volume_chauffe:
+        const: false
+        default: false
+      position_chauffe_eau:
+        const: null
+        default: null
+      generateur_mixte_id:
+        const: null
+        default: null
+      reseau_chaleur_id:
+        const: null
+        default: null
+    required:
+      - generateur_collectif
+      - position_volume_chauffe
+      - position_chauffe_eau
+      - generateur_mixte_id
+      - reseau_chaleur_id
+  signaletique:
+    type: object
+    properties:
+      pn:
+        const: null
+        default: null
+      cop:
+        const: null
+        default: null
+      label:
+        const: null
+        default: null
+      mode_combustion:
+        const: null
+        default: null
+      presence_ventouse:
+        const: null
+        default: null
+      pveilleuse:
+        const: null
+        default: null
+      qp0:
+        const: null
+        default: null
+      rpn:
+        const: null
+        default: null
+    required:
+      - pn
+      - cop
+      - label
+      - mode_combustion
+      - presence_ventouse
+      - pveilleuse
+      - qp0
+      - rpn
+required:
+  - type
+  - energie
+  - position
+  - signaletique

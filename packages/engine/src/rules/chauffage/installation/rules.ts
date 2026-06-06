@@ -96,3 +96,17 @@ export function effet_joule(
 		});
 	});
 }
+
+export function applique(ctx: Context, item: Installation): models.chauffage.installation.InstallationWithData {
+	const sumMois = (v: models.common.ParMois<number>): number =>
+		Object.values(v).reduce((s: number, n: number) => s + n, 0);
+	return {
+		...item,
+		data: {
+			bch: sumMois(ctx.resolve(ID, RULES.bch, item)),
+			rdim: ctx.resolve(ID, RULES.rdim, item),
+			pch: ctx.resolve(ID, RULES.pch, item),
+			fch: ctx.resolve(ID, RULES.fch, item),
+		},
+	};
+}

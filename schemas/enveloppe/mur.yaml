@@ -5,9 +5,9 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   structures:
     title: Structures connues et justifiées
     type: array
@@ -28,49 +28,28 @@ properties:
     title: Présence d'un enduit isolant
     type: [boolean, "null"]
   inertie:
-    $ref: /enveloppe/common/primitives#/$defs/inertie_paroi
+    $ref: /enveloppe/paroi#/$defs/inertie
   annee_construction:
-    $ref: /common/primitives#/$defs/annee_construction
+    $ref: /common#/$defs/annee_construction
   annee_renovation:
-    $ref: /common/primitives#/$defs/annee_renovation
+    $ref: /common#/$defs/annee_renovation
   u0:
-    $ref: /enveloppe/common/primitives#/$defs/u0_saisi
+    title: Coefficient de transmission thermique du mur nu connu et justifié en W/m².K
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   u:
-    $ref: /enveloppe/common/primitives#/$defs/u_saisi
+    title: Coefficient de transmission thermique du mur connu et justifié en W/m².K
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   position:
-    title: Position
-    type: object
-    properties:
-      orientation:
-        $ref: /enveloppe/common/primitives#/$defs/orientation
-    required:
-      - orientation
-    allOf:
-      - $ref: /enveloppe/common/components#/$defs/position
+    $ref: "#/$defs/position"
   isolation:
-    $ref: /enveloppe/common/components#/$defs/isolation
+    $ref: /enveloppe/paroi#/$defs/isolation
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      u0:
-        $ref: /enveloppe/common/primitives#/$defs/u
-      u:
-        $ref: /enveloppe/common/primitives#/$defs/u
-      b:
-        $ref: /enveloppe/common/primitives#/$defs/b
-      sdep:
-        $ref: /enveloppe/common/primitives#/$defs/sdep
-      dp:
-        $ref: /enveloppe/common/primitives#/$defs/deperditions
-    required:
-      - u0
-      - u
-      - b
-      - sdep
-      - dp
+    $ref: "#/$defs/data"
+
 required:
   - id
   - description
@@ -84,6 +63,7 @@ required:
   - u
   - position
   - isolation
+
 $defs:
   structure:
     title: Structure
@@ -118,8 +98,9 @@ $defs:
           - null
       epaisseur:
         title: Epaisseur du mur non isolé en mm
-        type: [number, "null"]
-        exclusiveMinimum: 0
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
       materiau_ancien:
         title: Matériau ancien
         type: [boolean, "null"]
@@ -127,3 +108,40 @@ $defs:
       - materiau
       - epaisseur
       - materiau_ancien
+
+  position:
+    title: Position
+    type: object
+    properties:
+      orientation:
+        $ref: /enveloppe/paroi#/$defs/orientation
+    required:
+      - orientation
+    allOf:
+      - $ref: /enveloppe/paroi#/$defs/position
+
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      sdep:
+        title: Surface déperditive du mur en m²
+        type: number
+      b:
+        title: Coefficient de réduction des déperditions thermiques du mur
+        type: number
+      dp:
+        title: Déperditions thermiques du mur en W/K
+        type: number
+      u:
+        title: Coefficient de transmission thermique du mur en W/(m².K)
+        type: number
+      u0:
+        title: Coefficient de transmission thermique du mur sans isolation en W/(m².K)
+        type: number
+      paroi_ancienne:
+        title: Mur composé de matériaux anciens
+        type: boolean
+    required: [sdep, b, dp, u, u0, paroi_ancienne]

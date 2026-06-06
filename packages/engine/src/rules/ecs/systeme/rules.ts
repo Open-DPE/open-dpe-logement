@@ -1,6 +1,7 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as climat from "#rules/climat/registry.js";
+import * as production from "#rules/production/registry.js";
 import * as generateurRules from "#rules/ecs/generateur/index.js";
 import * as installationRegistry from "#rules/ecs/installation/registry.js";
 import * as formules from "./formulas.js";
@@ -9,8 +10,12 @@ import { ID, RULES } from "./registry.js";
 export function register(ctx: Context): void {
 	ctx.diagnostic.ecs.installations.forEach((i) => {
 		i.systemes.forEach((s) => {
+			ctx.register(ID, RULES.consommations, s, () => consommations(ctx, s));
 			ctx.register(ID, RULES.cecs, s, () => cecs(ctx, i, s));
+			ctx.register(ID, RULES.cecs_enr, s, () => cecs_enr(ctx, s));
+			ctx.register(ID, RULES.cecs_elec, s, () => cecs_elec(ctx, s));
 			ctx.register(ID, RULES.caux_dist, s, () => caux_dist(ctx, s));
+			ctx.register(ID, RULES.caux_dist_enr, s, () => caux_dist_enr(ctx, s));
 			ctx.register(ID, RULES.qcirb, s, () => qcirb(ctx, i, s));
 			ctx.register(ID, RULES.qtrac, s, () => qtrac(ctx, i, s));
 			ctx.register(ID, RULES.rdim, s, () => rdim(i));
@@ -25,6 +30,24 @@ export function register(ctx: Context): void {
 
 type Installation = models.ecs.installation.Installation;
 type Systeme = models.ecs.systeme.Systeme;
+
+export function consommations(
+	ctx: Context,
+	systeme: Systeme,
+): ReturnType<typeof formules.calcule_consommations> {
+	const generateur = models.ecs.get_generateur(
+		ctx.diagnostic.ecs,
+		systeme.generateur_id,
+	);
+	return formules.calcule_consommations({
+		cecs: ctx.resolve(ID, RULES.cecs, systeme),
+		cecs_enr: ctx.resolve(ID, RULES.cecs_enr, systeme),
+		caux_dist: ctx.resolve(ID, RULES.caux_dist, systeme),
+		caux_dist_enr: ctx.resolve(ID, RULES.caux_dist_enr, systeme),
+		energie: generateurRules.rules.energie_generateur(generateur),
+		reseau_id: generateur.position.reseau_chaleur_id,
+	});
+}
 
 export function cecs(
 	ctx: Context,
@@ -47,6 +70,31 @@ export function cecs(
 	});
 }
 
+export function cecs_enr(
+	ctx: Context,
+	systeme: Systeme,
+): ReturnType<typeof formules.calcule_cecs_enr> {
+	return formules.calcule_cecs_enr({
+		celec: ctx.resolve(production.ID, production.RULES.celec),
+		celec_ac: ctx.resolve(production.ID, production.RULES.celec_ac),
+		cecs_elec: ctx.resolve(ID, RULES.cecs_elec, systeme),
+	});
+}
+
+export function cecs_elec(
+	ctx: Context,
+	systeme: Systeme,
+): ReturnType<typeof formules.calcule_cecs_elec> {
+	const generateur = models.ecs.get_generateur(
+		ctx.diagnostic.ecs,
+		systeme.generateur_id,
+	);
+	return formules.calcule_cecs_elec({
+		cecs: ctx.resolve(ID, RULES.cecs, systeme),
+		energie_generateur: generateurRules.rules.energie_generateur(generateur),
+	});
+}
+
 export function caux_dist(
 	ctx: Context,
 	item: Systeme,
@@ -54,6 +102,17 @@ export function caux_dist(
 	return formules.calcule_caux_dist({
 		qtrac: ctx.resolve(ID, RULES.qtrac, item),
 		qcirb: ctx.resolve(ID, RULES.qcirb, item),
+	});
+}
+
+export function caux_dist_enr(
+	ctx: Context,
+	item: Systeme,
+): ReturnType<typeof formules.calcule_caux_dist_enr> {
+	return formules.calcule_caux_dist_enr({
+		celec: ctx.resolve(production.ID, production.RULES.celec),
+		celec_ac: ctx.resolve(production.ID, production.RULES.celec_ac),
+		caux_dist: ctx.resolve(ID, RULES.caux_dist, item),
 	});
 }
 
@@ -281,4 +340,21 @@ export function isolation_reseau(
 	return formules.set_isolation_reseau({
 		isolation_reseau: systeme.reseau.isolation ?? null,
 	});
+}
+
+export function applique(ctx: Context, item: Systeme): models.ecs.systeme.SystemeWithData {
+	return {
+		...item,
+		data: {
+			rdim: ctx.resolve(ID, RULES.rdim, item),
+			iecs: ctx.resolve(ID, RULES.iecs, item),
+			rd: ctx.resolve(ID, RULES.rd, item),
+			rs: ctx.resolve(ID, RULES.rs, item),
+			rg: ctx.resolve(ID, RULES.rg, item),
+			rgs: ctx.resolve(ID, RULES.rgs, item),
+			qcirb: ctx.resolve(ID, RULES.qcirb, item),
+			qtrac: ctx.resolve(ID, RULES.qtrac, item),
+			consommations: ctx.resolve(ID, RULES.consommations, item),
+		},
+	};
 }

@@ -3,9 +3,11 @@ import * as rules from "./rules.js";
 export const ID = "chauffage:generateur";
 
 export const RULES = {
+	consommations: "consommations",
 	cch: "cch",
 	cch_elec: "cch_elec",
-	caux: "caux",
+	caux_gen: "caux_gen",
+	caux_gen_enr: "caux_gen_enr",
 	rdim: "rdim",
 	pn: "pn",
 	pdim: "pdim",
@@ -26,9 +28,11 @@ export type Results = {
 	[ID]: Record<
 		string,
 		{
+			[RULES.consommations]: ReturnType<typeof rules.consommations>;
 			[RULES.cch]: ReturnType<typeof rules.cch>;
 			[RULES.cch_elec]: ReturnType<typeof rules.cch_elec>;
-			[RULES.caux]: ReturnType<typeof rules.caux>;
+			[RULES.caux_gen]: ReturnType<typeof rules.caux_gen>;
+			[RULES.caux_gen_enr]: ReturnType<typeof rules.caux_gen_enr>;
 			[RULES.rdim]: ReturnType<typeof rules.rdim>;
 			[RULES.pn]: ReturnType<typeof rules.pn>;
 			[RULES.pdim]: ReturnType<typeof rules.pdim>;

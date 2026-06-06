@@ -1,12 +1,35 @@
 import { common } from "@open-dpe-logement/models";
 import { abaques } from "@open-dpe-logement/abaques";
 
-export function calcule_cef(props: {
-	cef_base: number;
-	celec_ac: number;
-}): number {
-	const { cef_base, celec_ac } = props;
-	return Math.max(0, cef_base - celec_ac);
+/**
+ * @return Consommations par usage et par énergie
+ */
+export function calcule_consommations(props: {
+	cef: number;
+	cef_enr: number;
+	usage: common.Usage;
+	energie: common.Energie;
+	reseau_id: string | null;
+}): common.Consommations {
+	const { cef_enr, usage, energie, reseau_id } = props;
+	const cef = Math.max(props.cef - cef_enr, 0);
+	const consommations: common.Consommations = {};
+	consommations[usage] = {
+		[energie]: {
+			cef,
+			cep: calcule_cep({ cef, energie }),
+			eges: calcule_eges({ cef, usage, energie, reseau_id }),
+		},
+	};
+	if (cef_enr > 0 && energie === common.EnergieEnum.electricite) {
+		const enr = common.EnergieEnum.electricite_renouvelable;
+		consommations[usage][enr] = {
+			cef: cef_enr,
+			cep: calcule_cep({ cef: cef_enr, energie: enr }),
+			eges: calcule_eges({ cef: cef_enr, usage, energie: enr, reseau_id }),
+		};
+	}
+	return consommations;
 }
 
 /**
@@ -22,6 +45,7 @@ export function calcule_cep(props: {
 	const { cef, energie } = props;
 	switch (energie) {
 		case common.EnergieEnum.electricite:
+		case common.EnergieEnum.electricite_renouvelable:
 			return cef * 1.9;
 		default:
 			return cef;
@@ -50,10 +74,7 @@ export function calcule_eges(props: {
 		const query = { id: reseau_id };
 		const matches = abaques.performance.reseau.search(query, abaque);
 		const reseau = matches.at(0) ?? null;
-
-		if (reseau) {
-			return cef * reseau.contenu_co2_acv;
-		}
+		if (reseau) return cef * reseau.contenu_co2_acv;
 	}
 
 	// Cas de l'électricité

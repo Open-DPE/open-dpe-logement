@@ -3,6 +3,7 @@ import type { Context } from "#core/context.js";
 import * as climat from "#rules/climat/registry.js";
 import * as generateurChauffage from "#rules/chauffage/generateur/registry.js";
 import * as ecs from "#rules/ecs/registry.js";
+import * as production from "#rules/production/registry.js";
 import * as installation from "#rules/ecs/installation/registry.js";
 import * as systeme from "#rules/ecs/systeme/registry.js";
 import * as formules from "./formulas.js";
@@ -11,8 +12,11 @@ import { ID, RULES } from "./registry.js";
 
 export function register(ctx: Context): void {
 	ctx.diagnostic.ecs.generateurs.forEach((g) => {
+		ctx.register(ID, RULES.consommations, g, () => consommations(ctx, g));
 		ctx.register(ID, RULES.cecs, g, () => cecs(ctx, g));
-		ctx.register(ID, RULES.caux, g, () => caux(ctx, g));
+		ctx.register(ID, RULES.cecs_elec, g, () => cecs_elec(ctx, g));
+		ctx.register(ID, RULES.caux_gen, g, () => caux_gen(ctx, g));
+		ctx.register(ID, RULES.caux_gen_enr, g, () => caux_gen_enr(ctx, g));
 		ctx.register(ID, RULES.rdim, g, () => rdim(ctx, g));
 		ctx.register(ID, RULES.pn, g, () => pn(ctx, g));
 		ctx.register(ID, RULES.pdim, g, () => pdim(ctx, g));
@@ -30,6 +34,21 @@ export function register(ctx: Context): void {
 
 type Generateur = models.ecs.generateur.Generateur;
 
+export function consommations(
+	ctx: Context,
+	generateur: Generateur,
+): ReturnType<typeof formules.calcule_consommations> {
+	return formules.calcule_consommations({
+		consommations: ctx.diagnostic.ecs.installations.flatMap((i) =>
+			i.systemes
+				.filter((s) => s.generateur_id === generateur.id)
+				.map((s) => ctx.resolve(systeme.ID, systeme.RULES.consommations, s)),
+		),
+		caux_gen: ctx.resolve(ID, RULES.caux_gen, generateur),
+		caux_gen_enr: ctx.resolve(ID, RULES.caux_gen_enr, generateur),
+	});
+}
+
 export function cecs(
 	ctx: Context,
 	generateur: Generateur,
@@ -43,15 +62,39 @@ export function cecs(
 	});
 }
 
-export function caux(
+export function cecs_elec(
 	ctx: Context,
 	generateur: Generateur,
-): ReturnType<typeof formules.calcule_caux> {
-	return formules.calcule_caux({
+): ReturnType<typeof formules.calcule_cecs_elec> {
+	return formules.calcule_cecs_elec({
+		cecs_elec: ctx.diagnostic.ecs.installations.flatMap((i) =>
+			i.systemes
+				.filter((s) => s.generateur_id === generateur.id)
+				.map((s) => ctx.resolve(systeme.ID, systeme.RULES.cecs_elec, s)),
+		),
+	});
+}
+
+export function caux_gen(
+	ctx: Context,
+	generateur: Generateur,
+): ReturnType<typeof formules.calcule_caux_gen> {
+	return formules.calcule_caux_gen({
 		becs: ctx.resolve(ecs.ID, ecs.RULES.becs),
 		pn: ctx.resolve(ID, RULES.pn, generateur),
 		paux: ctx.resolve(ID, RULES.paux, generateur),
 		rdim: ctx.resolve(ID, RULES.rdim, generateur),
+	});
+}
+
+export function caux_gen_enr(
+	ctx: Context,
+	generateur: Generateur,
+): ReturnType<typeof formules.calcule_caux_gen_enr> {
+	return formules.calcule_caux_gen_enr({
+		celec: ctx.resolve(production.ID, production.RULES.celec),
+		celec_ac: ctx.resolve(production.ID, production.RULES.celec_ac),
+		caux_gen: ctx.resolve(ID, RULES.caux_gen, generateur),
 	});
 }
 
@@ -275,4 +318,25 @@ export function volume_stockage(
 	return formules.set_volume_stockage({
 		volume_stockage: generateur.stockage?.volume ?? null,
 	});
+}
+
+export function applique(ctx: Context, item: Generateur): models.ecs.generateur.GenerateurWithData {
+	return {
+		...item,
+		data: {
+			rdim: ctx.resolve(ID, RULES.rdim, item),
+			pn: ctx.resolve(ID, RULES.pn, item),
+			pdim: ctx.resolve(ID, RULES.pdim, item),
+			pecs: ctx.resolve(ID, RULES.pecs, item),
+			paux: ctx.resolve(ID, RULES.paux, item),
+			cop: ctx.resolve(ID, RULES.cop, item),
+			rpn: ctx.resolve(ID, RULES.rpn, item),
+			qp0: ctx.resolve(ID, RULES.qp0, item),
+			pveilleuse: ctx.resolve(ID, RULES.pveilleuse, item),
+			cr: ctx.resolve(ID, RULES.cr, item),
+			qgw: ctx.resolve(ID, RULES.qgw, item),
+			qgen: ctx.resolve(ID, RULES.qgen, item),
+			consommations: ctx.resolve(ID, RULES.consommations, item),
+		},
+	};
 }

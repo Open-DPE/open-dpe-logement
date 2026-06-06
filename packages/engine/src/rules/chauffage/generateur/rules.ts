@@ -3,6 +3,7 @@ import type { Context } from "#core/context.js";
 import * as climat from "#rules/climat/registry.js";
 import * as generateurEcsRules from "#rules/ecs/generateur/registry.js";
 import * as chauffage from "#rules/chauffage/registry.js";
+import * as production from "#rules/production/registry.js";
 import * as emetteurRules from "#rules/chauffage/emetteur/index.js";
 import * as installationRules from "#rules/chauffage/installation/registry.js";
 import * as systemeRules from "#rules/chauffage/systeme/registry.js";
@@ -10,11 +11,15 @@ import * as formulas from "./formulas.js";
 import * as utils from "./utils.js";
 import { ID, RULES } from "./registry.js";
 
+type Generateur = models.chauffage.generateur.Generateur;
+
 export function register(ctx: Context) {
 	ctx.diagnostic.chauffage.generateurs.forEach((item) => {
+		ctx.register(ID, RULES.consommations, item, () => consommations(ctx, item));
 		ctx.register(ID, RULES.cch, item, () => cch(ctx, item));
 		ctx.register(ID, RULES.cch_elec, item, () => cch_elec(ctx, item));
-		ctx.register(ID, RULES.caux, item, () => caux(ctx, item));
+		ctx.register(ID, RULES.caux_gen, item, () => caux_gen(ctx, item));
+		ctx.register(ID, RULES.caux_gen_enr, item, () => caux_gen_enr(ctx, item));
 		ctx.register(ID, RULES.rdim, item, () => rdim(ctx, item));
 		ctx.register(ID, RULES.pn, item, () => pn(ctx, item));
 		ctx.register(ID, RULES.pdim, item, () => pdim(ctx, item));
@@ -32,7 +37,50 @@ export function register(ctx: Context) {
 	});
 }
 
-type Generateur = models.chauffage.generateur.Generateur;
+export function applique(
+	ctx: Context,
+	item: Generateur,
+): models.chauffage.generateur.GenerateurWithData {
+	const sumMois = (v: models.common.ParMois<number>): number =>
+		Object.values(v).reduce((s: number, n: number) => s + n, 0);
+	return {
+		...item,
+		data: {
+			rdim: ctx.resolve(ID, RULES.rdim, item),
+			pn: ctx.resolve(ID, RULES.pn, item),
+			pdim: ctx.resolve(ID, RULES.pdim, item),
+			pch: ctx.resolve(ID, RULES.pch, item),
+			paux: ctx.resolve(ID, RULES.paux, item),
+			scop: ctx.resolve(ID, RULES.scop, item),
+			rpn: ctx.resolve(ID, RULES.rpn, item),
+			rpint: ctx.resolve(ID, RULES.rpint, item),
+			qp0: ctx.resolve(ID, RULES.qp0, item),
+			pveilleuse: ctx.resolve(ID, RULES.pveilleuse, item),
+			tfonc30: ctx.resolve(ID, RULES.tfonc30, item),
+			tfonc100: ctx.resolve(ID, RULES.tfonc100, item),
+			qgen_rec: sumMois(ctx.resolve(ID, RULES.qgen_rec, item)),
+			qgen: ctx.resolve(ID, RULES.qgen, item),
+			consommations: ctx.resolve(ID, RULES.consommations, item),
+		},
+	};
+}
+
+export function consommations(
+	ctx: Context,
+	generateur: Generateur,
+): ReturnType<typeof formulas.calcule_consommations> {
+	return formulas.calcule_consommations({
+		consommations: ctx.diagnostic.chauffage.installations.flatMap((i) =>
+			i.systemes
+				.filter((s) => s.generateur_id === generateur.id)
+				.map((s) =>
+					ctx.resolve(systemeRules.ID, systemeRules.RULES.consommations, s),
+				),
+		),
+		caux_gen: ctx.resolve(ID, RULES.caux_gen, generateur),
+		caux_gen_enr: ctx.resolve(ID, RULES.caux_gen_enr, generateur),
+	});
+}
 
 export function cch(
 	ctx: Context,
@@ -51,20 +99,33 @@ export function cch_elec(
 	generateur: Generateur,
 ): ReturnType<typeof formulas.calcule_cch_elec> {
 	return formulas.calcule_cch_elec({
-		cch: cch(ctx, generateur),
-		energie: energie_generateur(generateur),
+		cch_elec: models.chauffage
+			.get_systemes(ctx.diagnostic.chauffage)
+			.filter((s) => s.generateur_id === generateur.id)
+			.map((s) => ctx.resolve(systemeRules.ID, systemeRules.RULES.cch_elec, s)),
 	});
 }
 
-export function caux(
+export function caux_gen(
 	ctx: Context,
 	generateur: Generateur,
-): ReturnType<typeof formulas.calcule_caux> {
-	return formulas.calcule_caux({
+): ReturnType<typeof formulas.calcule_caux_gen> {
+	return formulas.calcule_caux_gen({
 		bch: ctx.resolve(chauffage.ID, chauffage.RULES.bch),
 		pn: ctx.resolve(ID, RULES.pn, generateur),
 		paux: ctx.resolve(ID, RULES.paux, generateur),
 		rdim: ctx.resolve(ID, RULES.rdim, generateur),
+	});
+}
+
+export function caux_gen_enr(
+	ctx: Context,
+	generateur: Generateur,
+): ReturnType<typeof formulas.calcule_caux_gen_enr> {
+	return formulas.calcule_caux_gen_enr({
+		celec: ctx.resolve(production.ID, production.RULES.celec),
+		celec_ac: ctx.resolve(production.ID, production.RULES.celec_ac),
+		caux_gen: ctx.resolve(ID, RULES.caux_gen, generateur),
 	});
 }
 

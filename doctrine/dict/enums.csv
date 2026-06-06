@@ -140,11 +140,6 @@ chauffage:type-generateur;poele;Poêle
 chauffage:type-generateur;poele_bouilleur;Poêle boulleur
 chauffage:type-generateur;radiateur_gaz;Radiateur gaz
 chauffage:type-generateur;reseau_chaleur;Réseau de chaleur
-chauffage:type-intermittence;absent;Absent
-chauffage:type-intermittence;central;Central sans minimum de température
-chauffage:type-intermittence;central_minimum_temperature;Central avec minimum de température
-chauffage:type-intermittence;terminal_minimum_temperature;Terminal avec minimum de température
-chauffage:type-intermittence;terminal_minimum_temperature_detection_presence;Terminal avec minimum de température et détection de présence
 zone-climatique;H1a;H1a
 zone-climatique;H1b;H1b
 zone-climatique;H1c;H1c
@@ -195,9 +190,6 @@ usage;ecs;Eau chaude sanitaire
 usage;refroidissement;Refroidissement
 usage;auxiliaire;Auxiliaire
 usage;eclairage;Éclairage
-type-pertes;generation;Pertes de génération
-type-pertes;distribution;Pertes de distribution
-type-pertes;stockage;Pertes de stockage
 ecs:bouclage-reseau;non_boucle;Réseau non bouclé
 ecs:bouclage-reseau;boucle;Réseau bouclé
 ecs:bouclage-reseau;trace;Réseau tracé
@@ -459,16 +451,6 @@ chauffage:type;divise;Chauffage divisé
 configuration-systeme;base;Système en base
 configuration-systeme;releve;Système en relève
 configuration-systeme;appoint;Système d'appoint
-chauffage:taux-charge;5;5
-chauffage:taux-charge;15;15
-chauffage:taux-charge;25;25
-chauffage:taux-charge;35;35
-chauffage:taux-charge;45;45
-chauffage:taux-charge;55;55
-chauffage:taux-charge;65;65
-chauffage:taux-charge;75;75
-chauffage:taux-charge;85;85
-chauffage:taux-charge;95;95
 chauffage:type-generateur-combustion;chaudiere_standard;Chaudière standard
 chauffage:type-generateur-combustion;chaudiere_basse_temperature;Chaudière basse température
 chauffage:type-generateur-combustion;chaudiere_condensation;Chaudière à condensation
@@ -477,7 +459,7 @@ chauffage:type-generateur-combustion;chaudiere_bois;Chaudière bois
 chauffage:type-generateur-combustion;radiateur_gaz;Radiateur gaz
 production:usage-electricite;chauffage;Chauffage
 production:usage-electricite;refroidissement;Refroidissement
-production:usage-electricite;ecs;Ecs
+production:usage-electricite;ecs;Eau chaude sanitaire
 production:usage-electricite;eclairage;Eclairage
 production:usage-electricite;auxiliaires_ventilation;Auxiliaires de ventilation
 production:usage-electricite;auxiliaires_distribution;Auxiliaires de distribution

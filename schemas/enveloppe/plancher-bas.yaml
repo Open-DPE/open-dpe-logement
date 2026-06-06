@@ -5,9 +5,9 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   type:
     title: Type de plancher bas
     type: [string, "null"]
@@ -26,29 +26,57 @@ properties:
       - plancher_entrevous_isolant
       - null
   inertie:
-    $ref: /enveloppe/common/primitives#/$defs/inertie_paroi
+    $ref: /enveloppe/paroi#/$defs/inertie
   annee_construction:
-    $ref: /common/primitives#/$defs/annee_construction
+    $ref: /common#/$defs/annee_construction
   annee_renovation:
-    $ref: /common/primitives#/$defs/annee_renovation
+    $ref: /common#/$defs/annee_renovation
   u0:
-    $ref: /enveloppe/common/primitives#/$defs/u0_saisi
+    title: Coefficient de transmission thermique du plancher bas nu connu et justifié en W/m².K
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   u:
-    $ref: /enveloppe/common/primitives#/$defs/u_saisi
+    title: Coefficient de transmission thermique du plancher bas connu et justifié en W/m².K
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
+  position:
+    $ref: "#/$defs/position"
+  isolation:
+    $ref: /enveloppe/paroi#/$defs/isolation
+  data:
+    $ref: "#/$defs/data"
+
+required:
+  - id
+  - description
+  - type
+  - inertie
+  - annee_construction
+  - annee_renovation
+  - u0
+  - u
+  - position
+  - isolation
+
+$defs:
   position:
     title: Position
     type: object
     properties:
       surface_ue:
         title: Surface retenue pour le calcul de ue en m²
-        type: [number, "null"]
-        exclusiveMinimum: 0
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
       perimetre_ue:
         title: Périmètre retenue pour le calcul de ue en m
-        type: [number, "null"]
-        exclusiveMinimum: 0
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
     allOf:
-      - $ref: /enveloppe/common/components#/$defs/position
+      - $ref: /enveloppe/paroi#/$defs/position
     oneOf:
       - title: Plancher bas donnant sur un vides sanitaire, un sous-sol non chauffé ou un terre-plein
         type: object
@@ -65,10 +93,13 @@ properties:
             type: number
           local_non_chauffe_id:
             const: null
+            default: null
         required:
           - mitoyennete
           - surface_ue
           - perimetre_ue
+          - local_non_chauffe_id
+
       - title: Autres cas
         type: object
         properties:
@@ -81,42 +112,34 @@ properties:
               - local_non_accessible
           surface_ue:
             const: null
+            default: null
           perimetre_ue:
             const: null
+            default: null
         required:
           - mitoyennete
-  isolation:
-    $ref: /enveloppe/common/components#/$defs/isolation
+          - surface_ue
+          - perimetre_ue
+
   data:
     title: Données calculées
     type: object
     readOnly: true
     additionalProperties: false
     properties:
-      u0:
-        $ref: /enveloppe/common/primitives#/$defs/u
-      u:
-        $ref: /enveloppe/common/primitives#/$defs/u
-      b:
-        $ref: /enveloppe/common/primitives#/$defs/b
       sdep:
-        $ref: /enveloppe/common/primitives#/$defs/sdep
+        title: Surface déperditive du plancher bas en m²
+        type: number
+      b:
+        title: Coefficient de réduction des déperditions thermiques du plancher bas
+        type: number
       dp:
-        $ref: /enveloppe/common/primitives#/$defs/deperditions
-    required:
-      - u0
-      - u
-      - b
-      - sdep
-      - dp
-required:
-  - id
-  - description
-  - type
-  - inertie
-  - annee_construction
-  - annee_renovation
-  - u0
-  - u
-  - position
-  - isolation
+        title: Déperditions thermiques du plancher bas en W/K
+        type: number
+      u:
+        title: Coefficient de transmission thermique du plancher bas en W/m².K
+        type: number
+      u0:
+        title: Coefficient de transmission thermique du plancher bas sans isolation en W/m².K
+        type: number
+    required: [sdep, b, dp, u, u0]

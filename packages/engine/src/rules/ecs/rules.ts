@@ -1,3 +1,4 @@
+import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as batiment from "#rules/batiment/registry.js";
 import * as climat from "#rules/climat/registry.js";
@@ -12,6 +13,7 @@ export function register(ctx: Context): void {
 	installation.rules.register(ctx);
 	systeme.rules.register(ctx);
 
+	ctx.register(ID, RULES.consommations, () => consommations(ctx));
 	ctx.register(ID, RULES.cecs, () => cecs(ctx));
 	ctx.register(ID, RULES.cecs_elec, () => cecs_elec(ctx));
 	ctx.register(ID, RULES.caux, () => caux(ctx));
@@ -27,6 +29,16 @@ export function register(ctx: Context): void {
 	ctx.register(ID, RULES.nmax, () => nmax(ctx));
 }
 
+export function consommations(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_consommations> {
+	return formulas.calcule_consommations({
+		consommations: ctx.diagnostic.ecs.generateurs.map((item) =>
+			ctx.resolve(generateur.ID, generateur.RULES.consommations, item),
+		),
+	});
+}
+
 export function cecs(ctx: Context): ReturnType<typeof formulas.calcule_cecs> {
 	return formulas.calcule_cecs({
 		cecs: ctx.diagnostic.ecs.generateurs.map((item) =>
@@ -39,10 +51,9 @@ export function cecs_elec(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_cecs_elec> {
 	return formulas.calcule_cecs_elec({
-		generateurs: ctx.diagnostic.ecs.generateurs.map((item) => ({
-			cecs: ctx.resolve(generateur.ID, generateur.RULES.cecs, item),
-			energie: generateur.rules.energie_generateur(item),
-		})),
+		cecs_elec: ctx.diagnostic.ecs.generateurs.map((item) =>
+			ctx.resolve(generateur.ID, generateur.RULES.cecs_elec, item),
+		),
 	});
 }
 
@@ -57,8 +68,8 @@ export function caux_gen(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_caux_gen> {
 	return formulas.calcule_caux_gen({
-		caux: ctx.diagnostic.ecs.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.caux, item),
+		caux_gen: ctx.diagnostic.ecs.generateurs.map((item) =>
+			ctx.resolve(generateur.ID, generateur.RULES.caux_gen, item),
 		),
 	});
 }
@@ -141,4 +152,22 @@ export function nmax(ctx: Context): ReturnType<typeof formulas.calcule_nmax> {
 		logements: ctx.diagnostic.batiment.logements,
 		sh: ctx.resolve(batiment.ID, batiment.RULES.sh),
 	});
+}
+
+export function applique(ctx: Context): models.ecs.EcsWithData {
+	const sumMois = (v: models.common.ParMois<number>): number =>
+		Object.values(v).reduce((s: number, n: number) => s + n, 0);
+	return {
+		...ctx.diagnostic.ecs,
+		data: {
+			qgw: ctx.resolve(ID, RULES.qgw),
+			qgen: ctx.resolve(ID, RULES.qgen),
+			qdw_ind_vc: ctx.resolve(ID, RULES.qdw_ind_vc),
+			qdw_col_vc: ctx.resolve(ID, RULES.qdw_col_vc),
+			qdw_col_hvc: ctx.resolve(ID, RULES.qdw_col_hvc),
+			becs: sumMois(ctx.resolve(ID, RULES.becs)),
+			nadeq: ctx.resolve(ID, RULES.nadeq),
+			nmax: ctx.resolve(ID, RULES.nmax),
+		},
+	};
 }

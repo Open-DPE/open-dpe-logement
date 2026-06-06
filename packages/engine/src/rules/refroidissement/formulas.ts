@@ -7,6 +7,18 @@ import * as generateur from "#rules/refroidissement/generateur/formulas.js";
 import { createParMois } from "#utils/helpers.js";
 
 /**
+ * @doctrine refroidissement.cef
+ * @doctrine refroidissement.cep
+ * @doctrine refroidissement.eges
+ * @return Consommations par usage et par énergie
+ */
+export function calcule_consommations(props: {
+	consommations: ReturnType<typeof generateur.calcule_consommations>[];
+}): models.common.Consommations {
+	return models.common.mergeConsommations(...props.consommations);
+}
+
+/**
  * @doctrine refroidissement.cfr
  * @return Consommations des générateurs de refroidissement en kWh/an
  */
@@ -21,14 +33,9 @@ export function calcule_cfr(props: {
  * @return Consommation d'électricité de refroidissement en kWh/an
  */
 export function calcule_cfr_elec(props: {
-	generateurs: {
-		cfr: ReturnType<typeof generateur.calcule_cfr>;
-		energie: models.common.Energie;
-	}[];
+	cfr_elec: ReturnType<typeof generateur.calcule_cfr_elec>[];
 }): number {
-	return props.generateurs
-		.filter(({ energie }) => energie === models.common.EnergieEnum.electricite)
-		.reduce((acc, { cfr }) => acc + cfr, 0);
+	return props.cfr_elec.reduce((acc, val) => acc + val, 0);
 }
 
 /**

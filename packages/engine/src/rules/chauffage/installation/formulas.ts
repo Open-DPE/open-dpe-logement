@@ -39,8 +39,9 @@ export function calcule_rdim(props: {
 	surface_installation: number;
 	surface_installations: number;
 }): number {
-	const { surface_installation, surface_installations } = props;
-	return surface_installation / surface_installations;
+	return props.surface_installations
+		? props.surface_installation / props.surface_installations
+		: 0;
 }
 
 /**

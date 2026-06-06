@@ -86,13 +86,16 @@ export function calcule_u(props: {
  */
 export function calcule_u0(props: {
 	u0_saisi: number | null;
+	u0_enduit_isolant: ReturnType<typeof calcule_u0_enduit_isolant>;
+	u0_doublage: ReturnType<typeof calcule_u0_doublage>;
 	annee_construction: ReturnType<typeof paroi.set_annee_construction>;
 	structures: {
 		materiau: models.enveloppe.mur.MateriauMur | null;
 		epaisseur: number | null;
 	}[];
 }): number {
-	const { u0_saisi, annee_construction } = props;
+	const { u0_saisi, u0_enduit_isolant, u0_doublage, annee_construction } =
+		props;
 
 	if (u0_saisi) return Math.min(u0_saisi, 2.5);
 
@@ -114,7 +117,54 @@ export function calcule_u0(props: {
 	});
 
 	const u0 = values.reduce((acc, value) => 1 / (1 / acc + 1 / value));
-	return Math.min(u0, 2.5);
+	return Math.min(u0 + u0_enduit_isolant + u0_doublage, 2.5);
+}
+
+/**
+ * @return Mur composé de matéraux anciens
+ */
+export function calcule_paroi_ancienne(props: {
+	structures: {
+		materiau_ancien: boolean | null;
+	}[];
+}): boolean {
+	return props.structures.some((i) => i.materiau_ancien);
+}
+
+/**
+ * Coefficient de transmission thermique additionnel dû à la présence d'un enduit isolant
+ * sur une paroi ancienne en W/m².K
+ */
+export function calcule_u0_enduit_isolant(props: {
+	paroi_ancienne: ReturnType<typeof calcule_paroi_ancienne>;
+	presence_enduit_isolant: boolean | null;
+}): number {
+	const { paroi_ancienne, presence_enduit_isolant } = props;
+	if (null === paroi_ancienne) return 0;
+	if (null === presence_enduit_isolant) return 0;
+	return paroi_ancienne && presence_enduit_isolant ? 1 / 0.7 : 0;
+}
+
+/**
+ * Coefficient de transmission thermique additionnel dû au doublage en W/m².K
+ */
+export function calcule_u0_doublage(props: {
+	type_doublage: models.enveloppe.mur.TypeDoublage | null;
+}): number {
+	switch (props.type_doublage) {
+		case models.enveloppe.mur.TypeDoublageEnum.sans_doublage:
+			return 0;
+		case models.enveloppe.mur.TypeDoublageEnum.indetermine:
+			return 10;
+		case models.enveloppe.mur.TypeDoublageEnum.lame_air_inferieur_15mm:
+			return 10;
+		case models.enveloppe.mur.TypeDoublageEnum.lame_air_superieur_15mm:
+			return 21;
+		case models.enveloppe.mur.TypeDoublageEnum.materiaux_connu:
+			return 21;
+		default:
+			return 0;
+	}
 }
 
 /**

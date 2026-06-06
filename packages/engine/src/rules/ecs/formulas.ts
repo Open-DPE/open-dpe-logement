@@ -6,6 +6,19 @@ import * as installation from "#rules/ecs/installation/formulas.js";
 import { createParMois } from "#utils/helpers.js";
 
 /**
+ * @doctrine ecs.cef
+ * @doctrine ecs.cep
+ * @doctrine ecs.eges
+ * @return Consommations par usage et par énergie
+ */
+export function calcule_consommations(props: {
+	consommations: ReturnType<typeof generateur.calcule_consommations>[];
+}): models.common.Consommations {
+	return models.common.mergeConsommations(...props.consommations);
+}
+
+/**
+ * @doctrine ecs.cecs
  * @return Consommations d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs(props: {
@@ -15,20 +28,17 @@ export function calcule_cecs(props: {
 }
 
 /**
+ * @doctrine ecs.cecs_elec
  * @return Consommation d'électricité d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_elec(props: {
-	generateurs: {
-		cecs: ReturnType<typeof generateur.calcule_cecs>;
-		energie: models.common.Energie;
-	}[];
+	cecs_elec: ReturnType<typeof generateur.calcule_cecs_elec>[];
 }): number {
-	return props.generateurs
-		.filter(({ energie }) => energie === models.common.EnergieEnum.electricite)
-		.reduce((acc, { cecs }) => acc + cecs, 0);
+	return props.cecs_elec.reduce((acc, val) => acc + val, 0);
 }
 
 /**
+ * @doctrine ecs.caux
  * @return Consommations des auxiliaires de l'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux(props: {
@@ -39,15 +49,17 @@ export function calcule_caux(props: {
 }
 
 /**
+ * @doctrine ecs.caux_gen
  * @return Consommations des auxiliaires de génération en kWh/an
  */
 export function calcule_caux_gen(props: {
-	caux: ReturnType<typeof generateur.calcule_caux>[];
+	caux_gen: ReturnType<typeof generateur.calcule_caux_gen>[];
 }): number {
-	return props.caux.reduce((acc, val) => acc + val, 0);
+	return props.caux_gen.reduce((acc, val) => acc + val, 0);
 }
 
 /**
+ * @doctrine ecs.caux_dist
  * @return Consommations des auxiliaires de distribution en kWh/an
  */
 export function calcule_caux_dist(props: {

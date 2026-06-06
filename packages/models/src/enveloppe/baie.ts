@@ -1,5 +1,6 @@
-import type { UUID } from "../common/common";
-import { buildEnum } from "../utils";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { UUID } from "#/common/common";
+import { buildEnum, createGuard } from "../utils";
 import type { Masque } from "./masque";
 import type {
 	Orientation,
@@ -7,6 +8,8 @@ import type {
 	Position as BasePosition,
 	TypePose,
 } from "./common";
+
+export const isBaie = createGuard<Baie>(SCHEMA_KEYS["enveloppe/baie"]);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/baie
@@ -75,8 +78,13 @@ export type BaieData = {
 	b: number;
 	sdep: number;
 	dp: number;
+	deltar: number;
+	uw: number;
+	ug: number;
 	sw: number;
+	fe: number;
 	sse: number;
+	c1: number;
 };
 
 export type Position = BasePosition & {

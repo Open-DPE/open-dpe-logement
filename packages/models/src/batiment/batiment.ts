@@ -1,8 +1,11 @@
-import type { Adresse, PositiveNumber } from "../common/common";
-import { buildEnum } from "../utils";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { Adresse, PositiveNumber } from "#/common/common";
+import { createGuard, buildEnum } from "#/utils";
 import * as appartement from "./appartement.js";
 
 export { appartement };
+
+export const isBatiment = createGuard<Batiment>(SCHEMA_KEYS["batiment"]);
 
 /**
  * @see https://schemas.open-dpe.fr/batiment
@@ -40,6 +43,9 @@ export type BatimentWithData<T extends Batiment = Batiment> = T & {
 };
 
 export type BatimentData = {
+	sh: number;
+	hsp: number;
+	ratio_proratisation: number;
 	zone_climatique: ZoneClimatique;
 };
 

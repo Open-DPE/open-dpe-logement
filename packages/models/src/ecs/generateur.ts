@@ -1,12 +1,14 @@
-import { buildEnum } from "../utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import { buildEnum, createGuard } from "#/utils";
 import type {
 	Consommations,
 	Energie,
 	EnergieBois,
 	EnergieCombustion,
-	Pertes,
 	UUID,
-} from "../common/common.js";
+} from "#/common/common";
+
+export const isGenerateur = createGuard<Generateur>(SCHEMA_KEYS["ecs/generateur"]);
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/generateur
@@ -19,7 +21,6 @@ export type Generateur =
 	| ChauffeEauElectrique
 	| ChauffeEauThermodynamique
 	| PacDoubleService
-	| PacHybride
 	| ReseauChaleur
 	| GenerateurCollectifInconnu;
 
@@ -85,7 +86,9 @@ export type GenerateurData = {
 	rpn: number | null;
 	qp0: number | null;
 	pveilleuse: number | null;
-	pertes: Pertes;
+	cr: number;
+	qgw: number;
+	qgen: number;
 	consommations: Consommations;
 };
 
@@ -232,7 +235,7 @@ export type ChauffeEauThermodynamique = GenerateurGeneric<
 export type PacDoubleService = GenerateurGeneric<
 	GenerateurThermodynamique & {
 		type: typeof TypeGenerateurEnum.pac_double_service;
-		bienergie: null;
+		bienergie: Bienergie | null;
 		position: {
 			generateur_mixte_id: null;
 		};
@@ -243,13 +246,6 @@ export type PacDoubleService = GenerateurGeneric<
 			qp0: null;
 			rpn: null;
 		};
-	}
->;
-
-export type PacHybride = GenerateurGeneric<
-	GenerateurThermodynamique & {
-		type: typeof TypeGenerateurEnum.pac_double_service;
-		bienergie: Bienergie;
 	}
 >;
 

@@ -10,8 +10,10 @@ export type GenerateurCombustion = {
 };
 
 export type PACHybride = {
-	type_generateur: models.ecs.generateur.PacHybride["type"];
-	energie_generateur: models.ecs.generateur.PacHybride["energie"];
+	type_generateur: models.ecs.generateur.PacDoubleService["type"];
+	energie_generateur: NonNullable<
+		models.ecs.generateur.PacDoubleService["energie"]
+	>;
 	bienergie_generateur: models.ecs.generateur.Bienergie;
 };
 
@@ -41,5 +43,8 @@ export function is_pac_hybride(props: {
 	energie_generateur: models.ecs.generateur.EnergieEcs;
 	bienergie_generateur: models.ecs.generateur.Bienergie | null;
 }): props is PACHybride {
-	return null !== props.bienergie_generateur;
+	return (
+		is_generateur_thermodynamique({ type_generateur: props.type_generateur }) &&
+		null !== props.bienergie_generateur
+	);
 }

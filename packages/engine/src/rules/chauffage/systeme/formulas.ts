@@ -1,8 +1,10 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
+import * as common from "#rules/common/formulas.js";
 import * as climat from "#rules/climat/formulas.js";
 import * as enveloppe from "#rules/enveloppe/formulas.js";
 import * as chauffage from "#rules/chauffage/formulas.js";
+import * as production from "#rules/production/formulas.js";
 import * as emetteur from "#rules/chauffage/emetteur/formulas.js";
 import * as installation from "#rules/chauffage/installation/formulas.js";
 import * as generateur from "#rules/chauffage/generateur/formulas.js";
@@ -10,7 +12,7 @@ import * as combustion from "./formulas/combustion.js";
 import * as emission from "./formulas/emission.js";
 import * as utils from "./utils.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois, reduceParMois } from "#utils/helpers.js";
+import { createParMois } from "#utils/helpers.js";
 
 export { combustion, emission, utils };
 
@@ -29,6 +31,39 @@ export type Configuration = {
 };
 
 /**
+ * @doctrine chauffage.systeme.cef
+ * @doctrine chauffage.systeme.cep
+ * @doctrine chauffage.systeme.eges
+ * @return Consommations par usage et par énergie du générateur de chauffage
+ */
+export function calcule_consommations(props: {
+	cch: ReturnType<typeof calcule_cch>;
+	cch_enr: ReturnType<typeof calcule_cch_enr>;
+	caux_dist: ReturnType<typeof calcule_caux_dist>;
+	caux_dist_enr: ReturnType<typeof calcule_caux_dist_enr>;
+	energie: models.chauffage.generateur.EnergieChauffage;
+	reseau_id: string | null;
+}): models.common.Consommations {
+	return models.common.mergeConsommations(
+		common.calcule_consommations({
+			cef: props.cch,
+			cef_enr: props.cch_enr,
+			usage: models.common.UsageEnum.chauffage,
+			energie: props.energie,
+			reseau_id: props.reseau_id,
+		}),
+		common.calcule_consommations({
+			cef: props.caux_dist,
+			cef_enr: props.caux_dist_enr,
+			usage: models.common.UsageEnum.auxiliaire,
+			energie: models.common.EnergieEnum.electricite,
+			reseau_id: null,
+		}),
+	);
+}
+
+/**
+ * @doctrine chauffage.systeme.cch
  * @return Consommations du système de chauffage en kWh/an
  */
 export function calcule_cch(props: {
@@ -39,6 +74,36 @@ export function calcule_cch(props: {
 }
 
 /**
+ * @doctrine chauffage.systeme.cch_elec
+ * @return Consommation d'électricité du système de chauffage en kWh/an
+ */
+export function calcule_cch_elec(props: {
+	cch1: ReturnType<typeof calcule_cch1>;
+	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
+}): number {
+	return props.energie_generateur === models.common.EnergieEnum.electricite
+		? props.cch1
+		: 0;
+}
+
+/**
+ * @doctrine chauffage.systeme.cch_enr
+ * @return Consommations d'électricité renouvelable du système de chauffage en kWh/an
+ */
+export function calcule_cch_enr(props: {
+	celec: ReturnType<typeof production.calcule_celec>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+	cch_elec: ReturnType<typeof calcule_cch_elec>;
+}): number {
+	const cch_elec = props.cch_elec;
+	const celec = props.celec.chauffage;
+	const celec_ac = props.celec_ac.chauffage;
+	const p_celec_ac = celec ? cch_elec / celec : 0;
+	return celec_ac * p_celec_ac;
+}
+
+/**
+ * @doctrine chauffage.systeme.cch2
  * @return Consommations de chauffage du système de chauffage (partie PAC pour les PAC hybrides) en kWh/an
  */
 export function calcule_cch1(props: {
@@ -48,6 +113,7 @@ export function calcule_cch1(props: {
 }
 
 /**
+ * @doctrine chauffage.systeme.cch2
  * @return Consommations de chauffage du système de chauffage (partie chaudière pour les PAC hybrides) en kWh/an
  */
 export function calcule_cch2(props: {
@@ -57,6 +123,7 @@ export function calcule_cch2(props: {
 }
 
 /**
+ * @doctrine chauffage.systeme.caux_dist
  * @return Consommations du circulateur de l'installation de chauffage en kWh/an
  */
 export function calcule_caux_dist(props: {
@@ -64,8 +131,24 @@ export function calcule_caux_dist(props: {
 	nref: ReturnType<typeof chauffage.calcule_nref>;
 }): number {
 	const { pcircem } = props;
-	const nref = reduceParMois(props.nref);
+	const nref = models.common.reduceParMois(props.nref);
 	return (pcircem * nref) / 1000;
+}
+
+/**
+ * @doctrine chauffage.systeme.caux_dist_enr
+ * @return Consommations d'électricité renouvelable des auxiliaires de distribution de chauffage en kWh/an
+ */
+export function calcule_caux_dist_enr(props: {
+	celec: ReturnType<typeof production.calcule_celec>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+	caux_dist: ReturnType<typeof calcule_caux_dist>;
+}): number {
+	const caux_dist = props.caux_dist;
+	const celec = props.celec.auxiliaires_distribution;
+	const celec_ac = props.celec_ac.auxiliaires_distribution;
+	const p_celec_ac = celec ? caux_dist / celec : 0;
+	return celec_ac * p_celec_ac;
 }
 
 /**

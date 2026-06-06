@@ -1,6 +1,12 @@
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import { EntityNotFoundError } from "#/errors.js";
-import type { Consommations, UUID, NonEmptyArray } from "../common/common.js";
+import type { UUID, NonEmptyArray } from "#/common/common";
+import { createGuard } from "#/utils";
 import type { Generateur } from "./generateur.js";
+
+export const isInstallation = createGuard<Installation>(
+	SCHEMA_KEYS["refroidissement/installation"],
+);
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement/installation
@@ -18,7 +24,6 @@ export type InstallationWithData<T extends Installation = Installation> = T & {
 
 export type InstallationData = {
 	rdim: number;
-	consommations: Consommations;
 };
 
 export function get_generateur(collection: Generateur[], id: UUID): Generateur {

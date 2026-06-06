@@ -1,10 +1,43 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
+import * as common from "#rules/common/formulas.js";
 import * as climat from "#rules/climat/formulas.js";
+import * as production from "#rules/production/formulas.js";
 import * as generateur from "#rules/ecs/generateur/formulas.js";
 import * as installation from "#rules/ecs/installation/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
-import { reduceParMois } from "#utils/helpers.js";
+
+/**
+ * @doctrine ecs.systeme.cef
+ * @doctrine ecs.systeme.cep
+ * @doctrine ecs.systeme.eges
+ * @return Consommations par usage et par énergie du générateur d'eau chaude sanitaire
+ */
+export function calcule_consommations(props: {
+	cecs: ReturnType<typeof calcule_cecs>;
+	cecs_enr: ReturnType<typeof calcule_cecs_enr>;
+	caux_dist: ReturnType<typeof calcule_caux_dist>;
+	caux_dist_enr: ReturnType<typeof calcule_caux_dist_enr>;
+	energie: models.ecs.generateur.EnergieEcs;
+	reseau_id: string | null;
+}): models.common.Consommations {
+	return models.common.mergeConsommations(
+		common.calcule_consommations({
+			cef: props.cecs,
+			cef_enr: props.cecs_enr,
+			usage: models.common.UsageEnum.ecs,
+			energie: props.energie,
+			reseau_id: props.reseau_id,
+		}),
+		common.calcule_consommations({
+			cef: props.caux_dist,
+			cef_enr: props.caux_dist_enr,
+			usage: models.common.UsageEnum.auxiliaire,
+			energie: models.common.EnergieEnum.electricite,
+			reseau_id: null,
+		}),
+	);
+}
 
 /**
  * @doctrine ecs.systeme.cecs
@@ -17,8 +50,37 @@ export function calcule_cecs(props: {
 	iecs: ReturnType<typeof calcule_iecs>;
 }): number {
 	const { fecs, rdim, iecs } = props;
-	const becs = reduceParMois(props.becs);
+	const becs = models.common.reduceParMois(props.becs);
 	return becs * (1 - fecs) * iecs * rdim;
+}
+
+/**
+ * @doctrine ecs.systeme.cecs_elec
+ * @return Consommation d'électricité du système d'eau chaude sanitaire en kWh/an
+ */
+export function calcule_cecs_elec(props: {
+	cecs: ReturnType<typeof calcule_cecs>;
+	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
+}): number {
+	return props.energie_generateur === models.common.EnergieEnum.electricite
+		? props.cecs
+		: 0;
+}
+
+/**
+ * @doctrine ecs.systeme.cecs_enr
+ * @return Consommations d'électricité renouvelable du système d'eau chaude sanitaire en kWh/an
+ */
+export function calcule_cecs_enr(props: {
+	celec: ReturnType<typeof production.calcule_celec>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+	cecs_elec: ReturnType<typeof calcule_cecs_elec>;
+}): number {
+	const cecs_elec = props.cecs_elec;
+	const celec = props.celec.ecs;
+	const celec_ac = props.celec_ac.ecs;
+	const p_celec_ac = celec ? cecs_elec / celec : 0;
+	return celec_ac * p_celec_ac;
 }
 
 /**
@@ -30,6 +92,22 @@ export function calcule_caux_dist(props: {
 	qtrac: ReturnType<typeof calcule_qtrac>;
 }): number {
 	return (props.qcirb + props.qtrac) / 1000;
+}
+
+/**
+ * @doctrine ecs.systeme.caux_dist_enr
+ * @return Consommations d'électricité renouvelable des auxiliaires de distribution d'eau chaude sanitaire en kWh/an
+ */
+export function calcule_caux_dist_enr(props: {
+	celec: ReturnType<typeof production.calcule_celec>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+	caux_dist: ReturnType<typeof calcule_caux_dist>;
+}): number {
+	const caux_dist = props.caux_dist;
+	const celec = props.celec.auxiliaires_distribution;
+	const celec_ac = props.celec_ac.auxiliaires_distribution;
+	const p_celec_ac = celec ? caux_dist / celec : 0;
+	return celec_ac * p_celec_ac;
 }
 
 /**
@@ -52,7 +130,7 @@ export function calcule_qcirb(props: {
 	if (bouclage !== models.ecs.systeme.BouclageEnum.boucle) return 0;
 
 	const { sh, qdw, niveaux_desservis } = props;
-	const nj = reduceParMois(props.nj);
+	const nj = models.common.reduceParMois(props.nj);
 	const nh = nj * 24;
 	const nh_puisage = nj * 5;
 	const lb = Math.sqrt(sh / niveaux_desservis) + 6 * (niveaux_desservis - 0.5);
@@ -75,7 +153,7 @@ export function calcule_qtrac(props: {
 	const { installation_collective, bouclage } = props;
 	if (false === installation_collective) return 0;
 	if (bouclage !== models.ecs.systeme.BouclageEnum.trace) return 0;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 	return becs * 0.14;
 }
 
@@ -275,7 +353,7 @@ export function calcule_rendements_chaudiere_mixte(props: {
 	const qp0 = (props.qp0 ?? 0) * 1000;
 	const rpn = props.rpn ?? 0;
 	const pveilleuse = props.pveilleuse ?? 0;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 
 	const rgs =
 		1 /
@@ -297,7 +375,7 @@ export function calcule_rendements_accumulateur_gaz(props: {
 	const qp0 = (props.qp0 ?? 0) * 1000;
 	const rpn = props.rpn ?? 0;
 	const pveilleuse = props.pveilleuse ?? 0;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 
 	const rgs =
 		1 / (1 / rpn + (8592 * qp0 + qgw) / becs + 6970 * (pveilleuse / becs));
@@ -316,7 +394,7 @@ export function calcule_rendements_chauffe_eau_gaz(props: {
 	const qp0 = (props.qp0 ?? 0) * 1000;
 	const rpn = props.rpn ?? 0;
 	const pveilleuse = props.pveilleuse ?? 0;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 	let rg: number = 1 / rpn;
 	rg += 1790 * (qp0 / becs);
 	rg += 6970 * (pveilleuse / becs);
@@ -350,7 +428,7 @@ export function calcule_rendements_systeme_electrique(props: {
 	label_generateur: models.ecs.generateur.Label | null;
 }): Rendements {
 	const { position_chauffe_eau, label_generateur, rd, qgw } = props;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 	const chauffe_eau_vertical =
 		models.ecs.generateur.PositionChauffeEauEnum.chauffe_eau_vertical;
 	const ne_performance_c = models.ecs.generateur.LabelEnum.ne_performance_c;

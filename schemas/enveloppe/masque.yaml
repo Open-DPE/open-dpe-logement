@@ -5,7 +5,7 @@ type: object
 unevaluatedProperties: false
 properties:
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   type:
     title: Type du masque
     type: string
@@ -20,13 +20,15 @@ properties:
       - paroi_laterale_avec_obstacle_au_sud
   hauteur:
     title: Hauteur du masque en angle
-    type: [number, "null"]
-    exclusiveMinimum: 0
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
     exclusiveMaximum: 90
   profondeur:
     title: Profondeur du masque en m
-    type: [number, "null"]
-    exclusiveMinimum: 0
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   secteur:
     title: Secteur
     type: [string, "null"]
@@ -35,8 +37,10 @@ properties:
 required:
   - description
   - type
-discriminator:
-  propertyName: type
+  - hauteur
+  - profondeur
+  - secteur
+
 oneOf:
   - title: Masque lointain homogène
     type: object
@@ -44,25 +48,37 @@ oneOf:
       type:
         const: homogene
       hauteur:
-        type: number
+        type: integer
+      profondeur:
+        const: null
+        default: null
       secteur:
         const: null
+        default: null
     required:
       - type
       - hauteur
+      - profondeur
+      - secteur
+
   - title: Masque lointain non homogène
     type: object
     properties:
       type:
         const: non_homogene
       hauteur:
-        type: number
+        type: integer
       secteur:
         type: string
+      profondeur:
+        const: null
+        default: null
     required:
       - type
       - hauteur
       - secteur
+      - profondeur
+
   - title: Masque proche - Paroi latérale
     type: object
     properties:
@@ -72,10 +88,19 @@ oneOf:
           - paroi_laterale_avec_obstacle_au_sud
       hauteur:
         const: null
+        default: null
+      profondeur:
+        const: null
+        default: null
       secteur:
         const: null
+        default: null
     required:
       - type
+      - hauteur
+      - profondeur
+      - secteur
+
   - title: Masque proche - Baie en fond de balcon ou fond et flanc de loggias
     type: object
     properties:
@@ -85,11 +110,18 @@ oneOf:
           - fond_et_flanc_loggias
       profondeur:
         type: number
+      hauteur:
+        const: null
+        default: null
       secteur:
         const: null
+        default: null
     required:
       - type
       - profondeur
+      - hauteur
+      - secteur
+
   - title: Masque proche - Baie sous un balcon ou auvent
     type: object
     properties:
@@ -97,8 +129,14 @@ oneOf:
         const: balcon_ou_auvent
       profondeur:
         type: number
+      hauteur:
+        const: null
+        default: null
       secteur:
         const: null
+        default: null
     required:
       - type
       - profondeur
+      - hauteur
+      - secteur

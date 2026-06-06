@@ -18,8 +18,8 @@
 |    `$.chauffage..generateur_id`     |     -      |                    `generateur_id` existe dans `$.chauffage.generateurs..id`                     |
 | `$.chauffage..generateur_mixte_id`  |     -      |                    `generateur_mixte_id` existe dans `$.ecs.generateurs..id`                     |
 |   `$.chauffage..installation_id`    |     -      |                  `installation_id` existe dans `$.chauffage.installations..id`                   |
-|         `$.systeme..reseau`         |     -      |        `reseau` est `null` si `generateur_id` référence un générateur de chauffage divisé        |
-|         `$.systeme..reseau`         |     -      |    `reseau` n'est pas `null` si `generateur_id` référence un générateur de chauffage central     |
+|          `$.systeme..type`          |     -      |        `type` est `divise` si `generateur_id` référence un générateur de chauffage divisé        |
+|          `$.systeme..type`          |     -      |       `type` est `central` si `generateur_id` référence un générateur de chauffage central       |
 |       `$.ecs..generateur_id`        |     -      |                       `generateur_id` existe dans `$.ecs.generateurs..id`                        |
 |    `$.ecs..generateur_mixte_id`     |     -      |                 `generateur_mixte_id` existe dans `$.chauffage.generateurs..id`                  |
 |      `$.ecs..installation_id`       |     -      |                     `installation_id` existe dans `$.ecs.installations..id`                      |

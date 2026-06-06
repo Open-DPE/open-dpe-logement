@@ -10,8 +10,9 @@ properties:
     x-enum: enveloppe:exposition
     enum: [simple, multiple]
   q4pa_conv:
-    anyOf:
-      - $ref: "#/$defs/q4pa_conv"
+    title: Débit d'air conventionnel à 4 Pa en m³/h
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
       - const: null
   presence_brasseurs_air:
     title: Présence de brasseurs d'air
@@ -63,31 +64,7 @@ properties:
     items:
       $ref: /enveloppe/masque
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      inertie:
-        title: Inertie
-        type: string
-        x-enum: enveloppe:inertie
-        enum: [tres_lourde, lourde, moyenne, legere]
-      parois_anciennes_lourdes:
-        title: Bâtiment constitué de parois anciennes lourdes
-        type: boolean
-      deperditions:
-        $ref: "#/$defs/deperditions"
-      permeabilite:
-        $ref: "#/$defs/permeabilite"
-      confort_ete:
-        $ref: "#/$defs/confort_ete"
-    required:
-      - inertie
-      - parois_anciennes_lourdes
-      - deperditions
-      - permeabilite
-      - confort_ete
+    $ref: "#/$defs/data"
 required:
   - exposition
   - q4pa_conv
@@ -101,115 +78,116 @@ required:
   - portes
   - ponts_thermiques
   - masques
+
 $defs:
-  q4pa_conv:
-    title: Perméabilité à l'air de l'enveloppe sous 4Pa en m3/(h.m²)
-    type: number
-    exclusiveMinimum: 0
-  deperditions:
-    title: Déperditions thermiques
+  data:
+    title: Données calculées
     type: object
+    readOnly: true
     additionalProperties: false
     properties:
       gv:
-        title: Déperditions thermiques totales
-        $ref: /enveloppe/common/primitives#/$defs/deperditions
+        title: Coefficient de déperditions globales en W/K
+        type: number
       ubat:
-        title: Coefficient de transmission thermique de l'enveloppe
-        $ref: /enveloppe/common/primitives#/$defs/u
-      pt:
-        title: Déperditions thermiques par les ponts thermiques
-        $ref: /enveloppe/common/primitives#/$defs/deperditions
-      dr:
-        title: Déperditions thermiques par renouvellement d'air
-        type: object
-        additionalProperties: false
-        properties:
-          total:
-            title: Déperditions thermiques totales par renouvellement d'air
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-          hvent:
-            title: Déperdition thermique par renouvellement d'air due au système de ventilation
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-          hperm:
-            title: Déperdition thermique par renouvellement d'air due au vent
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-        required:
-          - total
-          - hvent
-          - hperm
+        title: Coefficient de transmission surfacique moyen du bâtiment en W/(m².K)
+        type: number
       dp:
-        title: Déperditions thermiques par les parois
-        type: object
-        additionalProperties: false
-        properties:
-          total:
-            title: Déperditions thermiques totales par les parois
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-          murs:
-            title: Déperditions thermiques par les murs
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-          planchers_bas:
-            title: Déperditions thermiques par les planchers bas
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-          planchers_hauts:
-            title: Déperditions thermiques par les planchers hauts
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-          baies:
-            title: Déperditions thermiques par les baies
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-          portes:
-            title: Déperditions thermiques par les portes
-            $ref: /enveloppe/common/primitives#/$defs/deperditions
-        required:
-          - total
-          - murs
-          - planchers_bas
-          - planchers_hauts
-          - baies
-          - portes
+        title: Déperditions par parois en W/K
+        type: number
+      dp_murs:
+        title: Déperditions par les murs en W/K
+        type: number
+      dp_planchers_bas:
+        title: Déperditions par les planchers bas en W/K
+        type: number
+      dp_planchers_hauts:
+        title: Déperditions par les planchers hauts en W/K
+        type: number
+      dp_baies:
+        title: Déperditions par les baies en W/K
+        type: number
+      dp_portes:
+        title: Déperditions par les portes en W/K
+        type: number
+      pt:
+        title: Déperditions thermiques par les ponts thermiques en W/K
+        type: number
+      dr:
+        title: Déperditions thermiques par renouvellement d'air en W/K
+        type: number
+      sdep:
+        title: Surface déperditive totale en m²
+        type: number
+      sdep_murs:
+        title: Surface déperditive des murs en m²
+        type: number
+      sdep_planchers_bas:
+        title: Surface déperditive des planchers bas en m²
+        type: number
+      sdep_planchers_hauts:
+        title: Surface déperditive des planchers hauts en m²
+        type: number
+      sdep_baies:
+        title: Surface déperditive des baies en m²
+        type: number
+      sdep_portes:
+        title: Surface déperditive des portes en m²
+        type: number
+      inertie:
+        title: Classe d'inertie thermique du bâtiment
+        type: string
+        x-enum: enveloppe:inertie
+      hperm:
+        title: Déperditions thermiques par renouvellement d'air due au vent en W/K
+        type: number
+      hvent:
+        title: Déperditions thermiques par renouvellement d'air due aux systèmes de ventilation en W/K
+        type: number
+      q4pa_conv:
+        title: Débit d'air conventionnel à 4 Pa en m³/h
+        type: number
+      presence_joints:
+        title: Présence majoritaire de joints d'étanchéité au niveau des menuiseries extérieures
+        type: boolean
+      parois_anciennes:
+        title: Présence majoritaire de parois composées de matériaux anciens
+        type: boolean
+      isolation_planchers_hauts:
+        title: Isolation majoritaire des planchers hauts
+        type: [boolean, "null"]
+      presence_protection_solaire:
+        title: Présence majoritaire de protections solaires
+        type: boolean
+      logement_traversant:
+        title: Logement traversant
+        type: boolean
+      sse:
+        title: Surface sud équivalente totale en m²
+        type: number
     required:
       - gv
       - ubat
       - dp
+      - dp_murs
+      - dp_planchers_bas
+      - dp_planchers_hauts
+      - dp_baies
+      - dp_portes
       - pt
       - dr
-  permeabilite:
-    title: Permeabilité
-    type: object
-    additionalProperties: false
-    properties:
-      q4pa_conv:
-        $ref: "#/$defs/q4pa_conv"
-      presence_joints_menuiserie:
-        title: Présence majoritaire de joints au niveau des menuiseries
-        type: boolean
-    required:
-      - q4pa_conv
-      - presence_joints_menuiserie
-  confort_ete:
-    title: Confort d'été
-    type: object
-    additionalProperties: false
-    properties:
-      inertie_lourde:
-        title: Inertie lourde
-        type: boolean
-      isolation_plancher_haut:
-        title: Isolation des planchers hauts
-        type: [boolean, "null"]
-      presence_protection_solaire:
-        title: Présence de protections solaires
-        type: [boolean, "null"]
-      logement_traversant:
-        title: Logement traversant
-        type: [boolean, "null"]
-      presence_brasseurs_air:
-        title: Présence de brasseurs d'air
-        type: [boolean, "null"]
-    required:
-      - inertie_lourde
-      - isolation_plancher_haut
+      - sdep
+      - sdep_murs
+      - sdep_planchers_bas
+      - sdep_planchers_hauts
+      - sdep_baies
+      - sdep_portes
+      - inertie
+      - hperm
+      - hvent
+      - presence_joints
+      - parois_anciennes
+      - isolation_planchers_hauts
       - presence_protection_solaire
       - logement_traversant
-      - presence_brasseurs_air
+      - sse

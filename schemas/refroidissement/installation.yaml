@@ -5,18 +5,26 @@ type: object
 additionalProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   surface:
     title: Surface couverte par l'installation en m²
-    $ref: /common/primitives#/$defs/surface
+    $ref: /common#/$defs/surface
   generateurs:
     title: Liste des générateurs de refroidissement associés
     type: array
     minItems: 1
     items:
-      $ref: /common/primitives#/$defs/id
+      $ref: /common#/$defs/id
+  data:
+    $ref: "#/$defs/data"
+required:
+  - id
+  - description
+  - surface
+  - generateurs
+$defs:
   data:
     title: Données calculées
     type: object
@@ -24,14 +32,6 @@ properties:
     additionalProperties: false
     properties:
       rdim:
-        $ref: /common/primitives#/$defs/rdim
-      consommations:
-        $ref: /common/components#/$defs/consommations
-    required:
-      - rdim
-      - consommations
-required:
-  - id
-  - description
-  - surface
-  - generateurs
+        title: Ratio de dimensionnement de l'installation de refroidissement
+        type: number
+    required: [rdim]

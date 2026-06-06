@@ -5,17 +5,30 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   longueur:
     title: Longueur du pont thermique en m
-    type: number
-    exclusiveMinimum: 0
+    $ref: /common#/$defs/nombre_positif
   kpt:
     title: Valeur du pont thermique
-    type: [number, "null"]
-    exclusiveMinimum: 0
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
+  liaison:
+    $ref: "#/$defs/liaison"
+  data:
+    $ref: "#/$defs/data"
+
+required:
+  - id
+  - description
+  - longueur
+  - kpt
+  - liaison
+
+$defs:
   liaison:
     title: Liaison
     type: object
@@ -37,22 +50,24 @@ properties:
         type: boolean
       mur_id:
         title: Identifiant du mur associé
-        $ref: /common/primitives#/$defs/id
+        $ref: /common#/$defs/id
       plancher_id:
         title: Identifiant du Plancher haut ou du Plancher bas associé
         anyOf:
-          - $ref: /common/primitives#/$defs/id
+          - $ref: /common#/$defs/id
           - const: null
       ouverture_id:
         title: Identifiant de la Baie ou de la Porte associée
         anyOf:
-          - $ref: /common/primitives#/$defs/id
+          - $ref: /common#/$defs/id
           - const: null
     required:
       - type
       - mur_id
-    discriminator:
-      propertyName: type
+      - pont_thermique_partiel
+      - plancher_id
+      - ouverture_id
+
     oneOf:
       - title: Pont thermique mur / plancher
         type: object
@@ -65,6 +80,7 @@ properties:
             type: string
           ouverture_id:
             const: null
+            default: null
         required:
           - type
           - plancher_id
@@ -79,6 +95,7 @@ properties:
             type: string
           plancher_id:
             const: null
+            default: null
         required:
           - type
           - ouverture_id
@@ -89,30 +106,24 @@ properties:
             enum: [plancher_intermediaire_mur, refend_mur]
           ouverture_id:
             const: null
+            default: null
           plancher_id:
             const: null
+            default: null
         required:
           - type
           - pont_thermique_partiel
+
   data:
     title: Données calculées
     type: object
     readOnly: true
     additionalProperties: false
     properties:
-      k:
-        title: Valeur du pont thermique
-        type: number
-        minimum: 0
       pt:
-        title: Déperditions thermiques
-        $ref: /enveloppe/common/primitives#/$defs/deperditions
-    required:
-      - k
-      - pt
-required:
-  - id
-  - description
-  - longueur
-  - kpt
-  - liaison
+        title: Déperditions linéiques du pont thermique en W/K
+        type: number
+      kpt:
+        title: Coefficient de pont thermique linéique en W/(m.K)
+        type: number
+    required: [pt, kpt]

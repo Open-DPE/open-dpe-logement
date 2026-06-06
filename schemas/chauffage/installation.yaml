@@ -5,11 +5,11 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   surface:
-    $ref: /common/primitives#/$defs/surface
+    $ref: /common#/$defs/surface
   type:
     title: Type d'installation de chauffage
     type: string
@@ -49,11 +49,12 @@ properties:
           - chauffage
           - chauffage_ecs
       annee_installation:
-        $ref: /common/primitives#/$defs/annee_installation
+        $ref: /common#/$defs/annee_installation
       fch:
         title: Facteur de couverture solaire
-        type: [number, "null"]
-        minimum: 0
+        oneOf:
+          - $ref: /common#/$defs/nombre
+          - const: null
         maximum: 1
     required:
       - usage
@@ -66,34 +67,7 @@ properties:
     items:
       $ref: /chauffage/systeme
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      fch:
-        title: Facteur de couverture solaire
-        type: number
-      int:
-        title: Facteur d'intermittence
-        type: number
-      i0:
-        title: Coefficient d'intermittence
-        type: number
-      ich:
-        title: Inverse du rendement moyen
-        type: number
-      rdim:
-        $ref: /common/primitives#/$defs/rdim
-      consommations:
-        $ref: /common/components#/$defs/consommations
-    required:
-      - fch
-      - int
-      - i0
-      - ich
-      - rdim
-      - consommations
+    $ref: "#/$defs/data"
 required:
   - id
   - description
@@ -103,6 +77,7 @@ required:
   - programmation
   - solaire_thermique
   - systemes
+
 oneOf:
   - title: Chauffage central collectif
     properties:
@@ -134,6 +109,7 @@ oneOf:
       - regulation_terminale
       - programmation
       - systemes
+
   - title: Chauffage central individuel
     properties:
       type:
@@ -163,9 +139,11 @@ oneOf:
     required:
       - type
       - installation_collective
+      - comptage_individuel
       - regulation_terminale
       - programmation
       - systemes
+
   - title: Chauffage divisé
     properties:
       type:
@@ -193,12 +171,36 @@ oneOf:
             type:
               const: divise
             reseau:
-              type: "null"
+              const: null
+              default: null
           required:
             - type
             - reseau
     required:
       - type
       - installation_collective
+      - comptage_individuel
+      - regulation_terminale
       - programmation
       - systemes
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      bch:
+        title: Besoins de chauffage de l'installation en kWh/an
+        type: number
+      rdim:
+        title: Ratio de dimensionnement de l'installation de chauffage
+        type: number
+      pch:
+        title: Puissance conventionnelle de l'installation de chauffage en kW
+        type: number
+      fch:
+        title: Facteur de couverture solaire de l'installation de chauffage
+        type: number
+    required: [bch, rdim, pch, fch]

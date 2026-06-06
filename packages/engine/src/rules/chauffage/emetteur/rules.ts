@@ -54,3 +54,14 @@ export function annee_installation(
 		annee_construction_batiment: ctx.diagnostic.batiment.annee_construction,
 	});
 }
+
+export function applique(ctx: Context, item: Emetteur): models.chauffage.emetteur.EmetteurWithData {
+	return {
+		...item,
+		data: {
+			delta_pem: ctx.resolve(ID, RULES.delta_pem, item),
+			fcot: ctx.resolve(ID, RULES.fcot, item),
+			dtheta_dim: ctx.resolve(ID, RULES.dtheta_dim, item),
+		},
+	};
+}

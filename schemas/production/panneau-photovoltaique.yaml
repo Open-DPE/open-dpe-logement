@@ -5,13 +5,13 @@ type: object
 additionalProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   orientation:
-    $ref: /common/primitives#/$defs/orientation
+    $ref: /common#/$defs/orientation
   inclinaison:
-    $ref: /common/primitives#/$defs/inclinaison
+    $ref: /common#/$defs/inclinaison
   modules:
     title: Nombre de modules
     type: integer
@@ -20,27 +20,14 @@ properties:
   surface:
     title: Surface totale des capteurs en m²
     anyOf:
-      - $ref: /common/primitives#/$defs/surface
+      - $ref: /common#/$defs/surface
       - const: null
   installation_collective:
     title: Installation photovoltaïque collective
     type: boolean
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      kpv:
-        title: Coefficient de pondération prenant en compte l'altération par rapport à l'orientation optimale
-        type: number
-        minimum: 0
-        maximum: 1
-      ppv:
-        $ref: /production/common#/$defs/ppv
-    required:
-      - kpv
-      - ppv
+    $ref: "#/$defs/data"
+
 required:
   - id
   - description
@@ -49,3 +36,18 @@ required:
   - modules
   - surface
   - installation_collective
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties:
+    properties:
+      ppv:
+        title: Production photovoltaïque mensuelle en kWh/an
+        type: number
+      kpv:
+        title: Coefficient de production photovoltaïque mensuel
+        type: number
+    required: [ppv, kpv]

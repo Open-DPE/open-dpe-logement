@@ -33,3 +33,15 @@ export function kpv(
 		inclinaison: item.inclinaison,
 	});
 }
+
+export function applique(ctx: Context, item: PanneauPhotovoltaique): models.production.panneauPhotovoltaique.PanneauPhotovoltaiqueWithData {
+	const sumMois = (v: models.common.ParMois<number>): number =>
+		Object.values(v).reduce((s: number, n: number) => s + n, 0);
+	return {
+		...item,
+		data: {
+			ppv: sumMois(ctx.resolve(ID, RULES.ppv, item)),
+			kpv: ctx.resolve(ID, RULES.kpv, item),
+		},
+	};
+}

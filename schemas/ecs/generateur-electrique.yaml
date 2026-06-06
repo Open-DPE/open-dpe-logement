@@ -1,0 +1,114 @@
+$id: https://schemas.open-dpe.fr/ecs/generateur-electrique
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Générateur électrique
+type: object
+unevaluatedProperties: false
+
+allOf:
+  - $ref: /ecs/generateur-base
+
+properties:
+  type:
+    enum: [chaudiere, chauffe_eau]
+  energie:
+    const: electricite
+  bienergie:
+    const: null
+    default: null
+  position:
+    type: object
+    properties:
+      reseau_chaleur_id:
+        const: null
+        default: null
+    required:
+      - reseau_chaleur_id
+  signaletique:
+    type: object
+    properties:
+      cop:
+        const: null
+        default: null
+      mode_combustion:
+        const: null
+        default: null
+      presence_ventouse:
+        const: null
+        default: null
+      pveilleuse:
+        const: null
+        default: null
+      qp0:
+        const: null
+        default: null
+      rpn:
+        const: null
+        default: null
+    required:
+      - cop
+      - mode_combustion
+      - presence_ventouse
+      - pveilleuse
+      - qp0
+      - rpn
+required:
+  - type
+  - energie
+  - position
+  - signaletique
+
+oneOf:
+  - title: Chaudière électrique
+    type: object
+    properties:
+      type:
+        const: chaudiere
+      position:
+        type: object
+        properties:
+          position_chauffe_eau:
+            const: null
+            default: null
+        required:
+          - position_chauffe_eau
+      signaletique:
+        type: object
+        properties:
+          label:
+            const: null
+            default: null
+        required:
+          - label
+    required:
+      - type
+      - position
+      - signaletique
+
+  - title: Chauffe-eau électrique
+    type: object
+    properties:
+      type:
+        const: chauffe_eau
+      position:
+        type: object
+        properties:
+          position_chauffe_eau:
+            type: string
+          generateur_collectif:
+            const: false
+            default: false
+          generateur_multi_batiment:
+            const: false
+            default: false
+          generateur_mixte_id:
+            const: null
+            default: null
+        required:
+          - position_chauffe_eau
+          - generateur_collectif
+          - generateur_multi_batiment
+          - generateur_mixte_id
+    required:
+      - type
+      - position
+      - signaletique

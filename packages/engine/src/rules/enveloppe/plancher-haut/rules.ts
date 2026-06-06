@@ -89,3 +89,16 @@ export function isolation(
 		annee_construction: paroi.annee_construction(ctx, item),
 	});
 }
+
+export function applique(ctx: Context, item: PlancherHaut): models.enveloppe.plancherHaut.PlancherHautWithData {
+	return {
+		...item,
+		data: {
+			u0: ctx.resolve(ID, RULES.u0, item),
+			u: ctx.resolve(ID, RULES.u, item),
+			b: ctx.resolve(ID, RULES.b, item),
+			sdep: ctx.resolve(ID, RULES.sdep, item),
+			dp: ctx.resolve(ID, RULES.dp, item),
+		},
+	};
+}

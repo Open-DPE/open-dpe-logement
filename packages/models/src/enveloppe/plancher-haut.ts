@@ -1,11 +1,14 @@
-import type { UUID } from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { UUID } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
 import type {
 	InertieParoi,
 	Isolation,
 	Orientation,
 	Position as PositionBase,
 } from "./common.js";
+
+export const isPlancherHaut = createGuard<PlancherHaut>(SCHEMA_KEYS["enveloppe/plancher-haut"]);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/plancher-haut

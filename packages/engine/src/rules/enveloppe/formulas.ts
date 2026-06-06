@@ -261,6 +261,94 @@ export function calcule_presence_joints(props: {
 }
 
 /**
+ * @doctrine enveloppe.isolation_planchers_hauts
+ * @return État d'isolation majoritaire des planchers hauts (plus de 50% de la surface totale des planchers hauts)
+ */
+export function calcule_isolation_planchers_hauts(props: {
+	planchers_hauts: {
+		surface: number;
+		mitoyennete: models.enveloppe.common.Mitoyennete;
+		isolation: ReturnType<typeof plancherHaut.set_isolation>;
+	}[];
+}): boolean | null {
+	const planchers_hauts = props.planchers_hauts.filter(
+		({ mitoyennete }) =>
+			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur,
+	);
+	if (planchers_hauts.length === 0) return null;
+	const s = planchers_hauts.reduce((acc, i) => acc + i.surface, 0);
+	const w = planchers_hauts.reduce(
+		(acc, i) => acc + (i.isolation ? i.surface : 0),
+		0,
+	);
+	return s === 0 ? null : w / s > 0.5;
+}
+
+/**
+ * @doctrine enveloppe.presence_protection_solaire
+ * @return Présence majoritaire de protections solaires au niveau des baies (plus de 50% de la surface totale des baies)
+ */
+export function calcule_presence_protection_solaire(props: {
+	baies: {
+		surface: number;
+		orientation: models.enveloppe.common.Orientation;
+		mitoyennete: models.enveloppe.common.Mitoyennete;
+		type_fermeture: models.enveloppe.baie.TypeFermeture;
+	}[];
+}): boolean | null {
+	const baies = props.baies.filter(
+		({ mitoyennete, orientation }) =>
+			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur &&
+			orientation !== models.common.OrientationEnum.nord,
+	);
+	if (baies.length === 0) return null;
+	const s = baies.reduce((acc, i) => acc + i.surface, 0);
+	const w = baies.reduce(
+		(acc, i) =>
+			acc +
+			(i.type_fermeture !==
+			models.enveloppe.baie.TypeFermetureEnum.sans_fermeture
+				? i.surface
+				: 0),
+		0,
+	);
+	return s === 0 ? null : w / s > 0.5;
+}
+
+/**
+ * @doctrine enveloppe.logement_traversant
+ * @return Logement traversant
+ */
+export function calcule_logement_traversant(props: {
+	baies: {
+		surface: number;
+		orientation: models.enveloppe.common.Orientation;
+		mitoyennete: models.enveloppe.common.Mitoyennete;
+	}[];
+}): boolean {
+	const baies = props.baies.filter(
+		({ mitoyennete, orientation }) =>
+			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur &&
+			orientation !== models.enveloppe.common.OrientationHorizontale,
+	);
+	// 1. On détermine la surface totale des baies pour chaque orientation
+	// 2. Pour chaque orientation, on vérifie que les surfaces correspondantes sont inférieures à 75% de la surface totale des baies
+	const surfaceParOrientation = new Map<
+		models.enveloppe.common.Orientation,
+		number
+	>();
+	for (const baie of baies) {
+		const current = surfaceParOrientation.get(baie.orientation) ?? 0;
+		surfaceParOrientation.set(baie.orientation, current + baie.surface);
+	}
+	const surfaceTotale = baies.reduce((acc, baie) => acc + baie.surface, 0);
+	for (const surface of surfaceParOrientation.values()) {
+		if (surface > 0.75 * surfaceTotale) return false;
+	}
+	return true;
+}
+
+/**
  * @doctrine enveloppe.sse
  * @returns Surface sud équivalente de l'enveloppe en m²
  */

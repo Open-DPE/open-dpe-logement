@@ -1,11 +1,14 @@
 import { ventilation } from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
+import * as production from "#rules/production/registry.js";
 import { ID, RULES } from "./registry.js";
 import * as formulas from "./formulas.js";
 
 export function register(ctx: Context): void {
 	ctx.diagnostic.ventilation.installations.forEach((item) => {
+		ctx.register(ID, RULES.consommations, item, () => consommations(ctx, item));
 		ctx.register(ID, RULES.caux, item, () => caux(ctx, item));
+		ctx.register(ID, RULES.caux_enr, item, () => caux_enr(ctx, item));
 		ctx.register(ID, RULES.pvent_moy, item, () => pvent_moy(ctx, item));
 		ctx.register(ID, RULES.rdim, item, () => rdim(ctx, item));
 		ctx.register(ID, RULES.rut, item, () => rut(item));
@@ -18,6 +21,16 @@ export function register(ctx: Context): void {
 
 type Installation = ventilation.installation.Installation;
 
+export function consommations(
+	ctx: Context,
+	item: Installation,
+): ReturnType<typeof formulas.calcule_consommations> {
+	return formulas.calcule_consommations({
+		caux: ctx.resolve(ID, RULES.caux, item),
+		caux_enr: ctx.resolve(ID, RULES.caux_enr, item),
+	});
+}
+
 export function caux(
 	ctx: Context,
 	item: Installation,
@@ -26,6 +39,17 @@ export function caux(
 		rdim: ctx.resolve(ID, RULES.rdim, item),
 		pvent_moy: ctx.resolve(ID, RULES.pvent_moy, item),
 		rut: ctx.resolve(ID, RULES.rut, item),
+	});
+}
+
+export function caux_enr(
+	ctx: Context,
+	item: Installation,
+): ReturnType<typeof formulas.calcule_caux_enr> {
+	return formulas.calcule_caux_enr({
+		celec: ctx.resolve(production.ID, production.RULES.celec),
+		celec_ac: ctx.resolve(production.ID, production.RULES.celec_ac),
+		caux: ctx.resolve(ID, RULES.caux, item),
 	});
 }
 
@@ -126,4 +150,19 @@ export function presence_echangeur_thermique(
 	return formulas.set_presence_echangeur_thermique({
 		presence_echangeur_thermique: item.presence_echangeur_thermique,
 	});
+}
+
+export function applique(ctx: Context, item: Installation): ventilation.installation.InstallationWithData {
+	return {
+		...item,
+		data: {
+			rdim: ctx.resolve(ID, RULES.rdim, item),
+			pvent_moy: ctx.resolve(ID, RULES.pvent_moy, item),
+			hvent: ctx.resolve(ID, RULES.hvent, item),
+			qvarep_conv: ctx.resolve(ID, RULES.qvarep_conv, item),
+			qvasouf_conv: ctx.resolve(ID, RULES.qvasouf_conv, item),
+			smea_conv: ctx.resolve(ID, RULES.smea_conv, item),
+			consommations: ctx.resolve(ID, RULES.consommations, item),
+		},
+	};
 }

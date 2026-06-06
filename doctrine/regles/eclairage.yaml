@@ -1,3 +1,28 @@
+eclairage.cef:
+  id: eclairage.cef
+  description: Consommations d'énergie finale d'éclairage
+  type: number
+  unite: kWh/an
+  dependances:
+    - eclairage.cecl
+    - production.cecl_ac
+
+eclairage.cep:
+  id: eclairage.cep
+  description: Consommations d'énergie primaire d'éclairage
+  type: number
+  unite: kWh/an
+  dependances:
+    - eclairage.cef
+
+eclairage.eges:
+  id: eclairage.eges
+  description: Emissions de gaz à effet de serre liées à l'éclairage
+  type: number
+  unite: kgCO2e/an
+  dependances:
+    - eclairage.cef
+
 eclairage.cecl:
   id: eclairage.cecl
   description: Consommations d'éclairage

@@ -1,5 +1,5 @@
+import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import { toNonEmptyArray } from "#utils/helpers.js";
 import * as batiment from "#rules/batiment/registry.js";
 import * as baie from "./baie/index.js";
 import * as localNonChauffe from "./local-non-chauffe/index.js";
@@ -26,6 +26,18 @@ export function register(ctx: Context): void {
 	ctx.register(ID, RULES.gv, () => gv(ctx));
 	ctx.register(ID, RULES.ubat, () => ubat(ctx));
 	ctx.register(ID, RULES.dp, () => dp(ctx));
+	ctx.register(ID, RULES.dp_murs, () => dp_murs(ctx));
+	ctx.register(ID, RULES.dp_planchers_bas, () => dp_planchers_bas(ctx));
+	ctx.register(ID, RULES.dp_planchers_hauts, () => dp_planchers_hauts(ctx));
+	ctx.register(ID, RULES.dp_baies, () => dp_baies(ctx));
+	ctx.register(ID, RULES.dp_portes, () => dp_portes(ctx));
+	ctx.register(ID, RULES.pt, () => pt(ctx));
+	ctx.register(ID, RULES.sdep, () => sdep(ctx));
+	ctx.register(ID, RULES.sdep_murs, () => sdep_murs(ctx));
+	ctx.register(ID, RULES.sdep_planchers_bas, () => sdep_planchers_bas(ctx));
+	ctx.register(ID, RULES.sdep_planchers_hauts, () => sdep_planchers_hauts(ctx));
+	ctx.register(ID, RULES.sdep_baies, () => sdep_baies(ctx));
+	ctx.register(ID, RULES.sdep_portes, () => sdep_portes(ctx));
 	ctx.register(ID, RULES.dr, () => dr(ctx));
 	ctx.register(ID, RULES.inertie, () => inertie(ctx));
 	ctx.register(ID, RULES.hperm, () => hperm(ctx));
@@ -39,6 +51,13 @@ export function register(ctx: Context): void {
 	);
 	ctx.register(ID, RULES.presence_joints, () => presence_joints(ctx));
 	ctx.register(ID, RULES.parois_anciennes, () => parois_anciennes(ctx));
+	ctx.register(ID, RULES.isolation_planchers_hauts, () =>
+		isolation_planchers_hauts(ctx),
+	);
+	ctx.register(ID, RULES.presence_protection_solaire, () =>
+		presence_protection_solaire(ctx),
+	);
+	ctx.register(ID, RULES.logement_traversant, () => logement_traversant(ctx));
 	ctx.register(ID, RULES.sse, () => sse(ctx));
 }
 
@@ -200,7 +219,9 @@ export function inertie(
 		inertie: ctx.resolve(niveau.ID, niveau.RULES.inertie, item),
 		sh: item.surface,
 	}));
-	return formulas.calcule_inertie({ niveaux: toNonEmptyArray(niveaux) });
+	return formulas.calcule_inertie({
+		niveaux: models.common.toNonEmptyArray(niveaux),
+	});
 }
 
 export function hperm(ctx: Context): ReturnType<typeof formulas.calcule_hperm> {
@@ -288,6 +309,43 @@ export function presence_joints(
 	});
 }
 
+export function isolation_planchers_hauts(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_isolation_planchers_hauts> {
+	return formulas.calcule_isolation_planchers_hauts({
+		planchers_hauts: ctx.diagnostic.enveloppe.planchers_hauts.map((item) => ({
+			surface: item.position.surface,
+			mitoyennete: item.position.mitoyennete,
+			isolation: plancherHaut.rules.isolation(ctx, item),
+		})),
+	});
+}
+
+export function presence_protection_solaire(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_presence_protection_solaire> {
+	return formulas.calcule_presence_protection_solaire({
+		baies: ctx.diagnostic.enveloppe.baies.map((item) => ({
+			surface: item.position.surface,
+			orientation: item.position.orientation,
+			mitoyennete: item.position.mitoyennete,
+			type_fermeture: item.type_fermeture,
+		})),
+	});
+}
+
+export function logement_traversant(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_logement_traversant> {
+	return formulas.calcule_logement_traversant({
+		baies: ctx.diagnostic.enveloppe.baies.map((item) => ({
+			surface: item.position.surface,
+			orientation: item.position.orientation,
+			mitoyennete: item.position.mitoyennete,
+		})),
+	});
+}
+
 export function sse(ctx: Context): ReturnType<typeof formulas.calcule_sse> {
 	return formulas.calcule_sse({
 		sse: ctx.diagnostic.enveloppe.baies.map((item) =>
@@ -308,4 +366,46 @@ export function parois_anciennes(
 			materiaux_anciens: item.structures.some((s) => s.materiau_ancien),
 		})),
 	});
+}
+
+export function applique(ctx: Context): models.enveloppe.EnveloppeWithData {
+	return {
+		...ctx.diagnostic.enveloppe,
+		data: {
+			gv: ctx.resolve(ID, RULES.gv),
+			ubat: ctx.resolve(ID, RULES.ubat),
+			dp: ctx.resolve(ID, RULES.dp),
+			dp_murs: ctx.resolve(ID, RULES.dp_murs),
+			dp_planchers_bas: ctx.resolve(ID, RULES.dp_planchers_bas),
+			dp_planchers_hauts: ctx.resolve(ID, RULES.dp_planchers_hauts),
+			dp_baies: ctx.resolve(ID, RULES.dp_baies),
+			dp_portes: ctx.resolve(ID, RULES.dp_portes),
+			pt: ctx.resolve(ID, RULES.pt),
+			dr: ctx.resolve(ID, RULES.dr),
+			sdep: ctx.resolve(ID, RULES.sdep),
+			sdep_murs: ctx.resolve(ID, RULES.sdep_murs),
+			sdep_planchers_bas: ctx.resolve(ID, RULES.sdep_planchers_bas),
+			sdep_planchers_hauts: ctx.resolve(ID, RULES.sdep_planchers_hauts),
+			sdep_baies: ctx.resolve(ID, RULES.sdep_baies),
+			sdep_portes: ctx.resolve(ID, RULES.sdep_portes),
+			inertie: ctx.resolve(ID, RULES.inertie),
+			hperm: ctx.resolve(ID, RULES.hperm),
+			hvent: ctx.resolve(ventilation.ID, ventilation.RULES.hvent),
+			presence_joints: ctx.resolve(ID, RULES.presence_joints),
+			parois_anciennes: ctx.resolve(ID, RULES.parois_anciennes),
+			isolation_planchers_hauts: ctx.resolve(
+				ID,
+				RULES.isolation_planchers_hauts,
+			),
+			presence_protection_solaire: ctx.resolve(
+				ID,
+				RULES.presence_protection_solaire,
+			),
+			logement_traversant: ctx.resolve(ID, RULES.logement_traversant),
+			sse: Object.values(ctx.resolve(ID, RULES.sse)).reduce(
+				(s: number, n: number) => s + n,
+				0,
+			),
+		},
+	};
 }

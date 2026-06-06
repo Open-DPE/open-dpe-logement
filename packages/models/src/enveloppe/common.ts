@@ -2,8 +2,9 @@ import type {
 	UUID,
 	OrientationCardinale,
 	PositiveNumber,
-} from "#/common/common.js";
+} from "#/common/common";
 import { buildEnum } from "#/utils.js";
+
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/inertie
  */

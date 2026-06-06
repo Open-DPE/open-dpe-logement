@@ -1,6 +1,7 @@
 export * as batiment from "./batiment/index.js";
 export * as climat from "./climat/index.js";
 export * as chauffage from "./chauffage/index.js";
+export * as diagnostic from "./diagnostic/index.js";
 export * as eclairage from "./eclairage/index.js";
 export * as ecs from "./ecs/index.js";
 export * as enveloppe from "./enveloppe/index.js";

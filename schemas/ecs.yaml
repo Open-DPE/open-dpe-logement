@@ -18,35 +18,49 @@ properties:
     items:
       $ref: /ecs/installation
   data:
+    $ref: "#/$defs/data"
+
+required:
+  - generateurs
+  - installations
+
+$defs:
+  data:
     title: Données calculées
     type: object
     readOnly: true
     additionalProperties: false
     properties:
-      nadeq:
-        title: Nombre d'adultes équivalents
+      qgw:
+        title: Pertes de stockage en Wh/an
         type: number
-        minimum: 0
+      qgen:
+        title: Pertes de génération d'eau chaude sanitaire en Wh/an
+        type: number
+      qdw_ind_vc:
+        title: Pertes de distribution individuelle en volume chauffé en Wh/an
+        type: number
+      qdw_col_vc:
+        title: Pertes de distribution collective en volume chauffé en Wh/an
+        type: number
+      qdw_col_hvc:
+        title: Pertes de distribution collective hors du volume chauffé en Wh/an
+        type: number
+      becs:
+        title: Besoins d'eau chaude sanitaire en kWh/an
+        type: number
+      nadeq:
+        title: Nombre d'adultes équivalent
+        type: number
       nmax:
         title: Coefficient d'occupation maximal
         type: number
-        minimum: 0
-      becs:
-        $ref: /common/primitives#/$defs/bef
-      iecs:
-        title: Inverse du rendement moyen
-        type: number
-        minimum: 0
-      pertes:
-        $ref: /common/components#/$defs/pertes
-      consommations:
-        $ref: /common/components#/$defs/consommations
     required:
+      - qgw
+      - qgen
+      - qdw_ind_vc
+      - qdw_col_vc
+      - qdw_col_hvc
+      - becs
       - nadeq
       - nmax
-      - becs
-      - pertes
-      - consommations
-required:
-  - generateurs
-  - installations

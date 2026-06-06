@@ -5,30 +5,23 @@ type: object
 additionalProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   surface:
-    $ref: /common/primitives#/$defs/surface
+    $ref: /common#/$defs/surface
   inertie_paroi_verticale:
     title: Inertie des parois verticales
-    $ref: /enveloppe/common/primitives#/$defs/inertie_paroi
+    $ref: /enveloppe/paroi#/$defs/inertie
   inertie_plancher_bas:
     title: Inertie des planchers bas
-    $ref: /enveloppe/common/primitives#/$defs/inertie_paroi
+    $ref: /enveloppe/paroi#/$defs/inertie
   inertie_plancher_haut:
     title: Inertie des planchers hauts
-    $ref: /enveloppe/common/primitives#/$defs/inertie_paroi
+    $ref: /enveloppe/paroi#/$defs/inertie
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      inertie:
-        $ref: /enveloppe/common/primitives#/$defs/inertie
-    required:
-      - inertie
+    $ref: "#/$defs/data"
+
 required:
   - id
   - description
@@ -36,3 +29,16 @@ required:
   - inertie_paroi_verticale
   - inertie_plancher_bas
   - inertie_plancher_haut
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      inertie:
+        title: Classe d'inertie thermique du niveau
+        type: string
+        x-enum: enveloppe:inertie
+    required: [inertie]

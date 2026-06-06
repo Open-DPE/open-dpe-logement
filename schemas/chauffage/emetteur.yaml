@@ -5,9 +5,9 @@ type: object
 additionalProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   type:
     title: Type d'émetteur de chauffage
     type: string
@@ -28,7 +28,10 @@ properties:
     title: Présence d'un robinet thermostatique
     type: boolean
   annee_installation:
-    $ref: /common/primitives#/$defs/annee_installation
+    $ref: /common#/$defs/annee_installation
+  data:
+    $ref: "#/$defs/data"
+
 required:
   - id
   - description
@@ -36,3 +39,21 @@ required:
   - temperature_distribution
   - presence_robinet_thermostatique
   - annee_installation
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      delta_pem:
+        title: Perte de charge de l'émetteur en kPa
+        type: number
+      fcot:
+        title: Facteur correcteur des températures de l'émetteur
+        type: number
+      dtheta_dim:
+        title: Chute nominale de température de dimensionnement en °C
+        type: number
+    required: [delta_pem, fcot, dtheta_dim]

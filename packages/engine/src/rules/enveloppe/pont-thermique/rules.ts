@@ -179,3 +179,13 @@ export function presence_retour_isolation(
 			entity.menuiserie?.presence_retour_isolation ?? null,
 	});
 }
+
+export function applique(ctx: Context, item: PontThermique): models.enveloppe.pontThermique.PontThermiqueWithData {
+	return {
+		...item,
+		data: {
+			kpt: ctx.resolve(ID, RULES.kpt, item),
+			pt: ctx.resolve(ID, RULES.pt, item),
+		},
+	};
+}

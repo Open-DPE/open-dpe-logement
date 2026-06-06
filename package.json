@@ -4,6 +4,8 @@
   "scripts": {
     "abaques:generate": "node scripts/generate-abaques.mjs",
     "abaques:prebuild": "npm run generate:abaques",
+    "schemas:generate": "node scripts/generate-schemas.mjs",
+    "schemas:prebuild": "npm run generate:schemas",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "lint": "turbo run lint",
@@ -11,6 +13,7 @@
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@hyperjump/json-schema": "^1.17.6",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.8.0",
     "csv-parse": "^6.2.1",

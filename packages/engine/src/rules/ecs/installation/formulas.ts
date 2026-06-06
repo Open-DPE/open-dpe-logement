@@ -4,7 +4,7 @@ import * as climat from "#rules/climat/formulas.js";
 import * as ecs from "#rules/ecs/formulas.js";
 import * as systeme from "#rules/ecs/systeme/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois, reduceParMois } from "#utils/helpers.js";
+import { createParMois } from "#utils/helpers.js";
 
 /**
  * @returns Besoins d'eau chaude sanitaire proratisés à l'installation en kWh/mois
@@ -35,8 +35,9 @@ export function calcule_rdim(props: {
 	surface_installation: number;
 	surface_installations: number;
 }): number {
-	const { surface_installation, surface_installations } = props;
-	return surface_installation / surface_installations;
+	return props.surface_installations
+		? props.surface_installation / props.surface_installations
+		: 0;
 }
 
 /**
@@ -93,7 +94,7 @@ export function calcule_qdw_ind_vc(props: {
 	ns: number;
 }): number {
 	const { sh, ns } = props;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 	const rat = 1 / ns;
 	const lvc = 0.2 * sh * rat;
 	return ((0.5 * lvc) / sh) * becs;
@@ -107,7 +108,7 @@ export function calcule_qdw_col_vc(props: {
 	reseau_collectif: boolean;
 }): number {
 	const { reseau_collectif } = props;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 	return reseau_collectif ? becs * 0.112 : 0;
 }
 
@@ -119,16 +120,17 @@ export function calcule_qdw_col_hvc(props: {
 	reseau_collectif: boolean;
 }): number {
 	const { reseau_collectif } = props;
-	const becs = reduceParMois(props.becs) * 1000;
+	const becs = models.common.reduceParMois(props.becs) * 1000;
 	return reseau_collectif ? becs * 0.028 : 0;
 }
 
 export function set_anciennete_installation_solaire(props: {
+	annee_reference: number;
 	annee_installation: number | null;
 	annee_construction_batiment: number;
 }): number {
 	return (
-		new Date().getFullYear() -
+		props.annee_reference -
 		(props.annee_installation ?? props.annee_construction_batiment)
 	);
 }

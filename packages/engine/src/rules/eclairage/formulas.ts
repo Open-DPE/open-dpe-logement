@@ -1,7 +1,29 @@
 import { abaques } from "@open-dpe-logement/abaques";
+import * as models from "@open-dpe-logement/models";
+import * as common from "#rules/common/formulas.js";
 import * as batiment from "#rules/batiment/formulas.js";
 import * as climat from "#rules/climat/formulas.js";
+import * as production from "#rules/production/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
+
+/**
+ * @doctrine eclairage.cef
+ * @doctrine eclairage.cep
+ * @doctrine eclairage.eges
+ * @return Consommations par usage et par énergie de l'éclairage
+ */
+export function calcule_consommations(props: {
+	cecl: ReturnType<typeof calcule_cecl>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+}): models.common.Consommations {
+	return common.calcule_consommations({
+		cef: props.cecl,
+		cef_enr: props.celec_ac.eclairage,
+		usage: models.common.UsageEnum.eclairage,
+		energie: models.common.EnergieEnum.electricite,
+		reseau_id: null,
+	});
+}
 
 /**
  * @doctrine eclairage.cecl

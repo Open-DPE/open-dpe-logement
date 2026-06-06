@@ -12,11 +12,12 @@ Monorepo communautaire pour la transparence, la fiabilité et la compréhension 
 
 ```text
 doctrine/                       # Référentiel doctrinal
-schemas/                        # Schémas de données publiques
+schemas/                        # Schémas de données publiques JSON Schema
 apps/                           # Applications
 packages/
 ├── engine/                     # Moteur de calcul 3CL-DPE
 ├── models/                     # Types TypeScript (écriture manuelle, stables)
+├── schemas/                    # Repositories des schémas de données publiques et validation
 ├── transformer/                # Transformers de données (schemas → schemas)
 └── database/                   # Infrastructure SQL
 ```
@@ -47,6 +48,20 @@ Pour cibler un workspace spécifique :
 npx turbo dev --filter=web
 npx turbo build --filter=@dpe-audit/core
 ```
+
+## Feuilles de route
+
+1. Alpha
+
+- [x] Doctrine 3CL-DPE
+- [ ] Schémas de données publiques - `schemas`  `packages/schemas`
+- [ ] Moteur de calcul - `packages/engine`
+- [ ] Modèle de données - `packages/models`
+
+2. Beta
+
+- [ ] Migration des données Observatoire DPE - `packages/transformer`
+- [ ] Tests de régression - `packages/transformer`
 
 ## Contribution
 

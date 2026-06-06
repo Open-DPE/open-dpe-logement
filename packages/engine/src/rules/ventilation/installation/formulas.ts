@@ -1,11 +1,48 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
+import * as common from "#rules/common/formulas.js";
+import * as production from "#rules/production/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
  * Surface habitable couverte par l'installation en m²
  */
 type Sh = number;
+
+/**
+ * @doctrine ventilation.installation.cef
+ * @doctrine ventilation.installation.cep
+ * @doctrine ventilation.installation.eges
+ * @return Consommations par usage et par énergie de l'auxiliaire de ventilation
+ */
+export function calcule_consommations(props: {
+	caux: ReturnType<typeof calcule_caux>;
+	caux_enr: ReturnType<typeof calcule_caux_enr>;
+}): models.common.Consommations {
+	return common.calcule_consommations({
+		cef: props.caux,
+		cef_enr: props.caux_enr,
+		usage: models.common.UsageEnum.auxiliaire,
+		energie: models.common.EnergieEnum.electricite,
+		reseau_id: null,
+	});
+}
+
+/**
+ * @doctrine ventilation.installation.caux_enr
+ * @return Consommations d'électricité renouvelable de l'auxiliaire de ventilation en kWh/an
+ */
+export function calcule_caux_enr(props: {
+	celec: ReturnType<typeof production.calcule_celec>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+	caux: ReturnType<typeof calcule_caux>;
+}): number {
+	const { caux } = props;
+	const celec = props.celec.auxiliaires_ventilation;
+	const celec_ac = props.celec_ac.auxiliaires_ventilation;
+	const p_celec_ac = celec ? caux / celec : 0;
+	return celec_ac * p_celec_ac;
+}
 
 /**
  * @returns Consommation de l'auxiliaire de ventilation en kWh/an
@@ -126,8 +163,9 @@ export function calcule_rdim(props: {
 	surface_installation: number;
 	surface_installations: number;
 }): number {
-	const { surface_installation, surface_installations } = props;
-	return surface_installation / surface_installations;
+	return props.surface_installations
+		? props.surface_installation / props.surface_installations
+		: 0;
 }
 
 export type Debits = {

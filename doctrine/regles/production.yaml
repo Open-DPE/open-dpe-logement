@@ -6,170 +6,59 @@ production.ppv:
   dependances:
     - production.panneau_photovoltaique.ppv
 
-production.celec_ac:
-  id: production.celec_ac
-  description: Électricité photovoltaïque autoconsommée
+production.celec_ac_total:
+  id: production.celec_ac_total
+  description: Électricité photovoltaïque autoconsommée totale
   type: number
   unite: kWh/an
   dependances:
     - production.ppv
-    - production.celec
+    - production.celec_total
     - production.tapl
 
-production.celec_ac_ch:
-  id: production.celec_ac_ch
-  description: Électricité photovoltaïque autoconsommée pour le chauffage
+production.celec_ac:
+  id: production.celec_ac
+  description: Électricité photovoltaïque autoconsommée par usage d'électricité
   type: number
   unite: kWh/an
   dependances:
     - production.celec
-    - production.celec_ac
+    - production.celec_total
+    - production.celec_ac_total
     - production.tapl
-    - production.celec_ch
 
-production.celec_ac_ecs:
-  id: production.celec_ac_ecs
-  description: Électricité photovoltaïque autoconsommée pour l'eau chaude sanitaire
-  type: number
-  unite: kWh/an
-  dependances:
-    - production.celec
-    - production.celec_ac
-    - production.tapl
-    - production.celec_ecs
-
-production.celec_ac_fr:
-  id: production.celec_ac_fr
-  description: Électricité photovoltaïque autoconsommée pour le refroidissement
-  type: number
-  unite: kWh/an
-  dependances:
-    - production.celec
-    - production.celec_ac
-    - production.tapl
-    - production.celec_fr
-
-production.celec_ac_ecl:
-  id: production.celec_ac_ecl
-  description: Électricité photovoltaïque autoconsommée pour l'éclairage
-  type: number
-  unite: kWh/an
-  dependances:
-    - production.celec
-    - production.celec_ac
-    - production.tapl
-    - production.celec_ecl
-
-production.celec_ac_aux_dist:
-  id: production.celec_ac_aux_dist
-  description: Électricité photovoltaïque autoconsommée pour les auxiliaires de distribution
-  type: number
-  unite: kWh/an
-  dependances:
-    - production.celec
-    - production.celec_ac
-    - production.tapl
-    - production.celec_aux_dist
-
-production.celec_ac_aux_vent:
-  id: production.celec_ac_aux_vent
-  description: Électricité photovoltaïque autoconsommée pour les auxiliaires de ventilation
-  type: number
-  unite: kWh/an
-  dependances:
-    - production.celec
-    - production.celec_ac
-    - production.tapl
-    - production.celec_aux_vent
-
-production.celec_ac_autres:
-  id: production.celec_ac_autres
-  description: Électricité photovoltaïque autoconsommée pour les autres usages
-  type: number
-  unite: kWh/an
-  dependances:
-    - production.celec
-    - production.celec_ac
-    - production.tapl
-    - production.celec_autres
-
-production.celec:
-  id: production.celec
+production.celec_total:
+  id: production.celec_total
   description: Consommation d'électricité totale
   type: number
   unite: kWh/an
   dependances:
-    - production.celec_ch
-    - production.celec_ecs
-    - production.celec_fr
-    - production.celec_ecl
-    - production.celec_aux_dist
-    - production.celec_aux_vent
-    - production.celec_autres
+    - production.celec
 
-production.tapl:
-  id: production.tapl
-  description: Coefficient de calage représentant le taux d'auto-production maximum pouvant être atteint lorsque la production d'électricité renouvelable augmente
-  type: number
-  dependances:
-    - production.celec_ch
-    - production.celec_ecs
-    - production.celec_fr
-    - production.celec_ecl
-    - production.celec_aux_dist
-    - production.celec_aux_vent
-    - production.celec_autres
-
-production.celec_ch:
-  id: production.celec_ch
-  description: Consommation d'électricité pour le chauffage
+production.celec:
+  id: production.celec
+  description: Consommation d'électricité par usage d'électricité
   type: number
   unite: kWh/an
   dependances:
     - chauffage.cch_elec
     - chauffage.caux_gen
-
-production.celec_ecs:
-  id: production.celec_ecs
-  description: Consommation d'électricité pour l'eau chaude sanitaire
-  type: number
-  unite: kWh/an
-  dependances:
-    - ecs.cecs_elec
-    - ecs.caux_gen
-
-production.celec_fr:
-  id: production.celec_fr
-  description: Consommation d'électricité pour le refroidissement
-  type: number
-  unite: kWh/an
-  dependances:
-    - refroidissement.cfr_elec
-
-production.celec_ecl:
-  id: production.celec_ecl
-  description: Consommation d'électricité pour l'éclairage
-  type: number
-  unite: kWh/an
-  dependances:
-    - eclairage.cecl
-
-production.celec_aux_dist:
-  id: production.celec_aux_dist
-  description: Consommation d'électricité pour les auxiliaires de distribution
-  type: number
-  unite: kWh/an
-  dependances:
     - chauffage.caux_dist
+    - ecs.cecs_elec
     - ecs.caux_dist
-
-production.celec_aux_vent:
-  id: production.celec_aux_vent
-  description: Consommation d'électricité pour les auxiliaires de ventilation
-  type: number
-  unite: kWh/an
-  dependances:
+    - ecs.caux_gen
+    - ecs.caux_gen
+    - eclairage.cecl
+    - refroidissement.cfr_elec
     - ventilation.caux
+    - production.celec_autres
+
+production.tapl:
+  id: production.tapl
+  description: Coefficient de calage pour chaque usage d'électricité
+  type: number
+  dependances:
+    - production.celec
 
 production.celec_autres:
   id: production.celec_autres

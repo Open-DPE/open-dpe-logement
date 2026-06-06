@@ -1,5 +1,8 @@
-import type { UUID } from "../common/common";
-import { buildEnum } from "../utils";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { UUID } from "#/common/common";
+import { buildEnum, createGuard } from "../utils";
+
+export const isPontThermique = createGuard<PontThermique>(SCHEMA_KEYS["enveloppe/pont-thermique"]);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/pont-thermique
@@ -18,7 +21,7 @@ export type PontThermiqueWithData<T extends PontThermique = PontThermique> =
 	};
 
 export type PontThermiqueData = {
-	k: number;
+	kpt: number;
 	pt: number;
 };
 

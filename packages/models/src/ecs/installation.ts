@@ -1,11 +1,12 @@
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type {
-	Consommations,
-	Pertes,
 	PositiveNumber,
 	UUID,
-} from "../common/common.js";
-import { buildEnum } from "../utils.js";
+} from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
 import * as systeme from "./systeme.js";
+
+export const isInstallation = createGuard<Installation>(SCHEMA_KEYS["ecs/installation"]);
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/installation
@@ -24,11 +25,13 @@ export type InstallationWithData<T extends Installation = Installation> = T & {
 };
 
 export type InstallationData = {
+	becs: number;
 	rdim: number;
 	fecs: number;
-	iecs: number;
-	pertes: Pertes;
-	consommations: Consommations;
+	qdw: number;
+	qdw_ind_vc: number;
+	qdw_col_vc: number;
+	qdw_col_hvc: number;
 };
 
 export type SolaireThermique = {

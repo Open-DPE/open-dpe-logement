@@ -1,3 +1,27 @@
+refroidissement.cef:
+  id: refroidissement.cef
+  description: Consommations d'énergie finale de refroidissement
+  type: number
+  unite: kWh/an
+  dependances:
+    - refroidissement.installation.cef
+
+refroidissement.cep:
+  id: refroidissement.cep
+  description: Consommations d'énergie primaire de refroidissement
+  type: number
+  unite: kWh/an
+  dependances:
+    - refroidissement.installation.cep
+
+refroidissement.eges:
+  id: refroidissement.eges
+  description: Emissions de gaz à effet de serre de refroidissement
+  type: number
+  unite: kgCO2e/an
+  dependances:
+    - refroidissement.installation.eges
+
 refroidissement.cfr:
   id: refroidissement.cfr
   description: Consommations de refroidissement
@@ -133,6 +157,33 @@ refroidissement.installation.rdim:
 
 # <-- Générateurs de refroidissement -->
 
+refroidissement.generateur.cef:
+  id: refroidissement.generateur.cef
+  description: Consommations d'énergie finale du générateur de refroidissement
+  type: number
+  unite: kWh/an
+  dependances:
+    - refroidissement.generateur.cfr
+    - refroidissement.generateur.cfr_enr
+
+refroidissement.generateur.cep:
+  id: refroidissement.generateur.cep
+  description: Consommations d'énergie primaire du générateur de refroidissement
+  type: number
+  unite: kWh/an
+  dependances:
+    - refroidissement.generateur.cfr
+    - refroidissement.generateur.cfr_enr
+
+refroidissement.generateur.eges:
+  id: refroidissement.generateur.eges
+  description: Emissions de gaz à effet de serre du générateur de refroidissement
+  type: number
+  unite: kgCO2e/an
+  dependances:
+    - refroidissement.generateur.cfr
+    - refroidissement.generateur.cfr_enr
+
 refroidissement.generateur.cfr:
   id: refroidissement.generateur.cfr
   description: Consommations de refroidissement du générateur de refroidissement
@@ -142,6 +193,24 @@ refroidissement.generateur.cfr:
     - refroidissement.bfr
     - refroidissement.generateur.rdim
     - refroidissement.generateur.eer
+
+refroidissement.generateur.cfr_enr:
+  id: refroidissement.generateur.cfr_enr
+  description: Consommations d'électricité renouvelable du générateur de refroidissement
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - refroidissement.generateur.cfr_elec
+
+refroidissement.generateur.cfr_elec:
+  id: refroidissement.generateur.cfr_elec
+  description: Consommations électriques de refroidissement du générateur de refroidissement
+  type: number
+  unite: kWh/an
+  dependances:
+    - refroidissement.generateur.cfr
 
 refroidissement.generateur.caux:
   id: refroidissement.generateur.caux

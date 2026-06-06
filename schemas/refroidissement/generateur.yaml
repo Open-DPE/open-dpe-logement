@@ -5,9 +5,9 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   type:
     title: Type de générateur
     type: string
@@ -27,39 +27,26 @@ properties:
     x-enum: energie
     enum: [electricite, gaz_naturel, gpl, reseau_froid]
   annee_installation:
-    $ref: /common/primitives#/$defs/annee_installation
+    $ref: /common#/$defs/annee_installation
   seer:
     title: Coefficient d'efficience énergétique saisonnier
-    type: [number, "null"]
-    exclusiveMinimum: 0
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   reseau_froid_id:
     title: Identifiant unique du réseau de froid
     type: [string, "null"]
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      eer:
-        title: Coefficient d'efficacité énergétique
-        type: number
-        exclusiveMinimum: 0
-      rdim:
-        $ref: /common/primitives#/$defs/rdim
-      consommations:
-        $ref: /common/components#/$defs/consommations
-    required:
-      - eer
-      - rdim
-      - consommations
+    $ref: "#/$defs/data"
 required:
   - id
   - description
   - type
   - energie
-discriminator:
-  propertyName: type
+  - annee_installation
+  - seer
+  - reseau_froid_id
+
 oneOf:
   - title: Pompe à chaleur
     type: object
@@ -76,9 +63,12 @@ oneOf:
         const: electricite
       reseau_froid_id:
         const: null
+        default: null
     required:
       - type
       - energie
+      - reseau_froid_id
+
   - title: Climatiseur
     type: object
     properties:
@@ -91,16 +81,39 @@ oneOf:
           - gpl
       reseau_froid_id:
         const: null
+        default: null
     required:
       - type
       - energie
+      - reseau_froid_id
+
   - title: Réseau de froid
     type: object
     properties:
       type:
         const: reseau_froid
+        default: reseau_froid
       energie:
         const: reseau_froid
+        default: reseau_froid
     required:
       - type
       - energie
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      consommations:
+        title: Consommations par usage et par énergie du générateur de refroidissement
+        $ref: /common#/$defs/consommations
+      rdim:
+        title: Ratio de dimensionnement du générateur de refroidissement
+        type: number
+      eer:
+        title: Efficacité énergétique saisonnière (EER) du générateur de refroidissement
+        type: number
+    required: [consommations, rdim, eer]

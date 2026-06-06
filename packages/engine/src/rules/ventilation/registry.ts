@@ -4,6 +4,7 @@ import * as rules from "./rules.js";
 export const ID = "ventilation";
 
 export const RULES = {
+	consommations: "consommations",
 	caux: "caux",
 	qvarep_conv: "qvarep_conv",
 	qvasouf_conv: "qvasouf_conv",
@@ -13,6 +14,7 @@ export const RULES = {
 
 export type Results = {
 	[ID]: {
+		[RULES.consommations]: ReturnType<typeof rules.consommations>;
 		[RULES.caux]: ReturnType<typeof rules.caux>;
 		[RULES.qvarep_conv]: ReturnType<typeof rules.qvarep_conv>;
 		[RULES.qvasouf_conv]: ReturnType<typeof rules.qvasouf_conv>;

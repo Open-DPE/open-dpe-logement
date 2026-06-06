@@ -37,6 +37,9 @@ export const RULES = {
 	q4paconv: "q4paconv",
 	isolation_murs_plafonds: "isolation_murs_plafonds",
 	presence_joints: "presence_joints",
+	isolation_planchers_hauts: "isolation_planchers_hauts",
+	presence_protection_solaire: "presence_protection_solaire",
+	logement_traversant: "logement_traversant",
 	parois_anciennes: "parois_anciennes",
 	sse: "sse",
 } as const;
@@ -71,6 +74,13 @@ export type Results = {
 		>;
 		[RULES.presence_joints]: ReturnType<typeof rules.presence_joints>;
 		[RULES.parois_anciennes]: ReturnType<typeof rules.parois_anciennes>;
+		[RULES.isolation_planchers_hauts]: ReturnType<
+			typeof rules.isolation_planchers_hauts
+		>;
+		[RULES.presence_protection_solaire]: ReturnType<
+			typeof rules.presence_protection_solaire
+		>;
+		[RULES.logement_traversant]: ReturnType<typeof rules.logement_traversant>;
 		[RULES.sse]: ReturnType<typeof rules.sse>;
 	};
 } & BaieResults &

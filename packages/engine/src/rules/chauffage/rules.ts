@@ -1,3 +1,4 @@
+import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as batiment from "#rules/batiment/registry.js";
 import * as climat from "#rules/climat/registry.js";
@@ -5,10 +6,17 @@ import * as ecs from "#rules/ecs/registry.js";
 import * as enveloppe from "#rules/enveloppe/registry.js";
 import * as generateurRules from "#rules/chauffage/generateur/index.js";
 import * as installationRules from "#rules/chauffage/installation/index.js";
+import * as systemeRules from "#rules/chauffage/systeme/index.js";
 import * as formulas from "./formulas.js";
 import { ID, RULES } from "./registry.js";
+import { generateur } from "./index.js";
 
 export function register(ctx: Context): void {
+	generateurRules.rules.register(ctx);
+	installationRules.rules.register(ctx);
+	systemeRules.rules.register(ctx);
+
+	ctx.register(ID, RULES.consommations, () => consommations(ctx));
 	ctx.register(ID, RULES.cch, () => cch(ctx));
 	ctx.register(ID, RULES.cch_elec, () => cch_elec(ctx));
 	ctx.register(ID, RULES.caux_gen, () => caux_gen(ctx));
@@ -26,6 +34,16 @@ export function register(ctx: Context): void {
 	ctx.register(ID, RULES.effet_joule, () => effet_joule(ctx));
 	ctx.register(ID, RULES.nref, () => nref(ctx));
 	ctx.register(ID, RULES.dh, () => dh(ctx));
+}
+
+export function consommations(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_consommations> {
+	return formulas.calcule_consommations({
+		consommations: ctx.diagnostic.chauffage.generateurs.map((item) =>
+			ctx.resolve(generateur.ID, generateur.RULES.consommations, item),
+		),
+	});
 }
 
 export function cch(ctx: Context): ReturnType<typeof formulas.calcule_cch> {
@@ -55,7 +73,11 @@ export function caux_gen(
 ): ReturnType<typeof formulas.calcule_caux_gen> {
 	return formulas.calcule_caux_gen({
 		caux_gen: ctx.diagnostic.chauffage.generateurs.map((generateur) =>
-			ctx.resolve(generateurRules.ID, generateurRules.RULES.caux, generateur),
+			ctx.resolve(
+				generateurRules.ID,
+				generateurRules.RULES.caux_gen,
+				generateur,
+			),
 		),
 	});
 }
@@ -188,4 +210,22 @@ export function dh(ctx: Context): ReturnType<typeof formulas.calcule_dh> {
 		sollicitations: ctx.resolve(climat.ID, climat.RULES.sollicitations),
 		scenario: ctx.scenario,
 	});
+}
+
+export function applique(ctx: Context): models.chauffage.ChauffageWithData {
+	const sumMois = (v: models.common.ParMois<number>): number =>
+		Object.values(v).reduce((s: number, n: number) => s + n, 0);
+	return {
+		...ctx.diagnostic.chauffage,
+		data: {
+			bch: sumMois(ctx.resolve(ID, RULES.bch)),
+			pch: ctx.resolve(ID, RULES.pch),
+			as: sumMois(ctx.resolve(ID, RULES.as)),
+			ai: sumMois(ctx.resolve(ID, RULES.ai)),
+			qgw_rec: sumMois(ctx.resolve(ID, RULES.qgw_rec)),
+			qdw_rec: sumMois(ctx.resolve(ID, RULES.qdw_rec)),
+			qgen_ecs_rec: sumMois(ctx.resolve(ID, RULES.qgen_ecs_rec)),
+			effet_joule: ctx.resolve(ID, RULES.effet_joule),
+		},
+	};
 }

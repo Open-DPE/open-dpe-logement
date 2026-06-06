@@ -5,9 +5,9 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   type:
     title: Type
     type: string
@@ -44,20 +44,27 @@ properties:
       - volet_battant_pvc_bois_epaisseur_gt_22_mm
       - fermeture_isolee_sans_ajours
   annee_installation:
-    $ref: /common/primitives#/$defs/annee_installation
+    $ref: /common#/$defs/annee_installation
   ug:
     title: Coefficient de transmission thermique du vitrage
-    $ref: /enveloppe/common/primitives#/$defs/u_saisi
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   uw:
     title: Coefficient de transmission thermique de la menuiserie
-    $ref: /enveloppe/common/primitives#/$defs/u_saisi
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   ujn:
     title: Coefficient de transmission thermique de la baie avec protections solaires
-    $ref: /enveloppe/common/primitives#/$defs/u_saisi
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
   sw:
     title: Proportion d'énergie solaire transmise
-    type: [number, "null"]
-    minimum: 0
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
     maximum: 1
   position:
     $ref: "#/$defs/position"
@@ -72,36 +79,8 @@ properties:
       - $ref: "#/$defs/survitrage"
       - const: null
   data:
-    title: Données calculées
-    description: >
-      En présence d'une double fenêtre (`position.baie_id` renseigné), les données de chaque baie sont calculées. Cependant,
-      `sse` et `dp` sont divisées par 2 pour refléter la répartition des apports solaires et des déperditions entre les deux baies.
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      sw:
-        title: Proportion d'énergie solaire transmise par la baie
-        type: number
-        minimum: 0
-        maximum: 1
-      sse:
-        $ref: /enveloppe/common/primitives#/$defs/sse
-      u:
-        $ref: /enveloppe/common/primitives#/$defs/u
-      b:
-        $ref: /enveloppe/common/primitives#/$defs/b
-      sdep:
-        $ref: /enveloppe/common/primitives#/$defs/sdep
-      dp:
-        $ref: /enveloppe/common/primitives#/$defs/deperditions
-    required:
-      - sw
-      - sse
-      - u
-      - b
-      - sdep
-      - dp
+    $ref: "#/$defs/data"
+
 required:
   - id
   - description
@@ -110,6 +89,7 @@ required:
   - type_fermeture
   - position
   - vitrage
+
 $defs:
   position:
     title: Position
@@ -119,22 +99,22 @@ $defs:
       paroi_id:
         title: Identifiant de la paroi opaque associée à la baie
         anyOf:
-          - $ref: /common/primitives#/$defs/id
+          - $ref: /common#/$defs/id
           - const: null
       baie_id:
         title: Identifiant de la baie associée (double fenêtre)
         anyOf:
-          - $ref: /common/primitives#/$defs/id
+          - $ref: /common#/$defs/id
           - const: null
       type_pose:
         title: Type de pose
         anyOf:
-          - $ref: /enveloppe/common/primitives#/$defs/type_pose
+          - $ref: /enveloppe/paroi#/$defs/type_pose
           - const: null
       inclinaison:
-        $ref: /common/primitives#/$defs/inclinaison
+        $ref: /common#/$defs/inclinaison
       orientation:
-        $ref: /enveloppe/common/primitives#/$defs/orientation
+        $ref: /enveloppe/paroi#/$defs/orientation
       masques:
         title: Masques
         type: array
@@ -148,7 +128,7 @@ $defs:
       - orientation
       - masques
     allOf:
-      - $ref: /enveloppe/common/components#/$defs/position
+      - $ref: /enveloppe/paroi#/$defs/position
     oneOf:
       - title: Nord ou Sud
         type: object
@@ -167,6 +147,8 @@ $defs:
         required:
           - inclinaison
           - orientation
+          - masques
+
       - title: Est ou Ouest
         type: object
         properties:
@@ -184,6 +166,8 @@ $defs:
         required:
           - inclinaison
           - orientation
+          - masques
+
       - title: Baie horizontale
         type: object
         properties:
@@ -194,6 +178,7 @@ $defs:
         required:
           - inclinaison
           - orientation
+
   menuiserie:
     title: Menuiserie
     type: object
@@ -206,8 +191,9 @@ $defs:
         enum: [pvc, bois, bois_metal, metal, null]
       largeur_dormant:
         title: Largeur dormant en mm
-        type: [number, "null"]
-        exclusiveMinimum: 0
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
       presence_soubassement:
         title: Présence d'un soubassement
         type: boolean
@@ -227,6 +213,7 @@ $defs:
       - presence_joint
       - presence_retour_isolation
       - presence_rupteur_pont_thermique
+
   vitrage:
     title: Vitrage
     type: object
@@ -252,10 +239,14 @@ $defs:
         enum: [air, argon, krypton, null]
       epaisseur_lame:
         title: Epaisseur de la lame d'air en mm
-        type: [number, "null"]
-        exclusiveMinimum: 0
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
     required:
       - type
+      - nature_lame
+      - epaisseur_lame
+
     oneOf:
       - title: Vitrage simple
         properties:
@@ -263,27 +254,41 @@ $defs:
             const: simple_vitrage
           nature_lame:
             const: null
+            default: null
           epaisseur_lame:
             const: null
+            default: null
         required:
           - type
+          - nature_lame
+          - epaisseur_lame
+
       - title: Vitrage complexe
         properties:
           type:
-            not:
-              enum: [brique_verre, polycarbonate, simple_vitrage]
+            enum:
+              - double_vitrage
+              - double_vitrage_fe
+              - triple_vitrage
+              - triple_vitrage_fe
         required:
           - type
+
       - title: Autres
         properties:
           type:
             enum: [brique_verre, polycarbonate, null]
           nature_lame:
             const: null
+            default: null
           epaisseur_lame:
             const: null
+            default: null
         required:
           - type
+          - nature_lame
+          - epaisseur_lame
+
   survitrage:
     title: Survitrage
     type: object
@@ -296,13 +301,68 @@ $defs:
         enum: [survitrage_simple, survitrage_fe, null]
       epaisseur_lame:
         title: Epaisseur de la lame d'air en mm
-        type: [number, "null"]
-        minimum: 0
+        oneOf:
+          - $ref: /common#/$defs/nombre_positif
+          - const: null
     required:
       - type
       - epaisseur_lame
-discriminator:
-  propertyName: type
+
+  data:
+    title: Données calculées
+    description: >
+      En présence d'une double fenêtre (`position.baie_id` renseigné), les données de chaque baie sont calculées. Cependant,
+      `sse` et `dp` sont divisées par 2 pour refléter la répartition des apports solaires et des déperditions entre les deux baies.
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      sdep:
+        title: Surface déperditive de la baie en m²
+        type: number
+      b:
+        title: Coefficient de réduction des déperditions thermiques de la baie
+        type: number
+      dp:
+        title: Déperditions thermiques de la baie en W/K
+        type: number
+      u:
+        title: Coefficient de transmission thermique de la baie en W/(m².K)
+        type: number
+      deltar:
+        title: Résistance thermique additionnelle de la baie en m².K/W
+        type: number
+      uw:
+        title: Coefficient de transmission thermique de la baie avec double fenêtre en W/(m².K)
+        type: number
+      ug:
+        title: Coefficient de transmission thermique du vitrage en W/(m².K)
+        type: number
+      sse:
+        title: Surface sud équivalente de la baie en m²
+        type: number
+      sw:
+        title: Facteur de transmission solaire de la baie
+        type: number
+      fe:
+        title: Facteur d'ensoleillement de la baie
+        type: number
+      c1:
+        title: Coefficient de correction d'ensoleillement de la baie
+        type: number
+    required:
+      - sdep
+      - b
+      - dp
+      - u
+      - deltar
+      - uw
+      - ug
+      - sse
+      - sw
+      - fe
+      - c1
+
 oneOf:
   - title: Baie en brique de verre
     type: object
@@ -316,9 +376,12 @@ oneOf:
             const: brique_verre
       menuiserie:
         const: null
+        default: null
     required:
       - type
       - vitrage
+      - menuiserie
+
   - title: Baie en polycarbonate
     type: object
     properties:
@@ -334,6 +397,7 @@ oneOf:
     required:
       - type
       - vitrage
+
   - title: Fenêtre ou porte fenêtre
     type: object
     properties:

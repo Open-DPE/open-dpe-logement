@@ -1,5 +1,10 @@
-import type { Consommations, UUID } from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { Consommations, UUID } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
+
+export const isInstallation = createGuard<Installation>(
+	SCHEMA_KEYS["ventilation/installation"],
+);
 
 /**
  * @see https://schemas.open-dpe.fr/ventilation/installation
@@ -28,6 +33,7 @@ export type InstallationNaturelle = InstallationGeneric<{
 	type: TypeVentilationNaturelle;
 	annee_installation: null;
 	installation_collective: null;
+	presence_echangeur_thermique: null;
 }>;
 
 export type InstallationMecanique = InstallationGeneric<{
@@ -48,6 +54,8 @@ export type InstallationPuitClimatique = InstallationGeneric<{
 
 export type InstallationData = {
 	rdim: number;
+	pvent_moy: number;
+	hvent: number;
 	qvarep_conv: number;
 	qvasouf_conv: number;
 	smea_conv: number;

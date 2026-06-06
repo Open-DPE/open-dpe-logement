@@ -10,14 +10,25 @@ properties:
     items:
       $ref: /production/panneau-photovoltaique
   data:
+    $ref: "#/$defs/data"
+
+required:
+  - panneaux_photovoltaiques
+
+$defs:
+  data:
     title: Données calculées
     type: object
     readOnly: true
     additionalProperties: false
     properties:
       ppv:
-        $ref: /production/common#/$defs/ppv
-    required:
-      - ppv
-required:
-  - panneaux_photovoltaiques
+        title: Production photovoltaïque totale en kWh/an
+        type: number
+      celec_ac:
+        title: Électricité photovoltaïque autoconsommée en kWh/an
+        type: number
+      tapl:
+        title: Coefficient de calage du taux d'auto-production photovoltaïque
+        type: number
+    required: [ppv, celec_ac, tapl]

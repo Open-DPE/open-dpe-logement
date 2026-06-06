@@ -1,3 +1,4 @@
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import * as baie from "./baie.js";
 import * as common from "./common.js";
 import * as localNonChauffe from "./local-non-chauffe.js";
@@ -8,9 +9,9 @@ import * as plancherBas from "./plancher-bas.js";
 import * as plancherHaut from "./plancher-haut.js";
 import * as pontThermique from "./pont-thermique.js";
 import * as porte from "./porte.js";
-import type { UUID, NonEmptyArray } from "#/common/common.js";
+import type { UUID, NonEmptyArray } from "#/common/common";
 import { EntityNotFoundError } from "#/errors.js";
-import { buildEnum } from "#/utils.js";
+import { buildEnum, createGuard } from "#/utils.js";
 
 export {
 	baie,
@@ -24,6 +25,8 @@ export {
 	pontThermique,
 	porte,
 };
+
+export const isEnveloppe = createGuard<Enveloppe>(SCHEMA_KEYS["enveloppe"]);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe
@@ -48,43 +51,31 @@ export type EnveloppeWithData<T extends Enveloppe = Enveloppe> = T & {
 };
 
 export type EnveloppeData = {
-	inertie: common.Inertie;
-	parois_anciennes_lourdes: boolean;
-	deperditions: Deperditions;
-	permeabilite: Permeabilite;
-	confort_ete: ConfortEte;
-};
-
-export type Deperditions = {
 	gv: number;
 	ubat: number;
+	dp: number;
+	dp_murs: number;
+	dp_planchers_bas: number;
+	dp_planchers_hauts: number;
+	dp_baies: number;
+	dp_portes: number;
 	pt: number;
-	dp: {
-		total: number;
-		murs: number;
-		planchers_hauts: number;
-		planchers_bas: number;
-		baies: number;
-		portes: number;
-	};
-	dr: {
-		total: number;
-		hperm: number;
-		hvent: number;
-	};
-};
-
-export type Permeabilite = {
-	q4pa_conv: number;
-	presence_joints_menuiserie: boolean;
-};
-
-export type ConfortEte = {
-	inertie_lourde: boolean;
-	isolation_plancher_haut: boolean | null;
+	dr: number;
+	sdep: number;
+	sdep_murs: number;
+	sdep_planchers_bas: number;
+	sdep_planchers_hauts: number;
+	sdep_baies: number;
+	sdep_portes: number;
+	inertie: common.Inertie;
+	hperm: number;
+	hvent: number;
+	presence_joints: boolean;
+	parois_anciennes: boolean;
+	isolation_planchers_hauts: boolean | null;
 	presence_protection_solaire: boolean | null;
 	logement_traversant: boolean | null;
-	presence_brasseurs_air: boolean | null;
+	sse: number;
 };
 
 export type Paroi =

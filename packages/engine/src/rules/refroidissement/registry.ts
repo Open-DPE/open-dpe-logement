@@ -5,6 +5,7 @@ import * as rules from "./rules.js";
 export const ID = "refroidissement";
 
 export const RULES = {
+	consommations: "consommations",
 	cfr: "cfr",
 	cfr_elec: "cfr_elec",
 	caux: "caux",
@@ -23,6 +24,7 @@ export const RULES = {
 
 export type Results = {
 	[ID]: {
+		[RULES.consommations]: ReturnType<typeof rules.consommations>;
 		[RULES.cfr]: ReturnType<typeof rules.cfr>;
 		[RULES.cfr_elec]: ReturnType<typeof rules.cfr_elec>;
 		[RULES.caux]: ReturnType<typeof rules.caux>;

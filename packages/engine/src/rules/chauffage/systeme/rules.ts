@@ -4,6 +4,7 @@ import * as batiment from "#rules/batiment/registry.js";
 import * as common from "#rules/common/formulas.js";
 import * as climat from "#rules/climat/registry.js";
 import * as enveloppe from "#rules/enveloppe/registry.js";
+import * as production from "#rules/production/registry.js";
 import * as chauffage from "#rules/chauffage/registry.js";
 import * as emetteurRules from "#rules/chauffage/emetteur/index.js";
 import * as generateurRules from "#rules/chauffage/generateur/index.js";
@@ -14,8 +15,12 @@ import { ID, RULES } from "./registry.js";
 export function register(ctx: Context): void {
 	ctx.diagnostic.chauffage.installations.forEach((i) => {
 		i.systemes.forEach((s) => {
+			ctx.register(ID, RULES.consommations, s, () => consommations(ctx, s));
 			ctx.register(ID, RULES.cch, s, () => cch(ctx, i, s));
+			ctx.register(ID, RULES.cch_elec, s, () => cch_elec(ctx, i, s));
+			ctx.register(ID, RULES.cch_enr, s, () => cch_enr(ctx, s));
 			ctx.register(ID, RULES.caux_dist, s, () => caux_dist(ctx, s));
+			ctx.register(ID, RULES.caux_dist_enr, s, () => caux_dist_enr(ctx, s));
 			ctx.register(ID, RULES.rdim, s, () => rdim(ctx, i, s));
 			ctx.register(ID, RULES.pch, s, () => pch(ctx, i, s));
 			ctx.register(ID, RULES.pcircem, s, () => pcircem(ctx, i, s));
@@ -37,6 +42,21 @@ type Emission = {
 	presence_robinet_thermostatique: boolean | null;
 };
 
+export function consommations(
+	ctx: Context,
+	systeme: Systeme,
+): ReturnType<typeof formulas.calcule_consommations> {
+	const generateur = prepare_generateur(ctx, systeme);
+	return formulas.calcule_consommations({
+		cch: ctx.resolve(ID, RULES.cch, systeme),
+		cch_enr: ctx.resolve(ID, RULES.cch_enr, systeme),
+		caux_dist: ctx.resolve(ID, RULES.caux_dist, systeme),
+		caux_dist_enr: ctx.resolve(ID, RULES.caux_dist_enr, systeme),
+		energie: generateur.energie_generateur,
+		reseau_id: generateur.reseau_id,
+	});
+}
+
 export function cch(
 	ctx: Context,
 	installation: Installation,
@@ -45,6 +65,29 @@ export function cch(
 	return formulas.calcule_cch({
 		cch1: cch1(ctx, installation, systeme),
 		cch2: cch2(ctx, installation, systeme),
+	});
+}
+
+export function cch_enr(
+	ctx: Context,
+	systeme: Systeme,
+): ReturnType<typeof formulas.calcule_cch_enr> {
+	return formulas.calcule_cch_enr({
+		celec: ctx.resolve(production.ID, production.RULES.celec),
+		celec_ac: ctx.resolve(production.ID, production.RULES.celec_ac),
+		cch_elec: ctx.resolve(ID, RULES.cch_elec, systeme),
+	});
+}
+
+export function cch_elec(
+	ctx: Context,
+	installation: Installation,
+	systeme: Systeme,
+): ReturnType<typeof formulas.calcule_cch_elec> {
+	const generateur = prepare_generateur(ctx, systeme);
+	return formulas.calcule_cch_elec({
+		cch1: cch1(ctx, installation, systeme),
+		energie_generateur: generateur.energie_generateur,
 	});
 }
 
@@ -83,6 +126,17 @@ export function caux_dist(
 	return formulas.calcule_caux_dist({
 		pcircem: ctx.resolve(ID, RULES.pcircem, systeme),
 		nref: ctx.resolve(chauffage.ID, chauffage.RULES.nref),
+	});
+}
+
+export function caux_dist_enr(
+	ctx: Context,
+	systeme: Systeme,
+): ReturnType<typeof formulas.calcule_caux_dist_enr> {
+	return formulas.calcule_caux_dist_enr({
+		celec: ctx.resolve(production.ID, production.RULES.celec),
+		celec_ac: ctx.resolve(production.ID, production.RULES.celec_ac),
+		caux_dist: ctx.resolve(ID, RULES.caux_dist, systeme),
 	});
 }
 
@@ -388,8 +442,10 @@ export function cch1_e(
 	emission: Emission,
 ): ReturnType<typeof formulas.emission.calcule_cch1> {
 	return ctx.once(ID, `cch1`, emission, () => {
+		const generateur = prepare_generateur(ctx, systeme);
 		return formulas.emission.calcule_cch1({
 			zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+			pac_hybride: generateurRules.formulas.utils.is_pac_hybride(generateur),
 			bch: bch(ctx, installation, systeme),
 			fch: ctx.resolve(
 				installationRules.ID,
@@ -416,8 +472,10 @@ export function cch2_e(
 	emission: Emission,
 ): ReturnType<typeof formulas.emission.calcule_cch2> {
 	return ctx.once(ID, `cch2`, emission, () => {
+		const generateur = prepare_generateur(ctx, systeme);
 		return formulas.emission.calcule_cch2({
 			zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+			pac_hybride: generateurRules.formulas.utils.is_pac_hybride(generateur),
 			bch: bch(ctx, installation, systeme),
 			fch: ctx.resolve(
 				installationRules.ID,
@@ -443,13 +501,15 @@ export function ich_e(
 	systeme: Systeme,
 	emission: Emission,
 ): ReturnType<typeof formulas.calcule_ich> {
-	return ctx.once(ID, `ich`, systeme, () =>
-		formulas.emission.calcule_ich({
+	return ctx.once(ID, `ich`, systeme, () => {
+		const generateur = prepare_generateur(ctx, systeme);
+		return formulas.emission.calcule_ich({
 			zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+			pac_hybride: generateurRules.formulas.utils.is_pac_hybride(generateur),
 			ich1: ich1_e(ctx, installation, systeme, emission),
 			ich2: ich2_e(ctx, installation, systeme, emission),
-		}),
-	);
+		});
+	});
 }
 
 export function ich1_e(
@@ -619,6 +679,7 @@ function prepare_generateur(ctx: Context, systeme: Systeme) {
 			presence_regulation:
 				generateurRules.rules.presence_regulation(generateur),
 			cascade: generateur.position.cascade,
+			reseau_id: generateur.position.reseau_chaleur_id,
 			pn_saisi: generateur.signaletique.pn,
 			pn: ctx.resolve(generateurRules.ID, generateurRules.RULES.pn, generateur),
 			rpn:
@@ -692,4 +753,22 @@ function isolation_reseau(
 	return formulas.set_isolation_reseau({
 		isolation_reseau: systeme.reseau?.isolation ?? null,
 	});
+}
+
+export function applique(ctx: Context, item: Systeme): models.chauffage.systeme.SystemeWithData {
+	return {
+		...item,
+		data: {
+			rdim: ctx.resolve(ID, RULES.rdim, item),
+			pch: ctx.resolve(ID, RULES.pch, item),
+			int: ctx.resolve(ID, RULES.int, item),
+			ich: ctx.resolve(ID, RULES.ich, item),
+			rd: ctx.resolve(ID, RULES.rd, item),
+			re: ctx.resolve(ID, RULES.re, item),
+			rg: ctx.resolve(ID, RULES.rg, item),
+			rr: ctx.resolve(ID, RULES.rr, item),
+			pcircem: ctx.resolve(ID, RULES.pcircem, item),
+			consommations: ctx.resolve(ID, RULES.consommations, item),
+		},
+	};
 }

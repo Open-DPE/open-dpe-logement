@@ -1,0 +1,144 @@
+$id: https://schemas.open-dpe.fr/ecs/generateur-thermodynamique
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Générateur thermodynamique
+type: object
+unevaluatedProperties: false
+
+allOf:
+  - $ref: /ecs/generateur-base
+
+properties:
+  type:
+    enum:
+      - cet_air_ambiant
+      - cet_air_exterieur
+      - cet_air_extrait
+      - pac_double_service
+  energie:
+    const: electricite
+  position:
+    type: object
+    properties:
+      reseau_chaleur_id:
+        const: null
+        default: null
+      position_chauffe_eau:
+        const: null
+        default: null
+    required:
+      - reseau_chaleur_id
+      - position_chauffe_eau
+  signaletique:
+    type: object
+    properties:
+      label:
+        const: null
+        default: null
+    required:
+      - label
+required:
+  - type
+  - energie
+  - position
+  - signaletique
+
+oneOf:
+  - title: Chauffe-eau thermodynamique
+    type: object
+    properties:
+      type:
+        enum: [cet_air_ambiant, cet_air_exterieur, cet_air_extrait]
+      bienergie:
+        const: null
+        default: null
+      position:
+        type: object
+        properties:
+          generateur_mixte_id:
+            const: null
+            default: null
+          generateur_multi_batiment:
+            const: false
+            default: false
+        required:
+          - generateur_mixte_id
+          - generateur_multi_batiment
+      signaletique:
+        type: object
+        properties:
+          mode_combustion:
+            const: null
+            default: null
+          presence_ventouse:
+            const: null
+            default: null
+          pveilleuse:
+            const: null
+            default: null
+          qp0:
+            const: null
+            default: null
+          rpn:
+            const: null
+            default: null
+        required:
+          - mode_combustion
+          - presence_ventouse
+          - pveilleuse
+          - qp0
+          - rpn
+    required:
+      - type
+      - position
+      - signaletique
+
+  - title: PAC double service
+    type: object
+    properties:
+      type:
+        const: pac_double_service
+      bienergie:
+        const: null
+        default: null
+      signaletique:
+        type: object
+        properties:
+          mode_combustion:
+            const: null
+            default: null
+          presence_ventouse:
+            const: null
+            default: null
+          pveilleuse:
+            const: null
+            default: null
+          qp0:
+            const: null
+            default: null
+          rpn:
+            const: null
+            default: null
+        required:
+          - mode_combustion
+          - presence_ventouse
+          - pveilleuse
+          - qp0
+          - rpn
+    required:
+      - type
+      - bienergie
+      - position
+      - signaletique
+
+  - title: PAC hybride
+    type: object
+    properties:
+      type:
+        const: pac_double_service
+      bienergie:
+        type: string
+        x-enum: energie
+        enum: [gaz_naturel, gpl, fioul]
+    required:
+      - type
+      - bienergie

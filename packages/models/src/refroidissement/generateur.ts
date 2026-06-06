@@ -1,5 +1,10 @@
-import type { Consommations, Energie, UUID } from "../common/common.js";
-import { buildEnum } from "../utils.js";
+import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
+import type { Consommations, Energie, UUID } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils";
+
+export const isGenerateur = createGuard<Generateur>(
+	SCHEMA_KEYS["refroidissement/generateur"],
+);
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement/generateur

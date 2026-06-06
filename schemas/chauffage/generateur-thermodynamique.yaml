@@ -1,0 +1,125 @@
+$id: https://schemas.open-dpe.fr/chauffage/generateur-thermodynamique
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Générateur thermodynamique
+type: object
+unevaluatedProperties: false
+
+allOf:
+  - $ref: /chauffage/generateur-base
+
+properties:
+  type:
+    enum:
+      - pac_air_air
+      - pac_air_eau
+      - pac_eau_eau
+      - pac_eau_glycolee_eau
+      - pac_geothermique
+  energie:
+    const: electricite
+  position:
+    type: object
+    properties:
+      reseau_chaleur_id:
+        const: null
+        default: null
+    required:
+      - reseau_chaleur_id
+required:
+  - type
+  - energie
+  - position
+
+oneOf:
+  - title: Pompe à chaleur classique
+    type: object
+    properties:
+      bienergie:
+        const: null
+        default: null
+      position:
+        type: object
+        properties:
+          cascade:
+            const: null
+            default: null
+          position_chaudiere:
+            const: null
+            default: null
+        required:
+          - position_chaudiere
+          - cascade
+      signaletique:
+        type: object
+        properties:
+          label:
+            const: null
+            default: null
+          mode_combustion:
+            const: null
+            default: null
+          presence_ventouse:
+            const: null
+            default: null
+          presence_regulation:
+            const: null
+            default: null
+          pveilleuse:
+            const: null
+            default: null
+          qp0:
+            const: null
+            default: null
+          rpn:
+            const: null
+            default: null
+          rpint:
+            const: null
+            default: null
+          tfonc30:
+            const: null
+            default: null
+          tfonc100:
+            const: null
+            default: null
+        required:
+          - label
+          - mode_combustion
+          - presence_ventouse
+          - presence_regulation
+          - pveilleuse
+          - qp0
+          - rpn
+          - rpint
+          - tfonc30
+          - tfonc100
+    required:
+      - type
+      - energie
+      - bienergie
+      - position
+      - signaletique
+
+  - title: Pompe à chaleur hybride
+    properties:
+      type:
+        enum:
+          - pac_air_eau
+          - pac_eau_eau
+          - pac_eau_glycolee_eau
+          - pac_geothermique
+      bienergie:
+        x-enum: energie
+        enum: [gaz_naturel, gpl, fioul]
+      signaletique:
+        type: object
+        properties:
+          label:
+            const: null
+            default: null
+        required:
+          - label
+    required:
+      - type
+      - bienergie
+      - signaletique

@@ -20,6 +20,21 @@ enveloppe.isolation_murs_plafonds:
   description: Isolation majoritaire des murs et des plafonds
   type: boolean
 
+enveloppe.isolation_planchers_hauts:
+  id: enveloppe.isolation_planchers_hauts
+  description: Isolation majoritaire des planchers hauts
+  type: [boolean, "null"]
+
+enveloppe.presence_protection_solaire:
+  id: enveloppe.presence_protection_solaire
+  description: Présence de protections solaires
+  type: boolean
+
+enveloppe.logement_traversant:
+  id: enveloppe.logement_traversant
+  description: Logement traversant
+  type: boolean
+
 enveloppe.sse:
   id: enveloppe.sse
   description: Surface sud équivalente de l'enveloppe

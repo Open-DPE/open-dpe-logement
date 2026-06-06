@@ -2,6 +2,7 @@ import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "#rules/common/formulas.js";
 import * as climat from "#rules/climat/formulas.js";
+import * as production from "#rules/production/formulas.js";
 import * as chauffage from "#rules/chauffage/formulas.js";
 import * as emetteur from "#rules/chauffage/emetteur/formulas.js";
 import * as installation from "#rules/chauffage/installation/formulas.js";
@@ -9,10 +10,33 @@ import * as systeme from "#rules/chauffage/systeme/formulas.js";
 import * as generateurEcs from "#rules/ecs/generateur/formulas.js";
 import * as utils from "./utils.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois, reduceParMois } from "#utils/helpers.js";
+import { createParMois } from "#utils/helpers.js";
 import { evaluate } from "#utils/math.js";
 
 export { utils };
+
+/**
+ * @doctrine chauffage.generateur.cef
+ * @doctrine chauffage.generateur.cep
+ * @doctrine chauffage.generateur.eges
+ * @return Consommations par usage et par énergie du générateur de chauffage
+ */
+export function calcule_consommations(props: {
+	consommations: ReturnType<typeof systeme.calcule_consommations>[];
+	caux_gen: ReturnType<typeof calcule_caux_gen>;
+	caux_gen_enr: ReturnType<typeof calcule_caux_gen_enr>;
+}): models.common.Consommations {
+	return models.common.mergeConsommations(
+		...props.consommations,
+		common.calcule_consommations({
+			cef: props.caux_gen,
+			cef_enr: props.caux_gen_enr,
+			usage: models.common.UsageEnum.auxiliaire,
+			energie: models.common.EnergieEnum.electricite,
+			reseau_id: null,
+		}),
+	);
+}
 
 /**
  * @doctrine chauffage.generateur.cch
@@ -29,27 +53,40 @@ export function calcule_cch(props: {
  * @return Consommation d'électricité du générateur chauffage en kWh/an
  */
 export function calcule_cch_elec(props: {
-	cch: ReturnType<typeof calcule_cch>;
-	energie: ReturnType<typeof set_energie_generateur>;
+	cch_elec: ReturnType<typeof systeme.calcule_cch_elec>[];
 }): number {
-	return props.energie === models.common.EnergieEnum.electricite
-		? props.cch
-		: 0;
+	return props.cch_elec.reduce((acc, val) => acc + val, 0);
 }
 
 /**
- * @doctrine chauffage.generateur.caux
+ * @doctrine chauffage.generateur.caux_gen
  * @return Consommations de l'auxiliaire de génération de chauffage en kWh/an
  */
-export function calcule_caux(props: {
+export function calcule_caux_gen(props: {
 	bch: ReturnType<typeof chauffage.calcule_bch>;
 	pn: ReturnType<typeof calcule_pn>;
 	paux: ReturnType<typeof calcule_paux>;
 	rdim: ReturnType<typeof calcule_rdim>;
 }): number {
 	const { pn, paux, rdim } = props;
-	const bch = reduceParMois(props.bch);
+	const bch = models.common.reduceParMois(props.bch);
 	return (paux * bch * rdim) / pn;
+}
+
+/**
+ * @doctrine chauffage.generateur.caux_gen_enr
+ * @return Consommations d'électricité renouvelable de l'auxiliaire de génération de chauffage en kWh/an
+ */
+export function calcule_caux_gen_enr(props: {
+	celec: ReturnType<typeof production.calcule_celec>;
+	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
+	caux_gen: ReturnType<typeof calcule_caux_gen>;
+}): number {
+	const caux_gen = props.caux_gen;
+	const celec = props.celec.chauffage;
+	const celec_ac = props.celec_ac.chauffage;
+	const p_celec_ac = celec ? caux_gen / celec : 0;
+	return celec_ac * p_celec_ac;
 }
 
 /**

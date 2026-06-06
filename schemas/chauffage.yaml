@@ -22,45 +22,50 @@ properties:
     items:
       $ref: /chauffage/installation
   data:
+    $ref: "#/$defs/data"
+
+required:
+  - emetteurs
+  - generateurs
+  - installations
+
+$defs:
+  data:
     title: Données calculées
     type: object
     readOnly: true
     additionalProperties: false
     properties:
-      effet_joule:
-        title: Effet Joule
-        type: boolean
-      f:
-        title: Fraction des besoins de chauffage couverts par les apports gratuits
+      bch:
+        title: Besoins de chauffage en kWh/an
         type: number
-        minimum: 0
-        maximum: 1
-      ai:
-        title: Apports internes
-        $ref: /common/primitives#/$defs/apports
+      pch:
+        title: Puissance conventionnelle de chauffage en kW
+        type: number
       as:
-        title: Apports solaires
-        $ref: /common/primitives#/$defs/apports
-      bef:
-        $ref: /common/primitives#/$defs/bef
-      ich:
-        title: Inverse du rendement moyen
+        title: Apports solaires en kWh/an
         type: number
-        minimum: 0
-      pertes:
-        $ref: /common/components#/$defs/pertes
-      consommations:
-        $ref: /common/components#/$defs/consommations
+      ai:
+        title: Apports internes en kWh/an
+        type: number
+      qgw_rec:
+        title: Pertes de stockage récupérables en Wh/an
+        type: number
+      qdw_rec:
+        title: Pertes de distribution d'eau chaude sanitaire récupérables en Wh/an
+        type: number
+      qgen_ecs_rec:
+        title: Pertes de génération d'eau chaude sanitaire récupérables en Wh/an
+        type: number
+      effet_joule:
+        title: Installation chauffée par effet joule
+        type: boolean
     required:
-      - effet_joule
-      - f
-      - ai
+      - bch
+      - pch
       - as
-      - bef
-      - ich
-      - pertes
-      - consommations
-required:
-  - emetteurs
-  - generateurs
-  - installations
+      - ai
+      - qgw_rec
+      - qdw_rec
+      - qgen_ecs_rec
+      - effet_joule

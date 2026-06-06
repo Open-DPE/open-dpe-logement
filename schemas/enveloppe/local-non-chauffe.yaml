@@ -5,9 +5,9 @@ type: object
 unevaluatedProperties: false
 properties:
   id:
-    $ref: /common/primitives#/$defs/id
+    $ref: /common#/$defs/id
   description:
-    $ref: /common/primitives#/$defs/description
+    $ref: /common#/$defs/description
   type:
     title: Type
     type: string
@@ -30,36 +30,22 @@ properties:
     title: Liste des parois
     type: array
     items:
-      $ref: "#/$defs/paroi"
+      $ref: /enveloppe/local-non-chauffe/paroi
   baies:
     title: Liste des baies
     type: array
     items:
-      $ref: "#/$defs/baie"
+      $ref: /enveloppe/local-non-chauffe/baie
   data:
-    title: Données calculées
-    type: object
-    readOnly: true
-    additionalProperties: false
-    properties:
-      b:
-        title: Coefficient de réduction des déperditions thermiques
-        type: number
-        minimum: 0
-        maximum: 1
-      sse:
-        title: Surface sud équivalente en m²
-        type: number
-        minimum: 0
-    required:
-      - b
-      - sse
+    $ref: "#/$defs/data"
+
 required:
   - id
   - description
   - type
   - parois
   - baies
+
 anyOf:
   - properties:
       parois:
@@ -71,127 +57,39 @@ anyOf:
         minItems: 1
     required:
       - baies
+
 $defs:
-  paroi:
-    title: Paroi
+  data:
+    title: Données calculées
     type: object
+    readOnly: true
     additionalProperties: false
     properties:
-      id:
-        $ref: /common/primitives#/$defs/id
-      description:
-        $ref: /common/primitives#/$defs/description
-      isolation:
-        title: État d'isolation de la paroi
-        type: [boolean, "null"]
-      position:
-        title: Position
-        type: object
-        properties:
-          mitoyennete:
-            $ref: /enveloppe/common/primitives#/$defs/mitoyennete
-          surface:
-            $ref: /common/primitives#/$defs/surface
-        required:
-          - mitoyennete
-          - surface
-    required:
-      - id
-      - description
-      - isolation
-      - position
-  baie:
-    title: Baie
-    type: object
-    unevaluatedProperties: false
-    properties:
-      id:
-        $ref: /common/primitives#/$defs/id
-      description:
-        $ref: /common/primitives#/$defs/description
-      type_vitrage:
-        title: Type
-        type: [string, "null"]
-        x-enum: enveloppe:baie:type-vitrage
-        enum:
-          - brique_verre
-          - polycarbonate
-          - simple_vitrage
-          - double_vitrage
-          - double_vitrage_fe
-          - triple_vitrage
-          - triple_vitrage_fe
-          - null
-      materiau_menuiserie:
-        title: Matériau
-        type: [string, "null"]
-        x-enum: enveloppe:baie:materiau
-        enum: [pvc, bois, bois_metal, metal, null]
-      presence_rupteur_pont_thermique:
-        title: Présence d'un rupteur de pont thermique
-        type: [boolean, "null"]
-      position:
-        title: Position de la baie
-        type: object
-        unevaluatedProperties: false
-        properties:
-          surface:
-            $ref: /common/primitives#/$defs/surface
-          mitoyennete:
-            $ref: /enveloppe/common/primitives#/$defs/mitoyennete
-          orientation:
-            $ref: /enveloppe/common/primitives#/$defs/orientation
-          inclinaison:
-            $ref: /common/primitives#/$defs/inclinaison
-        required:
-          - surface
-          - mitoyennete
-          - inclinaison
-          - orientation
-        oneOf:
-          - title: Baie horizontale
-            type: object
-            properties:
-              inclinaison:
-                const: 0
-              orientation:
-                const: horizontale
-            required:
-              - inclinaison
-              - orientation
-          - title: Autres cas
-            type: object
-            properties:
-              inclinaison:
-                exclusiveMinimum: 0
-              orientation:
-                enum: [nord, est, sud, ouest]
-            required:
-              - inclinaison
-              - orientation
-    required:
-      - id
-      - description
-      - materiau_menuiserie
-      - type_vitrage
-      - position
-    discriminator:
-      propertyName: type_vitrage
-    oneOf:
-      - title: Baie vitrée
-        type: object
-        properties:
-          type_vitrage:
-            enum: [brique_verre, polycarbonate]
-          materiau_menuiserie:
-            const: null
-        required:
-          - type_vitrage
-      - title: Autres cas
-        type: object
-        properties:
-          type_vitrage:
-            not:
-              enum: [brique_verre, polycarbonate]
-        required:
-          - type_vitrage
+      b:
+        title: Coefficient de réduction des déperditions thermiques du local non chauffé
+        type: number
+      aiu:
+        title: Surface des parois du local non chauffé donnant sur un espace chauffé en m²
+        type: number
+      aue:
+        title: Surface des parois du local non chauffé donnant sur l'extérieur en m²
+        type: number
+      isolation_aiu:
+        title: État d'isolation des parois du local non chauffé donnant sur un espace chauffé
+        type: boolean
+      isolation_aue:
+        title: État d'isolation des parois du local non chauffé donnant sur l'extérieur
+        type: boolean
+      sse:
+        title: Surface sud équivalente du local non chauffé en m²/an
+        type: number
+      orientations:
+        title: Orientations majoritaires du local non chauffé
+        type: array
+        items:
+          type: string
+          x-enum: orientation-cardinale
+      t:
+        title: Coefficient de transparence du local non chauffé
+        type: number
+    required: [b, aiu, aue, isolation_aiu, isolation_aue, sse, orientations, t]
