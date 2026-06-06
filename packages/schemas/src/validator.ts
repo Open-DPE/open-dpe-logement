@@ -5,7 +5,6 @@ import { type SchemaKey, SCHEMAS } from "./schemas";
 const ajv = new Ajv2020({
 	strict: false,
 	allErrors: true,
-	removeAdditional: true,
 	useDefaults: true,
 });
 
