@@ -1,9 +1,7 @@
-// Fichier de débogage — peut être supprimé.
 import { describe, it } from 'vitest'
 
 describe('debug', () => {
-  it('placeholder', () => {
-    // Fichier utilisé pendant le développement pour déboguer la validation AJV.
-    // Peut être supprimé.
+  it('placeholder — ce fichier peut être supprimé', () => {
+    // Fichier utilisé temporairement pour déboguer les fixtures.
   })
 })

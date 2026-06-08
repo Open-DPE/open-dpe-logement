@@ -42,6 +42,7 @@ export type Enveloppe = {
 	baies: baie.Baie[];
 	portes: porte.Porte[];
 	ponts_thermiques: pontThermique.PontThermique[];
+	masques: masque.Masque[];
 };
 
 export type EnveloppeWithData<T extends Enveloppe = Enveloppe> = T & {
@@ -70,9 +71,9 @@ export type EnveloppeData = {
 	hvent: number;
 	presence_joints: boolean;
 	parois_anciennes: boolean;
-	isolation_planchers_hauts: boolean | null;
-	presence_protection_solaire: boolean | null;
-	logement_traversant: boolean | null;
+	isolation_planchers_hauts: boolean;
+	presence_protection_solaire: boolean;
+	logement_traversant: boolean;
 	sse: number;
 };
 

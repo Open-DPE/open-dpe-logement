@@ -1,8 +1,4 @@
-import type {
-	UUID,
-	OrientationCardinale,
-	PositiveNumber,
-} from "#/common/common";
+import type { UUID, OrientationCardinale } from "#/common/common";
 import { buildEnum } from "#/utils.js";
 
 /**
@@ -70,7 +66,7 @@ export const TypeIsolationEnum = buildEnum(TYPES_ISOLATION);
 export type Position = PositionParoiLocalNonChauffe | PositionParoiAutres;
 
 export type PositionBase = {
-	surface: PositiveNumber;
+	surface: number;
 	mitoyennete: Mitoyennete;
 	local_non_chauffe_id: UUID | null;
 };
@@ -105,6 +101,6 @@ export type IsolationConnue = {
 	etat: true;
 	type: TypeIsolation;
 	annee_installation: number | null;
-	epaisseur: PositiveNumber | null;
-	resistance_thermique: PositiveNumber | null;
+	epaisseur: number | null;
+	resistance_thermique: number | null;
 };

@@ -99,14 +99,11 @@ oneOf:
           - ventilation_naturelle_conduit_entrees_air_hygroreglables
           - ventilation_naturelle_conduit
       installation_collective:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       presence_echangeur_thermique:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       annee_installation:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - installation_collective
@@ -139,8 +136,7 @@ oneOf:
           - ventilation_mecanique_conduit
           - ventilation_mecanique_insufflation
       presence_echangeur_thermique:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - presence_echangeur_thermique

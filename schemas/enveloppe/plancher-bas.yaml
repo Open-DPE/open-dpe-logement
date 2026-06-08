@@ -93,8 +93,7 @@ $defs:
           perimetre_ue:
             type: number
           local_non_chauffe_id:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - mitoyennete
           - surface_ue
@@ -112,11 +111,9 @@ $defs:
               - local_residentiel
               - local_non_accessible
           surface_ue:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           perimetre_ue:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - mitoyennete
           - surface_ue

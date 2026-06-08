@@ -45,8 +45,7 @@ oneOf:
       type:
         const: divise
       reseau:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - reseau
@@ -113,8 +112,7 @@ $defs:
           type_distribution:
             const: aeraulique
           temperature_distribution:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           emetteurs:
             type: array
             minItems: 0

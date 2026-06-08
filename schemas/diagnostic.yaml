@@ -17,6 +17,11 @@ properties:
   date_etablissement:
     title: Date d'établissement
     $ref: /common#/$defs/date
+  type:
+    title: Type de diagnostic
+    type: string
+    enum: [batiment, logement]
+    x-enum: type-diagnostic
   batiment:
     $ref: /batiment
   enveloppe:
@@ -45,6 +50,37 @@ required:
   - refroidissement
   - production
 
+oneOf:
+  - title: Diagnostic bâtiment
+    properties:
+      type:
+        const: batiment
+      batiment:
+        type: object
+        properties:
+          logement:
+            $ref: /common#/$defs/non_applicable
+        required:
+          - logement
+    required:
+      - type
+      - batiment
+
+  - title: Diagnostic logement
+    properties:
+      type:
+        const: logement
+      batiment:
+        type: object
+        properties:
+          logement:
+            type: object
+        required:
+          - logement
+    required:
+      - type
+      - batiment
+
 $defs:
   data:
     title: Données calculées
@@ -64,4 +100,26 @@ $defs:
       eges:
         title: Émissions de gaz à effet de serre en kgCO2/m².an
         type: number
-    required: [consommations, cef, cep, eges]
+      etiquette_energie:
+        title: Étiquette énergie
+        type: string
+        enum: [A, B, C, D, E, F, G]
+        x-enum: etiquette
+      etiquette_climat:
+        title: Étiquette climat
+        type: string
+        enum: [A, B, C, D, E, F, G]
+        x-enum: etiquette
+      confort_ete:
+        title: Confort d'été
+        type: [number, "null"]
+        enum: [1, 2, 3, null]
+        x-enum: confort-ete
+    required:
+      - consommations
+      - cef
+      - cep
+      - eges
+      - etiquette_energie
+      - etiquette_climat
+      - confort_ete

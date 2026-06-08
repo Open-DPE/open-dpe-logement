@@ -262,30 +262,29 @@ export function calcule_presence_joints(props: {
 
 /**
  * @doctrine enveloppe.isolation_planchers_hauts
- * @return État d'isolation majoritaire des planchers hauts (plus de 50% de la surface totale des planchers hauts)
+ * @return État d'isolation des planchers hauts
  */
 export function calcule_isolation_planchers_hauts(props: {
 	planchers_hauts: {
-		surface: number;
 		mitoyennete: models.enveloppe.common.Mitoyennete;
 		isolation: ReturnType<typeof plancherHaut.set_isolation>;
 	}[];
-}): boolean | null {
+}): boolean {
 	const planchers_hauts = props.planchers_hauts.filter(
-		({ mitoyennete }) =>
-			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur,
+		({ mitoyennete, isolation }) =>
+			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur &&
+			isolation === false,
 	);
-	if (planchers_hauts.length === 0) return null;
-	const s = planchers_hauts.reduce((acc, i) => acc + i.surface, 0);
-	const w = planchers_hauts.reduce(
-		(acc, i) => acc + (i.isolation ? i.surface : 0),
-		0,
-	);
-	return s === 0 ? null : w / s > 0.5;
+	return planchers_hauts.length === 0;
 }
 
 /**
  * @doctrine enveloppe.presence_protection_solaire
+ *
+ * FAUX si Une ou plusieurs baies orientées au Sud, à l’Est, à l’Ouest ou en toiture ne sont pas équipées
+ * de protection solaire extérieure, à l’exception des baies orientées au Sud, à l’Est et à l’Ouest dont la
+ * surface est strictement inférieure à 0,7 m² et si celles-ci représentent moins de 10% de la surface totale de baie
+ *
  * @return Présence majoritaire de protections solaires au niveau des baies (plus de 50% de la surface totale des baies)
  */
 export function calcule_presence_protection_solaire(props: {
@@ -295,15 +294,54 @@ export function calcule_presence_protection_solaire(props: {
 		mitoyennete: models.enveloppe.common.Mitoyennete;
 		type_fermeture: models.enveloppe.baie.TypeFermeture;
 	}[];
-}): boolean | null {
-	const baies = props.baies.filter(
+}): boolean {
+	const orientationsExposees: Set<models.enveloppe.common.Orientation> =
+		new Set([
+			models.common.OrientationEnum.sud,
+			models.common.OrientationEnum.est,
+			models.common.OrientationEnum.ouest,
+			models.enveloppe.common.OrientationHorizontale,
+		]);
+
+	// Baies extérieures orientées côtés exposés (Sud, Est, Ouest, toiture)
+	const baiesExposees = props.baies.filter(
 		({ mitoyennete, orientation }) =>
 			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur &&
-			orientation !== models.common.OrientationEnum.nord,
+			orientationsExposees.has(orientation),
 	);
-	if (baies.length === 0) return null;
-	const s = baies.reduce((acc, i) => acc + i.surface, 0);
-	const w = baies.reduce(
+
+	if (baiesExposees.length === 0) return true;
+
+	const surfaceTotale = baiesExposees.reduce((acc, i) => acc + i.surface, 0);
+	if (surfaceTotale === 0) return true;
+
+	// Exception : petites baies (< 0.7m²) hors toiture exclues si elles
+	// représentent moins de 10% de la surface totale des baies exposées
+	const surfacePetitesBaies = baiesExposees
+		.filter(
+			({ surface, orientation }) =>
+				surface < 0.7 &&
+				orientation !== models.enveloppe.common.OrientationHorizontale,
+		)
+		.reduce((acc, i) => acc + i.surface, 0);
+
+	const petitesBaiesNegligeables = surfacePetitesBaies / surfaceTotale < 0.1;
+
+	const baiesPrisesEnCompte = baiesExposees.filter(
+		({ surface, orientation }) =>
+			orientation === models.enveloppe.common.OrientationHorizontale ||
+			surface >= 0.7 ||
+			!petitesBaiesNegligeables,
+	);
+
+	if (baiesPrisesEnCompte.length === 0) return true;
+
+	const surfacePrisesEnCompte = baiesPrisesEnCompte.reduce(
+		(acc, i) => acc + i.surface,
+		0,
+	);
+
+	const surfaceProtegee = baiesPrisesEnCompte.reduce(
 		(acc, i) =>
 			acc +
 			(i.type_fermeture !==
@@ -312,7 +350,8 @@ export function calcule_presence_protection_solaire(props: {
 				: 0),
 		0,
 	);
-	return s === 0 ? null : w / s > 0.5;
+
+	return surfaceProtegee / surfacePrisesEnCompte > 0.5;
 }
 
 /**

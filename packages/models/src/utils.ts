@@ -12,6 +12,6 @@ export function buildEnum<T extends string | number>(
 
 export function createGuard<T>(schemaKey: SchemaKey) {
 	return function (data: unknown): data is T {
-		return validate(schemaKey, data) === true;
+		return validate(schemaKey, data).isValid;
 	};
 }

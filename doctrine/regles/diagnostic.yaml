@@ -33,3 +33,33 @@ diagnostic.eges:
     - ecs.eges
     - refroidissement.eges
     - ventilation.eges
+
+diagnostic.etiquette_energie:
+  id: diagnostic.etiquette_energie
+  description: Étiquette énergie
+  type: string
+  enum: [A, B, C, D, E, F, G]
+  dependances:
+    - diagnostic.cep
+    - diagnostic.eges
+    - climat.zone_climatique
+
+diagnostic.etiquette_climat:
+  id: diagnostic.etiquette_climat
+  description: Étiquette climat
+  type: string
+  enum: [A, B, C, D, E, F, G]
+  dependances:
+    - diagnostic.eges
+    - climat.zone_climatique
+
+diagnostic.confort_ete:
+  id: diagnostic.confort_ete
+  description: Confort d'été
+  type: [number, "null"]
+  enum: [1, 2, 3, null]
+  dependances:
+    - enveloppe.presence_protection_solaire
+    - enveloppe.isolation_planchers_hauts
+    - enveloppe.inertie
+    - enveloppe.logement_traversant

@@ -50,11 +50,9 @@ oneOf:
       hauteur:
         type: integer
       profondeur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       secteur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - hauteur
@@ -71,8 +69,7 @@ oneOf:
       secteur:
         type: string
       profondeur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - hauteur
@@ -87,14 +84,11 @@ oneOf:
           - paroi_laterale_sans_obstacle_au_sud
           - paroi_laterale_avec_obstacle_au_sud
       hauteur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       profondeur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       secteur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - hauteur
@@ -111,11 +105,9 @@ oneOf:
       profondeur:
         type: number
       hauteur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       secteur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - profondeur
@@ -130,11 +122,9 @@ oneOf:
       profondeur:
         type: number
       hauteur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       secteur:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - profondeur

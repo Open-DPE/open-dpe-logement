@@ -58,6 +58,11 @@ properties:
     type: array
     items:
       $ref: /enveloppe/pont-thermique
+  masques:
+    title: Liste des masques
+    type: array
+    items:
+      $ref: /enveloppe/masque
   data:
     $ref: "#/$defs/data"
 required:
@@ -72,6 +77,7 @@ required:
   - baies
   - portes
   - ponts_thermiques
+  - masques
 
 $defs:
   data:
@@ -149,7 +155,7 @@ $defs:
         type: boolean
       isolation_planchers_hauts:
         title: Isolation majoritaire des planchers hauts
-        type: [boolean, "null"]
+        type: boolean
       presence_protection_solaire:
         title: Présence majoritaire de protections solaires
         type: boolean

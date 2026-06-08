@@ -79,8 +79,7 @@ $defs:
           plancher_id:
             type: string
           ouverture_id:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - type
           - plancher_id
@@ -94,8 +93,7 @@ $defs:
           ouverture_id:
             type: string
           plancher_id:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - type
           - ouverture_id
@@ -105,11 +103,9 @@ $defs:
           type:
             enum: [plancher_intermediaire_mur, refend_mur]
           ouverture_id:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           plancher_id:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - type
           - pont_thermique_partiel

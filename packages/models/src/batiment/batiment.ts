@@ -1,4 +1,4 @@
-import type { Adresse, PositiveNumber } from "#/common/common";
+import type { Adresse } from "#/common/common";
 import { createGuard, buildEnum } from "#/utils";
 import * as appartement from "./appartement.js";
 
@@ -16,9 +16,9 @@ type BaseBatiment = {
 	annee_construction: number;
 	annee_renovation: number | null;
 	altitude: number;
-	logements: PositiveNumber;
-	surface_habitable: PositiveNumber;
-	hauteur_sous_plafond: PositiveNumber;
+	logements: number;
+	surface_habitable: number;
+	hauteur_sous_plafond: number;
 	materiaux_anciens: boolean;
 	rnb_id: string | null;
 	adresse: Adresse;
@@ -34,7 +34,7 @@ export type Maison = BaseBatiment & {
 
 export type Immeuble = BaseBatiment & {
 	type: typeof TypeBatimentEnum.immeuble;
-	logements: PositiveNumber;
+	logements: number;
 };
 
 export type BatimentWithData<T extends Batiment = Batiment> = T & {
@@ -50,8 +50,8 @@ export type BatimentData = {
 
 export type Logement = {
 	description: string;
-	surface_habitable: PositiveNumber;
-	hauteur_sous_plafond: PositiveNumber;
+	surface_habitable: number;
+	hauteur_sous_plafond: number;
 };
 
 export const TYPES_BATIMENT = ["maison", "immeuble"] as const;

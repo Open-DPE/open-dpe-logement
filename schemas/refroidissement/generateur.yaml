@@ -62,8 +62,7 @@ oneOf:
       energie:
         const: electricite
       reseau_froid_id:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - energie
@@ -80,8 +79,7 @@ oneOf:
           - gaz_naturel
           - gpl
       reseau_froid_id:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - energie

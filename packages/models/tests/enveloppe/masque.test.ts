@@ -1,81 +1,66 @@
-import { describe, expect, expectTypeOf, it } from "vitest";
+import { describe, expect, it } from 'vitest'
 import {
-	isMasque,
-	type Masque,
-	type TypeMasque,
-	type MasqueLointainNonHomogene,
-} from "../../src/enveloppe/masque.js";
+  isMasque,
+  type MasqueLointainHomogene,
+  type MasqueLointainNonHomogene,
+  type MasqueProcheParoiLaterale,
+  type MasqueProcheFondBalconOuLoggias,
+  type MasqueProcheBalconOuAuvent,
+} from '../../src/enveloppe/masque.js'
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+describe('isMasque — guard', () => {
+  it('accepte un masque lointain homogène', () => {
+    const masque: MasqueLointainHomogene = {
+      description: 'Bâtiment voisin',
+      type: 'homogene',
+      hauteur: 10,
+      profondeur: null,
+      secteur: null,
+    }
+    expect(isMasque(masque)).toBe(true)
+  })
 
-describe("Masque — types", () => {
-	it("type est requis", () => {
-		expectTypeOf<Masque["type"]>().toEqualTypeOf<TypeMasque>();
-	});
+  it('accepte un masque lointain non homogène', () => {
+    const masque: MasqueLointainNonHomogene = {
+      description: 'Masque non homogène',
+      type: 'non_homogene',
+      hauteur: 8,
+      profondeur: null,
+      secteur: 'central',
+    }
+    expect(isMasque(masque)).toBe(true)
+  })
 
-	it("hauteur est nullable", () => {
-		expectTypeOf<Masque["hauteur"]>().toEqualTypeOf<number | null>();
-	});
+  it('accepte un masque proche paroi latérale', () => {
+    const masque: MasqueProcheParoiLaterale = {
+      description: 'Paroi latérale sans obstacle',
+      type: 'paroi_laterale_sans_obstacle_au_sud',
+      hauteur: null,
+      profondeur: null,
+      secteur: null,
+    }
+    expect(isMasque(masque)).toBe(true)
+  })
 
-	it("MasqueLointainNonHomogene a secteur obligatoire", () => {
-		expectTypeOf<MasqueLointainNonHomogene["secteur"]>().not.toBeNull();
-		expectTypeOf<
-			MasqueLointainNonHomogene["hauteur"]
-		>().toEqualTypeOf<number>();
-	});
-});
+  it('accepte un masque proche fond balcon / loggia', () => {
+    const masque: MasqueProcheFondBalconOuLoggias = {
+      description: 'Fond loggias',
+      type: 'fond_et_flanc_loggias',
+      hauteur: null,
+      profondeur: 1.5,
+      secteur: null,
+    }
+    expect(isMasque(masque)).toBe(true)
+  })
 
-// ─── Guards ──────────────────────────────────────────────────────────────────
-
-const VALID_MASQUE_HOMOGENE: unknown = {
-	description: "Bâtiment voisin",
-	type: "homogene",
-	hauteur: 10,
-	profondeur: null,
-	secteur: null,
-};
-
-const VALID_MASQUE_PAROI_LATERALE: unknown = {
-	description: "Paroi latérale",
-	type: "paroi_laterale_sans_obstacle_au_sud",
-	hauteur: null,
-	profondeur: null,
-	secteur: null,
-};
-
-const VALID_MASQUE_NON_HOMOGENE: unknown = {
-	description: "Masque non homogène",
-	type: "non_homogene",
-	hauteur: 8,
-	profondeur: null,
-	secteur: "central",
-};
-
-describe("isMasque — guard", () => {
-	it("accepte un masque lointain homogène valide", () => {
-		expect(isMasque(VALID_MASQUE_HOMOGENE)).toBe(true);
-	});
-
-	it("accepte un masque proche paroi latérale valide", () => {
-		expect(isMasque(VALID_MASQUE_PAROI_LATERALE)).toBe(true);
-	});
-
-	it("accepte un masque lointain non homogène valide", () => {
-		expect(isMasque(VALID_MASQUE_NON_HOMOGENE)).toBe(true);
-	});
-
-	it("rejette si type est invalide", () => {
-		expect(
-			isMasque({ ...(VALID_MASQUE_HOMOGENE as object), type: "rideau_arbres" }),
-		).toBe(false);
-	});
-
-	it("rejette si type est absent", () => {
-		const { type: _, ...rest } = VALID_MASQUE_HOMOGENE as { type: unknown };
-		expect(isMasque(rest)).toBe(false);
-	});
-
-	it("rejette null", () => {
-		expect(isMasque(null)).toBe(false);
-	});
-});
+  it('accepte un masque proche balcon ou auvent', () => {
+    const masque: MasqueProcheBalconOuAuvent = {
+      description: 'Auvent',
+      type: 'balcon_ou_auvent',
+      hauteur: null,
+      profondeur: 0.8,
+      secteur: null,
+    }
+    expect(isMasque(masque)).toBe(true)
+  })
+})

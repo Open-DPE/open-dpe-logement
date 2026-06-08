@@ -1,5 +1,4 @@
 import type { Consommations, Energie, UUID } from "#/common/common";
-import type { NonNegativeNumber, PositiveNumber } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 
 export const isGenerateur = createGuard<Generateur>("/chauffage/generateur");
@@ -61,18 +60,18 @@ export type Position = {
 };
 
 export type Signaletique = {
-	pn: PositiveNumber | null;
+	pn: number | null;
 	label: Label | null;
-	scop: PositiveNumber | null;
+	scop: number | null;
 	mode_combustion: ModeCombustion | null;
 	presence_ventouse: boolean | null;
 	presence_regulation: boolean | null;
-	pveilleuse: NonNegativeNumber | null;
-	qp0: NonNegativeNumber | null;
-	rpn: PositiveNumber | null;
-	rpint: PositiveNumber | null;
-	tfonc30: PositiveNumber | null;
-	tfonc100: PositiveNumber | null;
+	pveilleuse: number | null;
+	qp0: number | null;
+	rpn: number | null;
+	rpint: number | null;
+	tfonc30: number | null;
+	tfonc100: number | null;
 };
 
 export type GenerateurData = {

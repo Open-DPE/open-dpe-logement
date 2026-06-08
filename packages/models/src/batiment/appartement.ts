@@ -1,4 +1,4 @@
-import type { PositiveNumber, UUID } from "#/common/common";
+import type { UUID } from "#/common/common";
 import { createGuard, buildEnum } from "#/utils";
 
 export const isAppartement = createGuard<Appartement>("/batiment/appartement");
@@ -9,8 +9,8 @@ export const isAppartement = createGuard<Appartement>("/batiment/appartement");
 export type Appartement = {
 	id: UUID;
 	description: string;
-	surface_habitable: PositiveNumber;
-	hauteur_sous_plafond: PositiveNumber;
+	surface_habitable: number;
+	hauteur_sous_plafond: number;
 	position: Position;
 	typologie: Typologie;
 };

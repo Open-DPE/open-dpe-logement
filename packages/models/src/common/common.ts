@@ -7,20 +7,6 @@ export function toNonEmptyArray<T>(arr: T[]): NonEmptyArray<T> {
 	return arr as NonEmptyArray<T>;
 }
 
-export type PositiveNumber = number & { readonly _brand: "positive" };
-
-export function toPositive(n: number): PositiveNumber {
-	if (n <= 0) throw new Error(`${n} n'est pas positif`);
-	return n as PositiveNumber;
-}
-
-export type NonNegativeNumber = number & { readonly _brand: "nonNegative" };
-
-export function toNonNegative(n: number): NonNegativeNumber {
-	if (n < 0) throw new Error(`${n} n'est pas non négatif`);
-	return n as NonNegativeNumber;
-}
-
 /**
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/id
  */

@@ -1,5 +1,5 @@
-import { createGuard } from "#/utils.js";
-import type { Consommations, UUID } from "#/common/common";
+import { buildEnum, createGuard } from "#/utils.js";
+import type { Consommations } from "#/common/common";
 import type { Chauffage } from "#/chauffage/chauffage.js";
 import type { Ecs } from "#/ecs/ecs.js";
 import type { Enveloppe } from "#/enveloppe/enveloppe.js";
@@ -14,8 +14,9 @@ export const isDiagnostic = createGuard<Diagnostic>("/diagnostic");
  * @see https://schemas.open-dpe.fr/diagnostic
  */
 export type Diagnostic = {
-	date_visite: Date;
-	date_etablissement: Date;
+	date_visite: string;
+	date_etablissement: string;
+	type: TypeDiagnostic;
 	batiment: Batiment;
 	enveloppe: Enveloppe;
 	chauffage: Chauffage;
@@ -34,4 +35,17 @@ export type DiagnosticData = {
 	cep: number;
 	eges: number;
 	consommations: Consommations;
+	etiquette_energie: Etiquette;
+	etiquette_climat: Etiquette;
+	confort_ete: ConfortEte | null;
 };
+
+export const TYPES_DIAGNOSTIC = ["batiment", "logement"] as const;
+export type TypeDiagnostic = (typeof TYPES_DIAGNOSTIC)[number];
+export const TypeDiagnosticEnum = buildEnum(TYPES_DIAGNOSTIC);
+
+export const ETIQUETTES = ["A", "B", "C", "D", "E", "F", "G"] as const;
+export type Etiquette = (typeof ETIQUETTES)[number];
+export const EtiquetteEnum = buildEnum(ETIQUETTES);
+
+export type ConfortEte = 1 | 2 | 3;

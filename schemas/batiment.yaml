@@ -45,7 +45,7 @@ properties:
   logement:
     oneOf:
       - $ref: "#/$defs/logement"
-      - const: null
+      - $ref: "/common#/$defs/non_applicable"
   data:
     $ref: "#/$defs/data"
 

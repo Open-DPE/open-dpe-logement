@@ -1,9 +1,15 @@
-// Fixtures réutilisables pour les tests de guards
+import type { UUID as UUIDType, PositiveNumber, Adresse } from '../src/common/common.js'
+import type { Isolation } from '../src/enveloppe/common.js'
 
-export const UUID = '550e8400-e29b-41d4-a716-446655440000'
-export const UUID2 = '550e8400-e29b-41d4-a716-446655440001'
+/** UUID de test n°1 */
+export const UUID = '550e8400-e29b-41d4-a716-446655440000' as unknown as UUIDType
+/** UUID de test n°2 */
+export const UUID2 = '550e8400-e29b-41d4-a716-446655440001' as unknown as UUIDType
 
-export const ADRESSE = {
+/** Convertit un nombre en PositiveNumber pour les fixtures de test */
+export const p = (n: number): PositiveNumber => n as unknown as PositiveNumber
+
+export const ADRESSE: Adresse = {
   ban_id: null,
   nom: '1 rue de la Paix',
   code_postal: '75001',
@@ -11,16 +17,10 @@ export const ADRESSE = {
   commune: 'Paris',
 }
 
-export const ISOLATION_SANS = {
+export const ISOLATION_SANS: Isolation = {
   etat: false,
   type: null,
   annee_installation: null,
   epaisseur: null,
   resistance_thermique: null,
-}
-
-export const POSITION_EXTERIEUR = {
-  surface: 20,
-  mitoyennete: 'exterieur',
-  local_non_chauffe_id: null,
 }

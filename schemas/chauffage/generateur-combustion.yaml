@@ -29,22 +29,19 @@ properties:
       - bois_plaquette
       - bois_granule
   bienergie:
-    const: null
-    default: null
+    $ref: "/common#/$defs/non_applicable"
   position:
     type: object
     properties:
       reseau_chaleur_id:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - reseau_chaleur_id
   signaletique:
     type: object
     properties:
       scop:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - scop
 required:
@@ -63,8 +60,7 @@ oneOf:
         type: object
         properties:
           label:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - label
     required:
@@ -81,8 +77,7 @@ oneOf:
         type: object
         properties:
           label:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - label
     required:
@@ -98,11 +93,9 @@ oneOf:
         type: object
         properties:
           cascade:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           position_chaudiere:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           generateur_collectif:
             const: false
             default: false
@@ -113,8 +106,7 @@ oneOf:
             const: true
             default: true
           generateur_mixte_id:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - position_chaudiere
           - cascade
@@ -130,29 +122,21 @@ oneOf:
             type: [string, "null"]
             enum: [flamme_verte, null]
           mode_combustion:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           presence_regulation:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           pveilleuse:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           qp0:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           rpn:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           rpint:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           tfonc30:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           tfonc100:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - label
           - mode_combustion
@@ -180,8 +164,7 @@ oneOf:
           mode_combustion:
             enum: [standard, condensation, null]
           label:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - mode_combustion
           - label
@@ -201,11 +184,9 @@ oneOf:
         type: object
         properties:
           cascade:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           position_chaudiere:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           generateur_collectif:
             const: false
             default: false
@@ -216,8 +197,7 @@ oneOf:
             const: true
             default: true
           generateur_mixte_id:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - position_chaudiere
           - cascade
@@ -234,26 +214,19 @@ oneOf:
             type: [string, "null"]
             enum: [flamme_verte, null]
           mode_combustion:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           presence_regulation:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           pveilleuse:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           qp0:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           rpint:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           tfonc30:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           tfonc100:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - label
           - mode_combustion

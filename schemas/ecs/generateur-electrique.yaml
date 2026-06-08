@@ -13,37 +13,29 @@ properties:
   energie:
     const: electricite
   bienergie:
-    const: null
-    default: null
+    $ref: "/common#/$defs/non_applicable"
   position:
     type: object
     properties:
       reseau_chaleur_id:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - reseau_chaleur_id
   signaletique:
     type: object
     properties:
       cop:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       mode_combustion:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       presence_ventouse:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       pveilleuse:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       qp0:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       rpn:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - cop
       - mode_combustion
@@ -67,16 +59,14 @@ oneOf:
         type: object
         properties:
           position_chauffe_eau:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - position_chauffe_eau
       signaletique:
         type: object
         properties:
           label:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - label
     required:
@@ -101,8 +91,7 @@ oneOf:
             const: false
             default: false
           generateur_mixte_id:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - position_chauffe_eau
           - generateur_collectif

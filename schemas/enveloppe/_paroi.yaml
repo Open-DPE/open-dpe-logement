@@ -82,8 +82,7 @@ $defs:
               - local_residentiel
               - local_non_accessible
           local_non_chauffe_id:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - mitoyennete
           - local_non_chauffe_id
@@ -122,17 +121,13 @@ $defs:
           etat:
             enum: [false, null]
           type:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           annee_installation:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           epaisseur:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           resistance_thermique:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - etat
           - type
@@ -146,17 +141,13 @@ $defs:
           etat:
             const: true
           type:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           annee_installation:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           epaisseur:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           resistance_thermique:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - etat
           - type

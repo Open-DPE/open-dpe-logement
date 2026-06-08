@@ -117,8 +117,7 @@ oneOf:
       installation_collective:
         const: false
       comptage_individuel:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       regulation_terminale:
         type: boolean
       programmation:
@@ -151,11 +150,9 @@ oneOf:
       installation_collective:
         const: false
       comptage_individuel:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       regulation_terminale:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       programmation:
         enum:
           - absent
@@ -171,8 +168,7 @@ oneOf:
             type:
               const: divise
             reseau:
-              const: null
-              default: null
+              $ref: "/common#/$defs/non_applicable"
           required:
             - type
             - reseau

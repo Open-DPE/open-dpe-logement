@@ -85,19 +85,40 @@ Une propriété `readOnly` ne DOIT PAS être présent dans le bloc `required`.
 
 - snake_case
 
-### Valeurs `null`
+### Polymorphisme
+
+Par convention, tous les champs d'un schéma doivent être renseignées.
+
+Une valeur non applicable dans un sous schéma doit être `null`.
+
+Exemple :
 
 ```yaml
 type: object
 properties:
-  # Valeur applicable qui peut être inconnue
   foo:
-    type: [number, "null"]
-  # Valeur non applicable
+    type: string
+    enum: [A, B]
   bar:
-    const: null
-    default: null
+    type: [number, "null"]
 required:
   - foo
   - bar
+
+oneOf:
+  - properties:
+      foo: { const: A }
+      bar: { type: "null", const: null, default: null }
+    required: [foo, bar]
+  - properties:
+      foo: { const: B }
+    required: [foo]
+
+```
+
+### Valeurs inconnues
+
+```yaml
+# "null" signifie ici inconnue
+type: [number, "null"]
 ```

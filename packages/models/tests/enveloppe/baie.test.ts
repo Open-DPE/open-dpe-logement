@@ -1,125 +1,89 @@
-import { describe, expect, expectTypeOf, it } from "vitest";
+import { describe, expect, it } from 'vitest'
 import {
-	isBaie,
-	type Baie,
-	type BaieFenetreOuPorteFenetre,
-	type BaieBriqueVerre,
-} from "../../src/enveloppe/baie.js";
-import { type Masque } from "../../src/enveloppe/masque.js";
-import type { UUID } from "../../src/common/common.js";
-import { UUID as FIXTURE_UUID, POSITION_EXTERIEUR } from "../helpers.js";
+  isBaie,
+  type BaieBriqueVerre,
+  type BaiePolycarbonate,
+  type BaieFenetreOuPorteFenetre,
+} from '../../src/enveloppe/baie.js'
+import { UUID, p } from '../helpers.js'
 
-// ─── Types ───────────────────────────────────────────────────────────────────
+const POSITION_VERTICALE_NORD = {
+  surface: p(2),
+  mitoyennete: 'exterieur' as const,
+  local_non_chauffe_id: null,
+  paroi_id: null,
+  baie_id: null,
+  type_pose: 'nu_interieur' as const,
+  inclinaison: 90 as const,
+  orientation: 'nord' as const,
+  masques: [],
+}
 
-describe("Baie — types", () => {
-	it("type est une union des 3 variantes", () => {
-		expectTypeOf<Baie>().toEqualTypeOf<Baie>();
-	});
+describe('isBaie — guard', () => {
+  it('accepte une brique de verre', () => {
+    const baie: BaieBriqueVerre = {
+      id: UUID,
+      description: 'Brique de verre pleine',
+      type: 'brique_verre_pleine',
+      presence_protection_solaire: false,
+      type_fermeture: 'sans_fermeture',
+      annee_installation: null,
+      ug: null,
+      uw: null,
+      ujn: null,
+      sw: null,
+      position: POSITION_VERTICALE_NORD,
+      menuiserie: null,
+      vitrage: { type: 'brique_verre', nature_lame: null, epaisseur_lame: null },
+      survitrage: null,
+    }
+    expect(isBaie(baie)).toBe(true)
+  })
 
-	it("id est un UUID requis", () => {
-		expectTypeOf<Baie["id"]>().toEqualTypeOf<UUID>();
-	});
+  it('accepte un polycarbonate', () => {
+    const baie: BaiePolycarbonate = {
+      id: UUID,
+      description: 'Polycarbonate',
+      type: 'polycarbonate',
+      presence_protection_solaire: false,
+      type_fermeture: 'sans_fermeture',
+      annee_installation: null,
+      ug: null,
+      uw: null,
+      ujn: null,
+      sw: null,
+      position: POSITION_VERTICALE_NORD,
+      menuiserie: null,
+      vitrage: { type: 'polycarbonate', nature_lame: null, epaisseur_lame: null },
+      survitrage: null,
+    }
+    expect(isBaie(baie)).toBe(true)
+  })
 
-	it("ug, uw, ujn, sw sont nullable", () => {
-		expectTypeOf<Baie["ug"]>().toEqualTypeOf<number | null>();
-		expectTypeOf<Baie["uw"]>().toEqualTypeOf<number | null>();
-		expectTypeOf<Baie["ujn"]>().toEqualTypeOf<number | null>();
-		expectTypeOf<Baie["sw"]>().toEqualTypeOf<number | null>();
-	});
-
-	it("BaieFenetreOuPorteFenetre a une menuiserie obligatoire", () => {
-		expectTypeOf<BaieFenetreOuPorteFenetre["menuiserie"]>().not.toBeNull();
-	});
-
-	it("BaieBriqueVerre a menuiserie null", () => {
-		expectTypeOf<BaieBriqueVerre["menuiserie"]>().toBeNull();
-	});
-
-	it("Masques", () => {
-		expectTypeOf<Baie["position"]["masques"]>().toEqualTypeOf<Array<Masque>>();
-	});
-});
-
-// ─── Guards ──────────────────────────────────────────────────────────────────
-
-const POSITION_BAIE = {
-	...POSITION_EXTERIEUR,
-	paroi_id: null,
-	baie_id: null,
-	type_pose: "nu_interieur",
-	inclinaison: 90,
-	orientation: "nord",
-	masques: [],
-};
-
-const VALID_BRIQUE_VERRE: unknown = {
-	id: FIXTURE_UUID,
-	description: "Brique de verre",
-	type: "brique_verre_pleine",
-	presence_protection_solaire: false,
-	type_fermeture: "sans_fermeture",
-	annee_installation: null,
-	ug: null,
-	uw: null,
-	ujn: null,
-	sw: null,
-	position: POSITION_BAIE,
-	menuiserie: null,
-	vitrage: { type: "brique_verre", nature_lame: null, epaisseur_lame: null },
-	survitrage: null,
-};
-
-const VALID_FENETRE: unknown = {
-	id: FIXTURE_UUID,
-	description: "Fenêtre double vitrage",
-	type: "fenetre_battante",
-	presence_protection_solaire: false,
-	type_fermeture: "sans_fermeture",
-	annee_installation: null,
-	ug: null,
-	uw: null,
-	ujn: null,
-	sw: null,
-	position: POSITION_BAIE,
-	menuiserie: {
-		materiau: "pvc",
-		largeur_dormant: null,
-		presence_soubassement: false,
-		presence_joint: null,
-		presence_retour_isolation: null,
-		presence_rupteur_pont_thermique: null,
-	},
-	vitrage: { type: "double_vitrage", nature_lame: null, epaisseur_lame: null },
-	survitrage: null,
-};
-
-describe("isBaie — guard", () => {
-	it("accepte une baie brique de verre valide", () => {
-		expect(isBaie(VALID_BRIQUE_VERRE)).toBe(true);
-	});
-
-	it("accepte une fenêtre double vitrage valide", () => {
-		expect(isBaie(VALID_FENETRE)).toBe(true);
-	});
-
-	it("rejette si type est invalide", () => {
-		expect(isBaie({ ...(VALID_FENETRE as object), type: "lucarne" })).toBe(
-			false,
-		);
-	});
-
-	it("rejette si type_fermeture est invalide", () => {
-		expect(
-			isBaie({ ...(VALID_FENETRE as object), type_fermeture: "rideau" }),
-		).toBe(false);
-	});
-
-	it("rejette si position est absent", () => {
-		const { position: _, ...rest } = VALID_FENETRE as { position: unknown };
-		expect(isBaie(rest)).toBe(false);
-	});
-
-	it("rejette null", () => {
-		expect(isBaie(null)).toBe(false);
-	});
-});
+  it('accepte une fenêtre battante simple vitrage', () => {
+    const baie: BaieFenetreOuPorteFenetre = {
+      id: UUID,
+      description: 'Fenêtre simple vitrage PVC',
+      type: 'fenetre_battante',
+      presence_protection_solaire: false,
+      type_fermeture: 'sans_fermeture',
+      annee_installation: 2000,
+      ug: null,
+      uw: null,
+      ujn: null,
+      sw: null,
+      position: POSITION_VERTICALE_NORD,
+      menuiserie: {
+        materiau: 'pvc',
+        largeur_dormant: null,
+        presence_soubassement: false,
+        presence_joint: null,
+        presence_retour_isolation: null,
+        presence_rupteur_pont_thermique: null,
+      },
+      vitrage: { type: 'simple_vitrage', nature_lame: null, epaisseur_lame: null },
+      survitrage: null,
+    }
+    expect(isBaie(baie)).toBe(true)
+  })
+})

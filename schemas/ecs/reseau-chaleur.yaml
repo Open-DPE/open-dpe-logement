@@ -13,8 +13,7 @@ properties:
   energie:
     const: reseau_chaleur
   bienergie:
-    const: null
-    default: null
+    $ref: "/common#/$defs/non_applicable"
   position:
     type: object
     properties:
@@ -28,8 +27,7 @@ properties:
         const: false
         default: false
       generateur_mixte_id:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       reseau_chaleur_id:
         type: [string, "null"]
     required:
@@ -42,29 +40,21 @@ properties:
     type: object
     properties:
       pn:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       cop:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       label:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       mode_combustion:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       presence_ventouse:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       pveilleuse:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       qp0:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       rpn:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - pn
       - cop

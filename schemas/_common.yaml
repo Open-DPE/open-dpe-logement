@@ -1,6 +1,11 @@
 $id: https://schemas.open-dpe.fr/common
 $schema: https://json-schema.org/draft/2020-12/schema
 $defs:
+  non_applicable:
+    title: Valeur non applicable
+    type: "null"
+    const: null
+    default: null
   id:
     title: Identifiant
     type: string
@@ -26,17 +31,17 @@ $defs:
     title: Année de construction
     anyOf:
       - $ref: "#/$defs/annee"
-      - const: null
+      - $ref: "#/$defs/non_applicable"
   annee_renovation:
     title: Année de dernière rénovation
     anyOf:
       - $ref: "#/$defs/annee"
-      - const: null
+      - $ref: "#/$defs/non_applicable"
   annee_installation:
     title: Année d'installation
     anyOf:
       - $ref: "#/$defs/annee"
-      - const: null
+      - $ref: "#/$defs/non_applicable"
   description:
     title: Description
     type: string

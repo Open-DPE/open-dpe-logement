@@ -253,11 +253,9 @@ $defs:
           type:
             const: simple_vitrage
           nature_lame:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           epaisseur_lame:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - type
           - nature_lame
@@ -279,11 +277,9 @@ $defs:
           type:
             enum: [brique_verre, polycarbonate, null]
           nature_lame:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
           epaisseur_lame:
-            const: null
-            default: null
+             $ref: "/common#/$defs/non_applicable"
         required:
           - type
           - nature_lame
@@ -375,8 +371,7 @@ oneOf:
           type:
             const: brique_verre
       menuiserie:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type
       - vitrage

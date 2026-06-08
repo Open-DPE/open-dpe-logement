@@ -21,8 +21,7 @@ properties:
     type: object
     properties:
       reseau_chaleur_id:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - reseau_chaleur_id
 required:
@@ -35,17 +34,14 @@ oneOf:
     type: object
     properties:
       bienergie:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
       position:
         type: object
         properties:
           cascade:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           position_chaudiere:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - position_chaudiere
           - cascade
@@ -53,35 +49,25 @@ oneOf:
         type: object
         properties:
           label:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           mode_combustion:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           presence_ventouse:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           presence_regulation:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           pveilleuse:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           qp0:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           rpn:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           rpint:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           tfonc30:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
           tfonc100:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - label
           - mode_combustion
@@ -115,8 +101,7 @@ oneOf:
         type: object
         properties:
           label:
-            const: null
-            default: null
+            $ref: "/common#/$defs/non_applicable"
         required:
           - label
     required:

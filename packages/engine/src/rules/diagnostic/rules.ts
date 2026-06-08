@@ -27,6 +27,24 @@ export function register(ctx: Context): void {
 	ctx.register(ID, RULES.cef, () => cef(ctx));
 	ctx.register(ID, RULES.cep, () => cep(ctx));
 	ctx.register(ID, RULES.eges, () => eges(ctx));
+	ctx.register(ID, RULES.etiquette_energie, () => etiquette_energie(ctx));
+	ctx.register(ID, RULES.etiquette_climat, () => etiquette_climat(ctx));
+	ctx.register(ID, RULES.confort_ete, () => confort_ete(ctx));
+}
+
+export function applique(ctx: Context): models.diagnostic.DiagnosticWithData {
+	return {
+		...ctx.diagnostic,
+		data: {
+			consommations: ctx.resolve(ID, RULES.consommations),
+			cef: ctx.resolve(ID, RULES.cef),
+			cep: ctx.resolve(ID, RULES.cep),
+			eges: ctx.resolve(ID, RULES.eges),
+			etiquette_energie: ctx.resolve(ID, RULES.etiquette_energie),
+			etiquette_climat: ctx.resolve(ID, RULES.etiquette_climat),
+			confort_ete: ctx.resolve(ID, RULES.confort_ete),
+		},
+	};
 }
 
 export function consommations(
@@ -65,14 +83,45 @@ export function eges(ctx: Context): ReturnType<typeof formulas.calcule_eges> {
 	});
 }
 
-export function applique(ctx: Context): models.diagnostic.DiagnosticWithData {
-	return {
-		...ctx.diagnostic,
-		data: {
-			consommations: ctx.resolve(ID, RULES.consommations),
-			cef: ctx.resolve(ID, RULES.cef),
-			cep: ctx.resolve(ID, RULES.cep),
-			eges: ctx.resolve(ID, RULES.eges),
-		},
-	};
+export function etiquette_energie(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_etiquette_energie> {
+	return formulas.calcule_etiquette_energie({
+		zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+		altitude: ctx.diagnostic.batiment.altitude,
+		cep: ctx.resolve(ID, RULES.cep),
+		eges: ctx.resolve(ID, RULES.eges),
+	});
+}
+
+export function etiquette_climat(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_etiquette_climat> {
+	return formulas.calcule_etiquette_climat({
+		zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+		altitude: ctx.diagnostic.batiment.altitude,
+		eges: ctx.resolve(ID, RULES.eges),
+	});
+}
+
+export function confort_ete(
+	ctx: Context,
+): ReturnType<typeof formulas.calcule_confort_ete> {
+	return formulas.calcule_confort_ete({
+		type_diagnostic: ctx.diagnostic.type,
+		presence_protection_solaire: ctx.resolve(
+			enveloppe.ID,
+			enveloppe.RULES.presence_protection_solaire,
+		),
+		isolation_planchers_hauts: ctx.resolve(
+			enveloppe.ID,
+			enveloppe.RULES.isolation_planchers_hauts,
+		),
+		inertie: ctx.resolve(enveloppe.ID, enveloppe.RULES.inertie),
+		logement_traversant: ctx.resolve(
+			enveloppe.ID,
+			enveloppe.RULES.logement_traversant,
+		),
+		presence_brasseur_air: ctx.diagnostic.enveloppe.presence_brasseurs_air,
+	});
 }

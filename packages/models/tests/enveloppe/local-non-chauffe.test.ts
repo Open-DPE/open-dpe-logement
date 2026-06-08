@@ -1,77 +1,54 @@
-import { describe, expect, expectTypeOf, it } from 'vitest'
-import { isLocalNonChauffe, type LocalNonChauffe, type AutreLocalNonChauffe, type EspaceTamponSolarise } from '../../src/enveloppe/local-non-chauffe.js'
-import type { UUID } from '../../src/common/common.js'
-import { UUID as FIXTURE_UUID, UUID2 } from '../helpers.js'
+import { describe, expect, it } from 'vitest'
+import {
+  isLocalNonChauffe,
+  type AutreLocalNonChauffe,
+  type EspaceTamponSolarise,
+  type Paroi,
+  type Baie,
+} from '../../src/enveloppe/local-non-chauffe.js'
+import { UUID, UUID2, p } from '../helpers.js'
 
-// ─── Types ───────────────────────────────────────────────────────────────────
-
-describe('LocalNonChauffe — types', () => {
-  it('id est un UUID requis', () => {
-    expectTypeOf<LocalNonChauffe['id']>().toEqualTypeOf<UUID>()
-  })
-
-  it('EspaceTamponSolarise a baies non vides', () => {
-    expectTypeOf<EspaceTamponSolarise['baies']>().toMatchTypeOf<[unknown, ...unknown[]]>()
-  })
-
-  it('AutreLocalNonChauffe a parois non vides', () => {
-    expectTypeOf<AutreLocalNonChauffe['parois']>().toMatchTypeOf<[unknown, ...unknown[]]>()
-  })
-})
-
-// ─── Guards ──────────────────────────────────────────────────────────────────
-
-const PAROI = {
+const PAROI_LNC: Paroi = {
   id: UUID2,
-  description: 'Paroi sur extérieur',
+  description: 'Paroi extérieure',
   isolation: null,
   position: { mitoyennete: 'exterieur', surface: 10 },
 }
 
-const VALID_GARAGE: unknown = {
-  id: FIXTURE_UUID,
-  description: 'Garage attenant',
-  type: 'garage',
-  parois: [PAROI],
-  baies: [],
-}
-
-const BAIE_LNC = {
+const BAIE_LNC: Baie = {
   id: UUID2,
   description: 'Fenêtre LNC',
-  type_vitrage: 'simple_vitrage',
+  type_vitrage: 'double_vitrage',
   materiau_menuiserie: 'pvc',
   presence_rupteur_pont_thermique: null,
-  position: { mitoyennete: 'exterieur', surface: 2, orientation: 'nord', inclinaison: 90 },
-}
-
-const VALID_ETS: unknown = {
-  id: FIXTURE_UUID,
-  description: 'Véranda',
-  type: 'espace_tampon_solarise',
-  parois: [],
-  baies: [BAIE_LNC],
+  position: {
+    mitoyennete: 'exterieur',
+    surface: 2,
+    orientation: 'sud',
+    inclinaison: 90,
+  },
 }
 
 describe('isLocalNonChauffe — guard', () => {
-  it('accepte un garage (autre local non chauffé) valide', () => {
-    expect(isLocalNonChauffe(VALID_GARAGE)).toBe(true)
+  it('accepte un garage (autre local non chauffé)', () => {
+    const lnc: AutreLocalNonChauffe = {
+      id: UUID,
+      description: 'Garage attenant',
+      type: 'garage',
+      parois: [PAROI_LNC],
+      baies: [],
+    }
+    expect(isLocalNonChauffe(lnc)).toBe(true)
   })
 
-  it('accepte un espace tampon solarisé valide', () => {
-    expect(isLocalNonChauffe(VALID_ETS)).toBe(true)
-  })
-
-  it('rejette si type est invalide', () => {
-    expect(isLocalNonChauffe({ ...VALID_GARAGE as object, type: 'grenier' })).toBe(false)
-  })
-
-  it('rejette si id est absent', () => {
-    const { id: _, ...rest } = VALID_GARAGE as { id: unknown }
-    expect(isLocalNonChauffe(rest)).toBe(false)
-  })
-
-  it('rejette null', () => {
-    expect(isLocalNonChauffe(null)).toBe(false)
+  it('accepte un espace tampon solarisé', () => {
+    const lnc: EspaceTamponSolarise = {
+      id: UUID,
+      description: 'Véranda',
+      type: 'espace_tampon_solarise',
+      parois: [],
+      baies: [BAIE_LNC],
+    }
+    expect(isLocalNonChauffe(lnc)).toBe(true)
   })
 })

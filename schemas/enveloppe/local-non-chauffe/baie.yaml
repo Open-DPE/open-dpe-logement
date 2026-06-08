@@ -48,8 +48,7 @@ oneOf:
       type_vitrage:
         enum: [brique_verre, polycarbonate]
       materiau_menuiserie:
-        const: null
-        default: null
+        $ref: "/common#/$defs/non_applicable"
     required:
       - type_vitrage
       - materiau_menuiserie

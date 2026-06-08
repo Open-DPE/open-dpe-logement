@@ -119,14 +119,17 @@ export function anciennete_installation_solaire(
 	installation: Installation,
 ): ReturnType<typeof formules.set_anciennete_installation_solaire> {
 	return formules.set_anciennete_installation_solaire({
-		annee_reference: ctx.diagnostic.date_etablissement.getFullYear(),
+		annee_reference: new Date(ctx.diagnostic.date_etablissement).getFullYear(),
 		annee_installation:
 			installation.solaire_thermique?.annee_installation ?? null,
 		annee_construction_batiment: ctx.diagnostic.batiment.annee_construction,
 	});
 }
 
-export function applique(ctx: Context, item: Installation): models.ecs.installation.InstallationWithData {
+export function applique(
+	ctx: Context,
+	item: Installation,
+): models.ecs.installation.InstallationWithData {
 	const sumMois = (v: models.common.ParMois<number>): number =>
 		Object.values(v).reduce((s: number, n: number) => s + n, 0);
 	return {
