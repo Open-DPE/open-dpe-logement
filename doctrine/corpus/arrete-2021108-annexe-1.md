@@ -41,8 +41,8 @@ Dernière mise à jour - Octobre 2021
   - 7.2 Plancher bas lourd
   - 7.3 Paroi verticale lourde
   - 7.4 Inertie du bâtiment
-- [8 Modélisation de l'intermittence](./arrete-2021108-annexe-1)
-- [9 Calcul de la consommation de chauffage (Cch)](./arrete-2021108-annexe-1)
+- [8 Modélisation de l'intermittence](./arrete-2021108-annexe-1/8-modelisation-intermittence.md)
+- [9 Calcul de la consommation de chauffage (Cch)](./arrete-2021108-annexe-1/9-calcul-consommation-chauffage.md)
   - 9.1 Installation de chauffage seule
     - 9.1.1 Consommation de chauffage
     - 9.1.2 Installation classique
@@ -62,7 +62,7 @@ Dernière mise à jour - Octobre 2021
   - 10.1 Calcul du besoin annuel de froid
   - 10.2 Calcul du besoin mensuel de froid
   - 10.3 Les consommations de refroidissement
-- [11 Calcul de la consommation d'ECS (Cecs)](./arrete-2021108-annexe-1)
+- [11 Calcul de la consommation d'ECS (Cecs)](./arrete-2021108-annexe-1/11-calcul-consommation-ecs.md)
   - 11.1 Calcul du besoin d'ECS
   - 11.2 Calcul des consommations d'ECS
   - 11.3 Un seul système d'ECS avec solaire
@@ -74,28 +74,28 @@ Dernière mise à jour - Octobre 2021
     - 11.6.1 Pertes de stockage des ballons d'accumulation
     - 11.6.2 Pertes des ballons électriques
     - 11.6.3 Rendement de stockage
-- [12 Rendements des installations](./arrete-2021108-annexe-1)
+- [12 Rendements des installations](./arrete-2021108-annexe-1/12-rendement-installation.md)
   - 12.1 Rendement d'émission
   - 12.2 Rendement de distribution
   - 12.3 Rendement de régulation
   - 12.4 Rendement de génération des générateurs autres qu'à combustion
     - 12.4.1 Générateurs à effet joule et réseaux de chaleur
     - 12.4.2 Pompe à Chaleur
-- [13 Rendement de génération des générateurs à combustion](./arrete-2021108-annexe-1)
+- [13 Rendement de génération des générateurs à combustion](./arrete-2021108-annexe-1/13-rendement-generateur-combustion.md)
   - 13.1 Inserts et poêles
   - 13.2 Chaudières et autres générateurs à combustion
     - 13.2.1 Profil de charge des générateurs
     - 13.2.2 Valeurs par défaut des caractéristiques des chaudières gaz et fioul
     - 13.2.3 Puissances moyennes fournies et consommées
     - 13.2.4 Rendement conventionnel annuel moyen de génération de chauffage
-- [14 Rendement des générateurs d'ECS](./arrete-2021108-annexe-1)
+- [14 Rendement des générateurs d'ECS](./arrete-2021108-annexe-1/14-rendement-generateurs-ecs.md)
   - 14.1 Générateurs à combustion
     - 14.1.1 Production d'ECS seule instantanée par chauffe-eau gaz
     - 14.1.2 Production mixte par chaudière gaz, fioul, bois
     - 14.1.3 Accumulateur gaz
   - 14.2 Chauffe-eau thermodynamique à accumulation
   - 14.3 Réseau de chaleur
-- [15 Calcul des consommations d'auxiliaires des installations de chauffage (Caux_ch) et d'ECS (Caux_ecs)](./arrete-2021108-annexe-1)
+- [15 Calcul des consommations d'auxiliaires des installations de chauffage (Caux_ch) et d'ECS (Caux_ecs)](./arrete-2021108-annexe-1/15-calcul-consommations-auxiliaires.md)
   - 15.1 Consommation des auxiliaires de génération
     - 15.1.1 Consommation des auxiliaires de génération de chauffage
     - 15.1.2 Consommation des auxiliaires de génération d'ECS
@@ -106,7 +106,7 @@ Dernière mise à jour - Octobre 2021
 - [16 Calcul de la consommation d'éclairage et de la production d'électricité](./arrete-2021108-annexe-1/16-calcul-consommations-eclairage-production-electricite.md)
   - 16.1 Consommation d'éclairage (Cecl)
   - 16.2 Production d'électricité
-- [17 DPE dans le collectif](./arrete-2021108-annexe-1)
+- [17 DPE dans le collectif](./arrete-2021108-annexe-1/17-dpe-collectif.md)
   - 17.1 Génération d'un DPE à l'immeuble collectif d'habitation
     - 17.1.1 Collecte des données d'entrée
     - 17.1.2 Définition d'un appartement « moyen »

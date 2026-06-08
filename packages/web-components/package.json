@@ -1,0 +1,42 @@
+{
+  "name": "@open-dpe-logement/web-components",
+  "version": "0.1.0",
+  "description": "Composants web pour l'affichage des données du Diagnostic de Performance Énergétique (DPE)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "imports": {
+    "#*": "./src/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "keywords": [
+    "dpe",
+    "diagnostic",
+    "energie",
+    "3cl",
+    "web-components"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-dpe/open-dpe-logement"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@open-dpe-logement/models": "*"
+  }
+}
