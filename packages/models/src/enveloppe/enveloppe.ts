@@ -1,4 +1,3 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import * as baie from "./baie.js";
 import * as common from "./common.js";
 import * as localNonChauffe from "./local-non-chauffe.js";
@@ -26,7 +25,7 @@ export {
 	porte,
 };
 
-export const isEnveloppe = createGuard<Enveloppe>(SCHEMA_KEYS["enveloppe"]);
+export const isEnveloppe = createGuard<Enveloppe>("/enveloppe");
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe
@@ -43,7 +42,6 @@ export type Enveloppe = {
 	baies: baie.Baie[];
 	portes: porte.Porte[];
 	ponts_thermiques: pontThermique.PontThermique[];
-	masques: masque.Masque[];
 };
 
 export type EnveloppeWithData<T extends Enveloppe = Enveloppe> = T & {

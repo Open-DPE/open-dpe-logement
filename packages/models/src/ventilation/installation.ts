@@ -1,9 +1,8 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { Consommations, UUID } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 
 export const isInstallation = createGuard<Installation>(
-	SCHEMA_KEYS["ventilation/installation"],
+	"/ventilation/installation",
 );
 
 /**

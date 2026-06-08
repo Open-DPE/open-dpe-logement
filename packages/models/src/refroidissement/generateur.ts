@@ -1,9 +1,8 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { Consommations, Energie, UUID } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 
 export const isGenerateur = createGuard<Generateur>(
-	SCHEMA_KEYS["refroidissement/generateur"],
+	"/refroidissement/generateur",
 );
 
 /**

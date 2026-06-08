@@ -23,8 +23,10 @@ import ecsInstallation from "./data/ecs.installation";
 import ecsSysteme from "./data/ecs.systeme";
 import enveloppe from "./data/enveloppe";
 import enveloppeBaie from "./data/enveloppe.baie";
-import enveloppeLocalNonChauffe from "./data/enveloppe.local-non-chauffe";
 import enveloppeMasque from "./data/enveloppe.masque";
+import enveloppeLocalNonChauffe from "./data/enveloppe.local-non-chauffe";
+import enveloppeLocalNonChauffeBaie from "./data/enveloppe.local-non-chauffe.baie";
+import enveloppeLocalNonChauffeParoi from "./data/enveloppe.local-non-chauffe.paroi";
 import enveloppeMur from "./data/enveloppe.mur";
 import enveloppeNiveau from "./data/enveloppe.niveau";
 import enveloppePlancherBas from "./data/enveloppe.plancher-bas";
@@ -39,112 +41,100 @@ import refroidissementInstallation from "./data/refroidissement.installation";
 import ventilation from "./data/ventilation";
 import ventilationInstallation from "./data/ventilation.installation";
 
-export const SCHEMA_KEYS = {
-	schemas: "https://schemas.open-dpe.fr/schemas",
-	batiment: "https://schemas.open-dpe.fr/batiment",
-	"batiment/appartement": "https://schemas.open-dpe.fr/batiment/appartement",
-	chauffage: "https://schemas.open-dpe.fr/chauffage",
-	"chauffage/emetteur": "https://schemas.open-dpe.fr/chauffage/emetteur",
-	"chauffage/generateur": "https://schemas.open-dpe.fr/chauffage/generateur",
-	"chauffage/generateur-combustion":
-		"https://schemas.open-dpe.fr/chauffage/generateur-combustion",
-	"chauffage/generateur-electrique":
-		"https://schemas.open-dpe.fr/chauffage/generateur-electrique",
-	"chauffage/generateur-inconnu":
-		"https://schemas.open-dpe.fr/chauffage/generateur-inconnu",
-	"chauffage/generateur-thermodynamique":
-		"https://schemas.open-dpe.fr/chauffage/generateur-thermodynamique",
-	"chauffage/reseau-chaleur":
-		"https://schemas.open-dpe.fr/chauffage/reseau-chaleur",
-	"chauffage/installation":
-		"https://schemas.open-dpe.fr/chauffage/installation",
-	"chauffage/systeme": "https://schemas.open-dpe.fr/chauffage/systeme",
-	diagnostic: "https://schemas.open-dpe.fr/diagnostic",
-	ecs: "https://schemas.open-dpe.fr/ecs",
-	"ecs/generateur": "https://schemas.open-dpe.fr/ecs/generateur",
-	"ecs/generateur-combustion":
-		"https://schemas.open-dpe.fr/ecs/generateur-combustion",
-	"ecs/generateur-electrique":
-		"https://schemas.open-dpe.fr/ecs/generateur-electrique",
-	"ecs/generateur-inconnu":
-		"https://schemas.open-dpe.fr/ecs/generateur-inconnu",
-	"ecs/generateur-thermodynamique":
-		"https://schemas.open-dpe.fr/ecs/generateur-thermodynamique",
-	"ecs/reseau-chaleur": "https://schemas.open-dpe.fr/ecs/reseau-chaleur",
-	"ecs/installation": "https://schemas.open-dpe.fr/ecs/installation",
-	"ecs/systeme": "https://schemas.open-dpe.fr/ecs/systeme",
-	enveloppe: "https://schemas.open-dpe.fr/enveloppe",
-	"enveloppe/baie": "https://schemas.open-dpe.fr/enveloppe/baie",
-	"enveloppe/local-non-chauffe":
-		"https://schemas.open-dpe.fr/enveloppe/local-non-chauffe",
-	"enveloppe/masque": "https://schemas.open-dpe.fr/enveloppe/masque",
-	"enveloppe/mur": "https://schemas.open-dpe.fr/enveloppe/mur",
-	"enveloppe/niveau": "https://schemas.open-dpe.fr/enveloppe/niveau",
-	"enveloppe/plancher-bas":
-		"https://schemas.open-dpe.fr/enveloppe/plancher-bas",
-	"enveloppe/plancher-haut":
-		"https://schemas.open-dpe.fr/enveloppe/plancher-haut",
-	"enveloppe/pont-thermique":
-		"https://schemas.open-dpe.fr/enveloppe/pont-thermique",
-	"enveloppe/porte": "https://schemas.open-dpe.fr/enveloppe/porte",
-	production: "https://schemas.open-dpe.fr/production",
-	"production/panneau-photovoltaique":
-		"https://schemas.open-dpe.fr/production/panneau-photovoltaique",
-	refroidissement: "https://schemas.open-dpe.fr/refroidissement",
-	"refroidissement/generateur":
-		"https://schemas.open-dpe.fr/refroidissement/generateur",
-	"refroidissement/installation":
-		"https://schemas.open-dpe.fr/refroidissement/installation",
-	ventilation: "https://schemas.open-dpe.fr/ventilation",
-	"ventilation/installation":
-		"https://schemas.open-dpe.fr/ventilation/installation",
-} as const;
+export type Schema = {
+	$schema: string;
+	$id: string;
+	[x: string]: unknown;
+};
 
-export type SchemaKey = (typeof SCHEMA_KEYS)[keyof typeof SCHEMA_KEYS];
+export const SCHEMA_KEYS = [
+	"/schemas",
+	"/batiment",
+	"/batiment/appartement",
+	"/chauffage",
+	"/chauffage/emetteur",
+	"/chauffage/generateur",
+	"/chauffage/generateur-combustion",
+	"/chauffage/generateur-electrique",
+	"/chauffage/generateur-inconnu",
+	"/chauffage/generateur-thermodynamique",
+	"/chauffage/reseau-chaleur",
+	"/chauffage/installation",
+	"/chauffage/systeme",
+	"/diagnostic",
+	"/ecs",
+	"/ecs/generateur",
+	"/ecs/generateur-combustion",
+	"/ecs/generateur-electrique",
+	"/ecs/generateur-inconnu",
+	"/ecs/generateur-thermodynamique",
+	"/ecs/reseau-chaleur",
+	"/ecs/installation",
+	"/ecs/systeme",
+	"/enveloppe",
+	"/enveloppe/baie",
+	"/enveloppe/masque",
+	"/enveloppe/local-non-chauffe",
+	"/enveloppe/local-non-chauffe/baie",
+	"/enveloppe/local-non-chauffe/paroi",
+	"/enveloppe/mur",
+	"/enveloppe/niveau",
+	"/enveloppe/plancher-bas",
+	"/enveloppe/plancher-haut",
+	"/enveloppe/pont-thermique",
+	"/enveloppe/porte",
+	"/production",
+	"/production/panneau-photovoltaique",
+	"/refroidissement",
+	"/refroidissement/generateur",
+	"/refroidissement/installation",
+	"/ventilation",
+	"/ventilation/installation",
+] as const;
 
-export const SCHEMAS: { [K in SchemaKey]: string } = {
-	[SCHEMA_KEYS.schemas]: schemas,
-	[SCHEMA_KEYS.batiment]: batiment,
-	[SCHEMA_KEYS["batiment/appartement"]]: batimentAppartement,
-	[SCHEMA_KEYS.chauffage]: chauffage,
-	[SCHEMA_KEYS["chauffage/emetteur"]]: chauffageEmetteur,
-	[SCHEMA_KEYS["chauffage/generateur"]]: chauffageGenerateur,
-	[SCHEMA_KEYS["chauffage/generateur-combustion"]]:
-		chauffageGenerateurCombustion,
-	[SCHEMA_KEYS["chauffage/generateur-electrique"]]:
-		chauffageGenerateurElectrique,
-	[SCHEMA_KEYS["chauffage/generateur-inconnu"]]: chauffageGenerateurInconnu,
-	[SCHEMA_KEYS["chauffage/generateur-thermodynamique"]]:
-		chauffageGenerateurThermodynamique,
-	[SCHEMA_KEYS["chauffage/reseau-chaleur"]]: chauffageReseauChaleur,
-	[SCHEMA_KEYS["chauffage/installation"]]: chauffageInstallation,
-	[SCHEMA_KEYS["chauffage/systeme"]]: chauffageSysteme,
-	[SCHEMA_KEYS.diagnostic]: diagnostic,
-	[SCHEMA_KEYS.ecs]: ecs,
-	[SCHEMA_KEYS["ecs/generateur"]]: ecsGenerateur,
-	[SCHEMA_KEYS["ecs/generateur-combustion"]]: ecsGenerateurCombustion,
-	[SCHEMA_KEYS["ecs/generateur-electrique"]]: ecsGenerateurElectrique,
-	[SCHEMA_KEYS["ecs/generateur-inconnu"]]: ecsGenerateurInconnu,
-	[SCHEMA_KEYS["ecs/generateur-thermodynamique"]]: ecsGenerateurThermodynamique,
-	[SCHEMA_KEYS["ecs/reseau-chaleur"]]: ecsReseauChaleur,
-	[SCHEMA_KEYS["ecs/installation"]]: ecsInstallation,
-	[SCHEMA_KEYS["ecs/systeme"]]: ecsSysteme,
-	[SCHEMA_KEYS.enveloppe]: enveloppe,
-	[SCHEMA_KEYS["enveloppe/baie"]]: enveloppeBaie,
-	[SCHEMA_KEYS["enveloppe/local-non-chauffe"]]: enveloppeLocalNonChauffe,
-	[SCHEMA_KEYS["enveloppe/masque"]]: enveloppeMasque,
-	[SCHEMA_KEYS["enveloppe/mur"]]: enveloppeMur,
-	[SCHEMA_KEYS["enveloppe/niveau"]]: enveloppeNiveau,
-	[SCHEMA_KEYS["enveloppe/plancher-bas"]]: enveloppePlancherBas,
-	[SCHEMA_KEYS["enveloppe/plancher-haut"]]: enveloppePlancherHaut,
-	[SCHEMA_KEYS["enveloppe/pont-thermique"]]: enveloppePontThermique,
-	[SCHEMA_KEYS["enveloppe/porte"]]: enveloppePorte,
-	[SCHEMA_KEYS.production]: production,
-	[SCHEMA_KEYS["production/panneau-photovoltaique"]]:
-		productionPanneauPhotovoltaique,
-	[SCHEMA_KEYS.refroidissement]: refroidissement,
-	[SCHEMA_KEYS["refroidissement/generateur"]]: refroidissementGenerateur,
-	[SCHEMA_KEYS["refroidissement/installation"]]: refroidissementInstallation,
-	[SCHEMA_KEYS.ventilation]: ventilation,
-	[SCHEMA_KEYS["ventilation/installation"]]: ventilationInstallation,
+export type SchemaKey = (typeof SCHEMA_KEYS)[number];
+
+export const SCHEMAS: { [key in SchemaKey]: Schema } = {
+	["/schemas"]: schemas,
+	["/batiment"]: batiment,
+	["/batiment/appartement"]: batimentAppartement,
+	["/chauffage"]: chauffage,
+	["/chauffage/emetteur"]: chauffageEmetteur,
+	["/chauffage/generateur"]: chauffageGenerateur,
+	["/chauffage/generateur-combustion"]: chauffageGenerateurCombustion,
+	["/chauffage/generateur-electrique"]: chauffageGenerateurElectrique,
+	["/chauffage/generateur-inconnu"]: chauffageGenerateurInconnu,
+	["/chauffage/generateur-thermodynamique"]: chauffageGenerateurThermodynamique,
+	["/chauffage/reseau-chaleur"]: chauffageReseauChaleur,
+	["/chauffage/installation"]: chauffageInstallation,
+	["/chauffage/systeme"]: chauffageSysteme,
+	["/diagnostic"]: diagnostic,
+	["/ecs"]: ecs,
+	["/ecs/generateur"]: ecsGenerateur,
+	["/ecs/generateur-combustion"]: ecsGenerateurCombustion,
+	["/ecs/generateur-electrique"]: ecsGenerateurElectrique,
+	["/ecs/generateur-inconnu"]: ecsGenerateurInconnu,
+	["/ecs/generateur-thermodynamique"]: ecsGenerateurThermodynamique,
+	["/ecs/reseau-chaleur"]: ecsReseauChaleur,
+	["/ecs/installation"]: ecsInstallation,
+	["/ecs/systeme"]: ecsSysteme,
+	["/enveloppe"]: enveloppe,
+	["/enveloppe/baie"]: enveloppeBaie,
+	["/enveloppe/masque"]: enveloppeMasque,
+	["/enveloppe/local-non-chauffe"]: enveloppeLocalNonChauffe,
+	["/enveloppe/local-non-chauffe/baie"]: enveloppeLocalNonChauffeBaie,
+	["/enveloppe/local-non-chauffe/paroi"]: enveloppeLocalNonChauffeParoi,
+	["/enveloppe/mur"]: enveloppeMur,
+	["/enveloppe/niveau"]: enveloppeNiveau,
+	["/enveloppe/plancher-bas"]: enveloppePlancherBas,
+	["/enveloppe/plancher-haut"]: enveloppePlancherHaut,
+	["/enveloppe/pont-thermique"]: enveloppePontThermique,
+	["/enveloppe/porte"]: enveloppePorte,
+	["/production"]: production,
+	["/production/panneau-photovoltaique"]: productionPanneauPhotovoltaique,
+	["/refroidissement"]: refroidissement,
+	["/refroidissement/generateur"]: refroidissementGenerateur,
+	["/refroidissement/installation"]: refroidissementInstallation,
+	["/ventilation"]: ventilation,
+	["/ventilation/installation"]: ventilationInstallation,
 };

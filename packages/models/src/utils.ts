@@ -10,8 +10,8 @@ export function buildEnum<T extends string | number>(
 	return Object.fromEntries(values.map((v) => [v, v])) as { [K in T]: K };
 }
 
-export function createGuard<T>(schema: SchemaKey) {
+export function createGuard<T>(schemaKey: SchemaKey) {
 	return function (data: unknown): data is T {
-		return validate(schema, data) === true;
+		return validate(schemaKey, data) === true;
 	};
 }

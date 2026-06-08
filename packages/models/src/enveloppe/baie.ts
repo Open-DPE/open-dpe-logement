@@ -1,4 +1,3 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { UUID } from "#/common/common";
 import { buildEnum, createGuard } from "../utils";
 import type { Masque } from "./masque";
@@ -9,7 +8,7 @@ import type {
 	TypePose,
 } from "./common";
 
-export const isBaie = createGuard<Baie>(SCHEMA_KEYS["enveloppe/baie"]);
+export const isBaie = createGuard<Baie>("/enveloppe/baie");
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/baie

@@ -1,8 +1,4 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
-import type {
-	NonEmptyArray,
-	UUID,
-} from "#/common/common";
+import type { NonEmptyArray, UUID } from "#/common/common";
 import { EntityNotFoundError } from "#/errors.js";
 import { createGuard } from "#/utils.js";
 import * as generateur from "./generateur.js";
@@ -11,7 +7,7 @@ import * as systeme from "./systeme.js";
 
 export { generateur, installation, systeme };
 
-export const isEcs = createGuard<Ecs>(SCHEMA_KEYS["ecs"]);
+export const isEcs = createGuard<Ecs>("/ecs");
 
 /**
  * @see https://schemas.open-dpe.fr/ecs

@@ -1,8 +1,9 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { UUID } from "#/common/common";
 import { buildEnum, createGuard } from "../utils";
 
-export const isPontThermique = createGuard<PontThermique>(SCHEMA_KEYS["enveloppe/pont-thermique"]);
+export const isPontThermique = createGuard<PontThermique>(
+	"/enveloppe/pont-thermique",
+);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/pont-thermique

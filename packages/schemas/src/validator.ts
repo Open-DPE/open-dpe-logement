@@ -1,22 +1,34 @@
 import Ajv2020 from "ajv/dist/2020";
 import addFormats from "ajv-formats";
-import { type SchemaKey, SCHEMAS } from "./schemas";
+import type { Schema } from "./schemas";
 
-const ajv = new Ajv2020({
-	strict: false,
-	allErrors: true,
-	useDefaults: true,
-});
+export function createValidator() {
+	const ajv = new Ajv2020({
+		strict: false,
+		allErrors: true,
+		useDefaults: true,
+	});
 
-addFormats(ajv);
+	addFormats(ajv);
+	ajv.addKeyword("x-enum");
+	return ajv;
+}
 
-const compiled = new Map<SchemaKey, ReturnType<typeof ajv.compile>>();
+const ajv = createValidator();
+const compiled = new Map<string, ReturnType<typeof ajv.compile>>();
 
-export function getValidator(key: SchemaKey): ReturnType<typeof ajv.compile> {
-	const cached = compiled.get(key);
+export function getValidator(schema: Schema): ReturnType<typeof ajv.compile> {
+	const cached = compiled.get(schema.$id);
 	if (cached) return cached;
-	const schema = JSON.parse(SCHEMAS[key]);
+
+	const existing = ajv.getSchema<unknown>(schema.$id);
+
+	if (existing) {
+		compiled.set(schema.$id, existing);
+		return existing;
+	}
+
 	const validator = ajv.compile(schema);
-	compiled.set(key, validator);
+	compiled.set(schema.$id, validator);
 	return validator;
 }

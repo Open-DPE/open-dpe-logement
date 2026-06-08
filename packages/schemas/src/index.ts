@@ -1,20 +1,29 @@
 import { type ErrorObject } from "ajv";
-import { type SchemaKey, SCHEMAS, SCHEMA_KEYS } from "./schemas";
+import { type Schema, type SchemaKey, SCHEMAS } from "./schemas";
 import { getValidator } from "./validator";
 
 export type { SchemaKey };
-export { SCHEMA_KEYS };
 
-export function get(schema: SchemaKey): string {
-	return SCHEMAS[schema];
+export function get(schemaKey: SchemaKey): Schema {
+	return SCHEMAS[schemaKey];
 }
 
+type IsValid = {
+	isValid: true;
+};
+
+type IsInvalid = {
+	isValid: false;
+	errors: ErrorObject[];
+};
+
 export function validate(
-	schema: SchemaKey,
+	schemaKey: SchemaKey,
 	data: unknown,
-): true | ErrorObject[] {
+): IsValid | IsInvalid {
+	const schema = get(schemaKey);
 	const validator = getValidator(schema);
 	const valid = validator(data);
-	if (valid) return true;
-	return validator.errors ?? [];
+	if (valid) return { isValid: true };
+	return { isValid: false, errors: validator.errors ?? [] };
 }

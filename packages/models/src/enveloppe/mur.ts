@@ -1,4 +1,3 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { UUID } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 import type {
@@ -8,7 +7,7 @@ import type {
 	Position as PositionBase,
 } from "./common.js";
 
-export const isMur = createGuard<Mur>(SCHEMA_KEYS["enveloppe/mur"]);
+export const isMur = createGuard<Mur>("/enveloppe/mur");
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/mur

@@ -1,7 +1,6 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import { buildEnum, createGuard } from "../utils";
 
-export const isMasque = createGuard<Masque>(SCHEMA_KEYS["enveloppe/masque"]);
+export const isMasque = createGuard<Masque>("/enveloppe/masque");
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/masque

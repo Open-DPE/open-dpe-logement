@@ -1,8 +1,7 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { UUID } from "#/common/common";
-import { buildEnum, createGuard } from "../utils";
+import { buildEnum, createGuard } from "#/utils";
 
-export const isEmetteur = createGuard<Emetteur>(SCHEMA_KEYS["chauffage/emetteur"]);
+export const isEmetteur = createGuard<Emetteur>("/chauffage/emetteur");
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/emetteur

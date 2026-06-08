@@ -1,6 +1,5 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
-import { EntityNotFoundError } from "#/errors.js";
 import type { NonEmptyArray, UUID } from "#/common/common";
+import { EntityNotFoundError } from "#/errors.js";
 import { buildEnum, createGuard } from "#/utils";
 import * as emetteur from "./emetteur.js";
 import * as generateur from "./generateur.js";
@@ -9,7 +8,7 @@ import * as systeme from "./systeme.js";
 
 export { generateur, installation, emetteur, systeme };
 
-export const isChauffage = createGuard<Chauffage>(SCHEMA_KEYS["chauffage"]);
+export const isChauffage = createGuard<Chauffage>("/chauffage");
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage

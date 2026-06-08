@@ -1,4 +1,3 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import { createGuard } from "#/utils.js";
 import type { Consommations, UUID } from "#/common/common";
 import type { Chauffage } from "#/chauffage/chauffage.js";
@@ -9,7 +8,7 @@ import type { Refroidissement } from "#/refroidissement/refroidissement.js";
 import type { Ventilation } from "#/ventilation/ventilation.js";
 import type { Batiment } from "#/batiment/batiment.js";
 
-export const isDiagnostic = createGuard<Diagnostic>(SCHEMA_KEYS["diagnostic"]);
+export const isDiagnostic = createGuard<Diagnostic>("/diagnostic");
 
 /**
  * @see https://schemas.open-dpe.fr/diagnostic

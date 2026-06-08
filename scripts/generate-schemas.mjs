@@ -17,6 +17,7 @@ const schemaFiles = globSync(`${SCHEMAS_DIR}/**/*.yaml`);
 
 const VALID_SCHEMA = "https://json-schema.org/draft/2020-12/schema";
 
+
 /**
  * @param {string} file
  * @returns {boolean}
@@ -80,11 +81,14 @@ for (const file of schemaFiles) {
 	if (!$id || isPrivate(file)) continue;
 
 	const bundled = await bundle($id);
+
 	const name = toFilename($id);
 	const stringidied = [
+		"import type { Schema } from '../schemas';",
+		"",
 		"// ⚠️  Fichier auto-généré — ne pas modifier manuellement.",
 		"",
-		`const schema = ${JSON.stringify(JSON.stringify(bundled))} as const;`,
+		`const schema: Schema = ${JSON.stringify(bundled)};`,
 		"",
 		"export default schema;",
 		"",

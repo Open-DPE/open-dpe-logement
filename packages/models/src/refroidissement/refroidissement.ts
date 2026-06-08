@@ -1,13 +1,11 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import { createGuard } from "#/utils.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
 
 export { generateur, installation };
 
-export const isRefroidissement = createGuard<Refroidissement>(
-	SCHEMA_KEYS["refroidissement"],
-);
+export const isRefroidissement =
+	createGuard<Refroidissement>("/refroidissement");
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement

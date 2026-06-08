@@ -1,11 +1,10 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { Adresse, PositiveNumber } from "#/common/common";
 import { createGuard, buildEnum } from "#/utils";
 import * as appartement from "./appartement.js";
 
 export { appartement };
 
-export const isBatiment = createGuard<Batiment>(SCHEMA_KEYS["batiment"]);
+export const isBatiment = createGuard<Batiment>("/batiment");
 
 /**
  * @see https://schemas.open-dpe.fr/batiment

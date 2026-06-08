@@ -1,8 +1,7 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { Consommations, UUID, NonEmptyArray } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils.js";
 
-export const isSysteme = createGuard<Systeme>(SCHEMA_KEYS["chauffage/systeme"]);
+export const isSysteme = createGuard<Systeme>("/chauffage/systeme");
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/systeme

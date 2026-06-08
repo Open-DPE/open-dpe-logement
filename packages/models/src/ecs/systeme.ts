@@ -1,10 +1,9 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { Consommations, UUID } from "#/common/common";
 import type { Generateur } from "./generateur.js";
 import { EntityNotFoundError } from "#/errors.js";
 import { buildEnum, createGuard } from "#/utils.js";
 
-export const isSysteme = createGuard<Systeme>(SCHEMA_KEYS["ecs/systeme"]);
+export const isSysteme = createGuard<Systeme>("/ecs/systeme");
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/systeme

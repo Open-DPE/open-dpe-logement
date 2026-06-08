@@ -1,4 +1,3 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { UUID } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 import type {
@@ -8,7 +7,9 @@ import type {
 	Position as PositionBase,
 } from "./common.js";
 
-export const isPlancherBas = createGuard<PlancherBas>(SCHEMA_KEYS["enveloppe/plancher-bas"]);
+export const isPlancherBas = createGuard<PlancherBas>(
+	"/enveloppe/plancher-bas",
+);
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/plancher-bas

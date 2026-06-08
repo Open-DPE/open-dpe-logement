@@ -1,10 +1,9 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import { buildEnum, createGuard } from "#/utils.js";
 import * as panneauPhotovoltaique from "./panneau-photovoltaique.js";
 
 export { panneauPhotovoltaique };
 
-export const isProduction = createGuard<Production>(SCHEMA_KEYS["production"]);
+export const isProduction = createGuard<Production>("/production");
 
 /**
  * @see https://schemas.open-dpe.fr/production

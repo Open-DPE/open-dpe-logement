@@ -1,9 +1,8 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { UUID } from "#/common/common";
 import type { Inertie, InertieParoi } from "./common.js";
 import { createGuard } from "#/utils.js";
 
-export const isNiveau = createGuard<Niveau>(SCHEMA_KEYS["enveloppe/niveau"]);
+export const isNiveau = createGuard<Niveau>("/enveloppe/niveau");
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/niveau

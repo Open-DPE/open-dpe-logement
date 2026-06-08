@@ -49,20 +49,6 @@ npx turbo dev --filter=web
 npx turbo build --filter=@dpe-audit/core
 ```
 
-## Feuilles de route
-
-1. Alpha
-
-- [x] Doctrine 3CL-DPE
-- [ ] Schémas de données publiques - `schemas`  `packages/schemas`
-- [ ] Moteur de calcul - `packages/engine`
-- [ ] Modèle de données - `packages/models`
-
-2. Beta
-
-- [ ] Migration des données Observatoire DPE - `packages/transformer`
-- [ ] Tests de régression - `packages/transformer`
-
 ## Contribution
 
 Ce monorepo est également un **espace d'échange collaboratif** pour les exploitants et producteurs de données DPE.

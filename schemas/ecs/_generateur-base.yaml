@@ -100,7 +100,7 @@ properties:
   stockage:
     title: Stockage
     type: [object, "null"]
-    additionalProperties: false
+    unevaluatedProperties: false
     properties:
       type:
         title: Type de stockage
@@ -121,7 +121,7 @@ properties:
   signaletique:
     title: Fiche signalétique
     type: object
-    additionalProperties: false
+    unevaluatedProperties: false
     properties:
       pn:
         title: Puissance nominale en kW
@@ -142,7 +142,6 @@ properties:
         oneOf:
           - $ref: /common#/$defs/nombre_positif
           - const: null
-        maximum: 10
       mode_combustion:
         title: Mode de combustion
         type: [string, "null"]
@@ -170,7 +169,6 @@ properties:
         oneOf:
           - $ref: /common#/$defs/nombre_positif
           - const: null
-        maximum: 150
     required:
       - pn
       - label

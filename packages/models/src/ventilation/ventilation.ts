@@ -1,13 +1,10 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { NonEmptyArray } from "#/common/common";
 import { createGuard } from "#/utils";
 import * as installation from "./installation.js";
 
 export { installation };
 
-export const isVentilation = createGuard<Ventilation>(
-	SCHEMA_KEYS["ventilation"],
-);
+export const isVentilation = createGuard<Ventilation>("/ventilation");
 
 /**
  * @see https://schemas.open-dpe.fr/ventilation

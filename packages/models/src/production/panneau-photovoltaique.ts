@@ -1,8 +1,9 @@
-import { SCHEMA_KEYS } from "@open-dpe-logement/schemas";
 import type { Orientation, UUID } from "#/common/common";
 import { createGuard } from "#/utils.js";
 
-export const isPanneauPhotovoltaique = createGuard<PanneauPhotovoltaique>(SCHEMA_KEYS["production/panneau-photovoltaique"]);
+export const isPanneauPhotovoltaique = createGuard<PanneauPhotovoltaique>(
+	"/production/panneau-photovoltaique",
+);
 
 /**
  * @see https://schemas.open-dpe.fr/production/panneau-photovoltaique
