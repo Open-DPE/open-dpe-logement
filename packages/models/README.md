@@ -1,18 +1,19 @@
 # @open-dpe-logement/models
 
-Types typescript du modèle de données publiques Open DPE Logement.
+Implémentation des schémas de données publiques DPE Logement.
 
-## Organisation
+## Installation
 
-```text
-src/
-├── <domaine>/
-│   └── <domaine>.ts        # Point d'entrée 
-├── errors.ts
-├── utils.ts
-└── index.ts
+```sh
+npm i @open-dpe-logement/models
 ```
 
-## Design
+## Usage
 
+```ts
+import * as models from "@open-dpe-logement/models";
 
+const data = { ... }
+models.diagnostic.isDiagnostic(data);
+data.batiment.type
+```

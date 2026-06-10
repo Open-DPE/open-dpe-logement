@@ -11,7 +11,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine ventilation.caux
+ * @formule ventilation.caux
  * @return Consommations des auxiliaires de ventilation en kWh/an
  */
 export function calcule_caux(props: {
@@ -21,7 +21,7 @@ export function calcule_caux(props: {
 }
 
 /**
- * @doctrine ventilation.hvent
+ * @formule ventilation.hvent
  * @returns Déperditions thermiques par renouvellement d'air due au système de ventilation en W/K
  */
 export function calcule_hvent(props: {
@@ -35,7 +35,7 @@ export function calcule_hvent(props: {
 }
 
 /**
- * @doctrine ventilation.qvarep_conv
+ * @formule ventilation.qvarep_conv
  * @returns Débit volumique conventionnel moyen à reprendre en m3/(h.m²)
  */
 export function calcule_qvarep_conv(props: {
@@ -51,7 +51,7 @@ export function calcule_qvarep_conv(props: {
 }
 
 /**
- * @doctrine ventilation.qvasouf_conv
+ * @formule ventilation.qvasouf_conv
  * @returns Débit volumique conventionnel moyen à souffler en m3/(h.m²)
  */
 export function calcule_qvasouf_conv(props: {
@@ -69,7 +69,7 @@ export function calcule_qvasouf_conv(props: {
 }
 
 /**
- * @doctrine ventilation.smea_conv
+ * @formule ventilation.smea_conv
  * @returns Moyenne des sommes des modules d'entrée d'air sous 20 Pa en m3/(h.m²)
  */
 export function calcule_smea_conv(props: {

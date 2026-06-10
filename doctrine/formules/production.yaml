@@ -1,0 +1,94 @@
+production.ppv:
+  id: production.ppv
+  description: Production d'électricité photovoltaique
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.panneau_photovoltaique.ppv
+
+production.celec_ac_total:
+  id: production.celec_ac_total
+  description: Électricité photovoltaïque autoconsommée totale
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.ppv
+    - production.celec_total
+    - production.tapl
+
+production.celec_ac:
+  id: production.celec_ac
+  description: Électricité photovoltaïque autoconsommée par usage d'électricité
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_total
+    - production.celec_ac_total
+    - production.tapl
+
+production.celec_total:
+  id: production.celec_total
+  description: Consommation d'électricité totale
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+
+production.celec:
+  id: production.celec
+  description: Consommation d'électricité par usage d'électricité
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.cch_elec
+    - chauffage.caux_gen
+    - chauffage.caux_dist
+    - ecs.cecs_elec
+    - ecs.caux_dist
+    - ecs.caux_gen
+    - ecs.caux_gen
+    - eclairage.cecl
+    - refroidissement.cfr_elec
+    - ventilation.caux
+    - production.celec_autres
+
+production.tapl:
+  id: production.tapl
+  description: Coefficient de calage pour chaque usage d'électricité
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  dependances:
+    - production.celec
+
+production.celec_autres:
+  id: production.celec_autres
+  description: Consommations d'électricité pour les autres
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - batiment.sh
+
+production.panneau_photovoltaique.ppv:
+  id: production.panneau_photovoltaique.ppv
+  description: Production d'électricité du panneau photovoltaïque
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/mois
+  dependances:
+    - climat.epv
+    - production.panneau_photovoltaique.kpv
+
+production.panneau_photovoltaique.kpv:
+  id: production.panneau_photovoltaique.kpv
+  description: Coefficient de pondération prenant en compte l'altération par rapport à l'orientation optimale du panneau photovoltaïque
+  references: Méthode 3CL-DPE 2021 §16.2
+  issues:
+    - https://github.com/dpe-audit/dpe-logement/issues/42
+  type: number

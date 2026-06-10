@@ -1,5 +1,5 @@
 /**
- * @doctrine refroidissement.installation.rdim
+ * @formule refroidissement.installation.rdim
  * @param props.surface_installation - Surface de l'installation de refroidissement en m²
  * @param props.surface_installations - Surface totale des installations de refroidissement en m²
  * @returns Ratio de dimensionnement de l'installation de refroidissement

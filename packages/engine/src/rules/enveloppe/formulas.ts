@@ -13,7 +13,7 @@ import { ValeurForfaitaireError } from "#utils/errors.js";
 import { createParMois } from "#utils/helpers.js";
 
 /**
- * @doctrine enveloppe.gv
+ * @formule enveloppe.gv
  * @returns Déperditions thermiques totales de l'enveloppe en W/K
  */
 export function calcule_gv(props: {
@@ -26,7 +26,7 @@ export function calcule_gv(props: {
 }
 
 /**
- * @doctrine enveloppe.ubat
+ * @formule enveloppe.ubat
  * @returns Coefficient de transmission thermique moyen en W/(K.m²)
  */
 export function calcule_ubat(props: {
@@ -39,12 +39,12 @@ export function calcule_ubat(props: {
 }
 
 /**
- * @doctrine enveloppe.dp
- * @doctrine enveloppe.dp_baies
- * @doctrine enveloppe.dp_portes
- * @doctrine enveloppe.dp_murs
- * @doctrine enveloppe.dp_planchers_hauts
- * @doctrine enveloppe.dp_planchers_bas
+ * @formule enveloppe.dp
+ * @formule enveloppe.dp_baies
+ * @formule enveloppe.dp_portes
+ * @formule enveloppe.dp_murs
+ * @formule enveloppe.dp_planchers_hauts
+ * @formule enveloppe.dp_planchers_bas
  * @returns Déperditions thermiques totales par les parois en W/K
  */
 export function calcule_dp(props: {
@@ -54,7 +54,7 @@ export function calcule_dp(props: {
 }
 
 /**
- * @doctrine enveloppe.dr
+ * @formule enveloppe.dr
  * @returns Déperditions thermiques totales par renouvellement d'air en W/K
  */
 export function calcule_dr(props: {
@@ -66,7 +66,7 @@ export function calcule_dr(props: {
 }
 
 /**
- * @doctrine enveloppe.pt
+ * @formule enveloppe.pt
  * @return Déperditions thermiques par les ponts thermiques en W/K
  */
 export function calcule_pt(props: {
@@ -76,12 +76,12 @@ export function calcule_pt(props: {
 }
 
 /**
- * @doctrine enveloppe.sdep
- * @doctrine enveloppe.sdep_baies
- * @doctrine enveloppe.sdep_portes
- * @doctrine enveloppe.sdep_murs
- * @doctrine enveloppe.sdep_planchers_hauts
- * @doctrine enveloppe.sdep_planchers_bas
+ * @formule enveloppe.sdep
+ * @formule enveloppe.sdep_baies
+ * @formule enveloppe.sdep_portes
+ * @formule enveloppe.sdep_murs
+ * @formule enveloppe.sdep_planchers_hauts
+ * @formule enveloppe.sdep_planchers_bas
  * @return Surface déperditive des baies en m²
  */
 export function calcule_sdep(props: {
@@ -91,7 +91,7 @@ export function calcule_sdep(props: {
 }
 
 /**
- * @doctrine enveloppe.inertie
+ * @formule enveloppe.inertie
  * @param props.niveaux[].sh : Surface habitable du niveau
  * @returns Inertie de l'enveloppe
  */
@@ -131,7 +131,7 @@ export function calcule_inertie(props: {
 }
 
 /**
- * @doctrine enveloppe.hperm
+ * @formule enveloppe.hperm
  * @returns Déperditions thermiques par renouvellement d'air due au vent en W/K
  */
 export function calcule_hperm(props: {
@@ -142,7 +142,7 @@ export function calcule_hperm(props: {
 }
 
 /**
- * @doctrine enveloppe.qvinf
+ * @formule enveloppe.qvinf
  * @returns Débit d'air dû aux infiltrations liées au vent en m3/h
  */
 export function calcule_qvinf(props: {
@@ -165,7 +165,7 @@ export function calcule_qvinf(props: {
 }
 
 /**
- * @doctrine enveloppe.n50
+ * @formule enveloppe.n50
  * @returns Renouvellement d'air sous 50 Pascals en h-1
  */
 export function calcule_n50(props: {
@@ -178,7 +178,7 @@ export function calcule_n50(props: {
 }
 
 /**
- * @doctrine enveloppe.q4pa
+ * @formule enveloppe.q4pa
  * @returns Perméabilité de la zone sous 4Pa en m3/h
  */
 export function calcule_q4pa(props: {
@@ -191,7 +191,7 @@ export function calcule_q4pa(props: {
 }
 
 /**
- * @doctrine enveloppe.q4paenv
+ * @formule enveloppe.q4paenv
  * @returns Perméabilité de l'enveloppe en m3/h
  */
 export function calcule_q4paenv(props: {
@@ -204,7 +204,7 @@ export function calcule_q4paenv(props: {
 }
 
 /**
- * @doctrine enveloppe.q4paconv
+ * @formule enveloppe.q4paconv
  * @param props.annee_construction : Année de construction du bâtiment
  * @see abaques.enveloppe.permeabilite.q4paconv
  * @throws {ValeurForfaitaireError}
@@ -223,7 +223,7 @@ export function calcule_q4paconv(props: {
 }
 
 /**
- * @doctrine enveloppe.isolation_murs_plafonds
+ * @formule enveloppe.isolation_murs_plafonds
  * @returns Isolation majoritaire des murs et des plafonds
  */
 export function calcule_isolation_murs_plafonds(props: {
@@ -242,7 +242,7 @@ export function calcule_isolation_murs_plafonds(props: {
 }
 
 /**
- * @doctrine enveloppe.presence_joints
+ * @formule enveloppe.presence_joints
  * @param props.ouvertures : Liste des ouvertures
  * @param props.ouvertures[].surface : Surface de l'ouverture en m²
  * @param props.ouvertures[].presence_joint : Présence de joints au niveau de l'ouverture
@@ -261,7 +261,7 @@ export function calcule_presence_joints(props: {
 }
 
 /**
- * @doctrine enveloppe.isolation_planchers_hauts
+ * @formule enveloppe.isolation_planchers_hauts
  * @return État d'isolation des planchers hauts
  */
 export function calcule_isolation_planchers_hauts(props: {
@@ -279,7 +279,7 @@ export function calcule_isolation_planchers_hauts(props: {
 }
 
 /**
- * @doctrine enveloppe.presence_protection_solaire
+ * @formule enveloppe.presence_protection_solaire
  *
  * FAUX si Une ou plusieurs baies orientées au Sud, à l’Est, à l’Ouest ou en toiture ne sont pas équipées
  * de protection solaire extérieure, à l’exception des baies orientées au Sud, à l’Est et à l’Ouest dont la
@@ -355,7 +355,7 @@ export function calcule_presence_protection_solaire(props: {
 }
 
 /**
- * @doctrine enveloppe.logement_traversant
+ * @formule enveloppe.logement_traversant
  * @return Logement traversant
  */
 export function calcule_logement_traversant(props: {
@@ -388,7 +388,7 @@ export function calcule_logement_traversant(props: {
 }
 
 /**
- * @doctrine enveloppe.sse
+ * @formule enveloppe.sse
  * @returns Surface sud équivalente de l'enveloppe en m²
  */
 export function calcule_sse(props: {
@@ -403,7 +403,7 @@ export function calcule_sse(props: {
 }
 
 /**
- * @doctrine enveloppe.parois_anciennes
+ * @formule enveloppe.parois_anciennes
  * @param props.murs - Liste des murs de l'enveloppe
  * @param props.murs[].surface - Surface du mur en m²
  * @param props.murs[].materiaux_anciens - Indique si les matériaux du mur sont anciens ou non (non par défaut)

@@ -10,9 +10,9 @@ import { ValeurForfaitaireError } from "#utils/errors.js";
 type Sh = number;
 
 /**
- * @doctrine ventilation.installation.cef
- * @doctrine ventilation.installation.cep
- * @doctrine ventilation.installation.eges
+ * @formule ventilation.installation.cef
+ * @formule ventilation.installation.cep
+ * @formule ventilation.installation.eges
  * @return Consommations par usage et par énergie de l'auxiliaire de ventilation
  */
 export function calcule_consommations(props: {
@@ -29,7 +29,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine ventilation.installation.caux_enr
+ * @formule ventilation.installation.caux_enr
  * @return Consommations d'électricité renouvelable de l'auxiliaire de ventilation en kWh/an
  */
 export function calcule_caux_enr(props: {
@@ -57,7 +57,7 @@ export function calcule_caux(props: {
 }
 
 /**
- * @doctrine ventilation.installation.rut
+ * @formule ventilation.installation.rut
  * @returns Puissance moyenne de l'auxiliaire de ventilation en W
  */
 export function calcule_pvent_moy(props: {
@@ -124,7 +124,7 @@ export function calcule_pvent_moy_immeuble(props: {
 }
 
 /**
- * @doctrine ventilation.installation.rut
+ * @formule ventilation.installation.rut
  * @returns Ratio du temps d'utilisation du mode mécanique de l'auxiliaire de ventilation
  */
 export function calcule_rut(props: {
@@ -154,7 +154,7 @@ export function calcule_rut(props: {
 }
 
 /**
- * @doctrine ventilation.installation.rdim
+ * @formule ventilation.installation.rdim
  * @param props.surface_installation : Surface de l'installation de ventilation en m²
  * @param props.surface_installations : Surface totale des installations de ventilation en m²
  * @returns Ratio de dimensionnement de l'installation de ventilation
@@ -178,9 +178,9 @@ export type Debits = {
 };
 
 /**
- * @doctrine ventilation.installation.qvasouf_conv
- * @doctrine ventilation.installation.qvarep_conv
- * @doctrine ventilation.installation.smea_conv
+ * @formule ventilation.installation.qvasouf_conv
+ * @formule ventilation.installation.qvarep_conv
+ * @formule ventilation.installation.smea_conv
  * @see abaques.ventilation.debits
  * @throws {ValeurForfaitaireError}
  * @returns Débits conventionnels de l'installation de ventilation
@@ -204,7 +204,7 @@ export function calcule_debits(props: {
 }
 
 /**
- * @doctrine ventilation.installation.hvent
+ * @formule ventilation.installation.hvent
  * @returns Déperditions thermiques par renouvellement d'air due au système de ventilation en W/K
  */
 export function calcule_hvent(props: {

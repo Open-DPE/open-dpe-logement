@@ -7,7 +7,7 @@ export * from "#rules/enveloppe/paroi/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
- * @doctrine enveloppe.mur.isolation_aiu
+ * @formule enveloppe.mur.isolation_aiu
  * @param props.isolation : État d'isolation saisi du mur donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment
  * @return État d'isolation du mur donnant sur un local non chauffé
@@ -20,7 +20,7 @@ export function calcule_isolation_aiu(props: {
 }
 
 /**
- * @doctrine enveloppe.mur.u
+ * @formule enveloppe.mur.u
  * @props props.u_saisi : Coefficient de transmission thermique du mur saisi en W/m².K
  * @props props.isolation : Etat de l'isolation du mur
  * @props props.type_isolation : Type d'isolation du mur
@@ -73,7 +73,7 @@ export function calcule_u(props: {
 }
 
 /**
- * @doctrine enveloppe.mur.u0
+ * @formule enveloppe.mur.u0
  * @see https://github.com/dpe-audit/dpe-logement/issues/41
  * @see https://github.com/dpe-audit/dpe-logement/issues/47
  * @props props.u0_saisi : Coefficient de transmission thermique du mur nu saisi en W/m².K

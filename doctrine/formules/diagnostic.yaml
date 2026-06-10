@@ -1,0 +1,71 @@
+diagnostic.cef:
+  id: diagnostic.cef
+  description: Consommations d'énergie finale
+  references: Arrêté du 31 mars 2021
+  type: number
+  unite: kWh/m²/an
+  dependances:
+    - batiment.sh
+    - chauffage.cef
+    - ecs.cef
+    - refroidissement.cef
+    - ventilation.cef
+
+diagnostic.cep:
+  id: diagnostic.cep
+  description: Consommations d'énergie primaire
+  references: Arrêté du 31 mars 2021
+  type: number
+  unite: kWh/m²/an
+  dependances:
+    - batiment.sh
+    - chauffage.cep
+    - ecs.cep
+    - refroidissement.cep
+    - ventilation.cep
+
+diagnostic.eges:
+  id: diagnostic.eges
+  description: Emissions de gaz à effet de serre
+  references: Arrêté du 31 mars 2021
+  type: number
+  unite: kgCO2/m²/an
+  dependances:
+    - batiment.sh
+    - chauffage.eges
+    - ecs.eges
+    - refroidissement.eges
+    - ventilation.eges
+
+diagnostic.etiquette_energie:
+  id: diagnostic.etiquette_energie
+  description: Étiquette énergie
+  references: Arrêté du 31 mars 2021
+  type: string
+  enum: [A, B, C, D, E, F, G]
+  dependances:
+    - diagnostic.cep
+    - diagnostic.eges
+    - climat.zone_climatique
+
+diagnostic.etiquette_climat:
+  id: diagnostic.etiquette_climat
+  description: Étiquette climat
+  references: Arrêté du 31 mars 2021
+  type: string
+  enum: [A, B, C, D, E, F, G]
+  dependances:
+    - diagnostic.eges
+    - climat.zone_climatique
+
+diagnostic.confort_ete:
+  id: diagnostic.confort_ete
+  description: Confort d'été
+  references: Arrêté du 31 mars 2021
+  type: [number, "null"]
+  enum: [1, 2, 3, null]
+  dependances:
+    - enveloppe.presence_protection_solaire
+    - enveloppe.isolation_planchers_hauts
+    - enveloppe.inertie
+    - enveloppe.logement_traversant

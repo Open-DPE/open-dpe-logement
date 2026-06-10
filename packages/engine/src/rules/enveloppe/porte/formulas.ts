@@ -4,7 +4,7 @@ export * from "#rules/enveloppe/paroi/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
- * @doctrine enveloppe.porte.isolation_aiu
+ * @formule enveloppe.porte.isolation_aiu
  * @return État d'isolation de la porte donnant sur un local non chauffé
  */
 export function calcule_isolation_aiu(): boolean {
@@ -12,7 +12,7 @@ export function calcule_isolation_aiu(): boolean {
 }
 
 /**
- * @doctrine enveloppe.porte.u
+ * @formule enveloppe.porte.u
  * @param props.u_saisi : Coefficient de transmission thermique saisi
  * @param props.taux_vitrage : Taux de vitrage de la porte
  * @param props.presence_sas : Indique la présence d'un sas derrière la porte

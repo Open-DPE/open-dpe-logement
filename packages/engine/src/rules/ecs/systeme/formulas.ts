@@ -8,9 +8,9 @@ import * as installation from "#rules/ecs/installation/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
- * @doctrine ecs.systeme.cef
- * @doctrine ecs.systeme.cep
- * @doctrine ecs.systeme.eges
+ * @formule ecs.systeme.cef
+ * @formule ecs.systeme.cep
+ * @formule ecs.systeme.eges
  * @return Consommations par usage et par énergie du générateur d'eau chaude sanitaire
  */
 export function calcule_consommations(props: {
@@ -40,7 +40,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine ecs.systeme.cecs
+ * @formule ecs.systeme.cecs
  * @returns Consommation d'énergie du système d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs(props: {
@@ -55,7 +55,7 @@ export function calcule_cecs(props: {
 }
 
 /**
- * @doctrine ecs.systeme.cecs_elec
+ * @formule ecs.systeme.cecs_elec
  * @return Consommation d'électricité du système d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_elec(props: {
@@ -68,7 +68,7 @@ export function calcule_cecs_elec(props: {
 }
 
 /**
- * @doctrine ecs.systeme.cecs_enr
+ * @formule ecs.systeme.cecs_enr
  * @return Consommations d'électricité renouvelable du système d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_enr(props: {
@@ -84,7 +84,7 @@ export function calcule_cecs_enr(props: {
 }
 
 /**
- * @doctrine ecs.systeme.caux_dist
+ * @formule ecs.systeme.caux_dist
  * @return Consommation des auxiliaires de distribution d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_dist(props: {
@@ -95,7 +95,7 @@ export function calcule_caux_dist(props: {
 }
 
 /**
- * @doctrine ecs.systeme.caux_dist_enr
+ * @formule ecs.systeme.caux_dist_enr
  * @return Consommations d'électricité renouvelable des auxiliaires de distribution d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_dist_enr(props: {
@@ -111,7 +111,7 @@ export function calcule_caux_dist_enr(props: {
 }
 
 /**
- * @doctrine ecs.systeme.qcirb
+ * @formule ecs.systeme.qcirb
  * @param props.sh : Surface de l'installation d'eau chaude sanitaire en m²
  * @param props.installation_collective : Installation collective d'eau chaude sanitaire
  * @param props.niveaux_desservis : Nombre de niveaux desservis par l'installation d'eau chaude sanitaire
@@ -142,7 +142,7 @@ export function calcule_qcirb(props: {
 }
 
 /**
- * @doctrine ecs.systeme.qtrac
+ * @formule ecs.systeme.qtrac
  * @return Consommation du traçeur d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qtrac(props: {
@@ -158,7 +158,7 @@ export function calcule_qtrac(props: {
 }
 
 /**
- * @doctrine ecs.systeme.rdim
+ * @formule ecs.systeme.rdim
  * @param props.n_systemes - Nombre de systèmes d'eau chaude sanitaire associés à l'installation
  * @returns Ratio de dimensionnement du système d'eau chaude sanitaire
  */
@@ -167,7 +167,7 @@ export function calcule_rdim(props: { n_systemes: number }): number {
 }
 
 /**
- * @doctrine ecs.systeme.iecs
+ * @formule ecs.systeme.iecs
  * @returns Inverse du rendement du système d'eau chaude sanitaire
  */
 export function calcule_iecs(props: {
@@ -181,7 +181,7 @@ export function calcule_iecs(props: {
 }
 
 /**
- * @doctrine ecs.systeme.rd
+ * @formule ecs.systeme.rd
  * @see abaques.ecs.rd
  * @throws {ValeurForfaitaireError}
  * @returns Rendement de distribution du système d'eau chaude sanitaire
@@ -313,10 +313,10 @@ export type Rendements = {
 };
 
 /**
- * @doctrine ecs.systeme.rd
- * @doctrine ecs.systeme.rg
- * @doctrine ecs.systeme.rs
- * @doctrine ecs.systeme.rgs
+ * @formule ecs.systeme.rd
+ * @formule ecs.systeme.rg
+ * @formule ecs.systeme.rs
+ * @formule ecs.systeme.rgs
  * @returns Rendements dy système
  */
 export function calcule_rendements(props: RendementsProps): Rendements {

@@ -16,9 +16,9 @@ schemas/                        # Schémas de données publiques JSON Schema
 apps/                           # Applications
 packages/
 ├── engine/                     # Moteur de calcul 3CL-DPE
-├── models/                     # Types TypeScript (écriture manuelle, stables)
-├── schemas/                    # Repositories des schémas de données publiques et validation
-├── transformer/                # Transformers de données (schemas → schemas)
+├── models/                     # Implémentation des schémas de données publiques
+├── schemas/                    # Export des schémas de données publiques et validation
+├── transformer/                # Transformers de données (schemas to schemas)
 └── database/                   # Infrastructure SQL
 ```
 
@@ -28,25 +28,21 @@ packages/
 - TypeScript ≥ 5
 - npm >= 11
 - Turborepo
-- Next.js 16
-- React 19
 - ESLint
 
 ## Commandes
 
-| Commande              | Description                               |
-| --------------------- | ----------------------------------------- |
-| `npm run dev`         | Lance tous les apps en mode développement |
-| `npm run build`       | Build toutes les apps et packages         |
-| `npm run lint`        | Lint l'ensemble du monorepo               |
-| `npm run check-types` | Vérification TypeScript                   |
-| `npm run format`      | Formatage avec Prettier                   |
-
-Pour cibler un workspace spécifique :
-
 ```sh
-npx turbo dev --filter=web
-npx turbo build --filter=@dpe-audit/core
+npm run dev                                 # Lance tous les apps en mode développement
+npx turbo dev --filter=web                  # Lance une app spécifique
+npm run build                               # Build toutes les apps et packages
+npx turbo build --filter=@dpe-audit/core    # Build un workspace spécifique
+npm run lint                                # Lint l'ensemble du monorepo
+npm run check-types                         # Vérification TypeScript
+npm run format                              # Formatage avec Prettier
+npm run abaques:generate                    # Exporte les abaques depuis `/doctrine/abaques` vers `/packages/abaques`
+npm run schemas:generate                    # Exporte les schémas de données publiques depuis `/schemas` vers `/packages/schemas`
+
 ```
 
 ## Contribution

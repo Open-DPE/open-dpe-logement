@@ -1,7 +1,7 @@
 import { chauffage } from "@open-dpe-logement/models";
 
 /**
- * @doctrine chauffage.emetteur.delta_pem
+ * @formule chauffage.emetteur.delta_pem
  * @return Perte de charge de l'émetteur en kPa
  */
 export function calcule_delta_pem(props: {
@@ -38,7 +38,7 @@ export function calcule_fcot(props: {
 }
 
 /**
- * @doctrine chauffage.emetteur.dtheta_dim
+ * @formule chauffage.emetteur.dtheta_dim
  * @return Chute nominale de température de dimensionnement en °C
  */
 export function calcule_dtheta_dim(props: {

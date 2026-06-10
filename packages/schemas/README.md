@@ -4,7 +4,7 @@ Schémas de données publiques Open DPE Logement.
 
 ## Installation
 
-```text
+```sh
 npm i @open-dpe-logement/schemas
 ```
 

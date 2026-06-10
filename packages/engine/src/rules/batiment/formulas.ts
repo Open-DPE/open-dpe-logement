@@ -1,5 +1,5 @@
 /**
- * @doctrine batiment.ratio_proratisation
+ * @formule batiment.ratio_proratisation
  * @props sh_batiment - Surface habitable totale du bâtiment en m²
  * @props sh_logement - Surface habitable du logement en m²
  * @return Ratio de proratisation
@@ -13,7 +13,7 @@ export function calcule_ratio_proratisation(props: {
 }
 
 /**
- * @doctrine batiment.sh
+ * @formule batiment.sh
  * @props sh_batiment - Surface habitable du bâtiment en m²
  * @props sh_logement - Surface habitable du logement en m²
  * @return Surface habitable de référence en m²
@@ -26,7 +26,7 @@ export function calcule_sh(props: {
 }
 
 /**
- * @doctrine batiment.hsp
+ * @formule batiment.hsp
  * @props hsp_batiment - Hauteur sous plafond du bâtiment en m
  * @props hsp_logement - Hauteur sous plafond du logement en m
  * @return Hauteur sous plafond de référence en m

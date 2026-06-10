@@ -8,9 +8,9 @@ import * as installation from "#rules/refroidissement/installation/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
- * @doctrine refroidissement.generateur.cef
- * @doctrine refroidissement.generateur.cep
- * @doctrine refroidissement.generateur.eges
+ * @formule refroidissement.generateur.cef
+ * @formule refroidissement.generateur.cep
+ * @formule refroidissement.generateur.eges
  * @return Consommations par usage et par énergie du générateur de refroidissement
  */
 export function calcule_consommations(props: {
@@ -39,7 +39,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine refroidissement.generateur.cfr
+ * @formule refroidissement.generateur.cfr
  * @returns Consommations du générateur de refroidissement en kWh/an
  */
 export function calcule_cfr(props: {
@@ -53,7 +53,7 @@ export function calcule_cfr(props: {
 }
 
 /**
- * @doctrine refroidissement.generateur.cfr_enr
+ * @formule refroidissement.generateur.cfr_enr
  * @return Consommations d'électricité renouvelable du générateur de refroidissement en kWh/an
  */
 export function calcule_cfr_enr(props: {
@@ -69,7 +69,7 @@ export function calcule_cfr_enr(props: {
 }
 
 /**
- * @doctrine refroidissement.generateur.cfr_elec
+ * @formule refroidissement.generateur.cfr_elec
  * @return Consommation d'électricité du générateur de refroidissement en kWh/an
  */
 export function calcule_cfr_elec(props: {
@@ -82,7 +82,7 @@ export function calcule_cfr_elec(props: {
 }
 
 /**
- * @doctrine refroidissement.generateur.caux
+ * @formule refroidissement.generateur.caux
  * @see https://github.com/dpe-audit/dpe-logement/issues/38
  * @returns Consommation d'énergie de l'auxiliaire de refroidissement en Wh/an
  */
@@ -91,7 +91,7 @@ export function calcule_caux(): number {
 }
 
 /**
- * @doctrine refroidissement.generateur.rdim
+ * @formule refroidissement.generateur.rdim
  * @param props.installations - Liste des installations de refroidissement associées au générateur
  * @param props.installations[].n_generateurs - Nombre de générateurs de refroidissement associés à chaque installation
  * @returns Ratio de dimensionnement du générateur de refroidissement
@@ -107,7 +107,7 @@ export function calcule_rdim(props: {
 }
 
 /**
- * @doctrine refroidissement.generateur.eer
+ * @formule refroidissement.generateur.eer
  * @param props.seer_saisi - Coefficient d'efficience énergétique saisonnier du générateur connu et justifié (SEER)
  * @see abaques.refroidissement.eer
  * @throws {ValeurForfaitaireError}

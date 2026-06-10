@@ -1,0 +1,542 @@
+ecs.cef:
+  id: ecs.cef
+  description: Consommations d'énergie finale d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.generateur.cef
+
+ecs.cep:
+  id: ecs.cep
+  description: Consommations d'énergie primaire d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.generateur.cep
+
+ecs.eges:
+  id: ecs.eges
+  description: Emissions de gaz à effet de serre d'eau chaude sanitaire
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - ecs.generateur.eges
+
+ecs.cecs:
+  id: ecs.cecs
+  description: Consommations d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.generateur.cecs
+
+ecs.cecs_elec:
+  id: ecs.cecs_elec
+  description: Consommations électriques d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.generateur.cecs_elec
+
+ecs.caux:
+  id: ecs.caux
+  description: Consommations des auxiliaires d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.caux_gen
+    - ecs.caux_dist
+
+ecs.caux_gen:
+  id: ecs.caux_gen
+  description: Consommations des auxiliaires de génération d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.generateur.caux
+
+ecs.caux_dist:
+  id: ecs.caux_dist
+  description: Consommations des auxiliaires de distribution d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.installation.caux_dist
+
+ecs.qgw:
+  id: ecs.qgw
+  description: Pertes de stockage d'eau chaude sanitaire
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.generateur.qgw
+
+ecs.qgen:
+  id: ecs.qgen
+  description: Pertes de génération d'eau chaude sanitaire
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.generateur.qgen
+
+ecs.qdw_ind_vc:
+  id: ecs.qdw_ind_vc
+  description: Pertes de distribution individuelle en volume chauffé d'eau chaude sanitaire
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.installation.qdw_ind_vc
+
+ecs.qdw_col_vc:
+  id: ecs.qdw_col_vc
+  description: Pertes de distribution collective en volume chauffé d'eau chaude sanitaire
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.installation.qdw_col_vc
+
+ecs.qdw_col_hvc:
+  id: ecs.qdw_col_hvc
+  description: Pertes de distribution collective hors du volume chauffé d'eau chaude sanitaire
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.installation.qdw_col_hvc
+
+ecs.becs:
+  id: ecs.becs
+  description: Besoins d'eau chaude 
+  references: Méthode 3CL-DPE 2021 §11.1
+  type: number
+  unite: kWh/mois
+  dependances:
+    - climat.nj
+    - climat.sollicitations
+    - ecs.nadeq
+
+ecs.nadeq:
+  id: ecs.nadeq
+  description: Nombre d'adulte équivalent
+  references: Méthode 3CL-DPE 2021 §11.1
+  type: number
+  dependances:
+    - ecs.nmax
+
+ecs.nmax:
+  id: ecs.nmax
+  description: Coefficient d'occupation maximal
+  references: Méthode 3CL-DPE 2021 §11.1
+  type: number
+
+# <-- Installations d'eau chaude sanitaire -->
+
+ecs.installation.becs:
+  id: ecs.installation.becs
+  description: Besoins d'eau chaude sanitaire proratisés à l'installation
+  type: number
+  unite: kWh/mois
+  dependances:
+    - ecs.becs
+    - ecs.installation.rdim
+
+ecs.installation.caux_dist:
+  id: ecs.installation.caux_dist
+  description: Consommations des auxiliaires de distribution d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.caux_dist
+
+ecs.installation.rdim:
+  id: ecs.installation.rdim
+  description: Ratio de dimensionnement de l'installation d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §17
+  type: number
+
+ecs.installation.fecs:
+  id: ecs.installation.fecs
+  description: Facteur de couverture solaire de l'installation d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.3
+  type: number
+  dependances:
+    - climat.zone_climatique
+
+ecs.installation.qdw:
+  id: ecs.installation.qdw
+  description: Pertes de distribution d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §15.2.3
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.installation.qdw_ind_vc
+    - ecs.installation.qdw_col_vc
+    - ecs.installation.qdw_col_hvc
+
+ecs.installation.qdw_ind_vc:
+  id: ecs.installation.qdw_ind_vc
+  description: Pertes de distribution individuelle en volume chauffé
+  references: Méthode 3CL-DPE 2021 §15.2.3
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.becs
+
+ecs.installation.qdw_col_vc:
+  id: ecs.installation.qdw_col_vc
+  description: Pertes de distribution collective en volume chauffé
+  references: Méthode 3CL-DPE 2021 §15.2.3
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.becs
+
+ecs.installation.qdw_col_hvc:
+  id: ecs.installation.qdw_col_hvc
+  description: Pertes de distribution collective hors du volume chauffé
+  references: Méthode 3CL-DPE 2021 §15.2.3
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.becs
+
+# <-- Systèmes d'eau chaude sanitaire -->
+
+ecs.systeme.cef:
+  id: ecs.systeme.cef
+  description: Consommations d'énergie finale du système d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs
+    - ecs.systeme.cecs_enr
+    - ecs.systeme.caux_dist
+    - ecs.systeme.caux_dist_enr
+
+ecs.systeme.cep:
+  id: ecs.systeme.cep
+  description: Consommations d'énergie primaire du système d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - common.fcep
+    - ecs.systeme.cecs
+    - ecs.systeme.cecs_enr
+    - ecs.systeme.caux_dist
+    - ecs.systeme.caux_dist_enr
+
+ecs.systeme.eges:
+  id: ecs.systeme.eges
+  description: Emissions de gaz à effet de serre du système d'eau chaude sanitaire
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - common.feges
+    - ecs.systeme.cecs
+    - ecs.systeme.cecs_enr
+    - ecs.systeme.caux_dist
+    - ecs.systeme.caux_dist_enr
+
+ecs.systeme.cecs:
+  id: ecs.systeme.cecs
+  description: Consommations du système d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.installation.becs
+    - ecs.installation.fecs
+    - ecs.systeme.iecs
+    - ecs.systeme.rdim
+
+ecs.systeme.cecs_elec:
+  id: ecs.systeme.cecs_elec
+  description: Consommations d'électricité du système d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs
+
+ecs.systeme.cecs_enr:
+  id: ecs.systeme.cecs_enr
+  description: Consommations d'électricité renouvelable du système d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - ecs.systeme.cecs
+
+ecs.systeme.caux_dist:
+  id: ecs.systeme.caux_dist
+  description: Consommations des auxiliaires de distribution d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §15.2.3
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.qcirb
+    - ecs.systeme.qtrac
+
+ecs.systeme.caux_dist_enr:
+  id: ecs.systeme.caux_dist_enr
+  description: Consommations d'électricité renouvelable des auxiliaires de distribution d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - ecs.systeme.caux_dist
+
+ecs.systeme.qcirb:
+  id: ecs.systeme.qcirb
+  description: Consommations du circulateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §15.2.3
+  type: number
+  unite: Wh/an
+  dependances:
+    - climat.nj
+    - ecs.installation.qdw
+
+ecs.systeme.qtrac:
+  id: ecs.systeme.qtrac
+  description: Consommation du traçeur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §15.2.3
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.installation.becs
+
+ecs.systeme.rdim:
+  id: ecs.systeme.rdim
+  description: Ratio de dimensionnement du système d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.4
+  type: number
+
+ecs.systeme.iecs:
+  id: ecs.systeme.iecs
+  description: Inverse du rendement du système d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.2
+  type: number
+  dependances:
+    - ecs.systeme.rd
+    - ecs.systeme.rg
+    - ecs.systeme.rs
+    - ecs.systeme.rgs
+
+ecs.systeme.rd:
+  id: ecs.systeme.rd
+  description: Rendement de distribution de l'installation d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.5
+  type: number
+
+ecs.systeme.rg:
+  id: ecs.systeme.rg
+  description: Rendement de génération de l'installation d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §14
+  type: number
+  dependances:
+    - ecs.becs
+    - ecs.generateur.rpn
+    - ecs.generateur.qp0
+    - ecs.generateur.pveilleuse
+
+ecs.systeme.rgs:
+  id: ecs.systeme.rgs
+  description: Rendement de génération et de stockage de l'installation d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §14
+  type: number
+  dependances:
+    - ecs.installation.becs
+    - ecs.generateur.cop
+    - ecs.generateur.rpn
+    - ecs.generateur.qp0
+    - ecs.generateur.pveilleuse
+    - ecs.generateur.qgw
+
+ecs.systeme.rs:
+  id: ecs.systeme.rs
+  description: Rendement de stockage de l'installation d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.6 et §14
+  type: number
+  dependances:
+    - ecs.installation.becs
+    - ecs.systeme.rd
+    - ecs.generateur.qgw
+
+# <-- Générateurs d'eau chaude sanitaire -->
+
+ecs.generateur.cef:
+  id: ecs.generateur.cef
+  description: Consommations d'énergie finale du générateur d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cef
+    - ecs.generateur.caux_gen
+    - ecs.generateur.caux_gen_enr
+
+ecs.generateur.cep:
+  id: ecs.generateur.cep
+  description: Consommations d'énergie primaire du générateur d'eau chaude sanitaire
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cep
+    - ecs.generateur.caux_gen
+    - ecs.generateur.caux_gen_enr
+
+ecs.generateur.eges:
+  id: ecs.generateur.eges
+  description: Emissions de gaz à effet de serre du générateur d'eau chaude sanitaire
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - ecs.systeme.eges
+    - ecs.generateur.caux_gen
+    - ecs.generateur.caux_gen_enr
+
+ecs.generateur.cecs:
+  id: ecs.generateur.cecs
+  description: Consommations du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs
+
+ecs.generateur.cecs_elec:
+  id: ecs.generateur.cecs_elec
+  description: Consommations d'électricité du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.systeme.cecs_elec
+
+ecs.generateur.caux_gen:
+  id: ecs.generateur.caux_gen
+  description: Consommations de l'auxiliaire de génération d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §15.1.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - ecs.becs
+    - ecs.generateur.pn
+    - ecs.generateur.paux
+    - ecs.generateur.rdim
+
+ecs.generateur.caux_gen_enr:
+  id: ecs.generateur.caux_gen_enr
+  description: Consommations d'électricité renouvelable de l'auxiliaire de génération d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - ecs.generateur.caux_gen
+
+ecs.generateur.rdim:
+  id: ecs.generateur.rdim
+  description: Ratio de dimensionnement du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §11.4
+  type: number
+  dependances:
+    - ecs.installation.rdim
+    - ecs.systeme.rdim
+
+ecs.generateur.pn:
+  id: ecs.generateur.pn
+  description: Puissance du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §13.2.2.4
+  type: number
+  unite: kW
+  dependances:
+    - ecs.generateur.pdim
+
+ecs.generateur.pdim:
+  id: ecs.generateur.pdim
+  description: Puissance de dimensionnement du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §13.2.2.4
+  type: number
+  unite: kW
+  dependances:
+    - ecs.generateur.pecs
+    - chauffage.generateur.pch
+
+ecs.generateur.pecs:
+  id: ecs.generateur.pecs
+  description: Puissance conventionnelle du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §13.2.2.4
+  type: number
+  unite: kW
+
+ecs.generateur.paux:
+  id: ecs.generateur.paux
+  description: Puissance de l'auxiliaire de production d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §15.1
+  type: number
+  unite: kW
+  dependances:
+    - ecs.generateur.pn
+
+ecs.generateur.cop:
+  id: ecs.generateur.cop
+  description: Coefficient de performance du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §14.2
+  type: [number, "null"]
+  dependances:
+    - climat:zone_climatique
+
+ecs.generateur.rpn:
+  id: ecs.generateur.rpn
+  description: Rendement à pleine charge
+  references: Méthode 3CL-DPE 2021 §13.2
+  type: [number, "null"]
+  dependances:
+    - ecs.generateur.pn
+
+ecs.generateur.qp0:
+  id: ecs.generateur.qp0
+  description: Pertes à l'arrêt du générateur
+  references: Méthode 3CL-DPE 2021 §13.2
+  type: [number, "null"]
+  unite: kW
+  dependances:
+    - ecs.generateur.pn
+
+ecs.generateur.pveilleuse:
+  id: ecs.generateur.pveilleuse
+  description: Puissance de la veilleuse
+  references: Méthode 3CL-DPE 2021 §13.2
+  type: [number, "null"]
+  unite: W
+  dependances:
+    - ecs.generateur.pn
+
+ecs.generateur.cr:
+  id: ecs.generateur.cr
+  description: Coefficient de perte du ballon de stockage
+  references: Méthode 3CL-DPE 2021 §11.6
+  type: number
+  unite: Wh/l.°C.jour
+
+ecs.generateur.qgw:
+  id: ecs.generateur.qgw
+  description: Pertes de stockage
+  references: Méthode 3CL-DPE 2021 §11.6
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.generateur.cr
+
+ecs.generateur.qgen:
+  id: ecs.generateur.qgen
+  description: Pertes de génération du générateur d'eau chaude sanitaire
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: Wh/an
+  dependances:
+    - ecs.generateur.qp0

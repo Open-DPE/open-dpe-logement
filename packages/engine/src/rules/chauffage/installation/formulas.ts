@@ -8,7 +8,7 @@ import { ValeurForfaitaireError } from "#utils/errors.js";
 import { createParMois } from "#utils/helpers.js";
 
 /**
- * @doctrine chauffage.installation.caux_dist
+ * @formule chauffage.installation.caux_dist
  * @return Consommations des auxiliaires de distribution en kWh/an
  */
 export function calcule_caux_dist(props: {
@@ -18,7 +18,7 @@ export function calcule_caux_dist(props: {
 }
 
 /**
- * @doctrine chauffage.installation.bch
+ * @formule chauffage.installation.bch
  * @returns Besoins de chauffage proratisés à l'installation en kWh/mois
  */
 export function calcule_bch(props: {
@@ -30,7 +30,7 @@ export function calcule_bch(props: {
 }
 
 /**
- * @doctrine chauffage.installation.rdim
+ * @formule chauffage.installation.rdim
  * @param props.surface_installation - Surface de l'installation de chauffage en m²
  * @param props.surface_installations - Surface totale des installations de chauffage en m²
  * @returns Ratio de dimensionnement de l'installation de chauffage
@@ -45,7 +45,7 @@ export function calcule_rdim(props: {
 }
 
 /**
- * @doctrine chauffage.installation.pch
+ * @formule chauffage.installation.pch
  * @returns Puissance de chauffage de l'installation de chauffage en kW
  */
 export function calcule_pch(props: {
@@ -57,7 +57,7 @@ export function calcule_pch(props: {
 }
 
 /**
- * @doctrine chauffage.installation.fch
+ * @formule chauffage.installation.fch
  * @param props.fch_saisi - Facteur de couverture solaire saisi
  * @returns Facteur de couverture solaire de l'installation de chauffage
  */

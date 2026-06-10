@@ -7,9 +7,9 @@ import * as production from "#rules/production/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
- * @doctrine eclairage.cef
- * @doctrine eclairage.cep
- * @doctrine eclairage.eges
+ * @formule eclairage.cef
+ * @formule eclairage.cep
+ * @formule eclairage.eges
  * @return Consommations par usage et par énergie de l'éclairage
  */
 export function calcule_consommations(props: {
@@ -26,7 +26,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine eclairage.cecl
+ * @formule eclairage.cecl
  * @returns Consommation d'éclairage en kWh/an
  */
 export function calcule_cecl(props: {
@@ -38,7 +38,7 @@ export function calcule_cecl(props: {
 }
 
 /**
- * @doctrine eclairage.nhecl
+ * @formule eclairage.nhecl
  * @see abaques.eclairage.nhecl
  * @throws {ValeurForfaitaireError}
  * @returns Nombre d'heures d'éclairage en heures/an

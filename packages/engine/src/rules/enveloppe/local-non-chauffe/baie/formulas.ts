@@ -5,12 +5,12 @@ import { ValeurForfaitaireError } from "#utils/errors.js";
 import { createParMois } from "#utils/helpers.js";
 
 /**
- * @doctrine enveloppe.local_non_chauffe.baie.c1
+ * @formule enveloppe.local_non_chauffe.baie.c1
  */
 export const calcule_c1 = climat.calcule_c1;
 
 /**
- * @doctrine enveloppe.local_non_chauffe.baie.aue
+ * @formule enveloppe.local_non_chauffe.baie.aue
  * @see https://github.com/dpe-audit/dpe-logement/issues/40
  * @param props.mitoyennete : Mitoyenneté de la paroi du local non chauffé
  * @param props.surface : Surface de la paroi du local non chauffé en m²
@@ -31,7 +31,7 @@ export function calcule_aue(props: {
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.baie.aiu
+ * @formule enveloppe.local_non_chauffe.baie.aiu
  * @param props.mitoyennete : Mitoyenneté de la paroi du local non chauffé
  * @param props.surface : Surface de la paroi du local non chauffé en m²
  * @returns Surface de la paroi du local non chauffé donnant sur un espace chauffé en m²
@@ -50,7 +50,7 @@ export function calcule_aiu(props: {
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.baie.sst
+ * @formule enveloppe.local_non_chauffe.baie.sst
  * @param props.surface : Surface de la baie de l'espace tampon solarisé donnant sur l'extérieur en m²
  * @return Surface sud équivalente de la baie de l'espace tampon solarisé donnant sur l'extérieur en m²/mois
  */
@@ -66,7 +66,7 @@ export function calcule_sst(props: {
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.baie.t
+ * @formule enveloppe.local_non_chauffe.baie.t
  * @see https://github.com/dpe-audit/dpe-logement/issues/44
  * @see abaques.enveloppe.localNonChauffe.t
  * @throws {ValeurForfaitaireError}

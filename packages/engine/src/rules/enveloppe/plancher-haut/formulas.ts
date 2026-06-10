@@ -7,7 +7,7 @@ import * as paroi from "#rules/enveloppe/paroi/formulas.js";
 export * from "#rules/enveloppe/paroi/formulas.js";
 
 /**
- * @doctrine enveloppe.plancher_haut.isolation_aiu
+ * @formule enveloppe.plancher_haut.isolation_aiu
  * @param props.isolation : État d'isolation saisi du plancher haut donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment
  * @return État d'isolation de plancher haut donnant sur un local non chauffé
@@ -20,7 +20,7 @@ export function calcule_isolation_aiu(props: {
 }
 
 /**
- * @doctrine enveloppe.plancher_haut.u
+ * @formule enveloppe.plancher_haut.u
  * @props props.u_saisi : Coefficient de transmission thermique du plancher haut saisi en W/m².K
  * @props props.configuration : Configuration du plancher haut
  * @props props.isolation : Etat de l'isolation du plancher haut
@@ -76,7 +76,7 @@ export function calcule_u(props: {
 }
 
 /**
- * @doctrine enveloppe.plancher_haut.u0
+ * @formule enveloppe.plancher_haut.u0
  * @props props.u0_saisi : Coefficient de transmission thermique du plancher haut nu saisi en W/m².K
  * @param props.type_plancher_haut : Type de plancher haut
  * @see abaques.enveloppe.plancherHaut.uph0

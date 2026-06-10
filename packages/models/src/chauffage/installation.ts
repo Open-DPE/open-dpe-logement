@@ -51,7 +51,7 @@ export const TYPES_PROGRAMMATION = [
 	"central_collectif_avec_detection_presence",
 	"terminal_avec_minimum_temperature",
 	"terminal_avec_minimum_temperature_detection_presence",
-];
+] as const;
 export type TypeProgrammation = (typeof TYPES_PROGRAMMATION)[number];
 export const TypeProgrammationEnum = buildEnum(TYPES_PROGRAMMATION);
 

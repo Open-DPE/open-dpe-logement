@@ -39,6 +39,17 @@ Avec :
 - $INT_{i,k,e}$ : Facteur d'intermittence du système $k$ associé à l'installation $i$ pour l'émetteur $e$
 - $Ich_{i,k,e}$ : Inverse du rendement du système $k$ associé à l'installation $i$ pour l'émetteur $e$
 
+$$Ich_{i,k,e} = \frac{1}{Rg_{i,k} \cdot Rd_{i,k,e} \cdot Re_{i,k,e} \cdot Rr_{i,k,e}}$$
+
+Avec :
+
+- $Rg_{i,k}$ : Rendement de génération du système $k$ associé à l'installation $i$
+- $Rd_{i,k,e}$ : Rendement de distribution du système $k$ associé à l'installation $i$ pour l'émetteur $e$
+- $Re_{i,k,e}$ : Rendement d'émission du système $k$ associé à l'installation $i$ pour l'émetteur $e$
+- $Rr_{i,k,e}$ : Rendement de régulation du système $k$ associé à l'installation $i$ pour l'émetteur $e$
+
+Les rendements de distribution, d'émission et de régulation de chaque système peuvent être obtenus en faisant la moyenne des rendements des émetteurs associés.
+
 ## Générateur bi-énergie
 
 Pour les générateurs pouvant fonctionner avec deux énergies différentes (selon le choix de l'occupant), chaque énergie couvre forfaitairement 50 % de la consommation :

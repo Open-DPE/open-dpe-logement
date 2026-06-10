@@ -6,9 +6,9 @@ import * as installation from "#rules/ecs/installation/formulas.js";
 import { createParMois } from "#utils/helpers.js";
 
 /**
- * @doctrine ecs.cef
- * @doctrine ecs.cep
- * @doctrine ecs.eges
+ * @formule ecs.cef
+ * @formule ecs.cep
+ * @formule ecs.eges
  * @return Consommations par usage et par énergie
  */
 export function calcule_consommations(props: {
@@ -18,7 +18,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine ecs.cecs
+ * @formule ecs.cecs
  * @return Consommations d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs(props: {
@@ -28,7 +28,7 @@ export function calcule_cecs(props: {
 }
 
 /**
- * @doctrine ecs.cecs_elec
+ * @formule ecs.cecs_elec
  * @return Consommation d'électricité d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_elec(props: {
@@ -38,7 +38,7 @@ export function calcule_cecs_elec(props: {
 }
 
 /**
- * @doctrine ecs.caux
+ * @formule ecs.caux
  * @return Consommations des auxiliaires de l'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux(props: {
@@ -49,7 +49,7 @@ export function calcule_caux(props: {
 }
 
 /**
- * @doctrine ecs.caux_gen
+ * @formule ecs.caux_gen
  * @return Consommations des auxiliaires de génération en kWh/an
  */
 export function calcule_caux_gen(props: {
@@ -59,7 +59,7 @@ export function calcule_caux_gen(props: {
 }
 
 /**
- * @doctrine ecs.caux_dist
+ * @formule ecs.caux_dist
  * @return Consommations des auxiliaires de distribution en kWh/an
  */
 export function calcule_caux_dist(props: {
@@ -69,7 +69,7 @@ export function calcule_caux_dist(props: {
 }
 
 /**
- * @doctrine ecs.qgw
+ * @formule ecs.qgw
  * @return Pertes de stockage en Wh/an
  */
 export function calcule_qgw(props: {
@@ -79,7 +79,7 @@ export function calcule_qgw(props: {
 }
 
 /**
- * @doctrine ecs.qgen
+ * @formule ecs.qgen
  * @return Pertes de génération d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qgen(props: {
@@ -89,7 +89,7 @@ export function calcule_qgen(props: {
 }
 
 /**
- * @doctrine ecs.qdw_ind_vc
+ * @formule ecs.qdw_ind_vc
  * @return Pertes de distribution individuelle en volume chauffé d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qdw_ind_vc(props: {
@@ -99,7 +99,7 @@ export function calcule_qdw_ind_vc(props: {
 }
 
 /**
- * @doctrine ecs.qdw_col_vc
+ * @formule ecs.qdw_col_vc
  * @return Pertes de distribution collective en volume chauffé en Wh/an
  */
 export function calcule_qdw_col_vc(props: {
@@ -109,7 +109,7 @@ export function calcule_qdw_col_vc(props: {
 }
 
 /**
- * @doctrine ecs.qdw_col_hvc
+ * @formule ecs.qdw_col_hvc
  * @return Pertes de distribution collective hors du volume chauffé en Wh/an
  */
 export function calcule_qdw_col_hvc(props: {
@@ -119,7 +119,7 @@ export function calcule_qdw_col_hvc(props: {
 }
 
 /**
- * @doctrine ecs.becs
+ * @formule ecs.becs
  * @returns Besoins d'eau chaude sanitaire en kWh/mois
  */
 export function calcule_becs(props: {
@@ -142,7 +142,7 @@ export function calcule_becs(props: {
 }
 
 /**
- * @doctrine ecs.nadeq
+ * @formule ecs.nadeq
  * @param props.logements : Nombre de logements
  * @return Nombre d'adultes équivalent
  */
@@ -157,7 +157,7 @@ export function calcule_nadeq(props: {
 }
 
 /**
- * @doctrine ecs.nmax
+ * @formule ecs.nmax
  * @param props.logements : Nombre de logements
  * @return Coefficient d'occupation maximal
  */

@@ -3,7 +3,7 @@ import * as models from "@open-dpe-logement/models";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
- * @doctrine enveloppe.pont_thermique.pt
+ * @formule enveloppe.pont_thermique.pt
  * @param props.type_liaison : Type de liaison
  * @param props.l : Longueur du pont thermique en m
  * @param props.pont_thermique_partiel : Indique si le pont thermique est partiel ou total
@@ -71,7 +71,7 @@ export type KptOuvertureMurProps = KptBaseProps<{
 }>;
 
 /**
- * @doctrine enveloppe.pont_thermique.kpt
+ * @formule enveloppe.pont_thermique.kpt
  * @see abaques.enveloppe.pontThermique.kpt
  * @throws ValeurForfaitaireError
  * @returns Valeur du pont thermique en W/(m.K)

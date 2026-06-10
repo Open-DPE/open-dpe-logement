@@ -17,7 +17,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine chauffage.cch
+ * @formule chauffage.cch
  * @return Consommations de chauffage en kWh/an
  */
 export function calcule_cch(props: {
@@ -27,7 +27,7 @@ export function calcule_cch(props: {
 }
 
 /**
- * @doctrine chauffage.cch_elec
+ * @formule chauffage.cch_elec
  * @return Consommation d'électricité de chauffage en kWh/an
  */
 export function calcule_cch_elec(props: {
@@ -37,7 +37,7 @@ export function calcule_cch_elec(props: {
 }
 
 /**
- * @doctrine chauffage.caux
+ * @formule chauffage.caux
  * @return Consommations des auxiliaires de chauffage en kWh/an
  */
 export function calcule_caux(props: {
@@ -48,7 +48,7 @@ export function calcule_caux(props: {
 }
 
 /**
- * @doctrine chauffage.caux_gen
+ * @formule chauffage.caux_gen
  * @return Consommations des auxiliaires de génération en kWh/an
  */
 export function calcule_caux_gen(props: {
@@ -58,7 +58,7 @@ export function calcule_caux_gen(props: {
 }
 
 /**
- * @doctrine chauffage.caux_dist
+ * @formule chauffage.caux_dist
  * @return Consommations des auxiliaires de distribution en kWh/an
  */
 export function calcule_caux_dist(props: {
@@ -68,7 +68,7 @@ export function calcule_caux_dist(props: {
 }
 
 /**
- * @doctrine chauffage.bch
+ * @formule chauffage.bch
  * @returns Besoins de chauffage en kWh/mois
  */
 export function calcule_bch(props: {
@@ -87,7 +87,7 @@ export function calcule_bch(props: {
 }
 
 /**
- * @doctrine chauffage.bch_hp
+ * @formule chauffage.bch_hp
  * @returns Besoins de chauffage hors pertes récupérées en kWh/mois
  */
 export function calcule_bch_hp(props: {
@@ -102,7 +102,7 @@ export function calcule_bch_hp(props: {
 }
 
 /**
- * @doctrine chauffage.bv
+ * @formule chauffage.bv
  * @returns Besoins de chauffage en kWh/mois
  */
 export function calcule_bv(props: {
@@ -117,7 +117,7 @@ export function calcule_bv(props: {
 }
 
 /**
- * @doctrine chauffage.pch
+ * @formule chauffage.pch
  * @return Puissance conventionnelle de chauffage en kW
  */
 export function calcule_pch(props: {
@@ -130,7 +130,7 @@ export function calcule_pch(props: {
 }
 
 /**
- * @doctrine chauffage.f
+ * @formule chauffage.f
  * @returns Fraction des besoins de chauffage couverts par les apports gratuits
  */
 export function calcule_f(props: {
@@ -162,7 +162,7 @@ export function calcule_f(props: {
 }
 
 /**
- * @doctrine chauffage.as
+ * @formule chauffage.as
  * @returns Apports solaires en Wh/mois
  */
 export function calcule_as(props: {
@@ -177,7 +177,7 @@ export function calcule_as(props: {
 }
 
 /**
- * @doctrine chauffage.ai
+ * @formule chauffage.ai
  * @returns Apports internes en Wh/mois
  */
 export function calcule_ai(props: {
@@ -193,7 +193,7 @@ export function calcule_ai(props: {
 }
 
 /**
- * @doctrine chauffage.qgw_rec
+ * @formule chauffage.qgw_rec
  * @returns Pertes de stockage récupérables en Wh/mois
  */
 export function calcule_qgw_rec(props: {
@@ -208,7 +208,7 @@ export function calcule_qgw_rec(props: {
 }
 
 /**
- * @doctrine chauffage.qdw_rec
+ * @formule chauffage.qdw_rec
  * @return Pertes de distribution d'eau chaude sanitaire récupérables en Wh/mois
  */
 export function calcule_qdw_rec(props: {
@@ -224,7 +224,7 @@ export function calcule_qdw_rec(props: {
 }
 
 /**
- * @doctrine chauffage.qgen_rec
+ * @formule chauffage.qgen_rec
  * @return Pertes de génération récupérables en Wh/mois
  */
 export function calcule_qgen_rec(props: {
@@ -238,7 +238,7 @@ export function calcule_qgen_rec(props: {
 }
 
 /**
- * @doctrine chauffage.qgen_ecs_rec
+ * @formule chauffage.qgen_ecs_rec
  * @return Pertes de génération d'eau chaude sanitaire récupérables en Wh/mois
  */
 export function calcule_qgen_ecs_rec(props: {
@@ -254,7 +254,7 @@ export function calcule_qgen_ecs_rec(props: {
 }
 
 /**
- * @doctrine chauffage.effet_joule
+ * @formule chauffage.effet_joule
  * @see https://github.com/dpe-audit/dpe-logement/issues/46
  * @returns Chauffage majoritaire par effet joule (plus de 50 % de la surface chauffée)
  */
@@ -274,7 +274,7 @@ export function calcule_effet_joule(props: {
 }
 
 /**
- * @doctrine chauffage.nref
+ * @formule chauffage.nref
  * @returns Nombre d'heures de chauffage en h/mois
  */
 export function calcule_nref(props: {
@@ -293,7 +293,7 @@ export function calcule_nref(props: {
 }
 
 /**
- * @doctrine chauffage.dh
+ * @formule chauffage.dh
  * @returns Degrés-heures de chauffage en °C.h/mois
  */
 export function calcule_dh(props: {

@@ -16,9 +16,9 @@ import { evaluate } from "#utils/math.js";
 export { utils };
 
 /**
- * @doctrine chauffage.generateur.cef
- * @doctrine chauffage.generateur.cep
- * @doctrine chauffage.generateur.eges
+ * @formule chauffage.generateur.cef
+ * @formule chauffage.generateur.cep
+ * @formule chauffage.generateur.eges
  * @return Consommations par usage et par énergie du générateur de chauffage
  */
 export function calcule_consommations(props: {
@@ -39,7 +39,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine chauffage.generateur.cch
+ * @formule chauffage.generateur.cch
  * @return Consommations du générateur chauffage en kWh/an
  */
 export function calcule_cch(props: {
@@ -49,7 +49,7 @@ export function calcule_cch(props: {
 }
 
 /**
- * @doctrine chauffage.generateur.cch_elec
+ * @formule chauffage.generateur.cch_elec
  * @return Consommation d'électricité du générateur chauffage en kWh/an
  */
 export function calcule_cch_elec(props: {
@@ -59,7 +59,7 @@ export function calcule_cch_elec(props: {
 }
 
 /**
- * @doctrine chauffage.generateur.caux_gen
+ * @formule chauffage.generateur.caux_gen
  * @return Consommations de l'auxiliaire de génération de chauffage en kWh/an
  */
 export function calcule_caux_gen(props: {
@@ -74,7 +74,7 @@ export function calcule_caux_gen(props: {
 }
 
 /**
- * @doctrine chauffage.generateur.caux_gen_enr
+ * @formule chauffage.generateur.caux_gen_enr
  * @return Consommations d'électricité renouvelable de l'auxiliaire de génération de chauffage en kWh/an
  */
 export function calcule_caux_gen_enr(props: {
@@ -90,7 +90,7 @@ export function calcule_caux_gen_enr(props: {
 }
 
 /**
- * @doctrine chauffage.generateur.rdim
+ * @formule chauffage.generateur.rdim
  * @returns Ratio de dimensionnement du générateur de chauffage
  */
 export function calcule_rdim(props: {
@@ -370,7 +370,7 @@ export function calcule_tfonc100(props: {
 }
 
 /**
- * @doctrine chauffage.generateur.qgen_rec
+ * @formule chauffage.generateur.qgen_rec
  * @param props.generateur_mixte : Générateur assurant la production de chauffage et d'eau chaude sanitaire
  * @return Pertes de génération récupérables du générateur de chauffage en Wh/mois
  */
@@ -393,7 +393,7 @@ export function calcule_qgen_rec(props: {
 }
 
 /**
- * @doctrine chauffage.generateur.qgen_rec
+ * @formule chauffage.generateur.qgen_rec
  * @return Pertes de génération du générateur de chauffage en Wh/an
  */
 export function calcule_qgen(props: {

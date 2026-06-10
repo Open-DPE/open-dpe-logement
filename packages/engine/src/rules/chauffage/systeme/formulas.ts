@@ -31,9 +31,9 @@ export type Configuration = {
 };
 
 /**
- * @doctrine chauffage.systeme.cef
- * @doctrine chauffage.systeme.cep
- * @doctrine chauffage.systeme.eges
+ * @formule chauffage.systeme.cef
+ * @formule chauffage.systeme.cep
+ * @formule chauffage.systeme.eges
  * @return Consommations par usage et par énergie du générateur de chauffage
  */
 export function calcule_consommations(props: {
@@ -63,7 +63,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine chauffage.systeme.cch
+ * @formule chauffage.systeme.cch
  * @return Consommations du système de chauffage en kWh/an
  */
 export function calcule_cch(props: {
@@ -74,7 +74,7 @@ export function calcule_cch(props: {
 }
 
 /**
- * @doctrine chauffage.systeme.cch_elec
+ * @formule chauffage.systeme.cch_elec
  * @return Consommation d'électricité du système de chauffage en kWh/an
  */
 export function calcule_cch_elec(props: {
@@ -87,7 +87,7 @@ export function calcule_cch_elec(props: {
 }
 
 /**
- * @doctrine chauffage.systeme.cch_enr
+ * @formule chauffage.systeme.cch_enr
  * @return Consommations d'électricité renouvelable du système de chauffage en kWh/an
  */
 export function calcule_cch_enr(props: {
@@ -103,7 +103,7 @@ export function calcule_cch_enr(props: {
 }
 
 /**
- * @doctrine chauffage.systeme.cch2
+ * @formule chauffage.systeme.cch2
  * @return Consommations de chauffage du système de chauffage (partie PAC pour les PAC hybrides) en kWh/an
  */
 export function calcule_cch1(props: {
@@ -113,7 +113,7 @@ export function calcule_cch1(props: {
 }
 
 /**
- * @doctrine chauffage.systeme.cch2
+ * @formule chauffage.systeme.cch2
  * @return Consommations de chauffage du système de chauffage (partie chaudière pour les PAC hybrides) en kWh/an
  */
 export function calcule_cch2(props: {
@@ -123,7 +123,7 @@ export function calcule_cch2(props: {
 }
 
 /**
- * @doctrine chauffage.systeme.caux_dist
+ * @formule chauffage.systeme.caux_dist
  * @return Consommations du circulateur de l'installation de chauffage en kWh/an
  */
 export function calcule_caux_dist(props: {
@@ -136,7 +136,7 @@ export function calcule_caux_dist(props: {
 }
 
 /**
- * @doctrine chauffage.systeme.caux_dist_enr
+ * @formule chauffage.systeme.caux_dist_enr
  * @return Consommations d'électricité renouvelable des auxiliaires de distribution de chauffage en kWh/an
  */
 export function calcule_caux_dist_enr(props: {

@@ -12,9 +12,9 @@ import { ValeurForfaitaireError } from "#utils/errors.js";
 import { evaluate } from "#utils/math.js";
 
 /**
- * @doctrine ecs.generateur.cef
- * @doctrine ecs.generateur.cep
- * @doctrine ecs.generateur.eges
+ * @formule ecs.generateur.cef
+ * @formule ecs.generateur.cep
+ * @formule ecs.generateur.eges
  * @return Consommations par usage et par énergie du générateur d'eau chaude sanitaire
  */
 export function calcule_consommations(props: {
@@ -35,7 +35,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine ecs.generateur.cecs
+ * @formule ecs.generateur.cecs
  * @return Consommations du générateur d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs(props: {
@@ -54,7 +54,7 @@ export function calcule_cecs_elec(props: {
 }
 
 /**
- * @doctrine ecs.generateur.caux_gen
+ * @formule ecs.generateur.caux_gen
  * @return Consommations de l'auxiliaire de génération d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_gen(props: {
@@ -69,7 +69,7 @@ export function calcule_caux_gen(props: {
 }
 
 /**
- * @doctrine ecs.generateur.caux_gen_enr
+ * @formule ecs.generateur.caux_gen_enr
  * @return Consommations d'électricité renouvelable de l'auxiliaire de génération d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_gen_enr(props: {
@@ -85,7 +85,7 @@ export function calcule_caux_gen_enr(props: {
 }
 
 /**
- * @doctrine ecs.generateur.rdim
+ * @formule ecs.generateur.rdim
  * @returns Ratio de dimensionnement du générateur d'eau chaude sanitaire
  */
 export function calcule_rdim(props: {
@@ -99,7 +99,7 @@ export function calcule_rdim(props: {
 }
 
 /**
- * @doctrine ecs.generateur.pn
+ * @formule ecs.generateur.pn
  * @param props.pn_saisi : Puissance nominale saisie du générateur d'eau chaude sanitaire en kW
  * @returns Puissance nominale conventionnelle du générateur d'eau chaude sanitaire en kW
  */
@@ -112,7 +112,7 @@ export function calcule_pn(props: {
 }
 
 /**
- * @doctrine ecs.generateur.pdim
+ * @formule ecs.generateur.pdim
  * @returns Puissance de dimensionnement du générateur en kW
  */
 export function calcule_pdim(props: {
@@ -124,7 +124,7 @@ export function calcule_pdim(props: {
 }
 
 /**
- * @doctrine ecs.generateur.pecs
+ * @formule ecs.generateur.pecs
  * @returns Puissance de dimensionnement du besoin d'eau chaude sanitaire en kW
  */
 export function calcule_pecs(props: {
@@ -146,7 +146,7 @@ export function calcule_pecs(props: {
 }
 
 /**
- * @doctrine ecs.generateur.paux
+ * @formule ecs.generateur.paux
  * @see abaques.ecs.paux
  * @throws {ValeurForfaitaireError}
  * @return Puissance de l'auxiliaire de génération d'eau chaude sanitaire en kW
@@ -178,7 +178,7 @@ export type CopProps = {
 } & utils.GenerateurThermodynamique;
 
 /**
- * @doctrine ecs.generateur.cop
+ * @formule ecs.generateur.cop
  * @applicable si {@link utils.is_generateur_thermodynamique}
  * @see abaques.ecs.cop
  * @throws {ValeurForfaitaireError}
@@ -215,9 +215,9 @@ export type CombustionProps = {
 } & (utils.GenerateurCombustion | utils.PACHybride);
 
 /**
- * @doctrine ecs.generateur.rpn
- * @doctrine ecs.generateur.qp0
- * @doctrine ecs.generateur.pveilleuse
+ * @formule ecs.generateur.rpn
+ * @formule ecs.generateur.qp0
+ * @formule ecs.generateur.pveilleuse
  * @applicable si {@link utils.is_generateur_combustion} | {@link utils.is_pac_hybride}
  * @see abaques.ecs.combustion
  * @throws {ValeurForfaitaireError}
@@ -265,7 +265,7 @@ export function calcule_combustion(props: CombustionProps): Combustion {
 }
 
 /**
- * @doctrine ecs.generateur.cr
+ * @formule ecs.generateur.cr
  * @see abaques.ecs.cr
  * @throws {ValeurForfaitaireError}
  * @return Coefficient de perte du ballon de stockage en Wh/l.°C.jour
@@ -285,7 +285,7 @@ export function calcule_cr(props: {
 }
 
 /**
- * @doctrine ecs.generateur.qgw
+ * @formule ecs.generateur.qgw
  * @return Pertes de stockage en Wh/an
  */
 export function calcule_qgw(props: {
@@ -301,7 +301,7 @@ export function calcule_qgw(props: {
 }
 
 /**
- * @doctrine ecs.generateur.qgen
+ * @formule ecs.generateur.qgen
  * @param props.generateur_mixte : Générateur assurant la production d'eau chaude sanitaire et de chauffage
  * @return Pertes de génération du générateur d'eau chaude sanitaire en Wh/an
  */

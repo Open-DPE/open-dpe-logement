@@ -16,7 +16,7 @@ import { createParMois } from "#utils/helpers.js";
 export { baie, paroi };
 
 /**
- * @doctrine enveloppe.local_non_chauffe.b
+ * @formule enveloppe.local_non_chauffe.b
  * @return Coefficient de réduction des déperditions thermiques du local non chauffé
  */
 export function calcule_b(
@@ -94,7 +94,7 @@ export function calcule_uvue(props: {
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.aue
+ * @formule enveloppe.local_non_chauffe.aue
  * @return Surface des parois du local non chauffé donnant sur l'extérieur en m²
  */
 export function calcule_aue(props: {
@@ -127,7 +127,7 @@ export function calcule_isolation_aue(
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.aiu
+ * @formule enveloppe.local_non_chauffe.aiu
  * @return Surface des parois du local non chauffé donnant sur un espace chauffé en m²
  */
 export function calcule_aiu(props: {
@@ -169,7 +169,7 @@ export function calcule_isolation_aiu(
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.sse
+ * @formule enveloppe.local_non_chauffe.sse
  * @see https://github.com/dpe-audit/dpe-logement/discussions/48
  * @returns Surface sud équivalente de l'espace tampon solarisé en m²/mois
  */
@@ -186,7 +186,7 @@ export function calcule_sse(props: {
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.t
+ * @formule enveloppe.local_non_chauffe.t
  * @param props.baies : Liste des baies du local non chauffé
  * @param props.baies[].surface : Surface de la baie en m²
  * @returns Coefficient de transparence moyen du local non chauffé
@@ -215,7 +215,7 @@ export function calcule_t(props: {
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.orientations
+ * @formule enveloppe.local_non_chauffe.orientations
  * @param props.baies : Liste des baies de l'espace tampon solarisé
  * @return Orientations majoritaires du local non chauffé
  */

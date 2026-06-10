@@ -14,59 +14,54 @@ export function calcule_consommations(props: {
 	const { cef_enr, usage, energie, reseau_id } = props;
 	const cef = Math.max(props.cef - cef_enr, 0);
 	const consommations: common.Consommations = {};
+
 	consommations[usage] = {
 		[energie]: {
 			cef,
-			cep: calcule_cep({ cef, energie }),
-			eges: calcule_eges({ cef, usage, energie, reseau_id }),
+			cep: cef * calcule_fcep({ energie }),
+			eges: cef * calcule_feges({ usage, energie, reseau_id }),
 		},
 	};
 	if (cef_enr > 0 && energie === common.EnergieEnum.electricite) {
 		const enr = common.EnergieEnum.electricite_renouvelable;
 		consommations[usage][enr] = {
 			cef: cef_enr,
-			cep: calcule_cep({ cef: cef_enr, energie: enr }),
-			eges: calcule_eges({ cef: cef_enr, usage, energie: enr, reseau_id }),
+			cep: cef_enr * calcule_fcep({ energie: enr }),
+			eges: cef_enr * calcule_feges({ usage, energie: enr, reseau_id }),
 		};
 	}
 	return consommations;
 }
 
 /**
- * @see Arrêté 15 septembre 2006 – Annexe 4
- * @param props.cef - Consommation d'énergie finale en kWh
+ * @formule common.fcep
  * @param props.energie - Type d'énergie consommée
- * @return Consommation d'énergie primaire en kWh
+ * @return Facteur de conversion énergie finale/énergie primaire
  */
-export function calcule_cep(props: {
-	cef: number;
-	energie: common.Energie;
-}): number {
-	const { cef, energie } = props;
-	switch (energie) {
+export function calcule_fcep(props: { energie: common.Energie }): number {
+	switch (props.energie) {
 		case common.EnergieEnum.electricite:
 		case common.EnergieEnum.electricite_renouvelable:
-			return cef * 1.9;
+			return 1.9;
 		default:
-			return cef;
+			return 1;
 	}
 }
 
 /**
- * @see Arrêté 15 septembre 2006 – Annexe 4
- * @param props.cef - Consommation d'énergie finale en kWh
+ * @formule common.feges
+ * @see abaques.performance.reseau
  * @param props.usage - Usage de l'énergie consommée
  * @param props.energie - Type d'énergie consommée
  * @param props.reseau_id - ID du réseau de chaleur ou de froid (optionnel)
- * @return Emissions de gaz à effet de serre en kgCO2eq
+ * @return Facteur de conversion énergie finale/émissions de gaz à effet de serre en kgCO2eq
  */
-export function calcule_eges(props: {
-	cef: number;
+export function calcule_feges(props: {
 	usage: common.Usage;
 	energie: common.Energie;
 	reseau_id?: string | null;
 }): number {
-	const { cef, usage, energie, reseau_id } = props;
+	const { usage, energie, reseau_id } = props;
 
 	// Cas des réseaux de chaleur ou de froid : on utilise le contenu en CO2 ACV du réseau
 	if (reseau_id) {
@@ -74,47 +69,48 @@ export function calcule_eges(props: {
 		const query = { id: reseau_id };
 		const matches = abaques.performance.reseau.search(query, abaque);
 		const reseau = matches.at(0) ?? null;
-		if (reseau) return cef * reseau.contenu_co2_acv;
+		if (reseau) return reseau.contenu_co2_acv;
 	}
 
 	// Cas de l'électricité
 	if (energie === common.EnergieEnum.electricite) {
 		switch (usage) {
 			case common.UsageEnum.chauffage:
-				return cef * 0.079;
+				return 0.079;
 			case common.UsageEnum.ecs:
-				return cef * 0.065;
+				return 0.065;
 			case common.UsageEnum.refroidissement:
-				return cef * 0.064;
+				return 0.064;
 			case common.UsageEnum.eclairage:
 			case common.UsageEnum.auxiliaire:
-				return cef * 0.069;
+				return 0.069;
 		}
 	}
 
 	switch (energie) {
 		case common.EnergieEnum.electricite_renouvelable:
-			return cef * 0;
+			return 0;
 		case common.EnergieEnum.gaz_naturel:
-			return cef * 0.227;
+			return 0.227;
 		case common.EnergieEnum.gpl:
-			return cef * 0.272;
+			return 0.272;
 		case common.EnergieEnum.fioul:
-			return cef * 0.324;
+			return 0.324;
 		case common.EnergieEnum.charbon:
-			return cef * 0.385;
+			return 0.385;
 		case common.EnergieEnum.bois_buche:
 		case common.EnergieEnum.bois_granule:
-			return cef * 0.03;
+			return 0.03;
 		case common.EnergieEnum.bois_plaquette:
-			return cef * 0.024;
+			return 0.024;
 		case common.EnergieEnum.reseau_chaleur:
 		case common.EnergieEnum.reseau_froid:
-			return cef * 0.385;
+			return 0.385;
 	}
 }
 
 /**
+ * @formule common.kpcs
  * @return Facteur de conversion PCI/PCS
  */
 export function calcule_kpcs(props: { energie: common.Energie }): number {

@@ -1,7 +1,7 @@
 import * as models from "@open-dpe-logement/models";
 
 /**
- * @doctrine enveloppe.local_non_chauffe.paroi.aue
+ * @formule enveloppe.local_non_chauffe.paroi.aue
  * @see https://github.com/dpe-audit/dpe-logement/issues/40
  * @param props.mitoyennete : Mitoyenneté de la paroi du local non chauffé
  * @param props.surface : Surface de la paroi du local non chauffé en m²
@@ -22,7 +22,7 @@ export function calcule_aue(props: {
 }
 
 /**
- * @doctrine enveloppe.local_non_chauffe.paroi.aiu
+ * @formule enveloppe.local_non_chauffe.paroi.aiu
  * @param props.mitoyennete : Mitoyenneté de la paroi du local non chauffé
  * @param props.surface : Surface de la paroi du local non chauffé en m²
  * @returns Surface de la paroi du local non chauffé donnant sur un espace chauffé en m²

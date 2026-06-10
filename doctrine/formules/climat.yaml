@@ -1,0 +1,41 @@
+﻿climat.zone_climatique:
+  id: climat.zone_climatique
+  description: Zone climatique du logement
+  references: Méthode 3CL-DPE 2021 §18.1
+  type: string
+
+climat.tbase:
+  id: climat.tbase
+  description: Température extérieure de base
+  references: Méthode 3CL-DPE 2021 §18.1
+  type: number
+  unite: °C
+  dependances:
+    - climat.zone_climatique
+
+climat.nj:
+  id: climat.nj
+  description: Nombre de jours
+  references: Méthode 3CL-DPE 2021 §11.1
+  type: number
+  unite: jours/mois
+
+climat.epv:
+  id: climat.epv
+  description: Ensoleillement
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/m²/mois
+  dependances:
+    - climat.zone_climatique
+    - enveloppe.inertie
+    - enveloppe.parois_anciennes
+
+climat.sollicitations:
+  id: climat.sollicitations
+  description: Sollicitations climatiques pour chaque mois de l'année
+  references: Méthode 3CL-DPE 2021 §18.2
+  dependances:
+    - climat.zone_climatique
+    - enveloppe.inertie
+    - enveloppe.parois_anciennes

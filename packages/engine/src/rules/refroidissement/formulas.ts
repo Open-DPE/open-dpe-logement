@@ -7,9 +7,9 @@ import * as generateur from "#rules/refroidissement/generateur/formulas.js";
 import { createParMois } from "#utils/helpers.js";
 
 /**
- * @doctrine refroidissement.cef
- * @doctrine refroidissement.cep
- * @doctrine refroidissement.eges
+ * @formule refroidissement.cef
+ * @formule refroidissement.cep
+ * @formule refroidissement.eges
  * @return Consommations par usage et par énergie
  */
 export function calcule_consommations(props: {
@@ -19,7 +19,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine refroidissement.cfr
+ * @formule refroidissement.cfr
  * @return Consommations des générateurs de refroidissement en kWh/an
  */
 export function calcule_cfr(props: {
@@ -29,7 +29,7 @@ export function calcule_cfr(props: {
 }
 
 /**
- * @doctrine refroidissement.cfr_elec
+ * @formule refroidissement.cfr_elec
  * @return Consommation d'électricité de refroidissement en kWh/an
  */
 export function calcule_cfr_elec(props: {
@@ -39,7 +39,7 @@ export function calcule_cfr_elec(props: {
 }
 
 /**
- * @doctrine refroidissement.caux
+ * @formule refroidissement.caux
  * @return Consommations des auxiliaires de refroidissement en kWh/an
  */
 export function calcule_caux(props: {
@@ -49,7 +49,7 @@ export function calcule_caux(props: {
 }
 
 /**
- * @doctrine refroidissement.bfr
+ * @formule refroidissement.bfr
  * @returns Besoins de refroidissement en kWh/mois
  */
 export function calcule_bfr(props: {
@@ -78,7 +78,7 @@ export function calcule_bfr(props: {
 }
 
 /**
- * @doctrine refroidissement.fut
+ * @formule refroidissement.fut
  * @returns Facteur d'utilisation des apports pour le mois
  */
 export function calcule_fut(props: {
@@ -96,7 +96,7 @@ export function calcule_fut(props: {
 }
 
 /**
- * @doctrine refroidissement.rbth
+ * @formule refroidissement.rbth
  * @returns Ratio de bilan thermique pour le mois
  */
 export function calcule_rbth(props: {
@@ -124,7 +124,7 @@ export function calcule_rbth(props: {
 }
 
 /**
- * @doctrine refroidissement.as
+ * @formule refroidissement.as
  * @returns Apports solaires en Wh/mois
  */
 export function calcule_as(props: {
@@ -139,7 +139,7 @@ export function calcule_as(props: {
 }
 
 /**
- * @doctrine refroidissement.ai
+ * @formule refroidissement.ai
  * @returns Apports internes en Wh/mois
  */
 export function calcule_ai(props: {
@@ -155,7 +155,7 @@ export function calcule_ai(props: {
 }
 
 /**
- * @doctrine refroidissement.e
+ * @formule refroidissement.e
  * @returns Ensoleillement reçu en période de refroidissement en kWh/m²/mois
  */
 export function calcule_e(props: {
@@ -174,7 +174,7 @@ export function calcule_e(props: {
 }
 
 /**
- * @doctrine refroidissement.textmoy
+ * @formule refroidissement.textmoy
  * @returns Température extérieure moyenne en °C
  */
 export function calcule_textmoy(props: {
@@ -193,7 +193,7 @@ export function calcule_textmoy(props: {
 }
 
 /**
- * @doctrine refroidissement.nref
+ * @formule refroidissement.nref
  * @returns Nombre d'heures de refroidissement en h/mois
  */
 export function calcule_nref(props: {
@@ -212,7 +212,7 @@ export function calcule_nref(props: {
 }
 
 /**
- * @doctrine refroidissement.tint
+ * @formule refroidissement.tint
  * @returns Température de consigne en froid en °C
  */
 export function calcule_tint(props: {
@@ -228,7 +228,7 @@ export function calcule_tint(props: {
 }
 
 /**
- * @doctrine refroidissement.t
+ * @formule refroidissement.t
  * @returns Constante de temps de la zone pour le refroidissement en h
  */
 export function calcule_t(props: {
@@ -240,7 +240,7 @@ export function calcule_t(props: {
 }
 
 /**
- * @doctrine refroidissement.cin
+ * @formule refroidissement.cin
  * @returns Capacité thermique intérieure efficace de la zone J/K
  */
 export function calcule_cin(props: {

@@ -11,7 +11,7 @@ import { linearInterpolate } from "#utils/math.js";
 export * from "#rules/enveloppe/paroi/formulas.js";
 
 /**
- * @doctrine enveloppe.baie.c1
+ * @formule enveloppe.baie.c1
  */
 export const calcule_c1 = climat.calcule_c1;
 
@@ -28,7 +28,7 @@ export function calcule_dp(
 }
 
 /**
- * @doctrine enveloppe.baie.isolation_aiu
+ * @formule enveloppe.baie.isolation_aiu
  * @return État d'isolation de la baie donnant sur un local non chauffé
  */
 export function calcule_isolation_aiu(props: {
@@ -44,7 +44,7 @@ export function calcule_isolation_aiu(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.u
+ * @formule enveloppe.baie.u
  * @param props.ujn_saisi : Coefficient de transmission thermique de la baie avec fermeture saisi en W/(m².K)
  * @see abaques.enveloppe.baie.ujn
  * @throws {ValeurForfaitaireError}
@@ -75,7 +75,7 @@ export function calcule_u(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.deltar
+ * @formule enveloppe.baie.deltar
  * @param props.type_fermeture : Type de fermeture de la baie
  * @see abaques.enveloppe.baie.deltar
  * @throws {ValeurForfaitaireError}
@@ -96,7 +96,7 @@ export function calcule_deltar(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.uw
+ * @formule enveloppe.baie.uw
  * @return Coefficient de transmission thermique de la baie avec double fenêtre en W/(m².K)
  */
 export function calcule_uw(props: {
@@ -109,7 +109,7 @@ export function calcule_uw(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.uw0
+ * @formule enveloppe.baie.uw0
  * @param props.uw_saisi : Coefficient de transmission thermique de la baie saisi en W/(m².K)
  * @param props.type_baie : Type de baie
  * @param props.presence_soubassement : Indique la présence d'un soubassement
@@ -145,7 +145,7 @@ export function calcule_uw0(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.ug
+ * @formule enveloppe.baie.ug
  * @param props.ug_saisi : Coefficient de transmission thermique du vitrage saisi en W/(m².K)
  * @param props.type_baie : Type de baie
  * @param props.inclinaison_vitrage : Inclinaison du vitrage de la baie en degrés
@@ -171,7 +171,7 @@ export function calcule_ug(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.sse
+ * @formule enveloppe.baie.sse
  * @param props.surface : Surface de la baie en m²
  * @return Surface sud équivalente de la baie en m²/mois
  */
@@ -202,7 +202,7 @@ export function calcule_sse(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.sw
+ * @formule enveloppe.baie.sw
  * @returns Proportion d'énergie solaire incidente transmise par la baie
  */
 export function calcule_sw(props: {
@@ -215,7 +215,7 @@ export function calcule_sw(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.sw0
+ * @formule enveloppe.baie.sw0
  * @param props.sw_saisi : Proportion d'énergie solaire incidente transmise par la baie saisie
  * @param props.type_baie : Type de baie
  * @param props.presence_soubassement : Indique la présence d'un soubassement
@@ -242,7 +242,7 @@ export function calcule_sw0(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.fe
+ * @formule enveloppe.baie.fe
  * @param props.fe1 : {@linkcode masque.calcule_fe1}
  * @param props.fe2 : {@linkcode masque.calcule_fe2}
  * @returns Facteur d'ensoleillement de la baie dû à la présence de masques
@@ -256,7 +256,7 @@ export function calcule_fe(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.fe1
+ * @formule enveloppe.baie.fe1
  * @returns Facteur d'ensoleillement dû aux masques proches
  */
 export function calcule_fe1(props: {
@@ -266,7 +266,7 @@ export function calcule_fe1(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.fe2
+ * @formule enveloppe.baie.fe2
  * @returns Facteur d'ensoleillement dû aux masques lointains
  */
 export function calcule_fe2(props: {
@@ -278,7 +278,7 @@ export function calcule_fe2(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.omb
+ * @formule enveloppe.baie.omb
  * @return Coefficient d'ombrage dû aux masques lointains non homogènes
  */
 export function calcule_omb(props: {

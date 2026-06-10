@@ -1,0 +1,44 @@
+eclairage.cef:
+  id: eclairage.cef
+  description: Consommations d'énergie finale d'éclairage
+  type: number
+  unite: kWh/an
+  dependances:
+    - eclairage.cecl
+    - production.cecl_ac
+
+eclairage.cep:
+  id: eclairage.cep
+  description: Consommations d'énergie primaire d'éclairage
+  type: number
+  unite: kWh/an
+  dependances:
+    - common.fcep
+    - eclairage.cef
+
+eclairage.eges:
+  id: eclairage.eges
+  description: Emissions de gaz à effet de serre liées à l'éclairage
+  type: number
+  unite: kgCO2e/an
+  dependances:
+    - common.feges
+    - eclairage.cef
+
+eclairage.cecl:
+  id: eclairage.cecl
+  description: Consommations d'éclairage
+  references: Méthode 3CL-DPE 2021 §16.1
+  type: number
+  unite: kWh/an
+  dependances:
+    - eclairage.nhecl
+
+eclairage.nhecl:
+  id: eclairage.nhecl
+  description: Nombre d'heures d'éclairage
+  references: Méthode 3CL-DPE 2021 §16.1
+  type: number
+  unite: h/an
+  dependances:
+    - climat.zone_climatique

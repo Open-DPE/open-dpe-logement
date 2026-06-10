@@ -30,7 +30,7 @@ export function calcule_consommations(props: {
 }
 
 /**
- * @doctrine diagnostic.cef
+ * @formule diagnostic.cef
  * @return Consommation d'énergie finale en kWh/m².an
  */
 export function calcule_cef(props: {
@@ -42,7 +42,7 @@ export function calcule_cef(props: {
 }
 
 /**
- * @doctrine diagnostic.cep
+ * @formule diagnostic.cep
  * @return Consommation d'énergie primaire en kWh/m².an
  */
 export function calcule_cep(props: {
@@ -54,7 +54,7 @@ export function calcule_cep(props: {
 }
 
 /**
- * @doctrine diagnostic.eges
+ * @formule diagnostic.eges
  * @return Émissions de gaz à effet de serre en kgCO2/m².an
  */
 export function calcule_eges(props: {
@@ -66,7 +66,7 @@ export function calcule_eges(props: {
 }
 
 /**
- * @doctrine diagnostic.etiquette_energie
+ * @formule diagnostic.etiquette_energie
  * @see abaques.diagnostic.etiquetteEnergie
  * @throws {ValeurForfaitaireError}
  * @return Étiquette énergie du bâtiment
@@ -84,7 +84,7 @@ export function calcule_etiquette_energie(props: {
 }
 
 /**
- * @doctrine diagnostic.etiquette_climat
+ * @formule diagnostic.etiquette_climat
  * @see abaques.diagnostic.etiquetteClimat
  * @throws {ValeurForfaitaireError}
  * @return Étiquette climatique du bâtiment
@@ -101,7 +101,7 @@ export function calcule_etiquette_climat(props: {
 }
 
 /**
- * @doctrine diagnostic.confort_ete
+ * @formule diagnostic.confort_ete
  * @return Niveau de confort d'été du logement
  */
 export function calcule_confort_ete(props: {

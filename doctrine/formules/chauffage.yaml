@@ -1,0 +1,761 @@
+chauffage.cef:
+  id: chauffage.cef
+  description: Consommations d'énergie finale du chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cef
+
+chauffage.cep:
+  id: chauffage.cep
+  description: Consommations d'énergie primaire du chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cep
+
+chauffage.eges:
+  id: chauffage.eges
+  description: Émissions de gaz à effet de serre du chauffage
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - chauffage.systeme.eges
+
+chauffage.cch:
+  id: chauffage.cch
+  description: Consommations de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.generateur.cch
+
+chauffage.cch_elec:
+  id: chauffage.cch_elec
+  description: Consommations d'électricité de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.generateur.cch_elec
+
+chauffage.caux:
+  id: chauffage.caux
+  description: Consommations des auxiliaires de chauffage
+  references: Méthode 3CL-DPE 2021 §15.1
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.caux_gen
+    - chauffage.caux_dist
+
+chauffage.caux_gen:
+  id: chauffage.caux_gen
+  description: Consommations des auxiliaires de génération de chauffage
+  references: Méthode 3CL-DPE 2021 §15.1
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.generateur.caux_gen
+
+chauffage.caux_dist:
+  id: chauffage.caux_dist
+  description: Consommations des auxiliaires de distribution de chauffage
+  references: Méthode 3CL-DPE 2021 §15.1
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.installation.caux_dist
+
+chauffage.bch:
+  id: chauffage.bch
+  description: Besoins de chauffage
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: kWh/mois
+  dependances:
+    - chauffage.bch_hp
+    - chauffage.qgen_rec
+    - chauffage.qgw_rec
+    - chauffage.qdw_rec
+
+chauffage.bch_hp:
+  id: chauffage.bch_hp
+  description: Besoins de chauffage hors pertes récupérées
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: kWh/mois
+  dependances:
+    - chauffage.bv
+    - chauffage.dh
+
+chauffage.bv:
+  id: chauffage.bv
+  description: Besoins de chauffage de base
+  references: Méthode 3CL-DPE 2021 §2
+  type: number
+  unite: kWh/mois
+  dependances:
+    - enveloppe.gv
+    - chauffage.f
+
+chauffage.pch:
+  id: chauffage.pch
+  description: Puissance conventionnelle de chauffage
+  type: number
+  unite: kW
+  dependances:
+    - batiment.ratio_proratisation
+    - climat.tbase
+    - enveloppe.gv
+
+chauffage.f:
+  id: chauffage.f
+  description: Fraction des besoins de chauffage couverts par les apports gratuits pour chaque mois de l'année
+  references: Méthode 3CL-DPE 2021 §6.1
+  type: number
+  dependances:
+    - enveloppe.inertie
+    - enveloppe.gv
+    - chauffage.dh
+    - chauffage.as
+    - chauffage.ai
+
+chauffage.as:
+  id: chauffage.as
+  description: Apports solaires
+  references: Méthode 3CL-DPE 2021 §6.1
+  type: number
+  unite: kWh/mois
+  dependances:
+    - climat.sollicitations
+    - enveloppe.as
+
+chauffage.ai:
+  id: chauffage.ai
+  description: Apports internes
+  references: Méthode 3CL-DPE 2021 §6.1
+  type: number
+  unite: kWh/mois
+  dependances:
+    - batiment.sh
+    - ecs.nadeq
+    - chauffage.nref
+
+chauffage.qgw_rec:
+  id: chauffage.qgw_rec
+  description: Pertes de stockage récupérables
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: Wh/mois
+  dependances:
+    - ecs.qgw
+    - chauffage.nref
+
+chauffage.qdw_rec:
+  id: chauffage.qdw_rec
+  description: Pertes de distribution d'eau chaude sanitaire récupérables
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: Wh/mois
+  dependances:
+    - ecs.qdw_ind_vc
+    - ecs.qdw_col_vc
+    - chauffage.nref
+
+chauffage.qgen_rec:
+  id: chauffage.qgen_rec
+  description: Pertes de génération récupérables
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: Wh/mois
+  dependances:
+    - ecs.qgen
+    - chauffage.generateur.qgen_rec
+
+chauffage.nref:
+  id: chauffage.nref
+  description: Nombre d'heures de chauffage
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: h/mois
+  dependances:
+    - climat.sollicitations
+
+chauffage.dh:
+  id: chauffage.dh
+  description: Degrés-heures de chauffage
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: °C.h/mois
+  dependances:
+    - climat.sollicitations
+
+chauffage.effet_joule:
+  id: chauffage.effet_joule
+  description: Chauffage majoritaire par effet joule
+  references: Méthode 3CL-DPE 2021 §3.2
+  extra: true
+  issues:
+    - https://github.com/dpe-audit/dpe-logement/issues/46
+  type: boolean
+
+# <-- Émetteurs de chauffage -->
+
+chauffage.emetteur.delta_pem:
+  id: chauffage.emetteur.delta_pem
+  description: Perte de charge de l'émetteur
+  references: Méthode 3CL-DPE 2021 §15.2.1
+  issues:
+    - https://github.com/dpe-audit/dpe-logement/issues/49
+  type: number
+  unite: kPa
+
+chauffage.emetteur.fcot:
+  id: chauffage.emetteur.fcot
+  description: Facteur de correction de l'émetteur
+  references: Méthode 3CL-DPE 2021 §15.2.1
+  type: number
+
+chauffage.emetteur.dtheta_dim:
+  id: chauffage.emetteur.dtheta_dim
+  description: Chute nominale de température de dimensionnement de l'émetteur
+  references: Méthode 3CL-DPE 2021 §15.2.1
+  issues:
+    - https://github.com/dpe-audit/dpe-logement/issues/49
+  type: number
+  unite: °C
+
+# <-- Générateurs de chauffage -->
+
+chauffage.generateur.cef:
+  id: chauffage.generateur.cef
+  description: Consommations d'énergie finale du générateur de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cef
+    - chauffage.generateur.caux_gen
+    - chauffage.generateur.caux_gen_enr
+
+chauffage.generateur.cep:
+  id: chauffage.generateur.cep
+  description: Consommations d'énergie primaire du générateur de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cep
+    - chauffage.generateur.caux_gen
+    - chauffage.generateur.caux_gen_enr
+
+chauffage.generateur.eges:
+  id: chauffage.generateur.eges
+  description: Émissions de gaz à effet de serre du générateur de chauffage
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - chauffage.systeme.eges
+    - chauffage.generateur.caux_gen
+    - chauffage.generateur.caux_gen_enr
+
+chauffage.generateur.cch:
+  id: chauffage.generateur.cch
+  description: Consommations de chauffage du générateur
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch
+
+chauffage.generateur.cch_elec:
+  id: chauffage.generateur.cch_elec
+  description: Consommations d'électricité du générateur de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch_elec
+
+chauffage.generateur.caux_gen:
+  id: chauffage.generateur.caux_gen
+  description: Consommations des auxiliaires de génération du générateur de chauffage
+  references: Méthode 3CL-DPE 2021 §15.1
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.bch
+    - chauffage.generateur.pn
+    - chauffage.generateur.paux
+    - chauffage.generateur.rdim
+
+chauffage.generateur.caux_gen_enr:
+  id: chauffage.generateur.caux_gen_enr
+  description: Consommations d'électricité renouvelable des auxiliaires de génération du générateur de chauffage
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.generateur.caux_gen
+    - production.celec
+    - production.celec_ac
+
+chauffage:generateur:rdim:
+  id: chauffage.generateur.rdim
+  description: Ratio de dimensionnement du générateur de chauffage
+  extra: true
+  type: number
+  dependances:
+    - chauffage.installation.rdim
+    - chauffage.systeme.rdim
+
+chauffage.generateur.pn:
+  id: chauffage.generateur.pn
+  description: Puissance du générateur de chauffage
+  references: Méthode 3CL-DPE 2021 §13.2.2.4
+  type: number
+  unite: kW
+  dependances:
+    - chauffage.generateur.pdim
+
+chauffage.generateur.pdim:
+  id: chauffage.generateur.pdim
+  description: Puissance de dimensionnement du générateur de chauffage
+  references: Méthode 3CL-DPE 2021 §13.2.2.4
+  type: number
+  unite: kW
+  dependances:
+    - chauffage.generateur.pch
+    - ecs.generateur.pecs
+
+chauffage:generateur:pch:
+  id: chauffage.generateur.pch
+  description: Puissance conventionnelle du générateur de chauffage
+  type: number
+  unite: kWh
+  dependances:
+    - chauffage.systeme.pch
+
+chauffage.generateur.paux:
+  id: chauffage.generateur.paux
+  description: Puissance des auxiliaires de chauffage du générateur
+  references: Méthode 3CL-DPE 2021 §15.1
+  type: number
+  unite: kW
+  dependances:
+    - chauffage.generateur.pn
+
+chauffage.generateur.scop:
+  id: chauffage.generateur.scop
+  description: Coefficient de performance énergétique saisonnier du générateur de chauffage
+  references: Méthode 3CL-DPE 2021 §12.4.2
+  type: [number, "null"]
+  dependances:
+    - climat.zone_climatique
+
+chauffage.generateur.rpn:
+  id: chauffage.generateur.rpn
+  description: Rendement à pleine charge
+  references: Méthode 3CL-DPE 2021 §13
+  type: [number, "null"]
+  dependances:
+    - chauffage.generateur.pn
+
+chauffage.generateur.rpint:
+  id: chauffage.generateur.rpint
+  description: Rendement à charge intermédiaire
+  references: Méthode 3CL-DPE 2021 §13
+  type: [number, "null"]
+  dependances:
+    - chauffage.generateur.pn
+
+chauffage.generateur.qp0:
+  id: chauffage.generateur.qp0
+  description: Pertes à l'arrêt du générateur
+  references: Méthode 3CL-DPE 2021 §13
+  type: [number, "null"]
+  unite: kW
+  dependances:
+    - chauffage.generateur.pn
+
+chauffage.generateur.pveilleuse:
+  id: chauffage.generateur.pveilleuse
+  description: Puissance de la veilleuse
+  references: Méthode 3CL-DPE 2021 §13
+  type: [number, "null"]
+  unite: W
+  dependances:
+    - chauffage.generateur.pn
+
+chauffage.generateur.tfonc30:
+  id: chauffage.generateur.tfonc30
+  description: Température de fonctionnement à 30% de charge
+  references: Méthode 3CL-DPE 2021 §13
+  type: [number, "null"]
+  unite: °C
+
+chauffage.generateur.tfonc100:
+  id: chauffage.generateur.tfonc100
+  description: Température de fonctionnement à pleine charge
+  references: Méthode 3CL-DPE 2021 §13
+  type: [number, "null"]
+  unite: °C
+
+chauffage.generateur.qgen_rec:
+  id: chauffage.generateur.qgen_rec
+  description: Pertes de génération récupérables du générateur de chauffage
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: Wh/mois
+  dependances:
+    - chauffage.bch_hp
+    - chauffage.nref
+    - chauffage.generateur.qgen
+    - chauffage.generateur.pn
+
+chauffage.generateur.qgen:
+  id: chauffage.generateur.qgen
+  description: Pertes de génération du générateur de chauffage
+  references: Méthode 3CL-DPE 2021 §9.1.1
+  type: number
+  unite: Wh/an
+  dependances:
+    - chauffage.generateur.qp0
+
+# <-- Installations de chauffage -->
+
+chauffage.installation.caux_dist:
+  id: chauffage.installation.caux_dist
+  description: Consommations des auxiliaires de distribution de chauffage
+  type: number
+  unite: kWh/an
+
+chauffage.installation.bch:
+  id: chauffage.installation.bch
+  description: Besoins de chauffage proratisés à l'installation
+  type: number
+  unite: kWh/mois
+  dependances:
+    - chauffage.bch
+
+chauffage.installation.rdim:
+  id: chauffage.installation.rdim
+  description: Ratio de dimensionnement de l'installation de chauffage
+  references: Méthode 3CL-DPE 2021 §9
+  extra: true
+  type: number
+
+chauffage.installation.pch:
+  id: chauffage.installation.pch
+  description: Puissance conventionnelle de l'installation de chauffage
+  type: number
+  unite: kW
+  dependances:
+    - chauffage.pch
+    - chauffage.installation.rdim
+
+chauffage.installation.fch:
+  id: chauffage.installation.fch
+  description: Facteur de couverture solaire de l'installation de chauffage
+  references: Méthode 3CL-DPE 2021 §9.2
+  type: number
+  dependances:
+    - climat.zone_climatique
+
+# <-- Systèmes de chauffage -->
+
+chauffage.systeme.cef:
+  id: chauffage.systeme.cef
+  description: Consommations d'énergie finale du système de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch
+    - chauffage.systeme.cch_enr
+    - chauffage.systeme.caux_dist
+    - chauffage.systeme.caux_dist_enr
+
+chauffage.systeme.cep:
+  id: chauffage.systeme.cep
+  description: Consommations d'énergie primaire du système de chauffage
+  type: number
+  unite: kWh/an
+  dependances:
+    - common.fcep
+    - chauffage.systeme.cch
+    - chauffage.systeme.cch_enr
+    - chauffage.systeme.caux_dist
+    - chauffage.systeme.caux_dist_enr
+
+chauffage.systeme.eges:
+  id: chauffage.systeme.eges
+  description: Émissions de gaz à effet de serre du système de chauffage
+  type: number
+  unite: kgCO2eq/an
+  dependances:
+    - common.feges
+    - chauffage.systeme.cch
+    - chauffage.systeme.cch_enr
+    - chauffage.systeme.caux_dist
+    - chauffage.systeme.caux_dist_enr
+
+chauffage.systeme.cch:
+  id: chauffage.systeme.cch
+  description: Consommations de chauffage du système de chauffage
+  references: Méthode 3CL-DPE 2021 §9
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch1
+    - chauffage.systeme.cch2
+
+chauffage.systeme.cch_elec:
+  id: chauffage.systeme.cch_elec
+  description: Consommations d'électricité du système de chauffage
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.cch
+
+chauffage.systeme.cch_enr:
+  id: chauffage.systeme.cch_enr
+  description: Consommations d'électricité renouvelable du système de chauffage
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - production.celec
+    - production.celec_ac
+    - chauffage.systeme.cch_elec
+
+chauffage.systeme.cch1:
+  id: chauffage.systeme.cch1
+  description: Consommations de chauffage du système de chauffage (partie PAC pour les PAC hybrides)
+  references: Méthode 3CL-DPE 2021 §9
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.emission.cch1
+
+chauffage.systeme.cch2:
+  id: chauffage.systeme.cch2
+  description: Consommations de chauffage du système de chauffage de la partie chaudière des PAC hybrides
+  references: Méthode 3CL-DPE 2021 §9.1.4.3
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.emission.cch2
+
+chauffage.systeme.caux_dist:
+  id: chauffage.systeme.caux_dist
+  description: Consommations des auxiliaires de distribution de chauffage du système de chauffage
+  references: Méthode 3CL-DPE 2021 §15.2.1
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.nref
+    - chauffage.systeme.pcircem
+
+chauffage.systeme.caux_dist_enr:
+  id: chauffage.systeme.caux_dist_enr
+  description: Consommations d'électricité renouvelable des auxiliaires de distribution du système de chauffage
+  references: Méthode 3CL-DPE 2021 §16.2
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.caux_dist
+    - production.celec
+    - production.celec_ac
+
+chauffage.systeme.rdim:
+  id: chauffage.systeme.rdim
+  description: Ratio de dimensionnement du système de chauffage
+  references: Méthode 3CL-DPE 2021 §9
+  extra: true
+  type: number
+
+chauffage.systeme.pch:
+  id: chauffage.systeme.pch
+  description: Puissance conventionnelle du système de chauffage
+  references: Méthode 3CL-DPE 2021 §13.2.2.4
+  type: number
+  unite: kW
+  dependances:
+    - chauffage.installation.pch
+
+chauffage.systeme.int:
+  id: chauffage.systeme.int
+  description: Facteur d'intermittence du système de chauffage
+  extra: true
+  type: number
+  dependances:
+    - chauffage.systeme.emission.int
+
+chauffage.systeme.ich:
+  id: chauffage.systeme.ich
+  description: Inverse du rendement du système de chauffage
+  extra: true
+  type: number
+  dependances:
+    - chauffage.systeme.emission.ich
+
+chauffage.systeme.rd:
+  id: chauffage.systeme.rd
+  description: Rendement de distribution du système de chauffage
+  extra: true
+  type: number
+
+chauffage.systeme.re:
+  id: chauffage.systeme.re
+  description: Rendement d'émission du système de chauffage
+  extra: true
+  type: number
+  dependances:
+    - chauffage.systeme.emisssion.re
+
+chauffage.systeme.rg:
+  id: chauffage.systeme.rg
+  description: Rendement de génération du système de chauffage
+  references: Méthode 3CL-DPE 2021 §12.4 et §13
+  type: number
+  dependances:
+    - chauffage.generateur.pn
+    - chauffage.generateur.rpn
+    - chauffage.generateur.rpint
+    - chauffage.generateur.qp0
+    - chauffage.generateur.pveilleuse
+
+chauffage.systeme.rr:
+  id: chauffage.systeme.rr
+  description: Rendement de régulation du système de chauffage
+  extra: true
+  type: number
+  dependances:
+    - chauffage.systeme.emisssion.rr
+
+chauffage.systeme.pcircem:
+  id: chauffage.systeme.pcircem
+  description: Puissance du circulateur de l'installation de chauffage
+  references: Méthode 3CL-DPE 2021 §15.2.1
+  type: number
+  unite: W
+  dependances:
+    - climat.tbase
+    - enveloppe.gv
+    - chauffage.installation.rdim
+    - chauffage.emetteur.delta_pem
+    - chauffage.emetteur.fcot
+    - chauffage.emetteur.dtheta_dim
+
+# <-- Emissions de chauffage -->
+
+chauffage.systeme.emission.cch:
+  id: chauffage.systeme.emission.cch
+  description: Consommations de chauffage du couple système/émission de chauffage
+  references: Méthode 3CL-DPE 2021 §9
+  extra: true
+  type: number
+  unite: kWh/an
+  dependances:
+    - chauffage.systeme.emission.cch1
+    - chauffage.systeme.emission.cch2
+
+chauffage.systeme.emission.cch1:
+  id: chauffage.systeme.emission.cch1
+  description: Consommations de chauffage du couple système/émission de chauffage (partie PAC pour les PAC hybrides)
+  references: Méthode 3CL-DPE 2021 §9
+  extra: true
+  type: number
+  unite: kWh/an
+  dependances:
+    - climat.zone_climatique
+    - chauffage.bch
+    - chauffage.installation.fch
+    - chauffage.installation.rdim
+    - chauffage.systeme.rdim
+    - chauffage.systeme.emission.int
+    - chauffage.systeme.emission.ich1
+
+chauffage.systeme.emission.cch2:
+  id: chauffage.systeme.emission.cch2
+  description: Consommations de chauffage du couple système/émission de chauffage de la partie chaudière des PAC hybrides
+  references: Méthode 3CL-DPE 2021 §9.1.4.3
+  extra: true
+  type: number
+  unite: kWh/an
+  dependances:
+    - climat.zone_climatique
+    - chauffage.bch
+    - chauffage.installation.fch
+    - chauffage.installation.rdim
+    - chauffage.systeme.rdim
+    - chauffage.systeme.emission.int
+    - chauffage.systeme.emission.ich2
+
+chauffage.systeme.emission.int:
+  id: chauffage.systeme.emission.int
+  description: Facteur d'intermittence du couple système/émission de chauffage
+  references: Méthode 3CL-DPE 2021 §8
+  extra: true
+  type: number
+  dependances:
+    - batiment.sh
+    - batiment.hsp
+    - enveloppe.gv
+    - chauffage.systeme.emission.i0
+
+chauffage.systeme.emission.i0:
+  id: chauffage.systeme.emission.i0
+  description: Coefficient d'intermittence du couple système/émission de chauffage
+  references: Méthode 3CL-DPE 2021 §8
+  extra: true
+  type: number
+  dependances:
+    - enveloppe.inertie
+
+chauffage.systeme.emission.ich:
+  id: chauffage.systeme.emission.ich
+  description: Inverse du rendement du couple système/émission de chauffage
+  references: Méthode 3CL-DPE 2021 §9
+  extra: true
+  type: number
+  dependances:
+    - climat.zone_climatique
+    - chauffage.systeme.emission.ich1
+    - chauffage.systeme.emission.ich2
+
+chauffage.systeme.emission.ich1:
+  id: chauffage.systeme.emission.ich1
+  description: Inverse du rendement du couple système/émission de chauffage (partie PAC pour les PAC hybrides)
+  references: Méthode 3CL-DPE 2021 §9
+  extra: true
+  type: number
+  dependances:
+    - chauffage.systeme.rd
+    - chauffage.systeme.rg
+    - chauffage.systeme.emission.re
+    - chauffage.systeme.emission.rr
+    - chauffage.generateur.scop
+
+chauffage.systeme.emission.ich2:
+  id: chauffage.systeme.emission.ich2
+  description: Inverse du rendement du couple système/émission de chauffage de la partie chaudière des PAC hybrides
+  references: Méthode 3CL-DPE 2021 §9.1.4.3
+  extra: true
+  type: number
+  dependances:
+    - chauffage.systeme.rd
+    - chauffage.systeme.rg
+    - chauffage.systeme.emission.re
+    - chauffage.systeme.emission.rr
+
+chauffage.systeme.emission.re:
+  id: chauffage.systeme.emission.re
+  description: Rendement d'émission du couple système/émission de chauffage
+  references: Méthode 3CL-DPE 2021 §12.1
+  extra: true
+  type: number
+
+chauffage.systeme.emission.rr:
+  id: chauffage.systeme.emission.rr
+  description: Rendement de régulation du couple système/émission de chauffage
+  references: Méthode 3CL-DPE 2021 §12.3
+  extra: true
+  type: number

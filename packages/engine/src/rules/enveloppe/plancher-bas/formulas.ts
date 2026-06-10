@@ -8,7 +8,7 @@ import { ValeurForfaitaireError } from "#utils/errors.js";
 import { bilinearInterpolate } from "#utils/math.js";
 
 /**
- * @doctrine enveloppe.plancher_bas.isolation_aiu
+ * @formule enveloppe.plancher_bas.isolation_aiu
  * @param props.isolation : État d'isolation saisi du plancher bas donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment
  * @return État d'isolation de plancher bas donnant sur un local non chauffé
@@ -26,7 +26,7 @@ export function calcule_isolation_aiu(props: {
 }
 
 /**
- * @doctrine enveloppe.plancher_bas.u
+ * @formule enveloppe.plancher_bas.u
  * @return Coefficient de transmission thermique du plancher bas en W/m².K
  */
 export function calcule_u(props: {
@@ -138,7 +138,7 @@ export function calcule_ue_applicable(props: {
 }
 
 /**
- * @doctrine enveloppe.plancher_bas.u0
+ * @formule enveloppe.plancher_bas.u0
  * @props props.u0_saisi : Coefficient de transmission thermique du plancher bas nu saisi en W/m².K
  * @param props.type_plancher_bas : Type de plancher bas
  * @see abaques.enveloppe.plancherBas.upb0

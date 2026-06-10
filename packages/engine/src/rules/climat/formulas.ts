@@ -9,7 +9,7 @@ import {
 } from "#utils/helpers.js";
 
 /**
- * @doctrine climat.zone_climatique
+ * @formule climat.zone_climatique
  * @see abaques.climat.zoneClimatique
  * @throws {ValeurForfaitaireError}
  * @returns Zone climatique du bâtiment
@@ -24,7 +24,7 @@ export function calcule_zone_climatique(props: {
 }
 
 /**
- * @doctrine climat.tbase
+ * @formule climat.tbase
  * @see abaques.climat.tbase
  * @throws {ValeurForfaitaireError}
  * @returns Température extérieure de base en °C
@@ -74,7 +74,7 @@ export type Sollicitations = models.common.ParMois<{
 }>;
 
 /**
- * @doctrine climat.sollicitations
+ * @formule climat.sollicitations
  * @param props.altitude - Altitude du bâtiment en mètres
  * @returns Sollicitations climatiques pour chaque mois de l'année
  */
@@ -108,7 +108,7 @@ export function calcule_c1(props: {
 }
 
 /**
- * @doctrine climat.nj
+ * @formule climat.nj
  * @see abaques.climat.nj
  * @returns Nombre de jours pour chaque mois de l'année
  */
@@ -130,7 +130,7 @@ export function calcule_nj(): models.common.ParMois<number> {
 }
 
 /**
- * @doctrine climat.epv
+ * @formule climat.epv
  * @see abaques.climat.epv
  * @throws {ValeurForfaitaireError}
  * @returns Ensoleillement mensuel pour chaque mois de l'année en kWh/m²

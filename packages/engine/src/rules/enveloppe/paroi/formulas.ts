@@ -10,11 +10,11 @@ import * as porte from "#rules/enveloppe/porte/formulas.js";
 import { ValeurForfaitaireError } from "#utils/errors.js";
 
 /**
- * @doctrine enveloppe.baie.aiu
- * @doctrine enveloppe.mur.aiu
- * @doctrine enveloppe.plancher_bas.aiu
- * @doctrine enveloppe.plancher_haut.aiu
- * @doctrine enveloppe.porte.aiu
+ * @formule enveloppe.baie.aiu
+ * @formule enveloppe.mur.aiu
+ * @formule enveloppe.plancher_bas.aiu
+ * @formule enveloppe.plancher_haut.aiu
+ * @formule enveloppe.porte.aiu
  * @return Surface de la paroi donnant sur un local non chauffé en m²
  */
 export function calcule_aiu(props: {
@@ -30,11 +30,11 @@ export function calcule_aiu(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.sdep
- * @doctrine enveloppe.mur.sdep
- * @doctrine enveloppe.plancher_bas.sdep
- * @doctrine enveloppe.plancher_haut.sdep
- * @doctrine enveloppe.porte.sdep
+ * @formule enveloppe.baie.sdep
+ * @formule enveloppe.mur.sdep
+ * @formule enveloppe.plancher_bas.sdep
+ * @formule enveloppe.plancher_haut.sdep
+ * @formule enveloppe.porte.sdep
  * @param props.surface : Surface de la paroi en m²
  * @param props.mitoyennete : Mitoyenneté de la paroi
  * @returns Surface déperditive de la paroi en m²
@@ -56,11 +56,11 @@ export type CalculeBProps =
 	| Parameters<typeof calcule_b_autres>[0];
 
 /**
- * @doctrine enveloppe.baie.b
- * @doctrine enveloppe.mur.b
- * @doctrine enveloppe.plancher_bas.b
- * @doctrine enveloppe.plancher_haut.b
- * @doctrine enveloppe.porte.b
+ * @formule enveloppe.baie.b
+ * @formule enveloppe.mur.b
+ * @formule enveloppe.plancher_bas.b
+ * @formule enveloppe.plancher_haut.b
+ * @formule enveloppe.porte.b
  * @returns Coefficient de réduction des déperditions thermiques de la paroi
  */
 export function calcule_b(props: CalculeBProps): number {
@@ -138,11 +138,11 @@ function calcule_b_autres(props: {
 }
 
 /**
- * @doctrine enveloppe.baie.dp
- * @doctrine enveloppe.mur.dp
- * @doctrine enveloppe.plancher_bas.dp
- * @doctrine enveloppe.plancher_haut.dp
- * @doctrine enveloppe.porte.dp
+ * @formule enveloppe.baie.dp
+ * @formule enveloppe.mur.dp
+ * @formule enveloppe.plancher_bas.dp
+ * @formule enveloppe.plancher_haut.dp
+ * @formule enveloppe.porte.dp
  * @param props.u : Coefficient de transmission thermique de la paroi en W/m²K
  * @returns Déperditions thermiques de la paroi en W/K
  */
