@@ -210,7 +210,9 @@ export function fe(
 
 export function fe1(item: Baie): ReturnType<typeof formulas.calcule_fe1> {
 	return formulas.calcule_fe1({
-		fe1: item.position.masques.map((m) => masque.fe1(item.position.orientation, m)),
+		fe1: item.position.masques
+			.map((m) => masque.fe1(item.position.orientation, m))
+			.filter((value) => value !== null),
 	});
 }
 
@@ -219,14 +221,18 @@ export function fe2(
 	item: Baie,
 ): ReturnType<typeof formulas.calcule_fe1> {
 	return formulas.calcule_fe2({
-		fe2: item.position.masques.map((m) => masque.fe2(item.position.orientation, m)),
+		fe2: item.position.masques
+			.map((m) => masque.fe2(item.position.orientation, m))
+			.filter((value) => value !== null),
 		omb: ctx.resolve(ID, RULES.omb, item),
 	});
 }
 
 export function omb(item: Baie): ReturnType<typeof formulas.calcule_omb> {
 	return formulas.calcule_omb({
-		omb: item.position.masques.map((m) => masque.omb(item.position.orientation, m)),
+		omb: item.position.masques
+			.map((m) => masque.omb(item.position.orientation, m))
+			.filter((value) => value !== null),
 	});
 }
 
@@ -302,7 +308,10 @@ export function presence_rupteur_pont_thermique(
 	});
 }
 
-export function applique(ctx: Context, item: Baie): models.enveloppe.baie.BaieWithData {
+export function applique(
+	ctx: Context,
+	item: Baie,
+): models.enveloppe.baie.BaieWithData {
 	return {
 		...item,
 		data: {
@@ -315,8 +324,14 @@ export function applique(ctx: Context, item: Baie): models.enveloppe.baie.BaieWi
 			ug: ctx.resolve(ID, RULES.ug, item),
 			sw: ctx.resolve(ID, RULES.sw, item),
 			fe: ctx.resolve(ID, RULES.fe, item),
-			sse: Object.values(ctx.resolve(ID, RULES.sse, item)).reduce((s: number, n: number) => s + n, 0),
-			c1: Object.values(ctx.resolve(ID, RULES.c1, item)).reduce((s: number, n: number) => s + n, 0),
+			sse: Object.values(ctx.resolve(ID, RULES.sse, item)).reduce(
+				(s: number, n: number) => s + n,
+				0,
+			),
+			c1: Object.values(ctx.resolve(ID, RULES.c1, item)).reduce(
+				(s: number, n: number) => s + n,
+				0,
+			),
 		},
 	};
 }

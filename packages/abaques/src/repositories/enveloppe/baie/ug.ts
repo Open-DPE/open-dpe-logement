@@ -1,7 +1,7 @@
 import data from "#data/enveloppe/baie/ug.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type UgSchema = {
+export type Schema = {
 	type_vitrage: string;
 	type_survitrage: string | null;
 	type_baie: string | null;
@@ -12,9 +12,18 @@ export type UgSchema = {
 	"inclinaison_vitrage/lt": number | null;
 	"inclinaison_vitrage/gte": number | null;
 	ug: number;
-	tv_ug_id: number;
 };
 
-export const load = (): UgSchema[] => data as UgSchema[];
-export const search = (query: AbaqueQuery, rows: UgSchema[]): UgSchema[] =>
+export type Query = {
+	type_vitrage: string;
+	type_survitrage: string | null;
+	type_baie: string | null;
+	nature_lame_air: string | null;
+	epaisseur_lame_air: number | null;
+	inclinaison_vitrage: number | null;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

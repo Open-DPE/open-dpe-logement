@@ -14,6 +14,7 @@ export type Production = {
 
 export type ProductionWithData<T extends Production = Production> = T & {
 	data: ProductionData;
+	panneaux_photovoltaiques: panneauPhotovoltaique.PanneauPhotovoltaiqueWithData[];
 };
 
 export type ProductionData = {

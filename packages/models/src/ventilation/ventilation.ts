@@ -14,6 +14,7 @@ export type Ventilation = {
 };
 
 export type VentilationWithData<T extends Ventilation = Ventilation> = T & {
+	installations: NonEmptyArray<installation.InstallationWithData>;
 	data: VentilationData;
 };
 

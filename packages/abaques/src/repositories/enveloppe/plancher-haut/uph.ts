@@ -1,16 +1,23 @@
 import data from "#data/enveloppe/plancher-haut/uph.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type UphSchema = {
+export type Schema = {
 	configuration: string;
 	zone_climatique: string;
 	effet_joule: boolean;
 	"annee_construction_isolation/lte": number | null;
 	"annee_construction_isolation/gte": number | null;
 	u: number;
-	tv_uph_id: number;
 };
 
-export const load = (): UphSchema[] => data as UphSchema[];
-export const search = (query: AbaqueQuery, rows: UphSchema[]): UphSchema[] =>
+export type Query = {
+	configuration: string;
+	zone_climatique: string;
+	effet_joule: boolean;
+	annee_construction_isolation: number;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

@@ -165,9 +165,15 @@ oneOf:
             enum: [standard, condensation, null]
           label:
             $ref: "/common#/$defs/non_applicable"
+          tfonc30:
+            $ref: "/common#/$defs/non_applicable"
+          tfonc100:
+            $ref: "/common#/$defs/non_applicable"
         required:
           - mode_combustion
           - label
+          - tfonc30
+          - tfonc100
     required:
       - type
       - energie

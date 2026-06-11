@@ -2,45 +2,34 @@ import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as baie from "./baie/formulas.js";
 import * as paroi from "./paroi/formulas.js";
-import { calcule_aiu as calcule_aiu_paroi } from "#rules/enveloppe/paroi/formulas.js";
-import { calcule_b as calcule_b_paroi } from "#rules/enveloppe/paroi/formulas.js";
-import { calcule_sse as calcule_sse_baie } from "#rules/enveloppe/baie/formulas.js";
-import { calcule_isolation_aiu as calcule_isolation_aiu_baie } from "#rules/enveloppe/baie/formulas.js";
-import { calcule_isolation_aiu as calcule_isolation_aiu_mur } from "#rules/enveloppe/mur/formulas.js";
-import { calcule_isolation_aiu as calcule_isolation_aiu_pb } from "#rules/enveloppe/plancher-bas/formulas.js";
-import { calcule_isolation_aiu as calcule_isolation_aiu_ph } from "#rules/enveloppe/plancher-haut/formulas.js";
-import { calcule_isolation_aiu as calcule_isolation_aiu_porte } from "#rules/enveloppe/porte/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois } from "#utils/helpers.js";
+import type { calcule_aiu as calcule_aiu_paroi } from "#rules/enveloppe/paroi/formulas.js";
+import type { calcule_b_ets as calcule_b_ets } from "#rules/enveloppe/paroi/formulas.js";
+import type { calcule_sse as calcule_sse_baie } from "#rules/enveloppe/baie/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_baie } from "#rules/enveloppe/baie/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_mur } from "#rules/enveloppe/mur/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_pb } from "#rules/enveloppe/plancher-bas/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_ph } from "#rules/enveloppe/plancher-haut/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_porte } from "#rules/enveloppe/porte/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { createParMois } from "#rules/helpers.js";
 
 export { baie, paroi };
 
 /**
- * @formule enveloppe.local_non_chauffe.b
- * @return Coefficient de réduction des déperditions thermiques du local non chauffé
+ * @see calcule_blnc
+ * @see calcule_bver
+ * Coefficient de réduction des déperditions thermiques du local non chauffé
  */
-export function calcule_b(
-	props:
-		| Parameters<typeof calcule_blnc>[0]
-		| Parameters<typeof calcule_bver>[0],
-): number {
-	const { type_local_non_chauffe } = props;
-	return type_local_non_chauffe ===
-		models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
-		? calcule_bver(props)
-		: calcule_blnc(props);
-}
+export type b = number;
 
 /**
+ * @guard {@linkcode models.enveloppe.localNonChauffe.isAutreLocalNonChauffe}
+ * @formule enveloppe.local_non_chauffe.b
  * @see abaques.enveloppe.localNonChauffe.b
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de réduction des déperditions thermiques du local non chauffé
+ * @returns Coefficient de réduction des déperditions thermiques du local non chauffé
  */
-function calcule_blnc(props: {
-	type_local_non_chauffe: Exclude<
-		models.enveloppe.localNonChauffe.TypeLnc,
-		typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
-	>;
+export function calcule_blnc(props: {
 	aue: ReturnType<typeof calcule_aue>;
 	aiu: ReturnType<typeof calcule_aiu>;
 	isolation_aue: ReturnType<typeof calcule_isolation_aue>;
@@ -57,16 +46,17 @@ function calcule_blnc(props: {
 }
 
 /**
+ * @guard {@linkcode models.enveloppe.localNonChauffe.isEspaceTamponSolarise}
+ * @formule enveloppe.local_non_chauffe.b
  * @see https://github.com/dpe-audit/dpe-logement/issues/45
  * @param props.parois : Liste des parois déperditives donnant sur l'espace tampon solarisé
  * @param props.parois[].surface : Surface de la paroi en m²
  * @returns Coefficient de réduction des déperditions thermiques de l'espace tampon solarisé
  */
-function calcule_bver(props: {
-	type_local_non_chauffe: typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise;
+export function calcule_bver(props: {
 	parois: {
 		surface: number;
-		b: ReturnType<typeof calcule_b_paroi>;
+		b: ReturnType<typeof calcule_b_ets>;
 	}[];
 }): number {
 	const { parois } = props;
@@ -76,16 +66,13 @@ function calcule_bver(props: {
 }
 
 /**
- * @param props.type_local_non_chauffe : Type du local non chauffé
+ * @guard {@linkcode models.enveloppe.localNonChauffe.isAutreLocalNonChauffe}
  * @see abaques.enveloppe.localNonChauffe.uvue
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de transmission thermique équivalent du local non chauffé en W/m².K
+ * @returns Coefficient de transmission thermique équivalent du local non chauffé en W/m².K
  */
 export function calcule_uvue(props: {
-	type_local_non_chauffe: Exclude<
-		models.enveloppe.localNonChauffe.TypeLnc,
-		typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
-	>;
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLnc;
 }): number {
 	const abaque = abaques.enveloppe.localNonChauffe.uvue;
 	const match = abaque.search(props, abaque.load()).at(0);
@@ -95,7 +82,7 @@ export function calcule_uvue(props: {
 
 /**
  * @formule enveloppe.local_non_chauffe.aue
- * @return Surface des parois du local non chauffé donnant sur l'extérieur en m²
+ * @returns Surface des parois du local non chauffé donnant sur l'extérieur en m²
  */
 export function calcule_aue(props: {
 	baies: {
@@ -112,7 +99,8 @@ export function calcule_aue(props: {
 }
 
 /**
- * @return État d'isolation des parois du local non chauffé donnant sur l'extérieur
+ * @formule enveloppe.local_non_chauffe.isolation_aue
+ * @returns État d'isolation des parois du local non chauffé donnant sur l'extérieur
  */
 export function calcule_isolation_aue(
 	props: Parameters<typeof calcule_aue>[0],
@@ -128,7 +116,7 @@ export function calcule_isolation_aue(
 
 /**
  * @formule enveloppe.local_non_chauffe.aiu
- * @return Surface des parois du local non chauffé donnant sur un espace chauffé en m²
+ * @returns Surface des parois du local non chauffé donnant sur un espace chauffé en m²
  */
 export function calcule_aiu(props: {
 	parois_mitoyennes: {
@@ -154,7 +142,8 @@ export function calcule_aiu(props: {
 }
 
 /**
- * @return État d'isolation des parois du local non chauffé donnant sur un espace chauffé
+ * @formule enveloppe.local_non_chauffe.isolation_aiu
+ * @returns État d'isolation des parois du local non chauffé donnant sur un espace chauffé
  */
 export function calcule_isolation_aiu(
 	props: Parameters<typeof calcule_aiu>[0],
@@ -176,7 +165,7 @@ export function calcule_isolation_aiu(
 export function calcule_sse(props: {
 	baies: { sst: ReturnType<typeof baie.calcule_sst> }[];
 	sse: ReturnType<typeof calcule_sse_baie>[];
-	b: ReturnType<typeof calcule_b>;
+	b: b;
 }): models.common.ParMois<number> {
 	const sst = models.common.mergeParMois(props.baies.map((baie) => baie.sst));
 	return createParMois((mois: models.common.Mois) => {
@@ -217,7 +206,7 @@ export function calcule_t(props: {
 /**
  * @formule enveloppe.local_non_chauffe.orientations
  * @param props.baies : Liste des baies de l'espace tampon solarisé
- * @return Orientations majoritaires du local non chauffé
+ * @returns Orientations majoritaires du local non chauffé
  */
 export function calcule_orientations(props: {
 	baies: {

@@ -1,35 +1,30 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
-import * as paroi from "#rules/enveloppe/paroi/formulas.js";
-import * as masque from "#rules/enveloppe/masque/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois } from "#utils/helpers.js";
-import { linearInterpolate } from "#utils/math.js";
-
-export * from "#rules/enveloppe/paroi/formulas.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
+import type * as masque from "#rules/enveloppe/masque/formulas.js";
+import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { createParMois } from "#rules/helpers.js";
+import { linearInterpolate } from "#rules/math.js";
 
 /**
- * @formule enveloppe.baie.c1
+ * @formule enveloppe.baie.dp
+ * @returns Déperditions thermiques de la paroi en W/K
  */
-export const calcule_c1 = climat.calcule_c1;
-
-/**
- * {@linkcode paroi.calcule_dp}
- */
-export function calcule_dp(
-	props: Parameters<typeof paroi.calcule_dp>[0] & {
-		double_fenetre: boolean;
-	},
-): ReturnType<typeof paroi.calcule_dp> {
-	const dp = paroi.calcule_dp(props);
-	return props.double_fenetre ? dp / 2 : dp;
+export function calcule_dp(props: {
+	sdep: ReturnType<typeof paroi.calcule_sdep>;
+	b: paroi.b;
+	u: ReturnType<typeof calcule_u>;
+	double_fenetre: boolean;
+}): ReturnType<typeof paroi.calcule_dp> {
+	const { sdep, b, u, double_fenetre } = props;
+	return double_fenetre ? (sdep * b * u) / 2 : sdep * b * u;
 }
 
 /**
  * @formule enveloppe.baie.isolation_aiu
- * @return État d'isolation de la baie donnant sur un local non chauffé
+ * @returns État d'isolation de la baie donnant sur un local non chauffé
  */
 export function calcule_isolation_aiu(props: {
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
@@ -48,7 +43,7 @@ export function calcule_isolation_aiu(props: {
  * @param props.ujn_saisi : Coefficient de transmission thermique de la baie avec fermeture saisi en W/(m².K)
  * @see abaques.enveloppe.baie.ujn
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de transmission thermique de la baie en W/(m².K)
+ * @returns Coefficient de transmission thermique de la baie en W/(m².K)
  */
 export function calcule_u(props: {
 	ujn_saisi: number | null;
@@ -62,7 +57,7 @@ export function calcule_u(props: {
 
 	const abaque = abaques.enveloppe.baie.ujn;
 	const matches = abaque.search(query, abaque.load());
-	const match = abaque.search({ uw }, matches).at(0);
+	const match = matches.find((match) => match.uw === uw);
 
 	if (match) return match.ujn;
 	if (matches.length === 0) throw new ValeurForfaitaireError(query);
@@ -79,7 +74,7 @@ export function calcule_u(props: {
  * @param props.type_fermeture : Type de fermeture de la baie
  * @see abaques.enveloppe.baie.deltar
  * @throws {ValeurForfaitaireError}
- * @return Résistance thermique additionnelle de la baie en m².K/W
+ * @returns Résistance thermique additionnelle de la baie en m².K/W
  */
 export function calcule_deltar(props: {
 	types_fermetures: models.enveloppe.baie.TypeFermeture[];
@@ -97,7 +92,7 @@ export function calcule_deltar(props: {
 
 /**
  * @formule enveloppe.baie.uw
- * @return Coefficient de transmission thermique de la baie avec double fenêtre en W/(m².K)
+ * @returns Coefficient de transmission thermique de la baie avec double fenêtre en W/(m².K)
  */
 export function calcule_uw(props: {
 	uw1: ReturnType<typeof calcule_uw0>;
@@ -115,7 +110,7 @@ export function calcule_uw(props: {
  * @param props.presence_soubassement : Indique la présence d'un soubassement
  * @see abaques.enveloppe.baie.uw
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de transmission thermique de la baie  en W/(m².K)
+ * @returns Coefficient de transmission thermique de la baie  en W/(m².K)
  */
 export function calcule_uw0(props: {
 	uw_saisi: number | null;
@@ -132,7 +127,7 @@ export function calcule_uw0(props: {
 
 	const abaque = abaques.enveloppe.baie.uw;
 	const matches = abaque.search(query, abaque.load());
-	const match = abaque.search({ ug }, matches).at(0);
+	const match = matches.find((match) => match.ug === ug);
 	if (match) return match.uw;
 	if (matches.length === 0) throw new ValeurForfaitaireError(query);
 
@@ -151,7 +146,7 @@ export function calcule_uw0(props: {
  * @param props.inclinaison_vitrage : Inclinaison du vitrage de la baie en degrés
  * @see abaques.enveloppe.baie.ug
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de transmission thermique du vitrage de la baie en W/(m².K)
+ * @returns Coefficient de transmission thermique du vitrage de la baie en W/(m².K)
  */
 export function calcule_ug(props: {
 	ug_saisi: number | null;
@@ -173,7 +168,7 @@ export function calcule_ug(props: {
 /**
  * @formule enveloppe.baie.sse
  * @param props.surface : Surface de la baie en m²
- * @return Surface sud équivalente de la baie en m²/mois
+ * @returns Surface sud équivalente de la baie en m²/mois
  */
 export function calcule_sse(props: {
 	surface: number;
@@ -279,7 +274,7 @@ export function calcule_fe2(props: {
 
 /**
  * @formule enveloppe.baie.omb
- * @return Coefficient d'ombrage dû aux masques lointains non homogènes
+ * @returns Coefficient d'ombrage dû aux masques lointains non homogènes
  */
 export function calcule_omb(props: {
 	omb: ReturnType<typeof masque.calcule_omb>[];
@@ -355,7 +350,7 @@ export function set_presence_rupteur_pont_thermique(props: {
 }
 
 /**
- * @return État d'isolation de la baie
+ * @returns État d'isolation de la baie
  */
 export function set_isolation(props: {
 	type_vitrage: ReturnType<typeof set_type_vitrage>;

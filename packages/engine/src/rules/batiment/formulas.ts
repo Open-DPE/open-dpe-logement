@@ -2,7 +2,7 @@
  * @formule batiment.ratio_proratisation
  * @props sh_batiment - Surface habitable totale du bâtiment en m²
  * @props sh_logement - Surface habitable du logement en m²
- * @return Ratio de proratisation
+ * @returns Ratio de proratisation
  */
 export function calcule_ratio_proratisation(props: {
 	sh_batiment: number;
@@ -16,7 +16,7 @@ export function calcule_ratio_proratisation(props: {
  * @formule batiment.sh
  * @props sh_batiment - Surface habitable du bâtiment en m²
  * @props sh_logement - Surface habitable du logement en m²
- * @return Surface habitable de référence en m²
+ * @returns Surface habitable de référence en m²
  */
 export function calcule_sh(props: {
 	sh_batiment: number;
@@ -29,7 +29,7 @@ export function calcule_sh(props: {
  * @formule batiment.hsp
  * @props hsp_batiment - Hauteur sous plafond du bâtiment en m
  * @props hsp_logement - Hauteur sous plafond du logement en m
- * @return Hauteur sous plafond de référence en m
+ * @returns Hauteur sous plafond de référence en m
  */
 export function calcule_hsp(props: {
 	hsp_batiment: number;

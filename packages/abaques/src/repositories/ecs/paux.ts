@@ -1,7 +1,7 @@
 import data from "#data/ecs/paux.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type EcsPauxSchema = {
+export type Schema = {
 	type_generateur: string;
 	energie_generateur: string | null;
 	presence_ventouse: boolean | null;
@@ -11,9 +11,13 @@ export type EcsPauxSchema = {
 	pn_max: number | null;
 };
 
-export const load = (): EcsPauxSchema[] => data as EcsPauxSchema[];
+export type Query = {
+	type_generateur: string;
+	energie_generateur: string;
+	presence_ventouse: boolean | null;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: EcsPauxSchema[],
-): EcsPauxSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

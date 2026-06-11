@@ -1,17 +1,17 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "#rules/common/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as production from "#rules/production/formulas.js";
-import * as refroidissement from "#rules/refroidissement/formulas.js";
-import * as installation from "#rules/refroidissement/installation/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as production from "#rules/production/formulas.js";
+import type * as refroidissement from "#rules/refroidissement/formulas.js";
+import type * as installation from "#rules/refroidissement/installation/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @formule refroidissement.generateur.cef
  * @formule refroidissement.generateur.cep
  * @formule refroidissement.generateur.eges
- * @return Consommations par usage et par énergie du générateur de refroidissement
+ * @returns Consommations par usage et par énergie du générateur de refroidissement
  */
 export function calcule_consommations(props: {
 	cfr: ReturnType<typeof calcule_cfr>;
@@ -54,7 +54,7 @@ export function calcule_cfr(props: {
 
 /**
  * @formule refroidissement.generateur.cfr_enr
- * @return Consommations d'électricité renouvelable du générateur de refroidissement en kWh/an
+ * @returns Consommations d'électricité renouvelable du générateur de refroidissement en kWh/an
  */
 export function calcule_cfr_enr(props: {
 	celec: ReturnType<typeof production.calcule_celec>;
@@ -70,7 +70,7 @@ export function calcule_cfr_enr(props: {
 
 /**
  * @formule refroidissement.generateur.cfr_elec
- * @return Consommation d'électricité du générateur de refroidissement en kWh/an
+ * @returns Consommation d'électricité du générateur de refroidissement en kWh/an
  */
 export function calcule_cfr_elec(props: {
 	cfr: ReturnType<typeof calcule_cfr>;
@@ -130,7 +130,7 @@ export function calcule_eer(props: {
 /**
  * @param props.annee_installation - Année d'installation du générateur de refroidissement saisie
  * @param props.annee_construction_batiment - Année de construction du bâtiment
- * @return Année d'installation du générateur de refroidissement retenue
+ * @returns Année d'installation du générateur de refroidissement retenue
  */
 export function set_annee_installation(props: {
 	annee_installation: number | null;

@@ -1,15 +1,15 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import * as chauffage from "#rules/chauffage/formulas.js";
-import * as generateur from "#rules/chauffage/generateur/formulas.js";
-import * as systeme from "#rules/chauffage/systeme/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois } from "#utils/helpers.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as chauffage from "#rules/chauffage/formulas.js";
+import type * as generateur from "#rules/chauffage/generateur/formulas.js";
+import type * as systeme from "#rules/chauffage/systeme/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { createParMois } from "#rules/helpers.js";
 
 /**
  * @formule chauffage.installation.caux_dist
- * @return Consommations des auxiliaires de distribution en kWh/an
+ * @returns Consommations des auxiliaires de distribution en kWh/an
  */
 export function calcule_caux_dist(props: {
 	caux_dist: ReturnType<typeof systeme.calcule_caux_dist>[];
@@ -58,6 +58,8 @@ export function calcule_pch(props: {
 
 /**
  * @formule chauffage.installation.fch
+ * @see abaques.chauffage.fch
+ * @throws {ValeurForfaitaireError}
  * @param props.fch_saisi - Facteur de couverture solaire saisi
  * @returns Facteur de couverture solaire de l'installation de chauffage
  */
@@ -78,7 +80,7 @@ export function calcule_fch(props: {
 
 /**
  * @see https://github.com/dpe-audit/dpe-logement/issues/46
- * @return Installation chauffée par effet de joule
+ * @returns Installation chauffée par effet de joule
  */
 export function calcule_effet_joule(props: {
 	type_installation: models.chauffage.installation.TypeInstallation;

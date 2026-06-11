@@ -29,24 +29,31 @@ export function kpt(
 	item: PontThermique,
 ): ReturnType<typeof formulas.calcule_kpt> {
 	const enums = models.enveloppe.pontThermique.TypeLiaisonEnum;
-	const type_liaison = item.liaison.type;
-	const kpt_saisi = item.kpt;
 	const mur = models.enveloppe.get_mur(
 		ctx.diagnostic.enveloppe,
 		item.liaison.mur_id,
 	);
 
-	switch (type_liaison) {
+	const props = {
+		kpt_saisi: item.kpt,
+		type_liaison: item.liaison.type,
+		isolation_mur: isolation_mur(ctx, mur),
+		type_isolation_mur: type_isolation_mur(mur),
+		isolation_plancher: null,
+		type_isolation_plancher: null,
+		type_pose_menuiserie: null,
+		presence_retour_isolation: null,
+		largeur_dormant: null,
+	};
+
+	switch (item.liaison.type) {
 		case enums.plancher_bas_mur: {
 			const plancher = models.enveloppe.get_plancher_bas(
 				ctx.diagnostic.enveloppe,
 				item.liaison.plancher_id,
 			);
 			return formulas.calcule_kpt({
-				kpt_saisi,
-				type_liaison,
-				isolation_mur: isolation_mur(ctx, mur),
-				type_isolation_mur: type_isolation_mur(mur),
+				...props,
 				isolation_plancher: isolation_plancher_bas(ctx, plancher),
 				type_isolation_plancher: type_isolation_plancher_bas(plancher),
 			});
@@ -56,54 +63,42 @@ export function kpt(
 				ctx.diagnostic.enveloppe,
 				item.liaison.plancher_id,
 			);
-
 			return formulas.calcule_kpt({
-				kpt_saisi,
-				type_liaison,
-				isolation_mur: isolation_mur(ctx, mur),
-				type_isolation_mur: type_isolation_mur(mur),
+				...props,
 				isolation_plancher: isolation_plancher_haut(ctx, plancher),
 				type_isolation_plancher: type_isolation_plancher_haut(plancher),
 			});
 		}
+
 		case enums.baie_mur: {
 			const baie = models.enveloppe.get_baie(
 				ctx.diagnostic.enveloppe,
 				item.liaison.ouverture_id,
 			);
 			return formulas.calcule_kpt({
-				kpt_saisi,
-				type_liaison,
-				isolation_mur: isolation_mur(ctx, mur),
-				type_isolation_mur: type_isolation_mur(mur),
+				...props,
 				type_pose_menuiserie: baie.position.type_pose,
 				presence_retour_isolation: presence_retour_isolation(baie),
 				largeur_dormant: largeur_dormant(baie),
 			});
 		}
+
 		case enums.porte_mur: {
 			const porte = models.enveloppe.get_porte(
 				ctx.diagnostic.enveloppe,
 				item.liaison.ouverture_id,
 			);
 			return formulas.calcule_kpt({
-				kpt_saisi,
-				type_liaison,
-				isolation_mur: isolation_mur(ctx, mur),
-				type_isolation_mur: type_isolation_mur(mur),
+				...props,
 				type_pose_menuiserie: porte.position.type_pose,
 				presence_retour_isolation: presence_retour_isolation(porte),
 				largeur_dormant: largeur_dormant(porte),
 			});
 		}
+
 		case enums.plancher_intermediaire_mur:
 		case enums.refend_mur: {
-			return formulas.calcule_kpt({
-				kpt_saisi,
-				type_liaison,
-				isolation_mur: isolation_mur(ctx, mur),
-				type_isolation_mur: type_isolation_mur(mur),
-			});
+			return formulas.calcule_kpt(props);
 		}
 	}
 }
@@ -180,7 +175,10 @@ export function presence_retour_isolation(
 	});
 }
 
-export function applique(ctx: Context, item: PontThermique): models.enveloppe.pontThermique.PontThermiqueWithData {
+export function applique(
+	ctx: Context,
+	item: PontThermique,
+): models.enveloppe.pontThermique.PontThermiqueWithData {
 	return {
 		...item,
 		data: {

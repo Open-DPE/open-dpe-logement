@@ -1,15 +1,18 @@
 import * as models from "@open-dpe-logement/models";
-import * as batiment from "#rules/batiment/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
+import type * as batiment from "#rules/batiment/formulas.js";
+import type * as climat from "#rules/climat/formulas.js";
 import * as generateur from "#rules/ecs/generateur/formulas.js";
 import * as installation from "#rules/ecs/installation/formulas.js";
-import { createParMois } from "#utils/helpers.js";
+import * as systeme from "#rules/ecs/systeme/formulas.js";
+import { createParMois } from "#rules/helpers.js";
+
+export { generateur, installation, systeme };
 
 /**
  * @formule ecs.cef
  * @formule ecs.cep
  * @formule ecs.eges
- * @return Consommations par usage et par énergie
+ * @returns Consommations par usage et par énergie
  */
 export function calcule_consommations(props: {
 	consommations: ReturnType<typeof generateur.calcule_consommations>[];
@@ -19,7 +22,7 @@ export function calcule_consommations(props: {
 
 /**
  * @formule ecs.cecs
- * @return Consommations d'eau chaude sanitaire en kWh/an
+ * @returns Consommations d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs(props: {
 	cecs: ReturnType<typeof generateur.calcule_cecs>[];
@@ -29,7 +32,7 @@ export function calcule_cecs(props: {
 
 /**
  * @formule ecs.cecs_elec
- * @return Consommation d'électricité d'eau chaude sanitaire en kWh/an
+ * @returns Consommation d'électricité d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_elec(props: {
 	cecs_elec: ReturnType<typeof generateur.calcule_cecs_elec>[];
@@ -39,7 +42,7 @@ export function calcule_cecs_elec(props: {
 
 /**
  * @formule ecs.caux
- * @return Consommations des auxiliaires de l'eau chaude sanitaire en kWh/an
+ * @returns Consommations des auxiliaires de l'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux(props: {
 	caux_gen: ReturnType<typeof calcule_caux_gen>;
@@ -50,7 +53,7 @@ export function calcule_caux(props: {
 
 /**
  * @formule ecs.caux_gen
- * @return Consommations des auxiliaires de génération en kWh/an
+ * @returns Consommations des auxiliaires de génération en kWh/an
  */
 export function calcule_caux_gen(props: {
 	caux_gen: ReturnType<typeof generateur.calcule_caux_gen>[];
@@ -60,7 +63,7 @@ export function calcule_caux_gen(props: {
 
 /**
  * @formule ecs.caux_dist
- * @return Consommations des auxiliaires de distribution en kWh/an
+ * @returns Consommations des auxiliaires de distribution en kWh/an
  */
 export function calcule_caux_dist(props: {
 	caux_dist: ReturnType<typeof installation.calcule_caux_dist>[];
@@ -70,7 +73,7 @@ export function calcule_caux_dist(props: {
 
 /**
  * @formule ecs.qgw
- * @return Pertes de stockage en Wh/an
+ * @returns Pertes de stockage en Wh/an
  */
 export function calcule_qgw(props: {
 	qgw: ReturnType<typeof generateur.calcule_qgw>[];
@@ -80,7 +83,7 @@ export function calcule_qgw(props: {
 
 /**
  * @formule ecs.qgen
- * @return Pertes de génération d'eau chaude sanitaire en Wh/an
+ * @returns Pertes de génération d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qgen(props: {
 	qgen: ReturnType<typeof generateur.calcule_qgen>[];
@@ -90,7 +93,7 @@ export function calcule_qgen(props: {
 
 /**
  * @formule ecs.qdw_ind_vc
- * @return Pertes de distribution individuelle en volume chauffé d'eau chaude sanitaire en Wh/an
+ * @returns Pertes de distribution individuelle en volume chauffé d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qdw_ind_vc(props: {
 	qdw_ind_vc: ReturnType<typeof installation.calcule_qdw_ind_vc>[];
@@ -100,7 +103,7 @@ export function calcule_qdw_ind_vc(props: {
 
 /**
  * @formule ecs.qdw_col_vc
- * @return Pertes de distribution collective en volume chauffé en Wh/an
+ * @returns Pertes de distribution collective en volume chauffé en Wh/an
  */
 export function calcule_qdw_col_vc(props: {
 	qdw_col_vc: ReturnType<typeof installation.calcule_qdw_col_vc>[];
@@ -110,7 +113,7 @@ export function calcule_qdw_col_vc(props: {
 
 /**
  * @formule ecs.qdw_col_hvc
- * @return Pertes de distribution collective hors du volume chauffé en Wh/an
+ * @returns Pertes de distribution collective hors du volume chauffé en Wh/an
  */
 export function calcule_qdw_col_hvc(props: {
 	qdw_col_hvc: ReturnType<typeof installation.calcule_qdw_col_hvc>[];
@@ -144,7 +147,7 @@ export function calcule_becs(props: {
 /**
  * @formule ecs.nadeq
  * @param props.logements : Nombre de logements
- * @return Nombre d'adultes équivalent
+ * @returns Nombre d'adultes équivalent
  */
 export function calcule_nadeq(props: {
 	logements: number;
@@ -159,7 +162,7 @@ export function calcule_nadeq(props: {
 /**
  * @formule ecs.nmax
  * @param props.logements : Nombre de logements
- * @return Coefficient d'occupation maximal
+ * @returns Coefficient d'occupation maximal
  */
 export function calcule_nmax(props: {
 	type_batiment: models.batiment.TypeBatiment;

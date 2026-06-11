@@ -4,6 +4,8 @@ title: Masque
 type: object
 unevaluatedProperties: false
 properties:
+  id:
+    $ref: /common#/$defs/id
   description:
     $ref: /common#/$defs/description
   type:
@@ -34,7 +36,9 @@ properties:
     type: [string, "null"]
     x-enum: enveloppe:masque:secteur
     enum: [lateral, lateral_sud, central, central_sud, null]
+
 required:
+  - id
   - description
   - type
   - hauteur

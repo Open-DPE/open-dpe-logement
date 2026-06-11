@@ -1,11 +1,16 @@
 import data from "#data/performance/fcep.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type FcepSchema = {
+export type Schema = {
 	energie: string;
 	fcep: number;
 };
 
-export const load = (): FcepSchema[] => data as FcepSchema[];
-export const search = (query: AbaqueQuery, rows: FcepSchema[]): FcepSchema[] =>
+export type Query = {
+	energie: string;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

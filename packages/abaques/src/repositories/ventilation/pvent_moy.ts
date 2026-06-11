@@ -1,16 +1,19 @@
 import data from "#data/ventilation/pvent_moy.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type PventMoySchema = {
+export type Schema = {
 	type_ventilation: string;
 	"annee_installation/gt": number | null;
 	"annee_installation/lte": number | null;
 	pvent_moy: number;
 };
 
-export const load = (): PventMoySchema[] => data as PventMoySchema[];
+export type Query = {
+	type_ventilation: string;
+	annee_installation: number;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: PventMoySchema[],
-): PventMoySchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

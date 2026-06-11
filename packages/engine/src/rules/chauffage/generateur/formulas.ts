@@ -1,19 +1,16 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "#rules/common/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as production from "#rules/production/formulas.js";
-import * as chauffage from "#rules/chauffage/formulas.js";
-import * as emetteur from "#rules/chauffage/emetteur/formulas.js";
-import * as installation from "#rules/chauffage/installation/formulas.js";
-import * as systeme from "#rules/chauffage/systeme/formulas.js";
-import * as generateurEcs from "#rules/ecs/generateur/formulas.js";
-import * as utils from "./utils.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois } from "#utils/helpers.js";
-import { evaluate } from "#utils/math.js";
-
-export { utils };
+import type * as climat from "#rules/climat/formulas.js";
+import type * as production from "#rules/production/formulas.js";
+import type * as chauffage from "#rules/chauffage/formulas.js";
+import type * as emetteur from "#rules/chauffage/emetteur/formulas.js";
+import type * as installation from "#rules/chauffage/installation/formulas.js";
+import type * as systeme from "#rules/chauffage/systeme/formulas.js";
+import type * as generateurEcs from "#rules/ecs/generateur/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { createParMois } from "#rules/helpers.js";
+import { evaluate } from "#rules/math.js";
 
 /**
  * @formule chauffage.generateur.cef
@@ -104,6 +101,7 @@ export function calcule_rdim(props: {
 }
 
 /**
+ * @formule chauffage.generateur.pn
  * @param props.pn_saisi : Puissance nominale saisie du générateur de chauffage en kW
  * @returns Puissance nominale conventionnelle du générateur de chauffage en kW
  */
@@ -116,6 +114,7 @@ export function calcule_pn(props: {
 }
 
 /**
+ * @formule chauffage.generateur.pdim
  * @returns Puissance de dimensionnement du générateur en kW
  */
 export function calcule_pdim(props: {
@@ -127,6 +126,7 @@ export function calcule_pdim(props: {
 }
 
 /**
+ * @formule chauffage.generateur.pch
  * @param props.pn_saisi: Puissance nominale saisie du générateur de chauffage en kW
  * @return Puissance de chauffage du générateur de chauffage en kW
  */
@@ -139,7 +139,7 @@ export function calcule_pch(props: {
 }
 
 /**
- * @param props.generateur_multi_batiment : Générateur multi-bâtiment
+ * @formule chauffage.generateur.paux
  * @see abaques.chauffage.paux
  * @throws {ValeurForfaitaireError}
  * @return Puissance de l'auxiliaire de génération de chauffage en kW
@@ -174,30 +174,37 @@ export type Combustion = {
 	pveilleuse: number;
 };
 
-export type CombustionProps = {
-	rpint_saisi: number | null;
-	rpn_saisi: number | null;
-	qp0_saisi: number | null;
-	pveilleuse_saisi: number | null;
-	mode_combustion: ReturnType<typeof set_mode_combustion>;
-	annee_installation: ReturnType<typeof set_annee_installation>;
-	pn: ReturnType<typeof calcule_pn>;
-	presence_ventouse: ReturnType<typeof set_presence_ventouse>;
-} & (
-	| utils.ChaudiereCombustion
-	| utils.PoeleBouilleur
-	| utils.GenerateurAirChaud
-	| utils.RadiateurGaz
-	| utils.PACHybride
-);
-
 /**
- * @applicable si {@linkcode utils.is_chaudiere_combustion} ou {@linkcode utils.is_poele_bouilleur} ou {@linkcode utils.is_generateur_air_chaud_combustion} ou {@linkcode utils.is_radiateur_gaz} ou {@linkcode utils.is_pac_hybride}
+ * @formule chauffage.generateur.rpint
+ * @formule chauffage.generateur.rpn
+ * @formule chauffage.generateur.qp0
+ * @formule chauffage.generateur.pveilleuse
+ *
+ * @guard :
+ * 	- {@linkcode models.chauffage.generateur.isChaudiereCombustion} ||
+ * 	- {@linkcode models.chauffage.generateur.isPoeleBouilleur} ||
+ * 	- {@linkcode models.chauffage.generateur.isGenerateurAirChaudCombustion} ||
+ * 	- {@linkcode models.chauffage.generateur.isRadiateurGaz} ||
+ * 	- {@linkcode models.chauffage.generateur.isPACHybride} ||
+ * 	- {@linkcode models.chauffage.generateur.isGenerateurCollectifInconnu}
+ *
  * @see abaques.chauffage.combustion
  * @throws {ValeurForfaitaireError}
  * @return Performances du générateur de chauffage à combustion
  */
-export function calcule_combustion(props: CombustionProps): Combustion {
+export function calcule_combustion(props: {
+	rpint_saisi: number | null;
+	rpn_saisi: number | null;
+	qp0_saisi: number | null;
+	pveilleuse_saisi: number | null;
+	type_generateur: ReturnType<typeof set_type_generateur>;
+	energie_generateur: ReturnType<typeof set_energie_generateur>;
+	bienergie_generateur: models.chauffage.generateur.Bienergie | null;
+	mode_combustion: ReturnType<typeof set_mode_combustion>;
+	annee_installation: ReturnType<typeof set_annee_installation>;
+	pn: ReturnType<typeof calcule_pn>;
+	presence_ventouse: ReturnType<typeof set_presence_ventouse>;
+}): Combustion {
 	const {
 		rpint_saisi,
 		rpn_saisi,
@@ -218,9 +225,12 @@ export function calcule_combustion(props: CombustionProps): Combustion {
 		return combustion as Combustion;
 	}
 
+	const energie_generateur =
+		props.bienergie_generateur ?? props.energie_generateur;
+	const q = { ...query, energie_generateur };
 	const abaque = abaques.chauffage.combustion;
-	const match = abaque.search(query, abaque.load()).at(0);
-	if (!match) throw new ValeurForfaitaireError(props);
+	const match = abaque.search(q, abaque.load()).at(0);
+	if (!match) throw new ValeurForfaitaireError(q);
 
 	const E = presence_ventouse ? 1.75 : 2.5;
 	const F = presence_ventouse ? -0.55 : -0.8;
@@ -236,22 +246,25 @@ export function calcule_combustion(props: CombustionProps): Combustion {
 	return combustion as Combustion;
 }
 
-export type ScopProps = {
+/**
+ * @formule chauffage.generateur.scop
+ *
+ * @guard :
+ * 	- {@linkcode models.chauffage.generateur.isPAC} ||
+ * 	- {@linkcode models.chauffage.generateur.isPACHybride}
+ *
+ * @see abaques.chauffage.scop
+ * @throws {ValeurForfaitaireError}
+ * @return Coefficient de performance énergétique saisonnier SCOP
+ */
+export function calcule_scop(props: {
 	scop_saisi: number | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	type_generateur: ReturnType<typeof set_type_generateur> &
 		models.chauffage.generateur.GenerateurThermodynamique["type"];
 	annee_installation: ReturnType<typeof set_annee_installation>;
 	types_emetteur: models.chauffage.emetteur.TypeEmetteur[];
-} & utils.GenerateurThermodynamique;
-
-/**
- * @applicable si {@linkcode utils.is_generateur_thermodynamique}
- * @see abaques.chauffage.scop
- * @throws {ValeurForfaitaireError}
- * @return Coefficient de performance énergétique saisonnier SCOP
- */
-export function calcule_scop(props: ScopProps): number {
+}): number {
 	const { scop_saisi } = props;
 	if (scop_saisi) return scop_saisi;
 	const { zone_climatique, type_generateur, annee_installation } = props;
@@ -279,7 +292,14 @@ export function calcule_scop(props: ScopProps): number {
 }
 
 /**
- * @applicable si {@linkcode utils.is_chaudiere_combustion}
+ * @formule chauffage.generateur.tfonc30
+ *
+ * @guard :
+ * 	- {@linkcode models.chauffage.generateur.isChaudiereCombustion} ||
+ * 	- {@linkcode models.chauffage.generateur.isPoeleBouilleur} ||
+ * 	- {@linkcode models.chauffage.generateur.isPACHybride} ||
+ * 	- {@linkcode models.chauffage.generateur.isGenerateurCollectifInconnu}
+ *
  * @return Température de fonctionnement à 30% de charge en °C
  */
 export function calcule_tfonc30(props: {
@@ -295,12 +315,13 @@ export function calcule_tfonc30(props: {
 }): number {
 	if (props.tfonc30_saisi) return props.tfonc30_saisi;
 
-	const { annee_installation_generateur } = props;
+	const { mode_combustion, annee_installation_generateur } = props;
 	const abaque = abaques.chauffage.tfonc30;
 
 	// Valeur par défaut en l'absence d'émetteurs de chauffage
 	if (props.emetteurs.length === 0) {
 		const query = {
+			mode_combustion,
 			temperature_distribution:
 				models.chauffage.emetteur.TemperatureDistributionEnum.haute,
 			annee_installation_emetteur: annee_installation_generateur,
@@ -314,6 +335,7 @@ export function calcule_tfonc30(props: {
 	const values = props.emetteurs.map(
 		({ temperature_distribution, annee_installation }) => {
 			const query = {
+				mode_combustion,
 				temperature_distribution,
 				annee_installation_emetteur: annee_installation,
 				annee_installation_generateur,
@@ -327,7 +349,14 @@ export function calcule_tfonc30(props: {
 }
 
 /**
- * @applicable si {@linkcode utils.is_chaudiere_combustion}
+ * @formule chauffage.generateur.tfonc100
+ *
+ * @guard :
+ * 	- {@linkcode models.chauffage.generateur.isChaudiereCombustion} ||
+ * 	- {@linkcode models.chauffage.generateur.isPoeleBouilleur} ||
+ * 	- {@linkcode models.chauffage.generateur.isPACHybride} ||
+ * 	- {@linkcode models.chauffage.generateur.isGenerateurCollectifInconnu}
+ *
  * @return Température de fonctionnement à 100% de charge en °C
  */
 export function calcule_tfonc100(props: {
@@ -405,6 +434,10 @@ export function calcule_qgen(props: {
 	return 0.48 * cper * qp0;
 }
 
+/**
+ * @see calcule_qpx_chaudiere_combustion
+ * @see calcule_qpx_autres
+ */
 export type QPx = {
 	// Pertes à 30% de charge en W
 	qp30: number;
@@ -415,7 +448,11 @@ export type QPx = {
 };
 
 /**
- * @applicable si {@linkcode utils.is_chaudiere_combustion}
+ * @guard :
+ * 	- {@linkcode models.chauffage.generateur.isChaudiereGaz} ||
+ * 	- {@linkcode models.chauffage.generateur.isChaudiereFioul} ||
+ * 	- {@linkcode models.chauffage.generateur.isPACHybride} ||
+ * 	- {@linkcode models.chauffage.generateur.isGenerateurCollectifInconnu}
  */
 export function calcule_qpx_chaudiere_combustion(props: {
 	pn: ReturnType<typeof calcule_pn>;
@@ -471,7 +508,11 @@ export function calcule_qpx_chaudiere_combustion(props: {
 }
 
 /**
- * @applicable si {@linkcode utils.is_chaudiere_bois} ou {@linkcode utils.is_poele_bouilleur} ou {@linkcode utils.is_generateur_air_chaud_combustion}
+ * @guard :
+ * 	- {@linkcode models.chauffage.generateur.isChaudiereCharbon} ||
+ * 	- {@linkcode models.chauffage.generateur.isChaudiereBois} ||
+ * 	- {@linkcode models.chauffage.generateur.isPoeleBouilleur} ||
+ * 	- {@linkcode models.chauffage.generateur.isGenerateurAirChaudCombustion}
  */
 export function calcule_qpx_autres(props: {
 	pn: ReturnType<typeof calcule_pn>;

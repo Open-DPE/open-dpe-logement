@@ -1,17 +1,21 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "#rules/common/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as production from "#rules/production/formulas.js";
-import * as generateur from "#rules/ecs/generateur/formulas.js";
-import * as installation from "#rules/ecs/installation/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as production from "#rules/production/formulas.js";
+import type * as generateur from "#rules/ecs/generateur/formulas.js";
+import type * as installation from "#rules/ecs/installation/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+
+const TypeGenerateurEnum = models.ecs.generateur.TypeGenerateurEnum;
+const LabelGenerateurEnum = models.ecs.generateur.LabelEnum;
+const PositionChauffeEauEnum = models.ecs.generateur.PositionChauffeEauEnum;
 
 /**
  * @formule ecs.systeme.cef
  * @formule ecs.systeme.cep
  * @formule ecs.systeme.eges
- * @return Consommations par usage et par énergie du générateur d'eau chaude sanitaire
+ * @returns Consommations par usage et par énergie du générateur d'eau chaude sanitaire
  */
 export function calcule_consommations(props: {
 	cecs: ReturnType<typeof calcule_cecs>;
@@ -56,7 +60,7 @@ export function calcule_cecs(props: {
 
 /**
  * @formule ecs.systeme.cecs_elec
- * @return Consommation d'électricité du système d'eau chaude sanitaire en kWh/an
+ * @returns Consommation d'électricité du système d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_elec(props: {
 	cecs: ReturnType<typeof calcule_cecs>;
@@ -69,7 +73,7 @@ export function calcule_cecs_elec(props: {
 
 /**
  * @formule ecs.systeme.cecs_enr
- * @return Consommations d'électricité renouvelable du système d'eau chaude sanitaire en kWh/an
+ * @returns Consommations d'électricité renouvelable du système d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_enr(props: {
 	celec: ReturnType<typeof production.calcule_celec>;
@@ -85,7 +89,7 @@ export function calcule_cecs_enr(props: {
 
 /**
  * @formule ecs.systeme.caux_dist
- * @return Consommation des auxiliaires de distribution d'eau chaude sanitaire en kWh/an
+ * @returns Consommation des auxiliaires de distribution d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_dist(props: {
 	qcirb: ReturnType<typeof calcule_qcirb>;
@@ -96,7 +100,7 @@ export function calcule_caux_dist(props: {
 
 /**
  * @formule ecs.systeme.caux_dist_enr
- * @return Consommations d'électricité renouvelable des auxiliaires de distribution d'eau chaude sanitaire en kWh/an
+ * @returns Consommations d'électricité renouvelable des auxiliaires de distribution d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_dist_enr(props: {
 	celec: ReturnType<typeof production.calcule_celec>;
@@ -115,7 +119,7 @@ export function calcule_caux_dist_enr(props: {
  * @param props.sh : Surface de l'installation d'eau chaude sanitaire en m²
  * @param props.installation_collective : Installation collective d'eau chaude sanitaire
  * @param props.niveaux_desservis : Nombre de niveaux desservis par l'installation d'eau chaude sanitaire
- * @return Consommations du circulateur d'eau chaude sanitaire en Wh/an
+ * @returns Consommations du circulateur d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qcirb(props: {
 	nj: ReturnType<typeof climat.calcule_nj>;
@@ -143,7 +147,7 @@ export function calcule_qcirb(props: {
 
 /**
  * @formule ecs.systeme.qtrac
- * @return Consommation du traçeur d'eau chaude sanitaire en Wh/an
+ * @returns Consommation du traçeur d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qtrac(props: {
 	becs: ReturnType<typeof installation.calcule_becs>;
@@ -172,9 +176,9 @@ export function calcule_rdim(props: { n_systemes: number }): number {
  */
 export function calcule_iecs(props: {
 	rd: ReturnType<typeof calcule_rd>;
-	rg: ReturnType<typeof calcule_rendements>["rg"];
-	rs: ReturnType<typeof calcule_rendements>["rs"];
-	rgs: ReturnType<typeof calcule_rendements>["rgs"];
+	rg: Rendements["rg"];
+	rs: Rendements["rs"];
+	rgs: Rendements["rgs"];
 }): number {
 	const { rd, rg, rs, rgs } = props;
 	return rd * rg * rs * rgs;
@@ -198,111 +202,14 @@ export function calcule_rd(props: {
 	return match.rd;
 }
 
-export const TYPES_SYSTEME = {
-	chaudiere_mixte: "chaudiere_mixte",
-	accumulateur_gaz: "accumulateur_gaz",
-	chauffe_eau_gaz: "chauffe_eau_gaz",
-	chauffe_eau_thermodynamique: "chauffe_eau_thermodynamique",
-	pac_double_service: "pac_double_service",
-	pac_hybride: "pac_hybride",
-	chaudiere_electrique: "chaudiere_electrique",
-	chauffe_eau_electrique: "chauffe_eau_electrique",
-	reseau_chaleur: "reseau_chaleur",
-} as const;
-
 /**
- * @returns Type de système d'eau chaude sanitaire
+ * @see calcule_rendements_reseau_chaleur
+ * @see calcule_rendements_chaudiere_mixte
+ * @see calcule_rendements_chauffe_eau_gaz
+ * @see calcule_rendements_systeme_thermodynamique
+ * @see calcule_rendements_systeme_electrique
+ * Rendements du système d'eau chaude sanitaire
  */
-export function calcule_type_systeme(props: {
-	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
-	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
-	bienergie: models.ecs.generateur.Bienergie | null;
-	generateur_multi_batiment: boolean;
-	volume_stockage: ReturnType<typeof generateur.set_volume_stockage>;
-}): (typeof TYPES_SYSTEME)[keyof typeof TYPES_SYSTEME] {
-	if (props.generateur_multi_batiment) return TYPES_SYSTEME.reseau_chaleur;
-
-	const electricite = models.ecs.generateur.EnergieEcsEnum.electricite;
-
-	switch (props.type_generateur) {
-		case models.ecs.generateur.TypeGenerateurEnum.chaudiere: {
-			return props.energie_generateur === electricite
-				? TYPES_SYSTEME.chaudiere_electrique
-				: TYPES_SYSTEME.chaudiere_mixte;
-		}
-		case models.ecs.generateur.TypeGenerateurEnum.poele_bouilleur: {
-			return TYPES_SYSTEME.chaudiere_mixte;
-		}
-		case models.ecs.generateur.TypeGenerateurEnum.chauffe_eau: {
-			if (props.energie_generateur === electricite)
-				return TYPES_SYSTEME.chauffe_eau_electrique;
-			return props.volume_stockage
-				? TYPES_SYSTEME.accumulateur_gaz
-				: TYPES_SYSTEME.chauffe_eau_gaz;
-		}
-		case models.ecs.generateur.TypeGenerateurEnum.cet_air_ambiant:
-		case models.ecs.generateur.TypeGenerateurEnum.cet_air_exterieur:
-		case models.ecs.generateur.TypeGenerateurEnum.cet_air_extrait: {
-			return TYPES_SYSTEME.chauffe_eau_thermodynamique;
-		}
-		case models.ecs.generateur.TypeGenerateurEnum.pac_double_service: {
-			return props.bienergie
-				? TYPES_SYSTEME.pac_hybride
-				: TYPES_SYSTEME.pac_double_service;
-		}
-		case models.ecs.generateur.TypeGenerateurEnum.reseau_chaleur: {
-			return TYPES_SYSTEME.reseau_chaleur;
-		}
-	}
-}
-
-export type RendementsChaudiereMixteProps = {
-	type_systeme: typeof TYPES_SYSTEME.chaudiere_mixte;
-} & Parameters<typeof calcule_rendements_chaudiere_mixte>[0];
-
-export type RendementsAccumulateurGazProps = {
-	type_systeme: typeof TYPES_SYSTEME.accumulateur_gaz;
-} & Parameters<typeof calcule_rendements_accumulateur_gaz>[0];
-
-export type RendementsChauffeEauGazProps = {
-	type_systeme: typeof TYPES_SYSTEME.chauffe_eau_gaz;
-} & Parameters<typeof calcule_rendements_chauffe_eau_gaz>[0];
-
-export type RendementsChauffeEauThermodynamiqueProps = {
-	type_systeme: typeof TYPES_SYSTEME.chauffe_eau_thermodynamique;
-} & Parameters<typeof calcule_rendements_generateur_thermodynamique>[0];
-
-export type RendementsPACDoubleServiceProps = {
-	type_systeme: typeof TYPES_SYSTEME.pac_double_service;
-} & Parameters<typeof calcule_rendements_generateur_thermodynamique>[0];
-
-export type RendementsPACHybrideProps = {
-	type_systeme: typeof TYPES_SYSTEME.pac_hybride;
-} & Parameters<typeof calcule_rendements_chaudiere_mixte>[0];
-
-export type RendementsChaudiereElectriqueProps = {
-	type_systeme: typeof TYPES_SYSTEME.chaudiere_electrique;
-} & Parameters<typeof calcule_rendements_systeme_electrique>[0];
-
-export type RendementsChauffeEauElectriqueProps = {
-	type_systeme: typeof TYPES_SYSTEME.chauffe_eau_electrique;
-} & Parameters<typeof calcule_rendements_systeme_electrique>[0];
-
-export type RendementsReseauChaleurProps = {
-	type_systeme: typeof TYPES_SYSTEME.reseau_chaleur;
-} & Parameters<typeof calcule_rendements_reseau_chaleur>[0];
-
-export type RendementsProps =
-	| RendementsChaudiereMixteProps
-	| RendementsAccumulateurGazProps
-	| RendementsChauffeEauGazProps
-	| RendementsChauffeEauThermodynamiqueProps
-	| RendementsPACDoubleServiceProps
-	| RendementsPACHybrideProps
-	| RendementsChaudiereElectriqueProps
-	| RendementsChauffeEauElectriqueProps
-	| RendementsReseauChaleurProps;
-
 export type Rendements = {
 	// Rendement de génération
 	rg: number;
@@ -313,33 +220,22 @@ export type Rendements = {
 };
 
 /**
- * @formule ecs.systeme.rd
- * @formule ecs.systeme.rg
- * @formule ecs.systeme.rs
- * @formule ecs.systeme.rgs
- * @returns Rendements dy système
+ * @guard {@linkcode models.ecs.generateur.isReseauChaleur} || {@linkcode models.ecs.generateur.isGenerateurMultiBatiment}
+ * @returns Rendements du réseau de chaleur et des générateurs multi-bâtiment
  */
-export function calcule_rendements(props: RendementsProps): Rendements {
-	switch (props.type_systeme) {
-		case TYPES_SYSTEME.chaudiere_mixte:
-		case TYPES_SYSTEME.pac_hybride:
-			return calcule_rendements_chaudiere_mixte(props);
-		case TYPES_SYSTEME.accumulateur_gaz:
-			return calcule_rendements_accumulateur_gaz(props);
-		case TYPES_SYSTEME.chauffe_eau_gaz:
-			return calcule_rendements_chauffe_eau_gaz(props);
-		case TYPES_SYSTEME.chauffe_eau_thermodynamique:
-		case TYPES_SYSTEME.pac_double_service:
-			return calcule_rendements_generateur_thermodynamique(props);
-		case TYPES_SYSTEME.chaudiere_electrique:
-		case TYPES_SYSTEME.chauffe_eau_electrique:
-			return calcule_rendements_systeme_electrique(props);
-		case TYPES_SYSTEME.reseau_chaleur:
-			return calcule_rendements_reseau_chaleur(props);
-	}
+export function calcule_rendements_reseau_chaleur(props: {
+	isolation_reseau: ReturnType<typeof set_isolation_reseau>;
+}): Rendements {
+	const rgs = props.isolation_reseau ? 0.9 : 0.75;
+	return { rgs, rg: 1, rs: 1 };
 }
 
 /**
+ * @guard :
+ * - {@linkcode models.ecs.generateur.isChaudiereCombustion} ||
+ * - {@linkcode models.ecs.generateur.isPoeleBoisBouilleur} ||
+ * - {@linkcode models.ecs.generateur.isPacHybride} ||
+ * - {@linkcode models.ecs.generateur.isGenerateurCollectifInconnu}
  * @returns Rendements de la chaudière mixte
  */
 export function calcule_rendements_chaudiere_mixte(props: {
@@ -362,9 +258,10 @@ export function calcule_rendements_chaudiere_mixte(props: {
 }
 
 /**
- * @returns Rendements de l'accumulateur gaz
+ * @guard {@linkcode models.ecs.generateur.isChauffeEauGaz}
+ * @returns Rendements du chauffe-eau gaz
  */
-export function calcule_rendements_accumulateur_gaz(props: {
+export function calcule_rendements_chauffe_eau_gaz(props: {
 	becs: ReturnType<typeof installation.calcule_becs>;
 	qgw: ReturnType<typeof generateur.calcule_qgw>;
 	rpn: ReturnType<typeof generateur.calcule_combustion>["rpn"];
@@ -372,29 +269,18 @@ export function calcule_rendements_accumulateur_gaz(props: {
 	pveilleuse: ReturnType<typeof generateur.calcule_combustion>["pveilleuse"];
 }): Rendements {
 	const qgw = props.qgw;
-	const qp0 = (props.qp0 ?? 0) * 1000;
-	const rpn = props.rpn ?? 0;
-	const pveilleuse = props.pveilleuse ?? 0;
+	const qp0 = props.qp0 * 1000;
+	const rpn = props.rpn;
+	const pveilleuse = props.pveilleuse;
 	const becs = models.common.reduceParMois(props.becs) * 1000;
 
-	const rgs =
-		1 / (1 / rpn + (8592 * qp0 + qgw) / becs + 6970 * (pveilleuse / becs));
-	return { rgs, rg: 1, rs: 1 };
-}
-
-/**
- * @returns Rendements du chauffe-eau gaz
- */
-export function calcule_rendements_chauffe_eau_gaz(props: {
-	becs: ReturnType<typeof installation.calcule_becs>;
-	rpn: ReturnType<typeof generateur.calcule_combustion>["rpn"];
-	qp0: ReturnType<typeof generateur.calcule_combustion>["qp0"];
-	pveilleuse: ReturnType<typeof generateur.calcule_combustion>["pveilleuse"];
-}): Rendements {
-	const qp0 = (props.qp0 ?? 0) * 1000;
-	const rpn = props.rpn ?? 0;
-	const pveilleuse = props.pveilleuse ?? 0;
-	const becs = models.common.reduceParMois(props.becs) * 1000;
+	// Accumulateur
+	if (qgw) {
+		const rgs =
+			1 / (1 / rpn + (8592 * qp0 + qgw) / becs + 6970 * (pveilleuse / becs));
+		return { rgs, rg: 1, rs: 1 };
+	}
+	// Chauffe eau instantané
 	let rg: number = 1 / rpn;
 	rg += 1790 * (qp0 / becs);
 	rg += 6970 * (pveilleuse / becs);
@@ -403,24 +289,11 @@ export function calcule_rendements_chauffe_eau_gaz(props: {
 }
 
 /**
- * @return Rendements du réseau de chaleur et des générateurs multi-bâtiment
- */
-export function calcule_rendements_reseau_chaleur(props: {
-	isolation_reseau: ReturnType<typeof set_isolation_reseau>;
-}): Rendements {
-	const rgs = props.isolation_reseau ? 0.9 : 0.75;
-	return { rgs, rg: 1, rs: 1 };
-}
-
-/**
- * @param props.position_chauffe_eau : Position du chauffe-eau
- * @param props.label_generateur : Label du générateur d'eau chaude sanitaire
- * @return Rendements du système électrique
+ * @guard {@linkcode models.ecs.generateur.isChaudiereElectrique} || {@linkcode models.ecs.generateur.isChauffeEauElectrique}
+ * @returns Rendements du système électrique
  */
 export function calcule_rendements_systeme_electrique(props: {
-	type_systeme:
-		| typeof TYPES_SYSTEME.chaudiere_electrique
-		| typeof TYPES_SYSTEME.chauffe_eau_electrique;
+	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	becs: ReturnType<typeof installation.calcule_becs>;
 	rd: ReturnType<typeof calcule_rd>;
 	qgw: ReturnType<typeof generateur.calcule_qgw>;
@@ -429,26 +302,24 @@ export function calcule_rendements_systeme_electrique(props: {
 }): Rendements {
 	const { position_chauffe_eau, label_generateur, rd, qgw } = props;
 	const becs = models.common.reduceParMois(props.becs) * 1000;
-	const chauffe_eau_vertical =
-		models.ecs.generateur.PositionChauffeEauEnum.chauffe_eau_vertical;
-	const ne_performance_c = models.ecs.generateur.LabelEnum.ne_performance_c;
-
-	const rg =
-		props.type_systeme === TYPES_SYSTEME.chaudiere_electrique ? 0.97 : 1;
-
+	const rg = props.type_generateur === TypeGenerateurEnum.chaudiere ? 0.97 : 1;
 	const rs =
-		position_chauffe_eau === chauffe_eau_vertical &&
-		label_generateur === ne_performance_c
+		position_chauffe_eau === PositionChauffeEauEnum.chauffe_eau_vertical &&
+		label_generateur === LabelGenerateurEnum.ne_performance_c
 			? 1.08 / (1 + (qgw * rd) / becs)
 			: 1 / (1 + (qgw * rd) / becs);
 
 	return { rgs: 1, rg: rg, rs };
 }
 
-export function calcule_rendements_generateur_thermodynamique(props: {
+/**
+ * @guard {@linkcode models.ecs.generateur.isChauffeEauThermodynamique} || {@linkcode models.ecs.generateur.isPACDoubleService}
+ * @returns Rendements du système thermodynamique
+ */
+export function calcule_rendements_systeme_thermodynamique(props: {
 	cop: ReturnType<typeof generateur.calcule_cop>;
 }): Rendements {
-	return { rgs: props.cop ?? 0, rg: 1, rs: 1 };
+	return { rgs: props.cop, rg: 1, rs: 1 };
 }
 
 /**

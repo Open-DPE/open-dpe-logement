@@ -1,33 +1,23 @@
-import type { Results as BaieResults } from "./baie/registry.js";
-import type { Results as ParoiResults } from "./paroi/registry.js";
+import { NAMESPACE, RULES } from "./constants.js";
 import * as rules from "./rules.js";
+import * as baie from "./baie/registry.js";
+import * as paroi from "./paroi/registry.js";
 
-export const ID = "enveloppe:local-non-chauffe";
+export { baie, paroi };
 
-export const RULES = {
-	b: "b",
-	aiu: "aiu",
-	aue: "aue",
-	isolation_aiu: "isolation_aiu",
-	isolation_aue: "isolation_aue",
-	sse: "sse",
-	orientations: "orientations",
-	t: "t",
-} as const;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.b]: rules.b,
+		[RULES.uvue]: rules.uvue,
+		[RULES.aiu]: rules.aiu,
+		[RULES.aue]: rules.aue,
+		[RULES.isolation_aiu]: rules.isolation_aiu,
+		[RULES.isolation_aue]: rules.isolation_aue,
+		[RULES.sse]: rules.sse,
+		[RULES.orientations]: rules.orientations,
+		[RULES.t]: rules.t,
+	},
 
-export type Results = {
-	[ID]: Record<
-		string,
-		{
-			[RULES.b]: ReturnType<typeof rules.b>;
-			[RULES.aiu]: ReturnType<typeof rules.aiu>;
-			[RULES.aue]: ReturnType<typeof rules.aue>;
-			[RULES.isolation_aiu]: ReturnType<typeof rules.isolation_aiu>;
-			[RULES.isolation_aue]: ReturnType<typeof rules.isolation_aue>;
-			[RULES.sse]: ReturnType<typeof rules.sse>;
-			[RULES.orientations]: ReturnType<typeof rules.orientations>;
-			[RULES.t]: ReturnType<typeof rules.t>;
-		}
-	>;
-} & BaieResults &
-	ParoiResults;
+	...baie.REGISTRY,
+	...paroi.REGISTRY,
+};

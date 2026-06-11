@@ -1,16 +1,16 @@
 import * as models from "@open-dpe-logement/models";
-import * as batiment from "#rules/batiment/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as ecs from "#rules/ecs/formulas.js";
-import * as enveloppe from "#rules/enveloppe/formulas.js";
-import * as generateur from "#rules/refroidissement/generateur/formulas.js";
-import { createParMois } from "#utils/helpers.js";
+import type * as batiment from "#rules/batiment/formulas.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as ecs from "#rules/ecs/formulas.js";
+import type * as enveloppe from "#rules/enveloppe/formulas.js";
+import type * as generateur from "#rules/refroidissement/generateur/formulas.js";
+import { createParMois } from "#rules/helpers.js";
 
 /**
  * @formule refroidissement.cef
  * @formule refroidissement.cep
  * @formule refroidissement.eges
- * @return Consommations par usage et par énergie
+ * @returns Consommations par usage et par énergie
  */
 export function calcule_consommations(props: {
 	consommations: ReturnType<typeof generateur.calcule_consommations>[];
@@ -20,7 +20,7 @@ export function calcule_consommations(props: {
 
 /**
  * @formule refroidissement.cfr
- * @return Consommations des générateurs de refroidissement en kWh/an
+ * @returns Consommations des générateurs de refroidissement en kWh/an
  */
 export function calcule_cfr(props: {
 	cfr: ReturnType<typeof generateur.calcule_cfr>[];
@@ -30,7 +30,7 @@ export function calcule_cfr(props: {
 
 /**
  * @formule refroidissement.cfr_elec
- * @return Consommation d'électricité de refroidissement en kWh/an
+ * @returns Consommation d'électricité de refroidissement en kWh/an
  */
 export function calcule_cfr_elec(props: {
 	cfr_elec: ReturnType<typeof generateur.calcule_cfr_elec>[];
@@ -40,7 +40,7 @@ export function calcule_cfr_elec(props: {
 
 /**
  * @formule refroidissement.caux
- * @return Consommations des auxiliaires de refroidissement en kWh/an
+ * @returns Consommations des auxiliaires de refroidissement en kWh/an
  */
 export function calcule_caux(props: {
 	caux: ReturnType<typeof generateur.calcule_caux>[];

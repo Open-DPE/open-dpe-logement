@@ -1,14 +1,20 @@
 import data from "#data/chauffage/re.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type ReSchema = {
+export type Schema = {
 	type_emission: string;
 	type_generateur: string | null;
 	label_generateur: string | null;
 	re: number;
 };
 
-export const load = (): ReSchema[] => data as ReSchema[];
+export type Query = {
+	type_emission: string;
+	type_generateur: string;
+	label_generateur: string | null;
+};
 
-export const search = (query: AbaqueQuery, rows: ReSchema[]): ReSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

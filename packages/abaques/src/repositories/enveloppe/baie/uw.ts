@@ -1,7 +1,7 @@
 import data from "#data/enveloppe/baie/uw.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type UwSchema = {
+export type Schema = {
 	type_baie: string;
 	presence_soubassement: boolean | null;
 	materiau: string | null;
@@ -10,7 +10,14 @@ export type UwSchema = {
 	uw: number;
 };
 
-export const load = (): UwSchema[] => data as UwSchema[];
+export type Query = {
+	type_baie: string;
+	presence_soubassement: boolean | null;
+	materiau: string | null;
+	presence_rupteur_pont_thermique: boolean | null;
+};
 
-export const search = (query: AbaqueQuery, rows: UwSchema[]): UwSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

@@ -1,13 +1,16 @@
 import data from "#data/enveloppe/mur/u0-doublage.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type U0DoublageSchema = {
+export type Schema = {
 	type_doublage: string;
 	u0_doublage: number;
 };
 
-export const load = (): U0DoublageSchema[] => data as U0DoublageSchema[];
-export const search = (
-	query: AbaqueQuery,
-	rows: U0DoublageSchema[],
-): U0DoublageSchema[] => filter(query, rows);
+export type Query = {
+	type_doublage: string;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

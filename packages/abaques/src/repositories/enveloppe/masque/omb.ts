@@ -1,16 +1,23 @@
 import data from "#data/enveloppe/masque/omb.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type OmbSchema = {
+export type Schema = {
 	type_masque: string;
-	orientation_facade: string | null;
+	orientation_facade: string;
 	secteur_orientation: string | null;
 	"hauteur_alpha_masque/gte": number | null;
 	"hauteur_alpha_masque/lt": number | null;
 	omb: number;
 };
 
-export const load = (): OmbSchema[] => data as OmbSchema[];
+export type Query = {
+	type_masque: string;
+	orientation_facade: string;
+	secteur_orientation: string;
+	hauteur_alpha_masque: number;
+};
 
-export const search = (query: AbaqueQuery, rows: OmbSchema[]): OmbSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

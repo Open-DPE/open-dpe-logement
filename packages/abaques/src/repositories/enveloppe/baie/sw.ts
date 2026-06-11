@@ -1,7 +1,7 @@
 import data from "#data/enveloppe/baie/sw.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type SwSchema = {
+export type Schema = {
 	type_baie: string;
 	presence_soubassement: boolean | null;
 	materiau: string | null;
@@ -11,7 +11,16 @@ export type SwSchema = {
 	sw: number;
 };
 
-export const load = (): SwSchema[] => data as SwSchema[];
+export type Query = {
+	type_baie: string;
+	presence_soubassement: boolean | null;
+	materiau: string | null;
+	type_vitrage: string | null;
+	type_pose: string | null;
+	type_survitrage: string | null;
+};
 
-export const search = (query: AbaqueQuery, rows: SwSchema[]): SwSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

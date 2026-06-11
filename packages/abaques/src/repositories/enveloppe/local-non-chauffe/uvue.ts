@@ -1,12 +1,16 @@
 import data from "#data/enveloppe/local-non-chauffe/uvue.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type UvueSchema = {
+export type Schema = {
 	type_local_non_chauffe: string;
 	uvue: number;
-	tv_uvue_id: number;
 };
 
-export const load = (): UvueSchema[] => data as UvueSchema[];
-export const search = (query: AbaqueQuery, rows: UvueSchema[]): UvueSchema[] =>
+export type Query = {
+	type_local_non_chauffe: string;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

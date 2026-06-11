@@ -1,4 +1,4 @@
-import type { UUID } from "#/common/common";
+import type { UUID, NonEmptyArray } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 import * as systeme from "./systeme.js";
 
@@ -12,12 +12,13 @@ export type Installation = {
 	description: string;
 	surface: number;
 	installation_collective: boolean;
-	systemes: [systeme.Systeme] | [systeme.Systeme, systeme.Systeme];
+	systemes: NonEmptyArray<systeme.Systeme>;
 	solaire_thermique: SolaireThermique | null;
 };
 
 export type InstallationWithData<T extends Installation = Installation> = T & {
 	data: InstallationData;
+	systemes: NonEmptyArray<systeme.SystemeWithData>;
 };
 
 export type InstallationData = {

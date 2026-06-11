@@ -1,14 +1,17 @@
 import * as models from "@open-dpe-logement/models";
-import * as batiment from "#rules/batiment/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as enveloppe from "#rules/enveloppe/formulas.js";
-import * as ecs from "#rules/ecs/formulas.js";
+import type * as batiment from "#rules/batiment/formulas.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as enveloppe from "#rules/enveloppe/formulas.js";
+import type * as ecs from "#rules/ecs/formulas.js";
 import * as generateur from "#rules/chauffage/generateur/formulas.js";
 import * as installation from "#rules/chauffage/installation/formulas.js";
-import { createParMois } from "#utils/helpers.js";
+import * as systeme from "#rules/chauffage/systeme/formulas.js";
+import { createParMois } from "#rules/helpers.js";
+
+export { generateur, installation, systeme };
 
 /**
- * @return Consommations par usage et par énergie
+ * @returns Consommations par usage et par énergie
  */
 export function calcule_consommations(props: {
 	consommations: ReturnType<typeof generateur.calcule_consommations>[];
@@ -18,7 +21,7 @@ export function calcule_consommations(props: {
 
 /**
  * @formule chauffage.cch
- * @return Consommations de chauffage en kWh/an
+ * @returns Consommations de chauffage en kWh/an
  */
 export function calcule_cch(props: {
 	cch: ReturnType<typeof generateur.calcule_cch>[];
@@ -28,7 +31,7 @@ export function calcule_cch(props: {
 
 /**
  * @formule chauffage.cch_elec
- * @return Consommation d'électricité de chauffage en kWh/an
+ * @returns Consommation d'électricité de chauffage en kWh/an
  */
 export function calcule_cch_elec(props: {
 	cch_elec: ReturnType<typeof generateur.calcule_cch_elec>[];
@@ -38,7 +41,7 @@ export function calcule_cch_elec(props: {
 
 /**
  * @formule chauffage.caux
- * @return Consommations des auxiliaires de chauffage en kWh/an
+ * @returns Consommations des auxiliaires de chauffage en kWh/an
  */
 export function calcule_caux(props: {
 	caux_gen: ReturnType<typeof calcule_caux_gen>;
@@ -49,7 +52,7 @@ export function calcule_caux(props: {
 
 /**
  * @formule chauffage.caux_gen
- * @return Consommations des auxiliaires de génération en kWh/an
+ * @returns Consommations des auxiliaires de génération en kWh/an
  */
 export function calcule_caux_gen(props: {
 	caux_gen: ReturnType<typeof generateur.calcule_caux_gen>[];
@@ -59,7 +62,7 @@ export function calcule_caux_gen(props: {
 
 /**
  * @formule chauffage.caux_dist
- * @return Consommations des auxiliaires de distribution en kWh/an
+ * @returns Consommations des auxiliaires de distribution en kWh/an
  */
 export function calcule_caux_dist(props: {
 	caux_dist: ReturnType<typeof installation.calcule_caux_dist>[];
@@ -118,7 +121,7 @@ export function calcule_bv(props: {
 
 /**
  * @formule chauffage.pch
- * @return Puissance conventionnelle de chauffage en kW
+ * @returns Puissance conventionnelle de chauffage en kW
  */
 export function calcule_pch(props: {
 	ratio_proratisation: ReturnType<typeof batiment.calcule_ratio_proratisation>;
@@ -209,7 +212,7 @@ export function calcule_qgw_rec(props: {
 
 /**
  * @formule chauffage.qdw_rec
- * @return Pertes de distribution d'eau chaude sanitaire récupérables en Wh/mois
+ * @returns Pertes de distribution d'eau chaude sanitaire récupérables en Wh/mois
  */
 export function calcule_qdw_rec(props: {
 	qdw_ind_vc: ReturnType<typeof ecs.calcule_qdw_ind_vc>;
@@ -225,7 +228,7 @@ export function calcule_qdw_rec(props: {
 
 /**
  * @formule chauffage.qgen_rec
- * @return Pertes de génération récupérables en Wh/mois
+ * @returns Pertes de génération récupérables en Wh/mois
  */
 export function calcule_qgen_rec(props: {
 	qgen_ch_rec: ReturnType<typeof generateur.calcule_qgen_rec>[];
@@ -239,7 +242,7 @@ export function calcule_qgen_rec(props: {
 
 /**
  * @formule chauffage.qgen_ecs_rec
- * @return Pertes de génération d'eau chaude sanitaire récupérables en Wh/mois
+ * @returns Pertes de génération d'eau chaude sanitaire récupérables en Wh/mois
  */
 export function calcule_qgen_ecs_rec(props: {
 	qgen: ReturnType<typeof ecs.calcule_qgen>;

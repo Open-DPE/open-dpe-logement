@@ -24,6 +24,7 @@ export type Installation = {
 
 export type InstallationWithData<T extends Installation = Installation> = T & {
 	data: InstallationData;
+	systemes: NonEmptyArray<systeme.SystemeWithData>;
 };
 
 export type InstallationData = {

@@ -1,12 +1,16 @@
 import data from "#data/enveloppe/paroi/b.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type BSchema = {
+export type Schema = {
 	mitoyennete: string;
 	b: number;
-	tv_coef_reduction_deperdition_id: number;
 };
 
-export const load = (): BSchema[] => data as BSchema[];
-export const search = (query: AbaqueQuery, rows: BSchema[]): BSchema[] =>
+export type Query = {
+	mitoyennete: string;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

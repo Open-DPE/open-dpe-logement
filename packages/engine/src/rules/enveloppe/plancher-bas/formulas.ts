@@ -1,17 +1,16 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import * as chauffage from "#rules/chauffage/formulas.js";
-import * as paroi from "#rules/enveloppe/paroi/formulas.js";
-export * from "#rules/enveloppe/paroi/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { bilinearInterpolate } from "#utils/math.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as chauffage from "#rules/chauffage/formulas.js";
+import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { bilinearInterpolate } from "#rules/math.js";
 
 /**
  * @formule enveloppe.plancher_bas.isolation_aiu
  * @param props.isolation : État d'isolation saisi du plancher bas donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment
- * @return État d'isolation de plancher bas donnant sur un local non chauffé
+ * @returns État d'isolation de plancher bas donnant sur un local non chauffé
  */
 export function calcule_isolation_aiu(props: {
 	isolation: boolean | null;
@@ -27,7 +26,7 @@ export function calcule_isolation_aiu(props: {
 
 /**
  * @formule enveloppe.plancher_bas.u
- * @return Coefficient de transmission thermique du plancher bas en W/m².K
+ * @returns Coefficient de transmission thermique du plancher bas en W/m².K
  */
 export function calcule_u(props: {
 	uint: ReturnType<typeof calcule_uint>;
@@ -88,7 +87,19 @@ export function calcule_uint(props: {
 	return Math.min(match.u, u0);
 }
 
+export function is_calcule_ue_applicable(props: {
+	mitoyennete: models.enveloppe.common.Mitoyennete;
+}): boolean {
+	const scope: models.enveloppe.common.Mitoyennete[] = [
+		models.enveloppe.common.MitoyenneteEnum.terre_plein,
+		models.enveloppe.common.MitoyenneteEnum.vide_sanitaire,
+		models.enveloppe.common.MitoyenneteEnum.sous_sol_non_chauffe,
+	];
+	return scope.includes(props.mitoyennete);
+}
+
 /**
+ * @guard {@linkcode models.enveloppe.plancherBas.isPositionTerrePlein}
  * @props props.surface_ue : Surface du plancher du bâtiment ou du lot sur terre-plein, vide sanitaire ou sous-sol non chauffé en m²
  * @props props.perimetre_ue : Périmètre du plancher du bâtiment ou du lot sur terre-plein, vide sanitaire ou sous-sol non chauffé en m
  * @see abaques.enveloppe.plancherBas.ue
@@ -96,10 +107,7 @@ export function calcule_uint(props: {
  * @returns Coefficient de transmission thermique du plancher bas en W/m².K
  */
 export function calcule_ue(props: {
-	mitoyennete:
-		| typeof models.enveloppe.common.MitoyenneteEnum.terre_plein
-		| typeof models.enveloppe.common.MitoyenneteEnum.vide_sanitaire
-		| typeof models.enveloppe.common.MitoyenneteEnum.sous_sol_non_chauffe;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 	annee_construction: ReturnType<typeof paroi.set_annee_construction>;
 	u: ReturnType<typeof calcule_u>;
 	surface_ue: number;
@@ -109,7 +117,9 @@ export function calcule_ue(props: {
 	const _2sp = Math.round((2 * surface_ue) / perimetre_ue);
 	const abaque = abaques.enveloppe.plancherBas.ue;
 	const matches = abaque.search(query, abaque.load());
-	const match = abaque.search({ u, "2s/p": _2sp }, matches).at(0);
+	const match = matches.find(
+		(match) => match.u === u && match["2s/p"] === _2sp,
+	);
 
 	if (match) return match.ue;
 	if (matches.length === 0) throw new ValeurForfaitaireError(props);
@@ -154,8 +164,9 @@ export function calcule_u0(props: {
 	if (u0_saisi) return u0_saisi;
 	if (type_plancher_bas === null) return 2;
 	const abaque = abaques.enveloppe.plancherBas.upb0;
-	const match = abaque.search({ type_plancher_bas }, abaque.load()).at(0);
-	if (!match) throw new ValeurForfaitaireError(props);
+	const query = { type_structure: type_plancher_bas };
+	const match = abaque.search(query, abaque.load()).at(0);
+	if (!match) throw new ValeurForfaitaireError(query);
 	return match.u0;
 }
 

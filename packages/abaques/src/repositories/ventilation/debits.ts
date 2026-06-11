@@ -1,7 +1,7 @@
 import data from "#data/ventilation/debits.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type DebitsSchema = {
+export type Schema = {
 	type_ventilation: string;
 	presence_echangeur_thermique: boolean | null;
 	installation_collective: boolean | null;
@@ -12,9 +12,14 @@ export type DebitsSchema = {
 	smea_conv: number;
 };
 
-export const load = (): DebitsSchema[] => data as DebitsSchema[];
+export type Query = {
+	type_ventilation: string;
+	presence_echangeur_thermique: boolean | null;
+	installation_collective: boolean | null;
+	annee_installation: number | null;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: DebitsSchema[],
-): DebitsSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

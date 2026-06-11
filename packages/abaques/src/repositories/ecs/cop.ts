@@ -1,7 +1,7 @@
 import data from "#data/ecs/cop.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type CopSchema = {
+export type Schema = {
 	type_generateur: string;
 	zone_climatique: string;
 	"annee_installation/gte": number | null;
@@ -9,7 +9,13 @@ export type CopSchema = {
 	cop: number;
 };
 
-export const load = (): CopSchema[] => data as CopSchema[];
+export type Query = {
+	type_generateur: string;
+	zone_climatique: string;
+	annee_installation: number;
+};
 
-export const search = (query: AbaqueQuery, rows: CopSchema[]): CopSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

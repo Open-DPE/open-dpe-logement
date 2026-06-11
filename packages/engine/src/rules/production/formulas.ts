@@ -1,11 +1,11 @@
 import * as models from "@open-dpe-logement/models";
-import * as batiment from "#rules/batiment/formulas.js";
-import * as eclairage from "#rules/eclairage/formulas.js";
-import * as chauffage from "#rules/chauffage/formulas.js";
-import * as ecs from "#rules/ecs/formulas.js";
-import * as refroidissement from "#rules/refroidissement/formulas.js";
-import * as ventiletion from "#rules/ventilation/formulas.js";
-import * as panneauPhotovoltaique from "./panneau-photovoltaique/formulas.js";
+import type * as batiment from "#rules/batiment/formulas.js";
+import type * as eclairage from "#rules/eclairage/formulas.js";
+import type * as chauffage from "#rules/chauffage/formulas.js";
+import type * as ecs from "#rules/ecs/formulas.js";
+import type * as refroidissement from "#rules/refroidissement/formulas.js";
+import type * as ventiletion from "#rules/ventilation/formulas.js";
+import type * as panneauPhotovoltaique from "./panneau-photovoltaique/formulas.js";
 
 /**
  * Coefficient de calage représentant le taux d'auto-production maximum pouvant être atteint lorsque
@@ -22,7 +22,7 @@ export const TAPLP = {
 };
 
 /**
- * @return Production photovoltaïque totale en kWh/an
+ * @returns Production photovoltaïque totale en kWh/an
  */
 export function calcule_ppv(props: {
 	ppv: ReturnType<typeof panneauPhotovoltaique.calcule_ppv>[];
@@ -31,7 +31,7 @@ export function calcule_ppv(props: {
 }
 
 /**
- * @return Coefficient de calage représentant le taux d'auto-production maximum pouvant être atteint lorsque la production d'électricité renouvelable augmente
+ * @returns Coefficient de calage représentant le taux d'auto-production maximum pouvant être atteint lorsque la production d'électricité renouvelable augmente
  */
 export function calcule_tapl(props: {
 	celec: ReturnType<typeof calcule_celec>;
@@ -43,7 +43,7 @@ export function calcule_tapl(props: {
 }
 
 /**
- * @return Électricité photovoltaïque autoconsommée en kWh/an
+ * @returns Électricité photovoltaïque autoconsommée en kWh/an
  */
 export function calcule_celec_ac_total(props: {
 	ppv: ReturnType<typeof calcule_ppv>;
@@ -88,7 +88,7 @@ export function calcule_celec_ac(props: {
 }
 
 /**
- * @return Électricité totale consommée en kWh/an
+ * @returns Électricité totale consommée en kWh/an
  */
 export function calcule_celec_total(props: {
 	celec: ReturnType<typeof calcule_celec>;
@@ -97,7 +97,7 @@ export function calcule_celec_total(props: {
 }
 
 /**
- * @return Électricité consommée par usage en kWh/an
+ * @returns Électricité consommée par usage en kWh/an
  */
 export function calcule_celec(props: {
 	celec_ch: ReturnType<typeof chauffage.calcule_cch_elec>;
@@ -125,7 +125,7 @@ export function calcule_celec(props: {
 }
 
 /**
- * @return Électricité consommée pour les autres usages en kWh/an
+ * @returns Électricité consommée pour les autres usages en kWh/an
  */
 export function calcule_celec_autres(props: {
 	type_batiment: models.batiment.TypeBatiment;

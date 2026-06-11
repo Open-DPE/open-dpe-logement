@@ -1,16 +1,21 @@
 import data from "#data/enveloppe/plancher-bas/ue.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type UeSchema = {
+export type Schema = {
 	mitoyennete: string;
 	"annee_construction/gte": number | null;
 	"annee_construction/lte": number | null;
 	"2s/p": number;
 	u: number;
 	ue: number;
-	tv_ue_id: number;
 };
 
-export const load = (): UeSchema[] => data as UeSchema[];
-export const search = (query: AbaqueQuery, rows: UeSchema[]): UeSchema[] =>
+export type Query = {
+	mitoyennete: string;
+	annee_construction: number;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

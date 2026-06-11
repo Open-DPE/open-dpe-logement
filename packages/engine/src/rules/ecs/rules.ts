@@ -1,173 +1,235 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import * as batiment from "#rules/batiment/registry.js";
-import * as climat from "#rules/climat/registry.js";
-import * as generateur from "./generateur/index.js";
-import * as installation from "./installation/index.js";
-import * as systeme from "./systeme/index.js";
+import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
-import { ID, RULES } from "./registry.js";
+import { NAMESPACE, RULES } from "./constants.js";
 
-export function register(ctx: Context): void {
-	generateur.rules.register(ctx);
-	installation.rules.register(ctx);
-	systeme.rules.register(ctx);
+import * as generateur from "./generateur/rules.js";
+import * as installation from "./installation/rules.js";
+import * as systeme from "./systeme/rules.js";
 
-	ctx.register(ID, RULES.consommations, () => consommations(ctx));
-	ctx.register(ID, RULES.cecs, () => cecs(ctx));
-	ctx.register(ID, RULES.cecs_elec, () => cecs_elec(ctx));
-	ctx.register(ID, RULES.caux, () => caux(ctx));
-	ctx.register(ID, RULES.caux_gen, () => caux_gen(ctx));
-	ctx.register(ID, RULES.caux_dist, () => caux_dist(ctx));
-	ctx.register(ID, RULES.qgw, () => qgw(ctx));
-	ctx.register(ID, RULES.qgen, () => qgen(ctx));
-	ctx.register(ID, RULES.qdw_ind_vc, () => qdw_ind_vc(ctx));
-	ctx.register(ID, RULES.qdw_col_vc, () => qdw_col_vc(ctx));
-	ctx.register(ID, RULES.qdw_col_hvc, () => qdw_col_hvc(ctx));
-	ctx.register(ID, RULES.becs, () => becs(ctx));
-	ctx.register(ID, RULES.nadeq, () => nadeq(ctx));
-	ctx.register(ID, RULES.nmax, () => nmax(ctx));
+export { generateur, installation, systeme };
+
+export function applique(ctx: Context): models.ecs.EcsWithData {
+	const generateurs = ctx.diagnostic.ecs.generateurs.map((item) =>
+		generateur.calcule(ctx, item),
+	);
+	const installations = ctx.diagnostic.ecs.installations.map((item) =>
+		installation.calcule(ctx, item),
+	);
+
+	return {
+		...ctx.diagnostic.ecs,
+		generateurs: models.common.toNonEmptyArray(generateurs),
+		installations: models.common.toNonEmptyArray(installations),
+		data: {
+			qgw: qgw(ctx),
+			qgen: qgen(ctx),
+			qdw_ind_vc: qdw_ind_vc(ctx),
+			qdw_col_vc: qdw_col_vc(ctx),
+			qdw_col_hvc: qdw_col_hvc(ctx),
+			becs: models.common.reduceParMois(becs(ctx)),
+			nadeq: nadeq(ctx),
+			nmax: nmax(ctx),
+		},
+	};
 }
 
 export function consommations(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_consommations> {
-	return formulas.calcule_consommations({
-		consommations: ctx.diagnostic.ecs.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.consommations, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.consommations, () =>
+		formulas.calcule_consommations({
+			consommations: ctx.diagnostic.ecs.generateurs.map((item) =>
+				ctx.resolve(
+					constants.ecs.generateur.NAMESPACE,
+					constants.ecs.generateur.RULES.consommations,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function cecs(ctx: Context): ReturnType<typeof formulas.calcule_cecs> {
-	return formulas.calcule_cecs({
-		cecs: ctx.diagnostic.ecs.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.cecs, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.cecs, () =>
+		formulas.calcule_cecs({
+			cecs: ctx.diagnostic.ecs.generateurs.map((item) =>
+				ctx.resolve(
+					constants.ecs.generateur.NAMESPACE,
+					constants.ecs.generateur.RULES.cecs,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function cecs_elec(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_cecs_elec> {
-	return formulas.calcule_cecs_elec({
-		cecs_elec: ctx.diagnostic.ecs.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.cecs_elec, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.cecs_elec, () =>
+		formulas.calcule_cecs_elec({
+			cecs_elec: ctx.diagnostic.ecs.generateurs.map((item) =>
+				ctx.resolve(
+					constants.ecs.generateur.NAMESPACE,
+					constants.ecs.generateur.RULES.cecs_elec,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function caux(ctx: Context): ReturnType<typeof formulas.calcule_caux> {
-	return formulas.calcule_caux({
-		caux_gen: ctx.resolve(ID, RULES.caux_gen),
-		caux_dist: ctx.resolve(ID, RULES.caux_dist),
-	});
+	return ctx.register(NAMESPACE, RULES.caux, () =>
+		formulas.calcule_caux({
+			caux_gen: caux_gen(ctx),
+			caux_dist: caux_dist(ctx),
+		}),
+	);
 }
 
 export function caux_gen(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_caux_gen> {
-	return formulas.calcule_caux_gen({
-		caux_gen: ctx.diagnostic.ecs.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.caux_gen, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.caux_gen, () =>
+		formulas.calcule_caux_gen({
+			caux_gen: ctx.diagnostic.ecs.generateurs.map((item) =>
+				ctx.resolve(
+					constants.ecs.generateur.NAMESPACE,
+					constants.ecs.generateur.RULES.caux_gen,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function caux_dist(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_caux_dist> {
-	return formulas.calcule_caux_dist({
-		caux_dist: ctx.diagnostic.ecs.installations.map((item) =>
-			ctx.resolve(installation.ID, installation.RULES.caux_dist, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.caux_dist, () =>
+		formulas.calcule_caux_dist({
+			caux_dist: ctx.diagnostic.ecs.installations.map((item) =>
+				ctx.resolve(
+					constants.ecs.installation.NAMESPACE,
+					constants.ecs.installation.RULES.caux_dist,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function qgw(ctx: Context): ReturnType<typeof formulas.calcule_qgw> {
-	return formulas.calcule_qgw({
-		qgw: ctx.diagnostic.ecs.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.qgw, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.qgw, () =>
+		formulas.calcule_qgw({
+			qgw: ctx.diagnostic.ecs.generateurs.map((item) =>
+				ctx.resolve(
+					constants.ecs.generateur.NAMESPACE,
+					constants.ecs.generateur.RULES.qgw,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function qgen(ctx: Context): ReturnType<typeof formulas.calcule_qgen> {
-	return formulas.calcule_qgen({
-		qgen: ctx.diagnostic.ecs.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.qgen, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.qgen, () =>
+		formulas.calcule_qgen({
+			qgen: ctx.diagnostic.ecs.generateurs.map((item) =>
+				ctx.resolve(
+					constants.ecs.generateur.NAMESPACE,
+					constants.ecs.generateur.RULES.qgen,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function qdw_ind_vc(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_qdw_ind_vc> {
-	return formulas.calcule_qdw_ind_vc({
-		qdw_ind_vc: ctx.diagnostic.ecs.installations.map((item) =>
-			ctx.resolve(installation.ID, installation.RULES.qdw_ind_vc, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.qdw_ind_vc, () =>
+		formulas.calcule_qdw_ind_vc({
+			qdw_ind_vc: ctx.diagnostic.ecs.installations.map((item) =>
+				ctx.resolve(
+					constants.ecs.installation.NAMESPACE,
+					constants.ecs.installation.RULES.qdw_ind_vc,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function qdw_col_vc(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_qdw_col_vc> {
-	return formulas.calcule_qdw_col_vc({
-		qdw_col_vc: ctx.diagnostic.ecs.installations.map((item) =>
-			ctx.resolve(installation.ID, installation.RULES.qdw_col_vc, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.qdw_col_vc, () =>
+		formulas.calcule_qdw_col_vc({
+			qdw_col_vc: ctx.diagnostic.ecs.installations.map((item) =>
+				ctx.resolve(
+					constants.ecs.installation.NAMESPACE,
+					constants.ecs.installation.RULES.qdw_col_vc,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function qdw_col_hvc(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_qdw_col_hvc> {
-	return formulas.calcule_qdw_col_hvc({
-		qdw_col_hvc: ctx.diagnostic.ecs.installations.map((item) =>
-			ctx.resolve(installation.ID, installation.RULES.qdw_col_hvc, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.qdw_col_hvc, () =>
+		formulas.calcule_qdw_col_hvc({
+			qdw_col_hvc: ctx.diagnostic.ecs.installations.map((item) =>
+				ctx.resolve(
+					constants.ecs.installation.NAMESPACE,
+					constants.ecs.installation.RULES.qdw_col_hvc,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function becs(ctx: Context): ReturnType<typeof formulas.calcule_becs> {
-	return formulas.calcule_becs({
-		scenario: ctx.scenario,
-		nadeq: ctx.resolve(ID, RULES.nadeq),
-		nj: ctx.resolve(climat.ID, climat.RULES.nj),
-		sollicitations: ctx.resolve(climat.ID, climat.RULES.sollicitations),
-	});
+	return ctx.register(NAMESPACE, RULES.becs, () =>
+		formulas.calcule_becs({
+			scenario: ctx.scenario,
+			nadeq: nadeq(ctx),
+			nj: ctx.resolve(constants.climat.NAMESPACE, constants.climat.RULES.nj),
+			sollicitations: ctx.resolve(
+				constants.climat.NAMESPACE,
+				constants.climat.RULES.sollicitations,
+			),
+		}),
+	);
 }
 
 export function nadeq(ctx: Context): ReturnType<typeof formulas.calcule_nadeq> {
-	return formulas.calcule_nadeq({
-		logements: ctx.diagnostic.batiment.logements,
-		nmax: ctx.resolve(ID, RULES.nmax),
-	});
+	return ctx.register(NAMESPACE, RULES.nadeq, () =>
+		formulas.calcule_nadeq({
+			logements: ctx.diagnostic.batiment.logements,
+			nmax: nmax(ctx),
+		}),
+	);
 }
 
 export function nmax(ctx: Context): ReturnType<typeof formulas.calcule_nmax> {
-	return formulas.calcule_nmax({
-		type_batiment: ctx.diagnostic.batiment.type,
-		logements: ctx.diagnostic.batiment.logements,
-		sh: ctx.resolve(batiment.ID, batiment.RULES.sh),
-	});
-}
-
-export function applique(ctx: Context): models.ecs.EcsWithData {
-	const sumMois = (v: models.common.ParMois<number>): number =>
-		Object.values(v).reduce((s: number, n: number) => s + n, 0);
-	return {
-		...ctx.diagnostic.ecs,
-		data: {
-			qgw: ctx.resolve(ID, RULES.qgw),
-			qgen: ctx.resolve(ID, RULES.qgen),
-			qdw_ind_vc: ctx.resolve(ID, RULES.qdw_ind_vc),
-			qdw_col_vc: ctx.resolve(ID, RULES.qdw_col_vc),
-			qdw_col_hvc: ctx.resolve(ID, RULES.qdw_col_hvc),
-			becs: sumMois(ctx.resolve(ID, RULES.becs)),
-			nadeq: ctx.resolve(ID, RULES.nadeq),
-			nmax: ctx.resolve(ID, RULES.nmax),
-		},
-	};
+	return ctx.register(NAMESPACE, RULES.nmax, () =>
+		formulas.calcule_nmax({
+			type_batiment: ctx.diagnostic.batiment.type,
+			logements: ctx.diagnostic.batiment.logements,
+			sh: ctx.resolve(
+				constants.batiment.NAMESPACE,
+				constants.batiment.RULES.sh,
+			),
+		}),
+	);
 }

@@ -70,26 +70,54 @@ export type PositionBase = {
 	mitoyennete: Mitoyennete;
 	local_non_chauffe_id: UUID | null;
 };
+
 export type PositionParoiLocalNonChauffe = PositionBase & {
 	mitoyennete: typeof MitoyenneteEnum.local_non_chauffe;
 	local_non_chauffe_id: UUID;
 };
+
 export type PositionParoiAutres = PositionBase & {
 	mitoyennete: Exclude<Mitoyennete, typeof MitoyenneteEnum.local_non_chauffe>;
 	local_non_chauffe_id: null;
 };
 
+export function isPositionParoiLocalNonChauffe(
+	position: Position,
+): position is PositionParoiLocalNonChauffe {
+	return position.mitoyennete === MitoyenneteEnum.local_non_chauffe;
+}
+
+export function isPositionParoiAutres(
+	position: Position,
+): position is PositionParoiAutres {
+	return position.mitoyennete !== MitoyenneteEnum.local_non_chauffe;
+}
+
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/common/components#/$defs/position
  */
-export type Isolation = SansIsolation | TypeIsolationInconnue | IsolationConnue;
+export type Isolation =
+	| SansIsolation
+	| IsolationInconnue
+	| TypeIsolationInconnue
+	| IsolationConnue;
+
 export type SansIsolation = {
-	etat: false | null;
+	etat: false;
 	type: null;
 	annee_installation: null;
 	epaisseur: null;
 	resistance_thermique: null;
 };
+
+export type IsolationInconnue = {
+	etat: null;
+	type: null;
+	annee_installation: null;
+	epaisseur: null;
+	resistance_thermique: null;
+};
+
 export type TypeIsolationInconnue = {
 	etat: true;
 	type: null;
@@ -97,6 +125,7 @@ export type TypeIsolationInconnue = {
 	epaisseur: null;
 	resistance_thermique: null;
 };
+
 export type IsolationConnue = {
 	etat: true;
 	type: TypeIsolation;
@@ -104,3 +133,27 @@ export type IsolationConnue = {
 	epaisseur: number | null;
 	resistance_thermique: number | null;
 };
+
+export function isSansIsolation(
+	isolation: Isolation,
+): isolation is SansIsolation {
+	return isolation.etat === false;
+}
+
+export function isIsolationInconnue(
+	isolation: Isolation,
+): isolation is IsolationInconnue {
+	return isolation.etat === null;
+}
+
+export function isTypeIsolationInconnue(
+	isolation: Isolation,
+): isolation is TypeIsolationInconnue {
+	return isolation.etat === true && isolation.type === null;
+}
+
+export function isIsolationConnue(
+	isolation: Isolation,
+): isolation is IsolationConnue {
+	return isolation.etat === true && isolation.type !== null;
+}

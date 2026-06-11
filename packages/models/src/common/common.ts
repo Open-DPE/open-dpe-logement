@@ -117,37 +117,46 @@ export const ENERGIES = [
 export type Energie = (typeof ENERGIES)[number];
 export const EnergieEnum = buildEnum(ENERGIES);
 
-export const ENERGIES_BOIS: readonly Energie[] = [
-	"bois_buche",
-	"bois_plaquette",
-	"bois_granule",
+export const ENERGIES_GAZ: readonly Energie[] = [
+	EnergieEnum.gaz_naturel,
+	EnergieEnum.gpl,
 ] as const satisfies readonly Energie[];
-export type EnergieBois = Extract<
-	Energie,
-	| typeof EnergieEnum.bois_buche
-	| typeof EnergieEnum.bois_plaquette
-	| typeof EnergieEnum.bois_granule
->;
+export type EnergieGaz = (typeof ENERGIES_GAZ)[number];
+export const EnergieGazEnum = buildEnum(ENERGIES_GAZ);
+
+export function isEnergieGaz(energie: Energie): energie is EnergieGaz {
+	return ENERGIES_GAZ.includes(energie);
+}
+
+export const ENERGIES_BOIS: readonly Energie[] = [
+	EnergieEnum.bois_buche,
+	EnergieEnum.bois_plaquette,
+	EnergieEnum.bois_granule,
+] as const satisfies readonly Energie[];
+export type EnergieBois = (typeof ENERGIES_BOIS)[number];
 export const EnergieBoisEnum = buildEnum(ENERGIES_BOIS);
 
+export function isEnergieBois(energie: Energie): energie is EnergieBois {
+	return ENERGIES_BOIS.includes(energie);
+}
+
 export const ENERGIES_COMBUSTION: readonly Energie[] = [
-	"gaz_naturel",
-	"gpl",
-	"fioul",
-	"bois_buche",
-	"bois_plaquette",
-	"bois_granule",
-	"charbon",
+	EnergieEnum.gaz_naturel,
+	EnergieEnum.gpl,
+	EnergieEnum.fioul,
+	EnergieEnum.bois_buche,
+	EnergieEnum.bois_plaquette,
+	EnergieEnum.bois_granule,
+	EnergieEnum.charbon,
 ] as const satisfies readonly Energie[];
 
-export type EnergieCombustion = Exclude<
-	Energie,
-	| typeof EnergieEnum.electricite
-	| typeof EnergieEnum.electricite_renouvelable
-	| typeof EnergieEnum.reseau_chaleur
-	| typeof EnergieEnum.reseau_froid
->;
-export const EnergieCombustionEnum = buildEnum(ENERGIES_COMBUSTION);
+export type EnergieCombustion = Energie;
+
+export function isEnergieCombustion(
+	energie: Energie,
+): energie is EnergieCombustion {
+	return ENERGIES_COMBUSTION.includes(energie);
+}
 
 /**
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/type_pertes

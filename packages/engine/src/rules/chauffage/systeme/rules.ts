@@ -376,10 +376,10 @@ export function rg(
 	switch (true) {
 		case utils.is_reseau_chaleur(generateur):
 		case utils.is_generateur_multi_batiment(generateur):
-		case utils.is_generateur_electrique(generateur):
+			return formulas.calcule_rg_reseau_chaleur();
+
 		case utils.is_pac(generateur):
-		case utils.is_poele_insert(generateur):
-			return formulas.calcule_rg(generateur);
+			return formulas.calcule_rg_pac();
 
 		case utils.is_chaudiere_combustion(generateur):
 		case utils.is_chaudiere_bois(generateur):
@@ -403,9 +403,7 @@ export function rg(
 				kpcs: common.calcule_kpcs({ energie: generateur.energie_generateur }),
 			});
 		default:
-			throw new Error(
-				`Type de générateur non géré pour le calcul du RG : ${JSON.stringify(generateur)}`,
-			);
+			return formulas.calcule_rg_autres(generateur);
 	}
 }
 
@@ -675,6 +673,10 @@ function prepare_generateur(ctx: Context, systeme: Systeme) {
 			generateur_multi_batiment: generateur.position.generateur_multi_batiment,
 			generateur_collectif: generateur.position.generateur_collectif,
 			label_generateur: generateur.signaletique.label,
+			annee_installation_generateur: generateurRules.rules.annee_installation(
+				ctx,
+				generateur,
+			),
 			mode_combustion: generateurRules.rules.mode_combustion(generateur),
 			presence_regulation:
 				generateurRules.rules.presence_regulation(generateur),
@@ -755,7 +757,10 @@ function isolation_reseau(
 	});
 }
 
-export function applique(ctx: Context, item: Systeme): models.chauffage.systeme.SystemeWithData {
+export function applique(
+	ctx: Context,
+	item: Systeme,
+): models.chauffage.systeme.SystemeWithData {
 	return {
 		...item,
 		data: {

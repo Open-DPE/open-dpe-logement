@@ -1,7 +1,7 @@
 import data from "#data/climat/c1.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type C1Schema = {
+export type Schema = {
 	zone_climatique: string;
 	orientation: string;
 	"inclinaison/gte": number | null;
@@ -11,6 +11,13 @@ export type C1Schema = {
 	c1: number;
 };
 
-export const load = (): C1Schema[] => data as C1Schema[];
-export const search = (query: AbaqueQuery, rows: C1Schema[]): C1Schema[] =>
+export type Query = {
+	zone_climatique: string;
+	orientation: string;
+	inclinaison: number;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

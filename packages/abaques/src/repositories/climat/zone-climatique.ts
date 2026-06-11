@@ -1,16 +1,17 @@
 import data from "#data/climat/zone-climatique.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type ZoneClimatiqueSchema = {
+export type Schema = {
 	code_departement: string;
 	departement: string;
 	zone_climatique: string;
 };
 
-export const load = (): ZoneClimatiqueSchema[] =>
-	data as ZoneClimatiqueSchema[];
+export type Query = {
+	code_departement: string;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: ZoneClimatiqueSchema[],
-): ZoneClimatiqueSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

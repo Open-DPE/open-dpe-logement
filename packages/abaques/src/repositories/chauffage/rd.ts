@@ -1,7 +1,7 @@
 import data from "#data/chauffage/rd.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type RdSchema = {
+export type Schema = {
 	type_distribution: string;
 	temperature_distribution: string | null;
 	presence_fluide_frigorigene: boolean | null;
@@ -10,7 +10,9 @@ export type RdSchema = {
 	rd: number;
 };
 
-export const load = (): RdSchema[] => data as RdSchema[];
+export type Query = Omit<Schema, "rd">;
 
-export const search = (query: AbaqueQuery, rows: RdSchema[]): RdSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

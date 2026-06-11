@@ -274,7 +274,7 @@ export function q4paconv(
 		type_batiment: ctx.diagnostic.batiment.type,
 		annee_construction: ctx.diagnostic.batiment.annee_construction,
 		isolation_murs_plafonds: ctx.resolve(ID, RULES.isolation_murs_plafonds),
-		presence_joints: ctx.resolve(ID, RULES.presence_joints),
+		presence_joints_menuiserie: ctx.resolve(ID, RULES.presence_joints),
 	});
 }
 

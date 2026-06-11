@@ -1,7 +1,7 @@
 import data from "#data/climat/sollicitations.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type SollicitationsSchema = {
+export type Schema = {
 	zone_climatique: string;
 	"altitude/gt": number | null;
 	"altitude/gte": number | null;
@@ -28,10 +28,14 @@ export type SollicitationsSchema = {
 	dh28: number;
 };
 
-export const load = (): SollicitationsSchema[] =>
-	data as SollicitationsSchema[];
+export type Query = {
+	zone_climatique: string;
+	altitude: number;
+	parois_anciennes: boolean;
+	inertie: string;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: SollicitationsSchema[],
-): SollicitationsSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

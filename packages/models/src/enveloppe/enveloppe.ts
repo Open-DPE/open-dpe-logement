@@ -42,11 +42,18 @@ export type Enveloppe = {
 	baies: baie.Baie[];
 	portes: porte.Porte[];
 	ponts_thermiques: pontThermique.PontThermique[];
-	masques: masque.Masque[];
 };
 
 export type EnveloppeWithData<T extends Enveloppe = Enveloppe> = T & {
 	data: EnveloppeData;
+	niveaux: niveau.NiveauWithData[];
+	locaux_non_chauffes: localNonChauffe.LocalNonChauffeWithData[];
+	murs: mur.MurWithData[];
+	planchers_hauts: plancherHaut.PlancherHautWithData[];
+	planchers_bas: plancherBas.PlancherBasWithData[];
+	baies: baie.BaieWithData[];
+	portes: porte.PorteWithData[];
+	ponts_thermiques: pontThermique.PontThermiqueWithData[];
 };
 
 export type EnveloppeData = {

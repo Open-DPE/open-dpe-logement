@@ -1,17 +1,22 @@
 import data from "#data/chauffage/pn.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type PnSchema = {
+export type Schema = {
 	position_chaudiere: string;
 	"pdim/gt": number | null;
 	"pdim/lte": number | null;
 	"annee_installation_generateur/gt": number | null;
 	"annee_installation_generateur/lte": number | null;
 	pn: number;
-	type_chaudiere_defaut: string | null;
 };
 
-export const load = (): PnSchema[] => data as PnSchema[];
+export type Query = {
+	position_chaudiere: string;
+	pdim: number;
+	annee_installation_generateur: number;
+};
 
-export const search = (query: AbaqueQuery, rows: PnSchema[]): PnSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

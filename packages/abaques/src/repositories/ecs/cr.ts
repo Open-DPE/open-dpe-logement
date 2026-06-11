@@ -1,7 +1,7 @@
 import data from "#data/ecs/cr.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type CrSchema = {
+export type Schema = {
 	type_generateur: string;
 	energie_generateur: string | null;
 	position_chauffe_eau: string | null;
@@ -11,7 +11,15 @@ export type CrSchema = {
 	cr: number;
 };
 
-export const load = (): CrSchema[] => data as CrSchema[];
+export type Query = {
+	type_generateur: string;
+	energie_generateur: string;
+	position_chauffe_eau: string | null;
+	label_generateur: string | null;
+	volume_stockage: number;
+};
 
-export const search = (query: AbaqueQuery, rows: CrSchema[]): CrSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

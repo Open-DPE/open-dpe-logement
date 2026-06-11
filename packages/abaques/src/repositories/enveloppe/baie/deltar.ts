@@ -1,15 +1,16 @@
 import data from "#data/enveloppe/baie/deltar.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type DeltarSchema = {
+export type Schema = {
 	type_fermeture: string;
 	deltar: number;
-	tv_deltar_id: number;
 };
 
-export const load = (): DeltarSchema[] => data as DeltarSchema[];
+export type Query = {
+	type_fermeture: string;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: DeltarSchema[],
-): DeltarSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

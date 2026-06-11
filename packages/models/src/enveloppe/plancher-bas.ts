@@ -1,10 +1,10 @@
 import type { UUID } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
-import type {
-	InertieParoi,
-	Isolation,
+import {
+	type InertieParoi,
+	type Isolation,
+	type Position as PositionBase,
 	MitoyenneteEnum,
-	Position as PositionBase,
 } from "./common.js";
 
 export const isPlancherBas = createGuard<PlancherBas>(
@@ -61,6 +61,29 @@ export type PositionAutres = PositionBase & {
 	surface_ue: null;
 	perimetre_ue: null;
 };
+
+export function isPositionTerrePlein(
+	position: Position,
+): position is PositionTerrePlein {
+	return (
+		position.mitoyennete === MitoyenneteEnum.enterre ||
+		position.mitoyennete === MitoyenneteEnum.vide_sanitaire ||
+		position.mitoyennete === MitoyenneteEnum.terre_plein ||
+		position.mitoyennete === MitoyenneteEnum.sous_sol_non_chauffe
+	);
+}
+
+export function isPositionAutres(
+	position: Position,
+): position is PositionAutres {
+	return (
+		position.mitoyennete === MitoyenneteEnum.exterieur ||
+		position.mitoyennete === MitoyenneteEnum.local_non_chauffe ||
+		position.mitoyennete === MitoyenneteEnum.local_non_residentiel ||
+		position.mitoyennete === MitoyenneteEnum.local_residentiel ||
+		position.mitoyennete === MitoyenneteEnum.local_non_accessible
+	);
+}
 
 export const TYPES_PLANCHER_BAS = [
 	"plancher_avec_ou_sans_remplissage",

@@ -1,13 +1,10 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois } from "#utils/helpers.js";
+import type * as climat from "#rules/climat/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { createParMois } from "#rules/helpers.js";
 
-/**
- * @formule enveloppe.local_non_chauffe.baie.c1
- */
-export const calcule_c1 = climat.calcule_c1;
+export { calcule_c1 } from "#rules/climat/formulas.js";
 
 /**
  * @formule enveloppe.local_non_chauffe.baie.aue
@@ -52,7 +49,7 @@ export function calcule_aiu(props: {
 /**
  * @formule enveloppe.local_non_chauffe.baie.sst
  * @param props.surface : Surface de la baie de l'espace tampon solarisé donnant sur l'extérieur en m²
- * @return Surface sud équivalente de la baie de l'espace tampon solarisé donnant sur l'extérieur en m²/mois
+ * @returns Surface sud équivalente de la baie de l'espace tampon solarisé donnant sur l'extérieur en m²/mois
  */
 export function calcule_sst(props: {
 	surface: number;
@@ -70,7 +67,7 @@ export function calcule_sst(props: {
  * @see https://github.com/dpe-audit/dpe-logement/issues/44
  * @see abaques.enveloppe.localNonChauffe.t
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de transparence de la baie séparant l'espace tampon solarisé de l'extérieur
+ * @returns Coefficient de transparence de la baie séparant l'espace tampon solarisé de l'extérieur
  */
 export function calcule_t(props: {
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
@@ -125,7 +122,7 @@ export function set_materiau(props: {
 
 /**
  * @param props.presence_rupteur_pont_thermique : Présence d'un rupteur de pont thermique sur la baie séparant le local non chauffé de l'extérieur saisie
- * @return Présence d'un rupteur de pont thermique sur la baie séparant le local non chauffé de l'extérieur retenue
+ * @returns Présence d'un rupteur de pont thermique sur la baie séparant le local non chauffé de l'extérieur retenue
  */
 export function set_presence_rupteur_pont_thermique(props: {
 	presence_rupteur_pont_thermique: boolean | null;

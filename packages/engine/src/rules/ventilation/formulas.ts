@@ -1,8 +1,10 @@
 import * as models from "@open-dpe-logement/models";
 import * as installation from "#rules/ventilation/installation/formulas.js";
 
+export { installation };
+
 /**
- * @return Consommations par usage et par énergie des auxiliaires de ventilation
+ * @returns Consommations par usage et par énergie des auxiliaires de ventilation
  */
 export function calcule_consommations(props: {
 	consommations: ReturnType<typeof installation.calcule_consommations>[];
@@ -12,7 +14,7 @@ export function calcule_consommations(props: {
 
 /**
  * @formule ventilation.caux
- * @return Consommations des auxiliaires de ventilation en kWh/an
+ * @returns Consommations des auxiliaires de ventilation en kWh/an
  */
 export function calcule_caux(props: {
 	caux: ReturnType<typeof installation.calcule_caux>[];

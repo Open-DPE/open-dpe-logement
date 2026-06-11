@@ -16,6 +16,7 @@ export function register(ctx: Context): void {
 
 	ctx.diagnostic.enveloppe.locaux_non_chauffes.forEach((item) => {
 		ctx.register(ID, RULES.b, item, () => b(ctx, item));
+		ctx.register(ID, RULES.uvue, item, () => uvue(item));
 		ctx.register(ID, RULES.aiu, item, () => aiu(ctx, item));
 		ctx.register(ID, RULES.aue, item, () => aue(ctx, item));
 		ctx.register(ID, RULES.isolation_aiu, item, () => isolation_aiu(ctx, item));
@@ -28,12 +29,8 @@ export function register(ctx: Context): void {
 
 type LocalNonChauffe = models.enveloppe.localNonChauffe.LocalNonChauffe;
 
-export function b(
-	ctx: Context,
-	item: LocalNonChauffe,
-): ReturnType<typeof formulas.calcule_b> {
-	const enums = models.enveloppe.localNonChauffe.TypeLncEnum;
-	if (item.type === enums.espace_tampon_solarise) {
+export function b(ctx: Context, item: LocalNonChauffe): formulas.B {
+	if (models.enveloppe.localNonChauffe.isEspaceTamponSolarise(item)) {
 		const baies = models.enveloppe.get_baies_local_non_chauffe(
 			ctx.diagnostic.enveloppe,
 			item.id,
@@ -55,8 +52,7 @@ export function b(
 			ctx.diagnostic.enveloppe,
 			item.id,
 		);
-		return formulas.calcule_b({
-			type_local_non_chauffe: item.type,
+		return formulas.calcule_bver({
 			parois: [
 				...baies.map((i) => ({
 					surface: i.position.surface,
@@ -81,16 +77,32 @@ export function b(
 			],
 		});
 	}
-	return formulas.calcule_b({
-		type_local_non_chauffe: item.type,
-		uvue: formulas.calcule_uvue({
-			type_local_non_chauffe: item.type,
-		}),
+	return formulas.calcule_blnc({
+		uvue: ctx.resolve(ID, RULES.uvue, item),
 		aue: ctx.resolve(ID, RULES.aue, item),
 		aiu: ctx.resolve(ID, RULES.aiu, item),
 		isolation_aue: ctx.resolve(ID, RULES.isolation_aue, item),
 		isolation_aiu: ctx.resolve(ID, RULES.isolation_aiu, item),
 	});
+}
+
+export function uvue(
+	item: LocalNonChauffe,
+): ReturnType<typeof formulas.calcule_uvue> | null {
+	return models.enveloppe.localNonChauffe.isAutreLocalNonChauffe(item)
+		? formulas.calcule_uvue({ type_local_non_chauffe: item.type })
+		: null;
+}
+
+export function uvue(
+	ctx: Context,
+	item: LocalNonChauffe,
+): ReturnType<typeof formulas.calcule_uvue> | null {
+	return ctx.register(ID, RULES.uvue, item, () =>
+		models.enveloppe.localNonChauffe.isAutreLocalNonChauffe(item)
+			? formulas.calcule_uvue({ type_local_non_chauffe: item.type })
+			: null,
+	);
 }
 
 export function aue(
@@ -280,7 +292,10 @@ function _portes(ctx: Context, item: LocalNonChauffe) {
 		}));
 }
 
-export function applique(ctx: Context, item: LocalNonChauffe): models.enveloppe.localNonChauffe.LocalNonChauffeWithData {
+export function applique(
+	ctx: Context,
+	item: LocalNonChauffe,
+): models.enveloppe.localNonChauffe.LocalNonChauffeWithData {
 	return {
 		...item,
 		data: {
@@ -289,7 +304,10 @@ export function applique(ctx: Context, item: LocalNonChauffe): models.enveloppe.
 			aue: ctx.resolve(ID, RULES.aue, item),
 			isolation_aiu: ctx.resolve(ID, RULES.isolation_aiu, item),
 			isolation_aue: ctx.resolve(ID, RULES.isolation_aue, item),
-			sse: Object.values(ctx.resolve(ID, RULES.sse, item)).reduce((s: number, n: number) => s + n, 0),
+			sse: Object.values(ctx.resolve(ID, RULES.sse, item)).reduce(
+				(s: number, n: number) => s + n,
+				0,
+			),
 			orientations: ctx.resolve(ID, RULES.orientations, item),
 			t: ctx.resolve(ID, RULES.t, item),
 		},

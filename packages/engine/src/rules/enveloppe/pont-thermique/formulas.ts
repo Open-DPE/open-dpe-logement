@@ -1,6 +1,6 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @formule enveloppe.pont_thermique.pt
@@ -30,60 +30,30 @@ export function calcule_pt(props: {
 	}
 }
 
-export type KptBaseProps<T extends object> = {
-	kpt_saisi: number | null;
-	type_liaison: models.enveloppe.pontThermique.TypeLiaison;
-	isolation_mur: ReturnType<typeof set_isolation_mur>;
-	type_isolation_mur: ReturnType<typeof set_type_isolation_mur> | null;
-} & T;
-
-export type KptPlancherBasMurProps = KptBaseProps<{
-	type_liaison: typeof models.enveloppe.pontThermique.TypeLiaisonEnum.plancher_bas_mur;
-	isolation_plancher: ReturnType<typeof set_isolation_plancher_bas>;
-	type_isolation_plancher: ReturnType<
-		typeof set_type_isolation_plancher_bas
-	> | null;
-}>;
-
-export type KptPlancherHautMurProps = KptBaseProps<{
-	type_liaison: typeof models.enveloppe.pontThermique.TypeLiaisonEnum.plancher_haut_mur;
-	isolation_plancher: ReturnType<typeof set_isolation_plancher_haut>;
-	type_isolation_plancher: ReturnType<
-		typeof set_type_isolation_plancher_haut
-	> | null;
-}>;
-
-export type KptPlancherIntermediaireMurProps = KptBaseProps<{
-	type_liaison: typeof models.enveloppe.pontThermique.TypeLiaisonEnum.plancher_intermediaire_mur;
-}>;
-
-export type KptRefendMurProps = KptBaseProps<{
-	type_liaison: typeof models.enveloppe.pontThermique.TypeLiaisonEnum.refend_mur;
-}>;
-
-export type KptOuvertureMurProps = KptBaseProps<{
-	type_liaison:
-		| typeof models.enveloppe.pontThermique.TypeLiaisonEnum.porte_mur
-		| typeof models.enveloppe.pontThermique.TypeLiaisonEnum.baie_mur;
-	type_pose_menuiserie: models.enveloppe.common.TypePose;
-	presence_retour_isolation: ReturnType<typeof set_presence_retour_isolation>;
-	largeur_dormant: ReturnType<typeof set_largeur_dormant>;
-}>;
-
 /**
  * @formule enveloppe.pont_thermique.kpt
  * @see abaques.enveloppe.pontThermique.kpt
  * @throws ValeurForfaitaireError
  * @returns Valeur du pont thermique en W/(m.K)
  */
-export function calcule_kpt(
-	props:
-		| KptPlancherBasMurProps
-		| KptPlancherHautMurProps
-		| KptPlancherIntermediaireMurProps
-		| KptRefendMurProps
-		| KptOuvertureMurProps,
-): number {
+export function calcule_kpt(props: {
+	kpt_saisi: number | null;
+	type_liaison: models.enveloppe.pontThermique.TypeLiaison;
+	isolation_mur: boolean;
+	type_isolation_mur: ReturnType<typeof set_type_isolation_mur> | null;
+	isolation_plancher: ReturnType<
+		typeof set_isolation_plancher_bas | typeof set_isolation_plancher_haut
+	> | null;
+	type_isolation_plancher: ReturnType<
+		| typeof set_type_isolation_plancher_bas
+		| typeof set_type_isolation_plancher_haut
+	> | null;
+	type_pose_menuiserie: models.enveloppe.common.TypePose | null;
+	presence_retour_isolation: ReturnType<
+		typeof set_presence_retour_isolation
+	> | null;
+	largeur_dormant: ReturnType<typeof set_largeur_dormant> | null;
+}): number {
 	const { kpt_saisi } = props;
 	if (kpt_saisi) return kpt_saisi;
 	const abaque = abaques.enveloppe.pontThermique.kpt;
@@ -141,7 +111,7 @@ export function set_isolation_plancher_bas(props: {
 
 /**
  * @param props.type_isolation : Type d'isolation du mur saisi
- * @return Type d'isolation du mur retenu
+ * @returns Type d'isolation du mur retenu
  */
 export function set_type_isolation_mur(props: {
 	type_isolation: models.enveloppe.common.TypeIsolation | null;
@@ -151,7 +121,7 @@ export function set_type_isolation_mur(props: {
 
 /**
  * @param props.type_isolation : Type d'isolation du plancher haut saisi
- * @return Type d'isolation du plancher haut retenu
+ * @returns Type d'isolation du plancher haut retenu
  */
 export function set_type_isolation_plancher_haut(props: {
 	type_isolation: models.enveloppe.common.TypeIsolation | null;
@@ -161,7 +131,7 @@ export function set_type_isolation_plancher_haut(props: {
 
 /**
  * @param props.type_isolation : Type d'isolation du plancher bas saisi
- * @return Type d'isolation du plancher bas retenu
+ * @returns Type d'isolation du plancher bas retenu
  */
 export function set_type_isolation_plancher_bas(props: {
 	type_isolation: models.enveloppe.common.TypeIsolation | null;
@@ -171,7 +141,7 @@ export function set_type_isolation_plancher_bas(props: {
 
 /**
  * @param props.largeur_dormant : Largeur du dormant saisie en mm
- * @return Largeur du dormant retenue en mm
+ * @returns Largeur du dormant retenue en mm
  */
 export function set_largeur_dormant(props: {
 	largeur_dormant: number | null;
@@ -181,7 +151,7 @@ export function set_largeur_dormant(props: {
 
 /**
  * @param props.presence_retour_isolation : Présence d'un retour d'isolation au niveau de la menuiserie saisie
- * @return Présence d'un retour d'isolation au niveau de la menuiserie retenue
+ * @returns Présence d'un retour d'isolation au niveau de la menuiserie retenue
  */
 export function set_presence_retour_isolation(props: {
 	presence_retour_isolation: boolean | null;

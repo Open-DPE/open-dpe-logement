@@ -1,16 +1,15 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as chauffage from "#rules/chauffage/formulas.js";
-import * as paroi from "#rules/enveloppe/paroi/formulas.js";
-export * from "#rules/enveloppe/paroi/formulas.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as chauffage from "#rules/chauffage/formulas.js";
+import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @formule enveloppe.plancher_haut.isolation_aiu
  * @param props.isolation : État d'isolation saisi du plancher haut donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment
- * @return État d'isolation de plancher haut donnant sur un local non chauffé
+ * @returns État d'isolation de plancher haut donnant sur un local non chauffé
  */
 export function calcule_isolation_aiu(props: {
 	isolation: boolean | null;
@@ -100,7 +99,7 @@ export function calcule_u0(props: {
 
 /**
  * @param props.isolation : État d'isolation saisie
- * @return État d'isolation retenu
+ * @returns État d'isolation retenu
  */
 export function set_isolation(props: {
 	isolation: boolean | null;

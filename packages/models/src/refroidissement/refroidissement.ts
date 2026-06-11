@@ -19,6 +19,8 @@ export type RefroidissementWithData<
 	T extends Refroidissement = Refroidissement,
 > = T & {
 	data: RefroidissementData;
+	generateurs: generateur.GenerateurWithData[];
+	installations: installation.InstallationWithData[];
 };
 
 export type RefroidissementData = {

@@ -42,47 +42,49 @@ type LiaisonBase = {
 	pont_thermique_partiel: boolean | null;
 };
 
-export type RefendMur = LiaisonBase & {
+type LiaisonG<T = Partial<LiaisonBase>> = LiaisonBase & T;
+
+export type RefendMur = LiaisonG<{
 	type: typeof TypeLiaisonEnum.refend_mur;
 	plancher_id: null;
 	ouverture_id: null;
 	pont_thermique_partiel: boolean;
-};
+}>;
 
-export type PlancherBasMur = LiaisonBase & {
+export type PlancherBasMur = LiaisonG<{
 	type: typeof TypeLiaisonEnum.plancher_bas_mur;
 	plancher_id: string;
 	ouverture_id: null;
 	pont_thermique_partiel: false;
-};
+}>;
 
-export type PlancherHautMur = LiaisonBase & {
+export type PlancherHautMur = LiaisonG<{
 	type: typeof TypeLiaisonEnum.plancher_haut_mur;
 	plancher_id: string;
 	ouverture_id: null;
 	pont_thermique_partiel: false;
-};
+}>;
 
-export type PlancherIntermediaireMur = LiaisonBase & {
+export type PlancherIntermediaireMur = LiaisonG<{
 	type: typeof TypeLiaisonEnum.plancher_intermediaire_mur;
 	plancher_id: null;
 	ouverture_id: null;
 	pont_thermique_partiel: boolean;
-};
+}>;
 
-export type PorteMur = LiaisonBase & {
+export type PorteMur = LiaisonG<{
 	type: typeof TypeLiaisonEnum.porte_mur;
 	plancher_id: null;
 	ouverture_id: string;
 	pont_thermique_partiel: false;
-};
+}>;
 
-export type BaieMur = LiaisonBase & {
+export type BaieMur = LiaisonG<{
 	type: typeof TypeLiaisonEnum.baie_mur;
 	plancher_id: null;
 	ouverture_id: string;
 	pont_thermique_partiel: false;
-};
+}>;
 
 export const TYPES_LIAISON = [
 	"plancher_bas_mur",

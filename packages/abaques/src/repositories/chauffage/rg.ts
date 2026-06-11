@@ -1,7 +1,7 @@
 import data from "#data/chauffage/rg.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type RgSchema = {
+export type Schema = {
 	type_generateur: string;
 	energie_generateur: string | null;
 	label_generateur: string | null;
@@ -10,7 +10,14 @@ export type RgSchema = {
 	rg: number;
 };
 
-export const load = (): RgSchema[] => data as RgSchema[];
+export type Query = {
+	type_generateur: string;
+	energie_generateur: string;
+	label_generateur: string | null;
+	annee_installation_generateur: number;
+};
 
-export const search = (query: AbaqueQuery, rows: RgSchema[]): RgSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

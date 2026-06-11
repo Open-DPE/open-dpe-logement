@@ -1,57 +1,113 @@
 import { common, diagnostic } from "@open-dpe-logement/models";
-import type { Results } from "./results.js";
+import { REGISTRY } from "#/rules/registry.js";
+import { Cache } from "./cache.js";
+import type { RegistryFn, RegistryReturn } from "./registry.js";
 
 export type Thunk<T> = () => T;
+export type Item = { id: string };
 
 export interface Context {
 	readonly diagnostic: diagnostic.Diagnostic;
 	readonly scenario: common.Scenario;
 
-	once<T>(key: string, value: string, thunk: Thunk<T>): T;
-	once<T>(key: string, value: string, item: { id: string }, thunk: Thunk<T>): T;
-
-	register<K extends keyof Results, V extends keyof Results[K]>(
+	register<
+		N extends keyof typeof REGISTRY,
+		K extends keyof (typeof REGISTRY)[N],
+	>(
+		ns: N,
 		key: K,
-		value: V,
-		thunk: Thunk<Results[K][V]>,
-	): void;
+		thunk: Thunk<RegistryReturn<typeof REGISTRY, N, K>>,
+	): RegistryReturn<typeof REGISTRY, N, K>;
 
 	register<
-		K extends keyof Results,
-		Item extends Results[K] extends Record<string, infer I> ? I : never,
-		V extends keyof Item,
-		T extends { id: string },
+		N extends keyof typeof REGISTRY,
+		K extends keyof (typeof REGISTRY)[N],
 	>(
+		ns: N,
 		key: K,
-		value: V,
-		item: T,
-		thunk: Thunk<Item[V]>,
-	): void;
-
-	resolve<K extends keyof Results, V extends keyof Results[K]>(
-		key: K,
-		value: V,
-	): Results[K][V];
+		item: Item,
+		thunk: Thunk<RegistryReturn<typeof REGISTRY, N, K>>,
+	): RegistryReturn<typeof REGISTRY, N, K>;
 
 	resolve<
-		K extends keyof Results,
-		Item extends Results[K] extends Record<string, infer I> ? I : never,
-		V extends keyof Item,
+		N extends keyof typeof REGISTRY,
+		K extends keyof (typeof REGISTRY)[N],
 	>(
+		ns: N,
 		key: K,
-		value: V,
-		item: { id: string },
-	): Item[V];
+	): RegistryReturn<typeof REGISTRY, N, K>;
 
 	resolve<
-		K extends keyof Results,
-		Item extends Results[K] extends Record<string, infer I> ? I : never,
-		V extends keyof Item,
+		N extends keyof typeof REGISTRY,
+		K extends keyof (typeof REGISTRY)[N],
 	>(
+		ns: N,
 		key: K,
-		value: V,
-		items: Array<{ id: string }>,
-	): Array<Item[V]>;
+		item: Item,
+	): RegistryReturn<typeof REGISTRY, N, K>;
+}
 
-	getResults(): Results;
+type R = typeof REGISTRY;
+
+export function createContext(
+	diagnostic: diagnostic.Diagnostic,
+	scenario: common.Scenario = common.ScenarioEnum.conventionnel,
+): Context {
+	const cache = new Cache();
+	const pending = new Set<string>();
+
+	function buildKey(ns: string, key: string, item?: Item): string {
+		return item ? `${ns}:${key}:${item.id}` : `${ns}:${key}`;
+	}
+
+	const ctx: Context = {
+		diagnostic,
+		scenario,
+
+		register<N extends keyof R, K extends keyof R[N]>(
+			ns: N,
+			key: K,
+			itemOrThunk: Item | Thunk<RegistryReturn<R, N, K>>,
+			thunk?: Thunk<RegistryReturn<R, N, K>>,
+		): RegistryReturn<R, N, K> {
+			const item = typeof itemOrThunk === "function" ? undefined : itemOrThunk;
+			const fn = typeof itemOrThunk === "function" ? itemOrThunk : thunk!;
+			const cacheKey = buildKey(String(ns), String(key), item);
+
+			// Déjà calculé
+			if (cache.has(String(ns), String(key), item)) {
+				return cache.get(String(ns), String(key), item);
+			}
+
+			// Cycle détecté
+			if (pending.has(cacheKey)) {
+				throw new Error(
+					`[Context] Cycle détecté : "${cacheKey}"\n` +
+						`Pile : ${[...pending].join(" → ")}`,
+				);
+			}
+
+			// Calcul
+			pending.add(cacheKey);
+			const result = fn();
+			pending.delete(cacheKey);
+			cache.set(String(ns), String(key), item, result);
+
+			return result;
+		},
+
+		resolve<N extends keyof R, K extends keyof R[N]>(
+			ns: N,
+			key: K,
+			item?: Item,
+		): RegistryReturn<R, N, K> {
+			if (!cache.has(String(ns), String(key), item)) {
+				const rule = REGISTRY[ns][key] as RegistryFn<R, N, K>;
+				item ? rule(ctx, item) : rule(ctx);
+			}
+			return cache.get(String(ns), String(key), item);
+		},
+	};
+
+	return ctx;
 }

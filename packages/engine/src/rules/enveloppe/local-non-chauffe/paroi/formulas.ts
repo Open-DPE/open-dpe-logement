@@ -43,7 +43,7 @@ export function calcule_aiu(props: {
 /**
  * @see https://github.com/dpe-audit/dpe-logement/issues/39
  * @param props.isolation : État d'isolation de la paroi séparant le local non chauffé de l'extérieur
- * @return État d'isolation retenu
+ * @returns État d'isolation retenu
  */
 export function set_isolation(props: { isolation: boolean | null }): boolean {
 	return props.isolation ? true : false;

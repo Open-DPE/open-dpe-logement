@@ -21,6 +21,9 @@ export type Chauffage = {
 
 export type ChauffageWithData<T extends Chauffage = Chauffage> = T & {
 	data: ChauffageData;
+	emetteurs: emetteur.EmetteurWithData[];
+	generateurs: NonEmptyArray<generateur.GenerateurWithData>;
+	installations: NonEmptyArray<installation.InstallationWithData>;
 };
 
 export type ChauffageData = {

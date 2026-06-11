@@ -352,7 +352,7 @@ enveloppe.local_non_chauffe.aue:
 
 enveloppe.local_non_chauffe.aiu:
   id: enveloppe.local_non_chauffe.aiu
-  description: Surface des parois du local non chauffé en contact avec l'espace chauffé
+  description: Surface des parois du local non chauffé en contact avec un espace chauffé
   references: Méthode 3CL-DPE 2021 §3.1
   type: number
   unite: m²
@@ -365,6 +365,48 @@ enveloppe.local_non_chauffe.aiu:
     - enveloppe.plancher_bas.aiu
     - enveloppe.porte.aiu
 
+enveloppe.local_non_chauffe.isolation_aiu:
+  id: enveloppe.local_non_chauffe.isolation_aiu
+  description: État d'isolation des parois du local non chauffé en contact avec un espace chauffé
+  references: Méthode 3CL-DPE 2021 §3.1
+  type: boolean
+  dependances:
+    - enveloppe.local_non_chauffe.baie.aiu
+    - enveloppe.local_non_chauffe.paroi.aiu
+    - enveloppe.baie.aiu
+    - enveloppe.mur.aiu
+    - enveloppe.plancher_haut.aiu
+    - enveloppe.plancher_bas.aiu
+    - enveloppe.porte.aiu
+    - enveloppe.local_non_chauffe.baie.isolation_aiu
+    - enveloppe.local_non_chauffe.paroi.isolation_aiu
+    - enveloppe.baie.isolation_aiu
+    - enveloppe.mur.isolation_aiu
+    - enveloppe.plancher_haut.isolation_aiu
+    - enveloppe.plancher_bas.isolation_aiu
+    - enveloppe.porte.isolation_aiu
+
+enveloppe.local_non_chauffe.isolation_aue:
+  id: enveloppe.local_non_chauffe.isolation_aue
+  description: État d'isolation des parois du local non chauffé en contact avec l'extérieur
+  references: Méthode 3CL-DPE 2021 §3.1
+  type: boolean
+  dependances:
+    - enveloppe.local_non_chauffe.baie.aue
+    - enveloppe.local_non_chauffe.paroi.aue
+    - enveloppe.baie.aue
+    - enveloppe.mur.aue
+    - enveloppe.plancher_haut.aue
+    - enveloppe.plancher_bas.aue
+    - enveloppe.porte.aue
+    - enveloppe.local_non_chauffe.baie.isolation_aue
+    - enveloppe.local_non_chauffe.paroi.isolation_aue
+    - enveloppe.baie.isolation_aue
+    - enveloppe.mur.isolation_aue
+    - enveloppe.plancher_haut.isolation_aue
+    - enveloppe.plancher_bas.isolation_aue
+    - enveloppe.porte.isolation_aue
+
 enveloppe.local_non_chauffe.baie.aue:
   id: enveloppe.local_non_chauffe.baie.aue
   description: Surface de la baie du local non chauffé en contact avec l'extérieur
@@ -375,6 +417,14 @@ enveloppe.local_non_chauffe.baie.aue:
   type: number
   unite: m²
 
+enveloppe.local_non_chauffe.baie.isolation_aue:
+  id: enveloppe.local_non_chauffe.baie.isolation_aue
+  description: État d'isolation de la baie du local non chauffé en contact avec l'extérieur
+  references: Méthode 3CL-DPE 2021 §3.1
+  type: boolean
+  issues:
+    - https://github.com/Open-DPE/open-dpe-logement/issues/39
+
 enveloppe.local_non_chauffe.baie.aiu:
   id: enveloppe.local_non_chauffe.baie.aiu
   description: Surface de la baie du local non chauffé en contact avec un espace chauffé
@@ -384,6 +434,14 @@ enveloppe.local_non_chauffe.baie.aiu:
     - https://github.com/dpe-audit/dpe-logement/issues/40
   type: number
   unite: m²
+
+enveloppe.local_non_chauffe.baie.isolation_aiu:
+  id: enveloppe.local_non_chauffe.baie.isolation_aiu
+  description: État d'isolation de la baie du local non chauffé en contact avec un espace chauffé
+  references: Méthode 3CL-DPE 2021 §3.1
+  type: boolean
+  issues:
+    - https://github.com/Open-DPE/open-dpe-logement/issues/39
 
 enveloppe.local_non_chauffe.baie.sst:
   id: enveloppe.local_non_chauffe.baie.sst
@@ -422,15 +480,31 @@ enveloppe.local_non_chauffe.paroi.aue:
   type: number
   unite: m²
 
+enveloppe.local_non_chauffe.paroi.isolation_aue:
+  id: enveloppe.local_non_chauffe.paroi.isolation_aue
+  description: État d'isolation de la paroi du local non chauffé en contact avec l'extérieur
+  references: Méthode 3CL-DPE 2021 §3.1
+  type: boolean
+  issues:
+    - https://github.com/Open-DPE/open-dpe-logement/issues/39
+
 enveloppe.local_non_chauffe.paroi.aiu:
   id: enveloppe.local_non_chauffe.paroi.aiu
-  description: Surface de la paroi du local non chauffé en contact avec l'espace
+  description: Surface de la paroi du local non chauffé en contact avec un espace chauffé
   references: Méthode 3CL-DPE 2021 §3.1
   issues:
     - https://github.com/dpe-audit/dpe-logement/issues/39
     - https://github.com/dpe-audit/dpe-logement/issues/40
   type: number
   unite: m²
+
+enveloppe.local_non_chauffe.paroi.isolation_aiu:
+  id: enveloppe.local_non_chauffe.paroi.isolation_aiu
+  description: État d'isolation de la paroi du local non chauffé en contact avec un espace chauffé
+  references: Méthode 3CL-DPE 2021 §3.1
+  type: boolean
+  issues:
+    - https://github.com/Open-DPE/open-dpe-logement/issues/39
 
 # <-- Enveloppe - Baie -->
 

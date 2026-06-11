@@ -1,7 +1,7 @@
 import data from "#data/performance/reseau.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type ReseauSchema = {
+export type Schema = {
 	id: string;
 	contenu_co2: number;
 	contenu_co2_acv: number;
@@ -9,8 +9,11 @@ export type ReseauSchema = {
 	feges: number;
 };
 
-export const load = (): ReseauSchema[] => data as ReseauSchema[];
-export const search = (
-	query: AbaqueQuery,
-	rows: ReseauSchema[],
-): ReseauSchema[] => filter(query, rows);
+export type Query = {
+	id: string;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

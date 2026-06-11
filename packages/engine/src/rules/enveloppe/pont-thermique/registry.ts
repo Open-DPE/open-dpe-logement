@@ -1,18 +1,9 @@
+import { NAMESPACE, RULES } from "./constants.js";
 import * as rules from "./rules.js";
 
-export const ID = "enveloppe:pont-thermique";
-
-export const RULES = {
-	pt: "pt",
-	kpt: "kpt",
-} as const;
-
-export type Results = {
-	[ID]: Record<
-		string,
-		{
-			[RULES.pt]: ReturnType<typeof rules.pt>;
-			[RULES.kpt]: ReturnType<typeof rules.kpt>;
-		}
-	>;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.pt]: rules.pt,
+		[RULES.kpt]: rules.kpt,
+	},
 };

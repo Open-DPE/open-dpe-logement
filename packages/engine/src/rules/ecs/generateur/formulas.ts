@@ -1,21 +1,20 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "#rules/common/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as production from "#rules/production/formulas.js";
-import * as ecs from "#rules/ecs/formulas.js";
-import * as installation from "#rules/ecs/installation/formulas.js";
-import * as systeme from "#rules/ecs/systeme/formulas.js";
-import * as generateurChauffage from "#rules/chauffage/generateur/formulas.js";
-import * as utils from "./utils.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { evaluate } from "#utils/math.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as production from "#rules/production/formulas.js";
+import type * as ecs from "#rules/ecs/formulas.js";
+import type * as installation from "#rules/ecs/installation/formulas.js";
+import type * as systeme from "#rules/ecs/systeme/formulas.js";
+import type * as generateurChauffage from "#rules/chauffage/generateur/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { evaluate } from "#rules/math.js";
 
 /**
  * @formule ecs.generateur.cef
  * @formule ecs.generateur.cep
  * @formule ecs.generateur.eges
- * @return Consommations par usage et par énergie du générateur d'eau chaude sanitaire
+ * @returns Consommations par usage et par énergie du générateur d'eau chaude sanitaire
  */
 export function calcule_consommations(props: {
 	consommations: ReturnType<typeof systeme.calcule_consommations>[];
@@ -36,7 +35,7 @@ export function calcule_consommations(props: {
 
 /**
  * @formule ecs.generateur.cecs
- * @return Consommations du générateur d'eau chaude sanitaire en kWh/an
+ * @returns Consommations du générateur d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs(props: {
 	cecs: ReturnType<typeof systeme.calcule_cecs>[];
@@ -45,7 +44,7 @@ export function calcule_cecs(props: {
 }
 
 /**
- * @return Consommation d'électricité du générateur d'eau chaude sanitaire en kWh/an
+ * @returns Consommation d'électricité du générateur d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_elec(props: {
 	cecs_elec: ReturnType<typeof systeme.calcule_cecs_elec>[];
@@ -55,7 +54,7 @@ export function calcule_cecs_elec(props: {
 
 /**
  * @formule ecs.generateur.caux_gen
- * @return Consommations de l'auxiliaire de génération d'eau chaude sanitaire en kWh/an
+ * @returns Consommations de l'auxiliaire de génération d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_gen(props: {
 	becs: ReturnType<typeof ecs.calcule_becs>;
@@ -70,7 +69,7 @@ export function calcule_caux_gen(props: {
 
 /**
  * @formule ecs.generateur.caux_gen_enr
- * @return Consommations d'électricité renouvelable de l'auxiliaire de génération d'eau chaude sanitaire en kWh/an
+ * @returns Consommations d'électricité renouvelable de l'auxiliaire de génération d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_gen_enr(props: {
 	celec: ReturnType<typeof production.calcule_celec>;
@@ -149,7 +148,7 @@ export function calcule_pecs(props: {
  * @formule ecs.generateur.paux
  * @see abaques.ecs.paux
  * @throws {ValeurForfaitaireError}
- * @return Puissance de l'auxiliaire de génération d'eau chaude sanitaire en kW
+ * @returns Puissance de l'auxiliaire de génération d'eau chaude sanitaire en kW
  */
 export function calcule_paux(props: {
 	type_generateur: ReturnType<typeof set_type_generateur>;
@@ -170,21 +169,24 @@ export function calcule_paux(props: {
 	return evaluate(match.paux, scope);
 }
 
-export type CopProps = {
-	// Coefficient de performance énergétique saisi du générateur d'eau chaude sanitaire
-	cop_saisi: number | null;
-	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
-	annee_installation: ReturnType<typeof set_annee_installation>;
-} & utils.GenerateurThermodynamique;
-
 /**
  * @formule ecs.generateur.cop
- * @applicable si {@link utils.is_generateur_thermodynamique}
+ *
+ * @guard :
+ * - {@linkcode models.ecs.generateur.isChauffeEauThermodynamique} ||
+ * - {@linkcode models.ecs.generateur.isPacDoubleService} ||
+ * - {@linkcode models.ecs.generateur.isPacHybride}
+ *
  * @see abaques.ecs.cop
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de performance énergétique du générateur d'eau chaude sanitaire
+ * @returns Coefficient de performance énergétique du générateur d'eau chaude sanitaire
  */
-export function calcule_cop(props: CopProps): number {
+export function calcule_cop(props: {
+	cop_saisi: number | null;
+	type_generateur: ReturnType<typeof set_type_generateur>;
+	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
+	annee_installation: ReturnType<typeof set_annee_installation>;
+}): number {
 	const { cop_saisi, ...query } = props;
 	if (cop_saisi) return cop_saisi;
 
@@ -203,27 +205,35 @@ export type Combustion = {
 	pveilleuse: number;
 };
 
-export type CombustionProps = {
+/**
+ * @formule ecs.generateur.rpn
+ * @formule ecs.generateur.qp0
+ * @formule ecs.generateur.pveilleuse
+ *
+ * @guard :
+ * - {@linkcode models.ecs.generateur.isChaudiereCombustion} ||
+ * - {@linkcode models.ecs.generateur.isPoeleBoisBouilleur} ||
+ * - {@linkcode models.ecs.generateur.isChauffeEauGaz} ||
+ * - {@linkcode models.ecs.generateur.isPacHybride} ||
+ * - {@linkcode models.ecs.generateur.isGenerateurCollectifInconnu}
+ *
+ * @see abaques.ecs.combustion
+ * @throws {ValeurForfaitaireError}
+ * @returns Performances des générateurs à combustion
+ */
+export function calcule_combustion(props: {
 	rpn_saisi: number | null;
 	qp0_saisi: number | null;
 	pveilleuse_saisi: number | null;
+	type_generateur: ReturnType<typeof set_type_generateur>;
+	energie_generateur: ReturnType<typeof set_energie_generateur>;
+	bienergie_generateur: models.ecs.generateur.Bienergie | null;
 	mode_combustion: ReturnType<typeof set_mode_combustion>;
 	volume_stockage: ReturnType<typeof set_volume_stockage>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
 	pn: ReturnType<typeof calcule_pn>;
 	presence_ventouse: ReturnType<typeof set_presence_ventouse>;
-} & (utils.GenerateurCombustion | utils.PACHybride);
-
-/**
- * @formule ecs.generateur.rpn
- * @formule ecs.generateur.qp0
- * @formule ecs.generateur.pveilleuse
- * @applicable si {@link utils.is_generateur_combustion} | {@link utils.is_pac_hybride}
- * @see abaques.ecs.combustion
- * @throws {ValeurForfaitaireError}
- * @return Performances des générateurs à combustion
- */
-export function calcule_combustion(props: CombustionProps): Combustion {
+}): Combustion {
 	const {
 		rpn_saisi,
 		qp0_saisi,
@@ -242,14 +252,11 @@ export function calcule_combustion(props: CombustionProps): Combustion {
 		return combustion as Combustion;
 
 	const energie_generateur =
-		"bienergie_generateur" in props
-			? props.bienergie_generateur
-			: props.energie_generateur;
+		props.bienergie_generateur ?? props.energie_generateur;
 
+	const q = { ...query, ...{ energie_generateur } };
 	const abaque = abaques.ecs.combustion;
-	const match = abaque
-		.search({ ...query, ...{ energie_generateur } }, abaque.load())
-		.at(0);
+	const match = abaque.search(q, abaque.load()).at(0);
 	if (!match) throw new ValeurForfaitaireError(props);
 	const E = presence_ventouse ? 1.75 : 2.5;
 	const F = presence_ventouse ? -0.55 : -0.8;
@@ -268,7 +275,7 @@ export function calcule_combustion(props: CombustionProps): Combustion {
  * @formule ecs.generateur.cr
  * @see abaques.ecs.cr
  * @throws {ValeurForfaitaireError}
- * @return Coefficient de perte du ballon de stockage en Wh/l.°C.jour
+ * @returns Coefficient de perte du ballon de stockage en Wh/l.°C.jour
  */
 export function calcule_cr(props: {
 	type_generateur: models.ecs.generateur.TypeGenerateur;
@@ -286,7 +293,7 @@ export function calcule_cr(props: {
 
 /**
  * @formule ecs.generateur.qgw
- * @return Pertes de stockage en Wh/an
+ * @returns Pertes de stockage en Wh/an
  */
 export function calcule_qgw(props: {
 	energie_generateur: models.ecs.generateur.EnergieEcs;
@@ -295,7 +302,7 @@ export function calcule_qgw(props: {
 }): number {
 	const { energie_generateur, cr, volume_stockage } = props;
 	if (volume_stockage === 0) return 0;
-	return energie_generateur === models.ecs.generateur.EnergieEcsEnum.electricite
+	return energie_generateur === models.common.EnergieEnum.electricite
 		? 8592 * (45 / 24) * volume_stockage * cr
 		: 67662 * volume_stockage ** 0.55;
 }
@@ -303,7 +310,7 @@ export function calcule_qgw(props: {
 /**
  * @formule ecs.generateur.qgen
  * @param props.generateur_mixte : Générateur assurant la production d'eau chaude sanitaire et de chauffage
- * @return Pertes de génération du générateur d'eau chaude sanitaire en Wh/an
+ * @returns Pertes de génération du générateur d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qgen(props: {
 	generateur_mixte: boolean;
@@ -319,7 +326,7 @@ export function calcule_qgen(props: {
 
 /**
  * @param props.type_generateur : Type de générateur d'eau chaude sanitaire saisi
- * @return Type de générateur d'eau chaude sanitaire retenu
+ * @returns Type de générateur d'eau chaude sanitaire retenu
  */
 export function set_type_generateur(props: {
 	type_generateur: models.ecs.generateur.TypeGenerateur | null;
@@ -330,18 +337,18 @@ export function set_type_generateur(props: {
 
 /**
  * @param props.energie_generateur : Energie du générateur d'eau chaude sanitaire saisie
- * @return Energie du générateur d'eau chaude sanitaire retenue
+ * @returns Energie du générateur d'eau chaude sanitaire retenue
  */
 export function set_energie_generateur(props: {
 	energie_generateur: models.ecs.generateur.EnergieEcs | null;
 }): models.ecs.generateur.EnergieEcs {
 	const { energie_generateur } = props;
-	return energie_generateur ?? models.ecs.generateur.EnergieEcsEnum.fioul;
+	return energie_generateur ?? models.common.EnergieEnum.fioul;
 }
 
 /**
  * @param props.mode_combustion : Mode de combustion du générateur d'eau chaude sanitaire saisi
- * @return Mode de combustion du générateur d'eau chaude sanitaire retenu
+ * @returns Mode de combustion du générateur d'eau chaude sanitaire retenu
  */
 export function set_mode_combustion(props: {
 	mode_combustion: models.ecs.generateur.ModeCombustion | null;
@@ -352,7 +359,7 @@ export function set_mode_combustion(props: {
 
 /**
  * @param props.presence_ventouse : Présence d'une ventouse sur le générateur d'eau chaude sanitaire saisie
- * @return Présence d'une ventouse sur le générateur d'eau chaude sanitaire retenue
+ * @returns Présence d'une ventouse sur le générateur d'eau chaude sanitaire retenue
  */
 export function set_presence_ventouse(props: {
 	presence_ventouse: boolean | null;
@@ -364,7 +371,7 @@ export function set_presence_ventouse(props: {
 /**
  * @param props.annee_installation : Année d'installation du générateur d'eau chaude sanitaire saisie
  * @param props.annee_construction_batiment : Année de construction du bâtiment
- * @return Année d'installation du générateur d'eau chaude sanitaire retenue
+ * @returns Année d'installation du générateur d'eau chaude sanitaire retenue
  */
 export function set_annee_installation(props: {
 	annee_installation: number | null;

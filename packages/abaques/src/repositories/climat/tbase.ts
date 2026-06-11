@@ -1,7 +1,7 @@
 import data from "#data/climat/tbase.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type TbaseSchema = {
+export type Schema = {
 	zone_climatique: string;
 	"altitude/gt": number | null;
 	"altitude/gte": number | null;
@@ -10,9 +10,12 @@ export type TbaseSchema = {
 	tbase: number;
 };
 
-export const load = (): TbaseSchema[] => data as TbaseSchema[];
+export type Query = {
+	zone_climatique: string;
+	altitude: number;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: TbaseSchema[],
-): TbaseSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

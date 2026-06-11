@@ -13,12 +13,12 @@ fields:
     type: string
     format: enums
     x-enum: enveloppe:paroi:orientation
-    required: false
-  - name: hauteur_masque_alpha/gte
+    required: true
+  - name: hauteur_alpha_masque/gte
     title: Hauteur angulaire du masque (supérieure ou égale à) en degrés
     type: number
     required: false
-  - name: hauteur_masque_alpha/lt
+  - name: hauteur_alpha_masque/lt
     title: Hauteur angulaire du masque (inférieure à) en degrés
     type: number
     required: false

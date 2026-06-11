@@ -13,7 +13,8 @@
     "#*": "./src/*"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "sideEffects": false,
   "scripts": {
@@ -42,6 +43,9 @@
     "mathjs": "^15.2.0"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^25.9.2",
+    "js-yaml": "^4.2.0",
     "vitest": "^4.1.6"
   }
 }

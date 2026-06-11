@@ -1,168 +1,228 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import * as batiment from "#rules/batiment/registry.js";
-import * as climat from "#rules/climat/registry.js";
-import * as ecs from "#rules/ecs/registry.js";
-import * as enveloppe from "#rules/enveloppe/registry.js";
-import * as generateur from "./generateur/index.js";
-import * as installation from "./installation/index.js";
+import * as constants from "#/rules/constants.js";
+import * as generateur from "./generateur/rules.js";
+import * as installation from "./installation/rules.js";
 import * as formulas from "./formulas.js";
-import { ID, RULES } from "./registry.js";
+import { NAMESPACE, RULES } from "./constants.js";
 
-export function register(ctx: Context): void {
-	generateur.rules.register(ctx);
-	installation.rules.register(ctx);
+export { generateur, installation };
 
-	ctx.register(ID, RULES.consommations, () => consommations(ctx));
-	ctx.register(ID, RULES.cfr, () => cfr(ctx));
-	ctx.register(ID, RULES.cfr_elec, () => cfr_elec(ctx));
-	ctx.register(ID, RULES.caux, () => caux(ctx));
-	ctx.register(ID, RULES.bfr, () => bfr(ctx));
-	ctx.register(ID, RULES.fut, () => fut(ctx));
-	ctx.register(ID, RULES.rbth, () => rbth(ctx));
-	ctx.register(ID, RULES.as, () => as(ctx));
-	ctx.register(ID, RULES.ai, () => ai(ctx));
-	ctx.register(ID, RULES.e, () => e(ctx));
-	ctx.register(ID, RULES.textmoy, () => textmoy(ctx));
-	ctx.register(ID, RULES.nref, () => nref(ctx));
-	ctx.register(ID, RULES.tint, () => tint(ctx));
-	ctx.register(ID, RULES.t, () => t(ctx));
-	ctx.register(ID, RULES.cin, () => cin(ctx));
+export function calcule(
+	ctx: Context,
+): models.refroidissement.RefroidissementWithData {
+	return {
+		...ctx.diagnostic.refroidissement,
+		generateurs: ctx.diagnostic.refroidissement.generateurs.map((item) =>
+			generateur.calcule(ctx, item),
+		),
+		installations: ctx.diagnostic.refroidissement.installations.map((item) =>
+			installation.calcule(ctx, item),
+		),
+		data: {
+			bfr: models.common.reduceParMois(bfr(ctx)),
+			as: models.common.reduceParMois(as(ctx)),
+			ai: models.common.reduceParMois(ai(ctx)),
+		},
+	};
 }
 
 export function consommations(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_consommations> {
-	return formulas.calcule_consommations({
-		consommations: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.consommations, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.consommations, () =>
+		formulas.calcule_consommations({
+			consommations: ctx.diagnostic.refroidissement.generateurs.map((item) =>
+				ctx.resolve(
+					constants.refroidissement.generateur.NAMESPACE,
+					constants.refroidissement.generateur.RULES.consommations,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function cfr(ctx: Context): ReturnType<typeof formulas.calcule_cfr> {
-	return formulas.calcule_cfr({
-		cfr: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.cfr, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.cfr, () =>
+		formulas.calcule_cfr({
+			cfr: ctx.diagnostic.refroidissement.generateurs.map((item) =>
+				ctx.resolve(
+					constants.refroidissement.generateur.NAMESPACE,
+					constants.refroidissement.generateur.RULES.cfr,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function cfr_elec(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_cfr_elec> {
-	return formulas.calcule_cfr_elec({
-		cfr_elec: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.cfr_elec, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.cfr_elec, () =>
+		formulas.calcule_cfr_elec({
+			cfr_elec: ctx.diagnostic.refroidissement.generateurs.map((item) =>
+				ctx.resolve(
+					constants.refroidissement.generateur.NAMESPACE,
+					constants.refroidissement.generateur.RULES.cfr_elec,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function caux(ctx: Context): ReturnType<typeof formulas.calcule_caux> {
-	return formulas.calcule_caux({
-		caux: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-			ctx.resolve(generateur.ID, generateur.RULES.caux, item),
-		),
-	});
+	return ctx.register(NAMESPACE, RULES.caux, () =>
+		formulas.calcule_caux({
+			caux: ctx.diagnostic.refroidissement.generateurs.map((item) =>
+				ctx.resolve(
+					constants.refroidissement.generateur.NAMESPACE,
+					constants.refroidissement.generateur.RULES.caux,
+					item,
+				),
+			),
+		}),
+	);
 }
 
 export function bfr(ctx: Context): ReturnType<typeof formulas.calcule_bfr> {
-	return formulas.calcule_bfr({
-		gv: ctx.resolve(enveloppe.ID, enveloppe.RULES.gv),
-		tint: ctx.resolve(ID, RULES.tint),
-		as: ctx.resolve(ID, RULES.as),
-		ai: ctx.resolve(ID, RULES.ai),
-		fut: ctx.resolve(ID, RULES.fut),
-		rbth: ctx.resolve(ID, RULES.rbth),
-		textmoy: ctx.resolve(ID, RULES.textmoy),
-		nref: ctx.resolve(ID, RULES.nref),
-	});
+	return ctx.register(NAMESPACE, RULES.bfr, () =>
+		formulas.calcule_bfr({
+			gv: ctx.resolve(
+				constants.enveloppe.NAMESPACE,
+				constants.enveloppe.RULES.gv,
+			),
+			tint: tint(ctx),
+			as: as(ctx),
+			ai: ai(ctx),
+			fut: fut(ctx),
+			rbth: rbth(ctx),
+			textmoy: textmoy(ctx),
+			nref: nref(ctx),
+		}),
+	);
 }
 
 export function fut(ctx: Context): ReturnType<typeof formulas.calcule_fut> {
-	return formulas.calcule_fut({
-		rbth: ctx.resolve(ID, RULES.rbth),
-		t: ctx.resolve(ID, RULES.t),
-	});
+	return ctx.register(NAMESPACE, RULES.fut, () =>
+		formulas.calcule_fut({
+			rbth: rbth(ctx),
+			t: t(ctx),
+		}),
+	);
 }
 
 export function rbth(ctx: Context): ReturnType<typeof formulas.calcule_rbth> {
-	return formulas.calcule_rbth({
-		gv: ctx.resolve(enveloppe.ID, enveloppe.RULES.gv),
-		as: ctx.resolve(ID, RULES.as),
-		ai: ctx.resolve(ID, RULES.ai),
-		cin: ctx.resolve(ID, RULES.cin),
-		tint: ctx.resolve(ID, RULES.tint),
-		textmoy: ctx.resolve(ID, RULES.textmoy),
-		nref: ctx.resolve(ID, RULES.nref),
-	});
+	return ctx.register(NAMESPACE, RULES.rbth, () =>
+		formulas.calcule_rbth({
+			gv: ctx.resolve(
+				constants.enveloppe.NAMESPACE,
+				constants.enveloppe.RULES.gv,
+			),
+			as: as(ctx),
+			ai: ai(ctx),
+			cin: cin(ctx),
+			tint: tint(ctx),
+			textmoy: textmoy(ctx),
+			nref: nref(ctx),
+		}),
+	);
 }
 
 export function as(ctx: Context): ReturnType<typeof formulas.calcule_as> {
-	return formulas.calcule_as({
-		sse: ctx.resolve(enveloppe.ID, enveloppe.RULES.sse),
-		e: ctx.resolve(ID, RULES.e),
-	});
+	return ctx.register(NAMESPACE, RULES.as, () =>
+		formulas.calcule_as({
+			sse: ctx.resolve(
+				constants.enveloppe.NAMESPACE,
+				constants.enveloppe.RULES.sse,
+			),
+			e: e(ctx),
+		}),
+	);
 }
 
 export function ai(ctx: Context): ReturnType<typeof formulas.calcule_ai> {
-	return formulas.calcule_ai({
-		sh: ctx.resolve(batiment.ID, batiment.RULES.sh),
-		nadeq: ctx.resolve(ecs.ID, ecs.RULES.nadeq),
-		nref: ctx.resolve(ID, RULES.nref),
-	});
+	return ctx.register(NAMESPACE, RULES.ai, () =>
+		formulas.calcule_ai({
+			sh: ctx.resolve(
+				constants.batiment.NAMESPACE,
+				constants.batiment.RULES.sh,
+			),
+			nadeq: ctx.resolve(constants.ecs.NAMESPACE, constants.ecs.RULES.nadeq),
+			nref: nref(ctx),
+		}),
+	);
 }
 
 export function e(ctx: Context): ReturnType<typeof formulas.calcule_e> {
-	return formulas.calcule_e({
-		scenario: ctx.scenario,
-		sollicitations: ctx.resolve(climat.ID, climat.RULES.sollicitations),
-	});
+	return ctx.register(NAMESPACE, RULES.e, () =>
+		formulas.calcule_e({
+			scenario: ctx.scenario,
+			sollicitations: ctx.resolve(
+				constants.climat.NAMESPACE,
+				constants.climat.RULES.sollicitations,
+			),
+		}),
+	);
 }
 
 export function textmoy(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_textmoy> {
-	return formulas.calcule_textmoy({
-		scenario: ctx.scenario,
-		sollicitations: ctx.resolve(climat.ID, climat.RULES.sollicitations),
-	});
+	return ctx.register(NAMESPACE, RULES.textmoy, () =>
+		formulas.calcule_textmoy({
+			scenario: ctx.scenario,
+			sollicitations: ctx.resolve(
+				constants.climat.NAMESPACE,
+				constants.climat.RULES.sollicitations,
+			),
+		}),
+	);
 }
 
 export function nref(ctx: Context): ReturnType<typeof formulas.calcule_nref> {
-	return formulas.calcule_nref({
-		scenario: ctx.scenario,
-		sollicitations: ctx.resolve(climat.ID, climat.RULES.sollicitations),
-	});
+	return ctx.register(NAMESPACE, RULES.nref, () =>
+		formulas.calcule_nref({
+			scenario: ctx.scenario,
+			sollicitations: ctx.resolve(
+				constants.climat.NAMESPACE,
+				constants.climat.RULES.sollicitations,
+			),
+		}),
+	);
 }
 
 export function tint(ctx: Context): ReturnType<typeof formulas.calcule_tint> {
-	return formulas.calcule_tint({ scenario: ctx.scenario });
+	return ctx.register(NAMESPACE, RULES.tint, () =>
+		formulas.calcule_tint({ scenario: ctx.scenario }),
+	);
 }
 
 export function t(ctx: Context): ReturnType<typeof formulas.calcule_t> {
-	return formulas.calcule_t({
-		gv: ctx.resolve(enveloppe.ID, enveloppe.RULES.gv),
-		cin: ctx.resolve(ID, RULES.cin),
-	});
+	return ctx.register(NAMESPACE, RULES.t, () =>
+		formulas.calcule_t({
+			gv: ctx.resolve(
+				constants.enveloppe.NAMESPACE,
+				constants.enveloppe.RULES.gv,
+			),
+			cin: cin(ctx),
+		}),
+	);
 }
 
 export function cin(ctx: Context): ReturnType<typeof formulas.calcule_cin> {
-	return formulas.calcule_cin({
-		sh: ctx.resolve(batiment.ID, batiment.RULES.sh),
-		inertie: ctx.resolve(enveloppe.ID, enveloppe.RULES.inertie),
-	});
-}
-
-export function applique(ctx: Context): models.refroidissement.RefroidissementWithData {
-	const sumMois = (v: models.common.ParMois<number>): number =>
-		Object.values(v).reduce((s: number, n: number) => s + n, 0);
-	return {
-		...ctx.diagnostic.refroidissement,
-		data: {
-			bfr: sumMois(ctx.resolve(ID, RULES.bfr)),
-			as: sumMois(ctx.resolve(ID, RULES.as)),
-			ai: sumMois(ctx.resolve(ID, RULES.ai)),
-		},
-	};
+	return ctx.register(NAMESPACE, RULES.cin, () =>
+		formulas.calcule_cin({
+			sh: ctx.resolve(
+				constants.batiment.NAMESPACE,
+				constants.batiment.RULES.sh,
+			),
+			inertie: ctx.resolve(
+				constants.enveloppe.NAMESPACE,
+				constants.enveloppe.RULES.inertie,
+			),
+		}),
+	);
 }

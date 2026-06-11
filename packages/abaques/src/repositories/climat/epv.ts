@@ -1,12 +1,17 @@
 import data from "#data/climat/epv.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type EpvSchema = {
+export type Schema = {
 	mois: string;
 	zone_climatique: string;
 	epv: number;
 };
 
-export const load = (): EpvSchema[] => data as EpvSchema[];
-export const search = (query: AbaqueQuery, rows: EpvSchema[]): EpvSchema[] =>
+export type Query = {
+	zone_climatique: string;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

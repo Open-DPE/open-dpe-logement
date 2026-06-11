@@ -1,8 +1,8 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "#rules/common/formulas.js";
-import * as production from "#rules/production/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as production from "#rules/production/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * Surface habitable couverte par l'installation en m²
@@ -13,7 +13,7 @@ type Sh = number;
  * @formule ventilation.installation.cef
  * @formule ventilation.installation.cep
  * @formule ventilation.installation.eges
- * @return Consommations par usage et par énergie de l'auxiliaire de ventilation
+ * @returns Consommations par usage et par énergie de l'auxiliaire de ventilation
  */
 export function calcule_consommations(props: {
 	caux: ReturnType<typeof calcule_caux>;
@@ -30,7 +30,7 @@ export function calcule_consommations(props: {
 
 /**
  * @formule ventilation.installation.caux_enr
- * @return Consommations d'électricité renouvelable de l'auxiliaire de ventilation en kWh/an
+ * @returns Consommations d'électricité renouvelable de l'auxiliaire de ventilation en kWh/an
  */
 export function calcule_caux_enr(props: {
 	celec: ReturnType<typeof production.calcule_celec>;
@@ -45,6 +45,7 @@ export function calcule_caux_enr(props: {
 }
 
 /**
+ * @formule ventilation.installation.caux
  * @returns Consommation de l'auxiliaire de ventilation en kWh/an
  */
 export function calcule_caux(props: {
@@ -57,7 +58,7 @@ export function calcule_caux(props: {
 }
 
 /**
- * @formule ventilation.installation.rut
+ * @formule ventilation.installation.pvent_moy
  * @returns Puissance moyenne de l'auxiliaire de ventilation en W
  */
 export function calcule_pvent_moy(props: {
@@ -95,7 +96,7 @@ export function calcule_pvent_moy(props: {
  * @throws {ValeurForfaitaireError}
  * @returns Puissance moyenne de l'auxiliaire de ventilation pour une maison individuelle en W
  */
-export function calcule_pvent_moy_maison(props: {
+function calcule_pvent_moy_maison(props: {
 	type_ventilation: ReturnType<typeof set_type_ventilation>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
 }): number {
@@ -110,7 +111,7 @@ export function calcule_pvent_moy_maison(props: {
  * @throws {ValeurForfaitaireError}
  * @returns Puissance moyenne de l'auxiliaire de ventilation pour un immeuble en W
  */
-export function calcule_pvent_moy_immeuble(props: {
+function calcule_pvent_moy_immeuble(props: {
 	type_ventilation: ReturnType<typeof set_type_ventilation>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
 	surface_installation: Sh;
@@ -234,7 +235,7 @@ export function set_type_ventilation(props: {
 /**
  * @param props.annee_installation : Année d'installation du système de ventilation saisie
  * @param props.annee_construction_batiment : Année de construction du bâtiment
- * @return Année d'installation du système de ventilation retenue
+ * @returns Année d'installation du système de ventilation retenue
  */
 export function set_annee_installation(props: {
 	annee_installation: number | null;

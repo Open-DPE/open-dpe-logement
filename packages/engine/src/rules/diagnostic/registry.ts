@@ -1,25 +1,14 @@
+import { NAMESPACE, RULES } from "./constants.js";
 import * as rules from "./rules.js";
 
-export const ID = "diagnostic";
-
-export const RULES = {
-	consommations: "consommations",
-	cef: "cef",
-	cep: "cep",
-	eges: "eges",
-	etiquette_energie: "etiquette_energie",
-	etiquette_climat: "etiquette_climat",
-	confort_ete: "confort_ete",
-} as const;
-
-export type Results = {
-	[ID]: {
-		[RULES.consommations]: ReturnType<typeof rules.consommations>;
-		[RULES.cef]: ReturnType<typeof rules.cef>;
-		[RULES.cep]: ReturnType<typeof rules.cep>;
-		[RULES.eges]: ReturnType<typeof rules.eges>;
-		[RULES.etiquette_energie]: ReturnType<typeof rules.etiquette_energie>;
-		[RULES.etiquette_climat]: ReturnType<typeof rules.etiquette_climat>;
-		[RULES.confort_ete]: ReturnType<typeof rules.confort_ete>;
-	};
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: rules.consommations,
+		[RULES.cef]: rules.cef,
+		[RULES.cep]: rules.cep,
+		[RULES.eges]: rules.eges,
+		[RULES.etiquette_energie]: rules.etiquette_energie,
+		[RULES.etiquette_climat]: rules.etiquette_climat,
+		[RULES.confort_ete]: rules.confort_ete,
+	},
 };

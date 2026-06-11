@@ -1,44 +1,30 @@
-import type { Results as GenerateurResults } from "./generateur/registry.js";
-import type { Results as InstallationResults } from "./installation/registry.js";
+import { NAMESPACE, RULES } from "./constants.js";
 import * as rules from "./rules.js";
 
-export const ID = "refroidissement";
+import * as generateur from "./generateur/registry.js";
+import * as installation from "./installation/registry.js";
 
-export const RULES = {
-	consommations: "consommations",
-	cfr: "cfr",
-	cfr_elec: "cfr_elec",
-	caux: "caux",
-	bfr: "bfr",
-	fut: "fut",
-	rbth: "rbth",
-	as: "as",
-	ai: "ai",
-	e: "e",
-	textmoy: "textmoy",
-	nref: "nref",
-	tint: "tint",
-	t: "t",
-	cin: "cin",
-} as const;
+export { generateur, installation };
 
-export type Results = {
-	[ID]: {
-		[RULES.consommations]: ReturnType<typeof rules.consommations>;
-		[RULES.cfr]: ReturnType<typeof rules.cfr>;
-		[RULES.cfr_elec]: ReturnType<typeof rules.cfr_elec>;
-		[RULES.caux]: ReturnType<typeof rules.caux>;
-		[RULES.bfr]: ReturnType<typeof rules.bfr>;
-		[RULES.fut]: ReturnType<typeof rules.fut>;
-		[RULES.rbth]: ReturnType<typeof rules.rbth>;
-		[RULES.as]: ReturnType<typeof rules.as>;
-		[RULES.ai]: ReturnType<typeof rules.ai>;
-		[RULES.e]: ReturnType<typeof rules.e>;
-		[RULES.textmoy]: ReturnType<typeof rules.textmoy>;
-		[RULES.nref]: ReturnType<typeof rules.nref>;
-		[RULES.tint]: ReturnType<typeof rules.tint>;
-		[RULES.t]: ReturnType<typeof rules.t>;
-		[RULES.cin]: ReturnType<typeof rules.cin>;
-	};
-} & GenerateurResults &
-	InstallationResults;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: rules.consommations,
+		[RULES.cfr]: rules.cfr,
+		[RULES.cfr_elec]: rules.cfr_elec,
+		[RULES.caux]: rules.caux,
+		[RULES.bfr]: rules.bfr,
+		[RULES.fut]: rules.fut,
+		[RULES.rbth]: rules.rbth,
+		[RULES.as]: rules.as,
+		[RULES.ai]: rules.ai,
+		[RULES.e]: rules.e,
+		[RULES.textmoy]: rules.textmoy,
+		[RULES.nref]: rules.nref,
+		[RULES.tint]: rules.tint,
+		[RULES.t]: rules.t,
+		[RULES.cin]: rules.cin,
+	},
+
+	...generateur.REGISTRY,
+	...installation.REGISTRY,
+};

@@ -1,4 +1,15 @@
-# Doctrine 3CL-DPE 2021
+# Doctrine Open DPE
+
+## Organisation
+
+```text
+doctrine/
+├── abaques/                    # Tables de valeurs forfaitaires
+├── corpus/                     # Textes réglementaires
+├── dict/                       # Dictionnaire
+├── extras/                     # Doctrine extra-réglementaire
+└── formules/                   # Formules de calcul
+```
 
 ## [Abaques](./abaques/)
 

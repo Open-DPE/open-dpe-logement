@@ -17,6 +17,18 @@ export const isLocalNonChauffe = createGuard<LocalNonChauffe>(
 export const isBaie = createGuard<Baie>("/enveloppe/local-non-chauffe/baie");
 export const isParoi = createGuard<Paroi>("/enveloppe/local-non-chauffe/paroi");
 
+export function isEspaceTamponSolarise(
+	localNonChauffe: LocalNonChauffe,
+): localNonChauffe is EspaceTamponSolarise {
+	return localNonChauffe.type === TypeLncEnum.espace_tampon_solarise;
+}
+
+export function isAutreLocalNonChauffe(
+	localNonChauffe: LocalNonChauffe,
+): localNonChauffe is AutreLocalNonChauffe {
+	return localNonChauffe.type !== TypeLncEnum.espace_tampon_solarise;
+}
+
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/local-non-chauffe
  */

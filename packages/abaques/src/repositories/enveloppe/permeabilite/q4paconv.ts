@@ -1,7 +1,7 @@
 import data from "#data/enveloppe/permeabilite/q4paconv.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type Q4paconvSchema = {
+export type Schema = {
 	type_batiment: string;
 	"annee_construction/gte": number | null;
 	"annee_construction/lte": number | null;
@@ -10,9 +10,14 @@ export type Q4paconvSchema = {
 	q4paconv: number;
 };
 
-export const load = (): Q4paconvSchema[] => data as Q4paconvSchema[];
+export type Query = {
+	type_batiment: string;
+	annee_construction: number;
+	presence_joints_menuiserie: boolean | null;
+	isolation_murs_plafonds: boolean | null;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: Q4paconvSchema[],
-): Q4paconvSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

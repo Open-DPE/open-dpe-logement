@@ -1,47 +1,49 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import * as climat from "#rules/climat/registry.js";
+import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
-import { ID, RULES } from "./registry.js";
-
-export function register(ctx: Context) {
-	ctx.diagnostic.production.panneaux_photovoltaiques.forEach((item) => {
-		ctx.register(ID, RULES.ppv, item, () => ppv(ctx, item));
-		ctx.register(ID, RULES.kpv, item, () => kpv(item));
-	});
-}
+import { NAMESPACE, RULES } from "./constants.js";
 
 type PanneauPhotovoltaique =
 	models.production.panneauPhotovoltaique.PanneauPhotovoltaique;
 
+export function calcule(
+	ctx: Context,
+	panneau: PanneauPhotovoltaique,
+): models.production.panneauPhotovoltaique.PanneauPhotovoltaiqueWithData {
+	return {
+		...panneau,
+		data: {
+			ppv: models.common.reduceParMois(ppv(ctx, panneau)),
+			kpv: kpv(ctx, panneau),
+		},
+	};
+}
+
 export function ppv(
 	ctx: Context,
-	item: PanneauPhotovoltaique,
+	panneau: PanneauPhotovoltaique,
 ): ReturnType<typeof formulas.calcule_ppv> {
-	return formulas.calcule_ppv({
-		spv: formulas.set_spv({ surface: item.surface, modules: item.modules }),
-		kpv: ctx.resolve(ID, RULES.kpv, item),
-		epv: ctx.resolve(climat.ID, climat.RULES.epv),
-	});
+	return ctx.register(NAMESPACE, RULES.ppv, () =>
+		formulas.calcule_ppv({
+			spv: formulas.set_spv({
+				surface: panneau.surface,
+				modules: panneau.modules,
+			}),
+			kpv: kpv(ctx, panneau),
+			epv: ctx.resolve(constants.climat.NAMESPACE, constants.climat.RULES.epv),
+		}),
+	);
 }
 
 export function kpv(
-	item: PanneauPhotovoltaique,
+	ctx: Context,
+	panneau: PanneauPhotovoltaique,
 ): ReturnType<typeof formulas.calcule_kpv> {
-	return formulas.calcule_kpv({
-		orientation: item.orientation,
-		inclinaison: item.inclinaison,
-	});
-}
-
-export function applique(ctx: Context, item: PanneauPhotovoltaique): models.production.panneauPhotovoltaique.PanneauPhotovoltaiqueWithData {
-	const sumMois = (v: models.common.ParMois<number>): number =>
-		Object.values(v).reduce((s: number, n: number) => s + n, 0);
-	return {
-		...item,
-		data: {
-			ppv: sumMois(ctx.resolve(ID, RULES.ppv, item)),
-			kpv: ctx.resolve(ID, RULES.kpv, item),
-		},
-	};
+	return ctx.register(NAMESPACE, RULES.kpv, () =>
+		formulas.calcule_kpv({
+			orientation_pv: panneau.orientation,
+			inclinaison_pv: panneau.inclinaison,
+		}),
+	);
 }

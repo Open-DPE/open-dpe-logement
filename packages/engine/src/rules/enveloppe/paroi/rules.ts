@@ -32,47 +32,30 @@ export function sdep(item: Paroi): ReturnType<typeof formulas.calcule_sdep> {
 	});
 }
 
-export function b(
-	ctx: Context,
-	item: Paroi,
-	isolation: boolean,
-): ReturnType<typeof formulas.calcule_b> {
-	const mitoyennete = item.position.mitoyennete;
+export function b(ctx: Context, item: Paroi, isolation: boolean): formulas.b {
+	if (models.enveloppe.common.isPositionParoiLocalNonChauffe(item.position)) {
+		const lnc = models.enveloppe.get_local_non_chauffe(
+			ctx.diagnostic.enveloppe,
+			item.position.local_non_chauffe_id,
+		);
+		const type_local_non_chauffe = lnc.type;
 
-	if (mitoyennete !== models.enveloppe.common.MitoyenneteEnum.local_non_chauffe)
-		return formulas.calcule_b({ mitoyennete });
-
-	const local_non_chauffe = models.enveloppe.get_local_non_chauffe(
-		ctx.diagnostic.enveloppe,
-		item.position.local_non_chauffe_id,
-	);
-	const type_local_non_chauffe = local_non_chauffe.type;
-
-	if (
-		type_local_non_chauffe ===
-		models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
-	) {
-		return formulas.calcule_b({
-			mitoyennete,
-			type_local_non_chauffe,
-			isolation_paroi: isolation,
-			zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
-			orientations_ets: ctx.resolve(
-				localNonChauffe.ID,
-				localNonChauffe.RULES.orientations,
-				local_non_chauffe,
-			),
+		if (models.enveloppe.localNonChauffe.isEspaceTamponSolarise(lnc)) {
+			return formulas.calcule_b_ets({
+				type_local_non_chauffe,
+				zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+				orientations_ets: ctx.resolve(
+					localNonChauffe.ID,
+					localNonChauffe.RULES.orientations,
+					lnc,
+				),
+				isolation_paroi: isolation,
+			});
+		}
+		return formulas.calcule_b_lnc({
+			blnc: ctx.resolve(localNonChauffe.ID, localNonChauffe.RULES.b, lnc),
 		});
 	}
-	return formulas.calcule_b({
-		mitoyennete: item.position.mitoyennete,
-		type_local_non_chauffe: local_non_chauffe?.type,
-		blnc: ctx.resolve(
-			localNonChauffe.ID,
-			localNonChauffe.RULES.b,
-			local_non_chauffe,
-		),
-	});
 }
 
 export function dp(

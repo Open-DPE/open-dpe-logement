@@ -1,16 +1,15 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import * as chauffage from "#rules/chauffage/formulas.js";
-import * as paroi from "#rules/enveloppe/paroi/formulas.js";
-export * from "#rules/enveloppe/paroi/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as chauffage from "#rules/chauffage/formulas.js";
+import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @formule enveloppe.mur.isolation_aiu
  * @param props.isolation : État d'isolation saisi du mur donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment
- * @return État d'isolation du mur donnant sur un local non chauffé
+ * @returns État d'isolation du mur donnant sur un local non chauffé
  */
 export function calcule_isolation_aiu(props: {
 	isolation: boolean | null;
@@ -99,29 +98,33 @@ export function calcule_u0(props: {
 
 	if (u0_saisi) return Math.min(u0_saisi, 2.5);
 
-	const structures = props.structures.filter((structure) => structure.materiau);
+	const structures = props.structures.filter(({ materiau }) => materiau);
+
 	if (structures.length === 0) return 2.5;
 
 	const abaque = abaques.enveloppe.mur.umur0;
 	const data = abaque.load();
+	const values: number[] = [];
 
-	const values: number[] = structures.map((structure) => {
+	for (const { materiau, epaisseur } of structures) {
+		if (!materiau || !epaisseur) continue;
+
 		const query = {
-			type_mur: structure.materiau,
-			epaisseur_mur: structure.epaisseur ?? 0,
+			type_mur: materiau,
+			epaisseur_mur: epaisseur,
 			annee_construction,
 		};
 		const match = abaque.search(query, data).at(0);
 		if (!match) throw new ValeurForfaitaireError(query);
-		return match.u0;
-	});
+		values.push(match.u0);
+	}
 
 	const u0 = values.reduce((acc, value) => 1 / (1 / acc + 1 / value));
 	return Math.min(u0 + u0_enduit_isolant + u0_doublage, 2.5);
 }
 
 /**
- * @return Mur composé de matéraux anciens
+ * @returns Mur composé de matéraux anciens
  */
 export function calcule_paroi_ancienne(props: {
 	structures: {
@@ -169,7 +172,7 @@ export function calcule_u0_doublage(props: {
 
 /**
  * @param props.isolation : État d'isolation saisie
- * @return État d'isolation retenu
+ * @returns État d'isolation retenu
  */
 export function set_isolation(props: {
 	isolation: boolean | null;

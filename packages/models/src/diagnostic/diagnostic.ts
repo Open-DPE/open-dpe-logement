@@ -1,12 +1,21 @@
 import { buildEnum, createGuard } from "#/utils.js";
 import type { Consommations } from "#/common/common";
-import type { Chauffage } from "#/chauffage/chauffage.js";
-import type { Ecs } from "#/ecs/ecs.js";
-import type { Enveloppe } from "#/enveloppe/enveloppe.js";
-import type { Production } from "#/production/production.js";
-import type { Refroidissement } from "#/refroidissement/refroidissement.js";
-import type { Ventilation } from "#/ventilation/ventilation.js";
-import type { Batiment } from "#/batiment/batiment.js";
+import type { Chauffage, ChauffageWithData } from "#/chauffage/chauffage.js";
+import type { Ecs, EcsWithData } from "#/ecs/ecs.js";
+import type { Enveloppe, EnveloppeWithData } from "#/enveloppe/enveloppe.js";
+import type {
+	Production,
+	ProductionWithData,
+} from "#/production/production.js";
+import type {
+	Refroidissement,
+	RefroidissementWithData,
+} from "#/refroidissement/refroidissement.js";
+import type {
+	Ventilation,
+	VentilationWithData,
+} from "#/ventilation/ventilation.js";
+import type { Batiment, BatimentWithData } from "#/batiment/batiment.js";
 
 export const isDiagnostic = createGuard<Diagnostic>("/diagnostic");
 
@@ -28,6 +37,13 @@ export type Diagnostic = {
 
 export type DiagnosticWithData<T extends Diagnostic = Diagnostic> = T & {
 	data: DiagnosticData;
+	batiment: BatimentWithData;
+	enveloppe: EnveloppeWithData;
+	chauffage: ChauffageWithData;
+	ecs: EcsWithData;
+	ventilation: VentilationWithData;
+	refroidissement: RefroidissementWithData;
+	production: ProductionWithData;
 };
 
 export type DiagnosticData = {

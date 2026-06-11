@@ -1,9 +1,8 @@
 import type { diagnostic } from "@open-dpe-logement/models";
-import { Engine } from "./core/engine.js";
-import type { Results } from "./core/results.js";
 
-export { Engine } from "./core/engine.js";
-export type { Results } from "./core/results.js";
+export * as rules from "./rules.js";
+export * as formulas from "./rules/formulas.js";
+export * as registry from "./registry.js";
 
 const engine = new Engine();
 

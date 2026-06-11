@@ -1,15 +1,15 @@
 import data from "#data/chauffage/emission.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type EmissionSchema = {
+export type Schema = {
 	type_generateur: string;
 	type_emetteur: string | null;
 	type_emission: string;
 };
 
-export const load = (): EmissionSchema[] => data as EmissionSchema[];
+export type Query = Omit<Schema, "type_emission">;
 
-export const search = (
-	query: AbaqueQuery,
-	rows: EmissionSchema[],
-): EmissionSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

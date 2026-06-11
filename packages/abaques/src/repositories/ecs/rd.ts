@@ -1,7 +1,7 @@
 import data from "#data/ecs/rd.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type EcsRdSchema = {
+export type Schema = {
 	installation_collective: boolean;
 	bouclage_reseau: string | null;
 	alimentation_contigue: boolean | null;
@@ -9,9 +9,14 @@ export type EcsRdSchema = {
 	rd: number;
 };
 
-export const load = (): EcsRdSchema[] => data as EcsRdSchema[];
+export type Query = {
+	installation_collective: boolean;
+	bouclage_reseau: string | null;
+	alimentation_contigue: boolean | null;
+	production_volume_habitable: boolean | null;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: EcsRdSchema[],
-): EcsRdSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

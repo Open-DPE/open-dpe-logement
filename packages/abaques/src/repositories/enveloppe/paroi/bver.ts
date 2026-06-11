@@ -1,14 +1,20 @@
 import data from "#data/enveloppe/paroi/bver.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type BverSchema = {
+export type Schema = {
 	zone_climatique: string;
 	orientation_ets: string;
 	isolation_paroi: boolean;
 	bver: number;
-	tv_coef_reduction_deperdition_id: number;
 };
 
-export const load = (): BverSchema[] => data as BverSchema[];
-export const search = (query: AbaqueQuery, rows: BverSchema[]): BverSchema[] =>
+export type Query = {
+	zone_climatique: string;
+	orientation_ets: string;
+	isolation_paroi: boolean;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

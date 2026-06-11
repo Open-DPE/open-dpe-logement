@@ -1,16 +1,32 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as batiment from "#rules/batiment/formulas.js";
+import type * as batiment from "#rules/batiment/formulas.js";
+import type * as ventilation from "#rules/ventilation/formulas.js";
 import * as baie from "#rules/enveloppe/baie/formulas.js";
 import * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
+import * as masque from "#rules/enveloppe/masque/formulas.js";
 import * as mur from "#rules/enveloppe/mur/formulas.js";
 import * as niveau from "#rules/enveloppe/niveau/formulas.js";
 import * as paroi from "#rules/enveloppe/paroi/formulas.js";
+import * as plancherBas from "#rules/enveloppe/plancher-bas/formulas.js";
 import * as plancherHaut from "#rules/enveloppe/plancher-haut/formulas.js";
 import * as pontThermique from "#rules/enveloppe/pont-thermique/formulas.js";
-import * as ventilation from "#rules/ventilation/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois } from "#utils/helpers.js";
+import * as porte from "#rules/enveloppe/porte/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { createParMois } from "#rules/helpers.js";
+
+export {
+	baie,
+	localNonChauffe,
+	masque,
+	mur,
+	niveau,
+	paroi,
+	plancherBas,
+	plancherHaut,
+	pontThermique,
+	porte,
+};
 
 /**
  * @formule enveloppe.gv
@@ -67,7 +83,7 @@ export function calcule_dr(props: {
 
 /**
  * @formule enveloppe.pt
- * @return Déperditions thermiques par les ponts thermiques en W/K
+ * @returns Déperditions thermiques par les ponts thermiques en W/K
  */
 export function calcule_pt(props: {
 	pt: ReturnType<typeof pontThermique.calcule_pt>[];
@@ -82,7 +98,7 @@ export function calcule_pt(props: {
  * @formule enveloppe.sdep_murs
  * @formule enveloppe.sdep_planchers_hauts
  * @formule enveloppe.sdep_planchers_bas
- * @return Surface déperditive des baies en m²
+ * @returns Surface déperditive des baies en m²
  */
 export function calcule_sdep(props: {
 	sdep: ReturnType<typeof paroi.calcule_sdep>[];
@@ -214,7 +230,7 @@ export function calcule_q4paconv(props: {
 	type_batiment: models.batiment.TypeBatiment;
 	annee_construction: number;
 	isolation_murs_plafonds: ReturnType<typeof calcule_isolation_murs_plafonds>;
-	presence_joints: ReturnType<typeof calcule_presence_joints>;
+	presence_joints_menuiserie: ReturnType<typeof calcule_presence_joints>;
 }): number {
 	const abaque = abaques.enveloppe.permeabilite.q4paconv;
 	const match = abaque.search(props, abaque.load()).at(0);
@@ -262,7 +278,7 @@ export function calcule_presence_joints(props: {
 
 /**
  * @formule enveloppe.isolation_planchers_hauts
- * @return État d'isolation des planchers hauts
+ * @returns État d'isolation des planchers hauts
  */
 export function calcule_isolation_planchers_hauts(props: {
 	planchers_hauts: {
@@ -285,7 +301,7 @@ export function calcule_isolation_planchers_hauts(props: {
  * de protection solaire extérieure, à l’exception des baies orientées au Sud, à l’Est et à l’Ouest dont la
  * surface est strictement inférieure à 0,7 m² et si celles-ci représentent moins de 10% de la surface totale de baie
  *
- * @return Présence majoritaire de protections solaires au niveau des baies (plus de 50% de la surface totale des baies)
+ * @returns Présence majoritaire de protections solaires au niveau des baies (plus de 50% de la surface totale des baies)
  */
 export function calcule_presence_protection_solaire(props: {
 	baies: {
@@ -356,7 +372,7 @@ export function calcule_presence_protection_solaire(props: {
 
 /**
  * @formule enveloppe.logement_traversant
- * @return Logement traversant
+ * @returns Logement traversant
  */
 export function calcule_logement_traversant(props: {
 	baies: {

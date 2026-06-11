@@ -1,13 +1,18 @@
 import data from "#data/production/kpv.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type KpvSchema = {
+export type Schema = {
 	orientation_pv: string;
 	"inclinaison_pv/gt": number | null;
 	"inclinaison_pv/lte": number | null;
 	kpv: number;
 };
 
-export const load = (): KpvSchema[] => data as KpvSchema[];
-export const search = (query: AbaqueQuery, rows: KpvSchema[]): KpvSchema[] =>
+export type Query = {
+	orientation_pv: string;
+	inclinaison_pv: number;
+};
+
+export const load = (): Schema[] => data as Schema[];
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

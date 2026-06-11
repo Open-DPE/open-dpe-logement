@@ -1,8 +1,8 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import { createParMois } from "#utils/helpers.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as climat from "#rules/climat/formulas.js";
+import { createParMois } from "#rules/helpers.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @returns Production du panneau photovoltaïque en kWh/mois
@@ -17,15 +17,15 @@ export function calcule_ppv(props: {
 }
 
 /**
- * @param props.orientation - Orientation du panneau photovoltaïque
- * @param props.inclinaison - Inclinaison du panneau photovoltaïque en degrés
+ * @param props.orientation_pv - Orientation du panneau photovoltaïque
+ * @param props.inclinaison_pv - Inclinaison du panneau photovoltaïque en degrés
  * @see abaques.production.kpv
  * @throws {ValeurForfaitaireError}
  * @returns Coefficient de pondération prenant en compte l'altération par rapport à l'orientation optimale du panneau photovoltaïque
  */
 export function calcule_kpv(props: {
-	orientation: models.common.Orientation;
-	inclinaison: number;
+	orientation_pv: models.common.Orientation;
+	inclinaison_pv: number;
 }): number {
 	const abaque = abaques.production.kpv;
 	const match = abaque.search(props, abaque.load()).at(0);

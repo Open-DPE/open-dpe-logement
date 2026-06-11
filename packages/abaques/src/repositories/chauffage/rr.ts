@@ -1,7 +1,7 @@
 import data from "#data/chauffage/rr.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type RrSchema = {
+export type Schema = {
 	type_emission: string;
 	type_generateur: string | null;
 	label_generateur: string | null;
@@ -11,7 +11,9 @@ export type RrSchema = {
 	rr: number;
 };
 
-export const load = (): RrSchema[] => data as RrSchema[];
+export type Query = Omit<Schema, "rr">;
 
-export const search = (query: AbaqueQuery, rows: RrSchema[]): RrSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

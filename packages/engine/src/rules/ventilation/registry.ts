@@ -1,24 +1,18 @@
-import * as installation from "./installation/registry.js";
+import { NAMESPACE, RULES } from "./constants.js";
 import * as rules from "./rules.js";
+import * as installation from "./installation/registry.js";
 
-export const ID = "ventilation";
+export { installation };
 
-export const RULES = {
-	consommations: "consommations",
-	caux: "caux",
-	qvarep_conv: "qvarep_conv",
-	qvasouf_conv: "qvasouf_conv",
-	smea_conv: "smea_conv",
-	hvent: "hvent",
-} as const;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: rules.consommations,
+		[RULES.caux]: rules.caux,
+		[RULES.qvarep_conv]: rules.qvarep_conv,
+		[RULES.qvasouf_conv]: rules.qvasouf_conv,
+		[RULES.smea_conv]: rules.smea_conv,
+		[RULES.hvent]: rules.hvent,
+	},
 
-export type Results = {
-	[ID]: {
-		[RULES.consommations]: ReturnType<typeof rules.consommations>;
-		[RULES.caux]: ReturnType<typeof rules.caux>;
-		[RULES.qvarep_conv]: ReturnType<typeof rules.qvarep_conv>;
-		[RULES.qvasouf_conv]: ReturnType<typeof rules.qvasouf_conv>;
-		[RULES.smea_conv]: ReturnType<typeof rules.smea_conv>;
-		[RULES.hvent]: ReturnType<typeof rules.hvent>;
-	};
-} & installation.Results;
+	...installation.REGISTRY,
+};

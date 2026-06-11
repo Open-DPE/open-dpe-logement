@@ -1,12 +1,12 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as enveloppeFormules from "#rules/enveloppe/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as enveloppe from "#rules/enveloppe/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 import {
 	createParMoisFrom,
 	containsAllMois,
 	mapParMois,
-} from "#utils/helpers.js";
+} from "#rules/helpers.js";
 
 /**
  * @formule climat.zone_climatique
@@ -31,6 +31,7 @@ export function calcule_zone_climatique(props: {
  */
 export function calcule_tbase(props: {
 	zone_climatique: ReturnType<typeof calcule_zone_climatique>;
+	altitude: number;
 }): number {
 	const abaque = abaques.climat.tbase;
 	const match = abaque.search(props, abaque.load()).at(0);
@@ -81,10 +82,8 @@ export type Sollicitations = models.common.ParMois<{
 export function calcule_sollicitations(props: {
 	zone_climatique: ReturnType<typeof calcule_zone_climatique>;
 	altitude: number;
-	parois_anciennes: ReturnType<
-		typeof enveloppeFormules.calcule_parois_anciennes
-	>;
-	inertie: ReturnType<typeof enveloppeFormules.calcule_inertie>;
+	parois_anciennes: ReturnType<typeof enveloppe.calcule_parois_anciennes>;
+	inertie: ReturnType<typeof enveloppe.calcule_inertie>;
 }): Sollicitations {
 	const abaque = abaques.climat.sollicitations;
 	const matches = abaque.search(props, abaque.load());
@@ -92,6 +91,8 @@ export function calcule_sollicitations(props: {
 }
 
 /**
+ * @formule enveloppe.baie.c1
+ * @formule enveloppe.local_non_chauffe.baie.c1
  * @param props.orientation - Orientation de la paroi
  * @param props.inclinaison - Inclinaison de la paroi en degrés
  * @returns Coefficients d'orientation et d'inclinaison des parois vitrées pour chaque mois de l'année

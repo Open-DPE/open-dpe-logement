@@ -1,13 +1,15 @@
 import data from "#data/chauffage/fch.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type FchSchema = {
+export type Schema = {
 	zone_climatique: string;
 	type_batiment: string;
 	fch: number;
 };
 
-export const load = (): FchSchema[] => data as FchSchema[];
+export type Query = Omit<Schema, "fch">;
 
-export const search = (query: AbaqueQuery, rows: FchSchema[]): FchSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

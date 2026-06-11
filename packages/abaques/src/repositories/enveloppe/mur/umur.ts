@@ -1,7 +1,7 @@
 import data from "#data/enveloppe/mur/umur.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type UmurSchema = {
+export type Schema = {
 	zone_climatique: string;
 	"annee_construction_isolation/gte": number | null;
 	"annee_construction_isolation/lte": number | null;
@@ -9,6 +9,13 @@ export type UmurSchema = {
 	u: number;
 };
 
-export const load = (): UmurSchema[] => data as UmurSchema[];
-export const search = (query: AbaqueQuery, rows: UmurSchema[]): UmurSchema[] =>
+export type Query = {
+	zone_climatique: string;
+	annee_construction_isolation: number;
+	effet_joule: boolean;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

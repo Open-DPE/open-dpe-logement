@@ -4,19 +4,7 @@ import * as climat from "#rules/climat/registry.js";
 import * as chauffage from "#rules/chauffage/registry.js";
 import * as paroi from "#rules/enveloppe/paroi/rules.js";
 import * as formulas from "./formulas.js";
-import { ID, RULES } from "./registry.js";
-
-export function register(ctx: Context): void {
-	ctx.diagnostic.enveloppe.planchers_bas.forEach((item) => {
-		ctx.register(ID, RULES.aiu, item, () => aiu(item));
-		ctx.register(ID, RULES.isolation_aiu, item, () => isolation_aiu(ctx, item));
-		ctx.register(ID, RULES.sdep, item, () => sdep(item));
-		ctx.register(ID, RULES.b, item, () => b(ctx, item));
-		ctx.register(ID, RULES.dp, item, () => dp(ctx, item));
-		ctx.register(ID, RULES.u0, item, () => u0(item));
-		ctx.register(ID, RULES.u, item, () => u(ctx, item));
-	});
-}
+import { NAMESPACE, RULES, type Results } from "./registry.js";
 
 type PlancherBas = models.enveloppe.plancherBas.PlancherBas;
 
@@ -64,37 +52,47 @@ export function u0(item: PlancherBas): ReturnType<typeof formulas.calcule_u0> {
 	});
 }
 
-export function u(ctx: Context, item: PlancherBas): number {
-	const uint = formulas.calcule_uint({
-		u_saisi: item.u,
-		zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
-		effet_joule: ctx.resolve(chauffage.ID, chauffage.RULES.effet_joule),
-		u0: ctx.resolve(ID, RULES.u0, item),
-		isolation: item.isolation.etat,
-		type_isolation: item.isolation.type,
-		epaisseur_isolation: item.isolation.epaisseur,
-		resistance_thermique_isolation: item.isolation.resistance_thermique,
-		annee_isolation: item.annee_renovation,
-		annee_construction: paroi.annee_construction(ctx, item),
-	});
+export function u(ctx: Context, item: PlancherBas): Results[typeof RULES.u] {
+	return ctx.register(NAMESPACE, RULES.u, item, () =>
+		formulas.calcule_u({
+			uint: ctx.resolve(NAMESPACE, RULES.uint, item),
+			ue: ctx.resolve(NAMESPACE, RULES.ue, item),
+		}),
+	);
+}
 
-	switch (item.position.mitoyennete) {
-		case models.enveloppe.common.MitoyenneteEnum.terre_plein:
-		case models.enveloppe.common.MitoyenneteEnum.vide_sanitaire:
-		case models.enveloppe.common.MitoyenneteEnum.sous_sol_non_chauffe: {
-			const ue = formulas.calcule_ue({
-				mitoyennete: item.position.mitoyennete,
-				annee_construction: paroi.annee_construction(ctx, item),
-				u: uint,
-				surface_ue: item.position.surface_ue,
-				perimetre_ue: item.position.perimetre_ue,
-			});
-			return formulas.calcule_u({ uint, ue });
-		}
-		default: {
-			return formulas.calcule_u({ uint, ue: null });
-		}
-	}
+export function uint(
+	ctx: Context,
+	item: PlancherBas,
+): Results[typeof RULES.uint] {
+	return ctx.register(NAMESPACE, RULES.uint, item, () =>
+		formulas.calcule_uint({
+			u_saisi: item.u,
+			zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+			effet_joule: ctx.resolve(chauffage.ID, chauffage.RULES.effet_joule),
+			u0: ctx.resolve(NAMESPACE, RULES.u0, item),
+			isolation: item.isolation.etat,
+			type_isolation: item.isolation.type,
+			epaisseur_isolation: item.isolation.epaisseur,
+			resistance_thermique_isolation: item.isolation.resistance_thermique,
+			annee_isolation: item.annee_renovation,
+			annee_construction: paroi.annee_construction(ctx, item),
+		}),
+	);
+}
+
+export function ue(ctx: Context, item: PlancherBas): Results[typeof RULES.ue] {
+	return ctx.register(NAMESPACE, RULES.ue, item, () => {
+		return models.enveloppe.plancherBas.isPositionTerrePlein(item.position)
+			? formulas.calcule_ue({
+					mitoyennete: item.position.mitoyennete,
+					annee_construction: paroi.annee_construction(ctx, item),
+					u: ctx.resolve(NAMESPACE, RULES.u, item),
+					surface_ue: item.position.surface_ue,
+					perimetre_ue: item.position.perimetre_ue,
+				})
+			: null;
+	});
 }
 
 export function isolation(
@@ -108,7 +106,10 @@ export function isolation(
 	});
 }
 
-export function applique(ctx: Context, item: PlancherBas): models.enveloppe.plancherBas.PlancherBasWithData {
+export function applique(
+	ctx: Context,
+	item: PlancherBas,
+): models.enveloppe.plancherBas.PlancherBasWithData {
 	return {
 		...item,
 		data: {

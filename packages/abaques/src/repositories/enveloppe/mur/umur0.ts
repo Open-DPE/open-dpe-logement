@@ -1,7 +1,7 @@
 import data from "#data/enveloppe/mur/umur0.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type Umur0Schema = {
+export type Schema = {
 	type_mur: string;
 	"epaisseur_mur/lt": number | null;
 	"epaisseur_mur/lte": number | null;
@@ -12,9 +12,13 @@ export type Umur0Schema = {
 	u0: number;
 };
 
-export const load = (): Umur0Schema[] => data as Umur0Schema[];
+export type Query = {
+	type_mur: string;
+	epaisseur_mur: number;
+	annee_construction: number;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: Umur0Schema[],
-): Umur0Schema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

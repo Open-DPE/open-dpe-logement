@@ -1,0 +1,26 @@
+ventilation.installation.rdim:
+  run: calcule_rdim
+  cases:
+    - title: Plusieurs installation
+      with:
+        surface_installation: 100
+        surface_installations: 200
+      expect: 0.5
+
+    - title: Installation unique
+      with:
+        surface_installation: 100
+        surface_installations: 100
+      expect: 1
+
+    - title: Surface totale = 0
+      with:
+        surface_installation: 100
+        surface_installations: 0
+      expect: 0
+
+    - title: Surface installation = 0
+      with:
+        surface_installation: 0
+        surface_installations: 100
+      expect: 0

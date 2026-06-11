@@ -1,15 +1,21 @@
 import data from "#data/enveloppe/plancher-bas/upb.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type UpbSchema = {
+export type Schema = {
 	zone_climatique: string;
 	"annee_construction_isolation/gte": number | null;
 	"annee_construction_isolation/lte": number | null;
 	effet_joule: boolean;
 	u: number;
-	tv_upb_id: number;
 };
 
-export const load = (): UpbSchema[] => data as UpbSchema[];
-export const search = (query: AbaqueQuery, rows: UpbSchema[]): UpbSchema[] =>
+export type Query = {
+	zone_climatique: string;
+	annee_construction_isolation: number;
+	effet_joule: boolean;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

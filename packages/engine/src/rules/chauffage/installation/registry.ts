@@ -1,24 +1,12 @@
+import { NAMESPACE, RULES } from "./constants.js";
 import * as rules from "./rules.js";
 
-export const ID = "chauffage:installation";
-
-export const RULES = {
-	caux_dist: "caux_dist",
-	bch: "bch",
-	rdim: "rdim",
-	pch: "pch",
-	fch: "fch",
-} as const;
-
-export type Results = {
-	[ID]: Record<
-		string,
-		{
-			[RULES.caux_dist]: ReturnType<typeof rules.caux_dist>;
-			[RULES.bch]: ReturnType<typeof rules.bch>;
-			[RULES.rdim]: ReturnType<typeof rules.rdim>;
-			[RULES.pch]: ReturnType<typeof rules.pch>;
-			[RULES.fch]: ReturnType<typeof rules.fch>;
-		}
-	>;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.caux_dist]: rules.caux_dist,
+		[RULES.bch]: rules.bch,
+		[RULES.rdim]: rules.rdim,
+		[RULES.pch]: rules.pch,
+		[RULES.fch]: rules.fch,
+	},
 };

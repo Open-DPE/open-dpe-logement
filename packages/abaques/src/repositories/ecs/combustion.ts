@@ -1,7 +1,7 @@
 import data from "#data/ecs/combustion.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type EcsCombustionSchema = {
+export type Schema = {
 	type_generateur: string;
 	energie_generateur: string;
 	mode_combustion: string;
@@ -17,9 +17,16 @@ export type EcsCombustionSchema = {
 	pveilleuse: number;
 };
 
-export const load = (): EcsCombustionSchema[] => data as EcsCombustionSchema[];
+export type Query = {
+	type_generateur: string;
+	energie_generateur: string;
+	mode_combustion: string;
+	volume_stockage: number;
+	annee_installation: number;
+	pn: number;
+};
 
-export const search = (
-	query: AbaqueQuery,
-	rows: EcsCombustionSchema[],
-): EcsCombustionSchema[] => filter(query, rows);
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

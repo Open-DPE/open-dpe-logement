@@ -1,11 +1,10 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-export * from "#rules/enveloppe/paroi/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @formule enveloppe.porte.isolation_aiu
- * @return État d'isolation de la porte donnant sur un local non chauffé
+ * @returns État d'isolation de la porte donnant sur un local non chauffé
  */
 export function calcule_isolation_aiu(): boolean {
 	return false;

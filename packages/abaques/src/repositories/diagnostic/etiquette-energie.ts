@@ -1,7 +1,7 @@
 import data from "#data/performance/etiquette-energie.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type EtiquetteEnergieSchema = {
+export type Schema = {
 	zone_climatique: string;
 	"altitude/gt": number | null;
 	"altitude/lte": number | null;
@@ -12,9 +12,14 @@ export type EtiquetteEnergieSchema = {
 	etiquette_energie: string;
 };
 
-export const load = (): EtiquetteEnergieSchema[] =>
-	data as EtiquetteEnergieSchema[];
-export const search = (
-	query: AbaqueQuery,
-	rows: EtiquetteEnergieSchema[],
-): EtiquetteEnergieSchema[] => filter(query, rows);
+export type Query = {
+	zone_climatique: string;
+	altitude: number;
+	cep: number;
+	eges: number;
+};
+
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
+	filter(query, rows);

@@ -19,6 +19,8 @@ export type Ecs = {
 
 export type EcsWithData<T extends Ecs = Ecs> = T & {
 	data: EcsData;
+	generateurs: NonEmptyArray<generateur.GenerateurWithData>;
+	installations: NonEmptyArray<installation.InstallationWithData>;
 };
 
 export type EcsData = {

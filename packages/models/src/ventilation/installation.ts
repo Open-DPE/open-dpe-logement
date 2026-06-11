@@ -5,6 +5,26 @@ export const isInstallation = createGuard<Installation>(
 	"/ventilation/installation",
 );
 
+export function isVentilationNaturelle(
+	installation: Installation,
+): installation is InstallationNaturelle {
+	return isTypeVentilationNaturelle(installation.type);
+}
+
+export function isVentilationMecanique(
+	installation: Installation,
+): installation is InstallationMecanique {
+	return isTypeVentilationMecanique(installation.type);
+}
+
+export function isTypeVentilationNaturelle(type: TypeVentilation): boolean {
+	return TYPES_VENTILATION_NATURELLE.includes(type as any);
+}
+
+export function isTypeVentilationMecanique(type: TypeVentilation): boolean {
+	return TYPES_VENTILATION_MECANIQUE.includes(type as any);
+}
+
 /**
  * @see https://schemas.open-dpe.fr/ventilation/installation
  */
@@ -16,6 +36,16 @@ export type Installation =
 
 export type InstallationWithData<T extends Installation = Installation> = T & {
 	data: InstallationData;
+};
+
+export type InstallationData = {
+	rdim: number;
+	pvent_moy: number;
+	hvent: number;
+	qvarep_conv: number;
+	qvasouf_conv: number;
+	smea_conv: number;
+	consommations: Consommations;
 };
 
 type InstallationGeneric<T> = {
@@ -50,16 +80,6 @@ export type InstallationPuitClimatique = InstallationGeneric<{
 	type: typeof TypeVentilationEnum.puit_climatique;
 	installation_collective: boolean;
 }>;
-
-export type InstallationData = {
-	rdim: number;
-	pvent_moy: number;
-	hvent: number;
-	qvarep_conv: number;
-	qvasouf_conv: number;
-	smea_conv: number;
-	consommations: Consommations;
-};
 
 export const TYPES_VENTILATION = [
 	"ventilation_ouverture_fenetres",

@@ -1,17 +1,23 @@
 import data from "#data/ecs/fecs.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type FecsSchema = {
+export type Schema = {
 	type_batiment: string;
 	zone_climatique: string;
 	usage_solaire: string;
 	"anciennete_installation/gt": number | null;
 	"anciennete_installation/lte": number | null;
 	fecs: number;
-	tv_facteur_couverture_solaire_id: number;
 };
 
-export const load = (): FecsSchema[] => data as FecsSchema[];
+export type Query = {
+	type_batiment: string;
+	zone_climatique: string;
+	usage_solaire: string;
+	anciennete_installation: number;
+};
 
-export const search = (query: AbaqueQuery, rows: FecsSchema[]): FecsSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

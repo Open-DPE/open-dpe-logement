@@ -1,10 +1,10 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import * as ecs from "#rules/ecs/formulas.js";
-import * as systeme from "#rules/ecs/systeme/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
-import { createParMois } from "#utils/helpers.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as ecs from "#rules/ecs/formulas.js";
+import type * as systeme from "#rules/ecs/systeme/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
+import { createParMois } from "#rules/helpers.js";
 
 /**
  * @returns Besoins d'eau chaude sanitaire proratisés à l'installation en kWh/mois
@@ -18,7 +18,7 @@ export function calcule_becs(props: {
 }
 
 /**
- * @return Consommations des auxiliaires de distribution de l'installation d'eau chaude sanitaire en kWh/an
+ * @returns Consommations des auxiliaires de distribution de l'installation d'eau chaude sanitaire en kWh/an
  */
 export function calcule_caux_dist(props: {
 	caux_dist: ReturnType<typeof systeme.calcule_caux_dist>[];
@@ -72,7 +72,7 @@ export function calcule_fecs(props: {
 }
 
 /**
- * @return Pertes de distribution d'eau chaude sanitaire en Wh/an
+ * @returns Pertes de distribution d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qdw(props: {
 	qdw_ind_vc: ReturnType<typeof calcule_qdw_ind_vc>;
@@ -86,7 +86,7 @@ export function calcule_qdw(props: {
 /**
  * @param props.sh : Surface de l'installation d'eau chaude sanitaire en m²
  * @param props.ns : Nombre de systèmes d'eau chaude sanitaire associés à l'installation
- * @return Pertes de distribution individuelle en volume chauffé de l'installation d'eau chaude sanitaire en Wh/an
+ * @returns Pertes de distribution individuelle en volume chauffé de l'installation d'eau chaude sanitaire en Wh/an
  */
 export function calcule_qdw_ind_vc(props: {
 	becs: ReturnType<typeof ecs.calcule_becs>;
@@ -101,7 +101,7 @@ export function calcule_qdw_ind_vc(props: {
 }
 
 /**
- * @return Pertes de distribution collective en volume chauffé en Wh/an
+ * @returns Pertes de distribution collective en volume chauffé en Wh/an
  */
 export function calcule_qdw_col_vc(props: {
 	becs: ReturnType<typeof ecs.calcule_becs>;
@@ -113,7 +113,7 @@ export function calcule_qdw_col_vc(props: {
 }
 
 /**
- * @return Pertes de distribution collective hors du volume chauffé en Wh/an
+ * @returns Pertes de distribution collective hors du volume chauffé en Wh/an
  */
 export function calcule_qdw_col_hvc(props: {
 	becs: ReturnType<typeof ecs.calcule_becs>;

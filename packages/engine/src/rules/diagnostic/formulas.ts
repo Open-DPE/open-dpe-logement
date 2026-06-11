@@ -1,14 +1,14 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as batiment from "#rules/batiment/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as chauffage from "#rules/chauffage/formulas.js";
-import * as eclairage from "#rules/eclairage/formulas.js";
-import * as ecs from "#rules/ecs/formulas.js";
-import * as enveloppe from "#rules/enveloppe/formulas.js";
-import * as refroidissement from "#rules/refroidissement/formulas.js";
-import * as ventilation from "#rules/ventilation/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as batiment from "#rules/batiment/formulas.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as chauffage from "#rules/chauffage/formulas.js";
+import type * as eclairage from "#rules/eclairage/formulas.js";
+import type * as ecs from "#rules/ecs/formulas.js";
+import type * as enveloppe from "#rules/enveloppe/formulas.js";
+import type * as refroidissement from "#rules/refroidissement/formulas.js";
+import type * as ventilation from "#rules/ventilation/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * Consommations par usage et par énergie
@@ -31,7 +31,7 @@ export function calcule_consommations(props: {
 
 /**
  * @formule diagnostic.cef
- * @return Consommation d'énergie finale en kWh/m².an
+ * @returns Consommation d'énergie finale en kWh/m².an
  */
 export function calcule_cef(props: {
 	consommations: ReturnType<typeof calcule_consommations>;
@@ -43,7 +43,7 @@ export function calcule_cef(props: {
 
 /**
  * @formule diagnostic.cep
- * @return Consommation d'énergie primaire en kWh/m².an
+ * @returns Consommation d'énergie primaire en kWh/m².an
  */
 export function calcule_cep(props: {
 	consommations: ReturnType<typeof calcule_consommations>;
@@ -55,7 +55,7 @@ export function calcule_cep(props: {
 
 /**
  * @formule diagnostic.eges
- * @return Émissions de gaz à effet de serre en kgCO2/m².an
+ * @returns Émissions de gaz à effet de serre en kgCO2/m².an
  */
 export function calcule_eges(props: {
 	consommations: ReturnType<typeof calcule_consommations>;
@@ -69,7 +69,7 @@ export function calcule_eges(props: {
  * @formule diagnostic.etiquette_energie
  * @see abaques.diagnostic.etiquetteEnergie
  * @throws {ValeurForfaitaireError}
- * @return Étiquette énergie du bâtiment
+ * @returns Étiquette énergie du bâtiment
  */
 export function calcule_etiquette_energie(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
@@ -87,7 +87,7 @@ export function calcule_etiquette_energie(props: {
  * @formule diagnostic.etiquette_climat
  * @see abaques.diagnostic.etiquetteClimat
  * @throws {ValeurForfaitaireError}
- * @return Étiquette climatique du bâtiment
+ * @returns Étiquette climatique du bâtiment
  */
 export function calcule_etiquette_climat(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
@@ -102,7 +102,7 @@ export function calcule_etiquette_climat(props: {
 
 /**
  * @formule diagnostic.confort_ete
- * @return Niveau de confort d'été du logement
+ * @returns Niveau de confort d'été du logement
  */
 export function calcule_confort_ete(props: {
 	type_diagnostic: models.diagnostic.TypeDiagnostic;

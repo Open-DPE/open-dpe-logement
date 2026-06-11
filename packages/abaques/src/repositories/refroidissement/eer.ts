@@ -1,13 +1,18 @@
 import data from "#data/refroidissement/eer.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type EerSchema = {
+export type Schema = {
 	zone_climatique: string;
 	"annee_installation/gte": number | null;
 	"annee_installation/lte": number | null;
 	eer: number;
 };
 
-export const load = (): EerSchema[] => data as EerSchema[];
-export const search = (query: AbaqueQuery, rows: EerSchema[]): EerSchema[] =>
+export type Query = {
+	zone_climatique: string;
+	annee_installation: number;
+};
+
+export const load = (): Schema[] => data as Schema[];
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

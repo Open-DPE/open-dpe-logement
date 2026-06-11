@@ -4,13 +4,13 @@ import * as common from "#rules/common/formulas.js";
 import * as batiment from "#rules/batiment/formulas.js";
 import * as climat from "#rules/climat/formulas.js";
 import * as production from "#rules/production/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @formule eclairage.cef
  * @formule eclairage.cep
  * @formule eclairage.eges
- * @return Consommations par usage et par énergie de l'éclairage
+ * @returns Consommations par usage et par énergie de l'éclairage
  */
 export function calcule_consommations(props: {
 	cecl: ReturnType<typeof calcule_cecl>;

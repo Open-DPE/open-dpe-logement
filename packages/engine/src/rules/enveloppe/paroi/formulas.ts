@@ -1,13 +1,13 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as climat from "#rules/climat/formulas.js";
-import * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
-import * as baie from "#rules/enveloppe/baie/formulas.js";
-import * as mur from "#rules/enveloppe/mur/formulas.js";
-import * as plancherBas from "#rules/enveloppe/plancher-bas/formulas.js";
-import * as plancherHaut from "#rules/enveloppe/plancher-haut/formulas.js";
-import * as porte from "#rules/enveloppe/porte/formulas.js";
-import { ValeurForfaitaireError } from "#utils/errors.js";
+import type * as climat from "#rules/climat/formulas.js";
+import type * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
+import type * as baie from "#rules/enveloppe/baie/formulas.js";
+import type * as mur from "#rules/enveloppe/mur/formulas.js";
+import type * as plancherBas from "#rules/enveloppe/plancher-bas/formulas.js";
+import type * as plancherHaut from "#rules/enveloppe/plancher-haut/formulas.js";
+import type * as porte from "#rules/enveloppe/porte/formulas.js";
+import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
  * @formule enveloppe.baie.aiu
@@ -15,7 +15,7 @@ import { ValeurForfaitaireError } from "#utils/errors.js";
  * @formule enveloppe.plancher_bas.aiu
  * @formule enveloppe.plancher_haut.aiu
  * @formule enveloppe.porte.aiu
- * @return Surface de la paroi donnant sur un local non chauffé en m²
+ * @returns Surface de la paroi donnant sur un local non chauffé en m²
  */
 export function calcule_aiu(props: {
 	mitoyennete: models.enveloppe.common.Mitoyennete;
@@ -50,58 +50,44 @@ export function calcule_sdep(props: {
 		: 0;
 }
 
-export type CalculeBProps =
-	| Parameters<typeof calcule_b_lnc>[0]
-	| Parameters<typeof calcule_b_ets>[0]
-	| Parameters<typeof calcule_b_autres>[0];
-
 /**
+ * @see calcule_blnc
+ * @see calcule_bver
+ * @see calcule_b_autres
  * @formule enveloppe.baie.b
  * @formule enveloppe.mur.b
  * @formule enveloppe.plancher_bas.b
  * @formule enveloppe.plancher_haut.b
  * @formule enveloppe.porte.b
- * @returns Coefficient de réduction des déperditions thermiques de la paroi
+ * Coefficient de réduction des déperditions thermiques de la paroi
  */
-export function calcule_b(props: CalculeBProps): number {
-	switch (props.mitoyennete) {
-		case models.enveloppe.common.MitoyenneteEnum.local_non_chauffe:
-			return props.type_local_non_chauffe ===
-				models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
-				? calcule_b_ets(props)
-				: calcule_b_lnc(props);
-		default:
-			return calcule_b_autres(props);
-	}
-}
+export type b = number;
 
 /**
+ * @guard {@linkcode models.enveloppe.common.isPositionParoiLocalNonChauffe} && {@linkcode models.enveloppe.localNonChauffe.isAutreLocalNonChauffe}
  * @returns Coefficient de réduction des déperditions thermiques de la paroi donnant sur un local non chauffé
  */
-function calcule_b_lnc(props: {
-	mitoyennete: typeof models.enveloppe.common.MitoyenneteEnum.local_non_chauffe;
-	type_local_non_chauffe: Exclude<
-		models.enveloppe.localNonChauffe.TypeLnc,
-		typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
-	>;
-	blnc: ReturnType<typeof localNonChauffe.calcule_b>;
-}): number {
+export function calcule_b_lnc(props: { blnc: localNonChauffe.b }): number {
 	return props.blnc;
 }
 
 /**
- * @param props.isolation_paroi - Indique si la paroi est isolée ou non
+ * @guard {@linkcode models.enveloppe.common.isPositionParoiLocalNonChauffe} && {@linkcode models.enveloppe.localNonChauffe.isAutreLocalNonChauffe}
  * @see abaques.enveloppe.paroi.bver
  * @throws {Error} Aucune orientation d'espace tampon solarisé fournie
  * @throws {ValeurForfaitaireError}
  * @returns Coefficient de réduction des déperditions thermiques de la paroi donnant sur un espace tampon solarisé
  */
-function calcule_b_ets(props: {
-	mitoyennete: typeof models.enveloppe.common.MitoyenneteEnum.local_non_chauffe;
-	type_local_non_chauffe: typeof models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise;
+export function calcule_b_ets(props: {
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLnc;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	orientations_ets: ReturnType<typeof localNonChauffe.calcule_orientations>;
-	isolation_paroi: boolean;
+	isolation_paroi:
+		| ReturnType<typeof baie.set_isolation>
+		| ReturnType<typeof mur.set_isolation>
+		| ReturnType<typeof plancherBas.set_isolation>
+		| ReturnType<typeof plancherHaut.set_isolation>
+		| ReturnType<typeof porte.set_isolation>;
 }): number {
 	const { zone_climatique, orientations_ets, isolation_paroi } = props;
 	const abaque = abaques.enveloppe.paroi.bver;
@@ -117,13 +103,11 @@ function calcule_b_ets(props: {
 }
 
 /**
- * @return Coefficient de réduction des déperditions thermiques de la paroi ne donnant pas sur un local non chauffé
+ * @guard {@linkcode models.enveloppe.common.isPositionParoiAutres}
+ * @returns Coefficient de réduction des déperditions thermiques de la paroi ne donnant pas sur un local non chauffé
  */
-function calcule_b_autres(props: {
-	mitoyennete: Exclude<
-		models.enveloppe.common.Mitoyennete,
-		typeof models.enveloppe.common.MitoyenneteEnum.local_non_chauffe
-	>;
+export function calcule_b_autres(props: {
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 }): number {
 	switch (props.mitoyennete) {
 		case models.enveloppe.common.MitoyenneteEnum.local_non_residentiel:
@@ -138,7 +122,6 @@ function calcule_b_autres(props: {
 }
 
 /**
- * @formule enveloppe.baie.dp
  * @formule enveloppe.mur.dp
  * @formule enveloppe.plancher_bas.dp
  * @formule enveloppe.plancher_haut.dp
@@ -148,7 +131,7 @@ function calcule_b_autres(props: {
  */
 export function calcule_dp(props: {
 	sdep: ReturnType<typeof calcule_sdep>;
-	b: ReturnType<typeof calcule_b>;
+	b: b;
 	u:
 		| ReturnType<typeof baie.calcule_u>
 		| ReturnType<typeof mur.calcule_u>
@@ -163,7 +146,7 @@ export function calcule_dp(props: {
 /**
  * @param props.annee_installation - Année d'installation de la baie ou de la porte saisie
  * @param props.annee_construction_batiment - Année de construction du bâtiment
- * @return Année d'installation de la baie ou de la porte retenue
+ * @returns Année d'installation de la baie ou de la porte retenue
  */
 export function set_annee_installation(props: {
 	annee_installation: number | null;
@@ -177,7 +160,7 @@ export function set_annee_installation(props: {
  * @param props.annee_construction - Année de construction de la paroi saisie
  * @param props.annee_renovation - Année de rénovation de la paroi saisie
  * @param props.annee_construction_batiment - Année de construction du bâtiment
- * @return Année de construction de la paroi retenue
+ * @returns Année de construction de la paroi retenue
  */
 export function set_annee_construction(props: {
 	annee_construction: number | null;

@@ -1,12 +1,16 @@
 import data from "#data/production/taplp.js";
-import { type AbaqueQuery, filter } from "#filter.js";
+import { filter } from "#filter.js";
 
-export type KpvSchema = {
+export type Schema = {
 	usage_electricite: string;
 	taplp: number;
 };
 
-export const load = (): KpvSchema[] => data as KpvSchema[];
+export type Query = {
+	usage_electricite: string;
+};
 
-export const search = (query: AbaqueQuery, rows: KpvSchema[]): KpvSchema[] =>
+export const load = (): Schema[] => data as Schema[];
+
+export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

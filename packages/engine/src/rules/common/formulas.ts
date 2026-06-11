@@ -2,7 +2,7 @@ import { common } from "@open-dpe-logement/models";
 import { abaques } from "@open-dpe-logement/abaques";
 
 /**
- * @return Consommations par usage et par énergie
+ * @returns Consommations par usage et par énergie
  */
 export function calcule_consommations(props: {
 	cef: number;
@@ -36,7 +36,7 @@ export function calcule_consommations(props: {
 /**
  * @formule common.fcep
  * @param props.energie - Type d'énergie consommée
- * @return Facteur de conversion énergie finale/énergie primaire
+ * @returns Facteur de conversion énergie finale/énergie primaire
  */
 export function calcule_fcep(props: { energie: common.Energie }): number {
 	switch (props.energie) {
@@ -54,7 +54,7 @@ export function calcule_fcep(props: { energie: common.Energie }): number {
  * @param props.usage - Usage de l'énergie consommée
  * @param props.energie - Type d'énergie consommée
  * @param props.reseau_id - ID du réseau de chaleur ou de froid (optionnel)
- * @return Facteur de conversion énergie finale/émissions de gaz à effet de serre en kgCO2eq
+ * @returns Facteur de conversion énergie finale/émissions de gaz à effet de serre en kgCO2eq
  */
 export function calcule_feges(props: {
 	usage: common.Usage;
@@ -111,7 +111,7 @@ export function calcule_feges(props: {
 
 /**
  * @formule common.kpcs
- * @return Facteur de conversion PCI/PCS
+ * @returns Facteur de conversion PCI/PCS
  */
 export function calcule_kpcs(props: { energie: common.Energie }): number {
 	switch (props.energie) {
