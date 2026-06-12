@@ -1,6 +1,20 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
+import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
 import { ValeurForfaitaireError } from "#rules/errors.js";
+
+/**
+ * @formule enveloppe.porte.dp
+ * @returns Déperditions thermiques de la porte en W/K
+ */
+export function calcule_dp(props: {
+	sdep: ReturnType<typeof paroi.calcule_sdep>;
+	b: paroi.b;
+	u: ReturnType<typeof calcule_u>;
+}): number {
+	const { sdep, b, u } = props;
+	return sdep * b * u;
+}
 
 /**
  * @formule enveloppe.porte.isolation_aiu

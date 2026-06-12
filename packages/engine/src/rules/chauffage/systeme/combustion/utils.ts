@@ -5,34 +5,34 @@ const TypeGenerateurEnum = models.chauffage.generateur.TypeGenerateurEnum;
 
 type Generateur = {
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
-	energie_combustion: models.common.EnergieCombustion;
+	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
 };
 
 export function is_chaudiere_gaz(props: Generateur): boolean {
 	return (
 		props.type_generateur === TypeGenerateurEnum.chaudiere &&
-		models.common.isEnergieGaz(props.energie_combustion)
+		models.common.isEnergieGaz(props.energie_generateur)
 	);
 }
 
 export function is_chaudiere_bois(props: Generateur): boolean {
 	return (
 		props.type_generateur === TypeGenerateurEnum.chaudiere &&
-		models.common.isEnergieBois(props.energie_combustion)
+		models.common.isEnergieBois(props.energie_generateur)
 	);
 }
 
 export function is_chaudiere_fioul(props: Generateur): boolean {
 	return (
 		props.type_generateur === TypeGenerateurEnum.chaudiere &&
-		props.energie_combustion === models.common.EnergieEnum.fioul
+		props.energie_generateur === models.common.EnergieEnum.fioul
 	);
 }
 
 export function is_chaudiere_charbon(props: Generateur): boolean {
 	return (
 		props.type_generateur === TypeGenerateurEnum.chaudiere &&
-		props.energie_combustion === models.common.EnergieEnum.charbon
+		props.energie_generateur === models.common.EnergieEnum.charbon
 	);
 }
 

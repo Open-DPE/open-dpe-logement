@@ -10,13 +10,10 @@ type PanneauPhotovoltaique =
 export function calcule(
 	ctx: Context,
 	panneau: PanneauPhotovoltaique,
-): models.production.panneauPhotovoltaique.PanneauPhotovoltaiqueWithData {
+): models.production.panneauPhotovoltaique.PanneauPhotovoltaiqueData {
 	return {
-		...panneau,
-		data: {
-			ppv: models.common.reduceParMois(ppv(ctx, panneau)),
-			kpv: kpv(ctx, panneau),
-		},
+		ppv: models.common.reduceParMois(ppv(ctx, panneau)),
+		kpv: kpv(ctx, panneau),
 	};
 }
 

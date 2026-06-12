@@ -1,4 +1,3 @@
-import { defineRegistry } from "#/core/registry.js";
 import * as batiment from "./batiment/registry";
 import * as chauffage from "./chauffage/registry";
 import * as climat from "./climat/registry";
@@ -23,7 +22,7 @@ export {
 	ventilation,
 };
 
-export const REGISTRY = defineRegistry({
+export const REGISTRY = {
 	...batiment.REGISTRY,
 	...chauffage.REGISTRY,
 	...climat.REGISTRY,
@@ -34,4 +33,4 @@ export const REGISTRY = defineRegistry({
 	...production.REGISTRY,
 	...refroidissement.REGISTRY,
 	...ventilation.REGISTRY,
-});
+};

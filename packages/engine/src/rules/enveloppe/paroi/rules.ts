@@ -1,12 +1,6 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import * as climat from "#rules/climat/registry.js";
-import * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/registry.js";
-import * as baie from "#rules/enveloppe/baie/registry.js";
-import * as mur from "#rules/enveloppe/mur/registry.js";
-import * as plancherBas from "#rules/enveloppe/plancher-bas/registry.js";
-import * as plancherHaut from "#rules/enveloppe/plancher-haut/registry.js";
-import * as porte from "#rules/enveloppe/porte/registry.js";
+import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 
 type Paroi = ParoiOpaque | Ouverture;
@@ -34,7 +28,7 @@ export function sdep(item: Paroi): ReturnType<typeof formulas.calcule_sdep> {
 
 export function b(ctx: Context, item: Paroi, isolation: boolean): formulas.b {
 	if (models.enveloppe.common.isPositionParoiLocalNonChauffe(item.position)) {
-		const lnc = models.enveloppe.get_local_non_chauffe(
+		const lnc = models.enveloppe.getLocalNonChauffe(
 			ctx.diagnostic.enveloppe,
 			item.position.local_non_chauffe_id,
 		);
@@ -43,35 +37,27 @@ export function b(ctx: Context, item: Paroi, isolation: boolean): formulas.b {
 		if (models.enveloppe.localNonChauffe.isEspaceTamponSolarise(lnc)) {
 			return formulas.calcule_b_ets({
 				type_local_non_chauffe,
-				zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
+				zone_climatique: ctx.resolve(
+					constants.climat.NAMESPACE,
+					constants.climat.RULES.zone_climatique,
+				),
 				orientations_ets: ctx.resolve(
-					localNonChauffe.ID,
-					localNonChauffe.RULES.orientations,
+					constants.enveloppe.localNonChauffe.NAMESPACE,
+					constants.enveloppe.localNonChauffe.RULES.orientations,
 					lnc,
 				),
 				isolation_paroi: isolation,
 			});
 		}
 		return formulas.calcule_b_lnc({
-			blnc: ctx.resolve(localNonChauffe.ID, localNonChauffe.RULES.b, lnc),
+			blnc: ctx.resolve(
+				constants.enveloppe.localNonChauffe.NAMESPACE,
+				constants.enveloppe.localNonChauffe.RULES.b,
+				lnc,
+			),
 		});
 	}
-}
-
-export function dp(
-	ctx: Context,
-	item: Paroi,
-	id:
-		| typeof baie.ID
-		| typeof mur.ID
-		| typeof plancherBas.ID
-		| typeof plancherHaut.ID
-		| typeof porte.ID,
-): ReturnType<typeof formulas.calcule_dp> {
-	const sdep = ctx.resolve(id, "sdep", item);
-	const u = ctx.resolve(id, "u", item);
-	const b = ctx.resolve(id, "b", item);
-	return formulas.calcule_dp({ sdep, b, u });
+	return formulas.calcule_b_autres({ mitoyennete: item.position.mitoyennete });
 }
 
 export function annee_construction(

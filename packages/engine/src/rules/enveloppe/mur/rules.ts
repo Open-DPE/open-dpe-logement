@@ -1,104 +1,119 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import * as climat from "#rules/climat/registry.js";
-import * as chauffage from "#rules/chauffage/registry.js";
+import * as constants from "#rules/constants.js";
 import * as paroi from "#rules/enveloppe/paroi/rules.js";
 import * as formulas from "./formulas.js";
-import { ID, RULES } from "./registry.js";
-
-export function register(ctx: Context): void {
-	ctx.diagnostic.enveloppe.murs.forEach((item) => {
-		ctx.register(ID, RULES.aiu, item, () => paroi.aiu(item));
-		ctx.register(ID, RULES.isolation_aiu, item, () => isolation_aiu(ctx, item));
-		ctx.register(ID, RULES.sdep, item, () => sdep(item));
-		ctx.register(ID, RULES.b, item, () => b(ctx, item));
-		ctx.register(ID, RULES.dp, item, () => dp(ctx, item));
-		ctx.register(ID, RULES.u0, item, () => u0(ctx, item));
-		ctx.register(ID, RULES.u, item, () => u(ctx, item));
-		ctx.register(ID, RULES.paroi_ancienne, item, () => paroi_ancienne(item));
-	});
-}
+import { NAMESPACE, RULES } from "./constants.js";
 
 type Mur = models.enveloppe.mur.Mur;
 
-export function aiu(item: Mur): ReturnType<typeof formulas.calcule_aiu> {
-	return paroi.aiu(item);
+export function calcule(ctx: Context, item: Mur): models.enveloppe.mur.MurData {
+	return {
+		sdep: sdep(ctx, item),
+		b: b(ctx, item),
+		u: u(ctx, item),
+		u0: u0(ctx, item),
+		dp: dp(ctx, item),
+		paroi_ancienne: paroi_ancienne(ctx, item),
+	};
+}
+
+export function aiu(ctx: Context, item: Mur): ReturnType<typeof paroi.aiu> {
+	return ctx.register(NAMESPACE, RULES.aiu, item, () => paroi.aiu(item));
 }
 
 export function isolation_aiu(
 	ctx: Context,
 	item: Mur,
 ): ReturnType<typeof formulas.calcule_isolation_aiu> {
-	return formulas.calcule_isolation_aiu({
-		isolation: item.isolation.etat,
-		annee_construction: ctx.diagnostic.batiment.annee_construction,
-	});
+	return ctx.register(NAMESPACE, RULES.isolation_aiu, item, () =>
+		formulas.calcule_isolation_aiu({
+			isolation: item.isolation.etat,
+			annee_construction: ctx.diagnostic.batiment.annee_construction,
+		}),
+	);
 }
 
-export function sdep(item: Mur): ReturnType<typeof formulas.calcule_sdep> {
-	return paroi.sdep(item);
+export function sdep(ctx: Context, item: Mur): ReturnType<typeof paroi.sdep> {
+	return ctx.register(NAMESPACE, RULES.sdep, item, () => paroi.sdep(item));
 }
 
-export function b(
-	ctx: Context,
-	item: Mur,
-): ReturnType<typeof formulas.calcule_b> {
-	return paroi.b(ctx, item, isolation(ctx, item));
+export function b(ctx: Context, item: Mur): ReturnType<typeof paroi.b> {
+	return ctx.register(NAMESPACE, RULES.b, item, () =>
+		paroi.b(ctx, item, isolation(ctx, item)),
+	);
 }
 
 export function dp(
 	ctx: Context,
 	item: Mur,
 ): ReturnType<typeof formulas.calcule_dp> {
-	return paroi.dp(ctx, item, ID);
+	return ctx.register(NAMESPACE, RULES.dp, item, () =>
+		formulas.calcule_dp({
+			sdep: sdep(ctx, item),
+			b: b(ctx, item),
+			u: u(ctx, item),
+		}),
+	);
 }
 
 export function u0(
 	ctx: Context,
 	item: Mur,
 ): ReturnType<typeof formulas.calcule_u0> {
-	const u0_enduit_isolant = formulas.calcule_u0_enduit_isolant({
-		paroi_ancienne: ctx.resolve(ID, RULES.paroi_ancienne, item),
-		presence_enduit_isolant: item.presence_enduit_isolant,
-	});
-	const u0_doublage = formulas.calcule_u0_doublage({
-		type_doublage: item.type_doublage,
-	});
-	return formulas.calcule_u0({
-		u0_saisi: item.u0,
-		annee_construction: paroi.annee_construction(ctx, item),
-		structures: item.structures,
-		u0_enduit_isolant,
-		u0_doublage,
-	});
+	return ctx.register(NAMESPACE, RULES.u0, item, () =>
+		formulas.calcule_u0({
+			u0_saisi: item.u0,
+			annee_construction: paroi.annee_construction(ctx, item),
+			structures: item.structures,
+			u0_enduit_isolant: formulas.calcule_u0_enduit_isolant({
+				paroi_ancienne: ctx.resolve(NAMESPACE, RULES.paroi_ancienne, item),
+				presence_enduit_isolant: item.presence_enduit_isolant,
+			}),
+			u0_doublage: formulas.calcule_u0_doublage({
+				type_doublage: item.type_doublage,
+			}),
+		}),
+	);
 }
 
 export function u(
 	ctx: Context,
 	item: Mur,
 ): ReturnType<typeof formulas.calcule_u> {
-	return formulas.calcule_u({
-		u_saisi: item.u,
-		zone_climatique: ctx.resolve(climat.ID, climat.RULES.zone_climatique),
-		effet_joule: ctx.resolve(chauffage.ID, chauffage.RULES.effet_joule),
-		u0: ctx.resolve(ID, RULES.u0, item),
-		isolation: item.isolation.etat,
-		type_isolation: item.isolation.type,
-		epaisseur_isolation: item.isolation.epaisseur,
-		resistance_thermique_isolation: item.isolation.resistance_thermique,
-		annee_isolation: item.isolation.annee_installation,
-		annee_construction: paroi.annee_construction(ctx, item),
-	});
+	return ctx.register(NAMESPACE, RULES.u, item, () =>
+		formulas.calcule_u({
+			u_saisi: item.u,
+			zone_climatique: ctx.resolve(
+				constants.climat.NAMESPACE,
+				constants.climat.RULES.zone_climatique,
+			),
+			effet_joule: ctx.resolve(
+				constants.chauffage.NAMESPACE,
+				constants.chauffage.RULES.effet_joule,
+			),
+			u0: u0(ctx, item),
+			isolation: item.isolation.etat,
+			type_isolation: item.isolation.type,
+			epaisseur_isolation: item.isolation.epaisseur,
+			resistance_thermique_isolation: item.isolation.resistance_thermique,
+			annee_isolation: item.isolation.annee_installation,
+			annee_construction: paroi.annee_construction(ctx, item),
+		}),
+	);
 }
 
 export function paroi_ancienne(
+	ctx: Context,
 	item: Mur,
 ): ReturnType<typeof formulas.calcule_paroi_ancienne> {
-	return formulas.calcule_paroi_ancienne({
-		structures: item.structures.map((structure) => ({
-			materiau_ancien: structure.materiau_ancien,
-		})),
-	});
+	return ctx.register(NAMESPACE, RULES.paroi_ancienne, item, () =>
+		formulas.calcule_paroi_ancienne({
+			structures: item.structures.map((structure) => ({
+				materiau_ancien: structure.materiau_ancien,
+			})),
+		}),
+	);
 }
 
 export function isolation(
@@ -109,18 +124,4 @@ export function isolation(
 		isolation: item.isolation.etat,
 		annee_construction: paroi.annee_construction(ctx, item),
 	});
-}
-
-export function applique(ctx: Context, item: Mur): models.enveloppe.mur.MurWithData {
-	return {
-		...item,
-		data: {
-			u0: ctx.resolve(ID, RULES.u0, item),
-			u: ctx.resolve(ID, RULES.u, item),
-			b: ctx.resolve(ID, RULES.b, item),
-			sdep: ctx.resolve(ID, RULES.sdep, item),
-			dp: ctx.resolve(ID, RULES.dp, item),
-			paroi_ancienne: ctx.resolve(ID, RULES.paroi_ancienne, item),
-		},
-	};
 }

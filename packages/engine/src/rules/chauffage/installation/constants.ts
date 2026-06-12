@@ -6,4 +6,5 @@ export const RULES = {
 	rdim: "rdim",
 	pch: "pch",
 	fch: "fch",
+	effet_joule: "effet_joule",
 } as const;

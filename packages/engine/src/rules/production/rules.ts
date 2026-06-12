@@ -7,18 +7,11 @@ import { NAMESPACE, RULES } from "./constants.js";
 
 export { panneauPhotovoltaique };
 
-export function calcule(ctx: Context): models.production.ProductionWithData {
+export function calcule(ctx: Context): models.production.ProductionData {
 	return {
-		...ctx.diagnostic.production,
-		panneaux_photovoltaiques:
-			ctx.diagnostic.production.panneaux_photovoltaiques.map((item) =>
-				panneauPhotovoltaique.calcule(ctx, item),
-			),
-		data: {
-			ppv: ppv(ctx),
-			celec_ac: celec_ac_total(ctx),
-			tapl: tapl(ctx),
-		},
+		ppv: ppv(ctx),
+		celec_ac: celec_ac_total(ctx),
+		tapl: tapl(ctx),
 	};
 }
 

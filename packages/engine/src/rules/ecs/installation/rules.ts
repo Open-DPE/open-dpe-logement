@@ -1,7 +1,6 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as constants from "#/rules/constants.js";
-import * as systeme from "../systeme/rules.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
@@ -10,23 +9,15 @@ type Installation = models.ecs.installation.Installation;
 export function calcule(
 	ctx: Context,
 	installation: Installation,
-): models.ecs.installation.InstallationWithData {
-	const systemes = installation.systemes.map((item) =>
-		systeme.calcule(ctx, installation, item),
-	);
-
+): models.ecs.installation.InstallationData {
 	return {
-		...installation,
-		systemes: models.common.toNonEmptyArray(systemes),
-		data: {
-			becs: models.common.reduceParMois(becs(ctx, installation)),
-			rdim: rdim(ctx, installation),
-			fecs: fecs(ctx, installation),
-			qdw: qdw(ctx, installation),
-			qdw_ind_vc: qdw_ind_vc(ctx, installation),
-			qdw_col_vc: qdw_col_vc(ctx, installation),
-			qdw_col_hvc: qdw_col_hvc(ctx, installation),
-		},
+		becs: models.common.reduceParMois(becs(ctx, installation)),
+		rdim: rdim(ctx, installation),
+		fecs: fecs(ctx, installation),
+		qdw: qdw(ctx, installation),
+		qdw_ind_vc: qdw_ind_vc(ctx, installation),
+		qdw_col_vc: qdw_col_vc(ctx, installation),
+		qdw_col_hvc: qdw_col_hvc(ctx, installation),
 	};
 }
 

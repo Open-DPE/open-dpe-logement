@@ -63,9 +63,7 @@ export function calcule_ubat(props: {
  * @formule enveloppe.dp_planchers_bas
  * @returns Déperditions thermiques totales par les parois en W/K
  */
-export function calcule_dp(props: {
-	dp: ReturnType<typeof paroi.calcule_dp>[];
-}): number {
+export function calcule_dp(props: { dp: number[] }): number {
 	return props.dp.reduce((acc, val) => acc + val, 0);
 }
 
@@ -243,10 +241,10 @@ export function calcule_q4paconv(props: {
  * @returns Isolation majoritaire des murs et des plafonds
  */
 export function calcule_isolation_murs_plafonds(props: {
-	murs: { surface: number; isolation: ReturnType<typeof mur.set_isolation> }[];
+	murs: { surface: number; isolation: boolean | null }[];
 	planchers_hauts: {
 		surface: number;
-		isolation: ReturnType<typeof plancherHaut.set_isolation>;
+		isolation: boolean | null;
 	}[];
 }): boolean {
 	const parois = [...props.murs, ...props.planchers_hauts];
@@ -283,7 +281,7 @@ export function calcule_presence_joints(props: {
 export function calcule_isolation_planchers_hauts(props: {
 	planchers_hauts: {
 		mitoyennete: models.enveloppe.common.Mitoyennete;
-		isolation: ReturnType<typeof plancherHaut.set_isolation>;
+		isolation: boolean | null;
 	}[];
 }): boolean {
 	const planchers_hauts = props.planchers_hauts.filter(
@@ -422,15 +420,17 @@ export function calcule_sse(props: {
  * @formule enveloppe.parois_anciennes
  * @param props.murs - Liste des murs de l'enveloppe
  * @param props.murs[].surface - Surface du mur en m²
- * @param props.murs[].materiaux_anciens - Indique si les matériaux du mur sont anciens ou non (non par défaut)
  * @returns Présence majoritaire de murs anciens (plus de 50% de la surface totale des murs)
  */
 export function calcule_parois_anciennes(props: {
-	murs: { surface: number; materiaux_anciens: boolean | null }[];
+	murs: {
+		surface: number;
+		paroi_ancienne: ReturnType<typeof mur.calcule_paroi_ancienne>;
+	}[];
 }): boolean {
 	const s = props.murs.reduce((acc, mur) => acc + mur.surface, 0);
 	const w = props.murs
-		.filter(({ materiaux_anciens }) => materiaux_anciens)
+		.filter(({ paroi_ancienne }) => paroi_ancienne)
 		.reduce((acc, { surface }) => acc + surface, 0);
 	return s === 0 ? false : w / s > 0.5;
 }

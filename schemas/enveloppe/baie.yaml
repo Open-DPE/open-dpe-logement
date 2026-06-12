@@ -253,9 +253,9 @@ $defs:
           type:
             const: simple_vitrage
           nature_lame:
-             $ref: "/common#/$defs/non_applicable"
+            $ref: "/common#/$defs/non_applicable"
           epaisseur_lame:
-             $ref: "/common#/$defs/non_applicable"
+            $ref: "/common#/$defs/non_applicable"
         required:
           - type
           - nature_lame
@@ -277,9 +277,9 @@ $defs:
           type:
             enum: [brique_verre, polycarbonate, null]
           nature_lame:
-             $ref: "/common#/$defs/non_applicable"
+            $ref: "/common#/$defs/non_applicable"
           epaisseur_lame:
-             $ref: "/common#/$defs/non_applicable"
+            $ref: "/common#/$defs/non_applicable"
         required:
           - type
           - nature_lame
@@ -343,9 +343,6 @@ $defs:
       fe:
         title: Facteur d'ensoleillement de la baie
         type: number
-      c1:
-        title: Coefficient de correction d'ensoleillement de la baie
-        type: number
     required:
       - sdep
       - b
@@ -357,7 +354,6 @@ $defs:
       - sse
       - sw
       - fe
-      - c1
 
 oneOf:
   - title: Baie en brique de verre

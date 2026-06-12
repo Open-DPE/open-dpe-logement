@@ -83,7 +83,6 @@ export type BaieData = {
 	sw: number;
 	fe: number;
 	sse: number;
-	c1: number;
 };
 
 export type Position = BasePosition & {

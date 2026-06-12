@@ -11,6 +11,5 @@ export const RULES = {
 	qtrac: "qtrac",
 	rdim: "rdim",
 	iecs: "iecs",
-	rd: "rd",
 	rendements: "rendements",
 } as const;

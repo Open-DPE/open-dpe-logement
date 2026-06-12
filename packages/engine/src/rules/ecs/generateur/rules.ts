@@ -9,24 +9,21 @@ type Generateur = models.ecs.generateur.Generateur;
 export function calcule(
 	ctx: Context,
 	item: Generateur,
-): models.ecs.generateur.GenerateurWithData {
+): models.ecs.generateur.GenerateurData {
 	return {
-		...item,
-		data: {
-			rdim: rdim(ctx, item),
-			pn: pn(ctx, item),
-			pdim: pdim(ctx, item),
-			pecs: pecs(ctx, item),
-			paux: paux(ctx, item),
-			cop: cop(ctx, item),
-			rpn: combustion(ctx, item)?.rpn ?? null,
-			qp0: combustion(ctx, item)?.qp0 ?? null,
-			pveilleuse: combustion(ctx, item)?.pveilleuse ?? null,
-			cr: cr(ctx, item),
-			qgw: qgw(ctx, item),
-			qgen: qgen(ctx, item),
-			consommations: consommations(ctx, item),
-		},
+		rdim: rdim(ctx, item),
+		pn: pn(ctx, item),
+		pdim: pdim(ctx, item),
+		pecs: pecs(ctx, item),
+		paux: paux(ctx, item),
+		cop: cop(ctx, item),
+		rpn: combustion(ctx, item)?.rpn ?? null,
+		qp0: combustion(ctx, item)?.qp0 ?? null,
+		pveilleuse: combustion(ctx, item)?.pveilleuse ?? null,
+		cr: cr(ctx, item),
+		qgw: qgw(ctx, item),
+		qgen: qgen(ctx, item),
+		consommations: consommations(ctx, item),
 	};
 }
 
@@ -177,9 +174,10 @@ export function pdim(
 				? ctx.resolve(
 						constants.chauffage.generateur.NAMESPACE,
 						constants.chauffage.generateur.RULES.pch,
-						{
-							id: generateur.position.generateur_mixte_id,
-						},
+						models.chauffage.getGenerateur(
+							ctx.diagnostic.chauffage,
+							generateur.position.generateur_mixte_id,
+						),
 					)
 				: null,
 		}),

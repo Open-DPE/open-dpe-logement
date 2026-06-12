@@ -5,6 +5,7 @@ import * as emetteur from "./emetteur/registry.js";
 import * as generateur from "./generateur/registry.js";
 import * as installation from "./installation/registry.js";
 import * as systeme from "./systeme/registry.js";
+import * as emission from "./emission/registry.js";
 
 export { emetteur, generateur, installation, systeme };
 
@@ -34,4 +35,5 @@ export const REGISTRY = {
 	...generateur.REGISTRY,
 	...installation.REGISTRY,
 	...systeme.REGISTRY,
+	...emission.REGISTRY,
 };

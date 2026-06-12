@@ -4,18 +4,15 @@ import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-export function calcule(ctx: Context): models.batiment.BatimentWithData {
+export function calcule(ctx: Context): models.batiment.BatimentData {
 	return {
-		...ctx.diagnostic.batiment,
-		data: {
-			sh: sh(ctx),
-			hsp: hsp(ctx),
-			ratio_proratisation: ratio_proratisation(ctx),
-			zone_climatique: ctx.resolve(
-				constants.climat.NAMESPACE,
-				constants.climat.RULES.zone_climatique,
-			),
-		},
+		sh: sh(ctx),
+		hsp: hsp(ctx),
+		ratio_proratisation: ratio_proratisation(ctx),
+		zone_climatique: ctx.resolve(
+			constants.climat.NAMESPACE,
+			constants.climat.RULES.zone_climatique,
+		),
 	};
 }
 

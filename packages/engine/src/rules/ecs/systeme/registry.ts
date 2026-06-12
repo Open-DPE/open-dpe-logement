@@ -13,7 +13,6 @@ export const REGISTRY = {
 		[RULES.qtrac]: rules.qtrac,
 		[RULES.rdim]: rules.rdim,
 		[RULES.iecs]: rules.iecs,
-		[RULES.rd]: rules.rd,
 		[RULES.rendements]: rules.rendements,
 	},
 };

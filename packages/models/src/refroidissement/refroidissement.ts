@@ -1,4 +1,6 @@
+import type { UUID } from "#/common/common";
 import { createGuard } from "#/utils.js";
+import { EntityNotFoundError } from "#errors.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
 
@@ -28,3 +30,21 @@ export type RefroidissementData = {
 	as: number;
 	ai: number;
 };
+
+export function getGenerateur(
+	refroidissement: Refroidissement,
+	id: UUID,
+): generateur.Generateur {
+	const e = refroidissement.generateurs.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Générateur", id);
+	return e;
+}
+
+export function getInstallation(
+	refroidissement: Refroidissement,
+	id: UUID,
+): installation.Installation {
+	const e = refroidissement.installations.find((i) => i.id === id);
+	if (!e) throw new EntityNotFoundError("Installation", id);
+	return e;
+}

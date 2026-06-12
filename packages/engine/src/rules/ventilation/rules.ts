@@ -7,18 +7,11 @@ import { NAMESPACE, RULES } from "./constants.js";
 
 export { installation };
 
-export function calcule(ctx: Context): models.ventilation.VentilationWithData {
-	const installations = ctx.diagnostic.ventilation.installations.map((item) =>
-		installation.calcule(ctx, item),
-	);
+export function calcule(ctx: Context): models.ventilation.VentilationData {
 	return {
-		...ctx.diagnostic.ventilation,
-		installations: models.common.toNonEmptyArray(installations),
-		data: {
-			qvarep_conv: qvarep_conv(ctx),
-			qvasouf_conv: qvasouf_conv(ctx),
-			smea_conv: smea_conv(ctx),
-		},
+		qvarep_conv: qvarep_conv(ctx),
+		qvasouf_conv: qvasouf_conv(ctx),
+		smea_conv: smea_conv(ctx),
 	};
 }
 

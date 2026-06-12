@@ -1,12 +1,14 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
+import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
 import type * as climat from "#rules/climat/formulas.js";
 import type * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
 import type * as masque from "#rules/enveloppe/masque/formulas.js";
-import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
 import { ValeurForfaitaireError } from "#rules/errors.js";
 import { createParMois } from "#rules/helpers.js";
 import { linearInterpolate } from "#rules/math.js";
+
+export { calcule_c1 } from "#rules/climat/formulas.js";
 
 /**
  * @formule enveloppe.baie.dp
@@ -17,7 +19,7 @@ export function calcule_dp(props: {
 	b: paroi.b;
 	u: ReturnType<typeof calcule_u>;
 	double_fenetre: boolean;
-}): ReturnType<typeof paroi.calcule_dp> {
+}): number {
 	const { sdep, b, u, double_fenetre } = props;
 	return double_fenetre ? (sdep * b * u) / 2 : sdep * b * u;
 }

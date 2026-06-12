@@ -1,5 +1,6 @@
-import type { NonEmptyArray } from "#/common/common";
+import type { NonEmptyArray, UUID } from "#/common/common";
 import { createGuard } from "#/utils";
+import { EntityNotFoundError } from "#errors.js";
 import * as installation from "./installation.js";
 
 export { installation };
@@ -23,3 +24,12 @@ export type VentilationData = {
 	qvasouf_conv: number;
 	smea_conv: number;
 };
+
+export function getInstallation(
+	ventilation: Ventilation,
+	id: UUID,
+): installation.Installation {
+	const e = ventilation.installations.find((i) => i.id === id);
+	if (!e) throw new EntityNotFoundError("Installation", id);
+	return e;
+}

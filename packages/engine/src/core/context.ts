@@ -1,53 +1,41 @@
 import { common, diagnostic } from "@open-dpe-logement/models";
-import { REGISTRY } from "#/rules/registry.js";
+import { REGISTRY } from "./registry.js";
+import type { Namespace, Key, Item, RuleReturn, RuleArgs } from "./registry.js";
 import { Cache } from "./cache.js";
-import type { RegistryFn, RegistryReturn } from "./registry.js";
 
 export type Thunk<T> = () => T;
-export type Item = { id: string };
 
 export interface Context {
 	readonly diagnostic: diagnostic.Diagnostic;
 	readonly scenario: common.Scenario;
 
-	register<
-		N extends keyof typeof REGISTRY,
-		K extends keyof (typeof REGISTRY)[N],
-	>(
+	register<N extends Namespace, K extends Key<N>>(
 		ns: N,
 		key: K,
-		thunk: Thunk<RegistryReturn<typeof REGISTRY, N, K>>,
-	): RegistryReturn<typeof REGISTRY, N, K>;
+		thunk: Thunk<RuleReturn<N, K>>,
+	): RuleReturn<N, K>;
 
-	register<
-		N extends keyof typeof REGISTRY,
-		K extends keyof (typeof REGISTRY)[N],
-	>(
+	register<N extends Namespace, K extends Key<N>>(
 		ns: N,
 		key: K,
 		item: Item,
-		thunk: Thunk<RegistryReturn<typeof REGISTRY, N, K>>,
-	): RegistryReturn<typeof REGISTRY, N, K>;
+		thunk: Thunk<RuleReturn<N, K>>,
+	): RuleReturn<N, K>;
 
-	resolve<
-		N extends keyof typeof REGISTRY,
-		K extends keyof (typeof REGISTRY)[N],
-	>(
+	resolve<N extends Namespace, K extends Key<N>>(
 		ns: N,
 		key: K,
-	): RegistryReturn<typeof REGISTRY, N, K>;
+	): RuleReturn<N, K>;
 
-	resolve<
-		N extends keyof typeof REGISTRY,
-		K extends keyof (typeof REGISTRY)[N],
-	>(
+	resolve<N extends Namespace, K extends Key<N>>(
 		ns: N,
 		key: K,
-		item: Item,
-	): RegistryReturn<typeof REGISTRY, N, K>;
+		...args: RuleArgs<N, K>
+	): RuleReturn<N, K>;
+
+	once<T>(ns: Namespace, key: string, fn: Thunk<T>): T;
+	once<T>(ns: Namespace, key: string, item: Item, fn: Thunk<T>): T;
 }
-
-type R = typeof REGISTRY;
 
 export function createContext(
 	diagnostic: diagnostic.Diagnostic,
@@ -64,12 +52,12 @@ export function createContext(
 		diagnostic,
 		scenario,
 
-		register<N extends keyof R, K extends keyof R[N]>(
+		register<N extends Namespace, K extends Key<N>>(
 			ns: N,
 			key: K,
-			itemOrThunk: Item | Thunk<RegistryReturn<R, N, K>>,
-			thunk?: Thunk<RegistryReturn<R, N, K>>,
-		): RegistryReturn<R, N, K> {
+			itemOrThunk: Item | Thunk<RuleReturn<N, K>>,
+			thunk?: Thunk<RuleReturn<N, K>>,
+		): RuleReturn<N, K> {
 			const item = typeof itemOrThunk === "function" ? undefined : itemOrThunk;
 			const fn = typeof itemOrThunk === "function" ? itemOrThunk : thunk!;
 			const cacheKey = buildKey(String(ns), String(key), item);
@@ -96,16 +84,34 @@ export function createContext(
 			return result;
 		},
 
-		resolve<N extends keyof R, K extends keyof R[N]>(
+		resolve<N extends Namespace, K extends Key<N>>(
 			ns: N,
 			key: K,
-			item?: Item,
-		): RegistryReturn<R, N, K> {
-			if (!cache.has(String(ns), String(key), item)) {
-				const rule = REGISTRY[ns][key] as RegistryFn<R, N, K>;
-				item ? rule(ctx, item) : rule(ctx);
+			...args: RuleArgs<N, K>
+		): RuleReturn<N, K> {
+			const rule = REGISTRY[ns][key] as (
+				ctx: Context,
+				...rest: unknown[]
+			) => unknown;
+
+			return rule(this, ...args) as RuleReturn<N, K>;
+		},
+
+		once<T>(
+			ns: Namespace,
+			key: string,
+			itemOrFn: Item | Thunk<T>,
+			fn?: Thunk<T>,
+		): T {
+			const item = typeof itemOrFn === "function" ? undefined : itemOrFn;
+			const fnToCall = typeof itemOrFn === "function" ? itemOrFn : fn!;
+
+			if (cache.has(ns, key, item)) {
+				return cache.get(ns, key, item);
 			}
-			return cache.get(String(ns), String(key), item);
+			const result = fnToCall();
+			cache.set(ns, key, item, result);
+			return result;
 		},
 	};
 

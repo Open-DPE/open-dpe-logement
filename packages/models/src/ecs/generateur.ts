@@ -15,7 +15,7 @@ export function isChaudiereCombustion(
 ): generateur is ChaudiereCombustion {
 	return (
 		generateur.type === TypeGenerateurEnum.chaudiere &&
-		ENERGIES_COMBUSTION.includes(generateur.energie)
+		(ENERGIES_COMBUSTION as readonly Energie[]).includes(generateur.energie)
 	);
 }
 
@@ -135,7 +135,7 @@ export type Position = {
 	generateur_collectif: boolean;
 	generateur_multi_batiment: boolean;
 	position_volume_chauffe: boolean;
-	generateur_mixte_id: string | null;
+	generateur_mixte_id: UUID | null;
 	reseau_chaleur_id: string | null;
 };
 
@@ -400,7 +400,7 @@ export const TYPES_GENERATEUR = [
 export type TypeGenerateur = (typeof TYPES_GENERATEUR)[number];
 export const TypeGenerateurEnum = buildEnum(TYPES_GENERATEUR);
 
-export const TYPES_PAC: readonly TypeGenerateur[] = [
+export const TYPES_PAC = [
 	TypeGenerateurEnum.cet_air_ambiant,
 	TypeGenerateurEnum.cet_air_exterieur,
 	TypeGenerateurEnum.cet_air_extrait,
@@ -409,15 +409,24 @@ export const TYPES_PAC: readonly TypeGenerateur[] = [
 export type TypePac = (typeof TYPES_PAC)[number];
 export const TypePacEnum = buildEnum(TYPES_PAC);
 
-export type EnergieEcs = Exclude<
-	Energie,
-	typeof EnergieEnum.electricite_renouvelable | typeof EnergieEnum.reseau_froid
->;
+export const ENERGIES_ECS = [
+	EnergieEnum.electricite,
+	EnergieEnum.gaz_naturel,
+	EnergieEnum.gpl,
+	EnergieEnum.fioul,
+	EnergieEnum.bois_buche,
+	EnergieEnum.bois_plaquette,
+	EnergieEnum.bois_granule,
+	EnergieEnum.charbon,
+	EnergieEnum.reseau_chaleur,
+] as const satisfies readonly Energie[];
+export type EnergieEcs = (typeof ENERGIES_ECS)[number];
+export const EnergieEcsEnum = buildEnum(ENERGIES_ECS);
 
 export const BIENERGIES = [
-	"gaz_naturel",
-	"gpl",
-	"fioul",
+	EnergieEnum.gaz_naturel,
+	EnergieEnum.gpl,
+	EnergieEnum.fioul,
 ] as const satisfies readonly EnergieEcs[];
 export type Bienergie = (typeof BIENERGIES)[number];
 export const BienergieEnum = buildEnum(BIENERGIES);

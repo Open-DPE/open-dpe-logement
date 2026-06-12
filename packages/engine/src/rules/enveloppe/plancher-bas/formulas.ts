@@ -7,6 +7,19 @@ import { ValeurForfaitaireError } from "#rules/errors.js";
 import { bilinearInterpolate } from "#rules/math.js";
 
 /**
+ * @formule enveloppe.plancher-bas.dp
+ * @returns Déperditions thermiques du plancher bas en W/K
+ */
+export function calcule_dp(props: {
+	sdep: ReturnType<typeof paroi.calcule_sdep>;
+	b: paroi.b;
+	u: ReturnType<typeof calcule_u>;
+}): number {
+	const { sdep, b, u } = props;
+	return sdep * b * u;
+}
+
+/**
  * @formule enveloppe.plancher_bas.isolation_aiu
  * @param props.isolation : État d'isolation saisi du plancher bas donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment

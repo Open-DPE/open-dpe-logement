@@ -1,5 +1,4 @@
 import * as models from "@open-dpe-logement/models";
-import * as utils from "#rules/chauffage/generateur/utils.js";
 
 type Systeme = {
 	type_systeme: models.chauffage.systeme.TypeSysteme;
@@ -10,6 +9,7 @@ type Systeme = {
 };
 
 const TypeSystem = models.chauffage.systeme.TypeSystemeEnum;
+const TypeGenerateurEnum = models.chauffage.generateur.TypeGenerateurEnum;
 
 export function filter_chaudieres_bois<T extends Systeme>(systemes: T[]): T[] {
 	return systemes.filter((s) => is_chaudiere_bois(s));
@@ -105,20 +105,27 @@ export function is_systeme_divise(systeme: Systeme): boolean {
 }
 
 export function is_chaudiere_bois(systeme: Systeme): boolean {
-	return is_systeme_central(systeme) && utils.is_chaudiere_bois(systeme);
+	return (
+		is_systeme_central(systeme) &&
+		systeme.type_generateur === TypeGenerateurEnum.chaudiere &&
+		models.common.isEnergieBois(systeme.energie_generateur)
+	);
 }
 
 export function is_chaudiere(systeme: Systeme): boolean {
 	return (
 		is_systeme_central(systeme) &&
-		(utils.is_chaudiere_combustion(systeme) ||
-			utils.is_chaudiere_electrique(systeme))
+		systeme.type_generateur === TypeGenerateurEnum.chaudiere &&
+		false === models.common.isEnergieBois(systeme.energie_generateur)
 	);
 }
 
 export function is_pac(systeme: Systeme): boolean {
 	return (
-		is_systeme_central(systeme) && utils.is_generateur_thermodynamique(systeme)
+		is_systeme_central(systeme) &&
+		models.chauffage.generateur.isTypeGenerateurThermodynamique(
+			systeme.type_generateur,
+		)
 	);
 }
 

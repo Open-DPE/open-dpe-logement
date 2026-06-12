@@ -95,7 +95,7 @@ export const EXPOSITIONS = ["simple", "multiple"] as const;
 export type Exposition = (typeof EXPOSITIONS)[number];
 export const ExpositionEnum = buildEnum(EXPOSITIONS);
 
-export function get_parois_local_non_chauffe(
+export function getParoisLocalNonChauffe(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): Paroi[] {
@@ -111,7 +111,7 @@ export function get_parois_local_non_chauffe(
 	});
 }
 
-export function get_baies_local_non_chauffe(
+export function getBaiesLocalNonChauffe(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): baie.Baie[] {
@@ -120,7 +120,7 @@ export function get_baies_local_non_chauffe(
 	});
 }
 
-export function get_portes_local_non_chauffe(
+export function getPortesLocalNonChauffe(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): porte.Porte[] {
@@ -129,7 +129,7 @@ export function get_portes_local_non_chauffe(
 	});
 }
 
-export function get_murs_local_non_chauffe(
+export function getMursLocalNonChauffe(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): mur.Mur[] {
@@ -138,7 +138,7 @@ export function get_murs_local_non_chauffe(
 	});
 }
 
-export function get_planchers_hauts_local_non_chauffe(
+export function getPlanchersHautsLocalNonChauffe(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): plancherHaut.PlancherHaut[] {
@@ -147,7 +147,7 @@ export function get_planchers_hauts_local_non_chauffe(
 	});
 }
 
-export function get_planchers_bas_local_non_chauffe(
+export function getPlanchersBasLocalNonChauffe(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): plancherBas.PlancherBas[] {
@@ -156,7 +156,7 @@ export function get_planchers_bas_local_non_chauffe(
 	);
 }
 
-export function get_local_non_chauffe(
+export function getLocalNonChauffe(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): localNonChauffe.LocalNonChauffe {
@@ -165,25 +165,25 @@ export function get_local_non_chauffe(
 	return e;
 }
 
-export function get_baie(enveloppe: Enveloppe, id: UUID): baie.Baie {
+export function getBaie(enveloppe: Enveloppe, id: UUID): baie.Baie {
 	const e = enveloppe.baies.find((g) => g.id === id);
 	if (!e) throw new EntityNotFoundError("Baie", id);
 	return e;
 }
 
-export function get_porte(enveloppe: Enveloppe, id: UUID): porte.Porte {
+export function getPorte(enveloppe: Enveloppe, id: UUID): porte.Porte {
 	const e = enveloppe.portes.find((g) => g.id === id);
 	if (!e) throw new EntityNotFoundError("Porte", id);
 	return e;
 }
 
-export function get_mur(enveloppe: Enveloppe, id: UUID): mur.Mur {
+export function getMur(enveloppe: Enveloppe, id: UUID): mur.Mur {
 	const e = enveloppe.murs.find((g) => g.id === id);
 	if (!e) throw new EntityNotFoundError("Mur", id);
 	return e;
 }
 
-export function get_plancher_haut(
+export function getPlancherHaut(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): plancherHaut.PlancherHaut {
@@ -192,7 +192,7 @@ export function get_plancher_haut(
 	return e;
 }
 
-export function get_plancher_bas(
+export function getPlancherBas(
 	enveloppe: Enveloppe,
 	id: UUID,
 ): plancherBas.PlancherBas {

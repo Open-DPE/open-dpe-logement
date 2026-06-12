@@ -117,7 +117,7 @@ export const ENERGIES = [
 export type Energie = (typeof ENERGIES)[number];
 export const EnergieEnum = buildEnum(ENERGIES);
 
-export const ENERGIES_GAZ: readonly Energie[] = [
+export const ENERGIES_GAZ = [
 	EnergieEnum.gaz_naturel,
 	EnergieEnum.gpl,
 ] as const satisfies readonly Energie[];
@@ -125,10 +125,10 @@ export type EnergieGaz = (typeof ENERGIES_GAZ)[number];
 export const EnergieGazEnum = buildEnum(ENERGIES_GAZ);
 
 export function isEnergieGaz(energie: Energie): energie is EnergieGaz {
-	return ENERGIES_GAZ.includes(energie);
+	return (ENERGIES_GAZ as readonly Energie[]).includes(energie);
 }
 
-export const ENERGIES_BOIS: readonly Energie[] = [
+export const ENERGIES_BOIS = [
 	EnergieEnum.bois_buche,
 	EnergieEnum.bois_plaquette,
 	EnergieEnum.bois_granule,
@@ -137,10 +137,10 @@ export type EnergieBois = (typeof ENERGIES_BOIS)[number];
 export const EnergieBoisEnum = buildEnum(ENERGIES_BOIS);
 
 export function isEnergieBois(energie: Energie): energie is EnergieBois {
-	return ENERGIES_BOIS.includes(energie);
+	return (ENERGIES_BOIS as readonly Energie[]).includes(energie);
 }
 
-export const ENERGIES_COMBUSTION: readonly Energie[] = [
+export const ENERGIES_COMBUSTION = [
 	EnergieEnum.gaz_naturel,
 	EnergieEnum.gpl,
 	EnergieEnum.fioul,
@@ -150,12 +150,13 @@ export const ENERGIES_COMBUSTION: readonly Energie[] = [
 	EnergieEnum.charbon,
 ] as const satisfies readonly Energie[];
 
-export type EnergieCombustion = Energie;
+export type EnergieCombustion = (typeof ENERGIES_COMBUSTION)[number];
+export const EnergieCombustionEnum = buildEnum(ENERGIES_COMBUSTION);
 
 export function isEnergieCombustion(
 	energie: Energie,
 ): energie is EnergieCombustion {
-	return ENERGIES_COMBUSTION.includes(energie);
+	return (ENERGIES_COMBUSTION as readonly Energie[]).includes(energie);
 }
 
 /**

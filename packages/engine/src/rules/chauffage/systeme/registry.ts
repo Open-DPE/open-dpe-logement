@@ -4,6 +4,7 @@ import * as rules from "./rules.js";
 export const REGISTRY = {
 	[NAMESPACE]: {
 		[RULES.consommations]: rules.consommations,
+		[RULES.bch]: rules.bch,
 		[RULES.cch]: rules.cch,
 		[RULES.cch_elec]: rules.cch_elec,
 		[RULES.cch_enr]: rules.cch_enr,

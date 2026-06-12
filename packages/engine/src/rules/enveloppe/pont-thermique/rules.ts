@@ -1,106 +1,113 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as formulas from "./formulas.js";
-import { ID, RULES } from "./registry.js";
-
-export function register(ctx: Context): void {
-	ctx.diagnostic.enveloppe.ponts_thermiques.forEach((item) => {
-		ctx.register(ID, RULES.pt, item, () => pt(ctx, item));
-		ctx.register(ID, RULES.kpt, item, () => kpt(ctx, item));
-	});
-}
+import { NAMESPACE, RULES } from "./constants.js";
 
 type PontThermique = models.enveloppe.pontThermique.PontThermique;
+
+export function calcule(
+	ctx: Context,
+	item: PontThermique,
+): models.enveloppe.pontThermique.PontThermiqueData {
+	return {
+		kpt: kpt(ctx, item),
+		pt: pt(ctx, item),
+	};
+}
 
 export function pt(
 	ctx: Context,
 	item: PontThermique,
 ): ReturnType<typeof formulas.calcule_pt> {
-	return formulas.calcule_pt({
-		type_liaison: item.liaison.type,
-		kpt: ctx.resolve(ID, RULES.kpt, item),
-		l: item.longueur,
-		pont_thermique_partiel: item.liaison.pont_thermique_partiel ?? false,
-	});
+	return ctx.register(NAMESPACE, RULES.pt, item, () =>
+		formulas.calcule_pt({
+			type_liaison: item.liaison.type,
+			kpt: kpt(ctx, item),
+			l: item.longueur,
+			pont_thermique_partiel: item.liaison.pont_thermique_partiel ?? false,
+		}),
+	);
 }
 
 export function kpt(
 	ctx: Context,
 	item: PontThermique,
 ): ReturnType<typeof formulas.calcule_kpt> {
-	const enums = models.enveloppe.pontThermique.TypeLiaisonEnum;
-	const mur = models.enveloppe.get_mur(
-		ctx.diagnostic.enveloppe,
-		item.liaison.mur_id,
-	);
+	return ctx.register(NAMESPACE, RULES.kpt, item, () => {
+		const enums = models.enveloppe.pontThermique.TypeLiaisonEnum;
+		const mur = models.enveloppe.getMur(
+			ctx.diagnostic.enveloppe,
+			item.liaison.mur_id,
+		);
 
-	const props = {
-		kpt_saisi: item.kpt,
-		type_liaison: item.liaison.type,
-		isolation_mur: isolation_mur(ctx, mur),
-		type_isolation_mur: type_isolation_mur(mur),
-		isolation_plancher: null,
-		type_isolation_plancher: null,
-		type_pose_menuiserie: null,
-		presence_retour_isolation: null,
-		largeur_dormant: null,
-	};
+		const props = {
+			kpt_saisi: item.kpt,
+			type_liaison: item.liaison.type,
+			isolation_mur: isolation_mur(ctx, mur),
+			type_isolation_mur: type_isolation_mur(mur),
+			isolation_plancher: null,
+			type_isolation_plancher: null,
+			type_pose_menuiserie: null,
+			presence_retour_isolation: null,
+			largeur_dormant: null,
+		};
 
-	switch (item.liaison.type) {
-		case enums.plancher_bas_mur: {
-			const plancher = models.enveloppe.get_plancher_bas(
-				ctx.diagnostic.enveloppe,
-				item.liaison.plancher_id,
-			);
-			return formulas.calcule_kpt({
-				...props,
-				isolation_plancher: isolation_plancher_bas(ctx, plancher),
-				type_isolation_plancher: type_isolation_plancher_bas(plancher),
-			});
-		}
-		case enums.plancher_haut_mur: {
-			const plancher = models.enveloppe.get_plancher_haut(
-				ctx.diagnostic.enveloppe,
-				item.liaison.plancher_id,
-			);
-			return formulas.calcule_kpt({
-				...props,
-				isolation_plancher: isolation_plancher_haut(ctx, plancher),
-				type_isolation_plancher: type_isolation_plancher_haut(plancher),
-			});
-		}
+		switch (item.liaison.type) {
+			case enums.plancher_bas_mur: {
+				const plancher = models.enveloppe.getPlancherBas(
+					ctx.diagnostic.enveloppe,
+					item.liaison.plancher_id,
+				);
+				return formulas.calcule_kpt({
+					...props,
+					isolation_plancher: isolation_plancher_bas(ctx, plancher),
+					type_isolation_plancher: type_isolation_plancher_bas(plancher),
+				});
+			}
+			case enums.plancher_haut_mur: {
+				const plancher = models.enveloppe.getPlancherHaut(
+					ctx.diagnostic.enveloppe,
+					item.liaison.plancher_id,
+				);
+				return formulas.calcule_kpt({
+					...props,
+					isolation_plancher: isolation_plancher_haut(ctx, plancher),
+					type_isolation_plancher: type_isolation_plancher_haut(plancher),
+				});
+			}
 
-		case enums.baie_mur: {
-			const baie = models.enveloppe.get_baie(
-				ctx.diagnostic.enveloppe,
-				item.liaison.ouverture_id,
-			);
-			return formulas.calcule_kpt({
-				...props,
-				type_pose_menuiserie: baie.position.type_pose,
-				presence_retour_isolation: presence_retour_isolation(baie),
-				largeur_dormant: largeur_dormant(baie),
-			});
-		}
+			case enums.baie_mur: {
+				const baie = models.enveloppe.getBaie(
+					ctx.diagnostic.enveloppe,
+					item.liaison.ouverture_id,
+				);
+				return formulas.calcule_kpt({
+					...props,
+					type_pose_menuiserie: baie.position.type_pose,
+					presence_retour_isolation: presence_retour_isolation(baie),
+					largeur_dormant: largeur_dormant(baie),
+				});
+			}
 
-		case enums.porte_mur: {
-			const porte = models.enveloppe.get_porte(
-				ctx.diagnostic.enveloppe,
-				item.liaison.ouverture_id,
-			);
-			return formulas.calcule_kpt({
-				...props,
-				type_pose_menuiserie: porte.position.type_pose,
-				presence_retour_isolation: presence_retour_isolation(porte),
-				largeur_dormant: largeur_dormant(porte),
-			});
-		}
+			case enums.porte_mur: {
+				const porte = models.enveloppe.getPorte(
+					ctx.diagnostic.enveloppe,
+					item.liaison.ouverture_id,
+				);
+				return formulas.calcule_kpt({
+					...props,
+					type_pose_menuiserie: porte.position.type_pose,
+					presence_retour_isolation: presence_retour_isolation(porte),
+					largeur_dormant: largeur_dormant(porte),
+				});
+			}
 
-		case enums.plancher_intermediaire_mur:
-		case enums.refend_mur: {
-			return formulas.calcule_kpt(props);
+			case enums.plancher_intermediaire_mur:
+			case enums.refend_mur: {
+				return formulas.calcule_kpt(props);
+			}
 		}
-	}
+	});
 }
 
 export function isolation_mur(
@@ -173,17 +180,4 @@ export function presence_retour_isolation(
 		presence_retour_isolation:
 			entity.menuiserie?.presence_retour_isolation ?? null,
 	});
-}
-
-export function applique(
-	ctx: Context,
-	item: PontThermique,
-): models.enveloppe.pontThermique.PontThermiqueWithData {
-	return {
-		...item,
-		data: {
-			kpt: ctx.resolve(ID, RULES.kpt, item),
-			pt: ctx.resolve(ID, RULES.pt, item),
-		},
-	};
 }

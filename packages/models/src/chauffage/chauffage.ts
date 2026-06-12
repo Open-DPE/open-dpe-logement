@@ -42,24 +42,38 @@ export type TauxCharge = (typeof TAUX_CHARGE)[number];
 export const TauxChargeEnum = buildEnum(TAUX_CHARGE);
 export type ParTauxCharge<T> = Record<TauxCharge, T>;
 
-export function get_systemes(chauffage: Chauffage): systeme.Systeme[] {
+export function getSystemes(chauffage: Chauffage): systeme.Systeme[] {
 	return chauffage.installations.flatMap((i) => i.systemes);
 }
 
-export function get_emetteur(
-	chauffage: Chauffage,
-	id: UUID,
-): emetteur.Emetteur {
+export function getSysteme(chauffage: Chauffage, id: UUID): systeme.Systeme {
+	const systeme = getSystemes(chauffage).find((s) => s.id === id);
+	if (!systeme) throw new EntityNotFoundError("Systeme", id);
+	return systeme;
+}
+
+export function getEmetteur(chauffage: Chauffage, id: UUID): emetteur.Emetteur {
 	const emetteur = chauffage.emetteurs.find((e) => e.id === id);
 	if (!emetteur) throw new EntityNotFoundError("Emetteur", id);
 	return emetteur;
 }
 
-export function get_generateur(
+export function getGenerateur(
 	chauffage: Chauffage,
 	id: UUID,
 ): generateur.Generateur {
 	const generateur = chauffage.generateurs.find((g) => g.id === id);
 	if (!generateur) throw new EntityNotFoundError("Generateur", id);
 	return generateur;
+}
+
+export function getInstallationBySysteme(
+	chauffage: Chauffage,
+	id: UUID,
+): installation.Installation {
+	const e = chauffage.installations.find((i) =>
+		i.systemes.some((s) => s.id === id),
+	);
+	if (!e) throw new EntityNotFoundError("Installation", id);
+	return e;
 }

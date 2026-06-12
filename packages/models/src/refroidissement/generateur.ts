@@ -1,4 +1,5 @@
 import type { Consommations, Energie, UUID } from "#/common/common";
+import { EnergieEnum } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 
 export const isGenerateur = createGuard<Generateur>(
@@ -67,20 +68,20 @@ export type TypeGenerateur = (typeof TYPES_GENERATEUR)[number];
 export const TypeGenerateurEnum = buildEnum(TYPES_GENERATEUR);
 
 const TYPES_GENERATEUR_PAC = [
-	"pac_air_air",
-	"pac_air_eau",
-	"pac_eau_eau",
-	"pac_eau_glycolee_eau",
-	"pac_geothermique",
-	"autre_systeme_thermodynamique",
+	TypeGenerateurEnum.pac_air_air,
+	TypeGenerateurEnum.pac_air_eau,
+	TypeGenerateurEnum.pac_eau_eau,
+	TypeGenerateurEnum.pac_eau_glycolee_eau,
+	TypeGenerateurEnum.pac_geothermique,
+	TypeGenerateurEnum.autre_systeme_thermodynamique,
 ] as const satisfies readonly TypeGenerateur[];
 type TYPE_GENERATEUR_PAC = (typeof TYPES_GENERATEUR_PAC)[number];
 
-export const ENERGIES_REFROIDISSEMENT: readonly Energie[] = [
-	"electricite",
-	"gaz_naturel",
-	"gpl",
-	"reseau_froid",
+export const ENERGIES_REFROIDISSEMENT = [
+	EnergieEnum.electricite,
+	EnergieEnum.gaz_naturel,
+	EnergieEnum.gpl,
+	EnergieEnum.reseau_froid,
 ] as const satisfies readonly Energie[];
 export type EnergieRefroidissement = (typeof ENERGIES_REFROIDISSEMENT)[number];
 export const EnergieRefroidissementEnum = buildEnum(ENERGIES_REFROIDISSEMENT);

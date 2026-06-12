@@ -211,6 +211,7 @@ export function calcule_rd(props: {
  * Rendements du système d'eau chaude sanitaire
  */
 export type Rendements = {
+	rd: ReturnType<typeof calcule_rd>;
 	// Rendement de génération
 	rg: number;
 	// Rendement de stockage
@@ -224,10 +225,12 @@ export type Rendements = {
  * @returns Rendements du réseau de chaleur et des générateurs multi-bâtiment
  */
 export function calcule_rendements_reseau_chaleur(props: {
+	rd: ReturnType<typeof calcule_rd>;
 	isolation_reseau: ReturnType<typeof set_isolation_reseau>;
 }): Rendements {
-	const rgs = props.isolation_reseau ? 0.9 : 0.75;
-	return { rgs, rg: 1, rs: 1 };
+	const { rd, isolation_reseau } = props;
+	const rgs = isolation_reseau ? 0.9 : 0.75;
+	return { rd, rgs, rg: 1, rs: 1 };
 }
 
 /**
@@ -239,22 +242,20 @@ export function calcule_rendements_reseau_chaleur(props: {
  * @returns Rendements de la chaudière mixte
  */
 export function calcule_rendements_chaudiere_mixte(props: {
+	rd: ReturnType<typeof calcule_rd>;
 	becs: ReturnType<typeof installation.calcule_becs>;
 	qgw: ReturnType<typeof generateur.calcule_qgw>;
 	rpn: ReturnType<typeof generateur.calcule_combustion>["rpn"];
 	qp0: ReturnType<typeof generateur.calcule_combustion>["qp0"];
 	pveilleuse: ReturnType<typeof generateur.calcule_combustion>["pveilleuse"];
 }): Rendements {
-	const qgw = props.qgw;
-	const qp0 = (props.qp0 ?? 0) * 1000;
-	const rpn = props.rpn ?? 0;
-	const pveilleuse = props.pveilleuse ?? 0;
+	const { rd, qgw, rpn, pveilleuse } = props;
+	const qp0 = props.qp0 * 1000;
 	const becs = models.common.reduceParMois(props.becs) * 1000;
-
 	const rgs =
 		1 /
 		(1 / rpn + (1790 * qp0 + qgw) / becs + 6970 * ((0.5 * pveilleuse) / becs));
-	return { rgs, rg: 1, rs: 1 };
+	return { rd, rgs, rg: 1, rs: 1 };
 }
 
 /**
@@ -262,30 +263,29 @@ export function calcule_rendements_chaudiere_mixte(props: {
  * @returns Rendements du chauffe-eau gaz
  */
 export function calcule_rendements_chauffe_eau_gaz(props: {
+	rd: ReturnType<typeof calcule_rd>;
 	becs: ReturnType<typeof installation.calcule_becs>;
 	qgw: ReturnType<typeof generateur.calcule_qgw>;
 	rpn: ReturnType<typeof generateur.calcule_combustion>["rpn"];
 	qp0: ReturnType<typeof generateur.calcule_combustion>["qp0"];
 	pveilleuse: ReturnType<typeof generateur.calcule_combustion>["pveilleuse"];
 }): Rendements {
-	const qgw = props.qgw;
+	const { rd, qgw, rpn, pveilleuse } = props;
 	const qp0 = props.qp0 * 1000;
-	const rpn = props.rpn;
-	const pveilleuse = props.pveilleuse;
 	const becs = models.common.reduceParMois(props.becs) * 1000;
 
 	// Accumulateur
 	if (qgw) {
 		const rgs =
 			1 / (1 / rpn + (8592 * qp0 + qgw) / becs + 6970 * (pveilleuse / becs));
-		return { rgs, rg: 1, rs: 1 };
+		return { rd, rgs, rg: 1, rs: 1 };
 	}
 	// Chauffe eau instantané
 	let rg: number = 1 / rpn;
 	rg += 1790 * (qp0 / becs);
 	rg += 6970 * (pveilleuse / becs);
 	rg = 1 / rg;
-	return { rgs: 1, rg: rg, rs: 1 };
+	return { rd, rgs: 1, rg: rg, rs: 1 };
 }
 
 /**
@@ -293,9 +293,9 @@ export function calcule_rendements_chauffe_eau_gaz(props: {
  * @returns Rendements du système électrique
  */
 export function calcule_rendements_systeme_electrique(props: {
+	rd: ReturnType<typeof calcule_rd>;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	becs: ReturnType<typeof installation.calcule_becs>;
-	rd: ReturnType<typeof calcule_rd>;
 	qgw: ReturnType<typeof generateur.calcule_qgw>;
 	position_chauffe_eau: models.ecs.generateur.PositionChauffeEau | null;
 	label_generateur: models.ecs.generateur.Label | null;
@@ -309,7 +309,7 @@ export function calcule_rendements_systeme_electrique(props: {
 			? 1.08 / (1 + (qgw * rd) / becs)
 			: 1 / (1 + (qgw * rd) / becs);
 
-	return { rgs: 1, rg: rg, rs };
+	return { rd, rgs: 1, rg: rg, rs };
 }
 
 /**
@@ -317,9 +317,11 @@ export function calcule_rendements_systeme_electrique(props: {
  * @returns Rendements du système thermodynamique
  */
 export function calcule_rendements_systeme_thermodynamique(props: {
+	rd: ReturnType<typeof calcule_rd>;
 	cop: ReturnType<typeof generateur.calcule_cop>;
 }): Rendements {
-	return { rgs: props.cop, rg: 1, rs: 1 };
+	const { rd, cop } = props;
+	return { rd, rgs: cop, rg: 1, rs: 1 };
 }
 
 /**

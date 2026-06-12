@@ -9,18 +9,15 @@ type Installation = models.ventilation.installation.Installation;
 export function calcule(
 	ctx: Context,
 	item: Installation,
-): models.ventilation.installation.InstallationWithData {
+): models.ventilation.installation.InstallationData {
 	return {
-		...item,
-		data: {
-			consommations: consommations(ctx, item),
-			pvent_moy: pvent_moy(ctx, item),
-			rdim: rdim(ctx, item),
-			qvarep_conv: debits(ctx, item).qvarep_conv,
-			qvasouf_conv: debits(ctx, item).qvasouf_conv,
-			smea_conv: debits(ctx, item).smea_conv,
-			hvent: hvent(ctx, item),
-		},
+		consommations: consommations(ctx, item),
+		pvent_moy: pvent_moy(ctx, item),
+		rdim: rdim(ctx, item),
+		qvarep_conv: debits(ctx, item).qvarep_conv,
+		qvasouf_conv: debits(ctx, item).qvasouf_conv,
+		smea_conv: debits(ctx, item).smea_conv,
+		hvent: hvent(ctx, item),
 	};
 }
 

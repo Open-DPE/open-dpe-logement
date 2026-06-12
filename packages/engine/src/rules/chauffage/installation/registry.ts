@@ -8,5 +8,6 @@ export const REGISTRY = {
 		[RULES.rdim]: rules.rdim,
 		[RULES.pch]: rules.pch,
 		[RULES.fch]: rules.fch,
+		[RULES.effet_joule]: rules.effet_joule,
 	},
 };

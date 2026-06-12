@@ -10,20 +10,11 @@ export { generateur, installation };
 
 export function calcule(
 	ctx: Context,
-): models.refroidissement.RefroidissementWithData {
+): models.refroidissement.RefroidissementData {
 	return {
-		...ctx.diagnostic.refroidissement,
-		generateurs: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-			generateur.calcule(ctx, item),
-		),
-		installations: ctx.diagnostic.refroidissement.installations.map((item) =>
-			installation.calcule(ctx, item),
-		),
-		data: {
-			bfr: models.common.reduceParMois(bfr(ctx)),
-			as: models.common.reduceParMois(as(ctx)),
-			ai: models.common.reduceParMois(ai(ctx)),
-		},
+		bfr: models.common.reduceParMois(bfr(ctx)),
+		as: models.common.reduceParMois(as(ctx)),
+		ai: models.common.reduceParMois(ai(ctx)),
 	};
 }
 

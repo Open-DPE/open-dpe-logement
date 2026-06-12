@@ -6,6 +6,19 @@ import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
 import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
+ * @formule enveloppe.plancher-haut.dp
+ * @returns Déperditions thermiques du plancher haut en W/K
+ */
+export function calcule_dp(props: {
+	sdep: ReturnType<typeof paroi.calcule_sdep>;
+	b: paroi.b;
+	u: ReturnType<typeof calcule_u>;
+}): number {
+	const { sdep, b, u } = props;
+	return sdep * b * u;
+}
+
+/**
  * @formule enveloppe.plancher_haut.isolation_aiu
  * @param props.isolation : État d'isolation saisi du plancher haut donnant sur un local non chauffé
  * @param props.annee_construction : Année de construction du bâtiment

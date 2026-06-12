@@ -34,21 +34,27 @@ export type EcsData = {
 	nmax: number;
 };
 
-export function get_systemes(ecs: Ecs): systeme.Systeme[] {
+export function getSysteme(ecs: Ecs): systeme.Systeme[] {
 	return ecs.installations.flatMap((i) => i.systemes);
 }
 
-export function get_generateur(ecs: Ecs, id: UUID): generateur.Generateur {
+export function getGenerateur(ecs: Ecs, id: UUID): generateur.Generateur {
 	const e = ecs.generateurs.find((g) => g.id === id);
 	if (!e) throw new EntityNotFoundError("Générateur", id);
 	return e;
 }
 
-export function get_installation(
+export function getInstallation(ecs: Ecs, id: UUID): installation.Installation {
+	const e = ecs.installations.find((g) => g.id === id);
+	if (!e) throw new EntityNotFoundError("Installation", id);
+	return e;
+}
+
+export function getInstallationBySysteme(
 	ecs: Ecs,
 	id: UUID,
 ): installation.Installation {
-	const e = ecs.installations.find((g) => g.id === id);
+	const e = ecs.installations.find((i) => i.systemes.some((s) => s.id === id));
 	if (!e) throw new EntityNotFoundError("Installation", id);
 	return e;
 }

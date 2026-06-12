@@ -16,7 +16,7 @@ export type Props = {
 	pn_cascade: ReturnType<typeof calcule_pn_cascade>;
 	cascade: models.chauffage.generateur.Cascade | null;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
-	energie_combustion: models.common.EnergieCombustion;
+	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
 	rpn: ReturnType<typeof generateur.calcule_combustion>["rpn"];
 	rpint: ReturnType<typeof generateur.calcule_combustion>["rpint"];
 	qp0: ReturnType<typeof generateur.calcule_combustion>["qp0"];

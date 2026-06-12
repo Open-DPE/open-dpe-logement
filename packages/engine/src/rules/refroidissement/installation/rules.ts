@@ -8,12 +8,9 @@ type Installation = models.refroidissement.installation.Installation;
 export function calcule(
 	ctx: Context,
 	installation: Installation,
-): models.refroidissement.installation.InstallationWithData {
+): models.refroidissement.installation.InstallationData {
 	return {
-		...installation,
-		data: {
-			rdim: rdim(ctx, installation),
-		},
+		rdim: rdim(ctx, installation),
 	};
 }
 

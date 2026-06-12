@@ -1,4 +1,4 @@
-import type { Item } from "./context.js";
+import type { Item } from "./registry.js";
 
 type CacheKey = string;
 

@@ -2,11 +2,6 @@ import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "#rules/climat/formulas.js";
 import type * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
-import type * as baie from "#rules/enveloppe/baie/formulas.js";
-import type * as mur from "#rules/enveloppe/mur/formulas.js";
-import type * as plancherBas from "#rules/enveloppe/plancher-bas/formulas.js";
-import type * as plancherHaut from "#rules/enveloppe/plancher-haut/formulas.js";
-import type * as porte from "#rules/enveloppe/porte/formulas.js";
 import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
@@ -67,7 +62,7 @@ export type b = number;
  * @guard {@linkcode models.enveloppe.common.isPositionParoiLocalNonChauffe} && {@linkcode models.enveloppe.localNonChauffe.isAutreLocalNonChauffe}
  * @returns Coefficient de réduction des déperditions thermiques de la paroi donnant sur un local non chauffé
  */
-export function calcule_b_lnc(props: { blnc: localNonChauffe.b }): number {
+export function calcule_b_lnc(props: { blnc: localNonChauffe.b }): b {
 	return props.blnc;
 }
 
@@ -82,13 +77,8 @@ export function calcule_b_ets(props: {
 	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLnc;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	orientations_ets: ReturnType<typeof localNonChauffe.calcule_orientations>;
-	isolation_paroi:
-		| ReturnType<typeof baie.set_isolation>
-		| ReturnType<typeof mur.set_isolation>
-		| ReturnType<typeof plancherBas.set_isolation>
-		| ReturnType<typeof plancherHaut.set_isolation>
-		| ReturnType<typeof porte.set_isolation>;
-}): number {
+	isolation_paroi: boolean;
+}): b {
 	const { zone_climatique, orientations_ets, isolation_paroi } = props;
 	const abaque = abaques.enveloppe.paroi.bver;
 	const data = abaque.load();
@@ -119,28 +109,6 @@ export function calcule_b_autres(props: {
 		default:
 			return 1;
 	}
-}
-
-/**
- * @formule enveloppe.mur.dp
- * @formule enveloppe.plancher_bas.dp
- * @formule enveloppe.plancher_haut.dp
- * @formule enveloppe.porte.dp
- * @param props.u : Coefficient de transmission thermique de la paroi en W/m²K
- * @returns Déperditions thermiques de la paroi en W/K
- */
-export function calcule_dp(props: {
-	sdep: ReturnType<typeof calcule_sdep>;
-	b: b;
-	u:
-		| ReturnType<typeof baie.calcule_u>
-		| ReturnType<typeof mur.calcule_u>
-		| ReturnType<typeof plancherBas.calcule_u>
-		| ReturnType<typeof plancherHaut.calcule_u>
-		| ReturnType<typeof porte.calcule_u>;
-}): number {
-	const { sdep, b, u } = props;
-	return sdep * b * u;
 }
 
 /**

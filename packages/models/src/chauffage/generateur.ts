@@ -1,5 +1,5 @@
 import type { Consommations, Energie, UUID } from "#/common/common";
-import { isEnergieCombustion } from "#/common/common";
+import { EnergieEnum, isEnergieCombustion } from "#/common/common";
 import { buildEnum, createGuard } from "#/utils";
 
 export const isGenerateur = createGuard<Generateur>("/chauffage/generateur");
@@ -154,7 +154,7 @@ export type Position = {
 	generateur_collectif: boolean;
 	generateur_multi_batiment: boolean;
 	position_volume_chauffe: boolean;
-	generateur_mixte_id: string | null;
+	generateur_mixte_id: UUID | null;
 	reseau_chaleur_id: string | null;
 };
 
@@ -434,17 +434,29 @@ export const TYPES_GENERATEUR = [
 export type TypeGenerateur = (typeof TYPES_GENERATEUR)[number];
 export const TypeGenerateurEnum = buildEnum(TYPES_GENERATEUR);
 
-export const TYPES_GENERATEUR_THERMODYNAMIQUE: readonly TypeGenerateur[] = [
+export const TYPES_GENERATEUR_THERMODYNAMIQUE = [
 	TypeGenerateurEnum.pac_air_air,
 	TypeGenerateurEnum.pac_air_eau,
 	TypeGenerateurEnum.pac_eau_eau,
 	TypeGenerateurEnum.pac_eau_glycolee_eau,
 	TypeGenerateurEnum.pac_geothermique,
-] as const;
+] as const satisfies readonly TypeGenerateur[];
+
 export type TypeGenerateurThermodynamique =
 	(typeof TYPES_GENERATEUR_THERMODYNAMIQUE)[number];
 
-export const TYPES_GENERATEUR_COMBUSTION: readonly TypeGenerateur[] = [
+export function isTypeGenerateurThermodynamique(
+	type: TypeGenerateur | null,
+): boolean {
+	return (
+		type !== null &&
+		(TYPES_GENERATEUR_THERMODYNAMIQUE as readonly TypeGenerateur[]).includes(
+			type,
+		)
+	);
+}
+
+export const TYPES_GENERATEUR_COMBUSTION = [
 	TypeGenerateurEnum.chaudiere,
 	TypeGenerateurEnum.cuisiniere,
 	TypeGenerateurEnum.foyer_ferme,
@@ -453,11 +465,20 @@ export const TYPES_GENERATEUR_COMBUSTION: readonly TypeGenerateur[] = [
 	TypeGenerateurEnum.poele_bouilleur,
 	TypeGenerateurEnum.radiateur_gaz,
 	TypeGenerateurEnum.generateur_air_chaud,
-] as const;
+] as const satisfies readonly TypeGenerateur[];
 export type TypeGenerateurCombustion =
 	(typeof TYPES_GENERATEUR_COMBUSTION)[number];
 
-export const TYPES_GENERATEUR_ELECTRIQUE: readonly TypeGenerateur[] = [
+export function isTypeGenerateurCombustion(
+	type: TypeGenerateur | null,
+): boolean {
+	return (
+		type !== null &&
+		(TYPES_GENERATEUR_COMBUSTION as readonly TypeGenerateur[]).includes(type)
+	);
+}
+
+export const TYPES_GENERATEUR_ELECTRIQUE = [
 	TypeGenerateurEnum.chaudiere,
 	TypeGenerateurEnum.generateur_air_chaud,
 	TypeGenerateurEnum.convecteur_bi_jonction,
@@ -467,28 +488,37 @@ export const TYPES_GENERATEUR_ELECTRIQUE: readonly TypeGenerateur[] = [
 	TypeGenerateurEnum.plancher_rayonnant_electrique,
 	TypeGenerateurEnum.radiateur_electrique,
 	TypeGenerateurEnum.radiateur_electrique_accumulation,
-] as const;
+] as const satisfies readonly TypeGenerateur[];
 export type TypeGenerateurElectrique =
 	(typeof TYPES_GENERATEUR_ELECTRIQUE)[number];
 
+export function isTypeGenerateurElectrique(
+	type: TypeGenerateur | null,
+): boolean {
+	return (
+		type !== null &&
+		(TYPES_GENERATEUR_ELECTRIQUE as readonly TypeGenerateur[]).includes(type)
+	);
+}
+
 export const ENERGIES_CHAUFFAGE = [
-	"electricite",
-	"gaz_naturel",
-	"gpl",
-	"fioul",
-	"charbon",
-	"bois_buche",
-	"bois_plaquette",
-	"bois_granule",
-	"reseau_chaleur",
+	EnergieEnum.electricite,
+	EnergieEnum.gaz_naturel,
+	EnergieEnum.gpl,
+	EnergieEnum.fioul,
+	EnergieEnum.charbon,
+	EnergieEnum.bois_buche,
+	EnergieEnum.bois_plaquette,
+	EnergieEnum.bois_granule,
+	EnergieEnum.reseau_chaleur,
 ] as const satisfies readonly Energie[];
 export type EnergieChauffage = (typeof ENERGIES_CHAUFFAGE)[number];
 export const EnergieChauffageEnum = buildEnum(ENERGIES_CHAUFFAGE);
 
 export const BIENERGIES = [
-	"gaz_naturel",
-	"gpl",
-	"fioul",
+	EnergieEnum.gaz_naturel,
+	EnergieEnum.gpl,
+	EnergieEnum.fioul,
 ] as const satisfies readonly EnergieChauffage[];
 export type Bienergie = (typeof BIENERGIES)[number];
 export const BienergieEnum = buildEnum(BIENERGIES);

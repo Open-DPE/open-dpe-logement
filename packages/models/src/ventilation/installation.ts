@@ -103,11 +103,11 @@ export const TYPES_VENTILATION = [
 export type TypeVentilation = (typeof TYPES_VENTILATION)[number];
 export const TypeVentilationEnum = buildEnum(TYPES_VENTILATION);
 
-export const TYPES_VENTILATION_NATURELLE: readonly TypeVentilation[] = [
-	"ventilation_ouverture_fenetres",
-	"ventilation_entrees_air_hautes_basses",
-	"ventilation_naturelle_conduit_entrees_air_hygroreglables",
-	"ventilation_naturelle_conduit",
+export const TYPES_VENTILATION_NATURELLE = [
+	TypeVentilationEnum.ventilation_ouverture_fenetres,
+	TypeVentilationEnum.ventilation_entrees_air_hautes_basses,
+	TypeVentilationEnum.ventilation_naturelle_conduit_entrees_air_hygroreglables,
+	TypeVentilationEnum.ventilation_naturelle_conduit,
 ] as const satisfies readonly TypeVentilation[];
 export type TypeVentilationNaturelle =
 	(typeof TYPES_VENTILATION_NATURELLE)[number];
@@ -116,17 +116,17 @@ export const TypeVentilationNaturelleEnum = buildEnum(
 );
 
 export const TYPES_VENTILATION_MECANIQUE = [
-	"vmc_simple_flux_autoreglable",
-	"vmc_simple_flux_hygroreglable_a",
-	"vmc_simple_flux_hygroreglable_gaz",
-	"vmc_simple_flux_hygroreglable_b",
-	"vmc_basse_pression_autoreglable",
-	"vmc_basse_pression_hygroreglable_a",
-	"vmc_basse_pression_hygroreglable_b",
-	"ventilation_hybride",
-	"ventilation_hybride_entrees_air_hygroreglables",
-	"ventilation_mecanique_conduit",
-	"ventilation_mecanique_insufflation",
+	TypeVentilationEnum.vmc_simple_flux_autoreglable,
+	TypeVentilationEnum.vmc_simple_flux_hygroreglable_a,
+	TypeVentilationEnum.vmc_simple_flux_hygroreglable_gaz,
+	TypeVentilationEnum.vmc_simple_flux_hygroreglable_b,
+	TypeVentilationEnum.vmc_basse_pression_autoreglable,
+	TypeVentilationEnum.vmc_basse_pression_hygroreglable_a,
+	TypeVentilationEnum.vmc_basse_pression_hygroreglable_b,
+	TypeVentilationEnum.ventilation_hybride,
+	TypeVentilationEnum.ventilation_hybride_entrees_air_hygroreglables,
+	TypeVentilationEnum.ventilation_mecanique_conduit,
+	TypeVentilationEnum.ventilation_mecanique_insufflation,
 ] as const satisfies readonly TypeVentilation[];
 export type TypeVentilationMecanique =
 	(typeof TYPES_VENTILATION_MECANIQUE)[number];
@@ -134,9 +134,9 @@ export const TypeVentilationMecaniqueEnum = buildEnum(
 	TYPES_VENTILATION_MECANIQUE,
 );
 
-export const TYPES_VENTILATION_HYBRIDE: readonly TypeVentilation[] = [
-	"ventilation_hybride",
-	"ventilation_hybride_entrees_air_hygroreglables",
+export const TYPES_VENTILATION_HYBRIDE = [
+	TypeVentilationEnum.ventilation_hybride,
+	TypeVentilationEnum.ventilation_hybride_entrees_air_hygroreglables,
 ] as const satisfies readonly TypeVentilation[];
 export type TypeVentilationHybride = (typeof TYPES_VENTILATION_HYBRIDE)[number];
 export const TypeVentilationHybrideEnum = buildEnum(TYPES_VENTILATION_HYBRIDE);

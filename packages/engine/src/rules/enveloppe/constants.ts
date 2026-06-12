@@ -1,3 +1,12 @@
+export * as baie from "./baie/constants.js";
+export * as localNonChauffe from "./local-non-chauffe/constants.js";
+export * as mur from "./mur/constants.js";
+export * as niveau from "./niveau/constants.js";
+export * as plancherBas from "./plancher-bas/constants.js";
+export * as plancherHaut from "./plancher-haut/constants.js";
+export * as porte from "./porte/constants.js";
+export * as pontThermique from "./pont-thermique/constants.js";
+
 export const NAMESPACE = "enveloppe";
 
 export const RULES = {

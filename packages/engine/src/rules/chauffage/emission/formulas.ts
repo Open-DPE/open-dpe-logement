@@ -5,7 +5,7 @@ import type * as climat from "#rules/climat/formulas.js";
 import type * as enveloppe from "#rules/enveloppe/formulas.js";
 import type * as generateur from "#rules/chauffage/generateur/formulas.js";
 import type * as installation from "#rules/chauffage/installation/formulas.js";
-import type { calcule_bch, calcule_rdim, calcule_rd, Rg } from "../formulas.js";
+import type * as systeme from "#rules/chauffage/systeme/formulas.js";
 import { ValeurForfaitaireError } from "#rules/errors.js";
 
 /**
@@ -23,6 +23,7 @@ export const FUT_PAC_HYBRIDE = {
 };
 
 /**
+ * @formule chauffage.systeme.emission.cch
  * @param props.n - Nombre d'émissions associées au système de chauffage
  * @returns Consommations de chauffage du système en kWh/an
  */
@@ -35,16 +36,17 @@ export function calcule_cch(props: {
 }
 
 /**
- * @param props.n - Nombre d'émissions associées au système de chauffage
+ * @formule chauffage.systeme.emission.cch1
+ * @param props.n - Nombre d'émissions associées au système de chauffage (minimum 1)
  * @returns Consommations de chauffage du système OU de la partie PAC des PAC hybrides en kWh/an
  */
 export function calcule_cch1(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	pac_hybride: boolean;
-	bch: ReturnType<typeof calcule_bch>;
+	bch: ReturnType<typeof systeme.calcule_bch>;
 	fch: ReturnType<typeof installation.calcule_fch>;
 	rdim_i: ReturnType<typeof installation.calcule_rdim>;
-	rdim: ReturnType<typeof calcule_rdim>;
+	rdim: ReturnType<typeof systeme.dimensionnement.calcule_rdim>;
 	int: ReturnType<typeof calcule_int>;
 	ich1: ReturnType<typeof calcule_ich1>;
 	n: number;
@@ -56,16 +58,17 @@ export function calcule_cch1(props: {
 }
 
 /**
- * @param props.n - Nombre d'émissions associées au système de chauffage
+ * @formule chauffage.systeme.emission.cch2
+ * @param props.n - Nombre d'émissions associées au système de chauffage (minimum 1)
  * @returns Consommations de chauffage de la partie chaudière des PAC hybrides en kWh/an
  */
 export function calcule_cch2(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	pac_hybride: boolean;
-	bch: ReturnType<typeof calcule_bch>;
+	bch: ReturnType<typeof systeme.calcule_bch>;
 	fch: ReturnType<typeof installation.calcule_fch>;
 	rdim_i: ReturnType<typeof installation.calcule_rdim>;
-	rdim: ReturnType<typeof calcule_rdim>;
+	rdim: ReturnType<typeof systeme.dimensionnement.calcule_rdim>;
 	int: ReturnType<typeof calcule_int>;
 	ich2: ReturnType<typeof calcule_ich2>;
 	n: number;
@@ -77,6 +80,7 @@ export function calcule_cch2(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.int
  * @returns Facteur d'intermittence du système de chauffage
  */
 export function calcule_int(props: {
@@ -91,6 +95,7 @@ export function calcule_int(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.i0
  * @see abaques.chauffage.i0
  * @throws {ValeurForfaitaireError}
  * @param props.installation_collective : Installation collective ou individuelle
@@ -137,6 +142,7 @@ export function calcule_i0(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.ich
  * @returns Inverse du rendement du système de chauffage
  */
 export function calcule_ich(props: {
@@ -153,11 +159,12 @@ export function calcule_ich(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.ich1
  * @returns Inverse du rendement du système OU de la partie PAC des PAC hybrides
  */
 export function calcule_ich1(props: {
-	rd: ReturnType<typeof calcule_rd>;
-	rg: Rg;
+	rd: ReturnType<typeof systeme.calcule_rd>;
+	rg: systeme.Rg;
 	re: ReturnType<typeof calcule_re>;
 	rr: ReturnType<typeof calcule_rr>;
 	scop: ReturnType<typeof generateur.calcule_scop> | null;
@@ -167,11 +174,13 @@ export function calcule_ich1(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.ich2
+ * @guard {@linkcode models.chauffage.generateur.isPACHybride}
  * @returns Inverse du rendement de la partie chaudière des PAC hybrides
  */
 export function calcule_ich2(props: {
-	rd: ReturnType<typeof calcule_rd>;
-	rg: Rg;
+	rd: ReturnType<typeof systeme.calcule_rd>;
+	rg: systeme.Rg;
 	re: ReturnType<typeof calcule_re>;
 	rr: ReturnType<typeof calcule_rr>;
 }): number {
@@ -180,6 +189,7 @@ export function calcule_ich2(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.re
  * @see https://github.com/dpe-audit/dpe-logement/issues/50
  * @see abaques.chauffage.re
  * @throws {ValeurForfaitaireError}
@@ -198,6 +208,7 @@ export function calcule_re(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.rr
  * @see https://github.com/dpe-audit/dpe-logement/issues/50
  * @see abaques.chauffage.rr
  * @throws {ValeurForfaitaireError}
@@ -222,6 +233,7 @@ export function calcule_rr(props: {
 }
 
 /**
+ * @formule chauffage.systeme.emission.re
  * @see abaques.chauffage.emission
  * @throws {ValeurForfaitaireError}
  * @param props.type_distribution - Type de distribution du système de chauffage

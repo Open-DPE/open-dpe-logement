@@ -1,27 +1,41 @@
-import type { diagnostic } from "@open-dpe-logement/models";
+import * as models from "@open-dpe-logement/models";
+import { createContext } from "./core/context.js";
+import * as rules from "./rules/rules.js";
 
-export * as rules from "./rules.js";
+export * as constants from "./rules/constants.js";
 export * as formulas from "./rules/formulas.js";
-export * as registry from "./registry.js";
+export * as registry from "./rules/registry.js";
 
-const engine = new Engine();
+export { createContext, rules };
 
 /**
  * Calcule l'ensemble des indicateurs 3CL-DPE pour un diagnostic.
- * @returns L'objet Results contenant toutes les valeurs calculées.
  */
-export function calcule(diagnostic: diagnostic.Diagnostic): Results {
-	return engine.run(diagnostic);
-}
+export function calcule(
+	diagnostic: models.diagnostic.Diagnostic,
+	scenario: models.batiment.Scenario = "conventionnel",
+): models.diagnostic.DiagnosticWithData {
+	const context = createContext(diagnostic, scenario);
 
-/**
- * Applique les résultats 3CL-DPE calculés directement sur le diagnostic.
- * @returns Le diagnostic enrichi avec les valeurs calculées.
- */
-export function applique(
-	diagnostic: diagnostic.Diagnostic,
-): diagnostic.Diagnostic {
-	// TODO: projeter les Results sur les champs readOnly du diagnostic
-	engine.run(diagnostic);
-	return diagnostic;
+	const ventilation: models.ventilation.VentilationWithData = {
+		...diagnostic.ventilation,
+		data: rules.ventilation.calcule(context),
+		installations: diagnostic.ventilation.installations.map((installation) => ({
+			...installation,
+			data: rules.ventilation.installation.calcule(context, installation),
+		})),
+	}
+
+
+
+	return {
+		...diagnostic,
+
+		data: rules.diagnostic.calcule(context),
+
+		ventilation
+
+
+	}
+	return engine.run(diagnostic);
 }

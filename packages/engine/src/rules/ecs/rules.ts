@@ -10,28 +10,16 @@ import * as systeme from "./systeme/rules.js";
 
 export { generateur, installation, systeme };
 
-export function applique(ctx: Context): models.ecs.EcsWithData {
-	const generateurs = ctx.diagnostic.ecs.generateurs.map((item) =>
-		generateur.calcule(ctx, item),
-	);
-	const installations = ctx.diagnostic.ecs.installations.map((item) =>
-		installation.calcule(ctx, item),
-	);
-
+export function calcule(ctx: Context): models.ecs.EcsData {
 	return {
-		...ctx.diagnostic.ecs,
-		generateurs: models.common.toNonEmptyArray(generateurs),
-		installations: models.common.toNonEmptyArray(installations),
-		data: {
-			qgw: qgw(ctx),
-			qgen: qgen(ctx),
-			qdw_ind_vc: qdw_ind_vc(ctx),
-			qdw_col_vc: qdw_col_vc(ctx),
-			qdw_col_hvc: qdw_col_hvc(ctx),
-			becs: models.common.reduceParMois(becs(ctx)),
-			nadeq: nadeq(ctx),
-			nmax: nmax(ctx),
-		},
+		qgw: qgw(ctx),
+		qgen: qgen(ctx),
+		qdw_ind_vc: qdw_ind_vc(ctx),
+		qdw_col_vc: qdw_col_vc(ctx),
+		qdw_col_hvc: qdw_col_hvc(ctx),
+		becs: models.common.reduceParMois(becs(ctx)),
+		nadeq: nadeq(ctx),
+		nmax: nmax(ctx),
 	};
 }
 

@@ -9,14 +9,11 @@ type Generateur = models.refroidissement.generateur.Generateur;
 export function calcule(
 	ctx: Context,
 	generateur: Generateur,
-): models.refroidissement.generateur.GenerateurWithData {
+): models.refroidissement.generateur.GenerateurData {
 	return {
-		...generateur,
-		data: {
-			rdim: rdim(ctx),
-			eer: eer(ctx, generateur),
-			consommations: consommations(ctx, generateur),
-		},
+		rdim: rdim(ctx),
+		eer: eer(ctx, generateur),
+		consommations: consommations(ctx, generateur),
 	};
 }
 

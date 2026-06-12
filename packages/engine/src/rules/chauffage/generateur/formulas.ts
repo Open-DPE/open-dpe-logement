@@ -92,7 +92,7 @@ export function calcule_caux_gen_enr(props: {
  */
 export function calcule_rdim(props: {
 	systemes: {
-		rdim: ReturnType<typeof systeme.calcule_rdim>;
+		rdim: ReturnType<typeof systeme.dimensionnement.calcule_rdim>;
 		rdim_installation: ReturnType<typeof installation.calcule_rdim>;
 	}[];
 }): number {
@@ -260,8 +260,7 @@ export function calcule_combustion(props: {
 export function calcule_scop(props: {
 	scop_saisi: number | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
-	type_generateur: ReturnType<typeof set_type_generateur> &
-		models.chauffage.generateur.GenerateurThermodynamique["type"];
+	type_generateur: ReturnType<typeof set_type_generateur>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
 	types_emetteur: models.chauffage.emetteur.TypeEmetteur[];
 }): number {
