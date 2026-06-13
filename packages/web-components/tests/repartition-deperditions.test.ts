@@ -100,33 +100,20 @@ describe("renderRepartitionDeperditions", () => {
     expect(closeCount).toBe(1);
   });
 
-  it("la somme des proportions affichées vaut 100% quand toutes les parts sont proportionnelles à gv", () => {
+  it("la proportion de chaque catégorie est rendue dans le SVG quand toutes les parts sont égales (≈16,67%)", () => {
     // gv = dp_murs + dp_planchers_bas + dp_planchers_hauts + dp_ponts_thermiques + dp_menuiseries + dr
-    const gv = 600;
-    const props = {
-      gv,
-      dp_murs: 100,
-      dp_planchers_bas: 100,
-      dp_planchers_hauts: 100,
-      dp_ponts_thermiques: 100,
-      dp_menuiseries: 100,
-      dr: 100,
-    };
-    const murs = (props.dp_murs / gv) * 100;
-    const planchers_bas = (props.dp_planchers_bas / gv) * 100;
-    const planchers_hauts = (props.dp_planchers_hauts / gv) * 100;
-    const ponts_thermiques = (props.dp_ponts_thermiques / gv) * 100;
-    const menuiserie = (props.dp_menuiseries / gv) * 100;
-    const dr = (props.dr / gv) * 100;
-    const total = murs + planchers_bas + planchers_hauts + ponts_thermiques + menuiserie + dr;
-    expect(total).toBeCloseTo(100, 10);
+    // Chaque composante vaut 100/600 ≈ 16.666...% → toLocaleString() produit "16.666666666666668"
+    const result = renderRepartitionDeperditions(BASE_PROPS);
+    const expectedValue = (100 / 600 * 100).toLocaleString();
+    // La valeur doit apparaître dans un contexte de pourcentage (format : "<valeur> %")
+    expect(result).toContain(`${expectedValue} %`);
   });
 
-  it("une proportion de 50% est bien rendue dans le SVG", () => {
-    // murs = 300/600 = 50%
+  it("une proportion de 50% est bien rendue dans le SVG au format '<valeur> %'", () => {
+    // murs = 300/600 = 50% → toLocaleString() produit "50"
     const props = { ...BASE_PROPS, gv: 600, dp_murs: 300 };
     const result = renderRepartitionDeperditions(props);
-    // La valeur 50 doit apparaître dans le SVG (via toLocaleString)
-    expect(result).toContain("50");
+    // On cible le format exact produit par toLocaleString() : "50 %" avec espace avant le signe
+    expect(result).toContain(`${(50).toLocaleString()} %`);
   });
 });
