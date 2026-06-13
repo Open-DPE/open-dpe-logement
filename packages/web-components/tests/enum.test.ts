@@ -36,4 +36,10 @@ describe("renderEnum", () => {
     const result = renderEnum("scenario", "depensier");
     expect(result).toContain("Scénario dépensier");
   });
+
+  it("retourne '-' pour une valeur inconnue dans une clé existante", () => {
+    const result = renderEnum("scenario", "inconnu" as any);
+    expect(result).toContain("-");
+    expect(result).not.toContain("undefined");
+  });
 });

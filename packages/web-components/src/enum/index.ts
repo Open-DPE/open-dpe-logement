@@ -735,5 +735,27 @@ type EnumKey = keyof typeof MAP_ENUMS;
 
 export function renderEnum(key: EnumKey, value: any) {
 	const map = MAP_ENUMS[key];
-	return map ? map[value] : "-";
+	const text = map?.[value] ?? "-";
+	return `<span>${text}</span>`;
+}
+
+export class Enum extends HTMLElement {
+	static observedAttributes = ["key", "value"];
+
+	connectedCallback() {
+		this.render();
+	}
+	attributeChangedCallback() {
+		this.render();
+	}
+
+	private render() {
+		const key = this.getAttribute("key") as EnumKey;
+		const value = this.getAttribute("value");
+		this.innerHTML = renderEnum(key, value);
+	}
+}
+
+if (!customElements.get("open-dpe-logement-enum")) {
+	customElements.define("open-dpe-logement-enum", Enum);
 }
