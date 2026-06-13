@@ -1,0 +1,145 @@
+refroidissement.generateur.caux:
+  run: calcule_caux
+  cases:
+    - title: Auxiliaire de refroidissement → toujours 0
+      with: {}
+      expect: 0
+
+refroidissement.generateur.set_annee_installation:
+  run: set_annee_installation
+  cases:
+    - title: Année fournie → retournée telle quelle
+      with:
+        annee_installation: 2005
+        annee_construction_batiment: 1990
+      expect: 2005
+
+    - title: Année null → année de construction du bâtiment
+      with:
+        annee_installation: null
+        annee_construction_batiment: 1990
+      expect: 1990
+
+refroidissement.generateur.cfr_elec:
+  run: calcule_cfr_elec
+  cases:
+    - title: Énergie électrique → cfr
+      with:
+        cfr: 500
+        energie_generateur: electricite
+      expect: 500
+
+    - title: Énergie non électrique → 0
+      with:
+        cfr: 500
+        energie_generateur: gaz_naturel
+      expect: 0
+
+refroidissement.generateur.rdim:
+  run: calcule_rdim
+  cases:
+    - title: Un générateur par installation
+      with:
+        installations:
+          - rdim: 1
+            n_generateurs: 1
+      expect: 1
+
+    - title: Deux générateurs sur une installation
+      with:
+        installations:
+          - rdim: 0.6
+            n_generateurs: 2
+      expect: 0.3
+
+    - title: Deux installations avec répartitions différentes
+      with:
+        installations:
+          - rdim: 0.5
+            n_generateurs: 1
+          - rdim: 0.5
+            n_generateurs: 2
+      expect: 0.75
+
+    - title: Aucune installation → 0
+      with:
+        installations: []
+      expect: 0
+
+refroidissement.generateur.eer:
+  run: calcule_eer
+  cases:
+    - title: SEER saisi positif → SEER × 0.95
+      with:
+        zone_climatique: H1a
+        annee_installation: 2010
+        seer_saisi: 4.0
+      expect: 3.8
+
+    - title: SEER saisi = 0 → traité comme absent (abaque)
+      with:
+        zone_climatique: H1a
+        annee_installation: 2010
+        seer_saisi: 0
+      expect: 6.175
+
+    - title: Zone H1 - avant 2008 (abaque)
+      with:
+        zone_climatique: H1a
+        annee_installation: 2000
+        seer_saisi: null
+      expect: 3.6
+
+    - title: Zone H1 - 2008 à 2014 (abaque)
+      with:
+        zone_climatique: H1a
+        annee_installation: 2010
+        seer_saisi: null
+      expect: 6.175
+
+    - title: Zone H1 - à partir de 2015 (abaque)
+      with:
+        zone_climatique: H1a
+        annee_installation: 2020
+        seer_saisi: null
+      expect: 6.365
+
+    - title: Zone H3 - avant 2008 (abaque)
+      with:
+        zone_climatique: H3
+        annee_installation: 2000
+        seer_saisi: null
+      expect: 3.25
+
+    - title: Zone H3 - à partir de 2015 (abaque)
+      with:
+        zone_climatique: H3
+        annee_installation: 2020
+        seer_saisi: null
+      expect: 7.125
+
+    - title: Zone inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: INCONNUE
+        annee_installation: 2010
+        seer_saisi: null
+      expectError: true
+
+refroidissement.generateur.cfr:
+  run: calcule_cfr
+  cases:
+    - title: Cas standard
+      with:
+        bfr:
+          "01": 1000
+        rdim: 0.5
+        eer: 2.5
+      expect: 180
+
+    - title: BFR nul → 0
+      with:
+        bfr:
+          "01": 0
+        rdim: 1
+        eer: 3.6
+      expect: 0

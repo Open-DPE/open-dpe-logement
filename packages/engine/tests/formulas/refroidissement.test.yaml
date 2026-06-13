@@ -1,0 +1,88 @@
+refroidissement.tint:
+  run: calcule_tint
+  cases:
+    - title: Scénario conventionnel → 28°C
+      with:
+        scenario: conventionnel
+      expect: 28
+
+    - title: Scénario dépensier → 26°C
+      with:
+        scenario: depensier
+      expect: 26
+
+refroidissement.cin:
+  run: calcule_cin
+  cases:
+    - title: Inertie légère (110 000 × sh)
+      with:
+        sh: 100
+        inertie: legere
+      expect: 11000000
+
+    - title: Inertie moyenne (165 000 × sh)
+      with:
+        sh: 100
+        inertie: moyenne
+      expect: 16500000
+
+    - title: Inertie lourde (260 000 × sh)
+      with:
+        sh: 100
+        inertie: lourde
+      expect: 26000000
+
+    - title: Inertie très lourde (260 000 × sh)
+      with:
+        sh: 100
+        inertie: tres_lourde
+      expect: 26000000
+
+refroidissement.t:
+  run: calcule_t
+  cases:
+    - title: Cas standard → cin / (3600 × gv)
+      with:
+        gv: 100
+        cin: 360000
+      expect: 1
+
+    - title: GV nul → 0 (pas de division par zéro)
+      with:
+        gv: 0
+        cin: 1000000
+      expect: 0
+
+refroidissement.cfr:
+  run: calcule_cfr
+  cases:
+    - title: Somme de plusieurs générateurs
+      with:
+        cfr: [100, 200, 50]
+      expect: 350
+
+    - title: Aucun générateur
+      with:
+        cfr: []
+      expect: 0
+
+refroidissement.cfr_elec:
+  run: calcule_cfr_elec
+  cases:
+    - title: Somme des consommations électriques
+      with:
+        cfr_elec: [150, 250]
+      expect: 400
+
+    - title: Aucun générateur
+      with:
+        cfr_elec: []
+      expect: 0
+
+refroidissement.caux:
+  run: calcule_caux
+  cases:
+    - title: Auxiliaires de refroidissement (toujours 0)
+      with:
+        caux: [0, 0]
+      expect: 0

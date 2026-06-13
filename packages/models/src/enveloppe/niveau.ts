@@ -1,6 +1,6 @@
-import type { UUID } from "#/common/common";
+import type { UUID } from "../common/common.js";
 import type { Inertie, InertieParoi } from "./common.js";
-import { createGuard } from "#/utils.js";
+import { createGuard } from "../utils.js";
 
 export const isNiveau = createGuard<Niveau>("/enveloppe/niveau");
 

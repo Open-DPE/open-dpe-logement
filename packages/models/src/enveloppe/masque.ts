@@ -1,5 +1,5 @@
-import type { UUID } from "#common/index.js";
-import { buildEnum, createGuard } from "../utils";
+import type { UUID } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
 
 export const isMasque = createGuard<Masque>("/enveloppe/masque");
 

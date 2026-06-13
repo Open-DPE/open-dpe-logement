@@ -2,8 +2,8 @@ import type {
 	UUID,
 	NonEmptyArray,
 	OrientationCardinale,
-} from "#/common/common";
-import { buildEnum, createGuard } from "#/utils";
+} from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
 import type {
 	Mitoyennete,
 	Orientation,

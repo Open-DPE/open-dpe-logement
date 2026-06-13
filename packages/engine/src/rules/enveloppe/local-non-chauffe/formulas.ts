@@ -2,16 +2,16 @@ import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
 import * as baie from "./baie/formulas.js";
 import * as paroi from "./paroi/formulas.js";
-import type { calcule_aiu as calcule_aiu_paroi } from "#rules/enveloppe/paroi/formulas.js";
-import type { calcule_b_ets as calcule_b_ets } from "#rules/enveloppe/paroi/formulas.js";
-import type { calcule_sse as calcule_sse_baie } from "#rules/enveloppe/baie/formulas.js";
-import type { calcule_isolation_aiu as calcule_isolation_aiu_baie } from "#rules/enveloppe/baie/formulas.js";
-import type { calcule_isolation_aiu as calcule_isolation_aiu_mur } from "#rules/enveloppe/mur/formulas.js";
-import type { calcule_isolation_aiu as calcule_isolation_aiu_pb } from "#rules/enveloppe/plancher-bas/formulas.js";
-import type { calcule_isolation_aiu as calcule_isolation_aiu_ph } from "#rules/enveloppe/plancher-haut/formulas.js";
-import type { calcule_isolation_aiu as calcule_isolation_aiu_porte } from "#rules/enveloppe/porte/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { createParMois } from "#rules/helpers.js";
+import type { calcule_aiu as calcule_aiu_paroi } from "../paroi/formulas.js";
+import type { calcule_b_ets as calcule_b_ets } from "../paroi/formulas.js";
+import type { calcule_sse as calcule_sse_baie } from "../baie/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_baie } from "../baie/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_mur } from "../mur/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_pb } from "../plancher-bas/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_ph } from "../plancher-haut/formulas.js";
+import type { calcule_isolation_aiu as calcule_isolation_aiu_porte } from "../porte/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { createParMois } from "../../helpers.js";
 
 export { baie, paroi };
 
@@ -67,6 +67,7 @@ export function calcule_bver(props: {
 
 /**
  * @guard {@linkcode models.enveloppe.localNonChauffe.isAutreLocalNonChauffe}
+ * @formule enveloppe.local_non_chauffe.uvue
  * @see abaques.enveloppe.localNonChauffe.uvue
  * @throws {ValeurForfaitaireError}
  * @returns Coefficient de transmission thermique équivalent du local non chauffé en W/m².K

@@ -1,4 +1,4 @@
-export * as installation from "./installation/constants";
+export * as installation from "./installation/constants.js";
 
 export const NAMESPACE = "ventilation";
 

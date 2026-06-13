@@ -1,12 +1,8 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as enveloppe from "#rules/enveloppe/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import {
-	createParMoisFrom,
-	containsAllMois,
-	mapParMois,
-} from "#rules/helpers.js";
+import type * as enveloppe from "../enveloppe/formulas.js";
+import { ValeurForfaitaireError } from "../errors.js";
+import { createParMoisFrom, containsAllMois, mapParMois } from "../helpers.js";
 
 /**
  * @formule climat.zone_climatique

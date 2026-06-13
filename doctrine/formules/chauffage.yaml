@@ -296,7 +296,7 @@ chauffage.generateur.caux_gen_enr:
     - production.celec
     - production.celec_ac
 
-chauffage:generateur:rdim:
+chauffage.generateur.rdim:
   id: chauffage.generateur.rdim
   description: Ratio de dimensionnement du générateur de chauffage
   extra: true
@@ -324,7 +324,7 @@ chauffage.generateur.pdim:
     - chauffage.generateur.pch
     - ecs.generateur.pecs
 
-chauffage:generateur:pch:
+chauffage.generateur.pch:
   id: chauffage.generateur.pch
   description: Puissance conventionnelle du générateur de chauffage
   type: number
@@ -571,6 +571,13 @@ chauffage.systeme.rdim:
   extra: true
   type: number
 
+chauffage.systeme.role:
+  id: chauffage.systeme.role
+  description: Rôle du système de chauffage (base, relève ou appoint)
+  references: Méthode 3CL-DPE 2021 §9
+  extra: true
+  type: string
+
 chauffage.systeme.pch:
   id: chauffage.systeme.pch
   description: Puissance conventionnelle du système de chauffage
@@ -579,6 +586,41 @@ chauffage.systeme.pch:
   unite: kW
   dependances:
     - chauffage.installation.pch
+
+chauffage.systeme.dht:
+  id: chauffage.systeme.dht
+  description: Degré heure base T sur le mois
+  references: Méthode 3CL-DPE 2021 §9.8
+  type: number
+  unite: °C.h/mois
+  dependances:
+    - chauffage.nref
+    - climat.sollicitations
+    - climat.tbase
+    - chauffage.systeme.t
+
+chauffage.systeme.t:
+  id: chauffage.systeme.t
+  description: Température de dimensionnement du système de chauffage collectif
+  references: Méthode 3CL-DPE 2021 §9.8
+  type: number
+  unite: °C
+  dependances:
+    - chauffage.installation.bch
+    - climat.sollicitations
+    - chauffage.systeme.pe
+
+chauffage.systeme.pe:
+  id: chauffage.systeme.pe
+  description: Puissance émise utile du système de chauffage collectif
+  references: Méthode 3CL-DPE 2021 §9.8
+  type: number
+  unite: kW
+  dependances:
+    - chauffage.generateur.pn
+    - chauffage.systeme.rd
+    - chauffage.systeme.re
+    - chauffage.systeme.rr
 
 chauffage.systeme.int:
   id: chauffage.systeme.int
@@ -608,7 +650,7 @@ chauffage.systeme.re:
   extra: true
   type: number
   dependances:
-    - chauffage.systeme.emisssion.re
+    - chauffage.systeme.emission.re
 
 chauffage.systeme.rg:
   id: chauffage.systeme.rg
@@ -628,7 +670,7 @@ chauffage.systeme.rr:
   extra: true
   type: number
   dependances:
-    - chauffage.systeme.emisssion.rr
+    - chauffage.systeme.emission.rr
 
 chauffage.systeme.pcircem:
   id: chauffage.systeme.pcircem

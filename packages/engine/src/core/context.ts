@@ -35,6 +35,8 @@ export interface Context {
 
 	once<T>(ns: Namespace, key: string, fn: Thunk<T>): T;
 	once<T>(ns: Namespace, key: string, item: Item, fn: Thunk<T>): T;
+
+	log(): Map<string, unknown>;
 }
 
 export function createContext(
@@ -112,6 +114,10 @@ export function createContext(
 			const result = fnToCall();
 			cache.set(ns, key, item, result);
 			return result;
+		},
+
+		log(): Map<string, unknown> {
+			return cache.all();
 		},
 	};
 

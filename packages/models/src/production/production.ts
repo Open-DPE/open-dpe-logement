@@ -1,4 +1,4 @@
-import { buildEnum, createGuard } from "#/utils.js";
+import { buildEnum, createGuard } from "../utils.js";
 import * as panneauPhotovoltaique from "./panneau-photovoltaique.js";
 
 export { panneauPhotovoltaique };

@@ -1,6 +1,6 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
  * @formule enveloppe.pont_thermique.pt

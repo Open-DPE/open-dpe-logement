@@ -1,9 +1,8 @@
-import type { UUID } from "#/common/common";
-import { buildEnum, createGuard } from "#/utils";
+import type { UUID } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
 import type {
 	InertieParoi,
 	Isolation,
-	Orientation,
 	Position as PositionBase,
 } from "./common.js";
 
@@ -46,9 +45,7 @@ export type Structure = {
 	materiau_ancien: boolean | null;
 };
 
-export type Position = PositionBase & {
-	orientation: Orientation;
-};
+export type Position = PositionBase;
 
 export const MATERIAUX_MUR = [
 	"pierre_moellons",

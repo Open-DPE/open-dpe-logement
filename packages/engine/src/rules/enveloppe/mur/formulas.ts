@@ -1,9 +1,9 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as chauffage from "#rules/chauffage/formulas.js";
-import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as chauffage from "../../chauffage/formulas.js";
+import type * as paroi from "../paroi/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
  * @formule enveloppe.mur.dp
@@ -132,8 +132,10 @@ export function calcule_u0(props: {
 		values.push(match.u0);
 	}
 
-	const u0 = values.reduce((acc, value) => 1 / (1 / acc + 1 / value));
-	return Math.min(u0 + u0_enduit_isolant + u0_doublage, 2.5);
+	let u0 = values.reduce((acc, value) => 1 / (1 / acc + 1 / value));
+	if (u0_enduit_isolant) u0 = 1 / (1 / u0 + 1 / u0_enduit_isolant);
+	if (u0_doublage) u0 = 1 / (1 / u0 + 1 / u0_doublage);
+	return Math.min(u0, 2.5);
 }
 
 /**

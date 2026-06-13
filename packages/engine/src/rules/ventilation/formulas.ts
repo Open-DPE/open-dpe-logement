@@ -1,5 +1,5 @@
 import * as models from "@open-dpe-logement/models";
-import * as installation from "#rules/ventilation/installation/formulas.js";
+import * as installation from "./installation/formulas.js";
 
 export { installation };
 

@@ -1,0 +1,96 @@
+climat.zone_climatique:
+  run: calcule_zone_climatique
+  cases:
+    - title: Ain (01) → H1c
+      with:
+        code_departement: "01"
+      expect: H1c
+
+    - title: Paris (75) → H1a
+      with:
+        code_departement: "75"
+      expect: H1a
+
+    - title: Alpes-Maritimes (06) → H3
+      with:
+        code_departement: "06"
+      expect: H3
+
+    - title: Vaucluse (84) → H2d
+      with:
+        code_departement: "84"
+      expect: H2d
+
+    - title: Corse-du-Sud (2A) → H3
+      with:
+        code_departement: 2A
+      expect: H3
+
+    - title: Code département inconnu → erreur ValeurForfaitaire
+      with:
+        code_departement: "INCONNU"
+      expectError: true
+
+climat.tbase:
+  run: calcule_tbase
+  cases:
+    - title: Zone H1 - altitude < 400 m → -9.5°C
+      with:
+        zone_climatique: H1a
+        altitude: 100
+      expect: -9.5
+
+    - title: Zone H1 - 400 ≤ altitude ≤ 800 m → -11.5°C
+      with:
+        zone_climatique: H1a
+        altitude: 500
+      expect: -11.5
+
+    - title: Zone H1 - altitude > 800 m → -13.5°C
+      with:
+        zone_climatique: H1a
+        altitude: 900
+      expect: -13.5
+
+    - title: Zone H2 - altitude < 400 m → -6.5°C
+      with:
+        zone_climatique: H2b
+        altitude: 100
+      expect: -6.5
+
+    - title: Zone H3 - altitude < 400 m → -3.5°C
+      with:
+        zone_climatique: H3
+        altitude: 100
+      expect: -3.5
+
+    - title: Zone H3 - 400 ≤ altitude ≤ 800 m → -5.5°C
+      with:
+        zone_climatique: H3
+        altitude: 600
+      expect: -5.5
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: INCONNUE
+        altitude: 100
+      expectError: true
+
+climat.nj:
+  run: calcule_nj
+  cases:
+    - title: Nombre de jours par mois (décembre = 24 jours conventionnels)
+      with: {}
+      expect:
+        "01": 31
+        "02": 28
+        "03": 31
+        "04": 30
+        "05": 31
+        "06": 30
+        "07": 31
+        "08": 31
+        "09": 30
+        "10": 31
+        "11": 30
+        "12": 24

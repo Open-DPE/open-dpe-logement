@@ -1,9 +1,8 @@
-import type { UUID } from "#/common/common";
-import { buildEnum, createGuard } from "#/utils";
+import type { UUID } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
 import type {
 	InertieParoi,
 	Isolation,
-	Orientation,
 	Position as PositionBase,
 } from "./common.js";
 
@@ -40,9 +39,7 @@ export type PlancherHautData = {
 	dp: number;
 };
 
-export type Position = PositionBase & {
-	orientation: Orientation;
-};
+export type Position = PositionBase;
 
 export const CONFIGURATIONS = ["plancher", "rampants", "terrasse"] as const;
 export type Configuration = (typeof CONFIGURATIONS)[number];

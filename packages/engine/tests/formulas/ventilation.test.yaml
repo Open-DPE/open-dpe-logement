@@ -1,0 +1,113 @@
+ventilation.caux:
+  run: calcule_caux
+  cases:
+    - title: Somme de plusieurs auxiliaires
+      with:
+        caux: [200, 100, 50]
+      expect: 350
+
+    - title: Auxiliaire nul
+      with:
+        caux: [0]
+      expect: 0
+
+    - title: Aucune installation
+      with:
+        caux: []
+      expect: 0
+
+ventilation.hvent:
+  run: calcule_hvent
+  cases:
+    - title: Installation unique (rdim=0.5)
+      with:
+        installations:
+          - hvent: 50
+            rdim: 0.5
+      expect: 25
+
+    - title: Deux installations complémentaires
+      with:
+        installations:
+          - hvent: 40
+            rdim: 0.3
+          - hvent: 60
+            rdim: 0.7
+      expect: 54
+
+    - title: Aucune installation
+      with:
+        installations: []
+      expect: 0
+
+ventilation.qvarep_conv:
+  run: calcule_qvarep_conv
+  cases:
+    - title: Installation unique
+      with:
+        installations:
+          - qvarep_conv: 1.5
+            rdim: 1.0
+      expect: 1.5
+
+    - title: Deux installations pondérées également
+      with:
+        installations:
+          - qvarep_conv: 2.0
+            rdim: 0.5
+          - qvarep_conv: 1.0
+            rdim: 0.5
+      expect: 1.5
+
+    - title: Aucune installation (rdim total = 0) → 0
+      with:
+        installations: []
+      expect: 0
+
+ventilation.qvasouf_conv:
+  run: calcule_qvasouf_conv
+  cases:
+    - title: Installation unique
+      with:
+        installations:
+          - qvasouf_conv: 0.6
+            rdim: 1.0
+      expect: 0.6
+
+    - title: Deux installations, une sans soufflage
+      with:
+        installations:
+          - qvasouf_conv: 1.0
+            rdim: 0.6
+          - qvasouf_conv: 0
+            rdim: 0.4
+      expect: 0.6
+
+    - title: Aucune installation → 0
+      with:
+        installations: []
+      expect: 0
+
+ventilation.smea_conv:
+  run: calcule_smea_conv
+  cases:
+    - title: Deux installations avec smea différents
+      with:
+        installations:
+          - smea_conv: 2.0
+            rdim: 0.5
+          - smea_conv: 1.5
+            rdim: 0.5
+      expect: 1.75
+
+    - title: smea nul
+      with:
+        installations:
+          - smea_conv: 0
+            rdim: 1.0
+      expect: 0
+
+    - title: Aucune installation → 0
+      with:
+        installations: []
+      expect: 0

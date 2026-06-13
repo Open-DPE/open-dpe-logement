@@ -1,14 +1,14 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
-import type * as masque from "#rules/enveloppe/masque/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { createParMois } from "#rules/helpers.js";
-import { linearInterpolate } from "#rules/math.js";
+import type * as paroi from "../paroi/formulas.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as localNonChauffe from "../local-non-chauffe/formulas.js";
+import type * as masque from "../masque/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { createParMois } from "../../helpers.js";
+import { linearInterpolate } from "../../math.js";
 
-export { calcule_c1 } from "#rules/climat/formulas.js";
+export { calcule_c1 } from "../../climat/formulas.js";
 
 /**
  * @formule enveloppe.baie.dp

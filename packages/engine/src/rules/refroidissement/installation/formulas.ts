@@ -1,3 +1,5 @@
+import type * as batiment from "../../batiment/formulas.js";
+
 /**
  * @formule refroidissement.installation.rdim
  * @param props.surface_installation - Surface de l'installation de refroidissement en m²
@@ -7,8 +9,12 @@
 export function calcule_rdim(props: {
 	surface_installation: number;
 	surface_installations: number;
+	sh: ReturnType<typeof batiment.calcule_sh>;
 }): number {
-	return props.surface_installations
-		? props.surface_installation / props.surface_installations
-		: 0;
+	const { surface_installation, surface_installations, sh } = props;
+	if (surface_installations === 0) return 0;
+	return (
+		(surface_installations / sh) *
+		(surface_installation / surface_installations)
+	);
 }

@@ -1,11 +1,11 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as production from "#rules/production/formulas.js";
-import type * as generateur from "#rules/ecs/generateur/formulas.js";
-import type * as installation from "#rules/ecs/installation/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import * as common from "../../common/formulas.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as production from "../../production/formulas.js";
+import type * as generateur from "../generateur/formulas.js";
+import type * as installation from "../installation/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 const TypeGenerateurEnum = models.ecs.generateur.TypeGenerateurEnum;
 const LabelGenerateurEnum = models.ecs.generateur.LabelEnum;
@@ -80,11 +80,12 @@ export function calcule_cecs_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	cecs_elec: ReturnType<typeof calcule_cecs_elec>;
 }): number {
-	const cecs_elec = props.cecs_elec;
-	const celec = props.celec.ecs;
-	const celec_ac = props.celec_ac.ecs;
-	const p_celec_ac = celec ? cecs_elec / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.ecs,
+		cef: props.cecs_elec,
+	});
 }
 
 /**
@@ -107,11 +108,12 @@ export function calcule_caux_dist_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	caux_dist: ReturnType<typeof calcule_caux_dist>;
 }): number {
-	const caux_dist = props.caux_dist;
-	const celec = props.celec.auxiliaires_distribution;
-	const celec_ac = props.celec_ac.auxiliaires_distribution;
-	const p_celec_ac = celec ? caux_dist / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.auxiliaires_distribution,
+		cef: props.caux_dist,
+	});
 }
 
 /**
@@ -181,7 +183,7 @@ export function calcule_iecs(props: {
 	rgs: Rendements["rgs"];
 }): number {
 	const { rd, rg, rs, rgs } = props;
-	return rd * rg * rs * rgs;
+	return 1 / (rd * rg * rs * rgs);
 }
 
 /**
@@ -203,6 +205,11 @@ export function calcule_rd(props: {
 }
 
 /**
+ * @formule ecs.systeme.rd
+ * @formule ecs.systeme.rg
+ * @formule ecs.systeme.rs
+ * @formule ecs.systeme.rgs
+ *
  * @see calcule_rendements_reseau_chaleur
  * @see calcule_rendements_chaudiere_mixte
  * @see calcule_rendements_chauffe_eau_gaz

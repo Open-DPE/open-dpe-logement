@@ -1,7 +1,7 @@
-import type { Consommations, UUID } from "#/common/common";
+import type { Consommations, UUID } from "../common/common.js";
 import type { Generateur } from "./generateur.js";
-import { EntityNotFoundError } from "#/errors.js";
-import { buildEnum, createGuard } from "#/utils.js";
+import { EntityNotFoundError } from "../errors.js";
+import { buildEnum, createGuard } from "../utils.js";
 
 export const isSysteme = createGuard<Systeme>("/ecs/systeme");
 

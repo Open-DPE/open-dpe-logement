@@ -1,6 +1,6 @@
-export * as generateur from "./generateur/constants";
-export * as installation from "./installation/constants";
-export * as systeme from "./systeme/constants";
+export * as generateur from "./generateur/constants.js";
+export * as installation from "./installation/constants.js";
+export * as systeme from "./systeme/constants.js";
 
 export const NAMESPACE = "ecs";
 

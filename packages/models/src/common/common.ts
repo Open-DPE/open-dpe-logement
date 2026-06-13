@@ -1,4 +1,4 @@
-import { buildEnum } from "../utils";
+import { buildEnum } from "../utils.js";
 
 export type NonEmptyArray<T> = [T, ...T[]];
 

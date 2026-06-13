@@ -1,8 +1,6 @@
 import * as models from "@open-dpe-logement/models";
-import type * as generateur from "#rules/chauffage/generateur/formulas.js";
+import type * as generateur from "../../generateur/formulas.js";
 import * as utils from "./utils.js";
-
-export { utils };
 
 export const ROLES = {
 	base: "base",
@@ -30,6 +28,7 @@ export type ConfigurationSystemeProps = {
 };
 
 /**
+ * @formule chauffage.systeme.rdim
  * @returns Ratio de dimensionnement du système de chauffage
  */
 export function calcule_rdim(props: {
@@ -62,6 +61,7 @@ export function calcule_rdim(props: {
 }
 
 /**
+ * @formule chauffage.systeme.role
  * @returns Rôle du système de chauffage (base, relève ou appoint)
  */
 export function calcule_role(props: {
@@ -85,6 +85,7 @@ export function calcule_role(props: {
 }
 
 /**
+ * @formule chauffage.systeme.role
  * @param props.systemes : Systèmes de chauffage individuels OU collectifs associés à l'installation
  * @returns Configuration de l'installation de chauffage
  */

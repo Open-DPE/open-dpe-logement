@@ -1,21 +1,21 @@
-import { buildEnum, createGuard } from "#/utils.js";
-import type { Consommations } from "#/common/common";
-import type { Chauffage, ChauffageWithData } from "#/chauffage/chauffage.js";
-import type { Ecs, EcsWithData } from "#/ecs/ecs.js";
-import type { Enveloppe, EnveloppeWithData } from "#/enveloppe/enveloppe.js";
+import { buildEnum, createGuard } from "../utils.js";
+import type { Consommations } from "../common/common.js";
+import type { Chauffage, ChauffageWithData } from "../chauffage/chauffage.js";
+import type { Ecs, EcsWithData } from "../ecs/ecs.js";
+import type { Enveloppe, EnveloppeWithData } from "../enveloppe/enveloppe.js";
 import type {
 	Production,
 	ProductionWithData,
-} from "#/production/production.js";
+} from "../production/production.js";
 import type {
 	Refroidissement,
 	RefroidissementWithData,
-} from "#/refroidissement/refroidissement.js";
+} from "../refroidissement/refroidissement.js";
 import type {
 	Ventilation,
 	VentilationWithData,
-} from "#/ventilation/ventilation.js";
-import type { Batiment, BatimentWithData } from "#/batiment/batiment.js";
+} from "../ventilation/ventilation.js";
+import type { Batiment, BatimentWithData } from "../batiment/batiment.js";
 
 export const isDiagnostic = createGuard<Diagnostic>("/diagnostic");
 

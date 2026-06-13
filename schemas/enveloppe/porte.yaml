@@ -53,8 +53,6 @@ $defs:
         anyOf:
           - $ref: /common#/$defs/id
           - const: null
-      orientation:
-        $ref: /enveloppe/paroi#/$defs/orientation
       presence_sas:
         title: Présence d'un sas devant la porte
         type: boolean
@@ -62,7 +60,6 @@ $defs:
         $ref: /enveloppe/paroi#/$defs/type_pose
     required:
       - paroi_id
-      - orientation
       - presence_sas
       - type_pose
     allOf:

@@ -1,13 +1,13 @@
-import * as batiment from "./batiment/rules";
-import * as chauffage from "./chauffage/rules";
-import * as climat from "./climat/rules";
-import * as diagnostic from "./diagnostic/rules";
-import * as eclairage from "./eclairage/rules";
-import * as ecs from "./ecs/rules";
-import * as enveloppe from "./enveloppe/rules";
-import * as production from "./production/rules";
-import * as refroidissement from "./refroidissement/rules";
-import * as ventilation from "./ventilation/rules";
+import * as batiment from "./batiment/rules.js";
+import * as chauffage from "./chauffage/rules.js";
+import * as climat from "./climat/rules.js";
+import * as diagnostic from "./diagnostic/rules.js";
+import * as eclairage from "./eclairage/rules.js";
+import * as ecs from "./ecs/rules.js";
+import * as enveloppe from "./enveloppe/rules.js";
+import * as production from "./production/rules.js";
+import * as refroidissement from "./refroidissement/rules.js";
+import * as ventilation from "./ventilation/rules.js";
 
 export {
 	batiment,

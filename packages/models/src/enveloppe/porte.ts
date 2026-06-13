@@ -1,10 +1,6 @@
-import type { UUID } from "#/common/common";
-import { buildEnum, createGuard } from "#/utils";
-import type {
-	Orientation,
-	Position as PositionBase,
-	TypePose,
-} from "./common.js";
+import type { UUID } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
+import type { Position as PositionBase, TypePose } from "./common.js";
 
 export const isPorte = createGuard<Porte>("/enveloppe/porte");
 
@@ -36,7 +32,6 @@ export type PorteData = {
 
 export type Position = PositionBase & {
 	paroi_id: UUID | null;
-	orientation: Orientation;
 	type_pose: TypePose;
 	presence_sas: boolean;
 };

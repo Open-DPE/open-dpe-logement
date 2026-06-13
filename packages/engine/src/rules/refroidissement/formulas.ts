@@ -1,10 +1,10 @@
 import * as models from "@open-dpe-logement/models";
-import type * as batiment from "#rules/batiment/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as ecs from "#rules/ecs/formulas.js";
-import type * as enveloppe from "#rules/enveloppe/formulas.js";
-import type * as generateur from "#rules/refroidissement/generateur/formulas.js";
-import { createParMois } from "#rules/helpers.js";
+import type * as batiment from "../batiment/formulas.js";
+import type * as climat from "../climat/formulas.js";
+import type * as ecs from "../ecs/formulas.js";
+import type * as enveloppe from "../enveloppe/formulas.js";
+import type * as generateur from "../refroidissement/generateur/formulas.js";
+import { createParMois } from "../helpers.js";
 
 /**
  * @formule refroidissement.cef

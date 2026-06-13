@@ -9,3 +9,15 @@ npm i @open-dpe-logement/web-components
 ```
 
 ## Usage
+
+## Organisation
+
+```text
+/src
+├── <component>/
+│   └── index.ts
+├── shared/
+│   ├── colors.ts
+│   └── utils.ts
+└── index.ts                        # Point d'entrée
+```

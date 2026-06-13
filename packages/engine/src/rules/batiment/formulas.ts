@@ -9,7 +9,7 @@ export function calcule_ratio_proratisation(props: {
 	sh_logement: number | null;
 }): number {
 	const { sh_batiment, sh_logement } = props;
-	return sh_logement ? sh_batiment / sh_logement : 1;
+	return sh_logement ? sh_logement / sh_batiment : 1;
 }
 
 /**

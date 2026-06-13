@@ -1,0 +1,25 @@
+chauffage.systeme.rg_combustion:
+  run: calcule_rg_combustion
+  cases:
+    - title: Chaudière à combustion
+      with:
+        scenario: conventionnel
+        gv: 400
+        tbase: -9.5
+        pn: 30
+        pn_combustion: 30
+        pn_cascade: 0
+        cascade: null
+        type_generateur: chaudiere
+        energie_generateur: gaz
+        bienergie_generateur: null
+        rpn: 0.85
+        rpint: 0.8
+        qp0: 0.3
+        pveilleuse: 100
+        kpcs: 1.11
+        mode_combustion: basse_temperature
+        presence_regulation: true
+        tfonc30: 52.2
+        tfonc100: 70
+      expect: 0.75

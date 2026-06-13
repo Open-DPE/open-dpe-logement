@@ -1,0 +1,50 @@
+batiment.ratio_proratisation:
+  run: calcule_ratio_proratisation
+  cases:
+    - title: Logement non renseigné → ratio 1 (maison ou logement = bâtiment)
+      with:
+        sh_batiment: 100
+        sh_logement: null
+      expect: 1
+
+    - title: Logement = moitié du bâtiment → ratio 2
+      with:
+        sh_batiment: 200
+        sh_logement: 100
+      expect: 0.5
+
+    - title: Ratio non entier → arrondi à 2 décimales
+      with:
+        sh_batiment: 100
+        sh_logement: 30
+      expect: 0.3
+
+batiment.sh:
+  run: calcule_sh
+  cases:
+    - title: Surface logement non renseignée → surface bâtiment
+      with:
+        sh_batiment: 150
+        sh_logement: null
+      expect: 150
+
+    - title: Surface logement renseignée → surface logement
+      with:
+        sh_batiment: 150
+        sh_logement: 80
+      expect: 80
+
+batiment.hsp:
+  run: calcule_hsp
+  cases:
+    - title: Hauteur logement non renseignée → hauteur bâtiment
+      with:
+        hsp_batiment: 2.5
+        hsp_logement: null
+      expect: 2.5
+
+    - title: Hauteur logement renseignée → hauteur logement
+      with:
+        hsp_batiment: 2.5
+        hsp_logement: 2.7
+      expect: 2.7

@@ -1,5 +1,5 @@
-import type { UUID } from "#/common/common";
-import { createGuard, buildEnum } from "#/utils";
+import type { UUID } from "../common/common.js";
+import { createGuard, buildEnum } from "../utils.js";
 
 export const isAppartement = createGuard<Appartement>("/batiment/appartement");
 

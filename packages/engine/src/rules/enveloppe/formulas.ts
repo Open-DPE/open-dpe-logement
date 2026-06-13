@@ -1,19 +1,19 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as batiment from "#rules/batiment/formulas.js";
-import type * as ventilation from "#rules/ventilation/formulas.js";
-import * as baie from "#rules/enveloppe/baie/formulas.js";
-import * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
-import * as masque from "#rules/enveloppe/masque/formulas.js";
-import * as mur from "#rules/enveloppe/mur/formulas.js";
-import * as niveau from "#rules/enveloppe/niveau/formulas.js";
-import * as paroi from "#rules/enveloppe/paroi/formulas.js";
-import * as plancherBas from "#rules/enveloppe/plancher-bas/formulas.js";
-import * as plancherHaut from "#rules/enveloppe/plancher-haut/formulas.js";
-import * as pontThermique from "#rules/enveloppe/pont-thermique/formulas.js";
-import * as porte from "#rules/enveloppe/porte/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { createParMois } from "#rules/helpers.js";
+import type * as batiment from "../batiment/formulas.js";
+import type * as ventilation from "../ventilation/formulas.js";
+import * as baie from "./baie/formulas.js";
+import * as localNonChauffe from "./local-non-chauffe/formulas.js";
+import * as masque from "./masque/formulas.js";
+import * as mur from "./mur/formulas.js";
+import * as niveau from "./niveau/formulas.js";
+import * as paroi from "./paroi/formulas.js";
+import * as plancherBas from "./plancher-bas/formulas.js";
+import * as plancherHaut from "./plancher-haut/formulas.js";
+import * as pontThermique from "./pont-thermique/formulas.js";
+import * as porte from "./porte/formulas.js";
+import { ValeurForfaitaireError } from "../errors.js";
+import { createParMois } from "../helpers.js";
 
 export {
 	baie,

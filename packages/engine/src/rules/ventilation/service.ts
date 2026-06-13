@@ -1,5 +1,5 @@
 import * as models from "@open-dpe-logement/models";
-import { type Context } from "#core/context.js";
+import { type Context } from "../../core/context.js";
 import * as installation from "./installation/service.js";
 import { NAMESPACE, RULES } from "./constants.js";
 

@@ -1,14 +1,14 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as production from "#rules/production/formulas.js";
-import type * as ecs from "#rules/ecs/formulas.js";
-import type * as installation from "#rules/ecs/installation/formulas.js";
-import type * as systeme from "#rules/ecs/systeme/formulas.js";
-import type * as generateurChauffage from "#rules/chauffage/generateur/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { evaluate } from "#rules/math.js";
+import * as common from "../../common/formulas.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as production from "../../production/formulas.js";
+import type * as ecs from "../formulas.js";
+import type * as installation from "../installation/formulas.js";
+import type * as systeme from "../systeme/formulas.js";
+import type * as generateurChauffage from "../../chauffage/generateur/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { evaluate } from "../../math.js";
 
 /**
  * @formule ecs.generateur.cef
@@ -44,6 +44,7 @@ export function calcule_cecs(props: {
 }
 
 /**
+ * @formule ecs.generateur.cecs_elec
  * @returns Consommation d'électricité du générateur d'eau chaude sanitaire en kWh/an
  */
 export function calcule_cecs_elec(props: {
@@ -76,11 +77,12 @@ export function calcule_caux_gen_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	caux_gen: ReturnType<typeof calcule_caux_gen>;
 }): number {
-	const caux_gen = props.caux_gen;
-	const celec = props.celec.ecs;
-	const celec_ac = props.celec_ac.ecs;
-	const p_celec_ac = celec ? caux_gen / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.ecs,
+		cef: props.caux_gen,
+	});
 }
 
 /**

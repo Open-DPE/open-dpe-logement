@@ -24,3 +24,300 @@ ventilation.installation.rdim:
         surface_installation: 0
         surface_installations: 100
       expect: 0
+
+ventilation.installation.set_type_ventilation:
+  run: set_type_ventilation
+  cases:
+    - title: Type fourni → retourné tel quel
+      with:
+        type_ventilation: vmc_double_flux
+      expect: vmc_double_flux
+
+    - title: Type null → valeur par défaut (ouverture fenêtres)
+      with:
+        type_ventilation: null
+      expect: ventilation_ouverture_fenetres
+
+ventilation.installation.set_annee_installation:
+  run: set_annee_installation
+  cases:
+    - title: Année fournie → retournée telle quelle
+      with:
+        annee_installation: 2005
+        annee_construction_batiment: 1990
+      expect: 2005
+
+    - title: Année null → année de construction du bâtiment
+      with:
+        annee_installation: null
+        annee_construction_batiment: 1990
+      expect: 1990
+
+ventilation.installation.set_presence_echangeur_thermique:
+  run: set_presence_echangeur_thermique
+  cases:
+    - title: Présence fournie (true) → true
+      with:
+        presence_echangeur_thermique: true
+      expect: true
+
+    - title: Présence fournie (false) → false
+      with:
+        presence_echangeur_thermique: false
+      expect: false
+
+    - title: Présence null → false par défaut
+      with:
+        presence_echangeur_thermique: null
+      expect: false
+
+ventilation.installation.rut:
+  run: calcule_rut
+  cases:
+    - title: Ventilation ouverture fenêtres → 0
+      with:
+        type_ventilation: ventilation_ouverture_fenetres
+        installation_collective: null
+      expect: 0
+
+    - title: Ventilation entrées air hautes/basses → 0
+      with:
+        type_ventilation: ventilation_entrees_air_hautes_basses
+        installation_collective: null
+      expect: 0
+
+    - title: Ventilation naturelle conduit entrées hygroréglables → 0
+      with:
+        type_ventilation: ventilation_naturelle_conduit_entrees_air_hygroreglables
+        installation_collective: null
+      expect: 0
+
+    - title: Ventilation naturelle conduit → 0
+      with:
+        type_ventilation: ventilation_naturelle_conduit
+        installation_collective: null
+      expect: 0
+
+    - title: Ventilation hybride collective → 0.167
+      with:
+        type_ventilation: ventilation_hybride
+        installation_collective: true
+      expect: 0.167
+
+    - title: Ventilation hybride non collective → 0.083
+      with:
+        type_ventilation: ventilation_hybride
+        installation_collective: false
+      expect: 0.083
+
+    - title: Ventilation hybride collective null → 0.083
+      with:
+        type_ventilation: ventilation_hybride
+        installation_collective: null
+      expect: 0.083
+
+    - title: VMC simple flux autoréglable → 1
+      with:
+        type_ventilation: vmc_simple_flux_autoreglable
+        installation_collective: null
+      expect: 1
+
+ventilation.installation.hvent:
+  run: calcule_hvent
+  cases:
+    - title: Cas standard (rdim=1)
+      with:
+        rdim: 1
+        qvarep_conv: 1.97
+        sh: 100
+      expect: 66.98
+
+    - title: Installation partielle (rdim=0.5)
+      with:
+        rdim: 0.5
+        qvarep_conv: 1.32
+        sh: 80
+      expect: 17.952
+
+    - title: Rdim nul → 0
+      with:
+        rdim: 0
+        qvarep_conv: 1.2
+        sh: 100
+      expect: 0
+
+ventilation.installation.caux:
+  run: calcule_caux
+  cases:
+    - title: Ventilation naturelle (pvent_moy=0, rut=0) → 0
+      with:
+        pvent_moy: 0
+        rut: 0
+        rdim: 1
+      expect: 0
+
+    - title: VMC pleine charge (pvent_moy=65 W, rut=1, rdim=1)
+      with:
+        pvent_moy: 65
+        rut: 1
+        rdim: 1
+      expect: 569.4
+
+    - title: VMC récente (pvent_moy=35 W, rut=1, rdim=1)
+      with:
+        pvent_moy: 35
+        rut: 1
+        rdim: 1
+      expect: 306.6
+
+    - title: Installation partielle (pvent_moy=65 W, rut=1, rdim=0.5)
+      with:
+        pvent_moy: 65
+        rut: 1
+        rdim: 0.5
+      expect: 284.7
+
+ventilation.installation.debits:
+  run: calcule_debits
+  cases:
+    - title: VMC SF autoréglable ≤ 1981
+      with:
+        type_ventilation: vmc_simple_flux_autoreglable
+        presence_echangeur_thermique: false
+        installation_collective: null
+        annee_installation: 1980
+      expect:
+        qvarep_conv: 1.97
+        qvasouf_conv: 0
+        smea_conv: 2
+
+    - title: VMC SF autoréglable 1982-2000
+      with:
+        type_ventilation: vmc_simple_flux_autoreglable
+        presence_echangeur_thermique: false
+        installation_collective: null
+        annee_installation: 1990
+      expect:
+        qvarep_conv: 1.65
+        qvasouf_conv: 0
+        smea_conv: 2
+
+    - title: VMC SF autoréglable 2001-2012
+      with:
+        type_ventilation: vmc_simple_flux_autoreglable
+        presence_echangeur_thermique: false
+        installation_collective: null
+        annee_installation: 2005
+      expect:
+        qvarep_conv: 1.5
+        qvasouf_conv: 0
+        smea_conv: 2
+
+    - title: VMC SF autoréglable ≥ 2013
+      with:
+        type_ventilation: vmc_simple_flux_autoreglable
+        presence_echangeur_thermique: false
+        installation_collective: null
+        annee_installation: 2020
+      expect:
+        qvarep_conv: 1.32
+        qvasouf_conv: 0
+        smea_conv: 2
+
+    - title: VMC double flux avec échangeur non collectif ≤ 2012
+      with:
+        type_ventilation: vmc_double_flux
+        presence_echangeur_thermique: true
+        installation_collective: false
+        annee_installation: 2010
+      expect:
+        qvarep_conv: 0.6
+        qvasouf_conv: 0.6
+        smea_conv: 0
+
+    - title: VMC double flux avec échangeur non collectif ≥ 2013
+      with:
+        type_ventilation: vmc_double_flux
+        presence_echangeur_thermique: true
+        installation_collective: false
+        annee_installation: 2015
+      expect:
+        qvarep_conv: 0.26
+        qvasouf_conv: 0.26
+        smea_conv: 0
+
+    - title: Ventilation ouverture fenêtres (toutes années)
+      with:
+        type_ventilation: ventilation_ouverture_fenetres
+        presence_echangeur_thermique: false
+        installation_collective: null
+        annee_installation: 2000
+      expect:
+        qvarep_conv: 1.2
+        qvasouf_conv: 1.2
+        smea_conv: 0
+
+    - title: Type inconnu → erreur ValeurForfaitaire
+      with:
+        type_ventilation: type_inexistant
+        presence_echangeur_thermique: false
+        installation_collective: null
+        annee_installation: 2000
+      expectError: true
+
+ventilation.installation.pvent_moy:
+  run: calcule_pvent_moy
+  cases:
+    - title: Maison - ventilation naturelle → 0 (court-circuit sans abaque)
+      with:
+        type_batiment: maison
+        type_ventilation: ventilation_ouverture_fenetres
+        annee_installation: 2000
+        surface_installation: 100
+        qvarep_conv: 1.2
+      expect: 0
+
+    - title: Maison - VMC SF autoréglable avant 2013
+      with:
+        type_batiment: maison
+        type_ventilation: vmc_simple_flux_autoreglable
+        annee_installation: 2010
+        surface_installation: 100
+        qvarep_conv: 1.5
+      expect: 65
+
+    - title: Maison - VMC SF autoréglable à partir de 2013
+      with:
+        type_batiment: maison
+        type_ventilation: vmc_simple_flux_autoreglable
+        annee_installation: 2013
+        surface_installation: 100
+        qvarep_conv: 1.32
+      expect: 35
+
+    - title: Maison - ventilation hybride (toutes années)
+      with:
+        type_batiment: maison
+        type_ventilation: ventilation_hybride
+        annee_installation: 2015
+        surface_installation: 100
+        qvarep_conv: 1.17
+      expect: 65
+
+    - title: Immeuble - VMC SF autoréglable avant 2013
+      with:
+        type_batiment: immeuble
+        type_ventilation: vmc_simple_flux_autoreglable
+        annee_installation: 2010
+        surface_installation: 100
+        qvarep_conv: 1.5
+      expect: 69
+
+    - title: Immeuble - VMC SF autoréglable à partir de 2013
+      with:
+        type_batiment: immeuble
+        type_ventilation: vmc_simple_flux_autoreglable
+        annee_installation: 2020
+        surface_installation: 100
+        qvarep_conv: 1.32
+      expect: 33

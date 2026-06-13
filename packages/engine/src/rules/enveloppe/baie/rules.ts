@@ -1,8 +1,8 @@
 import * as models from "@open-dpe-logement/models";
-import type { Context } from "#core/context.js";
-import * as constants from "#rules/constants.js";
-import * as masque from "#rules/enveloppe/masque/rules.js";
-import * as paroi from "#rules/enveloppe/paroi/rules.js";
+import type { Context } from "../../../core/context.js";
+import * as constants from "../../constants.js";
+import * as masque from "../masque/rules.js";
+import * as paroi from "../paroi/rules.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 

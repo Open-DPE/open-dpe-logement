@@ -1,10 +1,10 @@
 import * as models from "@open-dpe-logement/models";
-import type * as batiment from "#rules/batiment/formulas.js";
-import type * as eclairage from "#rules/eclairage/formulas.js";
-import type * as chauffage from "#rules/chauffage/formulas.js";
-import type * as ecs from "#rules/ecs/formulas.js";
-import type * as refroidissement from "#rules/refroidissement/formulas.js";
-import type * as ventiletion from "#rules/ventilation/formulas.js";
+import type * as batiment from "../batiment/formulas.js";
+import type * as eclairage from "../eclairage/formulas.js";
+import type * as chauffage from "../chauffage/formulas.js";
+import type * as ecs from "../ecs/formulas.js";
+import type * as refroidissement from "../refroidissement/formulas.js";
+import type * as ventiletion from "../ventilation/formulas.js";
 import type * as panneauPhotovoltaique from "./panneau-photovoltaique/formulas.js";
 
 /**

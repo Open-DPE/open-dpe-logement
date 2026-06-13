@@ -1,8 +1,8 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import type * as production from "#rules/production/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import * as common from "../../common/formulas.js";
+import type * as production from "../../production/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
  * Surface habitable couverte par l'installation en m²
@@ -37,11 +37,12 @@ export function calcule_caux_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	caux: ReturnType<typeof calcule_caux>;
 }): number {
-	const { caux } = props;
-	const celec = props.celec.auxiliaires_ventilation;
-	const celec_ac = props.celec_ac.auxiliaires_ventilation;
-	const p_celec_ac = celec ? caux / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.auxiliaires_ventilation,
+		cef: props.caux,
+	});
 }
 
 /**

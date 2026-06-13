@@ -1,12 +1,12 @@
 import * as models from "@open-dpe-logement/models";
-import type { Context } from "#core/context.js";
-import { calcule as calcule_batiment } from "#rules/batiment/service.js";
-import { calcule as calcule_chauffage } from "#rules/chauffage/service.js";
-import { calcule as calcule_ecs } from "#rules/ecs/service.js";
-import { calcule as calcule_enveloppe } from "#rules/enveloppe/service.js";
-import { calcule as calcule_production } from "#rules/production/service.js";
-import { calcule as calcule_refroidissement } from "#rules/refroidissement/service.js";
-import { calcule as calcule_ventilation } from "#rules/ventilation/service.js";
+import type { Context } from "../../core/context.js";
+import { calcule as calcule_batiment } from "../batiment/service.js";
+import { calcule as calcule_chauffage } from "../chauffage/service.js";
+import { calcule as calcule_ecs } from "../ecs/service.js";
+import { calcule as calcule_enveloppe } from "../enveloppe/service.js";
+import { calcule as calcule_production } from "../production/service.js";
+import { calcule as calcule_refroidissement } from "../refroidissement/service.js";
+import { calcule as calcule_ventilation } from "../ventilation/service.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
 export function calcule(ctx: Context): models.diagnostic.DiagnosticWithData {

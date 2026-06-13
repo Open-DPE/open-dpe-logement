@@ -1,11 +1,11 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as chauffage from "#rules/chauffage/formulas.js";
-import type * as generateur from "#rules/chauffage/generateur/formulas.js";
-import type * as systeme from "#rules/chauffage/systeme/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { createParMois } from "#rules/helpers.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as chauffage from "../formulas.js";
+import type * as generateur from "../generateur/formulas.js";
+import type * as systeme from "../systeme/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { createParMois } from "../../helpers.js";
 
 /**
  * @formule chauffage.installation.caux_dist

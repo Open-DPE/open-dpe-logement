@@ -1,5 +1,5 @@
-import type { UUID } from "#/common/common";
-import { buildEnum, createGuard } from "../utils";
+import type { UUID } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
 
 export const isPontThermique = createGuard<PontThermique>(
 	"/enveloppe/pont-thermique",

@@ -34,4 +34,8 @@ export class Cache {
 			if (key.endsWith(`:${uuid}`)) this.store.delete(key);
 		}
 	}
+
+	all(): Map<string, unknown> {
+		return this.store;
+	}
 }

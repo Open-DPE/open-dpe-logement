@@ -1,7 +1,7 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import type * as paroi from "../paroi/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
  * @formule enveloppe.porte.dp

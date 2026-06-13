@@ -1,5 +1,5 @@
-import type { Consommations, UUID, NonEmptyArray } from "#/common/common";
-import { buildEnum, createGuard } from "#/utils.js";
+import type { Consommations, UUID, NonEmptyArray } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
 
 export const isSysteme = createGuard<Systeme>("/chauffage/systeme");
 

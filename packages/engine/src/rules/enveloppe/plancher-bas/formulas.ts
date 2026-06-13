@@ -1,13 +1,13 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as chauffage from "#rules/chauffage/formulas.js";
-import type * as paroi from "#rules/enveloppe/paroi/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { bilinearInterpolate } from "#rules/math.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as chauffage from "../../chauffage/formulas.js";
+import type * as paroi from "../paroi/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { bilinearInterpolate } from "../../math.js";
 
 /**
- * @formule enveloppe.plancher-bas.dp
+ * @formule enveloppe.plancher_bas.dp
  * @returns Déperditions thermiques du plancher bas en W/K
  */
 export function calcule_dp(props: {

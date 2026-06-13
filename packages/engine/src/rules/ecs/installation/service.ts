@@ -1,5 +1,5 @@
 import * as models from "@open-dpe-logement/models";
-import type { Context } from "#core/context.js";
+import type { Context } from "../../../core/context.js";
 import { calcule as calcule_systeme } from "../systeme/service.js";
 import { NAMESPACE, RULES } from "./constants.js";
 

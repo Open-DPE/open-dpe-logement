@@ -1,22 +1,22 @@
-import type { UUID, OrientationCardinale } from "#/common/common";
-import { buildEnum } from "#/utils.js";
+import type { UUID, OrientationCardinale } from "../common/common.js";
+import { buildEnum } from "../utils.js";
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/inertie
+ * @see https://schemas.open-dpe.fr/enveloppe/common/primitives../$defs/inertie
  */
 export const INERTIES = ["tres_lourde", "lourde", "moyenne", "legere"] as const;
 export type Inertie = (typeof INERTIES)[number];
 export const InertieEnum = buildEnum(INERTIES);
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/inertie_paroi
+ * @see https://schemas.open-dpe.fr/enveloppe/common/primitives../$defs/inertie_paroi
  */
 export const INERTIES_PAROI = ["lourde", "legere"] as const;
 export type InertieParoi = (typeof INERTIES_PAROI)[number];
 export const InertieParoiEnum = buildEnum(INERTIES_PAROI);
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/mitoyennete
+ * @see https://schemas.open-dpe.fr/enveloppe/common/primitives../$defs/mitoyennete
  */
 export const MITOYENNETES = [
 	"exterieur",
@@ -33,20 +33,20 @@ export type Mitoyennete = (typeof MITOYENNETES)[number];
 export const MitoyenneteEnum = buildEnum(MITOYENNETES);
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/orientation
+ * @see https://schemas.open-dpe.fr/enveloppe/common/primitives../$defs/orientation
  */
 export type Orientation = OrientationCardinale | typeof OrientationHorizontale;
 export const OrientationHorizontale = "horizontale" as const;
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/type_pose
+ * @see https://schemas.open-dpe.fr/enveloppe/common/primitives../$defs/type_pose
  */
 export const TYPES_POSE = ["nu_exterieur", "nu_interieur", "tunnel"] as const;
 export type TypePose = (typeof TYPES_POSE)[number];
 export const TypePoseEnum = buildEnum(TYPES_POSE);
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/primitives#/$defs/type_isolation
+ * @see https://schemas.open-dpe.fr/enveloppe/common/primitives../$defs/type_isolation
  */
 export const TYPES_ISOLATION = [
 	"iti",
@@ -61,7 +61,7 @@ export type TypeIsolation = (typeof TYPES_ISOLATION)[number];
 export const TypeIsolationEnum = buildEnum(TYPES_ISOLATION);
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/components#/$defs/position
+ * @see https://schemas.open-dpe.fr/enveloppe/common/components../$defs/position
  */
 export type Position = PositionParoiLocalNonChauffe | PositionParoiAutres;
 
@@ -94,7 +94,7 @@ export function isPositionParoiAutres(
 }
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/components#/$defs/position
+ * @see https://schemas.open-dpe.fr/enveloppe/common/components../$defs/position
  */
 export type Isolation =
 	| SansIsolation

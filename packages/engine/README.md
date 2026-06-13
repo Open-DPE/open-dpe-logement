@@ -11,9 +11,12 @@ npm i @open-dpe-logement/engine
 ## Usage
 
 ```ts
-import { createContext, calcule, rules, formulas } from "@open-dpe-logement/engine"
+import { createContext, rules, formulas, services } from "@open-dpe-logement/engine"
 
 const diagnostic = {...};
+
+createContext({ diagnostic }) // scenario: 'conventionnel'
+createContext({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
 
 // Application d'une formule de calcule
 formulas.climat.calcule_zone_climatique({ code_departement: "84" })
@@ -23,13 +26,11 @@ const context = createContext({ diagnostic });
 rules.climat.zone_climatique(context);
 
 // Calcule d'un diagnostic
-const data = calcule({ diagnostic })
+const context = createContext({ diagnostic });
+const data = services.diagnostic.calcule(context);
 
-// Scénarios d'usage
-createContext({ diagnostic }) // scenario: 'conventionnel'
-createContext({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
-calcule({ diagnostic }) // scenario: 'conventionnel'
-calcule({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
+// Liste des données calculées
+context.log();
 ```
 
 ## Organisation
@@ -38,14 +39,14 @@ calcule({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
 /src
 ├── core/
 │   ├── cache.ts                    # Gestion du cache
-│   ├── context.ts                  # Données d'entrée, scénario de calcul, gestion des dépendances
-│   ├── engine.ts                   # Moteur de calcul
-│   └── results.ts                  # Typage des données calculées
+│   ├── context.ts                  # Contexte d'exécution du moteur de calcul
+│   └── registry.ts                 # Registre des règles de calcul
 ├── rules/
 │   ├── <domaine>/
-│   │    ├── formules.ts            # Formules de calcul (fonctions pures)
-│   │    ├── registry.ts            # Registre des règles
-│   │    └── rules.ts               # Règles de calcul (orchestrateur)
+│   │    ├── constants.ts           # Déclaration NAMESPACE + RULES
+│   │    ├── formulas.ts            # Formules de calcul (fonctions pures)
+│   │    ├── rules.ts               # Règles de calcul (orchestrateur)
+│   │    └── service.ts             # Hydrate les données calculées
 │   ├── errors.ts
 │   ├── helpers.ts
 │   └── math.ts
@@ -56,5 +57,13 @@ calcule({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
 
 ### Tags JSDoc
 
-- `@formules path.to.formule` : Documente la formule de calcul implémentée
-- `@abaque path.to.abaque` : Documente l'abaque utilisée par la formule de calcul
+- `@formule` : Documente la formule de calcul implémentée
+- `@guard` : Documente la condition d'application de la formule de calcul
+- `@abaque` : Documente l'abaque utilisée par la formule de calcul
+
+### Tests
+
+Toutes les formules de calcul sont testées :
+
+1. Cas limites
+2. Valeurs forfaitaires

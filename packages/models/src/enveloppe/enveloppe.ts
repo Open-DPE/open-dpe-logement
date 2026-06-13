@@ -8,9 +8,9 @@ import * as plancherBas from "./plancher-bas.js";
 import * as plancherHaut from "./plancher-haut.js";
 import * as pontThermique from "./pont-thermique.js";
 import * as porte from "./porte.js";
-import type { UUID, NonEmptyArray } from "#/common/common";
-import { EntityNotFoundError } from "#/errors.js";
-import { buildEnum, createGuard } from "#/utils.js";
+import type { UUID, NonEmptyArray } from "../common/common.js";
+import { EntityNotFoundError } from "../errors.js";
+import { buildEnum, createGuard } from "../utils.js";
 
 export {
 	baie,

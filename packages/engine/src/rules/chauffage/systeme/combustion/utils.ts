@@ -1,11 +1,12 @@
 import * as models from "@open-dpe-logement/models";
-import type * as generateur from "#rules/chauffage/generateur/formulas.js";
+import type * as generateur from "../../generateur/formulas.js";
 
 const TypeGenerateurEnum = models.chauffage.generateur.TypeGenerateurEnum;
 
 type Generateur = {
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
+	bienergie_generateur: models.chauffage.generateur.Bienergie | null;
 };
 
 export function is_chaudiere_gaz(props: Generateur): boolean {
@@ -50,9 +51,10 @@ export function is_generateur_air_chaud_combustion(props: Generateur): boolean {
 
 export function is_pac_hybride(props: Generateur): boolean {
 	return (
-		props.type_generateur === TypeGenerateurEnum.pac_air_eau ||
-		props.type_generateur === TypeGenerateurEnum.pac_eau_eau ||
-		props.type_generateur === TypeGenerateurEnum.pac_eau_glycolee_eau ||
-		props.type_generateur === TypeGenerateurEnum.pac_geothermique
+		(props.type_generateur === TypeGenerateurEnum.pac_air_eau ||
+			props.type_generateur === TypeGenerateurEnum.pac_eau_eau ||
+			props.type_generateur === TypeGenerateurEnum.pac_eau_glycolee_eau ||
+			props.type_generateur === TypeGenerateurEnum.pac_geothermique) &&
+		null !== props.bienergie_generateur
 	);
 }

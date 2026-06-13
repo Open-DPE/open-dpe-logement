@@ -1,0 +1,42 @@
+eclairage.nhecl:
+  run: calcule_nhecl
+  cases:
+    - title: Zone H1a → 1500 h/an
+      with:
+        zone_climatique: H1a
+      expect: 1500
+
+    - title: Zone H1b → 1445 h/an
+      with:
+        zone_climatique: H1b
+      expect: 1445
+
+    - title: Zone H2c → 1566 h/an
+      with:
+        zone_climatique: H2c
+      expect: 1566
+
+    - title: Zone H3 → 1506 h/an
+      with:
+        zone_climatique: H3
+      expect: 1506
+
+    - title: Zone inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: INCONNUE
+      expectError: true
+
+eclairage.cecl:
+  run: calcule_cecl
+  cases:
+    - title: Surface 100 m² - zone H1a (1500 h)
+      with:
+        sh: 100
+        nhecl: 1500
+      expect: 189
+
+    - title: Surface 50 m² - zone H1b (1445 h)
+      with:
+        sh: 50
+        nhecl: 1445
+      expect: 91.035

@@ -1,11 +1,11 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as production from "#rules/production/formulas.js";
-import type * as refroidissement from "#rules/refroidissement/formulas.js";
-import type * as installation from "#rules/refroidissement/installation/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import * as common from "../../common/formulas.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as production from "../../production/formulas.js";
+import type * as refroidissement from "../../refroidissement/formulas.js";
+import type * as installation from "../../refroidissement/installation/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
  * @formule refroidissement.generateur.cef
@@ -61,11 +61,12 @@ export function calcule_cfr_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	cfr_elec: ReturnType<typeof calcule_cfr_elec>;
 }): number {
-	const cfr_elec = props.cfr_elec;
-	const celec = props.celec.refroidissement;
-	const celec_ac = props.celec_ac.refroidissement;
-	const p_celec_ac = celec ? cfr_elec / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.refroidissement,
+		cef: props.cfr_elec,
+	});
 }
 
 /**

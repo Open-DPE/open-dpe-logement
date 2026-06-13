@@ -50,7 +50,7 @@ properties:
       - $ref: /common#/$defs/nombre_positif
       - const: null
   position:
-    $ref: "#/$defs/position"
+    $ref: /enveloppe/paroi#/$defs/position
   isolation:
     $ref: /enveloppe/paroi#/$defs/isolation
   data:
@@ -70,18 +70,6 @@ required:
   - isolation
 
 $defs:
-  position:
-    title: Position
-    unevaluatedProperties: false
-    type: object
-    properties:
-      orientation:
-        $ref: /enveloppe/paroi#/$defs/orientation
-    required:
-      - orientation
-    allOf:
-      - $ref: /enveloppe/paroi#/$defs/position
-
   data:
     title: Données calculées
     type: object

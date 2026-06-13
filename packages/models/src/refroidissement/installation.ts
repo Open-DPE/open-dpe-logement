@@ -1,6 +1,6 @@
-import { EntityNotFoundError } from "#/errors.js";
-import type { UUID, NonEmptyArray } from "#/common/common";
-import { createGuard } from "#/utils";
+import { EntityNotFoundError } from "../errors.js";
+import type { UUID, NonEmptyArray } from "../common/common.js";
+import { createGuard } from "../utils.js";
 import type { Generateur } from "./generateur.js";
 
 export const isInstallation = createGuard<Installation>(

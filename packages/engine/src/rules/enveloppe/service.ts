@@ -1,6 +1,6 @@
 import * as models from "@open-dpe-logement/models";
-import type { Context } from "#core/context.js";
-import * as constants from "#rules/constants.js";
+import type { Context } from "../../core/context.js";
+import * as constants from "../constants.js";
 import { NAMESPACE, RULES } from "./constants.js";
 import * as baie from "./baie/service.js";
 import * as localNonChauffe from "./local-non-chauffe/service.js";

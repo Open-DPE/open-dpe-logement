@@ -1,14 +1,14 @@
 import * as models from "@open-dpe-logement/models";
-import type * as batiment from "#rules/batiment/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as enveloppe from "#rules/enveloppe/formulas.js";
-import type * as ecs from "#rules/ecs/formulas.js";
-import * as emetteur from "#rules/chauffage/emetteur/formulas.js";
-import * as emission from "#rules/chauffage/emission/formulas.js";
-import * as generateur from "#rules/chauffage/generateur/formulas.js";
-import * as installation from "#rules/chauffage/installation/formulas.js";
-import * as systeme from "#rules/chauffage/systeme/formulas.js";
-import { createParMois } from "#rules/helpers.js";
+import type * as batiment from "../batiment/formulas.js";
+import type * as climat from "../climat/formulas.js";
+import type * as enveloppe from "../enveloppe/formulas.js";
+import type * as ecs from "../ecs/formulas.js";
+import * as emetteur from "./emetteur/formulas.js";
+import * as emission from "./emission/formulas.js";
+import * as generateur from "./generateur/formulas.js";
+import * as installation from "./installation/formulas.js";
+import * as systeme from "./systeme/formulas.js";
+import { createParMois } from "../helpers.js";
 
 export { generateur, installation, systeme, emetteur, emission };
 
@@ -123,6 +123,7 @@ export function calcule_bv(props: {
 
 /**
  * @formule chauffage.pch
+ * @todo - Implémenter les méthodes DPE Appartement depuis les données DPE Immeuble
  * @returns Puissance conventionnelle de chauffage en kW
  */
 export function calcule_pch(props: {
@@ -131,7 +132,9 @@ export function calcule_pch(props: {
 	tbase: ReturnType<typeof climat.calcule_tbase>;
 }): number {
 	const { ratio_proratisation, gv, tbase } = props;
-	return (1.2 * gv * ratio_proratisation * tbase) / (1000 * 0.95 ** 3);
+	return (
+		(1.2 * gv * (1 / ratio_proratisation) * (19 - tbase)) / (1000 * 0.95 ** 3)
+	);
 }
 
 /**

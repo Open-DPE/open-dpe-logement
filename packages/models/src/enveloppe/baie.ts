@@ -1,12 +1,12 @@
-import type { UUID } from "#/common/common";
-import { buildEnum, createGuard } from "../utils";
-import type { Masque } from "./masque";
+import type { UUID } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
+import type { Masque } from "./masque.js";
 import type {
 	Orientation,
 	OrientationHorizontale,
 	Position as BasePosition,
 	TypePose,
-} from "./common";
+} from "./common.js";
 
 export const isBaie = createGuard<Baie>("/enveloppe/baie");
 

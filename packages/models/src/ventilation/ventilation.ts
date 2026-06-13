@@ -1,6 +1,6 @@
-import type { NonEmptyArray, UUID } from "#/common/common";
-import { createGuard } from "#/utils";
-import { EntityNotFoundError } from "#errors.js";
+import type { NonEmptyArray, UUID } from "../common/common.js";
+import { createGuard } from "../utils.js";
+import { EntityNotFoundError } from "../errors.js";
 import * as installation from "./installation.js";
 
 export { installation };

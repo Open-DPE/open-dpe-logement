@@ -1,16 +1,16 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as production from "#rules/production/formulas.js";
-import type * as chauffage from "#rules/chauffage/formulas.js";
-import type * as emetteur from "#rules/chauffage/emetteur/formulas.js";
-import type * as installation from "#rules/chauffage/installation/formulas.js";
-import type * as systeme from "#rules/chauffage/systeme/formulas.js";
-import type * as generateurEcs from "#rules/ecs/generateur/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { createParMois } from "#rules/helpers.js";
-import { evaluate } from "#rules/math.js";
+import * as common from "../../common/formulas.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as production from "../../production/formulas.js";
+import type * as chauffage from "../formulas.js";
+import type * as emetteur from "../emetteur/formulas.js";
+import type * as installation from "../installation/formulas.js";
+import type * as systeme from "../systeme/formulas.js";
+import type * as generateurEcs from "../../ecs/generateur/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { createParMois } from "../../helpers.js";
+import { evaluate } from "../../math.js";
 
 /**
  * @formule chauffage.generateur.cef
@@ -79,11 +79,12 @@ export function calcule_caux_gen_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	caux_gen: ReturnType<typeof calcule_caux_gen>;
 }): number {
-	const caux_gen = props.caux_gen;
-	const celec = props.celec.chauffage;
-	const celec_ac = props.celec_ac.chauffage;
-	const p_celec_ac = celec ? caux_gen / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.chauffage,
+		cef: props.caux_gen,
+	});
 }
 
 /**
@@ -421,7 +422,7 @@ export function calcule_qgen_rec(props: {
 }
 
 /**
- * @formule chauffage.generateur.qgen_rec
+ * @formule chauffage.generateur.qgen
  * @return Pertes de génération du générateur de chauffage en Wh/an
  */
 export function calcule_qgen(props: {

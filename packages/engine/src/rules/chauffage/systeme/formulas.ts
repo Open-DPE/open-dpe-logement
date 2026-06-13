@@ -1,18 +1,18 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as enveloppe from "#rules/enveloppe/formulas.js";
-import type * as chauffage from "#rules/chauffage/formulas.js";
-import type * as production from "#rules/production/formulas.js";
-import type * as emetteur from "#rules/chauffage/emetteur/formulas.js";
-import type * as emission from "#rules/chauffage/emission/formulas.js";
-import type * as installation from "#rules/chauffage/installation/formulas.js";
-import type * as generateur from "#rules/chauffage/generateur/formulas.js";
+import * as common from "../../common/formulas.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as enveloppe from "../../enveloppe/formulas.js";
+import type * as production from "../../production/formulas.js";
+import type * as chauffage from "../formulas.js";
+import type * as emetteur from "../emetteur/formulas.js";
+import type * as emission from "../emission/formulas.js";
+import type * as installation from "../installation/formulas.js";
+import type * as generateur from "../generateur/formulas.js";
 import * as combustion from "./combustion/formulas.js";
 import * as dimensionnement from "./dimensionnement/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { createParMois } from "#rules/helpers.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { createParMois } from "../../helpers.js";
 
 export { combustion, dimensionnement };
 
@@ -81,15 +81,16 @@ export function calcule_cch_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	cch_elec: ReturnType<typeof calcule_cch_elec>;
 }): number {
-	const cch_elec = props.cch_elec;
-	const celec = props.celec.chauffage;
-	const celec_ac = props.celec_ac.chauffage;
-	const p_celec_ac = celec ? cch_elec / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.chauffage,
+		cef: props.cch_elec,
+	});
 }
 
 /**
- * @formule chauffage.systeme.cch2
+ * @formule chauffage.systeme.cch1
  * @returns Consommations de chauffage du système de chauffage (partie PAC pour les PAC hybrides) en kWh/an
  */
 export function calcule_cch1(props: {
@@ -130,14 +131,16 @@ export function calcule_caux_dist_enr(props: {
 	celec_ac: ReturnType<typeof production.calcule_celec_ac>;
 	caux_dist: ReturnType<typeof calcule_caux_dist>;
 }): number {
-	const caux_dist = props.caux_dist;
-	const celec = props.celec.auxiliaires_distribution;
-	const celec_ac = props.celec_ac.auxiliaires_distribution;
-	const p_celec_ac = celec ? caux_dist / celec : 0;
-	return celec_ac * p_celec_ac;
+	return common.calcule_cener({
+		celec: props.celec,
+		celec_ac: props.celec_ac,
+		usage: models.production.UsageElectriciteEnum.auxiliaires_distribution,
+		cef: props.caux_dist,
+	});
 }
 
 /**
+ * @formule chauffage.systeme.int
  * @returns Facteur d'intermittence moyen du système de chauffage
  */
 export function calcule_int(props: {
@@ -147,6 +150,7 @@ export function calcule_int(props: {
 }
 
 /**
+ * @formule chauffage.systeme.ich
  * @returns Inverse du rendement moyen du système de chauffage
  */
 export function calcule_ich(props: {
@@ -217,6 +221,7 @@ export function calcule_pch(props: {
 }
 
 /**
+ * @formule chauffage.systeme.pe
  * @returns Puissance émise utile du système de chauffage collectif en kW
  */
 export function calcule_pe(props: {
@@ -230,6 +235,7 @@ export function calcule_pe(props: {
 }
 
 /**
+ * @formule chauffage.systeme.dht
  * @returns Degré heure base T en °C.h/mois
  */
 export function calcule_dht(props: {
@@ -244,6 +250,8 @@ export function calcule_dht(props: {
 		const text = props.sollicitations[mois].text;
 		const nref = props.nref[mois];
 		if (null === text) return 0;
+		if (t === tbase) return 0;
+		if (text === tbase) return 0;
 		const x = 0.5 * ((t - tbase) / (text - tbase));
 		return (
 			nref * (text - tbase) * x ** 5 * (14 - 28 * x + 20 * x ** 2 - 5 * x ** 3)
@@ -252,6 +260,7 @@ export function calcule_dht(props: {
 }
 
 /**
+ * @formule chauffage.systeme.t
  * @returns Température de dimensionnement du système de chauffage collectif en °C/mois
  */
 export function calcule_t(props: {
@@ -263,7 +272,7 @@ export function calcule_t(props: {
 	return createParMois((mois) => {
 		const bch = props.bch[mois];
 		const dh14 = props.sollicitations[mois].dh14;
-		return 14 - (pe * dh14) / bch;
+		return bch ? 14 - (pe * dh14) / bch : 0;
 	});
 }
 

@@ -1,5 +1,5 @@
-import type { Adresse } from "#/common/common";
-import { createGuard, buildEnum } from "#/utils";
+import type { Adresse } from "../common/common.js";
+import { createGuard, buildEnum } from "../utils.js";
 import * as appartement from "./appartement.js";
 
 export { appartement };

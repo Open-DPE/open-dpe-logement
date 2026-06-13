@@ -1,8 +1,8 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as localNonChauffe from "#rules/enveloppe/local-non-chauffe/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as localNonChauffe from "../local-non-chauffe/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
  * @formule enveloppe.baie.aiu
@@ -51,8 +51,8 @@ export function calcule_sdep(props: {
  * @see calcule_b_autres
  * @formule enveloppe.baie.b
  * @formule enveloppe.mur.b
- * @formule enveloppe.plancher_bas.b
- * @formule enveloppe.plancher_haut.b
+ * @formule enveloppe.plancher-bas.b
+ * @formule enveloppe.plancher-haut.b
  * @formule enveloppe.porte.b
  * Coefficient de réduction des déperditions thermiques de la paroi
  */

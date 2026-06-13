@@ -1,12 +1,12 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as batiment from "#rules/batiment/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as enveloppe from "#rules/enveloppe/formulas.js";
-import type * as generateur from "#rules/chauffage/generateur/formulas.js";
-import type * as installation from "#rules/chauffage/installation/formulas.js";
-import type * as systeme from "#rules/chauffage/systeme/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import type * as batiment from "../../batiment/formulas.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as enveloppe from "../../enveloppe/formulas.js";
+import type * as generateur from "../generateur/formulas.js";
+import type * as installation from "../installation/formulas.js";
+import type * as systeme from "../systeme/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
  * Facteur d'utilisation de la PAC pour les générateurs hybrides

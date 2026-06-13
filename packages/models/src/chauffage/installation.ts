@@ -1,5 +1,5 @@
-import type { UUID, NonEmptyArray } from "#/common/common";
-import { buildEnum, createGuard } from "#/utils.js";
+import type { UUID, NonEmptyArray } from "../common/common.js";
+import { buildEnum, createGuard } from "../utils.js";
 import * as systeme from "./systeme.js";
 
 export const isInstallation = createGuard<Installation>(

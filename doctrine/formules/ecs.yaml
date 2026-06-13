@@ -105,7 +105,7 @@ ecs.qdw_col_hvc:
 
 ecs.becs:
   id: ecs.becs
-  description: Besoins d'eau chaude 
+  description: Besoins d'eau chaude
   references: Méthode 3CL-DPE 2021 §11.1
   type: number
   unite: kWh/mois
@@ -488,7 +488,7 @@ ecs.generateur.cop:
   references: Méthode 3CL-DPE 2021 §14.2
   type: [number, "null"]
   dependances:
-    - climat:zone_climatique
+    - climat.zone_climatique
 
 ecs.generateur.rpn:
   id: ecs.generateur.rpn

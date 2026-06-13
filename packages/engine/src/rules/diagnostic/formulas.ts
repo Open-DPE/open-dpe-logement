@@ -1,14 +1,14 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as batiment from "#rules/batiment/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as chauffage from "#rules/chauffage/formulas.js";
-import type * as eclairage from "#rules/eclairage/formulas.js";
-import type * as ecs from "#rules/ecs/formulas.js";
-import type * as enveloppe from "#rules/enveloppe/formulas.js";
-import type * as refroidissement from "#rules/refroidissement/formulas.js";
-import type * as ventilation from "#rules/ventilation/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import type * as batiment from "../batiment/formulas.js";
+import type * as climat from "../climat/formulas.js";
+import type * as chauffage from "../chauffage/formulas.js";
+import type * as eclairage from "../eclairage/formulas.js";
+import type * as ecs from "../ecs/formulas.js";
+import type * as enveloppe from "../enveloppe/formulas.js";
+import type * as refroidissement from "../refroidissement/formulas.js";
+import type * as ventilation from "../ventilation/formulas.js";
+import { ValeurForfaitaireError } from "../errors.js";
 
 /**
  * Consommations par usage et par énergie
@@ -77,9 +77,14 @@ export function calcule_etiquette_energie(props: {
 	cep: ReturnType<typeof calcule_cep>;
 	eges: ReturnType<typeof calcule_eges>;
 }): models.diagnostic.Etiquette {
+	const query = {
+		...props,
+		cep: Math.floor(props.cep),
+		eges: Math.floor(props.eges),
+	};
 	const abaque = abaques.diagnostic.etiquetteEnergie;
-	const match = abaque.search(props, abaque.load()).at(0);
-	if (!match) throw new ValeurForfaitaireError(props);
+	const match = abaque.search(query, abaque.load()).at(0);
+	if (!match) throw new ValeurForfaitaireError(query);
 	return match.etiquette_energie as models.diagnostic.Etiquette;
 }
 
@@ -94,9 +99,13 @@ export function calcule_etiquette_climat(props: {
 	altitude: number;
 	eges: ReturnType<typeof calcule_eges>;
 }): models.diagnostic.Etiquette {
+	const query = {
+		...props,
+		eges: Math.floor(props.eges),
+	};
 	const abaque = abaques.diagnostic.etiquetteClimat;
-	const match = abaque.search(props, abaque.load()).at(0);
-	if (!match) throw new ValeurForfaitaireError(props);
+	const match = abaque.search(query, abaque.load()).at(0);
+	if (!match) throw new ValeurForfaitaireError(query);
 	return match.etiquette_climat as models.diagnostic.Etiquette;
 }
 

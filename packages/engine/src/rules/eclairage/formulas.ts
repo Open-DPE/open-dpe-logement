@@ -1,10 +1,10 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import * as batiment from "#rules/batiment/formulas.js";
-import * as climat from "#rules/climat/formulas.js";
-import * as production from "#rules/production/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
+import * as common from "../common/formulas.js";
+import * as batiment from "../batiment/formulas.js";
+import * as climat from "../climat/formulas.js";
+import * as production from "../production/formulas.js";
+import { ValeurForfaitaireError } from "../errors.js";
 
 /**
  * @formule eclairage.cef

@@ -23,6 +23,7 @@ export function calcule_delta_pem(props: {
 }
 
 /**
+ * @formule chauffage.emetteur.fcot
  * @returns Facteur de correction
  */
 export function calcule_fcot(props: {

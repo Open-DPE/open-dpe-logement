@@ -1,5 +1,5 @@
-import type { Orientation, UUID } from "#/common/common";
-import { createGuard } from "#/utils.js";
+import type { Orientation, UUID } from "../common/common.js";
+import { createGuard } from "../utils.js";
 
 export const isPanneauPhotovoltaique = createGuard<PanneauPhotovoltaique>(
 	"/production/panneau-photovoltaique",

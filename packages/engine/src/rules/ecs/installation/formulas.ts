@@ -1,10 +1,10 @@
 import { abaques } from "@open-dpe-logement/abaques";
 import * as models from "@open-dpe-logement/models";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as ecs from "#rules/ecs/formulas.js";
-import type * as systeme from "#rules/ecs/systeme/formulas.js";
-import { ValeurForfaitaireError } from "#rules/errors.js";
-import { createParMois } from "#rules/helpers.js";
+import type * as climat from "../../climat/formulas.js";
+import type * as ecs from "../formulas.js";
+import type * as systeme from "../systeme/formulas.js";
+import { ValeurForfaitaireError } from "../../errors.js";
+import { createParMois } from "../../helpers.js";
 
 /**
  * @returns Besoins d'eau chaude sanitaire proratisés à l'installation en kWh/mois

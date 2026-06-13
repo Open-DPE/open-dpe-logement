@@ -1,11 +1,9 @@
 import * as models from "@open-dpe-logement/models";
-import * as common from "#rules/common/formulas.js";
-import type * as climat from "#rules/climat/formulas.js";
-import type * as enveloppe from "#rules/enveloppe/formulas.js";
-import type * as generateur from "#rules/chauffage/generateur/formulas.js";
+import * as common from "../../../common/formulas.js";
+import type * as climat from "../../../climat/formulas.js";
+import type * as enveloppe from "../../../enveloppe/formulas.js";
+import type * as generateur from "../../generateur/formulas.js";
 import * as utils from "./utils.js";
-
-export { utils };
 
 export type Props = {
 	scenario: models.common.Scenario;
@@ -17,6 +15,7 @@ export type Props = {
 	cascade: models.chauffage.generateur.Cascade | null;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
+	bienergie_generateur: models.chauffage.generateur.Bienergie | null;
 	rpn: ReturnType<typeof generateur.calcule_combustion>["rpn"];
 	rpint: ReturnType<typeof generateur.calcule_combustion>["rpint"];
 	qp0: ReturnType<typeof generateur.calcule_combustion>["qp0"];
@@ -66,8 +65,9 @@ export function calcule_rg(props: Props): number {
 	const pmcons = calcule_pmcons({ pcons });
 
 	const kpcs = props.kpcs;
-	const qp0 = props.qp0 / kpcs;
-	const pveilleuse = props.pveilleuse / 1000 / kpcs;
+	const qp0 = props.qp0 * kpcs;
+	const pveilleuse = (props.pveilleuse / 1000) * kpcs;
+
 	return (pmfou / (pmcons + 0.45 * qp0 + pveilleuse)) * kpcs;
 }
 
@@ -108,7 +108,7 @@ function createParTauxCharge<T>(fn: (x: TauxCharge) => T): ParTauxCharge<T> {
 /**
  * Coefficient de pondération au point de fonciontionnement
  */
-const COEFF_POND = {
+export const COEFF_POND = {
 	[TAUX_CHARGE["5"]]: 0.1,
 	[TAUX_CHARGE["15"]]: 0.25,
 	[TAUX_CHARGE["25"]]: 0.2,
@@ -124,14 +124,14 @@ const COEFF_POND = {
 /**
  * @returns Taux de charge en valeur décimale
  */
-function calcule_tch(): ParTauxCharge<number> {
+export function calcule_tch(): ParTauxCharge<number> {
 	return createParTauxCharge((x) => x / 100);
 }
 
 /**
  * @returns Taux de charge dimensionné en valeur décimale
  */
-function calcule_tch_dim(props: {
+export function calcule_tch_dim(props: {
 	tch: ReturnType<typeof calcule_tch>;
 	cdim_ref: ReturnType<typeof calcule_cdim_ref>;
 }): ParTauxCharge<number> {
@@ -145,7 +145,7 @@ function calcule_tch_dim(props: {
 /**
  * @returns Taux de charge final en valeur décimale
  */
-function calcule_tch_final(props: {
+export function calcule_tch_final(props: {
 	tch_dim: ReturnType<typeof calcule_tch_dim>;
 	prel: ReturnType<typeof calcule_prel>;
 	ctch: ReturnType<typeof calcule_ctch> | null;
@@ -161,14 +161,14 @@ function calcule_tch_final(props: {
 /**
  * @returns Coefficient de pondération
  */
-function calcule_coeff_pond(): ParTauxCharge<number> {
+export function calcule_coeff_pond(): ParTauxCharge<number> {
 	return createParTauxCharge((x) => COEFF_POND[x]);
 }
 
 /**
  * @returns Coefficient de pondération dimensionné - Valeur fantôme
  */
-function calcule_coeff_pond_dim(props: {
+export function calcule_coeff_pond_dim(props: {
 	coeff_pond: ReturnType<typeof calcule_coeff_pond>;
 }): ParTauxCharge<number> {
 	return props.coeff_pond;
@@ -178,7 +178,7 @@ function calcule_coeff_pond_dim(props: {
  * @see https://github.com/dpe-audit/dpe-logement/issues/51
  * @returns Coefficient de pondération final au point de fonctionnement x
  */
-function calcule_coeff_pond_final(props: {
+export function calcule_coeff_pond_final(props: {
 	tch_dim: ReturnType<typeof calcule_tch_dim>;
 	coeff_pond_dim: ReturnType<typeof calcule_coeff_pond_dim>;
 	ctch: ReturnType<typeof calcule_ctch>;
@@ -202,7 +202,7 @@ function calcule_coeff_pond_final(props: {
 	});
 }
 
-function calcule_ctch(props: {
+export function calcule_ctch(props: {
 	tch_dim: ReturnType<typeof calcule_tch_dim>;
 	prel: ReturnType<typeof calcule_prel>;
 	cascade: Props["cascade"];
@@ -229,7 +229,7 @@ function calcule_ctch(props: {
 /**
  * @returns Coefficient de pondération permettant de prendre en compte les charges partielles
  */
-function calcule_cdim_ref(props: {
+export function calcule_cdim_ref(props: {
 	scenario: Props["scenario"];
 	gv: Props["gv"];
 	tbase: Props["tbase"];
@@ -243,7 +243,7 @@ function calcule_cdim_ref(props: {
 /**
  * @returns Puissance relative du générateur en cascade
  */
-function calcule_prel(props: {
+export function calcule_prel(props: {
 	pn: Props["pn"];
 	pn_cascade: Props["pn_cascade"];
 }): number {
@@ -254,7 +254,7 @@ function calcule_prel(props: {
 /**
  * @returns Puissance au point de fonctionnement x en kW
  */
-function calcule_p(props: {
+export function calcule_p(props: {
 	pn: Props["pn"];
 	tch_final: ReturnType<typeof calcule_tch_final>;
 }): ParTauxCharge<number> {
@@ -265,7 +265,7 @@ function calcule_p(props: {
 /**
  * @returns Puissance moyenne fournie en kW
  */
-function calcule_pmfou(props: {
+export function calcule_pmfou(props: {
 	pfou: ReturnType<typeof calcule_pfou>;
 }): number {
 	return Object.values(props.pfou).reduce((acc, pfou) => acc + pfou, 0);
@@ -274,7 +274,7 @@ function calcule_pmfou(props: {
 /**
  * @returns Puissance fournie au point de fonctionnement x en kW
  */
-function calcule_pfou(props: {
+export function calcule_pfou(props: {
 	p: ReturnType<typeof calcule_p>;
 	coeff_pond_final: ReturnType<typeof calcule_coeff_pond_final>;
 }): ParTauxCharge<number> {
@@ -284,7 +284,7 @@ function calcule_pfou(props: {
 /**
  * @returns Puissance moyenne consommée en kW
  */
-function calcule_pmcons(props: {
+export function calcule_pmcons(props: {
 	pcons: ReturnType<typeof calcule_pcons>;
 }): number {
 	return Object.values(props.pcons).reduce((acc, pcons) => acc + pcons, 0);
@@ -293,7 +293,7 @@ function calcule_pmcons(props: {
 /**
  * @returns Puissance consommée au point de fonctionnement x en kW
  */
-function calcule_pcons(props: {
+export function calcule_pcons(props: {
 	p: ReturnType<typeof calcule_p>;
 	pfou: ReturnType<typeof calcule_pfou>;
 	qp: ReturnType<typeof calcule_qp>;
@@ -351,7 +351,7 @@ type QPProps = Props & {
 /**
  * @returns Pertes pour chaque point de fonctionnement
  */
-function calcule_qp(props: QPProps): ParTauxCharge<number> {
+export function calcule_qp(props: QPProps): ParTauxCharge<number> {
 	switch (true) {
 		case utils.is_chaudiere_gaz(props):
 		case utils.is_chaudiere_fioul(props):
@@ -372,27 +372,35 @@ function calcule_qp(props: QPProps): ParTauxCharge<number> {
 /**
  * @returns Pertes pour chaque point de fonctionnement des chaudières gaz, fioul et PAC hybride
  */
-function calcule_qpx_chaudiere(props: QPProps): ParTauxCharge<number> {
-	const qp0 = props.qp0 / props.kpcs;
-	const qp30 = calcule_qp30_chaudiere(props);
-	const qp100 = calcule_qp100_chaudiere(props);
+export function calcule_qpx_chaudiere(props: QPProps): ParTauxCharge<number> {
+	const qp0 = props.qp0 * props.kpcs;
+	const qp30 = calcule_qp30(props);
+	const qp100 = calcule_qp100(props);
 
 	return createParTauxCharge((x) => {
 		const tch = props.tch_final[x];
 
 		switch (props.mode_combustion) {
 			case models.chauffage.generateur.ModeCombustionEnum.standard: {
-				return x < 30
+				return tch < 30
 					? ((qp30 - 0.15 * qp0) * tch) / 0.3 + 0.15 * qp0
 					: ((qp100 - qp30) * tch) / 0.7 + qp30 - ((qp100 - qp30) * 0.3) / 0.7;
 			}
 			case models.chauffage.generateur.ModeCombustionEnum.basse_temperature:
 			case models.chauffage.generateur.ModeCombustionEnum.condensation: {
 				const qp15 = qp30 / 2;
-				if (x === 15) return qp15;
-				return x < 30
-					? ((qp30 - qp15) * tch) / 0.15 + qp15 - ((qp30 - qp15) * 0.15) / 0.15
-					: ((qp100 - qp30) * tch) / 0.7 + qp30 - ((qp100 - qp30) * 0.3) / 0.7;
+
+				if (tch < 15) {
+					return ((qp15 - 0.15 * qp0) * tch) / 0.15 + 0.15 * qp0;
+				} else if (tch < 30) {
+					return (
+						((qp30 - qp15) * tch) / 0.15 + qp15 - ((qp30 - qp15) * 0.15) / 0.15
+					);
+				} else {
+					return (
+						((qp100 - qp30) * tch) / 0.7 + qp30 - ((qp100 - qp30) * 0.3) / 0.7
+					);
+				}
 			}
 		}
 	});
@@ -401,7 +409,9 @@ function calcule_qpx_chaudiere(props: QPProps): ParTauxCharge<number> {
 /**
  * @returns Pertes pour chaque point de fonctionnement des radiateurs gaz
  */
-function calcule_qpx_radiateur_gaz(props: QPProps): ParTauxCharge<number> {
+export function calcule_qpx_radiateur_gaz(
+	props: QPProps,
+): ParTauxCharge<number> {
 	const pn = props.pn;
 	const rpn = (props.rpn * 100) / props.kpcs;
 	return createParTauxCharge((x) => {
@@ -413,26 +423,27 @@ function calcule_qpx_radiateur_gaz(props: QPProps): ParTauxCharge<number> {
 /**
  * @returns Pertes pour chaque point de fonctionnement des autres générateurs à combustion
  */
-function calcule_qpx_autres(props: QPProps): ParTauxCharge<number> {
-	const qp0 = props.qp0 / props.kpcs;
-	const qp50 = calcule_qp50_autres(props);
-	const qp100 = calcule_qp100_autres(props);
+export function calcule_qpx_autres(props: QPProps): ParTauxCharge<number> {
+	const qp0 = props.qp0 * props.kpcs;
+	const qp50 = calcule_qp50(props);
+	const qp100 = calcule_qp100(props);
 	return createParTauxCharge((x) => {
 		const tch = props.tch_final[x];
-		return x < 50
+		return tch < 50
 			? ((qp50 - 0.15 * qp0) * tch) / 0.5 + 0.15 * qp0
 			: ((qp100 - qp50) * tch) / 0.5 + 2 * qp50 - qp100;
 	});
 }
 
 /**
- * @returns Pertes à 30% de charge des chaudières gaz, fioul et PAC hybride
+ * @returns Pertes à 30% de charge
  */
-function calcule_qp30_chaudiere(props: Props): number {
+export function calcule_qp30(props: Props): number {
 	const { pn, tfonc30, tfonc100, presence_regulation, kpcs } = props;
 	const rpint = (props.rpint * 100) / kpcs;
+	const tfonc = presence_regulation ? tfonc30 : tfonc100;
 
-	if (null === tfonc30 || null === tfonc100) {
+	if (null === tfonc) {
 		throw new Error(
 			"Tfonc30 et tfonc100 doivent être renseignés pour les chaudières à combustion",
 		);
@@ -440,65 +451,33 @@ function calcule_qp30_chaudiere(props: Props): number {
 
 	switch (props.mode_combustion) {
 		case models.chauffage.generateur.ModeCombustionEnum.basse_temperature:
-		case models.chauffage.generateur.ModeCombustionEnum.condensation: {
-			return presence_regulation
-				? 0.3 *
-						pn *
-						((100 - (rpint + 0.2 * (33 - tfonc30))) /
-							(rpint + 0.2 * (33 - tfonc30)))
-				: 0.3 *
-						pn *
-						((100 - (rpint + 0.2 * (33 - tfonc100))) /
-							(rpint + 0.2 * (33 - tfonc100)));
-		}
-		default: {
-			return presence_regulation
-				? 0.3 *
-						pn *
-						((100 - (rpint + 0.1 * (50 - tfonc30))) /
-							(rpint + 0.1 * (50 - tfonc30)))
-				: 0.3 *
-						pn *
-						((100 - (rpint + 0.1 * (50 - tfonc100))) /
-							(rpint + 0.1 * (50 - tfonc100)));
-		}
-	}
-}
-
-/**
- * @returns Pertes à 100% de charge des chaudières gaz, fioul et PAC hybride
- */
-function calcule_qp100_chaudiere(props: Props): number {
-	const { pn, tfonc100, kpcs } = props;
-	const rpn = (props.rpn * 100) / kpcs;
-
-	if (null === tfonc100) {
-		throw new Error(
-			"Tfonc30 et tfonc100 doivent être renseignés pour les chaudières à combustion",
-		);
-	}
-
-	switch (props.mode_combustion) {
-		case models.chauffage.generateur.ModeCombustionEnum.basse_temperature:
-		case models.chauffage.generateur.ModeCombustionEnum.condensation: {
 			return (
+				0.3 *
 				pn *
-				((100 - (rpn + 0.1 * (70 - tfonc100))) / (rpn + 0.1 * (70 - tfonc100)))
+				((100 - (rpint + 0.1 * (40 - tfonc))) / (rpint + 0.1 * (40 - tfonc)))
 			);
-		}
+
+		case models.chauffage.generateur.ModeCombustionEnum.condensation:
+			return (
+				0.3 *
+				pn *
+				((100 - (rpint + 0.2 * (33 - tfonc))) / (rpint + 0.2 * (33 - tfonc)))
+			);
+
 		default: {
 			return (
+				0.3 *
 				pn *
-				((100 - (rpn + 0.1 * (70 - tfonc100))) / (rpn + 0.1 * (70 - tfonc100)))
+				((100 - (rpint + 0.1 * (50 - tfonc))) / (rpint + 0.1 * (50 - tfonc)))
 			);
 		}
 	}
 }
 
 /**
- * @returns Pertes à 50% de charge des autres generateurs à combustion
+ * @returns Pertes à 50% de charge
  */
-function calcule_qp50_autres(props: Props): number {
+export function calcule_qp50(props: Props): number {
 	const { pn, kpcs } = props;
 	const rpint = (props.rpint * 100) / kpcs;
 	return 0.5 * pn * ((100 - rpint) / rpint);
@@ -507,8 +486,26 @@ function calcule_qp50_autres(props: Props): number {
 /**
  * @returns Pertes à 100% de charge des autres generateurs à combustion
  */
-function calcule_qp100_autres(props: Props): number {
-	const { pn, kpcs } = props;
+export function calcule_qp100(props: Props): number {
+	const { pn, tfonc100, kpcs } = props;
 	const rpn = (props.rpn * 100) / kpcs;
-	return pn * ((100 - rpn) / rpn);
+
+	switch (true) {
+		case utils.is_chaudiere_gaz(props):
+		case utils.is_chaudiere_fioul(props):
+		case utils.is_pac_hybride(props): {
+			if (null === tfonc100) {
+				throw new Error(
+					"Tfonc30 et tfonc100 doivent être renseignés pour les chaudières à combustion",
+				);
+			}
+			return (
+				pn *
+				((100 - (rpn + 0.1 * (70 - tfonc100))) / (rpn + 0.1 * (70 - tfonc100)))
+			);
+		}
+
+		default:
+			return pn * ((100 - rpn) / rpn);
+	}
 }

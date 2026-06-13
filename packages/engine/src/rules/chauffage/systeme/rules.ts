@@ -1,7 +1,7 @@
 import * as models from "@open-dpe-logement/models";
-import type { Context } from "#core/context.js";
-import * as common from "#rules/common/formulas.js";
-import * as constants from "#/rules/constants.js";
+import type { Context } from "../../../core/context.js";
+import * as common from "../../common/formulas.js";
+import * as constants from "../../constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
@@ -10,12 +10,18 @@ export const REGISTRY = {
 		[RULES.consommations]: consommations,
 		[RULES.bch]: bch,
 		[RULES.cch]: cch,
+		[RULES.cch1]: cch1,
+		[RULES.cch2]: cch2,
 		[RULES.cch_elec]: cch_elec,
 		[RULES.cch_enr]: cch_enr,
 		[RULES.caux_dist]: caux_dist,
 		[RULES.caux_dist_enr]: caux_dist_enr,
 		[RULES.rdim]: rdim,
+		[RULES.role]: role,
 		[RULES.pch]: pch,
+		[RULES.pe]: pe,
+		[RULES.t]: t,
+		[RULES.dht]: dht,
 		[RULES.int]: int,
 		[RULES.ich]: ich,
 		[RULES.rd]: rd,
@@ -82,7 +88,7 @@ export function cch_elec(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_cch_elec> {
-	return ctx.register(NAMESPACE, "cch_elec", item, () => {
+	return ctx.register(NAMESPACE, RULES.cch_elec, item, () => {
 		const generateur = _generateur(ctx, item);
 		return formulas.calcule_cch_elec({
 			cch1: cch1(ctx, item),
@@ -95,7 +101,7 @@ export function cch1(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_cch1> {
-	return ctx.once(NAMESPACE, "cch1", item, () =>
+	return ctx.register(NAMESPACE, RULES.cch1, item, () =>
 		formulas.calcule_cch1({
 			cch1: _emissions(ctx, item).map((e) => e.cch1),
 		}),
@@ -106,7 +112,7 @@ export function cch2(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_cch2> {
-	return ctx.once(NAMESPACE, "cch2", item, () =>
+	return ctx.register(NAMESPACE, RULES.cch2, item, () =>
 		formulas.calcule_cch2({
 			cch2: _emissions(ctx, item).map((e) => e.cch2),
 		}),
@@ -199,7 +205,7 @@ export function role(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.dimensionnement.calcule_role> {
-	return ctx.once(NAMESPACE, "role", item, () => {
+	return ctx.register(NAMESPACE, RULES.role, item, () => {
 		const map = (systeme: Systeme) => {
 			const generateur = _generateur(ctx, systeme);
 			return { ...generateur, type_systeme: systeme.type };
@@ -265,7 +271,7 @@ export function dht(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_dht> {
-	return ctx.once(NAMESPACE, "dht", item, () =>
+	return ctx.register(NAMESPACE, RULES.dht, item, () =>
 		formulas.calcule_dht({
 			t: t(ctx, item),
 			tbase: ctx.resolve(
@@ -288,7 +294,7 @@ export function pe(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_pe> {
-	return ctx.once(NAMESPACE, "pe", item, () =>
+	return ctx.register(NAMESPACE, RULES.pe, item, () =>
 		formulas.calcule_pe({
 			pn: _generateur(ctx, item).pn,
 			rd: rd(ctx, item),
@@ -302,7 +308,7 @@ export function t(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_t> {
-	return ctx.once(NAMESPACE, "t", item, () => {
+	return ctx.register(NAMESPACE, RULES.t, item, () => {
 		const installation = _installation(ctx, item);
 		return formulas.calcule_t({
 			bch: installation.bch,
@@ -389,8 +395,8 @@ export function rg(ctx: Context, item: Systeme): formulas.Rg {
 				const generateurs = _generateurs(ctx, item);
 				return formulas.combustion.calcule_rg({
 					...generateur,
-					energie_generateur:
-						generateur.bienergie ?? generateur.energie_generateur,
+					energie_generateur: generateur.energie_generateur,
+					bienergie_generateur: generateur.bienergie,
 					scenario: ctx.scenario,
 					gv: ctx.resolve(
 						constants.enveloppe.NAMESPACE,
@@ -587,18 +593,16 @@ function _generateur(ctx: Context, item: Systeme) {
 					constants.chauffage.generateur.RULES.scop,
 					generateur,
 				) ?? 0,
-			tfonc30:
-				ctx.resolve(
-					constants.chauffage.generateur.NAMESPACE,
-					constants.chauffage.generateur.RULES.tfonc30,
-					generateur,
-				) ?? 0,
-			tfonc100:
-				ctx.resolve(
-					constants.chauffage.generateur.NAMESPACE,
-					constants.chauffage.generateur.RULES.tfonc100,
-					generateur,
-				) ?? 0,
+			tfonc30: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.tfonc30,
+				generateur,
+			),
+			tfonc100: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.tfonc100,
+				generateur,
+			),
 		};
 	});
 }

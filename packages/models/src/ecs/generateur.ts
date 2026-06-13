@@ -1,12 +1,12 @@
-import { buildEnum, createGuard } from "#/utils";
-import { ENERGIES_COMBUSTION, EnergieEnum } from "#/common/common";
+import { buildEnum, createGuard } from "../utils.js";
+import { ENERGIES_COMBUSTION, EnergieEnum } from "../common/common.js";
 import type {
 	Consommations,
 	Energie,
 	EnergieBois,
 	EnergieCombustion,
 	UUID,
-} from "#/common/common";
+} from "../common/common.js";
 
 export const isGenerateur = createGuard<Generateur>("/ecs/generateur");
 

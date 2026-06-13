@@ -1,6 +1,6 @@
-import type { UUID } from "#/common/common";
-import { createGuard } from "#/utils.js";
-import { EntityNotFoundError } from "#errors.js";
+import type { UUID } from "../common/common.js";
+import { createGuard } from "../utils.js";
+import { EntityNotFoundError } from "../errors.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
 

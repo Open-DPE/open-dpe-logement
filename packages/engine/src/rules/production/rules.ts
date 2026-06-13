@@ -1,5 +1,5 @@
-import type { Context } from "#core/context.js";
-import * as constants from "#/rules/constants.js";
+import type { Context } from "../../core/context.js";
+import * as constants from "../constants.js";
 import * as panneauPhotovoltaique from "./panneau-photovoltaique/rules.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";

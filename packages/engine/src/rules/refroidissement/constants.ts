@@ -1,5 +1,5 @@
-export * as generateur from "./generateur/constants";
-export * as installation from "./installation/constants";
+export * as generateur from "./generateur/constants.js";
+export * as installation from "./installation/constants.js";
 
 export const NAMESPACE = "refroidissement";
 
