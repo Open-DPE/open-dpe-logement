@@ -1,9 +1,24 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import { type_generateur } from "../generateur/rules.js";
 import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
+
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.cch]: cch,
+		[RULES.cch1]: cch1,
+		[RULES.cch2]: cch2,
+		[RULES.ich]: ich,
+		[RULES.ich1]: ich1,
+		[RULES.ich2]: ich2,
+		[RULES.re]: re,
+		[RULES.rr]: rr,
+		[RULES.int]: int,
+		[RULES.i0]: i0,
+		[RULES.type]: type,
+	},
+};
 
 export type Emission = {
 	id: string;
@@ -224,7 +239,7 @@ export function type(
 	});
 }
 
-export function _emetteur(ctx: Context, item: Emission) {
+function _emetteur(ctx: Context, item: Emission) {
 	return ctx.once(NAMESPACE, "emetteur", item, () => {
 		if (!item.emetteur_id) return null;
 		return models.chauffage.getEmetteur(
@@ -234,7 +249,7 @@ export function _emetteur(ctx: Context, item: Emission) {
 	});
 }
 
-export function _systeme(ctx: Context, item: Emission) {
+function _systeme(ctx: Context, item: Emission) {
 	return ctx.once(NAMESPACE, "systeme", item, () => {
 		const systeme = models.chauffage.getSysteme(
 			ctx.diagnostic.chauffage,
@@ -297,8 +312,12 @@ function _generateur(ctx: Context, item: Emission) {
 		);
 		return {
 			...generateur,
-			type_generateur: type_generateur(generateur),
 			label_generateur: generateur.signaletique.label,
+			type_generateur: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.type_generateur,
+				generateur,
+			),
 			scop:
 				ctx.resolve(
 					constants.chauffage.generateur.NAMESPACE,

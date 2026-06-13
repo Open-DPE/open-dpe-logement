@@ -3,16 +3,13 @@ import type { Context } from "#core/context.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Niveau = models.enveloppe.niveau.Niveau;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.inertie]: inertie,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: Niveau,
-): models.enveloppe.niveau.NiveauData {
-	return {
-		inertie: inertie(ctx, item),
-	};
-}
+type Niveau = models.enveloppe.niveau.Niveau;
 
 export function inertie(
 	ctx: Context,

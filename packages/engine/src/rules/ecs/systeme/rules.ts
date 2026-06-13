@@ -2,28 +2,25 @@ import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
-import { type_generateur, energie_generateur } from "../generateur/rules.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Installation = models.ecs.installation.Installation;
-type Systeme = models.ecs.systeme.Systeme;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.cecs]: cecs,
+		[RULES.cecs_enr]: cecs_enr,
+		[RULES.cecs_elec]: cecs_elec,
+		[RULES.caux_dist]: caux_dist,
+		[RULES.caux_dist_enr]: caux_dist_enr,
+		[RULES.qcirb]: qcirb,
+		[RULES.qtrac]: qtrac,
+		[RULES.rdim]: rdim,
+		[RULES.iecs]: iecs,
+		[RULES.rendements]: rendements,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: Systeme,
-): models.ecs.systeme.SystemeData {
-	return {
-		rdim: rdim(ctx, item),
-		iecs: iecs(ctx, item),
-		rd: rendements(ctx, item).rd,
-		rs: rendements(ctx, item).rs,
-		rg: rendements(ctx, item).rg,
-		rgs: rendements(ctx, item).rgs,
-		qcirb: qcirb(ctx, item),
-		qtrac: qtrac(ctx, item),
-		consommations: consommations(ctx, item),
-	};
-}
+type Systeme = models.ecs.systeme.Systeme;
 
 export function consommations(
 	ctx: Context,
@@ -36,7 +33,7 @@ export function consommations(
 			cecs_enr: cecs_enr(ctx, item),
 			caux_dist: caux_dist(ctx, item),
 			caux_dist_enr: caux_dist_enr(ctx, item),
-			energie: energie_generateur(generateur),
+			energie: generateur.energie_generateur,
 			reseau_id: generateur.position.reseau_chaleur_id,
 		});
 	});
@@ -49,16 +46,8 @@ export function cecs(
 	return ctx.register(NAMESPACE, RULES.cecs, item, () => {
 		const installation = _installation(ctx, item);
 		return formulas.calcule_cecs({
-			becs: ctx.resolve(
-				constants.ecs.installation.NAMESPACE,
-				constants.ecs.installation.RULES.becs,
-				installation,
-			),
-			fecs: ctx.resolve(
-				constants.ecs.installation.NAMESPACE,
-				constants.ecs.installation.RULES.fecs,
-				{ id: "test" },
-			),
+			becs: installation.becs,
+			fecs: installation.fecs,
 			rdim: rdim(ctx, item),
 			iecs: iecs(ctx, item),
 		});
@@ -92,7 +81,7 @@ export function cecs_elec(
 		const generateur = _generateur(ctx, item);
 		return formulas.calcule_cecs_elec({
 			cecs: cecs(ctx, item),
-			energie_generateur: energie_generateur(generateur),
+			energie_generateur: generateur.energie_generateur,
 		});
 	});
 }
@@ -140,11 +129,7 @@ export function qcirb(
 			installation_collective: installation.installation_collective,
 			bouclage: bouclage_reseau(item),
 			niveaux_desservis: item.reseau.niveaux_desservis,
-			qdw: ctx.resolve(
-				constants.ecs.installation.NAMESPACE,
-				constants.ecs.installation.RULES.qdw,
-				installation,
-			),
+			qdw: installation.qdw,
 		});
 	});
 }
@@ -156,11 +141,7 @@ export function qtrac(
 	return ctx.register(NAMESPACE, RULES.qtrac, item, () => {
 		const installation = _installation(ctx, item);
 		return formulas.calcule_qtrac({
-			becs: ctx.resolve(
-				constants.ecs.installation.NAMESPACE,
-				constants.ecs.installation.RULES.becs,
-				installation,
-			),
+			becs: installation.becs,
 			installation_collective: installation.installation_collective,
 			bouclage: bouclage_reseau(item),
 		});
@@ -182,14 +163,15 @@ export function iecs(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_iecs> {
-	return ctx.register(NAMESPACE, RULES.iecs, item, () =>
-		formulas.calcule_iecs({
-			rd: rendements(ctx, item).rd,
-			rg: rendements(ctx, item).rg,
-			rs: rendements(ctx, item).rs,
-			rgs: rendements(ctx, item).rgs,
-		}),
-	);
+	return ctx.register(NAMESPACE, RULES.iecs, item, () => {
+		const v = rendements(ctx, item);
+		return formulas.calcule_iecs({
+			rd: v.rd,
+			rs: v.rs,
+			rg: v.rg,
+			rgs: v.rgs,
+		});
+	});
 }
 
 export function rendements(ctx: Context, item: Systeme): formulas.Rendements {
@@ -206,93 +188,50 @@ export function rendements(ctx: Context, item: Systeme): formulas.Rendements {
 
 		switch (true) {
 			case models.ecs.generateur.isReseauChaleur(generateur):
-			case models.ecs.generateur.isGenerateurMultiBatiment(generateur): {
+			case models.ecs.generateur.isGenerateurMultiBatiment(generateur):
 				return formulas.calcule_rendements_reseau_chaleur({
 					rd,
 					isolation_reseau: isolation_reseau(item),
 				});
-			}
 
 			case models.ecs.generateur.isChaudiereCombustion(generateur):
 			case models.ecs.generateur.isPoeleBoisBouilleur(generateur):
 			case models.ecs.generateur.isPacHybride(generateur):
-			case models.ecs.generateur.isGenerateurCollectifInconnu(generateur): {
-				const combustion = ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.combustion,
-					generateur,
-				);
+			case models.ecs.generateur.isGenerateurCollectifInconnu(generateur):
 				return formulas.calcule_rendements_chaudiere_mixte({
 					rd,
-					becs: ctx.resolve(
-						constants.ecs.installation.NAMESPACE,
-						constants.ecs.installation.RULES.becs,
-						installation,
-					),
-					qgw: ctx.resolve(
-						constants.ecs.generateur.NAMESPACE,
-						constants.ecs.generateur.RULES.qgw,
-						generateur,
-					),
-					rpn: combustion?.rpn ?? 0,
-					qp0: combustion?.qp0 ?? 0,
-					pveilleuse: combustion?.pveilleuse ?? 0,
+					becs: installation.becs,
+					qgw: generateur.qgw,
+					rpn: generateur.combustion?.rpn ?? 0,
+					qp0: generateur.combustion?.qp0 ?? 0,
+					pveilleuse: generateur.combustion?.pveilleuse ?? 0,
 				});
-			}
 
-			case models.ecs.generateur.isChauffeEauGaz(generateur): {
-				const combustion = ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.combustion,
-					generateur,
-				);
+			case models.ecs.generateur.isChauffeEauGaz(generateur):
 				return formulas.calcule_rendements_chaudiere_mixte({
 					rd,
-					becs: ctx.resolve(
-						constants.ecs.installation.NAMESPACE,
-						constants.ecs.installation.RULES.becs,
-						installation,
-					),
-					qgw: ctx.resolve(
-						constants.ecs.generateur.NAMESPACE,
-						constants.ecs.generateur.RULES.qgw,
-						generateur,
-					),
-					rpn: combustion?.rpn ?? 0,
-					qp0: combustion?.qp0 ?? 0,
-					pveilleuse: combustion?.pveilleuse ?? 0,
+					qgw: generateur.qgw,
+					rpn: generateur.combustion?.rpn ?? 0,
+					qp0: generateur.combustion?.qp0 ?? 0,
+					pveilleuse: generateur.combustion?.pveilleuse ?? 0,
+					becs: installation.becs,
 				});
-			}
 
 			case models.ecs.generateur.isChauffeEauThermodynamique(generateur):
-			case models.ecs.generateur.isPacDoubleService(generateur): {
+			case models.ecs.generateur.isPacDoubleService(generateur):
 				return formulas.calcule_rendements_systeme_thermodynamique({
 					rd,
-					cop:
-						ctx.resolve(
-							constants.ecs.generateur.NAMESPACE,
-							constants.ecs.generateur.RULES.cop,
-							generateur,
-						) ?? 0,
+					cop: generateur.cop ?? 0,
 				});
-			}
 
 			default:
 				return formulas.calcule_rendements_systeme_electrique({
 					rd,
-					type_generateur: type_generateur(generateur),
-					becs: ctx.resolve(
-						constants.ecs.installation.NAMESPACE,
-						constants.ecs.installation.RULES.becs,
-						installation,
-					),
-					qgw: ctx.resolve(
-						constants.ecs.generateur.NAMESPACE,
-						constants.ecs.generateur.RULES.qgw,
-						generateur,
-					),
+					type_generateur: generateur.type_generateur,
+					qgw: generateur.qgw,
 					position_chauffe_eau: generateur.position.position_chauffe_eau,
 					label_generateur: generateur.signaletique.label,
+					becs: installation.becs,
 				});
 		}
 	});
@@ -314,13 +253,67 @@ export function isolation_reseau(
 	});
 }
 
-function _installation(ctx: Context, item: Systeme): Installation {
-	return models.ecs.getInstallationBySysteme(ctx.diagnostic.ecs, item.id);
+function _installation(ctx: Context, item: Systeme) {
+	return ctx.once(NAMESPACE, "installation", item, () => {
+		const installation = models.ecs.getInstallationBySysteme(
+			ctx.diagnostic.ecs,
+			item.id,
+		);
+
+		return {
+			...installation,
+
+			becs: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.becs,
+				installation,
+			),
+			fecs: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.fecs,
+				installation,
+			),
+			qdw: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.qdw,
+				installation,
+			),
+		};
+	});
 }
 
-function _generateur(
-	ctx: Context,
-	item: Systeme,
-): models.ecs.generateur.Generateur {
-	return models.ecs.getGenerateur(ctx.diagnostic.ecs, item.generateur_id);
+function _generateur(ctx: Context, item: Systeme) {
+	const generateur = models.ecs.getGenerateur(
+		ctx.diagnostic.ecs,
+		item.generateur_id,
+	);
+
+	return {
+		...generateur,
+		type_generateur: ctx.resolve(
+			constants.ecs.generateur.NAMESPACE,
+			constants.ecs.generateur.RULES.type_generateur,
+			generateur,
+		),
+		energie_generateur: ctx.resolve(
+			constants.ecs.generateur.NAMESPACE,
+			constants.ecs.generateur.RULES.energie_generateur,
+			generateur,
+		),
+		qgw: ctx.resolve(
+			constants.ecs.generateur.NAMESPACE,
+			constants.ecs.generateur.RULES.qgw,
+			generateur,
+		),
+		cop: ctx.resolve(
+			constants.ecs.generateur.NAMESPACE,
+			constants.ecs.generateur.RULES.cop,
+			generateur,
+		),
+		combustion: ctx.resolve(
+			constants.ecs.generateur.NAMESPACE,
+			constants.ecs.generateur.RULES.combustion,
+			generateur,
+		),
+	};
 }

@@ -1,4 +1,3 @@
-import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as constants from "#/rules/constants.js";
 import * as emetteur from "./emetteur/rules.js";
@@ -11,18 +10,34 @@ import { NAMESPACE, RULES } from "./constants.js";
 
 export { emetteur, emission, generateur, installation, systeme };
 
-export function calcule(ctx: Context): models.chauffage.ChauffageData {
-	return {
-		bch: models.common.reduceParMois(bch(ctx)),
-		pch: pch(ctx),
-		as: models.common.reduceParMois(as(ctx)),
-		ai: models.common.reduceParMois(ai(ctx)),
-		qgw_rec: models.common.reduceParMois(qgw_rec(ctx)),
-		qdw_rec: models.common.reduceParMois(qdw_rec(ctx)),
-		qgen_ecs_rec: models.common.reduceParMois(qgen_ecs_rec(ctx)),
-		effet_joule: effet_joule(ctx),
-	};
-}
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.cch]: cch,
+		[RULES.cch_elec]: cch_elec,
+		[RULES.caux_gen]: caux_gen,
+		[RULES.caux_dist]: caux_dist,
+		[RULES.bch]: bch,
+		[RULES.bch_hp]: bch_hp,
+		[RULES.bv]: bv,
+		[RULES.pch]: pch,
+		[RULES.f]: f,
+		[RULES.as]: as,
+		[RULES.ai]: ai,
+		[RULES.qgw_rec]: qgw_rec,
+		[RULES.qdw_rec]: qdw_rec,
+		[RULES.qgen_ecs_rec]: qgen_ecs_rec,
+		[RULES.effet_joule]: effet_joule,
+		[RULES.nref]: nref,
+		[RULES.dh]: dh,
+	},
+
+	...emetteur.REGISTRY,
+	...generateur.REGISTRY,
+	...installation.REGISTRY,
+	...systeme.REGISTRY,
+	...emission.REGISTRY,
+};
 
 export function consommations(
 	ctx: Context,

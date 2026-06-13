@@ -4,30 +4,27 @@ import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.ppv]: ppv,
+		[RULES.kpv]: kpv,
+	},
+};
+
 type PanneauPhotovoltaique =
 	models.production.panneauPhotovoltaique.PanneauPhotovoltaique;
 
-export function calcule(
-	ctx: Context,
-	panneau: PanneauPhotovoltaique,
-): models.production.panneauPhotovoltaique.PanneauPhotovoltaiqueData {
-	return {
-		ppv: models.common.reduceParMois(ppv(ctx, panneau)),
-		kpv: kpv(ctx, panneau),
-	};
-}
-
 export function ppv(
 	ctx: Context,
-	panneau: PanneauPhotovoltaique,
+	item: PanneauPhotovoltaique,
 ): ReturnType<typeof formulas.calcule_ppv> {
-	return ctx.register(NAMESPACE, RULES.ppv, () =>
+	return ctx.register(NAMESPACE, RULES.ppv, item, () =>
 		formulas.calcule_ppv({
 			spv: formulas.set_spv({
-				surface: panneau.surface,
-				modules: panneau.modules,
+				surface: item.surface,
+				modules: item.modules,
 			}),
-			kpv: kpv(ctx, panneau),
+			kpv: kpv(ctx, item),
 			epv: ctx.resolve(constants.climat.NAMESPACE, constants.climat.RULES.epv),
 		}),
 	);
@@ -35,12 +32,12 @@ export function ppv(
 
 export function kpv(
 	ctx: Context,
-	panneau: PanneauPhotovoltaique,
+	item: PanneauPhotovoltaique,
 ): ReturnType<typeof formulas.calcule_kpv> {
-	return ctx.register(NAMESPACE, RULES.kpv, () =>
+	return ctx.register(NAMESPACE, RULES.kpv, item, () =>
 		formulas.calcule_kpv({
-			orientation_pv: panneau.orientation,
-			inclinaison_pv: panneau.inclinaison,
+			orientation_pv: item.orientation,
+			inclinaison_pv: item.inclinaison,
 		}),
 	);
 }

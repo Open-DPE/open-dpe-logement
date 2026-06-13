@@ -7,4 +7,5 @@ export const RULES = {
 	b: "b",
 	dp: "dp",
 	u: "u",
+	isolation: "isolation",
 } as const;

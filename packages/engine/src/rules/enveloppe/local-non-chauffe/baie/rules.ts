@@ -4,6 +4,19 @@ import * as constants from "#rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.aue]: aue,
+		[RULES.aiu]: aiu,
+		[RULES.sst]: sst,
+		[RULES.t]: t,
+		[RULES.isolation]: isolation,
+		[RULES.type_vitrage]: type_vitrage,
+		[RULES.materiau]: materiau,
+		[RULES.presence_rupteur_pont_thermique]: presence_rupteur_pont_thermique,
+	},
+};
+
 type Baie = models.enveloppe.localNonChauffe.Baie;
 
 export function aue(
@@ -71,25 +84,43 @@ export function t(
 }
 
 export function isolation(
+	ctx: Context,
 	item: Baie,
 ): ReturnType<typeof formulas.set_isolation> {
-	return formulas.set_isolation({ type_vitrage: type_vitrage(item) });
+	return ctx.register(NAMESPACE, RULES.isolation, item, () =>
+		formulas.set_isolation({ type_vitrage: type_vitrage(ctx, item) }),
+	);
 }
 
 export function type_vitrage(
+	ctx: Context,
 	item: Baie,
 ): ReturnType<typeof formulas.set_type_vitrage> {
-	return formulas.set_type_vitrage({ type_vitrage: item.type_vitrage });
+	return ctx.register(NAMESPACE, RULES.type_vitrage, item, () =>
+		formulas.set_type_vitrage({ type_vitrage: item.type_vitrage }),
+	);
 }
 
-export function materiau(item: Baie): ReturnType<typeof formulas.set_materiau> {
-	return formulas.set_materiau({ materiau: item.materiau_menuiserie });
+export function materiau(
+	ctx: Context,
+	item: Baie,
+): ReturnType<typeof formulas.set_materiau> {
+	return ctx.register(NAMESPACE, RULES.materiau, item, () =>
+		formulas.set_materiau({ materiau: item.materiau_menuiserie }),
+	);
 }
 
 export function presence_rupteur_pont_thermique(
+	ctx: Context,
 	item: Baie,
 ): ReturnType<typeof formulas.set_presence_rupteur_pont_thermique> {
-	return formulas.set_presence_rupteur_pont_thermique({
-		presence_rupteur_pont_thermique: item.presence_rupteur_pont_thermique,
-	});
+	return ctx.register(
+		NAMESPACE,
+		RULES.presence_rupteur_pont_thermique,
+		item,
+		() =>
+			formulas.set_presence_rupteur_pont_thermique({
+				presence_rupteur_pont_thermique: item.presence_rupteur_pont_thermique,
+			}),
+	);
 }

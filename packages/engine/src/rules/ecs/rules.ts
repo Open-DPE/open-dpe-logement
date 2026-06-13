@@ -1,4 +1,3 @@
-import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
@@ -10,30 +9,36 @@ import * as systeme from "./systeme/rules.js";
 
 export { generateur, installation, systeme };
 
-export function calcule(ctx: Context): models.ecs.EcsData {
-	return {
-		qgw: qgw(ctx),
-		qgen: qgen(ctx),
-		qdw_ind_vc: qdw_ind_vc(ctx),
-		qdw_col_vc: qdw_col_vc(ctx),
-		qdw_col_hvc: qdw_col_hvc(ctx),
-		becs: models.common.reduceParMois(becs(ctx)),
-		nadeq: nadeq(ctx),
-		nmax: nmax(ctx),
-	};
-}
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.cecs]: cecs,
+		[RULES.cecs_elec]: cecs_elec,
+		[RULES.caux]: caux,
+		[RULES.caux_gen]: caux_gen,
+		[RULES.caux_dist]: caux_dist,
+		[RULES.qgw]: qgw,
+		[RULES.qgen]: qgen,
+		[RULES.qdw_ind_vc]: qdw_ind_vc,
+		[RULES.qdw_col_vc]: qdw_col_vc,
+		[RULES.qdw_col_hvc]: qdw_col_hvc,
+		[RULES.becs]: becs,
+		[RULES.nadeq]: nadeq,
+		[RULES.nmax]: nmax,
+	},
+
+	...generateur.REGISTRY,
+	...installation.REGISTRY,
+	...systeme.REGISTRY,
+};
 
 export function consommations(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_consommations> {
 	return ctx.register(NAMESPACE, RULES.consommations, () =>
 		formulas.calcule_consommations({
-			consommations: ctx.diagnostic.ecs.generateurs.map((item) =>
-				ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.consommations,
-					item,
-				),
+			consommations: _generateurs(ctx).map(
+				({ consommations }) => consommations,
 			),
 		}),
 	);
@@ -42,13 +47,7 @@ export function consommations(
 export function cecs(ctx: Context): ReturnType<typeof formulas.calcule_cecs> {
 	return ctx.register(NAMESPACE, RULES.cecs, () =>
 		formulas.calcule_cecs({
-			cecs: ctx.diagnostic.ecs.generateurs.map((item) =>
-				ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.cecs,
-					item,
-				),
-			),
+			cecs: _generateurs(ctx).map(({ cecs }) => cecs),
 		}),
 	);
 }
@@ -58,13 +57,7 @@ export function cecs_elec(
 ): ReturnType<typeof formulas.calcule_cecs_elec> {
 	return ctx.register(NAMESPACE, RULES.cecs_elec, () =>
 		formulas.calcule_cecs_elec({
-			cecs_elec: ctx.diagnostic.ecs.generateurs.map((item) =>
-				ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.cecs_elec,
-					item,
-				),
-			),
+			cecs_elec: _generateurs(ctx).map(({ cecs_elec }) => cecs_elec),
 		}),
 	);
 }
@@ -83,13 +76,7 @@ export function caux_gen(
 ): ReturnType<typeof formulas.calcule_caux_gen> {
 	return ctx.register(NAMESPACE, RULES.caux_gen, () =>
 		formulas.calcule_caux_gen({
-			caux_gen: ctx.diagnostic.ecs.generateurs.map((item) =>
-				ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.caux_gen,
-					item,
-				),
-			),
+			caux_gen: _generateurs(ctx).map(({ caux_gen }) => caux_gen),
 		}),
 	);
 }
@@ -99,13 +86,7 @@ export function caux_dist(
 ): ReturnType<typeof formulas.calcule_caux_dist> {
 	return ctx.register(NAMESPACE, RULES.caux_dist, () =>
 		formulas.calcule_caux_dist({
-			caux_dist: ctx.diagnostic.ecs.installations.map((item) =>
-				ctx.resolve(
-					constants.ecs.installation.NAMESPACE,
-					constants.ecs.installation.RULES.caux_dist,
-					item,
-				),
-			),
+			caux_dist: _installations(ctx).map(({ caux_dist }) => caux_dist),
 		}),
 	);
 }
@@ -113,13 +94,7 @@ export function caux_dist(
 export function qgw(ctx: Context): ReturnType<typeof formulas.calcule_qgw> {
 	return ctx.register(NAMESPACE, RULES.qgw, () =>
 		formulas.calcule_qgw({
-			qgw: ctx.diagnostic.ecs.generateurs.map((item) =>
-				ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.qgw,
-					item,
-				),
-			),
+			qgw: _generateurs(ctx).map(({ qgw }) => qgw),
 		}),
 	);
 }
@@ -127,13 +102,7 @@ export function qgw(ctx: Context): ReturnType<typeof formulas.calcule_qgw> {
 export function qgen(ctx: Context): ReturnType<typeof formulas.calcule_qgen> {
 	return ctx.register(NAMESPACE, RULES.qgen, () =>
 		formulas.calcule_qgen({
-			qgen: ctx.diagnostic.ecs.generateurs.map((item) =>
-				ctx.resolve(
-					constants.ecs.generateur.NAMESPACE,
-					constants.ecs.generateur.RULES.qgen,
-					item,
-				),
-			),
+			qgen: _generateurs(ctx).map(({ qgen }) => qgen),
 		}),
 	);
 }
@@ -143,13 +112,7 @@ export function qdw_ind_vc(
 ): ReturnType<typeof formulas.calcule_qdw_ind_vc> {
 	return ctx.register(NAMESPACE, RULES.qdw_ind_vc, () =>
 		formulas.calcule_qdw_ind_vc({
-			qdw_ind_vc: ctx.diagnostic.ecs.installations.map((item) =>
-				ctx.resolve(
-					constants.ecs.installation.NAMESPACE,
-					constants.ecs.installation.RULES.qdw_ind_vc,
-					item,
-				),
-			),
+			qdw_ind_vc: _installations(ctx).map(({ qdw_ind_vc }) => qdw_ind_vc),
 		}),
 	);
 }
@@ -159,13 +122,7 @@ export function qdw_col_vc(
 ): ReturnType<typeof formulas.calcule_qdw_col_vc> {
 	return ctx.register(NAMESPACE, RULES.qdw_col_vc, () =>
 		formulas.calcule_qdw_col_vc({
-			qdw_col_vc: ctx.diagnostic.ecs.installations.map((item) =>
-				ctx.resolve(
-					constants.ecs.installation.NAMESPACE,
-					constants.ecs.installation.RULES.qdw_col_vc,
-					item,
-				),
-			),
+			qdw_col_vc: _installations(ctx).map(({ qdw_col_vc }) => qdw_col_vc),
 		}),
 	);
 }
@@ -175,13 +132,7 @@ export function qdw_col_hvc(
 ): ReturnType<typeof formulas.calcule_qdw_col_hvc> {
 	return ctx.register(NAMESPACE, RULES.qdw_col_hvc, () =>
 		formulas.calcule_qdw_col_hvc({
-			qdw_col_hvc: ctx.diagnostic.ecs.installations.map((item) =>
-				ctx.resolve(
-					constants.ecs.installation.NAMESPACE,
-					constants.ecs.installation.RULES.qdw_col_hvc,
-					item,
-				),
-			),
+			qdw_col_hvc: _installations(ctx).map(({ qdw_col_hvc }) => qdw_col_hvc),
 		}),
 	);
 }
@@ -219,5 +170,71 @@ export function nmax(ctx: Context): ReturnType<typeof formulas.calcule_nmax> {
 				constants.batiment.RULES.sh,
 			),
 		}),
+	);
+}
+
+function _generateurs(ctx: Context) {
+	return ctx.once(NAMESPACE, "generateurs", () =>
+		ctx.diagnostic.ecs.generateurs.map((item) => ({
+			...item,
+			consommations: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.consommations,
+				item,
+			),
+			cecs: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.cecs,
+				item,
+			),
+			cecs_elec: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.cecs_elec,
+				item,
+			),
+			caux_gen: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.caux_gen,
+				item,
+			),
+			qgw: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.qgw,
+				item,
+			),
+			qgen: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.qgen,
+				item,
+			),
+		})),
+	);
+}
+
+function _installations(ctx: Context) {
+	return ctx.once(NAMESPACE, "installations", () =>
+		ctx.diagnostic.ecs.installations.map((item) => ({
+			...item,
+			caux_dist: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.caux_dist,
+				item,
+			),
+			qdw_col_hvc: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.qdw_col_hvc,
+				item,
+			),
+			qdw_col_vc: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.qdw_col_vc,
+				item,
+			),
+			qdw_ind_vc: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.qdw_ind_vc,
+				item,
+			),
+		})),
 	);
 }

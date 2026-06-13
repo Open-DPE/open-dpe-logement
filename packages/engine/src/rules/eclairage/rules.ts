@@ -3,6 +3,14 @@ import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.cecl]: cecl,
+		[RULES.nhecl]: nhecl,
+	},
+};
+
 export function consommations(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_consommations> {

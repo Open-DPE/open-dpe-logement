@@ -4,22 +4,22 @@ import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Installation = models.ventilation.installation.Installation;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.caux]: caux,
+		[RULES.caux_enr]: caux_enr,
+		[RULES.pvent_moy]: pvent_moy,
+		[RULES.rut]: rut,
+		[RULES.rdim]: rdim,
+		[RULES.debits]: debits,
+		[RULES.hvent]: hvent,
+		[RULES.annee_installation]: annee_installation,
+		[RULES.presence_echangeur_thermique]: presence_echangeur_thermique,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: Installation,
-): models.ventilation.installation.InstallationData {
-	return {
-		consommations: consommations(ctx, item),
-		pvent_moy: pvent_moy(ctx, item),
-		rdim: rdim(ctx, item),
-		qvarep_conv: debits(ctx, item).qvarep_conv,
-		qvasouf_conv: debits(ctx, item).qvasouf_conv,
-		smea_conv: debits(ctx, item).smea_conv,
-		hvent: hvent(ctx, item),
-	};
-}
+type Installation = models.ventilation.installation.Installation;
 
 export function consommations(
 	ctx: Context,
@@ -116,7 +116,7 @@ export function debits(
 			type_ventilation: item.type,
 			installation_collective: item.installation_collective,
 			annee_installation: annee_installation(ctx, item),
-			presence_echangeur_thermique: presence_echangeur_thermique(item),
+			presence_echangeur_thermique: presence_echangeur_thermique(ctx, item),
 		}),
 	);
 }
@@ -138,16 +138,21 @@ export function annee_installation(
 	ctx: Context,
 	item: Installation,
 ): ReturnType<typeof formulas.set_annee_installation> {
-	return formulas.set_annee_installation({
-		annee_installation: item.annee_installation,
-		annee_construction_batiment: ctx.diagnostic.batiment.annee_construction,
-	});
+	return ctx.register(NAMESPACE, RULES.annee_installation, item, () =>
+		formulas.set_annee_installation({
+			annee_installation: item.annee_installation,
+			annee_construction_batiment: ctx.diagnostic.batiment.annee_construction,
+		}),
+	);
 }
 
 export function presence_echangeur_thermique(
+	ctx: Context,
 	item: Installation,
 ): ReturnType<typeof formulas.set_presence_echangeur_thermique> {
-	return formulas.set_presence_echangeur_thermique({
-		presence_echangeur_thermique: item.presence_echangeur_thermique,
-	});
+	return ctx.register(NAMESPACE, RULES.presence_echangeur_thermique, item, () =>
+		formulas.set_presence_echangeur_thermique({
+			presence_echangeur_thermique: item.presence_echangeur_thermique,
+		}),
+	);
 }

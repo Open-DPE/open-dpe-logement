@@ -1,4 +1,3 @@
-import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as constants from "#/rules/constants.js";
 import * as panneauPhotovoltaique from "./panneau-photovoltaique/rules.js";
@@ -7,13 +6,17 @@ import { NAMESPACE, RULES } from "./constants.js";
 
 export { panneauPhotovoltaique };
 
-export function calcule(ctx: Context): models.production.ProductionData {
-	return {
-		ppv: ppv(ctx),
-		celec_ac: celec_ac_total(ctx),
-		tapl: tapl(ctx),
-	};
-}
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.ppv]: ppv,
+		[RULES.celec_total]: celec_total,
+		[RULES.celec]: celec,
+		[RULES.celec_ac_total]: celec_ac_total,
+		[RULES.celec_ac]: celec_ac,
+		[RULES.tapl]: tapl,
+	},
+	...panneauPhotovoltaique.REGISTRY,
+};
 
 export function ppv(ctx: Context): ReturnType<typeof formulas.calcule_ppv> {
 	return formulas.calcule_ppv({

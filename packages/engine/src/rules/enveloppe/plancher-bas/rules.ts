@@ -7,18 +7,20 @@ import { NAMESPACE, RULES } from "./constants.js";
 
 type PlancherBas = models.enveloppe.plancherBas.PlancherBas;
 
-export function calcule(
-	ctx: Context,
-	item: PlancherBas,
-): models.enveloppe.plancherBas.PlancherBasData {
-	return {
-		sdep: sdep(ctx, item),
-		b: b(ctx, item),
-		u: u(ctx, item),
-		u0: u0(ctx, item),
-		dp: dp(ctx, item),
-	};
-}
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.aiu]: aiu,
+		[RULES.isolation_aiu]: isolation_aiu,
+		[RULES.sdep]: sdep,
+		[RULES.b]: b,
+		[RULES.dp]: dp,
+		[RULES.u]: u,
+		[RULES.u0]: u0,
+		[RULES.uint]: uint,
+		[RULES.ue]: ue,
+		[RULES.isolation]: isolation,
+	},
+};
 
 export function aiu(
 	ctx: Context,
@@ -137,9 +139,11 @@ export function isolation(
 	ctx: Context,
 	item: PlancherBas,
 ): ReturnType<typeof formulas.set_isolation> {
-	return formulas.set_isolation({
-		mitoyennete: item.position.mitoyennete,
-		isolation: item.isolation.etat,
-		annee_construction: paroi.annee_construction(ctx, item),
-	});
+	return ctx.register(NAMESPACE, RULES.isolation, item, () =>
+		formulas.set_isolation({
+			mitoyennete: item.position.mitoyennete,
+			isolation: item.isolation.etat,
+			annee_construction: paroi.annee_construction(ctx, item),
+		}),
+	);
 }

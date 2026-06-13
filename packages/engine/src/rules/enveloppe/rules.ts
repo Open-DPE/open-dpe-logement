@@ -4,47 +4,69 @@ import * as constants from "#rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-export * as baie from "./baie/rules.js";
-export * as localNonChauffe from "./local-non-chauffe/rules.js";
-export * as mur from "./mur/rules.js";
-export * as niveau from "./niveau/rules.js";
-export * as plancherBas from "./plancher-bas/rules.js";
-export * as plancherHaut from "./plancher-haut/rules.js";
-export * as porte from "./porte/rules.js";
-export * as pontThermique from "./pont-thermique/rules.js";
+import * as baie from "./baie/rules.js";
+import * as localNonChauffe from "./local-non-chauffe/rules.js";
+import * as mur from "./mur/rules.js";
+import * as niveau from "./niveau/rules.js";
+import * as plancherBas from "./plancher-bas/rules.js";
+import * as plancherHaut from "./plancher-haut/rules.js";
+import * as porte from "./porte/rules.js";
+import * as pontThermique from "./pont-thermique/rules.js";
 
-export function calcule(ctx: Context): models.enveloppe.EnveloppeData {
-	return {
-		gv: gv(ctx),
-		ubat: ubat(ctx),
-		dp: dp(ctx),
-		dp_murs: dp_murs(ctx),
-		dp_planchers_bas: dp_planchers_bas(ctx),
-		dp_planchers_hauts: dp_planchers_hauts(ctx),
-		dp_baies: dp_baies(ctx),
-		dp_portes: dp_portes(ctx),
-		pt: pt(ctx),
-		dr: dr(ctx),
-		sdep: sdep(ctx),
-		sdep_murs: sdep_murs(ctx),
-		sdep_planchers_bas: sdep_planchers_bas(ctx),
-		sdep_planchers_hauts: sdep_planchers_hauts(ctx),
-		sdep_baies: sdep_baies(ctx),
-		sdep_portes: sdep_portes(ctx),
-		inertie: inertie(ctx),
-		hperm: hperm(ctx),
-		hvent: ctx.resolve(
-			constants.ventilation.NAMESPACE,
-			constants.ventilation.RULES.hvent,
-		),
-		presence_joints: presence_joints(ctx),
-		parois_anciennes: parois_anciennes(ctx),
-		isolation_planchers_hauts: isolation_planchers_hauts(ctx),
-		presence_protection_solaire: presence_protection_solaire(ctx),
-		logement_traversant: logement_traversant(ctx),
-		sse: models.common.reduceParMois(sse(ctx)),
-	};
-}
+export {
+	baie,
+	localNonChauffe,
+	mur,
+	niveau,
+	plancherBas,
+	plancherHaut,
+	pontThermique,
+	porte,
+};
+
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.gv]: gv,
+		[RULES.ubat]: ubat,
+		[RULES.dp]: dp,
+		[RULES.dp_murs]: dp_murs,
+		[RULES.dp_planchers_bas]: dp_planchers_bas,
+		[RULES.dp_planchers_hauts]: dp_planchers_hauts,
+		[RULES.dp_baies]: dp_baies,
+		[RULES.dp_portes]: dp_portes,
+		[RULES.pt]: pt,
+		[RULES.dr]: dr,
+		[RULES.sdep]: sdep,
+		[RULES.sdep_murs]: sdep_murs,
+		[RULES.sdep_planchers_bas]: sdep_planchers_bas,
+		[RULES.sdep_planchers_hauts]: sdep_planchers_hauts,
+		[RULES.sdep_baies]: sdep_baies,
+		[RULES.sdep_portes]: sdep_portes,
+		[RULES.inertie]: inertie,
+		[RULES.hperm]: hperm,
+		[RULES.qvinf]: qvinf,
+		[RULES.n50]: n50,
+		[RULES.q4pa]: q4pa,
+		[RULES.q4paenv]: q4paenv,
+		[RULES.q4paconv]: q4paconv,
+		[RULES.isolation_murs_plafonds]: isolation_murs_plafonds,
+		[RULES.presence_joints]: presence_joints,
+		[RULES.parois_anciennes]: parois_anciennes,
+		[RULES.isolation_planchers_hauts]: isolation_planchers_hauts,
+		[RULES.presence_protection_solaire]: presence_protection_solaire,
+		[RULES.logement_traversant]: logement_traversant,
+		[RULES.sse]: sse,
+	},
+
+	...baie.REGISTRY,
+	...localNonChauffe.REGISTRY,
+	...mur.REGISTRY,
+	...niveau.REGISTRY,
+	...plancherBas.REGISTRY,
+	...plancherHaut.REGISTRY,
+	...pontThermique.REGISTRY,
+	...porte.REGISTRY,
+};
 
 export function gv(ctx: Context): ReturnType<typeof formulas.calcule_gv> {
 	return ctx.register(NAMESPACE, RULES.gv, () =>
@@ -470,6 +492,11 @@ function _murs(ctx: Context) {
 				constants.enveloppe.mur.RULES.paroi_ancienne,
 				item,
 			),
+			isolation: ctx.resolve(
+				constants.enveloppe.mur.NAMESPACE,
+				constants.enveloppe.mur.RULES.isolation,
+				item,
+			),
 		})),
 	);
 }
@@ -487,6 +514,11 @@ function _planchers_bas(ctx: Context) {
 				constants.enveloppe.plancherBas.RULES.dp,
 				item,
 			),
+			isolation: ctx.resolve(
+				constants.enveloppe.plancherBas.NAMESPACE,
+				constants.enveloppe.plancherBas.RULES.isolation,
+				item,
+			),
 		})),
 	);
 }
@@ -502,6 +534,11 @@ function _planchers_hauts(ctx: Context) {
 			dp: ctx.resolve(
 				constants.enveloppe.plancherHaut.NAMESPACE,
 				constants.enveloppe.plancherHaut.RULES.dp,
+				item,
+			),
+			isolation: ctx.resolve(
+				constants.enveloppe.plancherHaut.NAMESPACE,
+				constants.enveloppe.plancherHaut.RULES.isolation,
 				item,
 			),
 		})),

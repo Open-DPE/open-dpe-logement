@@ -3,17 +3,14 @@ import type { Context } from "#core/context.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type PontThermique = models.enveloppe.pontThermique.PontThermique;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.pt]: pt,
+		[RULES.kpt]: kpt,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: PontThermique,
-): models.enveloppe.pontThermique.PontThermiqueData {
-	return {
-		kpt: kpt(ctx, item),
-		pt: pt(ctx, item),
-	};
-}
+type PontThermique = models.enveloppe.pontThermique.PontThermique;
 
 export function pt(
 	ctx: Context,
@@ -110,7 +107,7 @@ export function kpt(
 	});
 }
 
-export function isolation_mur(
+function isolation_mur(
 	ctx: Context,
 	entity: models.enveloppe.mur.Mur,
 ): ReturnType<typeof formulas.set_isolation_mur> {
@@ -120,7 +117,7 @@ export function isolation_mur(
 	});
 }
 
-export function isolation_plancher_haut(
+function isolation_plancher_haut(
 	ctx: Context,
 	entity: models.enveloppe.plancherHaut.PlancherHaut,
 ): ReturnType<typeof formulas.set_isolation_plancher_haut> {
@@ -130,7 +127,7 @@ export function isolation_plancher_haut(
 	});
 }
 
-export function isolation_plancher_bas(
+function isolation_plancher_bas(
 	ctx: Context,
 	entity: models.enveloppe.plancherBas.PlancherBas,
 ): ReturnType<typeof formulas.set_isolation_plancher_bas> {
@@ -141,7 +138,7 @@ export function isolation_plancher_bas(
 	});
 }
 
-export function type_isolation_mur(
+function type_isolation_mur(
 	entity: models.enveloppe.mur.Mur,
 ): ReturnType<typeof formulas.set_type_isolation_mur> {
 	return formulas.set_type_isolation_mur({
@@ -149,7 +146,7 @@ export function type_isolation_mur(
 	});
 }
 
-export function type_isolation_plancher_haut(
+function type_isolation_plancher_haut(
 	entity: models.enveloppe.plancherHaut.PlancherHaut,
 ): ReturnType<typeof formulas.set_type_isolation_plancher_haut> {
 	return formulas.set_type_isolation_plancher_haut({
@@ -157,7 +154,7 @@ export function type_isolation_plancher_haut(
 	});
 }
 
-export function type_isolation_plancher_bas(
+function type_isolation_plancher_bas(
 	entity: models.enveloppe.plancherBas.PlancherBas,
 ): ReturnType<typeof formulas.set_type_isolation_plancher_bas> {
 	return formulas.set_type_isolation_plancher_bas({
@@ -165,7 +162,7 @@ export function type_isolation_plancher_bas(
 	});
 }
 
-export function largeur_dormant(
+function largeur_dormant(
 	entity: models.enveloppe.baie.Baie | models.enveloppe.porte.Porte,
 ): ReturnType<typeof formulas.set_largeur_dormant> {
 	return formulas.set_largeur_dormant({
@@ -173,7 +170,7 @@ export function largeur_dormant(
 	});
 }
 
-export function presence_retour_isolation(
+function presence_retour_isolation(
 	entity: models.enveloppe.baie.Baie | models.enveloppe.porte.Porte,
 ): ReturnType<typeof formulas.set_presence_retour_isolation> {
 	return formulas.set_presence_retour_isolation({

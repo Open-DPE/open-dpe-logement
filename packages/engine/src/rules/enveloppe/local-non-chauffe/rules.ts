@@ -8,23 +8,24 @@ import { NAMESPACE, RULES } from "./constants.js";
 
 export { paroiRules as paroi, baieRules as baie };
 
-type LocalNonChauffe = models.enveloppe.localNonChauffe.LocalNonChauffe;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.b]: b,
+		[RULES.uvue]: uvue,
+		[RULES.aiu]: aiu,
+		[RULES.aue]: aue,
+		[RULES.isolation_aiu]: isolation_aiu,
+		[RULES.isolation_aue]: isolation_aue,
+		[RULES.sse]: sse,
+		[RULES.orientations]: orientations,
+		[RULES.t]: t,
+	},
 
-export function calcule(
-	ctx: Context,
-	item: LocalNonChauffe,
-): models.enveloppe.localNonChauffe.LocalNonChauffeData {
-	return {
-		b: b(ctx, item),
-		aiu: aiu(ctx, item),
-		aue: aue(ctx, item),
-		isolation_aiu: isolation_aiu(ctx, item),
-		isolation_aue: isolation_aue(ctx, item),
-		sse: models.common.reduceParMois(sse(ctx, item)),
-		orientations: orientations(ctx, item),
-		t: t(ctx, item),
-	};
-}
+	...baieRules.REGISTRY,
+	...paroiRules.REGISTRY,
+};
+
+type LocalNonChauffe = models.enveloppe.localNonChauffe.LocalNonChauffe;
 
 export function b(ctx: Context, item: LocalNonChauffe): formulas.b {
 	return ctx.register(NAMESPACE, RULES.b, item, () => {
@@ -107,34 +108,19 @@ export function isolation_aiu(
 	ctx: Context,
 	item: LocalNonChauffe,
 ): ReturnType<typeof formulas.calcule_isolation_aiu> {
-	const parois_mitoyennes = [
-		..._baies_lnc(ctx, item),
-		..._murs_lnc(ctx, item),
-		..._planchers_bas_lnc(ctx, item),
-		..._planchers_hauts_lnc(ctx, item),
-		..._portes_lnc(ctx, item),
-	];
-	const parois = item.parois.map((p) => ({
-		aiu: ctx.resolve(
-			constants.enveloppe.localNonChauffe.paroi.NAMESPACE,
-			constants.enveloppe.localNonChauffe.paroi.RULES.aiu,
-			p,
-		),
-		isolation: paroiRules.isolation(p),
-	}));
-	const baies = item.baies.map((b) => ({
-		aiu: ctx.resolve(
-			constants.enveloppe.localNonChauffe.baie.NAMESPACE,
-			constants.enveloppe.localNonChauffe.baie.RULES.aiu,
-			b,
-		),
-		isolation: baieRules.isolation(b),
-	}));
-	return formulas.calcule_isolation_aiu({
-		parois_mitoyennes,
-		parois,
-		baies,
-	});
+	return ctx.register(NAMESPACE, RULES.isolation_aiu, item, () =>
+		formulas.calcule_isolation_aiu({
+			parois_mitoyennes: [
+				..._baies_lnc(ctx, item),
+				..._murs_lnc(ctx, item),
+				..._planchers_bas_lnc(ctx, item),
+				..._planchers_hauts_lnc(ctx, item),
+				..._portes_lnc(ctx, item),
+			],
+			parois: _parois(ctx, item),
+			baies: _baies(ctx, item),
+		}),
+	);
 }
 
 export function orientations(
@@ -156,11 +142,13 @@ export function sse(
 	ctx: Context,
 	item: LocalNonChauffe,
 ): ReturnType<typeof formulas.calcule_sse> {
-	return formulas.calcule_sse({
-		baies: _baies(ctx, item),
-		sse: _baies_lnc(ctx, item).map((i) => i.sse),
-		b: b(ctx, item),
-	});
+	return ctx.register(NAMESPACE, RULES.sse, item, () =>
+		formulas.calcule_sse({
+			baies: _baies(ctx, item),
+			sse: _baies_lnc(ctx, item).map((i) => i.sse),
+			b: b(ctx, item),
+		}),
+	);
 }
 
 export function t(
@@ -200,7 +188,11 @@ function _baies(ctx: Context, item: LocalNonChauffe) {
 				constants.enveloppe.localNonChauffe.baie.RULES.t,
 				i,
 			),
-			isolation: baieRules.isolation(i),
+			isolation: ctx.resolve(
+				constants.enveloppe.localNonChauffe.baie.NAMESPACE,
+				constants.enveloppe.localNonChauffe.baie.RULES.isolation,
+				i,
+			),
 		})),
 	);
 }
@@ -220,7 +212,11 @@ function _parois(ctx: Context, item: LocalNonChauffe) {
 				constants.enveloppe.localNonChauffe.paroi.RULES.aiu,
 				i,
 			),
-			isolation: paroiRules.isolation(i),
+			isolation: ctx.resolve(
+				constants.enveloppe.localNonChauffe.paroi.NAMESPACE,
+				constants.enveloppe.localNonChauffe.paroi.RULES.isolation,
+				i,
+			),
 		})),
 	);
 }

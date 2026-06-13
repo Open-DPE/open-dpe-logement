@@ -1,20 +1,19 @@
-import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-export function calcule(ctx: Context): models.diagnostic.DiagnosticData {
-	return {
-		consommations: consommations(ctx),
-		cef: cef(ctx),
-		cep: cep(ctx),
-		eges: eges(ctx),
-		etiquette_energie: etiquette_energie(ctx),
-		etiquette_climat: etiquette_climat(ctx),
-		confort_ete: confort_ete(ctx),
-	};
-}
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.cef]: cef,
+		[RULES.cep]: cep,
+		[RULES.eges]: eges,
+		[RULES.etiquette_energie]: etiquette_energie,
+		[RULES.etiquette_climat]: etiquette_climat,
+		[RULES.confort_ete]: confort_ete,
+	},
+};
 
 export function consommations(
 	ctx: Context,

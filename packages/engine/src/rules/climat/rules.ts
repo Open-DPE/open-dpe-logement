@@ -3,6 +3,16 @@ import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.zone_climatique]: zone_climatique,
+		[RULES.tbase]: tbase,
+		[RULES.sollicitations]: sollicitations,
+		[RULES.nj]: nj,
+		[RULES.epv]: epv,
+	},
+};
+
 export function zone_climatique(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_zone_climatique> {

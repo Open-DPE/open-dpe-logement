@@ -1,36 +1,32 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as common from "#rules/common/formulas.js";
-import {
-	type_generateur,
-	energie_generateur,
-	mode_combustion,
-	presence_regulation,
-	annee_installation,
-} from "../generateur/rules.js";
 import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-export function calcule(
-	ctx: Context,
-	item: Systeme,
-): models.chauffage.systeme.SystemeData {
-	return {
-		rdim: rdim(ctx, item),
-		pch: pch(ctx, item),
-		int: int(ctx, item),
-		ich: ich(ctx, item),
-		rd: rd(ctx, item),
-		re: re(ctx, item),
-		rg: rg(ctx, item),
-		rr: rr(ctx, item),
-		pcircem: pcircem(ctx, item),
-		consommations: consommations(ctx, item),
-	};
-}
-
-type Installation = models.chauffage.installation.Installation;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.bch]: bch,
+		[RULES.cch]: cch,
+		[RULES.cch_elec]: cch_elec,
+		[RULES.cch_enr]: cch_enr,
+		[RULES.caux_dist]: caux_dist,
+		[RULES.caux_dist_enr]: caux_dist_enr,
+		[RULES.rdim]: rdim,
+		[RULES.pch]: pch,
+		[RULES.int]: int,
+		[RULES.ich]: ich,
+		[RULES.rd]: rd,
+		[RULES.re]: re,
+		[RULES.rg]: rg,
+		[RULES.rr]: rr,
+		[RULES.pcircem]: pcircem,
+		[RULES.temperature_distribution]: temperature_distribution,
+		[RULES.isolation_reseau]: isolation_reseau,
+	},
+};
 
 type Systeme = models.chauffage.systeme.Systeme;
 
@@ -348,11 +344,11 @@ export function rd(
 	return ctx.register(NAMESPACE, RULES.rd, item, () =>
 		formulas.calcule_rd({
 			type_distribution: item.reseau?.type_distribution ?? null,
-			temperature_distribution: temperature_distribution(item),
+			temperature_distribution: temperature_distribution(ctx, item),
 			presence_fluide_frigorigene:
 				item.reseau?.presence_fluide_frigorigene ?? null,
 			reseau_collectif: _installation(ctx, item).installation_collective,
-			isolation_reseau: isolation_reseau(item),
+			isolation_reseau: isolation_reseau(ctx, item),
 		}),
 	);
 }
@@ -390,10 +386,7 @@ export function rg(ctx: Context, item: Systeme): formulas.Rg {
 			case models.chauffage.generateur.isGenerateurCollectifInconnu(
 				generateur,
 			): {
-				const installation = _installation(ctx, item);
-				const generateurs = _generateurs(ctx, installation).filter(
-					(s) => s.id !== item.id,
-				);
+				const generateurs = _generateurs(ctx, item);
 				return formulas.combustion.calcule_rg({
 					...generateur,
 					energie_generateur:
@@ -436,7 +429,29 @@ export function rr(
 	);
 }
 
-export function _emissions(ctx: Context, item: Systeme) {
+export function temperature_distribution(
+	ctx: Context,
+	item: Systeme,
+): ReturnType<typeof formulas.set_temperature_distribution> {
+	return ctx.register(NAMESPACE, RULES.temperature_distribution, item, () =>
+		formulas.set_temperature_distribution({
+			temperature_distribution: item.reseau?.temperature_distribution ?? null,
+		}),
+	);
+}
+
+export function isolation_reseau(
+	ctx: Context,
+	item: Systeme,
+): ReturnType<typeof formulas.set_isolation_reseau> {
+	return ctx.register(NAMESPACE, RULES.isolation_reseau, item, () =>
+		formulas.set_isolation_reseau({
+			isolation_reseau: item.reseau?.isolation ?? null,
+		}),
+	);
+}
+
+function _emissions(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, "emissions", item, () => {
 		const emetteurs = _emetteurs(ctx, item);
 
@@ -500,9 +515,9 @@ function _installation(ctx: Context, item: Systeme) {
 	});
 }
 
-function _generateurs(ctx: Context, item: Installation) {
+function _generateurs(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, "generateurs", item, () =>
-		item.systemes.map((s) => _generateur(ctx, s)),
+		_installation(ctx, item).systemes.map((s) => _generateur(ctx, s)),
 	);
 }
 
@@ -520,18 +535,43 @@ function _generateur(ctx: Context, item: Systeme) {
 		return {
 			...generateur,
 			id: item.generateur_id,
-			type_generateur: type_generateur(generateur),
-			energie_generateur: energie_generateur(generateur),
 			bienergie_generateur: generateur.bienergie,
 			generateur_multi_batiment: generateur.position.generateur_multi_batiment,
 			generateur_collectif: generateur.position.generateur_collectif,
 			label_generateur: generateur.signaletique.label,
-			annee_installation_generateur: annee_installation(ctx, generateur),
-			mode_combustion: mode_combustion(generateur),
-			presence_regulation: presence_regulation(generateur),
 			cascade: generateur.position.cascade,
 			reseau_id: generateur.position.reseau_chaleur_id,
 			pn_saisi: generateur.signaletique.pn,
+			type_generateur: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.type_generateur,
+				generateur,
+			),
+			energie_generateur: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.energie_generateur,
+				generateur,
+			),
+			mode_combustion: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.mode_combustion,
+				generateur,
+			),
+			annee_installation_generateur: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.annee_installation,
+				generateur,
+			),
+			presence_ventouse: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.presence_ventouse,
+				generateur,
+			),
+			presence_regulation: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.presence_regulation,
+				generateur,
+			),
 			pn: ctx.resolve(
 				constants.chauffage.generateur.NAMESPACE,
 				constants.chauffage.generateur.RULES.pn,
@@ -585,21 +625,5 @@ function _emetteurs(ctx: Context, item: Systeme) {
 				emetteur,
 			),
 		};
-	});
-}
-
-function temperature_distribution(
-	item: Systeme,
-): ReturnType<typeof formulas.set_temperature_distribution> {
-	return formulas.set_temperature_distribution({
-		temperature_distribution: item.reseau?.temperature_distribution ?? null,
-	});
-}
-
-function isolation_reseau(
-	item: Systeme,
-): ReturnType<typeof formulas.set_isolation_reseau> {
-	return formulas.set_isolation_reseau({
-		isolation_reseau: item.reseau?.isolation ?? null,
 	});
 }

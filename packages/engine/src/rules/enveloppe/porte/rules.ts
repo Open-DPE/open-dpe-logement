@@ -4,19 +4,19 @@ import * as paroi from "#rules/enveloppe/paroi/rules.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Porte = models.enveloppe.porte.Porte;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.aiu]: aiu,
+		[RULES.isolation_aiu]: isolation_aiu,
+		[RULES.sdep]: sdep,
+		[RULES.b]: b,
+		[RULES.dp]: dp,
+		[RULES.u]: u,
+		[RULES.isolation]: isolation,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: Porte,
-): models.enveloppe.porte.PorteData {
-	return {
-		sdep: sdep(ctx, item),
-		b: b(ctx, item),
-		u: u(ctx, item),
-		dp: dp(ctx, item),
-	};
-}
+type Porte = models.enveloppe.porte.Porte;
 
 export function aiu(ctx: Context, item: Porte): ReturnType<typeof paroi.aiu> {
 	return ctx.register(NAMESPACE, RULES.aiu, item, () => paroi.aiu(item));
@@ -37,7 +37,7 @@ export function sdep(ctx: Context, item: Porte): ReturnType<typeof paroi.sdep> {
 
 export function b(ctx: Context, item: Porte): ReturnType<typeof paroi.b> {
 	return ctx.register(NAMESPACE, RULES.b, item, () =>
-		paroi.b(ctx, item, isolation(item)),
+		paroi.b(ctx, item, isolation(ctx, item)),
 	);
 }
 
@@ -76,9 +76,12 @@ export function u(
 }
 
 export function isolation(
+	ctx: Context,
 	item: Porte,
 ): ReturnType<typeof formulas.set_isolation> {
-	return formulas.set_isolation({
-		isolation: item.isolation,
-	});
+	return ctx.register(NAMESPACE, RULES.isolation, item, () =>
+		formulas.set_isolation({
+			isolation: item.isolation,
+		}),
+	);
 }

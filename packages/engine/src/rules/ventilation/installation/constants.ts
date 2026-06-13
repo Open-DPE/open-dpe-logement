@@ -9,4 +9,6 @@ export const RULES = {
 	rdim: "rdim",
 	debits: "debits",
 	hvent: "hvent",
+	annee_installation: "annee_installation",
+	presence_echangeur_thermique: "presence_echangeur_thermique",
 } as const;

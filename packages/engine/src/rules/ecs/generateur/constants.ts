@@ -16,4 +16,10 @@ export const RULES = {
 	cr: "cr",
 	qgw: "qgw",
 	qgen: "qgen",
+	type_generateur: "type_generateur",
+	energie_generateur: "energie_generateur",
+	mode_combustion: "mode_combustion",
+	presence_ventouse: "presence_ventouse",
+	annee_installation: "annee_installation",
+	volume_stockage: "volume_stockage",
 } as const;

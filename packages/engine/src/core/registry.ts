@@ -1,5 +1,5 @@
 import { type Context } from "./context.js";
-import { REGISTRY as _REGISTRY } from "#/rules/registry.js";
+import { REGISTRY as _REGISTRY } from "#/rules/rules.js";
 
 export type Item = { id: string; [key: string]: unknown };
 

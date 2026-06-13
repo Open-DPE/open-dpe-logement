@@ -10,4 +10,5 @@ export const RULES = {
 	u0: "u0",
 	uint: "uint",
 	ue: "ue",
+	isolation: "isolation",
 } as const;

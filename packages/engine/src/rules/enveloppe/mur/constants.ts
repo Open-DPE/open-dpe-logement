@@ -9,4 +9,5 @@ export const RULES = {
 	u: "u",
 	u0: "u0",
 	paroi_ancienne: "paroi_ancienne",
+	isolation: "isolation",
 } as const;

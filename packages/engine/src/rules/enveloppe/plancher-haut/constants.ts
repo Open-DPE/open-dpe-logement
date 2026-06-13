@@ -8,4 +8,5 @@ export const RULES = {
 	dp: "dp",
 	u: "u",
 	u0: "u0",
+	isolation: "isolation",
 } as const;

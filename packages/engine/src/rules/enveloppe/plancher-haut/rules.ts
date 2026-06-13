@@ -5,20 +5,20 @@ import * as paroi from "#rules/enveloppe/paroi/rules.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type PlancherHaut = models.enveloppe.plancherHaut.PlancherHaut;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.aiu]: aiu,
+		[RULES.isolation_aiu]: isolation_aiu,
+		[RULES.sdep]: sdep,
+		[RULES.b]: b,
+		[RULES.dp]: dp,
+		[RULES.u]: u,
+		[RULES.u0]: u0,
+		[RULES.isolation]: isolation,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: PlancherHaut,
-): models.enveloppe.plancherHaut.PlancherHautData {
-	return {
-		sdep: sdep(ctx, item),
-		b: b(ctx, item),
-		u: u(ctx, item),
-		u0: u0(ctx, item),
-		dp: dp(ctx, item),
-	};
-}
+type PlancherHaut = models.enveloppe.plancherHaut.PlancherHaut;
 
 export function aiu(
 	ctx: Context,
@@ -111,8 +111,10 @@ export function isolation(
 	ctx: Context,
 	item: PlancherHaut,
 ): ReturnType<typeof formulas.set_isolation> {
-	return formulas.set_isolation({
-		isolation: item.isolation.etat,
-		annee_construction: paroi.annee_construction(ctx, item),
-	});
+	return ctx.register(NAMESPACE, RULES.isolation, item, () =>
+		formulas.set_isolation({
+			isolation: item.isolation.etat,
+			annee_construction: paroi.annee_construction(ctx, item),
+		}),
+	);
 }

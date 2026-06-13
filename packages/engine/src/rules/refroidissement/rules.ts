@@ -1,4 +1,3 @@
-import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
 import * as constants from "#/rules/constants.js";
 import * as generateur from "./generateur/rules.js";
@@ -8,27 +7,36 @@ import { NAMESPACE, RULES } from "./constants.js";
 
 export { generateur, installation };
 
-export function calcule(
-	ctx: Context,
-): models.refroidissement.RefroidissementData {
-	return {
-		bfr: models.common.reduceParMois(bfr(ctx)),
-		as: models.common.reduceParMois(as(ctx)),
-		ai: models.common.reduceParMois(ai(ctx)),
-	};
-}
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.consommations]: consommations,
+		[RULES.cfr]: cfr,
+		[RULES.cfr_elec]: cfr_elec,
+		[RULES.caux]: caux,
+		[RULES.bfr]: bfr,
+		[RULES.fut]: fut,
+		[RULES.rbth]: rbth,
+		[RULES.as]: as,
+		[RULES.ai]: ai,
+		[RULES.e]: e,
+		[RULES.textmoy]: textmoy,
+		[RULES.nref]: nref,
+		[RULES.tint]: tint,
+		[RULES.t]: t,
+		[RULES.cin]: cin,
+	},
+
+	...generateur.REGISTRY,
+	...installation.REGISTRY,
+};
 
 export function consommations(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_consommations> {
 	return ctx.register(NAMESPACE, RULES.consommations, () =>
 		formulas.calcule_consommations({
-			consommations: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-				ctx.resolve(
-					constants.refroidissement.generateur.NAMESPACE,
-					constants.refroidissement.generateur.RULES.consommations,
-					item,
-				),
+			consommations: _generateurs(ctx).map(
+				({ consommations }) => consommations,
 			),
 		}),
 	);
@@ -37,13 +45,7 @@ export function consommations(
 export function cfr(ctx: Context): ReturnType<typeof formulas.calcule_cfr> {
 	return ctx.register(NAMESPACE, RULES.cfr, () =>
 		formulas.calcule_cfr({
-			cfr: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-				ctx.resolve(
-					constants.refroidissement.generateur.NAMESPACE,
-					constants.refroidissement.generateur.RULES.cfr,
-					item,
-				),
-			),
+			cfr: _generateurs(ctx).map(({ cfr }) => cfr),
 		}),
 	);
 }
@@ -53,13 +55,7 @@ export function cfr_elec(
 ): ReturnType<typeof formulas.calcule_cfr_elec> {
 	return ctx.register(NAMESPACE, RULES.cfr_elec, () =>
 		formulas.calcule_cfr_elec({
-			cfr_elec: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-				ctx.resolve(
-					constants.refroidissement.generateur.NAMESPACE,
-					constants.refroidissement.generateur.RULES.cfr_elec,
-					item,
-				),
-			),
+			cfr_elec: _generateurs(ctx).map(({ cfr_elec }) => cfr_elec),
 		}),
 	);
 }
@@ -67,13 +63,7 @@ export function cfr_elec(
 export function caux(ctx: Context): ReturnType<typeof formulas.calcule_caux> {
 	return ctx.register(NAMESPACE, RULES.caux, () =>
 		formulas.calcule_caux({
-			caux: ctx.diagnostic.refroidissement.generateurs.map((item) =>
-				ctx.resolve(
-					constants.refroidissement.generateur.NAMESPACE,
-					constants.refroidissement.generateur.RULES.caux,
-					item,
-				),
-			),
+			caux: _generateurs(ctx).map(({ caux }) => caux),
 		}),
 	);
 }
@@ -215,5 +205,32 @@ export function cin(ctx: Context): ReturnType<typeof formulas.calcule_cin> {
 				constants.enveloppe.RULES.inertie,
 			),
 		}),
+	);
+}
+
+function _generateurs(ctx: Context) {
+	return ctx.once(NAMESPACE, "generateurs", () =>
+		ctx.diagnostic.refroidissement.generateurs.map((item) => ({
+			consommations: ctx.resolve(
+				constants.refroidissement.generateur.NAMESPACE,
+				constants.refroidissement.generateur.RULES.consommations,
+				item,
+			),
+			cfr: ctx.resolve(
+				constants.refroidissement.generateur.NAMESPACE,
+				constants.refroidissement.generateur.RULES.cfr,
+				item,
+			),
+			cfr_elec: ctx.resolve(
+				constants.refroidissement.generateur.NAMESPACE,
+				constants.refroidissement.generateur.RULES.cfr_elec,
+				item,
+			),
+			caux: ctx.resolve(
+				constants.refroidissement.generateur.NAMESPACE,
+				constants.refroidissement.generateur.RULES.caux,
+				item,
+			),
+		})),
 	);
 }

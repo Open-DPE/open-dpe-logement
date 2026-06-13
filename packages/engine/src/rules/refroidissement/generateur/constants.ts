@@ -8,4 +8,5 @@ export const RULES = {
 	caux: "caux",
 	rdim: "rdim",
 	eer: "eer",
+	annee_installation: "annee_installation",
 } as const;

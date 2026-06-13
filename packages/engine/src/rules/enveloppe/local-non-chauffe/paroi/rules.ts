@@ -3,6 +3,14 @@ import type { Context } from "#core/context.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.aue]: aue,
+		[RULES.aiu]: aiu,
+		[RULES.isolation]: isolation,
+	},
+};
+
 type Paroi = models.enveloppe.localNonChauffe.Paroi;
 
 export function aue(
@@ -30,7 +38,10 @@ export function aiu(
 }
 
 export function isolation(
+	ctx: Context,
 	item: Paroi,
 ): ReturnType<typeof formulas.set_isolation> {
-	return formulas.set_isolation({ isolation: item.isolation });
+	return ctx.register(NAMESPACE, RULES.isolation, item, () =>
+		formulas.set_isolation({ isolation: item.isolation }),
+	);
 }

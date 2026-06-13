@@ -17,4 +17,11 @@ export const RULES = {
 	tfonc100: "tfonc100",
 	qgen_rec: "qgen_rec",
 	qgen: "qgen",
+	type_generateur: "type_generateur",
+	energie_generateur: "energie_generateur",
+	mode_combustion: "mode_combustion",
+	presence_ventouse: "presence_ventouse",
+	presence_regulation: "presence_regulation",
+	annee_installation: "annee_installation",
 } as const;
+

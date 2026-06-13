@@ -6,25 +6,32 @@ import * as paroi from "#rules/enveloppe/paroi/rules.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Baie = models.enveloppe.baie.Baie;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.aiu]: aiu,
+		[RULES.isolation_aiu]: isolation_aiu,
+		[RULES.sdep]: sdep,
+		[RULES.b]: b,
+		[RULES.dp]: dp,
+		[RULES.u]: u,
+		[RULES.deltar]: deltar,
+		[RULES.uw]: uw,
+		[RULES.uw1]: uw1,
+		[RULES.uw2]: uw2,
+		[RULES.ug]: ug,
+		[RULES.sse]: sse,
+		[RULES.sw]: sw,
+		[RULES.sw1]: sw1,
+		[RULES.sw2]: sw2,
+		[RULES.fe]: fe,
+		[RULES.fe1]: fe1,
+		[RULES.fe2]: fe2,
+		[RULES.omb]: omb,
+		[RULES.c1]: c1,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: Baie,
-): models.enveloppe.baie.BaieData {
-	return {
-		u: u(ctx, item),
-		b: b(ctx, item),
-		sdep: sdep(ctx, item),
-		dp: dp(ctx, item),
-		deltar: deltar(ctx, item),
-		uw: uw(ctx, item),
-		ug: ug(ctx, item),
-		sw: sw(ctx, item),
-		fe: fe(ctx, item),
-		sse: models.common.reduceParMois(sse(ctx, item)),
-	};
-}
+type Baie = models.enveloppe.baie.Baie;
 
 export function aiu(ctx: Context, item: Baie): ReturnType<typeof paroi.aiu> {
 	return ctx.register(NAMESPACE, RULES.aiu, item, () => paroi.aiu(item));

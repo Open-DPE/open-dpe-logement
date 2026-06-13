@@ -5,4 +5,8 @@ export const RULES = {
 	aiu: "aiu",
 	sst: "sst",
 	t: "t",
+	isolation: "isolation",
+	type_vitrage: "type_vitrage",
+	materiau: "materiau",
+	presence_rupteur_pont_thermique: "presence_rupteur_pont_thermique",
 } as const;

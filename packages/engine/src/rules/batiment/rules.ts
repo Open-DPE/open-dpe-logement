@@ -1,20 +1,14 @@
-import * as models from "@open-dpe-logement/models";
 import { type Context } from "#core/context.js";
-import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-export function calcule(ctx: Context): models.batiment.BatimentData {
-	return {
-		sh: sh(ctx),
-		hsp: hsp(ctx),
-		ratio_proratisation: ratio_proratisation(ctx),
-		zone_climatique: ctx.resolve(
-			constants.climat.NAMESPACE,
-			constants.climat.RULES.zone_climatique,
-		),
-	};
-}
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.sh]: sh,
+		[RULES.hsp]: hsp,
+		[RULES.ratio_proratisation]: ratio_proratisation,
+	},
+};
 
 export function sh(ctx: Context): ReturnType<typeof formulas.calcule_sh> {
 	return ctx.register(NAMESPACE, RULES.sh, () =>

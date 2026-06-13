@@ -1,23 +1,21 @@
 import * as models from "@open-dpe-logement/models";
 import type { Context } from "#core/context.js";
-import { energie_generateur } from "../generateur/rules.js";
 import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Installation = models.chauffage.installation.Installation;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.caux_dist]: caux_dist,
+		[RULES.bch]: bch,
+		[RULES.rdim]: rdim,
+		[RULES.pch]: pch,
+		[RULES.fch]: fch,
+		[RULES.effet_joule]: effet_joule,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	item: Installation,
-): models.chauffage.installation.InstallationData {
-	return {
-		bch: models.common.reduceParMois(bch(ctx, item)),
-		rdim: rdim(ctx, item),
-		pch: pch(ctx, item),
-		fch: fch(ctx, item),
-	};
-}
+type Installation = models.chauffage.installation.Installation;
 
 export function caux_dist(
 	ctx: Context,
@@ -25,13 +23,7 @@ export function caux_dist(
 ): ReturnType<typeof formulas.calcule_caux_dist> {
 	return ctx.register(NAMESPACE, RULES.caux_dist, item, () =>
 		formulas.calcule_caux_dist({
-			caux_dist: item.systemes.map((s) =>
-				ctx.resolve(
-					constants.chauffage.systeme.NAMESPACE,
-					constants.chauffage.systeme.RULES.caux_dist,
-					s,
-				),
-			),
+			caux_dist: _systemes(ctx, item).map(({ caux_dist }) => caux_dist),
 		}),
 	);
 }
@@ -105,16 +97,35 @@ export function effet_joule(
 	return ctx.register(NAMESPACE, RULES.effet_joule, item, () => {
 		return formulas.calcule_effet_joule({
 			type_installation: item.type,
-			systemes: item.systemes.map((s) => {
-				const generateur = models.chauffage.getGenerateur(
-					ctx.diagnostic.chauffage,
-					s.generateur_id,
-				);
-				return {
-					type_systeme: s.type,
-					energie_generateur: energie_generateur(generateur),
-				};
-			}),
+			systemes: _systemes(ctx, item),
 		});
 	});
+}
+
+function _systemes(ctx: Context, item: Installation) {
+	return ctx.once(NAMESPACE, "systemes", item, () =>
+		item.systemes.map((systeme) => {
+			const generateur = models.chauffage.getGenerateur(
+				ctx.diagnostic.chauffage,
+				systeme.generateur_id,
+			);
+
+			return {
+				...systeme,
+
+				type_systeme: systeme.type,
+
+				caux_dist: ctx.resolve(
+					constants.chauffage.systeme.NAMESPACE,
+					constants.chauffage.systeme.RULES.caux_dist,
+					systeme,
+				),
+				energie_generateur: ctx.resolve(
+					constants.chauffage.generateur.NAMESPACE,
+					constants.chauffage.generateur.RULES.energie_generateur,
+					generateur,
+				),
+			};
+		}),
+	);
 }

@@ -4,42 +4,40 @@ import * as constants from "#/rules/constants.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Installation = models.ecs.installation.Installation;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.becs]: becs,
+		[RULES.caux_dist]: caux_dist,
+		[RULES.rdim]: rdim,
+		[RULES.fecs]: fecs,
+		[RULES.qdw]: qdw,
+		[RULES.qdw_ind_vc]: qdw_ind_vc,
+		[RULES.qdw_col_vc]: qdw_col_vc,
+		[RULES.qdw_col_hvc]: qdw_col_hvc,
+	},
+};
 
-export function calcule(
-	ctx: Context,
-	installation: Installation,
-): models.ecs.installation.InstallationData {
-	return {
-		becs: models.common.reduceParMois(becs(ctx, installation)),
-		rdim: rdim(ctx, installation),
-		fecs: fecs(ctx, installation),
-		qdw: qdw(ctx, installation),
-		qdw_ind_vc: qdw_ind_vc(ctx, installation),
-		qdw_col_vc: qdw_col_vc(ctx, installation),
-		qdw_col_hvc: qdw_col_hvc(ctx, installation),
-	};
-}
+type Installation = models.ecs.installation.Installation;
 
 export function becs(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_becs> {
-	return ctx.register(NAMESPACE, RULES.becs, installation, () =>
+	return ctx.register(NAMESPACE, RULES.becs, item, () =>
 		formulas.calcule_becs({
 			becs: ctx.resolve(constants.ecs.NAMESPACE, constants.ecs.RULES.becs),
-			rdim: rdim(ctx, installation),
+			rdim: rdim(ctx, item),
 		}),
 	);
 }
 
 export function caux_dist(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_caux_dist> {
-	return ctx.register(NAMESPACE, RULES.caux_dist, installation, () =>
+	return ctx.register(NAMESPACE, RULES.caux_dist, item, () =>
 		formulas.calcule_caux_dist({
-			caux_dist: installation.systemes.map((s) =>
+			caux_dist: item.systemes.map((s) =>
 				ctx.resolve(
 					constants.ecs.systeme.NAMESPACE,
 					constants.ecs.systeme.RULES.caux_dist,
@@ -52,11 +50,11 @@ export function caux_dist(
 
 export function rdim(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_rdim> {
-	return ctx.register(NAMESPACE, RULES.rdim, installation, () =>
+	return ctx.register(NAMESPACE, RULES.rdim, item, () =>
 		formulas.calcule_rdim({
-			surface_installation: installation.surface,
+			surface_installation: item.surface,
 			surface_installations: ctx.diagnostic.ecs.installations.reduce(
 				(s, i) => s + i.surface,
 				0,
@@ -67,20 +65,20 @@ export function rdim(
 
 export function fecs(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_fecs> {
-	return ctx.register(NAMESPACE, RULES.fecs, installation, () =>
+	return ctx.register(NAMESPACE, RULES.fecs, item, () =>
 		formulas.calcule_fecs({
-			fecs_saisi: installation.solaire_thermique?.fecs ?? null,
+			fecs_saisi: item.solaire_thermique?.fecs ?? null,
 			zone_climatique: ctx.resolve(
 				constants.climat.NAMESPACE,
 				constants.climat.RULES.zone_climatique,
 			),
 			type_batiment: ctx.diagnostic.batiment.type,
-			installation_solaire: installation.solaire_thermique
+			installation_solaire: item.solaire_thermique
 				? {
-						usage: installation.solaire_thermique.usage,
-						anciennete: anciennete_installation_solaire(ctx, installation),
+						usage: item.solaire_thermique.usage,
+						anciennete: anciennete_installation_solaire(ctx, item),
 					}
 				: null,
 		}),
@@ -89,62 +87,61 @@ export function fecs(
 
 export function qdw(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_qdw> {
-	return ctx.register(NAMESPACE, RULES.qdw, installation, () =>
+	return ctx.register(NAMESPACE, RULES.qdw, item, () =>
 		formulas.calcule_qdw({
-			qdw_ind_vc: qdw_ind_vc(ctx, installation),
-			qdw_col_vc: qdw_col_vc(ctx, installation),
-			qdw_col_hvc: qdw_col_hvc(ctx, installation),
+			qdw_ind_vc: qdw_ind_vc(ctx, item),
+			qdw_col_vc: qdw_col_vc(ctx, item),
+			qdw_col_hvc: qdw_col_hvc(ctx, item),
 		}),
 	);
 }
 
 export function qdw_ind_vc(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_qdw_ind_vc> {
-	return ctx.register(NAMESPACE, RULES.qdw_ind_vc, installation, () =>
+	return ctx.register(NAMESPACE, RULES.qdw_ind_vc, item, () =>
 		formulas.calcule_qdw_ind_vc({
-			becs: becs(ctx, installation),
-			sh: installation.surface,
-			ns: installation.systemes.length,
+			becs: becs(ctx, item),
+			sh: item.surface,
+			ns: item.systemes.length,
 		}),
 	);
 }
 
 export function qdw_col_vc(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_qdw_col_vc> {
-	return ctx.register(NAMESPACE, RULES.qdw_col_vc, installation, () =>
+	return ctx.register(NAMESPACE, RULES.qdw_col_vc, item, () =>
 		formulas.calcule_qdw_col_vc({
-			becs: becs(ctx, installation),
-			reseau_collectif: installation.installation_collective,
+			becs: becs(ctx, item),
+			reseau_collectif: item.installation_collective,
 		}),
 	);
 }
 
 export function qdw_col_hvc(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.calcule_qdw_col_hvc> {
-	return ctx.register(NAMESPACE, RULES.qdw_col_hvc, installation, () =>
+	return ctx.register(NAMESPACE, RULES.qdw_col_hvc, item, () =>
 		formulas.calcule_qdw_col_hvc({
-			becs: becs(ctx, installation),
-			reseau_collectif: installation.installation_collective,
+			becs: becs(ctx, item),
+			reseau_collectif: item.installation_collective,
 		}),
 	);
 }
 
-export function anciennete_installation_solaire(
+function anciennete_installation_solaire(
 	ctx: Context,
-	installation: Installation,
+	item: Installation,
 ): ReturnType<typeof formulas.set_anciennete_installation_solaire> {
 	return formulas.set_anciennete_installation_solaire({
 		annee_reference: new Date(ctx.diagnostic.date_etablissement).getFullYear(),
-		annee_installation:
-			installation.solaire_thermique?.annee_installation ?? null,
+		annee_installation: item.solaire_thermique?.annee_installation ?? null,
 		annee_construction_batiment: ctx.diagnostic.batiment.annee_construction,
 	});
 }

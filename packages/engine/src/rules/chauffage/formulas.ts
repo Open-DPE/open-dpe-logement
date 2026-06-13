@@ -3,12 +3,14 @@ import type * as batiment from "#rules/batiment/formulas.js";
 import type * as climat from "#rules/climat/formulas.js";
 import type * as enveloppe from "#rules/enveloppe/formulas.js";
 import type * as ecs from "#rules/ecs/formulas.js";
+import * as emetteur from "#rules/chauffage/emetteur/formulas.js";
+import * as emission from "#rules/chauffage/emission/formulas.js";
 import * as generateur from "#rules/chauffage/generateur/formulas.js";
 import * as installation from "#rules/chauffage/installation/formulas.js";
 import * as systeme from "#rules/chauffage/systeme/formulas.js";
 import { createParMois } from "#rules/helpers.js";
 
-export { generateur, installation, systeme };
+export { generateur, installation, systeme, emetteur, emission };
 
 /**
  * @returns Consommations par usage et par énergie

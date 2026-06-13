@@ -17,4 +17,6 @@ export const RULES = {
 	rg: "rg",
 	rr: "rr",
 	pcircem: "pcircem",
+	temperature_distribution: "temperature_distribution",
+	isolation_reseau: "isolation_reseau",
 } as const;

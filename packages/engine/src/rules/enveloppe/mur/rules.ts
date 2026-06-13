@@ -5,18 +5,21 @@ import * as paroi from "#rules/enveloppe/paroi/rules.js";
 import * as formulas from "./formulas.js";
 import { NAMESPACE, RULES } from "./constants.js";
 
-type Mur = models.enveloppe.mur.Mur;
+export const REGISTRY = {
+	[NAMESPACE]: {
+		[RULES.aiu]: aiu,
+		[RULES.isolation_aiu]: isolation_aiu,
+		[RULES.sdep]: sdep,
+		[RULES.b]: b,
+		[RULES.dp]: dp,
+		[RULES.u]: u,
+		[RULES.u0]: u0,
+		[RULES.paroi_ancienne]: paroi_ancienne,
+		[RULES.isolation]: isolation,
+	},
+};
 
-export function calcule(ctx: Context, item: Mur): models.enveloppe.mur.MurData {
-	return {
-		sdep: sdep(ctx, item),
-		b: b(ctx, item),
-		u: u(ctx, item),
-		u0: u0(ctx, item),
-		dp: dp(ctx, item),
-		paroi_ancienne: paroi_ancienne(ctx, item),
-	};
-}
+type Mur = models.enveloppe.mur.Mur;
 
 export function aiu(ctx: Context, item: Mur): ReturnType<typeof paroi.aiu> {
 	return ctx.register(NAMESPACE, RULES.aiu, item, () => paroi.aiu(item));
@@ -120,8 +123,10 @@ export function isolation(
 	ctx: Context,
 	item: Mur,
 ): ReturnType<typeof formulas.set_isolation> {
-	return formulas.set_isolation({
-		isolation: item.isolation.etat,
-		annee_construction: paroi.annee_construction(ctx, item),
-	});
+	return ctx.register(NAMESPACE, RULES.isolation, item, () =>
+		formulas.set_isolation({
+			isolation: item.isolation.etat,
+			annee_construction: paroi.annee_construction(ctx, item),
+		}),
+	);
 }
