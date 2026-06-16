@@ -144,7 +144,7 @@ export class EtiquetteEnergie extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-etiquette-energie";
+const HTML_TAG = "open-dpe-logement-etiquette-energie";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, EtiquetteEnergie);

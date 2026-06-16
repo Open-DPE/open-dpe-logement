@@ -7,8 +7,8 @@ export type Schema = {
 	presence_ventouse: boolean | null;
 	G: number;
 	H: number;
-	paux: string;
 	pn_max: number | null;
+	paux: string | number;
 };
 
 export type Query = {
@@ -17,7 +17,7 @@ export type Query = {
 	presence_ventouse: boolean | null;
 };
 
-export const load = (): Schema[] => data as Schema[];
+export const load = (): Schema[] => data;
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

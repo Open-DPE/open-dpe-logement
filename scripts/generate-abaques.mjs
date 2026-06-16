@@ -80,6 +80,9 @@ function parseCsv(csvContent, csvPath, relativeKey) {
   const schemaFields = readSchema(csvPath)
   const rangeCols = new Set(headers.filter((h) => parseRangeHeader(h)))
 
+  // Colonnes toujours traitées comme string (même si leur contenu est numérique)
+  const STRING_COLS = new Set(['code_departement', 'mois'])
+
   // Colonnes booléennes : toutes les valeurs non-vides sont '0' ou '1'
   const booleanCols = new Set(
     headers.filter((h, i) => {
@@ -105,7 +108,8 @@ function parseCsv(csvContent, csvPath, relativeKey) {
       const h = headers[i]
       if (!h || rangeCols.has(h)) continue
       const raw = values[i] ?? ''
-      row[h] = booleanCols.has(h) ? parseBooleanCell(raw) : parseCell(raw)
+      if (STRING_COLS.has(h)) row[h] = raw === '' ? null : raw
+      else row[h] = booleanCols.has(h) ? parseBooleanCell(raw) : parseCell(raw)
     }
 
     // Clés range plates (pas de fusion en RangeBounds)

@@ -2,7 +2,7 @@ $id: https://schemas.open-dpe.fr/ecs/generateur-inconnu
 $schema: https://json-schema.org/draft/2020-12/schema
 title: Générateur collectif inconnu
 type: object
-additionalProperties: false
+unevaluatedProperties: false
 
 allOf:
   - $ref: /ecs/generateur-base

@@ -23,7 +23,13 @@ export function caux_dist(
 ): ReturnType<typeof formulas.calcule_caux_dist> {
 	return ctx.register(NAMESPACE, RULES.caux_dist, item, () =>
 		formulas.calcule_caux_dist({
-			caux_dist: _systemes(ctx, item).map(({ caux_dist }) => caux_dist),
+			caux_dist: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.chauffage.systeme.NAMESPACE,
+					constants.chauffage.systeme.RULES.caux_dist,
+					s,
+				),
+			),
 		}),
 	);
 }
@@ -115,11 +121,6 @@ function _systemes(ctx: Context, item: Installation) {
 
 				type_systeme: systeme.type,
 
-				caux_dist: ctx.resolve(
-					constants.chauffage.systeme.NAMESPACE,
-					constants.chauffage.systeme.RULES.caux_dist,
-					systeme,
-				),
 				energie_generateur: ctx.resolve(
 					constants.chauffage.generateur.NAMESPACE,
 					constants.chauffage.generateur.RULES.energie_generateur,

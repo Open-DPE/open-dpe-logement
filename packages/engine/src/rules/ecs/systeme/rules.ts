@@ -46,8 +46,16 @@ export function cecs(
 	return ctx.register(NAMESPACE, RULES.cecs, item, () => {
 		const installation = _installation(ctx, item);
 		return formulas.calcule_cecs({
-			becs: installation.becs,
-			fecs: installation.fecs,
+			becs: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.becs,
+				installation,
+			),
+			fecs: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.fecs,
+				installation,
+			),
 			rdim: rdim(ctx, item),
 			iecs: iecs(ctx, item),
 		});
@@ -129,7 +137,11 @@ export function qcirb(
 			installation_collective: installation.installation_collective,
 			bouclage: bouclage_reseau(item),
 			niveaux_desservis: item.reseau.niveaux_desservis,
-			qdw: installation.qdw,
+			qdw: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.qdw,
+				installation,
+			),
 		});
 	});
 }
@@ -141,7 +153,11 @@ export function qtrac(
 	return ctx.register(NAMESPACE, RULES.qtrac, item, () => {
 		const installation = _installation(ctx, item);
 		return formulas.calcule_qtrac({
-			becs: installation.becs,
+			becs: ctx.resolve(
+				constants.ecs.installation.NAMESPACE,
+				constants.ecs.installation.RULES.becs,
+				installation,
+			),
 			installation_collective: installation.installation_collective,
 			bouclage: bouclage_reseau(item),
 		});
@@ -178,6 +194,11 @@ export function rendements(ctx: Context, item: Systeme): formulas.Rendements {
 	return ctx.register(NAMESPACE, RULES.rendements, item, () => {
 		const installation = _installation(ctx, item);
 		const generateur = _generateur(ctx, item);
+		const conbustion = ctx.resolve(
+			constants.ecs.generateur.NAMESPACE,
+			constants.ecs.generateur.RULES.combustion,
+			generateur,
+		);
 
 		const rd = formulas.calcule_rd({
 			installation_collective: installation.installation_collective,
@@ -200,38 +221,67 @@ export function rendements(ctx: Context, item: Systeme): formulas.Rendements {
 			case models.ecs.generateur.isGenerateurCollectifInconnu(generateur):
 				return formulas.calcule_rendements_chaudiere_mixte({
 					rd,
-					becs: installation.becs,
-					qgw: generateur.qgw,
-					rpn: generateur.combustion?.rpn ?? 0,
-					qp0: generateur.combustion?.qp0 ?? 0,
-					pveilleuse: generateur.combustion?.pveilleuse ?? 0,
+					becs: ctx.resolve(
+						constants.ecs.installation.NAMESPACE,
+						constants.ecs.installation.RULES.becs,
+						installation,
+					),
+					qgw: ctx.resolve(
+						constants.ecs.generateur.NAMESPACE,
+						constants.ecs.generateur.RULES.qgw,
+						generateur,
+					),
+					rpn: conbustion?.rpn ?? 0,
+					qp0: conbustion?.qp0 ?? 0,
+					pveilleuse: conbustion?.pveilleuse ?? 0,
 				});
 
 			case models.ecs.generateur.isChauffeEauGaz(generateur):
 				return formulas.calcule_rendements_chaudiere_mixte({
 					rd,
-					qgw: generateur.qgw,
-					rpn: generateur.combustion?.rpn ?? 0,
-					qp0: generateur.combustion?.qp0 ?? 0,
-					pveilleuse: generateur.combustion?.pveilleuse ?? 0,
-					becs: installation.becs,
+					qgw: ctx.resolve(
+						constants.ecs.generateur.NAMESPACE,
+						constants.ecs.generateur.RULES.qgw,
+						generateur,
+					),
+					rpn: conbustion?.rpn ?? 0,
+					qp0: conbustion?.qp0 ?? 0,
+					pveilleuse: conbustion?.pveilleuse ?? 0,
+					becs: ctx.resolve(
+						constants.ecs.installation.NAMESPACE,
+						constants.ecs.installation.RULES.becs,
+						installation,
+					),
 				});
 
 			case models.ecs.generateur.isChauffeEauThermodynamique(generateur):
 			case models.ecs.generateur.isPacDoubleService(generateur):
 				return formulas.calcule_rendements_systeme_thermodynamique({
 					rd,
-					cop: generateur.cop ?? 0,
+					cop:
+						ctx.resolve(
+							constants.ecs.generateur.NAMESPACE,
+							constants.ecs.generateur.RULES.cop,
+							generateur,
+						) ?? 0,
 				});
 
 			default:
 				return formulas.calcule_rendements_systeme_electrique({
 					rd,
 					type_generateur: generateur.type_generateur,
-					qgw: generateur.qgw,
+					qgw: ctx.resolve(
+						constants.ecs.generateur.NAMESPACE,
+						constants.ecs.generateur.RULES.qgw,
+						generateur,
+					),
 					position_chauffe_eau: generateur.position.position_chauffe_eau,
 					label_generateur: generateur.signaletique.label,
-					becs: installation.becs,
+					becs: ctx.resolve(
+						constants.ecs.installation.NAMESPACE,
+						constants.ecs.installation.RULES.becs,
+						installation,
+					),
 				});
 		}
 	});
@@ -254,66 +304,29 @@ export function isolation_reseau(
 }
 
 function _installation(ctx: Context, item: Systeme) {
-	return ctx.once(NAMESPACE, "installation", item, () => {
-		const installation = models.ecs.getInstallationBySysteme(
-			ctx.diagnostic.ecs,
-			item.id,
-		);
-
-		return {
-			...installation,
-
-			becs: ctx.resolve(
-				constants.ecs.installation.NAMESPACE,
-				constants.ecs.installation.RULES.becs,
-				installation,
-			),
-			fecs: ctx.resolve(
-				constants.ecs.installation.NAMESPACE,
-				constants.ecs.installation.RULES.fecs,
-				installation,
-			),
-			qdw: ctx.resolve(
-				constants.ecs.installation.NAMESPACE,
-				constants.ecs.installation.RULES.qdw,
-				installation,
-			),
-		};
-	});
+	return ctx.once(NAMESPACE, "installation", item, () =>
+		models.ecs.getInstallationBySysteme(ctx.diagnostic.ecs, item.id),
+	);
 }
 
 function _generateur(ctx: Context, item: Systeme) {
-	const generateur = models.ecs.getGenerateur(
-		ctx.diagnostic.ecs,
-		item.generateur_id,
-	);
-
-	return {
-		...generateur,
-		type_generateur: ctx.resolve(
-			constants.ecs.generateur.NAMESPACE,
-			constants.ecs.generateur.RULES.type_generateur,
-			generateur,
-		),
-		energie_generateur: ctx.resolve(
-			constants.ecs.generateur.NAMESPACE,
-			constants.ecs.generateur.RULES.energie_generateur,
-			generateur,
-		),
-		qgw: ctx.resolve(
-			constants.ecs.generateur.NAMESPACE,
-			constants.ecs.generateur.RULES.qgw,
-			generateur,
-		),
-		cop: ctx.resolve(
-			constants.ecs.generateur.NAMESPACE,
-			constants.ecs.generateur.RULES.cop,
-			generateur,
-		),
-		combustion: ctx.resolve(
-			constants.ecs.generateur.NAMESPACE,
-			constants.ecs.generateur.RULES.combustion,
-			generateur,
-		),
-	};
+	return ctx.once(NAMESPACE, "generateur", item, () => {
+		const generateur = models.ecs.getGenerateur(
+			ctx.diagnostic.ecs,
+			item.generateur_id,
+		);
+		return {
+			...generateur,
+			type_generateur: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.type_generateur,
+				generateur,
+			),
+			energie_generateur: ctx.resolve(
+				constants.ecs.generateur.NAMESPACE,
+				constants.ecs.generateur.RULES.energie_generateur,
+				generateur,
+			),
+		};
+	});
 }

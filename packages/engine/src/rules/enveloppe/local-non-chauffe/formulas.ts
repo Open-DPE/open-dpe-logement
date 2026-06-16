@@ -37,7 +37,7 @@ export function calcule_blnc(props: {
 	uvue: ReturnType<typeof calcule_uvue>;
 }): number {
 	const { aue, aiu, isolation_aue, isolation_aiu, uvue } = props;
-	const aiu_aue = aiu / aue;
+	const aiu_aue = aue ? aiu / aue : 0;
 	const abaque = abaques.enveloppe.localNonChauffe.b;
 	const query = { uvue, aiu_aue, isolation_aue, isolation_aiu };
 	const match = abaque.search(query, abaque.load()).at(0);
@@ -62,7 +62,7 @@ export function calcule_bver(props: {
 	const { parois } = props;
 	const s = parois.reduce((acc, paroi) => acc + paroi.surface, 0);
 	const w = parois.reduce((acc, paroi) => acc + paroi.surface * paroi.b, 0);
-	return w / s;
+	return s > 0 ? w / s : 0;
 }
 
 /**
@@ -86,14 +86,8 @@ export function calcule_uvue(props: {
  * @returns Surface des parois du local non chauffé donnant sur l'extérieur en m²
  */
 export function calcule_aue(props: {
-	baies: {
-		aue: ReturnType<typeof baie.calcule_aue>;
-		isolation: ReturnType<typeof baie.set_isolation>;
-	}[];
-	parois: {
-		aue: ReturnType<typeof paroi.calcule_aue>;
-		isolation: ReturnType<typeof paroi.set_isolation>;
-	}[];
+	baies: { aue: ReturnType<typeof baie.calcule_aue> }[];
+	parois: { aue: ReturnType<typeof paroi.calcule_aue> }[];
 }): number {
 	const parois = [...props.baies, ...props.parois];
 	return parois.reduce((s, { aue }) => s + aue, 0);
@@ -103,9 +97,16 @@ export function calcule_aue(props: {
  * @formule enveloppe.local_non_chauffe.isolation_aue
  * @returns État d'isolation des parois du local non chauffé donnant sur l'extérieur
  */
-export function calcule_isolation_aue(
-	props: Parameters<typeof calcule_aue>[0],
-): boolean {
+export function calcule_isolation_aue(props: {
+	baies: {
+		aue: ReturnType<typeof baie.calcule_aue>;
+		isolation: ReturnType<typeof baie.set_isolation>;
+	}[];
+	parois: {
+		aue: ReturnType<typeof paroi.calcule_aue>;
+		isolation: ReturnType<typeof paroi.set_isolation>;
+	}[];
+}): boolean {
 	const parois = [...props.baies, ...props.parois];
 	const aue = parois.reduce((s, { aue }) => s + aue, 0);
 	const aue_isole = parois.reduce(
@@ -120,23 +121,15 @@ export function calcule_isolation_aue(
  * @returns Surface des parois du local non chauffé donnant sur un espace chauffé en m²
  */
 export function calcule_aiu(props: {
-	parois_mitoyennes: {
+	parois_mitoyennes: Array<{
 		aiu: ReturnType<typeof calcule_aiu_paroi>;
-		isolation:
-			| ReturnType<typeof calcule_isolation_aiu_mur>
-			| ReturnType<typeof calcule_isolation_aiu_ph>
-			| ReturnType<typeof calcule_isolation_aiu_pb>
-			| ReturnType<typeof calcule_isolation_aiu_baie>
-			| ReturnType<typeof calcule_isolation_aiu_porte>;
-	}[];
-	baies: {
+	}>;
+	baies: Array<{
 		aiu: ReturnType<typeof baie.calcule_aiu>;
-		isolation: ReturnType<typeof baie.set_isolation>;
-	}[];
-	parois: {
+	}>;
+	parois: Array<{
 		aiu: ReturnType<typeof paroi.calcule_aiu>;
-		isolation: ReturnType<typeof paroi.set_isolation>;
-	}[];
+	}>;
 }): number {
 	const parois = [...props.baies, ...props.parois, ...props.parois_mitoyennes];
 	return parois.reduce((s, { aiu }) => s + aiu, 0);
@@ -146,9 +139,25 @@ export function calcule_aiu(props: {
  * @formule enveloppe.local_non_chauffe.isolation_aiu
  * @returns État d'isolation des parois du local non chauffé donnant sur un espace chauffé
  */
-export function calcule_isolation_aiu(
-	props: Parameters<typeof calcule_aiu>[0],
-): boolean {
+export function calcule_isolation_aiu(props: {
+	parois_mitoyennes: Array<{
+		aiu: ReturnType<typeof calcule_aiu_paroi>;
+		isolation:
+			| ReturnType<typeof calcule_isolation_aiu_mur>
+			| ReturnType<typeof calcule_isolation_aiu_ph>
+			| ReturnType<typeof calcule_isolation_aiu_pb>
+			| ReturnType<typeof calcule_isolation_aiu_baie>
+			| ReturnType<typeof calcule_isolation_aiu_porte>;
+	}>;
+	baies: Array<{
+		aiu: ReturnType<typeof baie.calcule_aiu>;
+		isolation: ReturnType<typeof baie.set_isolation>;
+	}>;
+	parois: Array<{
+		aiu: ReturnType<typeof paroi.calcule_aiu>;
+		isolation: ReturnType<typeof paroi.set_isolation>;
+	}>;
+}): boolean {
 	const parois = [...props.baies, ...props.parois, ...props.parois_mitoyennes];
 	const aiu = parois.reduce((s, { aiu }) => s + aiu, 0);
 	const aiu_isole = parois.reduce(
@@ -201,7 +210,7 @@ export function calcule_t(props: {
 	);
 	const s = baies.reduce((acc, baie) => acc + baie.surface, 0);
 	const w = baies.reduce((acc, baie) => acc + baie.surface * baie.t, 0);
-	return w / s;
+	return s > 0 ? w / s : 0;
 }
 
 /**

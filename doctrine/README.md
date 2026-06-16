@@ -32,6 +32,19 @@ doctrine/
 - `<filtre>/gt` : Supérieur à
 - `<filtre>/gte` : Supérieur ou égal à
 
+### Schémas
+
+Chaque fichier CSV est décrit par un schéma [Table Schéma](https://datapackage.org/standard/table-schema/) au format YAML :
+
+```text
+/abaques/chauffage/combustion.csv
+/abaques/chauffage/combustion.schema.yaml
+```
+
+#### Mots clés
+
+- **x-enum** : Référence une valeur dans le dictionnaire des énumérations.
+
 ## [Corpus](./corpus/)
 
 La documentation présente dans le corpus est la source de vérité unique applicable à l'ensemble du projet.

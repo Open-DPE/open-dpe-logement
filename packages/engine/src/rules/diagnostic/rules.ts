@@ -47,7 +47,7 @@ export function consommations(
 export function cef(ctx: Context): ReturnType<typeof formulas.calcule_cef> {
 	return ctx.register(NAMESPACE, RULES.cef, () =>
 		formulas.calcule_cef({
-			consommations: ctx.resolve(NAMESPACE, RULES.consommations),
+			consommations: consommations(ctx),
 			sh: ctx.resolve(
 				constants.batiment.NAMESPACE,
 				constants.batiment.RULES.sh,
@@ -59,7 +59,7 @@ export function cef(ctx: Context): ReturnType<typeof formulas.calcule_cef> {
 export function cep(ctx: Context): ReturnType<typeof formulas.calcule_cep> {
 	return ctx.register(NAMESPACE, RULES.cep, () =>
 		formulas.calcule_cep({
-			consommations: ctx.resolve(NAMESPACE, RULES.consommations),
+			consommations: consommations(ctx),
 			sh: ctx.resolve(
 				constants.batiment.NAMESPACE,
 				constants.batiment.RULES.sh,
@@ -71,7 +71,7 @@ export function cep(ctx: Context): ReturnType<typeof formulas.calcule_cep> {
 export function eges(ctx: Context): ReturnType<typeof formulas.calcule_eges> {
 	return ctx.register(NAMESPACE, RULES.eges, () =>
 		formulas.calcule_eges({
-			consommations: ctx.resolve(NAMESPACE, RULES.consommations),
+			consommations: consommations(ctx),
 			sh: ctx.resolve(
 				constants.batiment.NAMESPACE,
 				constants.batiment.RULES.sh,
@@ -90,8 +90,8 @@ export function etiquette_energie(
 				constants.climat.RULES.zone_climatique,
 			),
 			altitude: ctx.diagnostic.batiment.altitude,
-			cep: ctx.resolve(NAMESPACE, RULES.cep),
-			eges: ctx.resolve(NAMESPACE, RULES.eges),
+			cep: cep(ctx),
+			eges: eges(ctx),
 		}),
 	);
 }
@@ -106,7 +106,7 @@ export function etiquette_climat(
 				constants.climat.RULES.zone_climatique,
 			),
 			altitude: ctx.diagnostic.batiment.altitude,
-			eges: ctx.resolve(NAMESPACE, RULES.eges),
+			eges: eges(ctx),
 		}),
 	);
 }

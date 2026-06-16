@@ -1,22 +1,10 @@
-import { describe, it, expect } from "vitest";
-import * as _formulas from "../../src/rules/ventilation/formulas.js";
-import { loadTests } from "./utils.js";
+import * as formulas from "../../src/rules/ventilation/formulas.js";
+import { runTests } from "./utils.js";
 
-const formulas = _formulas as Record<string, Function>;
-const tests = loadTests("ventilation.test.yaml");
-
-Object.keys(tests).forEach((id) => {
-	const test = tests[id];
-	describe(id, () => {
-		it.each(test.cases)(
-			"$title",
-			({ title: _, with: input, expect: expected, expectError }) => {
-				if (expectError) {
-					expect(() => formulas[test.run](input)).toThrow();
-				} else {
-					expect(formulas[test.run](input)).toEqual(expected);
-				}
-			},
-		);
-	});
+runTests("ventilation.test.yaml", {
+	caux: formulas.calcule_caux,
+	hvent: formulas.calcule_hvent,
+	qvarep_conv: formulas.calcule_qvarep_conv,
+	qvasouf_conv: formulas.calcule_qvasouf_conv,
+	smea_conv: formulas.calcule_smea_conv,
 });

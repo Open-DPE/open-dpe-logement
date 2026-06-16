@@ -37,29 +37,9 @@ properties:
       - terminal_avec_minimum_temperature
       - terminal_avec_minimum_temperature_detection_presence
   solaire_thermique:
-    title: Solaire thermique
-    type: ["object", "null"]
-    unevaluatedProperties: false
-    properties:
-      usage:
-        title: Usages couverts par le solaire thermique
-        type: string
-        x-enum: chauffage:usage-solaire
-        enum:
-          - chauffage
-          - chauffage_ecs
-      annee_installation:
-        $ref: /common#/$defs/annee_installation
-      fch:
-        title: Facteur de couverture solaire
-        oneOf:
-          - $ref: /common#/$defs/nombre
-          - const: null
-        maximum: 1
-    required:
-      - usage
-      - annee_installation
-      - fch
+    oneOf:
+      - $ref: "#/$defs/solaire"
+      - const: null
   systemes:
     title: Liste des systèmes de chauffage
     type: array
@@ -181,6 +161,31 @@ oneOf:
       - systemes
 
 $defs:
+  solaire:
+    title: Solaire thermique
+    type: object
+    unevaluatedProperties: false
+    properties:
+      usage:
+        title: Usages couverts par le solaire thermique
+        type: string
+        x-enum: chauffage:usage-solaire
+        enum:
+          - chauffage
+          - chauffage_ecs
+      annee_installation:
+        $ref: /common#/$defs/annee_installation
+      fch:
+        title: Facteur de couverture solaire
+        oneOf:
+          - $ref: /common#/$defs/nombre
+          - const: null
+        maximum: 1
+    required:
+      - usage
+      - annee_installation
+      - fch
+
   data:
     title: Données calculées
     type: object

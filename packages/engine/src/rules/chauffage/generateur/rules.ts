@@ -39,7 +39,13 @@ export function consommations(
 ): ReturnType<typeof formulas.calcule_consommations> {
 	return ctx.register(NAMESPACE, RULES.consommations, item, () =>
 		formulas.calcule_consommations({
-			consommations: _systemes(ctx, item).map((s) => s.consommations),
+			consommations: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.chauffage.systeme.NAMESPACE,
+					constants.chauffage.systeme.RULES.consommations,
+					s,
+				),
+			),
 			caux_gen: caux_gen(ctx, item),
 			caux_gen_enr: caux_gen_enr(ctx, item),
 		}),
@@ -52,7 +58,13 @@ export function cch(
 ): ReturnType<typeof formulas.calcule_cch> {
 	return ctx.register(NAMESPACE, RULES.cch, item, () =>
 		formulas.calcule_cch({
-			cch: _systemes(ctx, item).map((s) => s.cch),
+			cch: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.chauffage.systeme.NAMESPACE,
+					constants.chauffage.systeme.RULES.cch,
+					s,
+				),
+			),
 		}),
 	);
 }
@@ -63,7 +75,13 @@ export function cch_elec(
 ): ReturnType<typeof formulas.calcule_cch_elec> {
 	return ctx.register(NAMESPACE, RULES.cch_elec, item, () =>
 		formulas.calcule_cch_elec({
-			cch_elec: _systemes(ctx, item).map((s) => s.cch_elec),
+			cch_elec: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.chauffage.systeme.NAMESPACE,
+					constants.chauffage.systeme.RULES.cch_elec,
+					s,
+				),
+			),
 		}),
 	);
 }
@@ -109,7 +127,20 @@ export function rdim(
 	item: Generateur,
 ): ReturnType<typeof formulas.calcule_rdim> {
 	return ctx.register(NAMESPACE, RULES.rdim, item, () =>
-		formulas.calcule_rdim({ systemes: _systemes(ctx, item) }),
+		formulas.calcule_rdim({
+			systemes: _systemes(ctx, item).map((s) => ({
+				rdim: ctx.resolve(
+					constants.chauffage.systeme.NAMESPACE,
+					constants.chauffage.systeme.RULES.rdim,
+					s,
+				),
+				rdim_installation: ctx.resolve(
+					constants.chauffage.installation.NAMESPACE,
+					constants.chauffage.installation.RULES.rdim,
+					s.installation,
+				),
+			})),
+		}),
 	);
 }
 
@@ -151,7 +182,13 @@ export function pch(
 	return ctx.register(NAMESPACE, RULES.pch, item, () =>
 		formulas.calcule_pch({
 			pn_saisi: item.signaletique.pn,
-			pch_systemes: _systemes(ctx, item).map((s) => s.pch),
+			pch_systemes: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.chauffage.systeme.NAMESPACE,
+					constants.chauffage.systeme.RULES.pch,
+					s,
+				),
+			),
 		}),
 	);
 }
@@ -396,36 +433,7 @@ function _systemes(ctx: Context, item: Generateur) {
 				.filter((s) => s.generateur_id === item.id)
 				.map((s) => ({
 					...s,
-					consommations: ctx.resolve(
-						constants.chauffage.systeme.NAMESPACE,
-						constants.chauffage.systeme.RULES.consommations,
-						s,
-					),
-					cch: ctx.resolve(
-						constants.chauffage.systeme.NAMESPACE,
-						constants.chauffage.systeme.RULES.cch,
-						s,
-					),
-					cch_elec: ctx.resolve(
-						constants.chauffage.systeme.NAMESPACE,
-						constants.chauffage.systeme.RULES.cch_elec,
-						s,
-					),
-					pch: ctx.resolve(
-						constants.chauffage.systeme.NAMESPACE,
-						constants.chauffage.systeme.RULES.pch,
-						s,
-					),
-					rdim: ctx.resolve(
-						constants.chauffage.systeme.NAMESPACE,
-						constants.chauffage.systeme.RULES.rdim,
-						s,
-					),
-					rdim_installation: ctx.resolve(
-						constants.chauffage.installation.NAMESPACE,
-						constants.chauffage.installation.RULES.rdim,
-						i,
-					),
+					installation: i,
 				})),
 		),
 	);

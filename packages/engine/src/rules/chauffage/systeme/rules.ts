@@ -103,7 +103,13 @@ export function cch1(
 ): ReturnType<typeof formulas.calcule_cch1> {
 	return ctx.register(NAMESPACE, RULES.cch1, item, () =>
 		formulas.calcule_cch1({
-			cch1: _emissions(ctx, item).map((e) => e.cch1),
+			cch1: _emissions(ctx, item).map((e) =>
+				ctx.resolve(
+					constants.chauffage.emission.NAMESPACE,
+					constants.chauffage.emission.RULES.cch1,
+					e,
+				),
+			),
 		}),
 	);
 }
@@ -114,7 +120,13 @@ export function cch2(
 ): ReturnType<typeof formulas.calcule_cch2> {
 	return ctx.register(NAMESPACE, RULES.cch2, item, () =>
 		formulas.calcule_cch2({
-			cch2: _emissions(ctx, item).map((e) => e.cch2),
+			cch2: _emissions(ctx, item).map((e) =>
+				ctx.resolve(
+					constants.chauffage.emission.NAMESPACE,
+					constants.chauffage.emission.RULES.cch2,
+					e,
+				),
+			),
 		}),
 	);
 }
@@ -161,7 +173,11 @@ export function bch(
 		const generateur = _generateur(ctx, item);
 		const installation = _installation(ctx, item);
 		return formulas.calcule_bch({
-			bch: installation.bch,
+			bch: ctx.resolve(
+				constants.chauffage.installation.NAMESPACE,
+				constants.chauffage.installation.RULES.bch,
+				installation,
+			),
 			dht: dht(ctx, item),
 			sollicitations: ctx.resolve(
 				constants.climat.NAMESPACE,
@@ -226,7 +242,11 @@ export function pch(
 		const installation = _installation(ctx, item);
 		const generateur = _generateur(ctx, item);
 		return formulas.calcule_pch({
-			pch_installation: installation.pch,
+			pch_installation: ctx.resolve(
+				constants.chauffage.installation.NAMESPACE,
+				constants.chauffage.installation.RULES.pch,
+				installation,
+			),
 			installation_collective: installation.installation_collective,
 			generateur_individuel: !generateur.generateur_collectif,
 			systemes: installation.systemes
@@ -262,7 +282,23 @@ export function pcircem(
 					item.reseau?.presence_circulateur_externe ?? null,
 			}),
 			rdim: rdim(ctx, item),
-			emetteurs: _emetteurs(ctx, item),
+			emetteurs: _emetteurs(ctx, item).map((e) => ({
+				delta_pem: ctx.resolve(
+					constants.chauffage.emetteur.NAMESPACE,
+					constants.chauffage.emetteur.RULES.delta_pem,
+					e,
+				),
+				fcot: ctx.resolve(
+					constants.chauffage.emetteur.NAMESPACE,
+					constants.chauffage.emetteur.RULES.fcot,
+					e,
+				),
+				dtheta_dim: ctx.resolve(
+					constants.chauffage.emetteur.NAMESPACE,
+					constants.chauffage.emetteur.RULES.dtheta_dim,
+					e,
+				),
+			})),
 		}),
 	);
 }
@@ -294,14 +330,19 @@ export function pe(
 	ctx: Context,
 	item: Systeme,
 ): ReturnType<typeof formulas.calcule_pe> {
-	return ctx.register(NAMESPACE, RULES.pe, item, () =>
-		formulas.calcule_pe({
-			pn: _generateur(ctx, item).pn,
+	return ctx.register(NAMESPACE, RULES.pe, item, () => {
+		const generateur = _generateur(ctx, item);
+		return formulas.calcule_pe({
+			pn: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.pn,
+				generateur,
+			),
 			rd: rd(ctx, item),
 			re: re(ctx, item),
 			rr: rr(ctx, item),
-		}),
-	);
+		});
+	});
 }
 
 export function t(
@@ -311,7 +352,11 @@ export function t(
 	return ctx.register(NAMESPACE, RULES.t, item, () => {
 		const installation = _installation(ctx, item);
 		return formulas.calcule_t({
-			bch: installation.bch,
+			bch: ctx.resolve(
+				constants.chauffage.installation.NAMESPACE,
+				constants.chauffage.installation.RULES.bch,
+				installation,
+			),
 			pe: pe(ctx, item),
 			sollicitations: ctx.resolve(
 				constants.climat.NAMESPACE,
@@ -327,7 +372,13 @@ export function int(
 ): ReturnType<typeof formulas.calcule_int> {
 	return ctx.register(NAMESPACE, RULES.int, item, () =>
 		formulas.calcule_int({
-			int: _emissions(ctx, item).map((e) => e.int),
+			int: _emissions(ctx, item).map((e) =>
+				ctx.resolve(
+					constants.chauffage.emission.NAMESPACE,
+					constants.chauffage.emission.RULES.int,
+					e,
+				),
+			),
 		}),
 	);
 }
@@ -338,7 +389,13 @@ export function ich(
 ): ReturnType<typeof formulas.calcule_ich> {
 	return ctx.register(NAMESPACE, RULES.ich, item, () =>
 		formulas.calcule_ich({
-			ich: _emissions(ctx, item).map((e) => e.ich),
+			ich: _emissions(ctx, item).map((e) =>
+				ctx.resolve(
+					constants.chauffage.emission.NAMESPACE,
+					constants.chauffage.emission.RULES.ich,
+					e,
+				),
+			),
 		}),
 	);
 }
@@ -365,7 +422,13 @@ export function re(
 ): ReturnType<typeof formulas.calcule_re> {
 	return ctx.register(NAMESPACE, RULES.re, item, () =>
 		formulas.calcule_re({
-			re: _emissions(ctx, item).map((e) => e.re),
+			re: _emissions(ctx, item).map((e) =>
+				ctx.resolve(
+					constants.chauffage.emission.NAMESPACE,
+					constants.chauffage.emission.RULES.re,
+					e,
+				),
+			),
 		}),
 	);
 }
@@ -392,7 +455,19 @@ export function rg(ctx: Context, item: Systeme): formulas.Rg {
 			case models.chauffage.generateur.isGenerateurCollectifInconnu(
 				generateur,
 			): {
-				const generateurs = _generateurs(ctx, item);
+				const generateurs = _generateurs(ctx, item).map((g) => ({
+					...g,
+					pn: ctx.resolve(
+						constants.chauffage.generateur.NAMESPACE,
+						constants.chauffage.generateur.RULES.pn,
+						g,
+					),
+				}));
+				const combustion = ctx.resolve(
+					constants.chauffage.generateur.NAMESPACE,
+					constants.chauffage.generateur.RULES.combustion,
+					generateur,
+				);
 				return formulas.combustion.calcule_rg({
 					...generateur,
 					energie_generateur: generateur.energie_generateur,
@@ -406,6 +481,11 @@ export function rg(ctx: Context, item: Systeme): formulas.Rg {
 						constants.climat.NAMESPACE,
 						constants.climat.RULES.tbase,
 					),
+					pn: ctx.resolve(
+						constants.chauffage.generateur.NAMESPACE,
+						constants.chauffage.generateur.RULES.pn,
+						generateur,
+					),
 					pn_combustion: formulas.combustion.calcule_pn_combustion({
 						generateur_collectif: generateur.generateur_collectif,
 						systemes: generateurs,
@@ -414,6 +494,20 @@ export function rg(ctx: Context, item: Systeme): formulas.Rg {
 						generateur_collectif: generateur.generateur_collectif,
 						systemes: generateurs,
 					}),
+					qp0: combustion?.qp0 ?? 0,
+					rpn: combustion?.rpn ?? 0,
+					rpint: combustion?.rpint ?? 0,
+					pveilleuse: combustion?.pveilleuse ?? 0,
+					tfonc30: ctx.resolve(
+						constants.chauffage.generateur.NAMESPACE,
+						constants.chauffage.generateur.RULES.tfonc30,
+						generateur,
+					),
+					tfonc100: ctx.resolve(
+						constants.chauffage.generateur.NAMESPACE,
+						constants.chauffage.generateur.RULES.tfonc100,
+						generateur,
+					),
 					kpcs: common.calcule_kpcs({ energie: generateur.energie_generateur }),
 				});
 			}
@@ -430,7 +524,13 @@ export function rr(
 ): ReturnType<typeof formulas.calcule_rr> {
 	return ctx.register(NAMESPACE, RULES.rr, item, () =>
 		formulas.calcule_rr({
-			rr: _emissions(ctx, item).map((e) => e.rr),
+			rr: _emissions(ctx, item).map((e) =>
+				ctx.resolve(
+					constants.chauffage.emission.NAMESPACE,
+					constants.chauffage.emission.RULES.rr,
+					e,
+				),
+			),
 		}),
 	);
 }
@@ -460,65 +560,33 @@ export function isolation_reseau(
 function _emissions(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, "emissions", item, () => {
 		const emetteurs = _emetteurs(ctx, item);
-
-		const emissions =
-			emetteurs.length > 0
-				? emetteurs.map((e) => ({
-						id: `${item.id}:${e.id}`,
-						emetteur_id: e.id,
+		return emetteurs.length > 0
+			? emetteurs.map((e) => ({
+					id: `${item.id}:${e.id}`,
+					emetteur_id: e.id,
+					systeme_id: item.id,
+					type_distribution: item.reseau?.type_distribution ?? null,
+					presence_robinet_thermostatique: e.presence_robinet_thermostatique,
+				}))
+			: [
+					{
+						id: item.id,
+						emetteur_id: null,
 						systeme_id: item.id,
 						type_distribution: item.reseau?.type_distribution ?? null,
-						presence_robinet_thermostatique: e.presence_robinet_thermostatique,
-					}))
-				: [
-						{
-							id: item.id,
-							emetteur_id: null,
-							systeme_id: item.id,
-							type_distribution: item.reseau?.type_distribution ?? null,
-							presence_robinet_thermostatique: null,
-						},
-					];
-
-		const ns = constants.chauffage.emission.NAMESPACE;
-		const rules = constants.chauffage.emission.RULES;
-
-		return emissions.map((emission) => ({
-			...emission,
-			cch: ctx.resolve(ns, rules.cch, emission),
-			cch1: ctx.resolve(ns, rules.cch1, emission),
-			cch2: ctx.resolve(ns, rules.cch2, emission),
-			ich: ctx.resolve(ns, rules.ich, emission),
-			ich1: ctx.resolve(ns, rules.ich1, emission),
-			ich2: ctx.resolve(ns, rules.ich2, emission),
-			re: ctx.resolve(ns, rules.re, emission),
-			rr: ctx.resolve(ns, rules.rr, emission),
-			int: ctx.resolve(ns, rules.int, emission),
-			i0: ctx.resolve(ns, rules.i0, emission),
-		}));
+						presence_robinet_thermostatique: null,
+					},
+				];
 	});
 }
 
 function _installation(ctx: Context, item: Systeme) {
-	return ctx.once(NAMESPACE, "installation", item, () => {
-		const installation = models.chauffage.getInstallationBySysteme(
+	return ctx.once(NAMESPACE, "installation", item, () =>
+		models.chauffage.getInstallationBySysteme(
 			ctx.diagnostic.chauffage,
 			item.id,
-		);
-		return {
-			...installation,
-			bch: ctx.resolve(
-				constants.chauffage.installation.NAMESPACE,
-				constants.chauffage.installation.RULES.bch,
-				installation,
-			),
-			pch: ctx.resolve(
-				constants.chauffage.installation.NAMESPACE,
-				constants.chauffage.installation.RULES.pch,
-				installation,
-			),
-		};
-	});
+		),
+	);
 }
 
 function _generateurs(ctx: Context, item: Systeme) {
@@ -532,11 +600,6 @@ function _generateur(ctx: Context, item: Systeme) {
 		const generateur = models.chauffage.getGenerateur(
 			ctx.diagnostic.chauffage,
 			item.generateur_id,
-		);
-		const combustion = ctx.resolve(
-			constants.chauffage.generateur.NAMESPACE,
-			constants.chauffage.generateur.RULES.combustion,
-			generateur,
 		);
 		return {
 			...generateur,
@@ -578,56 +641,15 @@ function _generateur(ctx: Context, item: Systeme) {
 				constants.chauffage.generateur.RULES.presence_regulation,
 				generateur,
 			),
-			pn: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.pn,
-				generateur,
-			),
-			rpn: combustion?.rpn ?? 0,
-			rpint: combustion?.rpint ?? 0,
-			qp0: combustion?.qp0 ?? 0,
-			pveilleuse: combustion?.pveilleuse ?? 0,
-			scop:
-				ctx.resolve(
-					constants.chauffage.generateur.NAMESPACE,
-					constants.chauffage.generateur.RULES.scop,
-					generateur,
-				) ?? 0,
-			tfonc30: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.tfonc30,
-				generateur,
-			),
-			tfonc100: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.tfonc100,
-				generateur,
-			),
 		};
 	});
 }
 
 function _emetteurs(ctx: Context, item: Systeme) {
-	if (null === item.reseau) return [];
-	return item.reseau.emetteurs.map((id) => {
-		const emetteur = models.chauffage.getEmetteur(ctx.diagnostic.chauffage, id);
-		return {
-			...emetteur,
-			fcot: ctx.resolve(
-				constants.chauffage.emetteur.NAMESPACE,
-				constants.chauffage.emetteur.RULES.fcot,
-				emetteur,
-			),
-			delta_pem: ctx.resolve(
-				constants.chauffage.emetteur.NAMESPACE,
-				constants.chauffage.emetteur.RULES.delta_pem,
-				emetteur,
-			),
-			dtheta_dim: ctx.resolve(
-				constants.chauffage.emetteur.NAMESPACE,
-				constants.chauffage.emetteur.RULES.dtheta_dim,
-				emetteur,
-			),
-		};
+	return ctx.once(NAMESPACE, "emetteurs", item, () => {
+		if (null === item.reseau) return [];
+		return item.reseau.emetteurs.map((id) =>
+			models.chauffage.getEmetteur(ctx.diagnostic.chauffage, id),
+		);
 	});
 }

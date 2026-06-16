@@ -19,7 +19,6 @@ describe('isMur — guard', () => {
         surface: p(20),
         mitoyennete: 'exterieur',
         local_non_chauffe_id: null,
-        orientation: 'nord',
       },
       isolation: ISOLATION_SANS,
     }
@@ -42,7 +41,6 @@ describe('isMur — guard', () => {
         surface: p(15),
         mitoyennete: 'exterieur',
         local_non_chauffe_id: null,
-        orientation: 'sud',
       },
       isolation: {
         etat: true,

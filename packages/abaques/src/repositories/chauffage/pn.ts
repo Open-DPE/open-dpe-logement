@@ -7,7 +7,7 @@ export type Schema = {
 	"pdim/lte": number | null;
 	"annee_installation_generateur/gt": number | null;
 	"annee_installation_generateur/lte": number | null;
-	pn: number;
+	pn: number | string;
 };
 
 export type Query = {
@@ -16,7 +16,7 @@ export type Query = {
 	annee_installation_generateur: number;
 };
 
-export const load = (): Schema[] => data as Schema[];
+export const load = (): Schema[] => data;
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

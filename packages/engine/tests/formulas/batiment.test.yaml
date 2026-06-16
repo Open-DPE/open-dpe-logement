@@ -1,5 +1,5 @@
 batiment.ratio_proratisation:
-  run: calcule_ratio_proratisation
+  rule: ratio_proratisation
   cases:
     - title: Logement non renseigné → ratio 1 (maison ou logement = bâtiment)
       with:
@@ -20,7 +20,7 @@ batiment.ratio_proratisation:
       expect: 0.3
 
 batiment.sh:
-  run: calcule_sh
+  rule: sh
   cases:
     - title: Surface logement non renseignée → surface bâtiment
       with:
@@ -35,7 +35,7 @@ batiment.sh:
       expect: 80
 
 batiment.hsp:
-  run: calcule_hsp
+  rule: hsp
   cases:
     - title: Hauteur logement non renseignée → hauteur bâtiment
       with:

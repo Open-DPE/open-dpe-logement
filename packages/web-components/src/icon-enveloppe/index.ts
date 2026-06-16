@@ -31,7 +31,7 @@ export class IconEnveloppe extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-icon-enveloppe";
+const HTML_TAG = "open-dpe-logement-icon-enveloppe";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, IconEnveloppe);

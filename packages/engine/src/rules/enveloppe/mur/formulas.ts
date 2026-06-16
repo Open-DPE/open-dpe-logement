@@ -111,28 +111,25 @@ export function calcule_u0(props: {
 
 	if (u0_saisi) return Math.min(u0_saisi, 2.5);
 
-	const structures = props.structures.filter(({ materiau }) => materiau);
-
-	if (structures.length === 0) return 2.5;
-
 	const abaque = abaques.enveloppe.mur.umur0;
 	const data = abaque.load();
-	const values: number[] = [];
+	const u0s = props.structures
+		.map(({ materiau, epaisseur }) => {
+			if (!materiau || !epaisseur) return null;
+			const query = {
+				type_mur: materiau,
+				epaisseur_mur: epaisseur,
+				annee_construction,
+			};
+			const match = abaque.search(query, data).at(0);
+			if (!match) throw new ValeurForfaitaireError(query);
+			return match.u0;
+		})
+		.filter((u0) => u0 !== null);
 
-	for (const { materiau, epaisseur } of structures) {
-		if (!materiau || !epaisseur) continue;
+	let u0 =
+		u0s.length > 0 ? 1 / u0s.reduce((acc, value) => acc + 1 / value, 0) : 2.5;
 
-		const query = {
-			type_mur: materiau,
-			epaisseur_mur: epaisseur,
-			annee_construction,
-		};
-		const match = abaque.search(query, data).at(0);
-		if (!match) throw new ValeurForfaitaireError(query);
-		values.push(match.u0);
-	}
-
-	let u0 = values.reduce((acc, value) => 1 / (1 / acc + 1 / value));
 	if (u0_enduit_isolant) u0 = 1 / (1 / u0 + 1 / u0_enduit_isolant);
 	if (u0_doublage) u0 = 1 / (1 / u0 + 1 / u0_doublage);
 	return Math.min(u0, 2.5);

@@ -1,0 +1,42 @@
+enveloppe.mur.u0:
+  rule: u0
+  cases:
+    - title: Mur inconnu
+      with:
+        u0_saisi: null
+        u0_enduit_isolant: null
+        u0_doublage: null
+        annee_construction: 2026
+        structures: []
+      expect: 2.5
+
+    - title: Matériaux connus
+      with:
+        u0_saisi: null
+        u0_enduit_isolant: null
+        u0_doublage: null
+        annee_construction: 2026
+        structures:
+          - materiau: pierre_moellons
+            epaisseur: 50
+          - materiau: pise_ou_beton_terre
+            epaisseur: 50
+      expect: 0.8826
+
+    - title: U0 connu
+      with:
+        u0_saisi: 1.8
+        u0_enduit_isolant: null
+        u0_doublage: null
+        annee_construction: 2026
+        structures: []
+      expect: 1.8
+
+    - title: Enduit isolant + Doublage
+      with:
+        u0_saisi: null
+        u0_enduit_isolant: 1
+        u0_doublage: 1
+        annee_construction: 2026
+        structures: []
+      expect: 0.4167

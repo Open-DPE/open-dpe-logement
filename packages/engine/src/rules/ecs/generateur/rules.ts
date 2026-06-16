@@ -38,8 +38,12 @@ export function consommations(
 ): ReturnType<typeof formulas.calcule_consommations> {
 	return ctx.register(NAMESPACE, RULES.consommations, item, () =>
 		formulas.calcule_consommations({
-			consommations: _systemes(ctx, item).map(
-				({ consommations }) => consommations,
+			consommations: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.ecs.systeme.NAMESPACE,
+					constants.ecs.systeme.RULES.consommations,
+					s,
+				),
 			),
 			caux_gen: caux_gen(ctx, item),
 			caux_gen_enr: caux_gen_enr(ctx, item),
@@ -53,7 +57,13 @@ export function cecs(
 ): ReturnType<typeof formulas.calcule_cecs> {
 	return ctx.register(NAMESPACE, RULES.cecs, item, () =>
 		formulas.calcule_cecs({
-			cecs: _systemes(ctx, item).map(({ cecs }) => cecs),
+			cecs: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.ecs.systeme.NAMESPACE,
+					constants.ecs.systeme.RULES.cecs,
+					s,
+				),
+			),
 		}),
 	);
 }
@@ -64,7 +74,13 @@ export function cecs_elec(
 ): ReturnType<typeof formulas.calcule_cecs_elec> {
 	return ctx.register(NAMESPACE, RULES.cecs_elec, item, () =>
 		formulas.calcule_cecs_elec({
-			cecs_elec: _systemes(ctx, item).map(({ cecs_elec }) => cecs_elec),
+			cecs_elec: _systemes(ctx, item).map((s) =>
+				ctx.resolve(
+					constants.ecs.systeme.NAMESPACE,
+					constants.ecs.systeme.RULES.cecs_elec,
+					s,
+				),
+			),
 		}),
 	);
 }
@@ -107,7 +123,20 @@ export function rdim(
 	item: Generateur,
 ): ReturnType<typeof formulas.calcule_rdim> {
 	return ctx.register(NAMESPACE, RULES.rdim, item, () =>
-		formulas.calcule_rdim({ systemes: _systemes(ctx, item) }),
+		formulas.calcule_rdim({
+			systemes: _systemes(ctx, item).map((s) => ({
+				rdim: ctx.resolve(
+					constants.ecs.systeme.NAMESPACE,
+					constants.ecs.systeme.RULES.rdim,
+					s,
+				),
+				rdim_installation: ctx.resolve(
+					constants.ecs.installation.NAMESPACE,
+					constants.ecs.installation.RULES.rdim,
+					s.installation,
+				),
+			})),
+		}),
 	);
 }
 
@@ -335,38 +364,14 @@ export function volume_stockage(
 }
 
 function _systemes(ctx: Context, item: Generateur) {
-	return ctx.once(NAMESPACE, "systemes", item, () => {
-		return ctx.diagnostic.ecs.installations.flatMap((i) =>
+	return ctx.once(NAMESPACE, "systemes", item, () =>
+		ctx.diagnostic.ecs.installations.flatMap((i) =>
 			i.systemes
 				.filter((s) => s.generateur_id === item.id)
 				.map((s) => ({
 					...s,
-					consommations: ctx.resolve(
-						constants.ecs.systeme.NAMESPACE,
-						constants.ecs.systeme.RULES.consommations,
-						s,
-					),
-					cecs_elec: ctx.resolve(
-						constants.ecs.systeme.NAMESPACE,
-						constants.ecs.systeme.RULES.cecs_elec,
-						s,
-					),
-					cecs: ctx.resolve(
-						constants.ecs.systeme.NAMESPACE,
-						constants.ecs.systeme.RULES.cecs,
-						s,
-					),
-					rdim: ctx.resolve(
-						constants.ecs.systeme.NAMESPACE,
-						constants.ecs.systeme.RULES.rdim,
-						s,
-					),
-					rdim_installation: ctx.resolve(
-						constants.ecs.installation.NAMESPACE,
-						constants.ecs.installation.RULES.rdim,
-						i,
-					),
+					installation: i,
 				})),
-		);
-	});
+		),
+	);
 }

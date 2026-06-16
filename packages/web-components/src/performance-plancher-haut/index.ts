@@ -37,7 +37,7 @@ export function renderPerformancePlancherHaut(props: {
 }): string {
 	const { configuration, u, style } = props;
 	const color = getColor(configuration, u);
-	const text = u.toLocaleString();
+	const text = u.toFixed(2);
 	return renderChips({ text, color, textColor: "#FFFFFF", style });
 }
 
@@ -59,7 +59,7 @@ export class PerformancePlancherHaut extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-performance-plancher-haut";
+const HTML_TAG = "open-dpe-logement-performance-plancher-haut";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, PerformancePlancherHaut);

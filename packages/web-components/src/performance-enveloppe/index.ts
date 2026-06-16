@@ -14,7 +14,7 @@ export function renderPerformanceEnveloppe(props: {
 }): string {
 	const { ubat, style } = props;
 	const color = getColor(ubat);
-	const text = ubat.toLocaleString();
+	const text = ubat.toFixed(2);
 	return renderChips({ text, color, textColor: "#FFFFFF", style });
 }
 
@@ -35,7 +35,7 @@ export class PerformanceEnveloppe extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-performance-enveloppe";
+const HTML_TAG = "open-dpe-logement-performance-enveloppe";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, PerformanceEnveloppe);

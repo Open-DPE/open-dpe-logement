@@ -81,7 +81,6 @@ export function calcule(ctx: Context): models.enveloppe.EnveloppeWithData {
 				constants.ventilation.RULES.hvent,
 			),
 			presence_joints: ctx.resolve(NAMESPACE, RULES.presence_joints),
-			parois_anciennes: ctx.resolve(NAMESPACE, RULES.parois_anciennes),
 			isolation_planchers_hauts: ctx.resolve(
 				NAMESPACE,
 				RULES.isolation_planchers_hauts,

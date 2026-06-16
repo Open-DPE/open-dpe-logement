@@ -1,5 +1,5 @@
 refroidissement.generateur.caux:
-  run: calcule_caux
+  rule: caux
   cases:
     - title: Auxiliaire de refroidissement → toujours 0
       with: {}
@@ -21,7 +21,7 @@ refroidissement.generateur.set_annee_installation:
       expect: 1990
 
 refroidissement.generateur.cfr_elec:
-  run: calcule_cfr_elec
+  rule: cfr_elec
   cases:
     - title: Énergie électrique → cfr
       with:
@@ -36,7 +36,7 @@ refroidissement.generateur.cfr_elec:
       expect: 0
 
 refroidissement.generateur.rdim:
-  run: calcule_rdim
+  rule: rdim
   cases:
     - title: Un générateur par installation
       with:
@@ -67,7 +67,7 @@ refroidissement.generateur.rdim:
       expect: 0
 
 refroidissement.generateur.eer:
-  run: calcule_eer
+  rule: eer
   cases:
     - title: SEER saisi positif → SEER × 0.95
       with:
@@ -126,7 +126,7 @@ refroidissement.generateur.eer:
       expectError: true
 
 refroidissement.generateur.cfr:
-  run: calcule_cfr
+  rule: cfr
   cases:
     - title: Cas standard
       with:

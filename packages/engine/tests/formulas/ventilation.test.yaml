@@ -1,5 +1,5 @@
 ventilation.caux:
-  run: calcule_caux
+  rule: caux
   cases:
     - title: Somme de plusieurs auxiliaires
       with:
@@ -17,7 +17,7 @@ ventilation.caux:
       expect: 0
 
 ventilation.hvent:
-  run: calcule_hvent
+  rule: hvent
   cases:
     - title: Installation unique (rdim=0.5)
       with:
@@ -41,7 +41,7 @@ ventilation.hvent:
       expect: 0
 
 ventilation.qvarep_conv:
-  run: calcule_qvarep_conv
+  rule: qvarep_conv
   cases:
     - title: Installation unique
       with:
@@ -65,7 +65,7 @@ ventilation.qvarep_conv:
       expect: 0
 
 ventilation.qvasouf_conv:
-  run: calcule_qvasouf_conv
+  rule: qvasouf_conv
   cases:
     - title: Installation unique
       with:
@@ -89,7 +89,7 @@ ventilation.qvasouf_conv:
       expect: 0
 
 ventilation.smea_conv:
-  run: calcule_smea_conv
+  rule: smea_conv
   cases:
     - title: Deux installations avec smea différents
       with:

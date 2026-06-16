@@ -44,7 +44,13 @@ export function consommations(
 ): ReturnType<typeof formulas.calcule_consommations> {
 	return ctx.register(NAMESPACE, RULES.consommations, () =>
 		formulas.calcule_consommations({
-			consommations: _generateurs(ctx).map((item) => item.consommations),
+			consommations: ctx.diagnostic.chauffage.generateurs.map((item) =>
+				ctx.resolve(
+					constants.chauffage.generateur.NAMESPACE,
+					constants.chauffage.generateur.RULES.consommations,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -52,17 +58,28 @@ export function consommations(
 export function cch(ctx: Context): ReturnType<typeof formulas.calcule_cch> {
 	return ctx.register(NAMESPACE, RULES.cch, () =>
 		formulas.calcule_cch({
-			cch: _generateurs(ctx).map((item) => item.cch),
+			cch: ctx.diagnostic.chauffage.generateurs.map((item) =>
+				ctx.resolve(
+					constants.chauffage.generateur.NAMESPACE,
+					constants.chauffage.generateur.RULES.cch,
+					item,
+				),
+			),
 		}),
 	);
 }
-
 export function cch_elec(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_cch_elec> {
 	return ctx.register(NAMESPACE, RULES.cch_elec, () =>
 		formulas.calcule_cch_elec({
-			cch_elec: _generateurs(ctx).map((item) => item.cch_elec),
+			cch_elec: ctx.diagnostic.chauffage.generateurs.map((item) =>
+				ctx.resolve(
+					constants.chauffage.generateur.NAMESPACE,
+					constants.chauffage.generateur.RULES.cch_elec,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -72,7 +89,13 @@ export function caux_gen(
 ): ReturnType<typeof formulas.calcule_caux_gen> {
 	return ctx.register(NAMESPACE, RULES.caux_gen, () =>
 		formulas.calcule_caux_gen({
-			caux_gen: _generateurs(ctx).map((item) => item.caux_gen),
+			caux_gen: ctx.diagnostic.chauffage.generateurs.map((item) =>
+				ctx.resolve(
+					constants.chauffage.generateur.NAMESPACE,
+					constants.chauffage.generateur.RULES.caux_gen,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -82,7 +105,13 @@ export function caux_dist(
 ): ReturnType<typeof formulas.calcule_caux_dist> {
 	return ctx.register(NAMESPACE, RULES.caux_dist, () =>
 		formulas.calcule_caux_dist({
-			caux_dist: _installations(ctx).map((item) => item.caux_dist),
+			caux_dist: ctx.diagnostic.chauffage.installations.map((item) =>
+				ctx.resolve(
+					constants.chauffage.installation.NAMESPACE,
+					constants.chauffage.installation.RULES.caux_dist,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -230,10 +259,18 @@ export function effet_joule(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_effet_joule> {
 	return ctx.register(NAMESPACE, RULES.effet_joule, () =>
-		formulas.calcule_effet_joule({ installations: _installations(ctx) }),
+		formulas.calcule_effet_joule({
+			installations: ctx.diagnostic.chauffage.installations.map((item) => ({
+				surface: item.surface,
+				effet_joule: ctx.resolve(
+					constants.chauffage.installation.NAMESPACE,
+					constants.chauffage.installation.RULES.effet_joule,
+					item,
+				),
+			})),
+		}),
 	);
 }
-
 export function nref(ctx: Context): ReturnType<typeof formulas.calcule_nref> {
 	return ctx.register(NAMESPACE, RULES.nref, () =>
 		formulas.calcule_nref({
@@ -255,56 +292,5 @@ export function dh(ctx: Context): ReturnType<typeof formulas.calcule_dh> {
 			),
 			scenario: ctx.scenario,
 		}),
-	);
-}
-
-function _generateurs(ctx: Context) {
-	return ctx.once(NAMESPACE, "generateurs", () =>
-		ctx.diagnostic.chauffage.generateurs.map((item) => ({
-			...item,
-			consommations: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.consommations,
-				item,
-			),
-			cch: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.cch,
-				item,
-			),
-			cch_elec: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.cch_elec,
-				item,
-			),
-			caux_gen: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.caux_gen,
-				item,
-			),
-			caux_gen_enr: ctx.resolve(
-				constants.chauffage.generateur.NAMESPACE,
-				constants.chauffage.generateur.RULES.caux_gen_enr,
-				item,
-			),
-		})),
-	);
-}
-
-function _installations(ctx: Context) {
-	return ctx.once(NAMESPACE, "installations", () =>
-		ctx.diagnostic.chauffage.installations.map((item) => ({
-			...item,
-			caux_dist: ctx.resolve(
-				constants.chauffage.installation.NAMESPACE,
-				constants.chauffage.installation.RULES.caux_dist,
-				item,
-			),
-			effet_joule: ctx.resolve(
-				constants.chauffage.installation.NAMESPACE,
-				constants.chauffage.installation.RULES.effet_joule,
-				item,
-			),
-		})),
 	);
 }

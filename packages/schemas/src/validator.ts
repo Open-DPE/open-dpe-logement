@@ -7,6 +7,7 @@ export function createValidator() {
 		strict: false,
 		allErrors: true,
 		useDefaults: true,
+		multipleOfPrecision: 2,
 	});
 
 	addFormats(ajv);

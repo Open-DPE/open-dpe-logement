@@ -18,7 +18,6 @@ describe('isPlancherHaut — guard', () => {
         surface: p(80),
         mitoyennete: 'exterieur',
         local_non_chauffe_id: null,
-        orientation: 'horizontale',
       },
       isolation: ISOLATION_SANS,
     }
@@ -40,7 +39,6 @@ describe('isPlancherHaut — guard', () => {
         surface: p(60),
         mitoyennete: 'exterieur',
         local_non_chauffe_id: null,
-        orientation: 'nord',
       },
       isolation: {
         etat: true,

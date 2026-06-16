@@ -30,7 +30,7 @@ export class ClasseClimat extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-classe-climat";
+const HTML_TAG = "open-dpe-logement-classe-climat";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, ClasseClimat);

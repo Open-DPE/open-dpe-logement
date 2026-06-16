@@ -111,6 +111,7 @@ export function calcule_etiquette_climat(props: {
 
 /**
  * @formule diagnostic.confort_ete
+ * @todo Contrainte pour les immeubles collectifs
  * @returns Niveau de confort d'été du logement
  */
 export function calcule_confort_ete(props: {
@@ -125,9 +126,6 @@ export function calcule_confort_ete(props: {
 	logement_traversant: ReturnType<typeof enveloppe.calcule_logement_traversant>;
 	presence_brasseur_air: boolean;
 }): models.diagnostic.ConfortEte | null {
-	if (props.type_diagnostic === models.diagnostic.TypeDiagnosticEnum.batiment) {
-		return null;
-	}
 	if (
 		false === props.presence_protection_solaire ||
 		false === props.isolation_planchers_hauts

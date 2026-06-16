@@ -26,7 +26,6 @@ describe('isEnveloppe — guard', () => {
       baies: [],
       portes: [],
       ponts_thermiques: [],
-      masques: [],
     }
     expect(isEnveloppe(enveloppe)).toBe(true)
   })

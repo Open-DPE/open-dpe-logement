@@ -14,7 +14,7 @@ export function renderPerformancePlancherBas(props: {
 }): string {
 	const { u, style } = props;
 	const color = getColor(u);
-	const text = u.toLocaleString();
+	const text = u.toFixed(2);
 	return renderChips({ text, color, textColor: "#FFFFFF", style });
 }
 
@@ -35,7 +35,7 @@ export class PerformancePlancherBas extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-performance-plancher-bas";
+const HTML_TAG = "open-dpe-logement-performance-plancher-bas";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, PerformancePlancherBas);

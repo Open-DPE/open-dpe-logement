@@ -58,7 +58,7 @@ export class IconConfortEte extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-icon-confort-ete";
+const HTML_TAG = "open-dpe-logement-icon-confort-ete";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, IconConfortEte);

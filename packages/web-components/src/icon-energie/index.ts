@@ -32,12 +32,10 @@ const SVG_MAP: Record<models.common.Energie, string> = {
 export function renderIconEnergie(props: {
 	value: models.common.Energie;
 	size?: number | null | undefined;
-	color?: string | null | undefined;
-	style?: string | null | undefined;
 }): string {
-	const { value, size, color, style } = props;
+	const { value, size } = props;
 	const content = SVG_MAP[value] ?? "";
-	return renderIcon({ size, color, content, style });
+	return renderIcon({ size, content });
 }
 
 export class IconEnergie extends HTMLElement {
@@ -53,13 +51,11 @@ export class IconEnergie extends HTMLElement {
 	private render() {
 		const value = this.getAttribute("value") as models.common.Energie;
 		const size = Number(this.getAttribute("size"));
-		const color = this.getAttribute("color");
-		const style = this.getAttribute("style");
-		this.innerHTML = renderIconEnergie({ value, size, color, style });
+		this.innerHTML = renderIconEnergie({ value, size });
 	}
 }
 
-const HTML_TAG = "open-dpe-icon-energie";
+const HTML_TAG = "open-dpe-logement-icon-energie";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, IconEnergie);

@@ -1,22 +1,14 @@
-import { describe, it, expect } from "vitest";
-import * as _formulas from "../../src/rules/ventilation/installation/formulas.js";
-import { loadTests } from "./utils.js";
+import * as formulas from "../../src/rules/ventilation/installation/formulas.js";
+import { runTests } from "./utils.js";
 
-const formulas = _formulas as Record<string, Function>;
-const tests = loadTests("ventilation.installation.test.yaml");
-
-Object.keys(tests).forEach((id) => {
-	const test = tests[id];
-	describe(id, () => {
-		it.each(test.cases)(
-			"$title",
-			({ title: _, with: input, expect: expected, expectError }) => {
-				if (expectError) {
-					expect(() => formulas[test.run](input)).toThrow();
-				} else {
-					expect(formulas[test.run](input)).toEqual(expected);
-				}
-			},
-		);
-	});
+runTests("ventilation.installation.test.yaml", {
+	rdim: formulas.calcule_rdim,
+	rut: formulas.calcule_rut,
+	hvent: formulas.calcule_hvent,
+	caux: formulas.calcule_caux,
+	debits: formulas.calcule_debits,
+	pvent_moy: formulas.calcule_pvent_moy,
+	type_ventilation: formulas.set_type_ventilation,
+	annee_installation: formulas.set_annee_installation,
+	presence_echangeur_thermique: formulas.set_presence_echangeur_thermique,
 });

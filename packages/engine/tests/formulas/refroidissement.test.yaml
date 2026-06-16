@@ -1,5 +1,5 @@
 refroidissement.tint:
-  run: calcule_tint
+  rule: tint
   cases:
     - title: Scénario conventionnel → 28°C
       with:
@@ -12,7 +12,7 @@ refroidissement.tint:
       expect: 26
 
 refroidissement.cin:
-  run: calcule_cin
+  rule: cin
   cases:
     - title: Inertie légère (110 000 × sh)
       with:
@@ -39,7 +39,7 @@ refroidissement.cin:
       expect: 26000000
 
 refroidissement.t:
-  run: calcule_t
+  rule: t
   cases:
     - title: Cas standard → cin / (3600 × gv)
       with:
@@ -54,7 +54,7 @@ refroidissement.t:
       expect: 0
 
 refroidissement.cfr:
-  run: calcule_cfr
+  rule: cfr
   cases:
     - title: Somme de plusieurs générateurs
       with:
@@ -67,7 +67,7 @@ refroidissement.cfr:
       expect: 0
 
 refroidissement.cfr_elec:
-  run: calcule_cfr_elec
+  rule: cfr_elec
   cases:
     - title: Somme des consommations électriques
       with:
@@ -80,7 +80,7 @@ refroidissement.cfr_elec:
       expect: 0
 
 refroidissement.caux:
-  run: calcule_caux
+  rule: caux
   cases:
     - title: Auxiliaires de refroidissement (toujours 0)
       with:

@@ -1,0 +1,152 @@
+[
+  {
+    "titre": "Isolation par l'extérieur",
+    "poste": "isolation-murs",
+    "id": "ite-murs",
+    "description": "Epaisseur ≃ 25 cm\nR = 5.5 m².K/W\n",
+    "data": {
+      "etat": true,
+      "type": "ite",
+      "annee_installation": null,
+      "epaisseur": 250,
+      "resistance_thermique": 5.5
+    }
+  },
+  {
+    "titre": "Isolation des planchers par l'extérieur",
+    "poste": "isolation-planchers-bas",
+    "id": "ite-planchers-bas",
+    "description": "Epaisseur ≃ 20 cm\nR = 4.5 m².K/W\n",
+    "data": {
+      "etat": true,
+      "type": "ite",
+      "annee_installation": null,
+      "epaisseur": 200,
+      "resistance_thermique": 4.5
+    }
+  },
+  {
+    "titre": "Isolation de la toiture par l'extérieur",
+    "poste": "isolation-planchers-hauts",
+    "id": "ite-planchers-hauts",
+    "description": "Epaisseur ≃ 30 cm\nR = 7.5 m².K/W\n",
+    "data": {
+      "etat": true,
+      "type": "ite",
+      "annee_installation": null,
+      "epaisseur": 300,
+      "resistance_thermique": 7.5
+    }
+  },
+  {
+    "titre": "Remplacement des fenêtres et portes-fenêtres",
+    "poste": "isolation-baies",
+    "id": "isolation-baies",
+    "description": "U = 1.2 W/m².K",
+    "data": {
+      "type": "fenetre_battante",
+      "uw": 1.2,
+      "sw": null,
+      "survitrage": null,
+      "vitrage": {
+        "type": "double_vitrage_fe",
+        "nature_lame": "argon",
+        "epaisseur_lame": 12
+      },
+      "menuiserie": {
+        "materiau": "pvc",
+        "largeur_dormant": 60,
+        "presence_soubassement": false,
+        "presence_joint": true,
+        "presence_retour_isolation": true,
+        "presence_rupteur_pont_thermique": true
+      }
+    }
+  },
+  {
+    "titre": "Remplacement des portes",
+    "poste": "isolation-portes",
+    "id": "isolation-portes",
+    "description": "U = 1.2 W/m².K",
+    "data": {
+      "isolation": true,
+      "materiau": "pvc",
+      "u": 1.2,
+      "menuiserie": {
+        "largeur_dormant": 60,
+        "presence_joint": true,
+        "presence_retour_isolation": true
+      }
+    }
+  },
+  {
+    "titre": "Protection solaire",
+    "poste": "protection-solaire",
+    "id": "protection-solaire",
+    "description": "Installation de protections solaires",
+    "data": {
+      "type_fermeture": "fermeture_isolee_sans_ajours",
+      "presence_protection_solaire": true
+    }
+  },
+  {
+    "titre": "Chauffe-eau thermodynamique",
+    "poste": "ecs",
+    "id": "cet",
+    "description": "COP = 6\nVolume de stockage 200 litres\n",
+    "data": {
+      "type": "cet",
+      "energie": "electricite",
+      "bienergie": null,
+      "stockage": {
+        "volume": 200,
+        "type": "integre",
+        "position_volume_chauffe": true
+      },
+      "position": {
+        "position_chauffe_eau": null,
+        "generateur_collectif": false,
+        "generateur_multi_batiment": false,
+        "position_volume_chauffe": true,
+        "generateur_mixte_id": null,
+        "reseau_chaleur_id": null
+      },
+      "signaletique": {
+        "cop": 6,
+        "pn": null,
+        "label": null,
+        "mode_combustion": null,
+        "annee_installation": null,
+        "presence_ventouse": null,
+        "pveilleuse": null,
+        "qp0": null,
+        "rpn": null
+      }
+    }
+  },
+  {
+    "titre": "VMC Double flux",
+    "poste": "ventilation",
+    "id": "vmc-double-flux",
+    "description": "Installation d'une VMC double flux",
+    "data": {
+      "type": "vmc_double_flux",
+      "presence_echangeur_thermique": true,
+      "generateur_collectif": false,
+      "annee_installation": null
+    }
+  },
+  {
+    "titre": "Panneaux photovoltaïques",
+    "description": "Installation de panneaux photovoltaïques",
+    "id": "panneaux-photovoltaiques",
+    "poste": "production",
+    "data": {
+      "orientation": "sud_est",
+      "inclinaison": 30,
+      "modules": 1,
+      "surface": 5,
+      "installation_collective": false
+    }
+  }
+]

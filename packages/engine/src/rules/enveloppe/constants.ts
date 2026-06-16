@@ -38,6 +38,5 @@ export const RULES = {
 	isolation_planchers_hauts: "isolation_planchers_hauts",
 	presence_protection_solaire: "presence_protection_solaire",
 	logement_traversant: "logement_traversant",
-	parois_anciennes: "parois_anciennes",
 	sse: "sse",
 } as const;

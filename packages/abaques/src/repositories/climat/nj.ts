@@ -5,4 +5,4 @@ export type Schema = {
 	nj: number;
 };
 
-export const load = (): Schema[] => data as Schema[];
+export const load = (): Schema[] => data;

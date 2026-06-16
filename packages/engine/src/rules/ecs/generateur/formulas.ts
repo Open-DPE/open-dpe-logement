@@ -168,7 +168,7 @@ export function calcule_paux(props: {
 	const H = match.H;
 	const Pn = match.pn_max ? Math.min(match.pn_max, pn) : pn;
 	const scope = { G, H, Pn };
-	return evaluate(match.paux, scope);
+	return evaluate(String(match.paux), scope);
 }
 
 /**
@@ -266,10 +266,9 @@ export function calcule_combustion(props: {
 	const logPn = Math.log10(Pn);
 	const scope = { E, F, Pn, logPn };
 
-	combustion.rpn = combustion.rpn ?? evaluate(match.rpn, scope);
-	combustion.qp0 = combustion.qp0 ?? evaluate(match.qp0, scope);
+	combustion.rpn = combustion.rpn ?? evaluate(String(match.rpn), scope);
+	combustion.qp0 = combustion.qp0 ?? evaluate(String(match.qp0), scope);
 	combustion.pveilleuse = combustion.pveilleuse ?? match.pveilleuse;
-
 	return combustion as Combustion;
 }
 

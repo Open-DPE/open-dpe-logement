@@ -138,7 +138,7 @@ export function calcule_kpcs(props: {
 }
 
 /**
- * @return Consommation d'électricité renouvelable en kWh/an
+ * @returns Consommation d'électricité renouvelable en kWh/an
  */
 export function calcule_cener(props: {
 	celec: ReturnType<typeof production.calcule_celec>;
@@ -151,4 +151,16 @@ export function calcule_cener(props: {
 	const celec_ac = props.celec_ac[usage];
 	const p_celec_ac = celec ? cef / celec : 0;
 	return celec_ac * p_celec_ac;
+}
+
+/**
+ * @returns Consommation d'électricité en kWh/an
+ */
+export function calcule_celec(props: {
+	cef: number;
+	energie: models.common.Energie;
+}): number {
+	return props.energie === models.common.EnergieEnum.electricite
+		? props.cef
+		: 0;
 }

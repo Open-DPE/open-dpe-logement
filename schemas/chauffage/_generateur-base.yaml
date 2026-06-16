@@ -54,6 +54,7 @@ properties:
     title: Energie secondaire
     x-enum: energie
     type: [string, "null"]
+    enum: [gaz_naturel, gpl, fioul, null]
   annee_installation:
     $ref: /common#/$defs/annee_installation
   position:
@@ -101,7 +102,7 @@ properties:
       - position_volume_chauffe
       - generateur_mixte_id
       - reseau_chaleur_id
-    oneOf:
+    anyOf:
       - title: Générateur individuel
         type: object
         properties:
@@ -136,6 +137,7 @@ properties:
         title: Label du générateur
         type: [string, "null"]
         enum: [flamme_verte, nf_performance, null]
+        x-enum: chauffage:label-generateur
       scop:
         title: Coefficient de performance énergétique saisonnier
         oneOf:

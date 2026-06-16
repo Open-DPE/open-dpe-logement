@@ -127,7 +127,7 @@ export function ue(
 			? formulas.calcule_ue({
 					mitoyennete: item.position.mitoyennete,
 					annee_construction: paroi.annee_construction(ctx, item),
-					u: u(ctx, item),
+					uint: uint(ctx, item),
 					surface_ue: item.position.surface_ue,
 					perimetre_ue: item.position.perimetre_ue,
 				})

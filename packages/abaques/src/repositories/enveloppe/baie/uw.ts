@@ -17,7 +17,7 @@ export type Query = {
 	presence_rupteur_pont_thermique: boolean | null;
 };
 
-export const load = (): Schema[] => data as Schema[];
+export const load = (): Schema[] => data;
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

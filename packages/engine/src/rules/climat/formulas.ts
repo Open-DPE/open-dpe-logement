@@ -78,7 +78,7 @@ export type Sollicitations = models.common.ParMois<{
 export function calcule_sollicitations(props: {
 	zone_climatique: ReturnType<typeof calcule_zone_climatique>;
 	altitude: number;
-	parois_anciennes: ReturnType<typeof enveloppe.calcule_parois_anciennes>;
+	parois_anciennes: boolean;
 	inertie: ReturnType<typeof enveloppe.calcule_inertie>;
 }): Sollicitations {
 	const abaque = abaques.climat.sollicitations;

@@ -58,7 +58,6 @@ export function calcule_rg(props: Props): number {
 
 	const p = calcule_p({ pn: props.pn, tch_final });
 	const qp = calcule_qp({ ...props, tch_final });
-
 	const pfou = calcule_pfou({ p, coeff_pond_final });
 	const pcons = calcule_pcons({ p, pfou, qp });
 	const pmfou = calcule_pmfou({ ...props, pfou });
@@ -198,7 +197,7 @@ export function calcule_coeff_pond_final(props: {
 			return acc + (ctch_x / tch_dim_x) * coeff_pond_dim_x;
 		}, 0);
 
-		return ((ctch_x / tch_dim_x) * coeff_pond_dim_x) / somme;
+		return somme > 0 ? ((ctch_x / tch_dim_x) * coeff_pond_dim_x) / somme : 0;
 	});
 }
 
@@ -237,7 +236,8 @@ export function calcule_cdim_ref(props: {
 }): number {
 	const { gv, tbase, pn_combustion } = props;
 	const tcons = TCONS[props.scenario];
-	return (1000 * pn_combustion) / (gv * (tcons - tbase));
+	if (tcons === tbase) return 0;
+	return gv ? (1000 * pn_combustion) / (gv * (tcons - tbase)) : 0;
 }
 
 /**
@@ -302,7 +302,7 @@ export function calcule_pcons(props: {
 		const p_x = props.p[x];
 		const pfou_x = props.pfou[x];
 		const qp_x = props.qp[x];
-		return pfou_x * ((p_x + qp_x) / p_x);
+		return p_x ? pfou_x * ((p_x + qp_x) / p_x) : 0;
 	});
 }
 

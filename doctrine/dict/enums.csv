@@ -1,466 +1,461 @@
-﻿enum;valeur;description
-code-departement;01;Ain
-code-departement;02;Aisne
-code-departement;03;Allier
-code-departement;04;Alpes-de-Haute-Provence
-code-departement;05;Hautes-Alpes
-code-departement;06;Alpes-Maritimes
-code-departement;07;Ardèche
-code-departement;08;Ardennes
-code-departement;09;Ariège
-code-departement;10;Aube
-code-departement;11;Aude
-code-departement;12;Aveyron
-code-departement;13;Bouches-du-Rhône
-code-departement;14;Calvados
-code-departement;15;Cantal
-code-departement;16;Charente
-code-departement;17;Charente-Maritime
-code-departement;18;Cher
-code-departement;19;Corrèze
-code-departement;2A;Corse-du-Sud
-code-departement;2B;Haute-Corse
-code-departement;21;Côte-d'Or
-code-departement;22;Côtes d'Armor
-code-departement;23;Creuse
-code-departement;24;Dordogne
-code-departement;25;Doubs
-code-departement;26;Drôme
-code-departement;27;Eure
-code-departement;28;Eure-et-Loir
-code-departement;29;Finistère
-code-departement;30;Gard
-code-departement;31;Haute-Garonne
-code-departement;32;Gers
-code-departement;33;Gironde
-code-departement;34;Hérault
-code-departement;35;Ille-et-Vilaine
-code-departement;36;Indre
-code-departement;37;Indre-et-Loire
-code-departement;38;Isère
-code-departement;39;Jura
-code-departement;40;Landes
-code-departement;41;Loir-et-Cher
-code-departement;42;Loire
-code-departement;43;Haute-Loire
-code-departement;44;Loire-Atlantique
-code-departement;45;Loiret
-code-departement;46;Lot
-code-departement;47;Lot-et-Garonne
-code-departement;48;Lozère
-code-departement;49;Maine-et-Loire
-code-departement;50;Manche
-code-departement;51;Marne
-code-departement;52;Haute-Marne
-code-departement;53;Mayenne
-code-departement;54;Meurthe-et-Moselle
-code-departement;55;Meuse
-code-departement;56;Morbihan
-code-departement;57;Moselle
-code-departement;58;Nièvre
-code-departement;59;Nord
-code-departement;60;Oise
-code-departement;61;Orne
-code-departement;62;Pas-de-Calais
-code-departement;63;Puy-de-Dôme
-code-departement;64;Pyrénées-Atlantiques
-code-departement;65;Hautes-Pyrénées
-code-departement;66;Pyrénées-Orientales
-code-departement;67;Bas-Rhin
-code-departement;68;Haut-Rhin
-code-departement;69;Rhône
-code-departement;70;Haute-Saône
-code-departement;71;Saône-et-Loire
-code-departement;72;Sarthe
-code-departement;73;Savoie
-code-departement;74;Haute-Savoie
-code-departement;75;Paris
-code-departement;76;Seine-Maritime
-code-departement;77;Seine-et-Marne
-code-departement;78;Yvelines
-code-departement;79;Deux-Sèvres
-code-departement;80;Somme
-code-departement;81;Tarn
-code-departement;82;Tarn-et-Garonne
-code-departement;83;Var
-code-departement;84;Vaucluse
-code-departement;85;Vandée
-code-departement;86;Vienne
-code-departement;87;Haute-Vienne
-code-departement;88;Vosges
-code-departement;89;Yonne
-code-departement;90;Territoire de Belfort
-code-departement;91;Essonne
-code-departement;92;Hauts-de-Seine
-code-departement;93;Seine-St-Denis
-code-departement;94;Val-de-Marne
-code-departement;95;Val-D'Oise
-type-batiment;maison;Maison individuelle
-type-batiment;immeuble;Immeuble collectif
-chauffage:label-generateur;flamme_verte;Flamme verte
-chauffage:label-generateur;nf_performance;NF Performance
-chauffage:mode-combustion;standard;Standard
-chauffage:mode-combustion;basse_temperature;Basse température
-chauffage:mode-combustion;condensation;Condensation
-chauffage:position-chaudiere;chaudiere_murale;Chaudière murale
-chauffage:position-chaudiere;chaudiere_sol;Chaudière au sol
-chauffage:temperature-distribution;basse;Basse température
-chauffage:temperature-distribution;moyenne;Moyenne température
-chauffage:temperature-distribution;haute;Haute température
-chauffage:type-distribution;hydraulique;Distribution hydraulique
-chauffage:type-distribution;aeraulique;Distribution aeraulique
-chauffage:type-emetteur;plancher_chauffant;Plancher chauffant
-chauffage:type-emetteur;plafond_chauffant;Plafond chauffant
-chauffage:type-emetteur;radiateur_monotube;Radiateur monotube
-chauffage:type-emetteur;radiateur_bitube;Radiateur bitube
-chauffage:type-emetteur;radiateur;Radiateur
-chauffage:type-emetteur;autres;Autres
-chauffage:type-emission;radiateur;Radiateur
-chauffage:type-emission;air_souffle;Air soufflé
-chauffage:type-emission;plancher_chauffant;Plancher chauffant
-chauffage:type-emission;plafond_chauffant;Plafond chauffant
-chauffage:type-generateur;chaudiere;Chaudière
-chauffage:type-generateur;convecteur_bi_jonction;Convecteur bi-jonction
-chauffage:type-generateur;convecteur_electrique;Convecteur électrique
-chauffage:type-generateur;panneau_rayonnant_electrique;Panneau rayonnant électrique
-chauffage:type-generateur;plafond_rayonnant_electrique;Plafond rayonnant électrique
-chauffage:type-generateur;plancher_rayonnant_electrique;Plancher rayonnant électrique
-chauffage:type-generateur;radiateur_electrique;Radiateur électrique
-chauffage:type-generateur;radiateur_electrique_accumulation;Radiateur électrique à accumulation
-chauffage:type-generateur;generateur_air_chaud;Générateur d'air chaud
-chauffage:type-generateur;pac_air_air;Pompe à chaleur air / air
-chauffage:type-generateur;pac_air_eau;Pompe à chaleur air / eau
-chauffage:type-generateur;pac_eau_eau;Pompe à chaleur eau / eau
-chauffage:type-generateur;pac_eau_glycolee_eau;Pompe à chaleur eau glycolée / eau
-chauffage:type-generateur;pac_geothermique;Pompe à chaleur géothermique
-chauffage:type-generateur;cuisiniere;Cuisinière
-chauffage:type-generateur;foyer_ferme;Foyer fermé
-chauffage:type-generateur;insert;Insert
-chauffage:type-generateur;poele;Poêle
-chauffage:type-generateur;poele_bouilleur;Poêle boulleur
-chauffage:type-generateur;radiateur_gaz;Radiateur gaz
-chauffage:type-generateur;reseau_chaleur;Réseau de chaleur
-zone-climatique;H1a;H1a
-zone-climatique;H1b;H1b
-zone-climatique;H1c;H1c
-zone-climatique;H2a;H2a
-zone-climatique;H2b;H2b
-zone-climatique;H2c;H2c
-zone-climatique;H2d;H2d
-zone-climatique;H3;H3
-energie;electricite;Électricité
-energie;electricite_renouvelable;Électricité d'origine renouvelable
-energie;gaz_naturel;Gaz naturel
-energie;gpl;GPL
-energie;fioul;Fioul
-energie;charbon;Charbon
-energie;bois_buche;Bois - Bûche
-energie;bois_plaquette;Bois - Plaquette
-energie;bois_granule;Bois - Granule
-energie;reseau_chaleur;Réseau de chaleur
-energie;reseau_froid;Réseau de froid
-mois;01;Janvier
-mois;02;Février
-mois;03;Mars
-mois;04;Avril
-mois;05;Mai
-mois;06;Juin
-mois;07;Juillet
-mois;08;Août
-mois;09;Septembre
-mois;10;Octobre
-mois;11;Novembre
-mois;12;Décembre
-orientation-cardinale;nord;Nord
-orientation-cardinale;sud;Sud
-orientation-cardinale;est;Est
-orientation-cardinale;ouest;Ouest
-orientation;nord;Nord
-orientation;nord_est;Nord-Est
-orientation;est;Est
-orientation;sud_est;Sud-Est
-orientation;sud;Sud
-orientation;sud_ouest;Sud-Ouest
-orientation;ouest;Ouest
-orientation;nord_ouest;Nord-Ouest
-scenario;conventionnel;Scénario conventionnel
-scenario;depensier;Scénario dépensier
-usage;chauffage;Chauffage
-usage;ecs;Eau chaude sanitaire
-usage;refroidissement;Refroidissement
-usage;auxiliaire;Auxiliaire
-usage;eclairage;Éclairage
-ecs:bouclage-reseau;non_boucle;Réseau non bouclé
-ecs:bouclage-reseau;boucle;Réseau bouclé
-ecs:bouclage-reseau;trace;Réseau tracé
-ecs:label-generateur;ne_performance_a;NE Performance - A
-ecs:label-generateur;ne_performance_b;NE Performance - B
-ecs:label-generateur;ne_performance_c;NE Performance - C
-ecs:mode-combustion;standard;Standard
-ecs:mode-combustion;basse_temperature;Basse température
-ecs:mode-combustion;condensation;Condensation
-ecs:position-chauffe-eau;chauffe_eau_vertical;Chauffe eau vertical
-ecs:position-chauffe-eau;chauffe_eau_horizontal;Chauffe eau horizontal
-ecs:type-generateur;chauffe_eau;Chauffe eau
-ecs:type-generateur;chaudiere;Chaudière
-ecs:type-generateur;cet_air_ambiant;Chauffe eau thermodynamique sur air ambiant
-ecs:type-generateur;cet_air_exterieur;Chauffe eau thermodynamique sur air extérieur
-ecs:type-generateur;cet_air_extrait;Chauffe eau thermodynamique sur air extrait
-ecs:type-generateur;pac_double_service;Pompe à chaleur double service
-ecs:type-generateur;poele_bouilleur;Poêle bouilleur
-ecs:type-generateur;reseau_chaleur;Réseau de chaleur
-ecs:usage-solaire;ecs;ECS seule
-ecs:usage-solaire;chauffage_ecs;Chauffage + ECS
-enveloppe:baie:materiau;pvc;PVC
-enveloppe:baie:materiau;bois;Bois
-enveloppe:baie:materiau;bois_metal;Bois-métal
-enveloppe:baie:materiau;metal;Métal
-enveloppe:baie:nature-lame-air;air;Air
-enveloppe:baie:nature-lame-air;argon;Argon
-enveloppe:baie:nature-lame-air;krypton;Krypton
-enveloppe:baie:type;brique_verre_pleine;Brique de verre pleine
-enveloppe:baie:type;brique_verre_creuse;Brique de verre creuse
-enveloppe:baie:type;polycarbonate;Polycarbonate
-enveloppe:baie:type;fenetre_battante;Fenêtre battante
-enveloppe:baie:type;fenetre_coulissante;Fenêtre coulissante
-enveloppe:baie:type;porte_fenetre_coulissante;Porte fenêtre coulissante
-enveloppe:baie:type;porte_fenetre_battante;Porte fenêtre battante
-enveloppe:baie:type-fermeture;sans_fermeture;Sans fermeture
-enveloppe:baie:type-fermeture;jalousie_accordeon;Jalousie et accordéon
-enveloppe:baie:type-fermeture;fermeture_lames_orientables;Fermeture à lames orientables
-enveloppe:baie:type-fermeture;venitiens_exterieurs_metal;Venitiens extérieurs en métal
-enveloppe:baie:type-fermeture;volet_battant_avec_ajours_fixes;Volet battant avec ajours fixes
-enveloppe:baie:type-fermeture;persiennes_avec_ajours_fixes;Persiennes avec ajours fixes
-enveloppe:baie:type-fermeture;fermeture_sans_ajours;Femeture sans ajours
-enveloppe:baie:type-fermeture;volets_roulants_aluminium;Volets roulants en aluminium
-enveloppe:baie:type-fermeture;volets_roulants_pvc_bois_epaisseur_lte_12mm;Volets roulants PVC ou bois - Epaisseur intérieure ou égale à 12mm
-enveloppe:baie:type-fermeture;volets_roulants_pvc_bois_epaisseur_gt_12mm;Volets roulants PVC ou bois - Epaisseur supérieure à 12mm
-enveloppe:baie:type-fermeture;persienne_coulissante_epaisseur_lte_22mm;Persienne coulissante - Epaisseur intérieure ou égale à 22mm
-enveloppe:baie:type-fermeture;persienne_coulissante_epaisseur_gt_22mm;Persienne coulissante - Epaisseur supérieure à 22mm
-enveloppe:baie:type-fermeture;volet_battant_pvc_bois_epaisseur_lte_22mm;Volet battant PVC ou bois - Epaisseur intérieure ou égale à 22mm
-enveloppe:baie:type-fermeture;volet_battant_pvc_bois_epaisseur_gt_22mm;Volet battant PVC ou bois - Epaisseur supérieure à 22mm
-enveloppe:baie:type-fermeture;fermeture_isolee_sans_ajours;Femeture isolée sans ajours
-enveloppe:baie:type-survitrage;survitrage_simple;Survitrage simple
-enveloppe:baie:type-survitrage;survitrage_fe;Survitrage à faible emissivité
-enveloppe:baie:type-vitrage;brique_verre;Brique de verre
-enveloppe:baie:type-vitrage;polycarbonate;Polycarbonate
-enveloppe:baie:type-vitrage;simple_vitrage;Simple vitrage
-enveloppe:baie:type-vitrage;double_vitrage;Double vitrage
-enveloppe:baie:type-vitrage;double_vitrage_fe;Double vitrage à faite emissivité
-enveloppe:baie:type-vitrage;triple_vitrage;Triple vitrage
-enveloppe:baie:type-vitrage;triple_vitrage_fe;Triple vitrage à faible emissivité
-enveloppe:exposition;simple;Exposition simple
-enveloppe:exposition;multiple;Exposition multiple
-enveloppe:inertie;legere;Légère
-enveloppe:inertie;moyenne;Moyenne
-enveloppe:inertie;lourde;Lourde
-enveloppe:inertie;tres_lourde;Très lourde
-enveloppe:paroi:type-isolation;iti;ITI
-enveloppe:paroi:type-isolation;ite;ITE
-enveloppe:paroi:type-isolation;itr;ITR
-enveloppe:paroi:type-isolation;iti_ite;ITI + ITE
-enveloppe:paroi:type-isolation;itr_iti;ITR + ITI
-enveloppe:paroi:type-isolation;itr_ite;ITR + ITE
-enveloppe:paroi:type-isolation;itr_iti_ite;ITR + ITI + ITE
-enveloppe:local-non-chauffe:type-paroi;baie;Baie
-enveloppe:local-non-chauffe:type-paroi;autres;Autres
-enveloppe:local-non-chauffe:type;garage;Garage
-enveloppe:local-non-chauffe:type;cellier;Cellier
-enveloppe:local-non-chauffe:type;espace_tampon_solarise;Espace tampon solarisé
-enveloppe:local-non-chauffe:type;comble_fortement_ventile;Comble fortement solarisé
-enveloppe:local-non-chauffe:type;comble_faiblement_ventile;Comble faiblement solarisé
-enveloppe:local-non-chauffe:type;comble_tres_faiblement_ventile;Comble très faiblement ventilé
-enveloppe:local-non-chauffe:type;circulation_sans_ouverture_exterieure;Circulation sans ouverture extérieur
-enveloppe:local-non-chauffe:type;circulation_avec_ouverture_exterieure;Circulation avec ouverture extérieur
-enveloppe:local-non-chauffe:type;circulation_avec_bouche_ou_gaine_desenfumage_ouverte;Circulation avec bouche ou gaine de desenfumage ouverte
-enveloppe:local-non-chauffe:type;hall_entree_avec_fermeture_automatique;Hall d'entrée avec fermeture automatique
-enveloppe:local-non-chauffe:type;hall_entree_sans_fermeture_automatique;Hall d'entrée sans fermeture automatique
-enveloppe:local-non-chauffe:type;garage_collectif;Garage collectif
-enveloppe:local-non-chauffe:type;autres;Autres
-enveloppe:masque:secteur;lateral;Secteur latéral
-enveloppe:masque:secteur;lateral_sud;Secteur latéral vers le sud
-enveloppe:masque:secteur;central;Secteur central
-enveloppe:masque:secteur;central_sud;Secteur central vers le sud
-enveloppe:masque:type;homogene;Masque lointain homogène
-enveloppe:masque:type;non_homogene;Masque lointain non homogène
-enveloppe:masque:type;fond_balcon;Fond de balcon
-enveloppe:masque:type;fond_et_flanc_loggias;Fond et flanc de loggias
-enveloppe:masque:type;balcon_ou_auvent;Balcon ou auvent
-enveloppe:masque:type;paroi_laterale_sans_obstacle_au_sud;Paroi latérale sans obstacle au sud
-enveloppe:masque:type;paroi_laterale_avec_obstacle_au_sud;Paroi latérale avec obstacle au sud
-enveloppe:paroi:type-pose;nu_exterieur;Nu extérieur
-enveloppe:paroi:type-pose;nu_interieur;Nu intérieur
-enveloppe:paroi:type-pose;tunnel;Tunnel
-enveloppe:mur:type;pierre_moellons;Pierre ou moellons
-enveloppe:mur:type;pierre_moellons_avec_remplissage;Pierre ou moellons avec remplissage
-enveloppe:mur:type;pise_ou_beton_terre;Pise ou béton terre
-enveloppe:mur:type;pan_bois_sans_remplissage;Pan bois sans remplissage
-enveloppe:mur:type;pan_bois_avec_remplissage;Pan bois avec remplissage
-enveloppe:mur:type;bois_rondin;Bois rondin
-enveloppe:mur:type;brique_pleine_simple;Brique pleine simple
-enveloppe:mur:type;brique_pleine_double_avec_lame_air;Brique pleine double avec lame d'air
-enveloppe:mur:type;brique_creuse;Brique creuse
-enveloppe:mur:type;bloc_beton_plein;Bloc béton plein
-enveloppe:mur:type;bloc_beton_creux;Bloc béton creux
-enveloppe:mur:type;beton_banche;Béton banché
-enveloppe:mur:type;beton_machefer;Béton machefer
-enveloppe:mur:type;brique_terre_cuite_alveolaire;Brique terre cuite alvéolaire
-enveloppe:mur:type;sandwich_beton_isolant_beton_sans_isolation_rapportee;Mur sandwich béton isolant et béton sans isolation rapportée
-enveloppe:mur:type;cloison_platre;Cloison de plâtre
-enveloppe:mur:type;ossature_bois_sans_remplissage;Ossature bois sans remplissage
-enveloppe:mur:type;ossature_bois_avec_remplissage_tout_venant;Ossature bois avec remplissage tout venant
-enveloppe:mur:type;ossature_bois_avec_remplissage_isolant;Ossature bois avec remplissage isolant
-enveloppe:mur:type-doublage;sans_doublage;Sans doublage
-enveloppe:mur:type-doublage;indetermine;Doublage rapporté de nature indéterminé
-enveloppe:mur:type-doublage;lame_air_inferieur_15mm;Doublage rapporté avec lame d'air inférieure à 15mm
-enveloppe:mur:type-doublage;lame_air_superieur_15mm;Doublage rapporté avec lame d'air supérieure à 15mm
-enveloppe:mur:type-doublage;materiaux_connu;Doublage rapporté avec un matériau de doublage connu (plâtre, brique, bois)
-enveloppe:paroi:inertie;legere;Inertie légère
-enveloppe:paroi:inertie;lourde;Inertie lourde
-enveloppe:paroi:mitoyennete;exterieur;Extérieur
-enveloppe:paroi:mitoyennete;enterre;Enterré
-enveloppe:paroi:mitoyennete;vide_sanitaire;Vide sanitaire
-enveloppe:paroi:mitoyennete;terre_plein;Terre plein
-enveloppe:paroi:mitoyennete;sous_sol_non_chauffe;Sous-sol non chauffé
-enveloppe:paroi:mitoyennete;local_non_chauffe;Local non chauffé
-enveloppe:paroi:mitoyennete;local_non_residentiel;Local non résidentiel
-enveloppe:paroi:mitoyennete;local_residentiel;Local résidentiel
-enveloppe:paroi:mitoyennete;local_non_accessible;Local non accessible
-enveloppe:paroi:type;mur;Mur
-enveloppe:paroi:type;plancher_haut;Plancher haut
-enveloppe:paroi:type;plancher_bas;Plancher bas
-enveloppe:paroi:type;baie;Baie
-enveloppe:paroi:type;porte;Porte
-enveloppe:plancher-bas:type;plancher_avec_ou_sans_remplissage;Plancher avec ou sans remplissage
-enveloppe:plancher-bas:type;plancher_entre_solives_metalliques;Plancher entre solives metalliques
-enveloppe:plancher-bas:type;plancher_entre_solives_bois;Plancher entre solives bois
-enveloppe:plancher-bas:type;plancher_bois_sur_solives_metalliques;Plancher bois sur solives metalliques
-enveloppe:plancher-bas:type;bardeaux_et_remplissage;Plancher et remplissage
-enveloppe:plancher-bas:type;voutains_sur_solives_metalliques;Plancher sur solives metalliques
-enveloppe:plancher-bas:type;voutains_briques_ou_moellons;Plancher briques ou moellons
-enveloppe:plancher-bas:type;dalle_beton;Plancher beton
-enveloppe:plancher-bas:type;plancher_bois_sur_solives_bois;Plancher bois sur solives bois
-enveloppe:plancher-bas:type;plancher_lourd_type_entrevous_terre_cuite_ou_poutrelles_beton;Plancher lourd type entrevous terre cuite ou poutrelles beton
-enveloppe:plancher-bas:type;plancher_entrevous_isolant;Plancher entrevous isolant
-enveloppe:plancher-haut:configuration;plancher;Plancher
-enveloppe:plancher-haut:configuration;rampants;Rampants
-enveloppe:plancher-haut:configuration;terrasse;Terrasse
-enveloppe:plancher-haut:type;plafond_avec_ou_sans_remplissage;Plafond avec ou sans remplissage
-enveloppe:plancher-haut:type;plafond_entre_solives_metalliques;Plafond entre solives metalliques
-enveloppe:plancher-haut:type;plafond_entre_solives_bois;Plafond entre solives bois
-enveloppe:plancher-haut:type;plafond_bois_sur_solives_metalliques;Plafond bois sur solives metalliques
-enveloppe:plancher-haut:type;plafond_bois_sous_solives_metalliques;Plafond bois sous solives metalliques
-enveloppe:plancher-haut:type;bardeaux_et_remplissage;Bardeaux et remplissage
-enveloppe:plancher-haut:type;plafond_bois_sur_solives_bois;Plafond bois sur solives bois
-enveloppe:plancher-haut:type;plafond_bois_sous_solives_bois;Plafond bois sous solives bo
-enveloppe:plancher-haut:type;dalle_beton;Dalle beton
-enveloppe:plancher-haut:type;plafond_lourd;Plafond lourd
-enveloppe:plancher-haut:type;combles_amenages_sous_rampant;Combles amenages sous rampant
-enveloppe:plancher-haut:type;toiture_chaume;Toiture chaume
-enveloppe:plancher-haut:type;plafond_patre;Plafond patre
-enveloppe:plancher-haut:type;bac_acier;Bac acier
-enveloppe:pont-thermique:type;plancher_bas_mur;Plancher bas / Mur
-enveloppe:pont-thermique:type;plancher_haut_mur;Plancher haut / Mur
-enveloppe:pont-thermique:type;refend_mur;Refend / Mur
-enveloppe:pont-thermique:type;plancher_intermediaire_mur;Plancher intermédiaire / Mur
-enveloppe:pont-thermique:type;baie_mur;Baie / Mur
-enveloppe:pont-thermique:type;porte_mur;Porte / Mur
-etiquette;A;A
-etiquette;B;B
-etiquette;C;C
-etiquette;D;D
-etiquette;E;E
-etiquette;F;F
-etiquette;G;G
-enveloppe:porte:materiau;pvc;PVC
-enveloppe:porte:materiau;bois;Bois
-enveloppe:porte:materiau;metal;Métal
-enveloppe:porte:type-vitrage;simple_vitrage;Simple vitrage
-enveloppe:porte:type-vitrage;double_vitrage;Double vitrage
-enveloppe:porte:type-vitrage;triple_vitrage;Triple vitrage
-refroidissement:type-generateur;pac_air_air;PAC air/air
-refroidissement:type-generateur;pac_air_eau;PAC air/eau
-refroidissement:type-generateur;pac_eau_eau;PAC eau/eau
-refroidissement:type-generateur;pac_eau_glycolee_eau;PAC eau glycolée/eau
-refroidissement:type-generateur;pac_geothermique;PAC géothermique
-refroidissement:type-generateur;autre_systeme_thermodynamique;Autres systèmes thermodynamique
-refroidissement:type-generateur;reseau_froid;Réseau de froid
-refroidissement:type-generateur;autre;Autres systèmes
-ventilation:type;ventilation_ouverture_fenetres;Ventilation par ouverture des fenêtres
-ventilation:type;ventilation_entrees_air_hautes_basses;Ventilation par entrées d'air hautes et basses
-ventilation:type;vmc_simple_flux_autoreglable;VMC Simple flux autoréglable
-ventilation:type;vmc_simple_flux_hygroreglable_a;VMC Simple flux hygroréglable - Type A
-ventilation:type;vmc_simple_flux_hygroreglable_gaz;VMC Simple flux hygroréglable Gaz
-ventilation:type;vmc_simple_flux_hygroreglable_b;VMC Simple flux hygroréglable - Type B
-ventilation:type;vmc_basse_pression_autoreglable;VMC Basse pression autoréglable
-ventilation:type;vmc_basse_pression_hygroreglable_a;VMC Basse préssion hygroréglable - Type A
-ventilation:type;vmc_basse_pression_hygroreglable_b;VMC Basse pression hygroréglable - Type B
-ventilation:type;vmc_double_flux;VMC Double flux
-ventilation:type;ventilation_naturelle_conduit;Ventilation naturelle par conduit
-ventilation:type;ventilation_hybride;Ventilation hybride
-ventilation:type;ventilation_hybride_entrees_air_hygroreglables;Ventilation hybride avec entrées d'air hygroréglables
-ventilation:type;ventilation_mecanique_conduit;Ventilation mécanique sur conduit existant
-ventilation:type;ventilation_naturelle_conduit_entrees_air_hygroreglables;Ventilation naturelle par conduit avec entrées d'air hygroéglables
-ventilation:type;puit_climatique;Puit climatique
-ventilation:type;ventilation_mecanique_insufflation;Ventilation mécanique par insufflation
-batiment:position-appartement;rdc;Appartement en rez-de-chaussée
-batiment:position-appartement;etage_intermediaire;Appartement en étage intermédiaire
-batiment:position-appartement;dernier_etage;Appartement au dernier étage
-batiment:typologie-appartement;T1;T1
-batiment:typologie-appartement;T2;T2
-batiment:typologie-appartement;T3;T3
-batiment:typologie-appartement;T4;T4
-batiment:typologie-appartement;T5;T5
-batiment:typologie-appartement;T6;T6
-batiment:typologie-appartement;T7;T7 et plus
-enveloppe:orientation-paroi;nord;Paroi exposée au nord
-enveloppe:orientation-paroi;sud;Paroi exposée au sud
-enveloppe:orientation-paroi;est;Paroi exposée à l'est
-enveloppe:orientation-paroi;ouest;Paroi exposée à l'ouest
-enveloppe:orientation-paroi;horizontale;Paroi horizontale
-mois;01;Janvier
-mois;02;Février
-mois;03;Mars
-mois;04;Avril
-mois;05;Mai
-mois;06;Juin
-mois;07;Juillet
-mois;08;Août
-mois;09;Septembre
-mois;10;Octobre
-mois;11;Novembre
-mois;12;Décembre
-ecs:type-stockage;integre;Stockage intégré à la production
-ecs:type-stockage;independant;Stockage indépendant de la production
-chauffage:type-programmation;absent;Absence de programmation
-chauffage:type-programmation;central_sans_minimum_temperature;Programmation centrale sans minimum de température
-chauffage:type-programmation;central_avec_minimum_temperature;Programmation centrale avec minimum de température
-chauffage:type-programmation;central_collectif_sans_detection_presence;Programmation centrale collective
-chauffage:type-programmation;central_collectif_avec_detection_presence;Programmation centrale collective avec détection de présence
-chauffage:type-programmation;terminal_avec_minimum_temperature;Programmation par pièce avec minimum de température
-chauffage:type-programmation;terminal_avec_minimum_temperature_detection_presence;Programmation par pièce avec minimum de température et détection de présence
-chauffage:type;central;Chauffage central
-chauffage:type;divise;Chauffage divisé
-configuration-systeme;base;Système en base
-configuration-systeme;releve;Système en relève
-configuration-systeme;appoint;Système d'appoint
-chauffage:type-generateur-combustion;chaudiere_standard;Chaudière standard
-chauffage:type-generateur-combustion;chaudiere_basse_temperature;Chaudière basse température
-chauffage:type-generateur-combustion;chaudiere_condensation;Chaudière à condensation
-chauffage:type-generateur-combustion;generateur_air_chaud;Générateur d'air chaud
-chauffage:type-generateur-combustion;chaudiere_bois;Chaudière bois
-chauffage:type-generateur-combustion;radiateur_gaz;Radiateur gaz
-production:usage-electricite;chauffage;Chauffage
-production:usage-electricite;refroidissement;Refroidissement
-production:usage-electricite;ecs;Eau chaude sanitaire
-production:usage-electricite;eclairage;Eclairage
-production:usage-electricite;auxiliaires_ventilation;Auxiliaires de ventilation
-production:usage-electricite;auxiliaires_distribution;Auxiliaires de distribution
-production:usage-electricite;autres;Autres
-chauffage:usage-solaire;chauffage;Chauffage
-chauffage:usage-solaire;chauffage_ecs;Chauffage + ECS
-confort-ete;1;Bon
-confort-ete;2;Moyen
-confort-ete;3;Insuffisant
-type-diagnostic;batiment;Bâtiment
-type-diagnostic;logement;Logement
+﻿enum;valeur;description;;;;;;
+code-departement;01;Ain;;;;;;
+code-departement;02;Aisne;;;;;;
+code-departement;03;Allier;;;;;;
+code-departement;04;Alpes-de-Haute-Provence;;;;;;
+code-departement;05;Hautes-Alpes;;;;;;
+code-departement;06;Alpes-Maritimes;;;;;;
+code-departement;07;Ardèche;;;;;;
+code-departement;08;Ardennes;;;;;;
+code-departement;09;Ariège;;;;;;
+code-departement;10;Aube;;;;;;
+code-departement;11;Aude;;;;;;
+code-departement;12;Aveyron;;;;;;
+code-departement;13;Bouches-du-Rhône;;;;;;
+code-departement;14;Calvados;;;;;;
+code-departement;15;Cantal;;;;;;
+code-departement;16;Charente;;;;;;
+code-departement;17;Charente-Maritime;;;;;;
+code-departement;18;Cher;;;;;;
+code-departement;19;Corrèze;;;;;;
+code-departement;2A;Corse-du-Sud;;;;;;
+code-departement;2B;Haute-Corse;;;;;;
+code-departement;21;Côte-d'Or;;;;;;
+code-departement;22;Côtes d'Armor;;;;;;
+code-departement;23;Creuse;;;;;;
+code-departement;24;Dordogne;;;;;;
+code-departement;25;Doubs;;;;;;
+code-departement;26;Drôme;;;;;;
+code-departement;27;Eure;;;;;;
+code-departement;28;Eure-et-Loir;;;;;;
+code-departement;29;Finistère;;;;;;
+code-departement;30;Gard;;;;;;
+code-departement;31;Haute-Garonne;;;;;;
+code-departement;32;Gers;;;;;;
+code-departement;33;Gironde;;;;;;
+code-departement;34;Hérault;;;;;;
+code-departement;35;Ille-et-Vilaine;;;;;;
+code-departement;36;Indre;;;;;;
+code-departement;37;Indre-et-Loire;;;;;;
+code-departement;38;Isère;;;;;;
+code-departement;39;Jura;;;;;;
+code-departement;40;Landes;;;;;;
+code-departement;41;Loir-et-Cher;;;;;;
+code-departement;42;Loire;;;;;;
+code-departement;43;Haute-Loire;;;;;;
+code-departement;44;Loire-Atlantique;;;;;;
+code-departement;45;Loiret;;;;;;
+code-departement;46;Lot;;;;;;
+code-departement;47;Lot-et-Garonne;;;;;;
+code-departement;48;Lozère;;;;;;
+code-departement;49;Maine-et-Loire;;;;;;
+code-departement;50;Manche;;;;;;
+code-departement;51;Marne;;;;;;
+code-departement;52;Haute-Marne;;;;;;
+code-departement;53;Mayenne;;;;;;
+code-departement;54;Meurthe-et-Moselle;;;;;;
+code-departement;55;Meuse;;;;;;
+code-departement;56;Morbihan;;;;;;
+code-departement;57;Moselle;;;;;;
+code-departement;58;Nièvre;;;;;;
+code-departement;59;Nord;;;;;;
+code-departement;60;Oise;;;;;;
+code-departement;61;Orne;;;;;;
+code-departement;62;Pas-de-Calais;;;;;;
+code-departement;63;Puy-de-Dôme;;;;;;
+code-departement;64;Pyrénées-Atlantiques;;;;;;
+code-departement;65;Hautes-Pyrénées;;;;;;
+code-departement;66;Pyrénées-Orientales;;;;;;
+code-departement;67;Bas-Rhin;;;;;;
+code-departement;68;Haut-Rhin;;;;;;
+code-departement;69;Rhône;;;;;;
+code-departement;70;Haute-Saône;;;;;;
+code-departement;71;Saône-et-Loire;;;;;;
+code-departement;72;Sarthe;;;;;;
+code-departement;73;Savoie;;;;;;
+code-departement;74;Haute-Savoie;;;;;;
+code-departement;75;Paris;;;;;;
+code-departement;76;Seine-Maritime;;;;;;
+code-departement;77;Seine-et-Marne;;;;;;
+code-departement;78;Yvelines;;;;;;
+code-departement;79;Deux-Sèvres;;;;;;
+code-departement;80;Somme;;;;;;
+code-departement;81;Tarn;;;;;;
+code-departement;82;Tarn-et-Garonne;;;;;;
+code-departement;83;Var;;;;;;
+code-departement;84;Vaucluse;;;;;;
+code-departement;85;Vandée;;;;;;
+code-departement;86;Vienne;;;;;;
+code-departement;87;Haute-Vienne;;;;;;
+code-departement;88;Vosges;;;;;;
+code-departement;89;Yonne;;;;;;
+code-departement;90;Territoire de Belfort;;;;;;
+code-departement;91;Essonne;;;;;;
+code-departement;92;Hauts-de-Seine;;;;;;
+code-departement;93;Seine-St-Denis;;;;;;
+code-departement;94;Val-de-Marne;;;;;;
+code-departement;95;Val-D'Oise;;;;;;
+type-batiment;maison;Maison individuelle;;;;;;
+type-batiment;immeuble;Immeuble collectif;;;;;;
+chauffage:label-generateur;flamme_verte;Flamme verte;;;;;;
+chauffage:label-generateur;nf_performance;NF Performance;;;;;;
+chauffage:mode-combustion;standard;Standard;;;;;;
+chauffage:mode-combustion;basse_temperature;Basse température;;;;;;
+chauffage:mode-combustion;condensation;Condensation;;;;;;
+chauffage:position-chaudiere;chaudiere_murale;Chaudière murale;;;;;;
+chauffage:position-chaudiere;chaudiere_sol;Chaudière au sol;;;;;;
+chauffage:temperature-distribution;basse;Basse température;;;;;;
+chauffage:temperature-distribution;moyenne;Moyenne température;;;;;;
+chauffage:temperature-distribution;haute;Haute température;;;;;;
+chauffage:type-distribution;hydraulique;Distribution hydraulique;;;;;;
+chauffage:type-distribution;aeraulique;Distribution aeraulique;;;;;;
+chauffage:type-emetteur;plancher_chauffant;Plancher chauffant;;;;;;
+chauffage:type-emetteur;plafond_chauffant;Plafond chauffant;;;;;;
+chauffage:type-emetteur;radiateur_monotube;Radiateur monotube;;;;;;
+chauffage:type-emetteur;radiateur_bitube;Radiateur bitube;;;;;;
+chauffage:type-emetteur;radiateur;Radiateur;;;;;;
+chauffage:type-emetteur;autres;Autres;;;;;;
+chauffage:type-emission;radiateur;Radiateur;;;;;;
+chauffage:type-emission;air_souffle;Air soufflé;;;;;;
+chauffage:type-emission;plancher_chauffant;Plancher chauffant;;;;;;
+chauffage:type-emission;plafond_chauffant;Plafond chauffant;;;;;;
+chauffage:type-generateur;chaudiere;Chaudière;;;;;;
+chauffage:type-generateur;convecteur_bi_jonction;Convecteur bi-jonction;;;;;;
+chauffage:type-generateur;convecteur_electrique;Convecteur électrique;;;;;;
+chauffage:type-generateur;panneau_rayonnant_electrique;Panneau rayonnant électrique;;;;;;
+chauffage:type-generateur;plafond_rayonnant_electrique;Plafond rayonnant électrique;;;;;;
+chauffage:type-generateur;plancher_rayonnant_electrique;Plancher rayonnant électrique;;;;;;
+chauffage:type-generateur;radiateur_electrique;Radiateur électrique;;;;;;
+chauffage:type-generateur;radiateur_electrique_accumulation;Radiateur électrique à accumulation;;;;;;
+chauffage:type-generateur;generateur_air_chaud;Générateur d'air chaud;;;;;;
+chauffage:type-generateur;pac_air_air;Pompe à chaleur air / air;;;;;;
+chauffage:type-generateur;pac_air_eau;Pompe à chaleur air / eau;;;;;;
+chauffage:type-generateur;pac_eau_eau;Pompe à chaleur eau / eau;;;;;;
+chauffage:type-generateur;pac_eau_glycolee_eau;Pompe à chaleur eau glycolée / eau;;;;;;
+chauffage:type-generateur;pac_geothermique;Pompe à chaleur géothermique;;;;;;
+chauffage:type-generateur;cuisiniere;Cuisinière;;;;;;
+chauffage:type-generateur;foyer_ferme;Foyer fermé;;;;;;
+chauffage:type-generateur;insert;Insert;;;;;;
+chauffage:type-generateur;poele;Poêle;;;;;;
+chauffage:type-generateur;poele_bouilleur;Poêle boulleur;;;;;;
+chauffage:type-generateur;radiateur_gaz;Radiateur gaz;;;;;;
+chauffage:type-generateur;reseau_chaleur;Réseau de chaleur;;;;;;
+zone-climatique;H1a;H1a;;;;;;
+zone-climatique;H1b;H1b;;;;;;
+zone-climatique;H1c;H1c;;;;;;
+zone-climatique;H2a;H2a;;;;;;
+zone-climatique;H2b;H2b;;;;;;
+zone-climatique;H2c;H2c;;;;;;
+zone-climatique;H2d;H2d;;;;;;
+zone-climatique;H3;H3;;;;;;
+energie;electricite;Électricité;;;;;;
+energie;electricite_renouvelable;Électricité d'origine renouvelable;;;;;;
+energie;gaz_naturel;Gaz naturel;;;;;;
+energie;gpl;GPL;;;;;;
+energie;fioul;Fioul;;;;;;
+energie;charbon;Charbon;;;;;;
+energie;bois_buche;Bois - Bûche;;;;;;
+energie;bois_plaquette;Bois - Plaquette;;;;;;
+energie;bois_granule;Bois - Granule;;;;;;
+energie;reseau_chaleur;Réseau de chaleur;;;;;;
+energie;reseau_froid;Réseau de froid;;;;;;
+mois;01;Janvier;;;;;;
+mois;02;Février;;;;;;
+mois;03;Mars;;;;;;
+mois;04;Avril;;;;;;
+mois;05;Mai;;;;;;
+mois;06;Juin;;;;;;
+mois;07;Juillet;;;;;;
+mois;08;Août;;;;;;
+mois;09;Septembre;;;;;;
+mois;10;Octobre;;;;;;
+mois;11;Novembre;;;;;;
+mois;12;Décembre;;;;;;
+orientation-cardinale;nord;Nord;;;;;;
+orientation-cardinale;sud;Sud;;;;;;
+orientation-cardinale;est;Est;;;;;;
+orientation-cardinale;ouest;Ouest;;;;;;
+orientation;nord;Nord;;;;;;
+orientation;nord_est;Nord-Est;;;;;;
+orientation;est;Est;;;;;;
+orientation;sud_est;Sud-Est;;;;;;
+orientation;sud;Sud;;;;;;
+orientation;sud_ouest;Sud-Ouest;;;;;;
+orientation;ouest;Ouest;;;;;;
+orientation;nord_ouest;Nord-Ouest;;;;;;
+scenario;conventionnel;Scénario conventionnel;;;;;;chauffage
+scenario;depensier;Scénario dépensier;;;;;;chaudiere
+usage;chauffage;Chauffage;;;;;;convecteur_bi_jonction
+usage;ecs;Eau chaude sanitaire;;;;;;convecteur_electrique
+usage;refroidissement;Refroidissement;;;;;;panneau_rayonnant_electrique
+usage;auxiliaire;Auxiliaire;;;;;;plafond_rayonnant_electrique
+usage;eclairage;Éclairage;;;;;;plancher_rayonnant_electrique
+ecs:bouclage-reseau;non_boucle;Réseau non bouclé;;;;;;radiateur_electrique
+ecs:bouclage-reseau;boucle;Réseau bouclé;;;;;;radiateur_electrique_accumulation
+ecs:bouclage-reseau;trace;Réseau tracé;;;;;;generateur_air_chaud
+ecs:label-generateur;ne_performance_a;NE Performance - A;;;;;;pac_air_air
+ecs:label-generateur;ne_performance_b;NE Performance - B;;;;;;pac_air_eau
+ecs:label-generateur;ne_performance_c;NE Performance - C;;;;;;pac_eau_eau
+ecs:mode-combustion;standard;Standard;;;;;;pac_eau_glycolee_eau
+ecs:mode-combustion;basse_temperature;Basse température;;;;;;pac_geothermique
+ecs:mode-combustion;condensation;Condensation;;;;;;cuisiniere
+ecs:position-chauffe-eau;chauffe_eau_vertical;Chauffe eau vertical;;;;;;foyer_ferme
+ecs:position-chauffe-eau;chauffe_eau_horizontal;Chauffe eau horizontal;;;;;;insert
+ecs:type-generateur;chauffe_eau;Chauffe eau;;;;;;poele
+ecs:type-generateur;chaudiere;Chaudière;;;;;;poele_bouilleur
+ecs:type-generateur;cet_air_ambiant;Chauffe eau thermodynamique sur air ambiant;;;;;;radiateur_gaz
+ecs:type-generateur;cet_air_exterieur;Chauffe eau thermodynamique sur air extérieur;;;;;;reseau_chaleur
+ecs:type-generateur;cet_air_extrait;Chauffe eau thermodynamique sur air extrait;;;;;;
+ecs:type-generateur;pac_double_service;Pompe à chaleur double service;;;;;;
+ecs:type-generateur;poele_bouilleur;Poêle bouilleur;;;;;;
+ecs:type-generateur;reseau_chaleur;Réseau de chaleur;;;;;;
+ecs:usage-solaire;ecs;ECS seule;;;;;;
+ecs:usage-solaire;chauffage_ecs;Chauffage + ECS;;;;;;
+enveloppe:baie:materiau;pvc;PVC;;;;;;
+enveloppe:baie:materiau;bois;Bois;;;;;;
+enveloppe:baie:materiau;bois_metal;Bois-métal;;;;;;
+enveloppe:baie:materiau;metal;Métal;;;;;;
+enveloppe:baie:nature-lame-air;air;Air;;;;;;
+enveloppe:baie:nature-lame-air;argon;Argon;;;;;;
+enveloppe:baie:nature-lame-air;krypton;Krypton;;;;;;
+enveloppe:baie:type;brique_verre_pleine;Brique de verre pleine;;;;;;
+enveloppe:baie:type;brique_verre_creuse;Brique de verre creuse;;;;;;
+enveloppe:baie:type;polycarbonate;Polycarbonate;;;;;;
+enveloppe:baie:type;fenetre_battante;Fenêtre battante;;;;;;
+enveloppe:baie:type;fenetre_coulissante;Fenêtre coulissante;;;;;;
+enveloppe:baie:type;porte_fenetre_coulissante;Porte fenêtre coulissante;;;;;;
+enveloppe:baie:type;porte_fenetre_battante;Porte fenêtre battante;;;;;;
+enveloppe:baie:type-fermeture;sans_fermeture;Sans fermeture;;;;;;
+enveloppe:baie:type-fermeture;jalousie_accordeon;Jalousie et accordéon;;;;;;
+enveloppe:baie:type-fermeture;fermeture_lames_orientables;Fermeture à lames orientables;;;;;;
+enveloppe:baie:type-fermeture;venitiens_exterieurs_metal;Venitiens extérieurs en métal;;;;;;
+enveloppe:baie:type-fermeture;volet_battant_avec_ajours_fixes;Volet battant avec ajours fixes;;;;;;
+enveloppe:baie:type-fermeture;persiennes_avec_ajours_fixes;Persiennes avec ajours fixes;;;;;;
+enveloppe:baie:type-fermeture;fermeture_sans_ajours;Femeture sans ajours;;;;;;
+enveloppe:baie:type-fermeture;volets_roulants_aluminium;Volets roulants en aluminium;;;;;;
+enveloppe:baie:type-fermeture;volets_roulants_pvc_bois_epaisseur_lte_12mm;Volets roulants PVC ou bois - Epaisseur intérieure ou égale à 12mm;;;;;;
+enveloppe:baie:type-fermeture;volets_roulants_pvc_bois_epaisseur_gt_12mm;Volets roulants PVC ou bois - Epaisseur supérieure à 12mm;;;;;;
+enveloppe:baie:type-fermeture;persienne_coulissante_epaisseur_lte_22mm;Persienne coulissante - Epaisseur intérieure ou égale à 22mm;;;;;;
+enveloppe:baie:type-fermeture;persienne_coulissante_epaisseur_gt_22mm;Persienne coulissante - Epaisseur supérieure à 22mm;;;;;;
+enveloppe:baie:type-fermeture;volet_battant_pvc_bois_epaisseur_lte_22mm;Volet battant PVC ou bois - Epaisseur intérieure ou égale à 22mm;;;;;;
+enveloppe:baie:type-fermeture;volet_battant_pvc_bois_epaisseur_gt_22mm;Volet battant PVC ou bois - Epaisseur supérieure à 22mm;;;;;;
+enveloppe:baie:type-fermeture;fermeture_isolee_sans_ajours;Femeture isolée sans ajours;;;;;;
+enveloppe:baie:type-survitrage;survitrage_simple;Survitrage simple;;;;;;
+enveloppe:baie:type-survitrage;survitrage_fe;Survitrage à faible emissivité;;;;;;
+enveloppe:baie:type-vitrage;brique_verre;Brique de verre;;;;;;
+enveloppe:baie:type-vitrage;polycarbonate;Polycarbonate;;;;;;
+enveloppe:baie:type-vitrage;simple_vitrage;Simple vitrage;;;;;;
+enveloppe:baie:type-vitrage;double_vitrage;Double vitrage;;;;;;
+enveloppe:baie:type-vitrage;double_vitrage_fe;Double vitrage à faite emissivité;;;;;;
+enveloppe:baie:type-vitrage;triple_vitrage;Triple vitrage;;;;;;
+enveloppe:baie:type-vitrage;triple_vitrage_fe;Triple vitrage à faible emissivité;;;;;;
+enveloppe:exposition;simple;Exposition simple;;;;;;
+enveloppe:exposition;multiple;Exposition multiple;;;;;;
+enveloppe:inertie;legere;Légère;;;;;;
+enveloppe:inertie;moyenne;Moyenne;;;;;;
+enveloppe:inertie;lourde;Lourde;;;;;;
+enveloppe:inertie;tres_lourde;Très lourde;;;;;;
+enveloppe:paroi:type-isolation;iti;ITI;;;;;;
+enveloppe:paroi:type-isolation;ite;ITE;;;;;;
+enveloppe:paroi:type-isolation;itr;ITR;;;;;;
+enveloppe:paroi:type-isolation;iti_ite;ITI + ITE;;;;;;
+enveloppe:paroi:type-isolation;itr_iti;ITR + ITI;;;;;;
+enveloppe:paroi:type-isolation;itr_ite;ITR + ITE;;;;;;
+enveloppe:paroi:type-isolation;itr_iti_ite;ITR + ITI + ITE;;;;;;
+enveloppe:local-non-chauffe:type-paroi;baie;Baie;;;;;;
+enveloppe:local-non-chauffe:type-paroi;autres;Autres;;;;;;
+enveloppe:local-non-chauffe:type;garage;Garage;;;;;;
+enveloppe:local-non-chauffe:type;cellier;Cellier;;;;;;
+enveloppe:local-non-chauffe:type;espace_tampon_solarise;Espace tampon solarisé;;;;;;
+enveloppe:local-non-chauffe:type;comble_fortement_ventile;Comble fortement solarisé;;;;;;
+enveloppe:local-non-chauffe:type;comble_faiblement_ventile;Comble faiblement solarisé;;;;;;
+enveloppe:local-non-chauffe:type;comble_tres_faiblement_ventile;Comble très faiblement ventilé;;;;;;
+enveloppe:local-non-chauffe:type;circulation_sans_ouverture_exterieure;Circulation sans ouverture extérieur;;;;;;
+enveloppe:local-non-chauffe:type;circulation_avec_ouverture_exterieure;Circulation avec ouverture extérieur;;;;;;
+enveloppe:local-non-chauffe:type;circulation_avec_bouche_ou_gaine_desenfumage_ouverte;Circulation avec bouche ou gaine de desenfumage ouverte;;;;;;
+enveloppe:local-non-chauffe:type;hall_entree_avec_fermeture_automatique;Hall d'entrée avec fermeture automatique;;;;;;
+enveloppe:local-non-chauffe:type;hall_entree_sans_fermeture_automatique;Hall d'entrée sans fermeture automatique;;;;;;
+enveloppe:local-non-chauffe:type;garage_collectif;Garage collectif;;;;;;
+enveloppe:local-non-chauffe:type;autres;Autres;;;;;;
+enveloppe:masque:secteur;lateral;Secteur latéral;;;;;;
+enveloppe:masque:secteur;lateral_sud;Secteur latéral vers le sud;;;;;;
+enveloppe:masque:secteur;central;Secteur central;;;;;;
+enveloppe:masque:secteur;central_sud;Secteur central vers le sud;;;;;;
+enveloppe:masque:type;homogene;Masque lointain homogène;;;;;;
+enveloppe:masque:type;non_homogene;Masque lointain non homogène;;;;;;
+enveloppe:masque:type;fond_balcon;Fond de balcon;;;;;;
+enveloppe:masque:type;fond_et_flanc_loggias;Fond et flanc de loggias;;;;;;
+enveloppe:masque:type;balcon_ou_auvent;Balcon ou auvent;;;;;;
+enveloppe:masque:type;paroi_laterale_sans_obstacle_au_sud;Paroi latérale sans obstacle au sud;;;;;;
+enveloppe:masque:type;paroi_laterale_avec_obstacle_au_sud;Paroi latérale avec obstacle au sud;;;;;;
+enveloppe:paroi:type-pose;nu_exterieur;Nu extérieur;;;;;;
+enveloppe:paroi:type-pose;nu_interieur;Nu intérieur;;;;;;
+enveloppe:paroi:type-pose;tunnel;Tunnel;;;;;;
+enveloppe:mur:type;pierre_moellons;Pierre ou moellons;;;;;;
+enveloppe:mur:type;pierre_moellons_avec_remplissage;Pierre ou moellons avec remplissage;;;;;;
+enveloppe:mur:type;pise_ou_beton_terre;Pise ou béton terre;;;;;;
+enveloppe:mur:type;pan_bois_sans_remplissage;Pan bois sans remplissage;;;;;;
+enveloppe:mur:type;pan_bois_avec_remplissage;Pan bois avec remplissage;;;;;;
+enveloppe:mur:type;bois_rondin;Bois rondin;;;;;;
+enveloppe:mur:type;brique_pleine_simple;Brique pleine simple;;;;;;
+enveloppe:mur:type;brique_pleine_double_avec_lame_air;Brique pleine double avec lame d'air;;;;;;
+enveloppe:mur:type;brique_creuse;Brique creuse;;;;;;
+enveloppe:mur:type;bloc_beton_plein;Bloc béton plein;;;;;;
+enveloppe:mur:type;bloc_beton_creux;Bloc béton creux;;;;;;
+enveloppe:mur:type;beton_banche;Béton banché;;;;;;
+enveloppe:mur:type;beton_machefer;Béton machefer;;;;;;
+enveloppe:mur:type;brique_terre_cuite_alveolaire;Brique terre cuite alvéolaire;;;;;;
+enveloppe:mur:type;beton_cellulaire;Béton cellulaire;;;;;;
+enveloppe:mur:type;sandwich_beton_isolant_beton_sans_isolation_rapportee;Mur sandwich béton isolant et béton sans isolation rapportée;;;;;;
+enveloppe:mur:type;cloison_platre;Cloison de plâtre;;;;;;
+enveloppe:mur:type;ossature_bois_sans_remplissage;Ossature bois sans remplissage;;;;;;
+enveloppe:mur:type;ossature_bois_avec_remplissage_tout_venant;Ossature bois avec remplissage tout venant;;;;;;
+enveloppe:mur:type;ossature_bois_avec_remplissage_isolant;Ossature bois avec remplissage isolant;;;;;;
+enveloppe:mur:type-doublage;sans_doublage;Sans doublage;;;;;;
+enveloppe:mur:type-doublage;indetermine;Doublage rapporté de nature indéterminé;;;;;;
+enveloppe:mur:type-doublage;lame_air_inferieur_15mm;Doublage rapporté avec lame d'air inférieure à 15mm;;;;;;
+enveloppe:mur:type-doublage;lame_air_superieur_15mm;Doublage rapporté avec lame d'air supérieure à 15mm;;;;;;
+enveloppe:mur:type-doublage;materiaux_connu;Doublage rapporté avec un matériau de doublage connu (plâtre, brique, bois);;;;;;
+enveloppe:paroi:inertie;legere;Inertie légère;;;;;;
+enveloppe:paroi:inertie;lourde;Inertie lourde;;;;;;
+enveloppe:paroi:mitoyennete;exterieur;Extérieur;;;;;;
+enveloppe:paroi:mitoyennete;enterre;Enterré;;;;;;
+enveloppe:paroi:mitoyennete;vide_sanitaire;Vide sanitaire;;;;;;
+enveloppe:paroi:mitoyennete;terre_plein;Terre plein;;;;;;
+enveloppe:paroi:mitoyennete;sous_sol_non_chauffe;Sous-sol non chauffé;;;;;;
+enveloppe:paroi:mitoyennete;local_non_chauffe;Local non chauffé;;;;;;
+enveloppe:paroi:mitoyennete;local_non_residentiel;Local non résidentiel;;;;;;
+enveloppe:paroi:mitoyennete;local_residentiel;Local résidentiel;;;;;;
+enveloppe:paroi:mitoyennete;local_non_accessible;Local non accessible;;;;;;
+enveloppe:paroi:type;mur;Mur;;;;;;
+enveloppe:paroi:type;plancher_haut;Plancher haut;;;;;;
+enveloppe:paroi:type;plancher_bas;Plancher bas;;;;;;
+enveloppe:paroi:type;baie;Baie;;;;;;
+enveloppe:paroi:type;porte;Porte;;;;;;
+enveloppe:plancher-bas:type;plancher_avec_ou_sans_remplissage;Plancher avec ou sans remplissage;;;;;;
+enveloppe:plancher-bas:type;plancher_entre_solives_metalliques;Plancher entre solives metalliques;;;;;;
+enveloppe:plancher-bas:type;plancher_entre_solives_bois;Plancher entre solives bois;;;;;;
+enveloppe:plancher-bas:type;plancher_bois_sur_solives_metalliques;Plancher bois sur solives metalliques;;;;;;
+enveloppe:plancher-bas:type;bardeaux_et_remplissage;Plancher et remplissage;;;;;;
+enveloppe:plancher-bas:type;voutains_sur_solives_metalliques;Plancher sur solives metalliques;;;;;;
+enveloppe:plancher-bas:type;voutains_briques_ou_moellons;Plancher briques ou moellons;;;;;;
+enveloppe:plancher-bas:type;dalle_beton;Plancher beton;;;;;;
+enveloppe:plancher-bas:type;plancher_bois_sur_solives_bois;Plancher bois sur solives bois;;;;;;
+enveloppe:plancher-bas:type;plancher_lourd_type_entrevous_terre_cuite_ou_poutrelles_beton;Plancher lourd type entrevous terre cuite ou poutrelles beton;;;;;;
+enveloppe:plancher-bas:type;plancher_entrevous_isolant;Plancher entrevous isolant;;;;;;
+enveloppe:plancher-haut:configuration;plancher;Plancher;;;;;;
+enveloppe:plancher-haut:configuration;rampants;Rampants;;;;;;
+enveloppe:plancher-haut:configuration;terrasse;Terrasse;;;;;;
+enveloppe:plancher-haut:type;plafond_avec_ou_sans_remplissage;Plafond avec ou sans remplissage;;;;;;
+enveloppe:plancher-haut:type;plafond_entre_solives_metalliques;Plafond entre solives metalliques;;;;;;
+enveloppe:plancher-haut:type;plafond_entre_solives_bois;Plafond entre solives bois;;;;;;
+enveloppe:plancher-haut:type;plafond_bois_sur_solives_metalliques;Plafond bois sur solives metalliques;;;;;;
+enveloppe:plancher-haut:type;plafond_bois_sous_solives_metalliques;Plafond bois sous solives metalliques;;;;;;
+enveloppe:plancher-haut:type;bardeaux_et_remplissage;Bardeaux et remplissage;;;;;;
+enveloppe:plancher-haut:type;plafond_bois_sur_solives_bois;Plafond bois sur solives bois;;;;;;
+enveloppe:plancher-haut:type;plafond_bois_sous_solives_bois;Plafond bois sous solives bo;;;;;;
+enveloppe:plancher-haut:type;dalle_beton;Dalle beton;;;;;;
+enveloppe:plancher-haut:type;plafond_lourd;Plafond lourd;;;;;;
+enveloppe:plancher-haut:type;combles_amenages_sous_rampant;Combles amenages sous rampant;;;;;;
+enveloppe:plancher-haut:type;toiture_chaume;Toiture chaume;;;;;;
+enveloppe:plancher-haut:type;plafond_patre;Plafond patre;;;;;;
+enveloppe:plancher-haut:type;bac_acier;Bac acier;;;;;;
+enveloppe:pont-thermique:type;plancher_bas_mur;Plancher bas / Mur;;;;;;
+enveloppe:pont-thermique:type;plancher_haut_mur;Plancher haut / Mur;;;;;;
+enveloppe:pont-thermique:type;refend_mur;Refend / Mur;;;;;;
+enveloppe:pont-thermique:type;plancher_intermediaire_mur;Plancher intermédiaire / Mur;;;;;;
+enveloppe:pont-thermique:type;baie_mur;Baie / Mur;;;;;;
+enveloppe:pont-thermique:type;porte_mur;Porte / Mur;;;;;;
+etiquette;A;A;;;;;;
+etiquette;B;B;;;;;;
+etiquette;C;C;;;;;;
+etiquette;D;D;;;;;;
+etiquette;E;E;;;;;;
+etiquette;F;F;;;;;;
+etiquette;G;G;;;;;;
+enveloppe:porte:materiau;pvc;PVC;;;;;;
+enveloppe:porte:materiau;bois;Bois;;;;;;
+enveloppe:porte:materiau;metal;Métal;;;;;;
+enveloppe:porte:type-vitrage;simple_vitrage;Simple vitrage;;;;;;
+enveloppe:porte:type-vitrage;double_vitrage;Double vitrage;;;;;;
+enveloppe:porte:type-vitrage;triple_vitrage;Triple vitrage;;;;;;
+refroidissement:type-generateur;pac_air_air;PAC air/air;;;;;;
+refroidissement:type-generateur;pac_air_eau;PAC air/eau;;;;;;
+refroidissement:type-generateur;pac_eau_eau;PAC eau/eau;;;;;;
+refroidissement:type-generateur;pac_eau_glycolee_eau;PAC eau glycolée/eau;;;;;;
+refroidissement:type-generateur;pac_geothermique;PAC géothermique;;;;;;
+refroidissement:type-generateur;autre_systeme_thermodynamique;Autres systèmes thermodynamique;;;;;;
+refroidissement:type-generateur;reseau_froid;Réseau de froid;;;;;;
+refroidissement:type-generateur;autre;Autres systèmes;;;;;;
+ventilation:type;ventilation_ouverture_fenetres;Ventilation par ouverture des fenêtres;;;;;;
+ventilation:type;ventilation_entrees_air_hautes_basses;Ventilation par entrées d'air hautes et basses;;;;;;
+ventilation:type;vmc_simple_flux_autoreglable;VMC Simple flux autoréglable;;;;;;
+ventilation:type;vmc_simple_flux_hygroreglable_a;VMC Simple flux hygroréglable - Type A;;;;;;
+ventilation:type;vmc_simple_flux_hygroreglable_gaz;VMC Simple flux hygroréglable Gaz;;;;;;
+ventilation:type;vmc_simple_flux_hygroreglable_b;VMC Simple flux hygroréglable - Type B;;;;;;
+ventilation:type;vmc_basse_pression_autoreglable;VMC Basse pression autoréglable;;;;;;
+ventilation:type;vmc_basse_pression_hygroreglable_a;VMC Basse préssion hygroréglable - Type A;;;;;;
+ventilation:type;vmc_basse_pression_hygroreglable_b;VMC Basse pression hygroréglable - Type B;;;;;;
+ventilation:type;vmc_double_flux;VMC Double flux;;;;;;
+ventilation:type;ventilation_naturelle_conduit;Ventilation naturelle par conduit;;;;;;
+ventilation:type;ventilation_hybride;Ventilation hybride;;;;;;
+ventilation:type;ventilation_hybride_entrees_air_hygroreglables;Ventilation hybride avec entrées d'air hygroréglables;;;;;;
+ventilation:type;ventilation_mecanique_conduit;Ventilation mécanique sur conduit existant;;;;;;
+ventilation:type;ventilation_naturelle_conduit_entrees_air_hygroreglables;Ventilation naturelle par conduit avec entrées d'air hygroéglables;;;;;;
+ventilation:type;puit_climatique;Puit climatique;;;;;;
+ventilation:type;ventilation_mecanique_insufflation;Ventilation mécanique par insufflation;;;;;;
+batiment:position-appartement;rdc;Appartement en rez-de-chaussée;;;;;;
+batiment:position-appartement;etage_intermediaire;Appartement en étage intermédiaire;;;;;;
+batiment:position-appartement;dernier_etage;Appartement au dernier étage;;;;;;
+batiment:typologie-appartement;T1;T1;;;;;;
+batiment:typologie-appartement;T2;T2;;;;;;
+batiment:typologie-appartement;T3;T3;;;;;;
+batiment:typologie-appartement;T4;T4;;;;;;
+batiment:typologie-appartement;T5;T5;;;;;;
+batiment:typologie-appartement;T6;T6;;;;;;
+batiment:typologie-appartement;T7;T7 et plus;;;;;;
+enveloppe:paroi:orientation;nord;Paroi exposée au nord;;;;;;
+enveloppe:paroi:orientation;sud;Paroi exposée au sud;;;;;;
+enveloppe:paroi:orientation;est;Paroi exposée à l'est;;;;;;
+enveloppe:paroi:orientation;ouest;Paroi exposée à l'ouest;;;;;;
+enveloppe:paroi:orientation;horizontale;Paroi horizontale;;;;;;
+mois;01;Janvier;;;;;;
+mois;02;Février;;;;;;
+mois;03;Mars;;;;;;
+mois;04;Avril;;;;;;
+mois;05;Mai;;;;;;
+mois;06;Juin;;;;;;
+mois;07;Juillet;;;;;;
+mois;08;Août;;;;;;
+mois;09;Septembre;;;;;;
+mois;10;Octobre;;;;;;
+mois;11;Novembre;;;;;;
+mois;12;Décembre;;;;;;
+ecs:type-stockage;integre;Stockage intégré à la production;;;;;;
+ecs:type-stockage;independant;Stockage indépendant de la production;;;;;;
+chauffage:type-programmation;absent;Absence de programmation;;;;;;
+chauffage:type-programmation;central_sans_minimum_temperature;Programmation centrale sans minimum de température;;;;;;
+chauffage:type-programmation;central_avec_minimum_temperature;Programmation centrale avec minimum de température;;;;;;
+chauffage:type-programmation;central_collectif_sans_detection_presence;Programmation centrale collective;;;;;;
+chauffage:type-programmation;central_collectif_avec_detection_presence;Programmation centrale collective avec détection de présence;;;;;;
+chauffage:type-programmation;terminal_avec_minimum_temperature;Programmation par pièce avec minimum de température;;;;;;
+chauffage:type-programmation;terminal_avec_minimum_temperature_detection_presence;Programmation par pièce avec minimum de température et détection de présence;;;;;;
+chauffage:type;central;Chauffage central;;;;;;
+chauffage:type;divise;Chauffage divisé;;;;;;
+configuration-systeme;base;Système en base;;;;;;
+configuration-systeme;releve;Système en relève;;;;;;
+configuration-systeme;appoint;Système d'appoint;;;;;;
+production:usage-electricite;chauffage;Chauffage;;;;;;
+production:usage-electricite;refroidissement;Refroidissement;;;;;;
+production:usage-electricite;ecs;Eau chaude sanitaire;;;;;;
+production:usage-electricite;eclairage;Eclairage;;;;;;
+production:usage-electricite;auxiliaires_ventilation;Auxiliaires de ventilation;;;;;;
+production:usage-electricite;auxiliaires_distribution;Auxiliaires de distribution;;;;;;
+production:usage-electricite;autres;Autres;;;;;;
+chauffage:usage-solaire;chauffage;Chauffage;;;;;;
+chauffage:usage-solaire;chauffage_ecs;Chauffage + ECS;;;;;;
+confort-ete;1;Bon;;;;;;
+confort-ete;2;Moyen;;;;;;
+confort-ete;3;Insuffisant;;;;;;
+type-diagnostic;batiment;Bâtiment;;;;;;
+type-diagnostic;logement;Logement;;;;;;

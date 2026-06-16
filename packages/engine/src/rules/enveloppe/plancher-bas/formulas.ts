@@ -122,16 +122,16 @@ export function is_calcule_ue_applicable(props: {
 export function calcule_ue(props: {
 	mitoyennete: models.enveloppe.common.Mitoyennete;
 	annee_construction: ReturnType<typeof paroi.set_annee_construction>;
-	u: ReturnType<typeof calcule_u>;
+	uint: ReturnType<typeof calcule_uint>;
 	surface_ue: number;
 	perimetre_ue: number;
 }): number {
-	const { u, surface_ue, perimetre_ue, ...query } = props;
+	const { uint, surface_ue, perimetre_ue, ...query } = props;
 	const _2sp = Math.round((2 * surface_ue) / perimetre_ue);
 	const abaque = abaques.enveloppe.plancherBas.ue;
 	const matches = abaque.search(query, abaque.load());
 	const match = matches.find(
-		(match) => match.u === u && match["2s/p"] === _2sp,
+		(match) => match.u === uint && match["2s/p"] === _2sp,
 	);
 
 	if (match) return match.ue;
@@ -142,7 +142,7 @@ export function calcule_ue(props: {
 		y: match.u,
 		q: match.ue,
 	}));
-	return bilinearInterpolate(_2sp, u, points);
+	return bilinearInterpolate(_2sp, uint, points);
 }
 
 /**

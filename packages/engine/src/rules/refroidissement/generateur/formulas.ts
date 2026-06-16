@@ -77,9 +77,10 @@ export function calcule_cfr_elec(props: {
 	cfr: ReturnType<typeof calcule_cfr>;
 	energie_generateur: models.refroidissement.generateur.EnergieRefroidissement;
 }): number {
-	return props.energie_generateur === models.common.EnergieEnum.electricite
-		? props.cfr
-		: 0;
+	return common.calcule_celec({
+		cef: props.cfr,
+		energie: props.energie_generateur,
+	});
 }
 
 /**

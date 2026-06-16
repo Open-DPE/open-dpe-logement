@@ -4,7 +4,7 @@ import { filter } from "#filter.js";
 export type Schema = {
 	type_generateur: string;
 	energie_generateur: string;
-	mode_combustion: string;
+	mode_combustion: string | null;
 	"volume_stockage/gt": number | null;
 	"volume_stockage/eq": number | null;
 	"annee_installation/lte": number | null;
@@ -13,7 +13,7 @@ export type Schema = {
 	"pn/gt": number | null;
 	pn_max: number | null;
 	rpn: string;
-	qp0: string;
+	qp0: string | number;
 	pveilleuse: number;
 };
 
@@ -26,7 +26,7 @@ export type Query = {
 	pn: number;
 };
 
-export const load = (): Schema[] => data as Schema[];
+export const load = (): Schema[] => data;
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

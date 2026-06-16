@@ -1,22 +1,11 @@
-import { describe, it, expect } from "vitest";
-import * as _formulas from "../../src/rules/refroidissement/formulas.js";
-import { loadTests } from "./utils.js";
+import * as formulas from "../../src/rules/refroidissement/formulas.js";
+import { runTests } from "./utils.js";
 
-const formulas = _formulas as Record<string, Function>;
-const tests = loadTests("refroidissement.test.yaml");
-
-Object.keys(tests).forEach((id) => {
-	const test = tests[id];
-	describe(id, () => {
-		it.each(test.cases)(
-			"$title",
-			({ title: _, with: input, expect: expected, expectError }) => {
-				if (expectError) {
-					expect(() => formulas[test.run](input)).toThrow();
-				} else {
-					expect(formulas[test.run](input)).toEqual(expected);
-				}
-			},
-		);
-	});
+runTests("refroidissement.test.yaml", {
+	tint: formulas.calcule_tint,
+	cin: formulas.calcule_cin,
+	t: formulas.calcule_t,
+	cfr: formulas.calcule_cfr,
+	cfr_elec: formulas.calcule_cfr_elec,
+	caux: formulas.calcule_caux,
 });

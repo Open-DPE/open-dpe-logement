@@ -7,6 +7,12 @@ export const PERFORMANCE_COLORS = {
 	4: "#E52322",
 };
 
+export const CONFORT_ETE_COLORS = {
+	1: "#2CAF85",
+	2: "#F49838",
+	3: "#E52322",
+};
+
 export const ETIQUETTE_CLIMAT_COLORS = {
 	[models.diagnostic.EtiquetteEnum.A]: "#A4DBF8",
 	[models.diagnostic.EtiquetteEnum.B]: "#8CB4D3",

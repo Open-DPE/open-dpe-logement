@@ -1,7 +1,7 @@
 chauffage.systeme.rg_combustion:
-  run: calcule_rg_combustion
+  rule: rg_combustion
   cases:
-    - title: Chaudière à combustion
+    - title: Chaudière gaz et fioul classique
       with:
         scenario: conventionnel
         gv: 400
@@ -16,10 +16,10 @@ chauffage.systeme.rg_combustion:
         rpn: 0.85
         rpint: 0.8
         qp0: 0.3
-        pveilleuse: 100
+        pveilleuse: 150
         kpcs: 1.11
-        mode_combustion: basse_temperature
+        mode_combustion: standard
         presence_regulation: true
-        tfonc30: 52.2
+        tfonc30: 52.5
         tfonc100: 70
-      expect: 0.75
+      expect: 0.747

@@ -5,8 +5,8 @@ export type Schema = {
 	uvue: number;
 	isolation_aiu: boolean;
 	isolation_aue: boolean;
-	"aiu_aue/gt": number;
-	"aiu_aue/lte": number;
+	"aiu_aue/gt": number | null;
+	"aiu_aue/lte": number | null;
 	b: number;
 };
 
@@ -17,7 +17,7 @@ export type Query = {
 	aiu_aue: number;
 };
 
-export const load = (): Schema[] => data as Schema[];
+export const load = (): Schema[] => data;
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

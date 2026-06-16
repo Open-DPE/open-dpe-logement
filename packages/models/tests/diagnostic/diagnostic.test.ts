@@ -59,7 +59,6 @@ const ENVELOPPE: Enveloppe = {
 	baies: [],
 	portes: [],
 	ponts_thermiques: [],
-	masques: [],
 };
 
 // ─── Chauffage ───────────────────────────────────────────────────────────────

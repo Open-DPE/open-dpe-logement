@@ -55,10 +55,26 @@ export function cch1(
 				constants.climat.RULES.zone_climatique,
 			),
 			pac_hybride: models.chauffage.generateur.isPACHybride(generateur),
-			bch: systeme.bch,
-			fch: installation.fch,
-			rdim_i: installation.rdim,
-			rdim: systeme.rdim,
+			bch: ctx.resolve(
+				constants.chauffage.systeme.NAMESPACE,
+				constants.chauffage.systeme.RULES.bch,
+				systeme,
+			),
+			fch: ctx.resolve(
+				constants.chauffage.installation.NAMESPACE,
+				constants.chauffage.installation.RULES.fch,
+				installation,
+			),
+			rdim_i: ctx.resolve(
+				constants.chauffage.installation.NAMESPACE,
+				constants.chauffage.installation.RULES.rdim,
+				installation,
+			),
+			rdim: ctx.resolve(
+				constants.chauffage.systeme.NAMESPACE,
+				constants.chauffage.systeme.RULES.rdim,
+				systeme,
+			),
 			int: int(ctx, item),
 			ich1: ich1(ctx, item),
 			n: Math.max(systeme.reseau?.emetteurs.length ?? 1, 1),
@@ -81,10 +97,26 @@ export function cch2(
 				constants.climat.RULES.zone_climatique,
 			),
 			pac_hybride: models.chauffage.generateur.isPACHybride(generateur),
-			bch: systeme.bch,
-			fch: installation.fch,
-			rdim_i: installation.rdim,
-			rdim: systeme.rdim,
+			bch: ctx.resolve(
+				constants.chauffage.systeme.NAMESPACE,
+				constants.chauffage.systeme.RULES.bch,
+				systeme,
+			),
+			fch: ctx.resolve(
+				constants.chauffage.installation.NAMESPACE,
+				constants.chauffage.installation.RULES.fch,
+				installation,
+			),
+			rdim_i: ctx.resolve(
+				constants.chauffage.installation.NAMESPACE,
+				constants.chauffage.installation.RULES.rdim,
+				installation,
+			),
+			rdim: ctx.resolve(
+				constants.chauffage.systeme.NAMESPACE,
+				constants.chauffage.systeme.RULES.rdim,
+				systeme,
+			),
 			int: int(ctx, item),
 			ich2: ich2(ctx, item) ?? 0,
 			n: Math.max(systeme.reseau?.emetteurs.length ?? 1, 1),
@@ -120,9 +152,21 @@ export function ich1(
 		return formulas.calcule_ich1({
 			re: re(ctx, item),
 			rr: rr(ctx, item),
-			rd: systeme.rd,
-			rg: systeme.rg,
-			scop: generateur.scop,
+			rd: ctx.resolve(
+				constants.chauffage.systeme.NAMESPACE,
+				constants.chauffage.systeme.RULES.rd,
+				systeme,
+			),
+			rg: ctx.resolve(
+				constants.chauffage.systeme.NAMESPACE,
+				constants.chauffage.systeme.RULES.rg,
+				systeme,
+			),
+			scop: ctx.resolve(
+				constants.chauffage.generateur.NAMESPACE,
+				constants.chauffage.generateur.RULES.scop,
+				generateur,
+			),
 		});
 	});
 }
@@ -136,8 +180,16 @@ export function ich2(
 		const systeme = _systeme(ctx, item);
 		return models.chauffage.generateur.isPACHybride(generateur)
 			? formulas.calcule_ich2({
-					rd: systeme.rd,
-					rg: systeme.rg,
+					rd: ctx.resolve(
+						constants.chauffage.systeme.NAMESPACE,
+						constants.chauffage.systeme.RULES.rd,
+						systeme,
+					),
+					rg: ctx.resolve(
+						constants.chauffage.systeme.NAMESPACE,
+						constants.chauffage.systeme.RULES.rg,
+						systeme,
+					),
 					re: re(ctx, item),
 					rr: rr(ctx, item),
 				})
@@ -250,57 +302,18 @@ function _emetteur(ctx: Context, item: Emission) {
 }
 
 function _systeme(ctx: Context, item: Emission) {
-	return ctx.once(NAMESPACE, "systeme", item, () => {
-		const systeme = models.chauffage.getSysteme(
-			ctx.diagnostic.chauffage,
-			item.systeme_id,
-		);
-		return {
-			...systeme,
-			bch: ctx.resolve(
-				constants.chauffage.systeme.NAMESPACE,
-				constants.chauffage.systeme.RULES.bch,
-				systeme,
-			),
-			rdim: ctx.resolve(
-				constants.chauffage.systeme.NAMESPACE,
-				constants.chauffage.systeme.RULES.rdim,
-				systeme,
-			),
-			rd: ctx.resolve(
-				constants.chauffage.systeme.NAMESPACE,
-				constants.chauffage.systeme.RULES.rd,
-				systeme,
-			),
-			rg: ctx.resolve(
-				constants.chauffage.systeme.NAMESPACE,
-				constants.chauffage.systeme.RULES.rg,
-				systeme,
-			),
-		};
-	});
+	return ctx.once(NAMESPACE, "systeme", item, () =>
+		models.chauffage.getSysteme(ctx.diagnostic.chauffage, item.systeme_id),
+	);
 }
 
 function _installation(ctx: Context, item: Emission) {
-	return ctx.once(NAMESPACE, "installation", item, () => {
-		const installation = models.chauffage.getInstallationBySysteme(
+	return ctx.once(NAMESPACE, "installation", item, () =>
+		models.chauffage.getInstallationBySysteme(
 			ctx.diagnostic.chauffage,
 			item.systeme_id,
-		);
-		return {
-			...installation,
-			fch: ctx.resolve(
-				constants.chauffage.installation.NAMESPACE,
-				constants.chauffage.installation.RULES.fch,
-				installation,
-			),
-			rdim: ctx.resolve(
-				constants.chauffage.installation.NAMESPACE,
-				constants.chauffage.installation.RULES.rdim,
-				installation,
-			),
-		};
-	});
+		),
+	);
 }
 
 function _generateur(ctx: Context, item: Emission) {
@@ -318,12 +331,6 @@ function _generateur(ctx: Context, item: Emission) {
 				constants.chauffage.generateur.RULES.type_generateur,
 				generateur,
 			),
-			scop:
-				ctx.resolve(
-					constants.chauffage.generateur.NAMESPACE,
-					constants.chauffage.generateur.RULES.scop,
-					generateur,
-				) ?? 0,
 		};
 	});
 }

@@ -53,7 +53,7 @@ export class IconPassoire extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-icon-passoire";
+const HTML_TAG = "open-dpe-logement-icon-passoire";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, IconPassoire);

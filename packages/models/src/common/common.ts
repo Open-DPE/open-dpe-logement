@@ -10,7 +10,7 @@ export function toNonEmptyArray<T>(arr: T[]): NonEmptyArray<T> {
 /**
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/id
  */
-export type UUID = string & { readonly __brand: "UUID" };
+export type UUID = string;
 
 /**
  * @see https://schemas.open-dpe.fr/common/primitives#/$defs/mois

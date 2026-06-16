@@ -30,7 +30,7 @@ export class ClasseEnergie extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-classe-energie";
+const HTML_TAG = "open-dpe-logement-classe-energie";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, ClasseEnergie);

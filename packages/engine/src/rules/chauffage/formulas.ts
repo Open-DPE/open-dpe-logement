@@ -108,16 +108,15 @@ export function calcule_bch_hp(props: {
 
 /**
  * @formule chauffage.bv
- * @returns Besoins de chauffage en kWh/mois
+ * @returns Besoins de chauffage en W/K
  */
 export function calcule_bv(props: {
 	gv: ReturnType<typeof enveloppe.calcule_gv>;
 	f: ReturnType<typeof calcule_f>;
 }): models.common.ParMois<number> {
-	const { gv } = props;
 	return createParMois((mois) => {
 		const f = props.f[mois];
-		return (gv * (1 - f)) / 1000;
+		return props.gv * (1 - f);
 	});
 }
 
@@ -154,6 +153,9 @@ export function calcule_f(props: {
 		const dh = props.dh[mois];
 		const as = props.as[mois];
 		const ai = props.ai[mois];
+
+		if (gv === 0 || dh === 0) return 0;
+
 		const x = (as + ai) / (gv * dh);
 
 		switch (inertie) {

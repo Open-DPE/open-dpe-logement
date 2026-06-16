@@ -61,7 +61,7 @@ export class IconUsage extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-icon-usage";
+const HTML_TAG = "open-dpe-logement-icon-usage";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, IconUsage);

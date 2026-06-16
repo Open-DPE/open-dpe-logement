@@ -40,10 +40,7 @@ export function sollicitations(
 		formulas.calcule_sollicitations({
 			zone_climatique: zone_climatique(ctx),
 			altitude: ctx.diagnostic.batiment.altitude,
-			parois_anciennes: ctx.resolve(
-				constants.enveloppe.NAMESPACE,
-				constants.enveloppe.RULES.parois_anciennes,
-			),
+			parois_anciennes: ctx.diagnostic.batiment.materiaux_anciens,
 			inertie: ctx.resolve(
 				constants.enveloppe.NAMESPACE,
 				constants.enveloppe.RULES.inertie,

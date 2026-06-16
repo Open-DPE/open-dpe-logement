@@ -140,7 +140,7 @@ export class EtiquetteClimat extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-etiquette-climat";
+const HTML_TAG = "open-dpe-logement-etiquette-climat";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, EtiquetteClimat);

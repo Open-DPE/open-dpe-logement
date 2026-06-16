@@ -14,7 +14,7 @@ export function renderPerformanceMenuiserie(props: {
 }): string {
 	const { u, style } = props;
 	const color = getColor(u);
-	const text = u.toLocaleString();
+	const text = u.toFixed(2);
 	return renderChips({ text, color, textColor: "#FFFFFF", style });
 }
 
@@ -35,7 +35,7 @@ export class PerformanceMenuiserie extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-performance-menuiserie";
+const HTML_TAG = "open-dpe-logement-performance-menuiserie";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, PerformanceMenuiserie);

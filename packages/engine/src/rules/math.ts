@@ -1,22 +1,13 @@
 import * as math from "mathjs";
-
-/**
- * Arrondi un nombre à une précision définie
- */
-export function round(value: number): number;
-export function round(value: null): null;
-export function round(value: number | null): number | null {
-	if (value === null) return null;
-	return parseFloat(value.toFixed(2));
-}
+import { NonNegativeError, PositiveError } from "./errors";
 
 /**
  * Moyenne simple ou pondérée
  */
-export const average = (props: {
+export function average(props: {
 	values: number[];
 	weights?: number[];
-}): number => {
+}): number {
 	const { values, weights } = props;
 
 	if (0 === values.length) {
@@ -42,15 +33,15 @@ export const average = (props: {
 	);
 
 	return weightedSum / totalWeight;
-};
+}
 
 /**
  * Interpolation linéaire / extrapolation
  */
-export const linearInterpolate = (
+export function linearInterpolate(
 	x: number,
 	points: { x: number; y: number }[],
-): number => {
+): number {
 	const match = points.find((point) => point.x === x);
 	if (match) return match.y;
 
@@ -68,16 +59,16 @@ export const linearInterpolate = (
 	const p1 = sorted[i]!;
 
 	return p0.y + ((p1.y - p0.y) * (x - p0.x)) / (p1.x - p0.x);
-};
+}
 
 /**
  * Interpolation et extrapolation bilinéaire
  */
-export const bilinearInterpolate = (
+export function bilinearInterpolate(
 	x: number,
 	y: number,
 	points: { x: number; y: number; q: number }[],
-): number => {
+): number {
 	const match = points.find((point) => point.x === x && point.y === y);
 	if (match) return match.q;
 
@@ -119,14 +110,46 @@ export const bilinearInterpolate = (
 	q += (((x2 - x) * (y - y1)) / ((x2 - x1) * (y2 - y1))) * q12;
 	q += (((x - x1) * (y - y1)) / ((x2 - x1) * (y2 - y1))) * q22;
 	return q;
-};
+}
 
 /**
  * Évalue une expression mathématique
  */
-export const evaluate = (
-	expr: string,
-	scope?: Record<string, number>,
-): number => {
+export function evaluate(expr: string, scope?: Record<string, number>): number {
 	return math.evaluate(expr, scope);
-};
+}
+
+export type NonZero = number & { readonly __brand: "NonZero" };
+
+export function nonZero(value: number | null): NonZero {
+	if (value === 0 || value === null)
+		throw new Error("La valeur ne peut pas être nulle.");
+
+	return value as NonZero;
+}
+
+export type Positive = number & { readonly __brand: "Positive" };
+
+export function positive(value: number | null): Positive {
+	if (value === null || value <= 0) throw new PositiveError(value);
+
+	return value as Positive;
+}
+
+export type NonNegative = number & { readonly __brand: "NonNegative" };
+
+export function nonNegative(value: number | null): NonNegative {
+	if (value === null || value < 0) throw new NonNegativeError(value);
+	return value as NonNegative;
+}
+
+export function round(value: number, decimals?: number): number;
+export function round(value: null, decimals?: number): null;
+export function round(
+	value: number | null,
+	decimals: number = 2,
+): number | null {
+	if (value === null) return null;
+	const factor = Math.pow(10, decimals);
+	return Math.round(value * factor) / factor;
+}

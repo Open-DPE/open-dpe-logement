@@ -413,10 +413,10 @@ MAP_ENUMS["enveloppe:exposition"] = {
 	[models.enveloppe.ExpositionEnum.multiple]: "Exposition multiple",
 };
 
-MAP_ENUMS["enveloppe:orientation-paroi"] = MAP_ENUMS["orientation-cardinale"] =
-	{
-		[models.enveloppe.common.OrientationHorizontale]: "Paroi horizontale",
-	};
+MAP_ENUMS["enveloppe:orientation-paroi"] = {
+	...MAP_ENUMS["orientation-cardinale"],
+	[models.enveloppe.common.OrientationHorizontale]: "Paroi horizontale",
+};
 
 MAP_ENUMS["enveloppe:paroi:mitoyennete"] = {
 	[models.enveloppe.common.MitoyenneteEnum.exterieur]: "Extérieur",
@@ -740,7 +740,7 @@ export function renderEnum(key: EnumKey, value: any) {
 }
 
 export class Enum extends HTMLElement {
-	static observedAttributes = ["key", "value"];
+	static observedAttributes = ["data-key", "value"];
 
 	connectedCallback() {
 		this.render();
@@ -750,12 +750,13 @@ export class Enum extends HTMLElement {
 	}
 
 	private render() {
-		const key = this.getAttribute("key") as EnumKey;
+		const key = this.getAttribute("data-key") as EnumKey;
 		const value = this.getAttribute("value");
 		this.innerHTML = renderEnum(key, value);
 	}
 }
+const HTML_TAG = "open-dpe-logement-enum";
 
-if (!customElements.get("open-dpe-logement-enum")) {
-	customElements.define("open-dpe-logement-enum", Enum);
+if (!customElements.get(HTML_TAG)) {
+	customElements.define(HTML_TAG, Enum);
 }

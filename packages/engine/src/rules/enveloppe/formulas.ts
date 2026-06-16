@@ -110,12 +110,16 @@ export function calcule_sdep(props: {
  * @returns Inertie de l'enveloppe
  */
 export function calcule_inertie(props: {
-	niveaux: models.common.NonEmptyArray<{
+	niveaux: Array<{
 		inertie: ReturnType<typeof niveau.calcule_inertie>;
 		sh: number;
 	}>;
 }): models.enveloppe.common.Inertie {
 	const { niveaux } = props;
+
+	// Valeur par défaut
+	if (niveaux.length === 0) return models.enveloppe.common.InertieEnum.legere;
+
 	// Surface totale par inertie
 	const surfaceParInertie = new Map<models.enveloppe.common.Inertie, number>();
 	for (const niveau of niveaux) {
@@ -188,7 +192,7 @@ export function calcule_n50(props: {
 	q4pa: ReturnType<typeof calcule_q4pa>;
 }): number {
 	const { sh, hsp, q4pa } = props;
-	return q4pa / ((4 / 50) ** (2 / 3) * hsp * sh);
+	return hsp && sh ? q4pa / ((4 / 50) ** (2 / 3) * hsp * sh) : 0;
 }
 
 /**
@@ -414,23 +418,4 @@ export function calcule_sse(props: {
 		const sse_ets = props.sse_ets.reduce((acc, sse) => acc + sse[mois], 0);
 		return sse + sse_ets;
 	});
-}
-
-/**
- * @formule enveloppe.parois_anciennes
- * @param props.murs - Liste des murs de l'enveloppe
- * @param props.murs[].surface - Surface du mur en m²
- * @returns Présence majoritaire de murs anciens (plus de 50% de la surface totale des murs)
- */
-export function calcule_parois_anciennes(props: {
-	murs: {
-		surface: number;
-		paroi_ancienne: ReturnType<typeof mur.calcule_paroi_ancienne>;
-	}[];
-}): boolean {
-	const s = props.murs.reduce((acc, mur) => acc + mur.surface, 0);
-	const w = props.murs
-		.filter(({ paroi_ancienne }) => paroi_ancienne)
-		.reduce((acc, { surface }) => acc + surface, 0);
-	return s === 0 ? false : w / s > 0.5;
 }

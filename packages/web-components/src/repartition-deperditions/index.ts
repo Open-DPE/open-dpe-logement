@@ -1,18 +1,22 @@
+import { objectToHundred } from "../shared/utils";
+
 export function renderRepartitionDeperditions(props: {
-	gv: number;
 	dp_murs: number;
 	dp_planchers_bas: number;
 	dp_planchers_hauts: number;
-	dp_ponts_thermiques: number;
-	dp_menuiseries: number;
+	dp_baies: number;
+	dp_portes: number;
+	pt: number;
 	dr: number;
 }): string {
-	const murs = (props.dp_murs / props.gv) * 100;
-	const planchers_bas = (props.dp_planchers_bas / props.gv) * 100;
-	const planchers_hauts = (props.dp_planchers_hauts / props.gv) * 100;
-	const ponts_thermiques = (props.dp_ponts_thermiques / props.gv) * 100;
-	const menuiserie = (props.dp_menuiseries / props.gv) * 100;
-	const dr = (props.dr / props.gv) * 100;
+	const percents = objectToHundred({
+		murs: props.dp_murs,
+		planchers_bas: props.dp_planchers_bas,
+		planchers_hauts: props.dp_planchers_hauts,
+		menuiseries: props.dp_baies + props.dp_portes,
+		pt: props.pt,
+		dr: props.dr,
+	});
 
 	return `
     <svg
@@ -38,7 +42,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${dr.toLocaleString()} %</tspan>
+        >${percents.dr} %</tspan>
       </text>
       <text y='20' fill='#1A1A1A' font-size='14'>
         <tspan x='280' text-anchor='middle'>Toitures</tspan>
@@ -47,7 +51,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${planchers_hauts.toLocaleString()} %</tspan>
+        >${percents.planchers_hauts} %</tspan>
       </text>
       <text
         id='murs'
@@ -61,7 +65,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${murs.toLocaleString()} %</tspan>
+        >${percents.murs} %</tspan>
       </text>
       <text y='220' fill='#1A1A1A' font-size='14'>
         <tspan x='198' text-anchor='middle'>Planchers</tspan>
@@ -70,7 +74,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${planchers_bas.toLocaleString()} %</tspan>
+        >${percents.planchers_bas} %</tspan>
       </text>
       <text y='210' fill='#1A1A1A' font-size='14'>
         <tspan x='90' text-anchor='middle'>Ponts thermiques</tspan>
@@ -79,7 +83,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${ponts_thermiques.toLocaleString()} %</tspan>
+        >${percents.pt} %</tspan>
       </text>
       <text y='120' fill='#1A1A1A' font-size='14'>
         <tspan x='60' text-anchor='middle'>Menuiseries</tspan>
@@ -88,7 +92,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${menuiserie.toLocaleString()} %</tspan>
+        >${percents.menuiseries} %</tspan>
       </text>
     </svg>
   `;
@@ -96,12 +100,12 @@ export function renderRepartitionDeperditions(props: {
 
 export class RepartitionDeperditions extends HTMLElement {
 	static observedAttributes = [
-		"gv",
 		"dp_murs",
 		"dp_planchers_bas",
 		"dp_planchers_hauts",
-		"dp_ponts_thermiques",
-		"dp_menuiseries",
+		"dp_baies",
+		"dp_portes",
+		"pt",
 		"dr",
 	];
 
@@ -114,19 +118,19 @@ export class RepartitionDeperditions extends HTMLElement {
 
 	private render() {
 		const value = {
-			gv: Number(this.getAttribute("gv")),
 			dp_murs: Number(this.getAttribute("dp_murs")),
 			dp_planchers_bas: Number(this.getAttribute("dp_planchers_bas")),
 			dp_planchers_hauts: Number(this.getAttribute("dp_planchers_hauts")),
-			dp_ponts_thermiques: Number(this.getAttribute("dp_ponts_thermiques")),
-			dp_menuiseries: Number(this.getAttribute("dp_menuiseries")),
+			dp_baies: Number(this.getAttribute("dp_baies")),
+			dp_portes: Number(this.getAttribute("dp_portes")),
+			pt: Number(this.getAttribute("pt")),
 			dr: Number(this.getAttribute("dr")),
 		};
 		this.innerHTML = renderRepartitionDeperditions(value);
 	}
 }
 
-const HTML_TAG = "open-dpe-repartition-deperditions";
+const HTML_TAG = "open-dpe-logement-repartition-deperditions";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, RepartitionDeperditions);

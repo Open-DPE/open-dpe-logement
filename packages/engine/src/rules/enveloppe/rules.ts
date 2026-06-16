@@ -1,4 +1,3 @@
-import * as models from "@open-dpe-logement/models";
 import type { Context } from "../../core/context.js";
 import * as constants from "../constants.js";
 import * as formulas from "./formulas.js";
@@ -51,7 +50,6 @@ export const REGISTRY = {
 		[RULES.q4paconv]: q4paconv,
 		[RULES.isolation_murs_plafonds]: isolation_murs_plafonds,
 		[RULES.presence_joints]: presence_joints,
-		[RULES.parois_anciennes]: parois_anciennes,
 		[RULES.isolation_planchers_hauts]: isolation_planchers_hauts,
 		[RULES.presence_protection_solaire]: presence_protection_solaire,
 		[RULES.logement_traversant]: logement_traversant,
@@ -105,7 +103,13 @@ export function dp(ctx: Context): ReturnType<typeof formulas.calcule_dp> {
 export function dp_murs(ctx: Context): ReturnType<typeof formulas.calcule_dp> {
 	return ctx.register(NAMESPACE, RULES.dp_murs, () =>
 		formulas.calcule_dp({
-			dp: _murs(ctx).map((item) => item.dp),
+			dp: ctx.diagnostic.enveloppe.murs.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.mur.NAMESPACE,
+					constants.enveloppe.mur.RULES.dp,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -115,7 +119,13 @@ export function dp_planchers_bas(
 ): ReturnType<typeof formulas.calcule_dp> {
 	return ctx.register(NAMESPACE, RULES.dp_planchers_bas, () =>
 		formulas.calcule_dp({
-			dp: _planchers_bas(ctx).map((item) => item.dp),
+			dp: ctx.diagnostic.enveloppe.planchers_bas.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.plancherBas.NAMESPACE,
+					constants.enveloppe.plancherBas.RULES.dp,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -125,7 +135,13 @@ export function dp_planchers_hauts(
 ): ReturnType<typeof formulas.calcule_dp> {
 	return ctx.register(NAMESPACE, RULES.dp_planchers_hauts, () =>
 		formulas.calcule_dp({
-			dp: _planchers_hauts(ctx).map((item) => item.dp),
+			dp: ctx.diagnostic.enveloppe.planchers_hauts.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.plancherHaut.NAMESPACE,
+					constants.enveloppe.plancherHaut.RULES.dp,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -133,7 +149,13 @@ export function dp_planchers_hauts(
 export function dp_baies(ctx: Context): ReturnType<typeof formulas.calcule_dp> {
 	return ctx.register(NAMESPACE, RULES.dp_baies, () =>
 		formulas.calcule_dp({
-			dp: _baies(ctx).map((item) => item.dp),
+			dp: ctx.diagnostic.enveloppe.baies.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.baie.NAMESPACE,
+					constants.enveloppe.baie.RULES.dp,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -143,7 +165,13 @@ export function dp_portes(
 ): ReturnType<typeof formulas.calcule_dp> {
 	return ctx.register(NAMESPACE, RULES.dp_portes, () =>
 		formulas.calcule_dp({
-			dp: _portes(ctx).map((item) => item.dp),
+			dp: ctx.diagnostic.enveloppe.portes.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.porte.NAMESPACE,
+					constants.enveloppe.porte.RULES.dp,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -193,7 +221,13 @@ export function sdep_murs(
 ): ReturnType<typeof formulas.calcule_sdep> {
 	return ctx.register(NAMESPACE, RULES.sdep_murs, () =>
 		formulas.calcule_sdep({
-			sdep: _murs(ctx).map((item) => item.sdep),
+			sdep: ctx.diagnostic.enveloppe.murs.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.mur.NAMESPACE,
+					constants.enveloppe.mur.RULES.sdep,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -203,7 +237,13 @@ export function sdep_planchers_bas(
 ): ReturnType<typeof formulas.calcule_sdep> {
 	return ctx.register(NAMESPACE, RULES.sdep_planchers_bas, () =>
 		formulas.calcule_sdep({
-			sdep: _planchers_bas(ctx).map((item) => item.sdep),
+			sdep: ctx.diagnostic.enveloppe.planchers_bas.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.plancherBas.NAMESPACE,
+					constants.enveloppe.plancherBas.RULES.sdep,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -213,7 +253,13 @@ export function sdep_planchers_hauts(
 ): ReturnType<typeof formulas.calcule_sdep> {
 	return ctx.register(NAMESPACE, RULES.sdep_planchers_hauts, () =>
 		formulas.calcule_sdep({
-			sdep: _planchers_hauts(ctx).map((item) => item.sdep),
+			sdep: ctx.diagnostic.enveloppe.planchers_hauts.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.plancherHaut.NAMESPACE,
+					constants.enveloppe.plancherHaut.RULES.sdep,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -223,7 +269,13 @@ export function sdep_baies(
 ): ReturnType<typeof formulas.calcule_sdep> {
 	return ctx.register(NAMESPACE, RULES.sdep_baies, () =>
 		formulas.calcule_sdep({
-			sdep: _baies(ctx).map((item) => item.sdep),
+			sdep: ctx.diagnostic.enveloppe.baies.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.baie.NAMESPACE,
+					constants.enveloppe.baie.RULES.sdep,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -233,7 +285,13 @@ export function sdep_portes(
 ): ReturnType<typeof formulas.calcule_sdep> {
 	return ctx.register(NAMESPACE, RULES.sdep_portes, () =>
 		formulas.calcule_sdep({
-			sdep: _portes(ctx).map((item) => item.sdep),
+			sdep: ctx.diagnostic.enveloppe.portes.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.porte.NAMESPACE,
+					constants.enveloppe.porte.RULES.sdep,
+					item,
+				),
+			),
 		}),
 	);
 }
@@ -241,26 +299,23 @@ export function sdep_portes(
 export function inertie(
 	ctx: Context,
 ): ReturnType<typeof formulas.calcule_inertie> {
-	return ctx.register(NAMESPACE, RULES.inertie, () => {
-		const niveaux = ctx.diagnostic.enveloppe.niveaux.map((item) => ({
-			inertie: ctx.resolve(
-				constants.enveloppe.niveau.NAMESPACE,
-				constants.enveloppe.niveau.RULES.inertie,
-				item,
-			),
-			sh: item.surface,
-		}));
-		return formulas.calcule_inertie({
-			niveaux: models.common.toNonEmptyArray(niveaux),
-		});
-	});
+	return ctx.register(NAMESPACE, RULES.inertie, () =>
+		formulas.calcule_inertie({
+			niveaux: ctx.diagnostic.enveloppe.niveaux.map((item) => ({
+				inertie: ctx.resolve(
+					constants.enveloppe.niveau.NAMESPACE,
+					constants.enveloppe.niveau.RULES.inertie,
+					item,
+				),
+				sh: item.surface,
+			})),
+		}),
+	);
 }
 
 export function hperm(ctx: Context): ReturnType<typeof formulas.calcule_hperm> {
 	return ctx.register(NAMESPACE, RULES.hperm, () =>
-		formulas.calcule_hperm({
-			qvinf: qvinf(ctx),
-		}),
+		formulas.calcule_hperm({ qvinf: qvinf(ctx) }),
 	);
 }
 
@@ -312,11 +367,11 @@ export function q4pa(ctx: Context): ReturnType<typeof formulas.calcule_q4pa> {
 				constants.batiment.NAMESPACE,
 				constants.batiment.RULES.sh,
 			),
-			q4paenv: q4paenv(ctx),
 			smea_conv: ctx.resolve(
 				constants.ventilation.NAMESPACE,
 				constants.ventilation.RULES.smea_conv,
 			),
+			q4paenv: q4paenv(ctx),
 		}),
 	);
 }
@@ -425,139 +480,20 @@ export function logement_traversant(
 export function sse(ctx: Context): ReturnType<typeof formulas.calcule_sse> {
 	return ctx.register(NAMESPACE, RULES.sse, () =>
 		formulas.calcule_sse({
-			sse: _baies(ctx).map((item) => item.sse),
-			sse_ets: _locaux_non_chauffes(ctx).map((item) => item.sse),
+			sse: ctx.diagnostic.enveloppe.baies.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.baie.NAMESPACE,
+					constants.enveloppe.baie.RULES.sse,
+					item,
+				),
+			),
+			sse_ets: ctx.diagnostic.enveloppe.locaux_non_chauffes.map((item) =>
+				ctx.resolve(
+					constants.enveloppe.localNonChauffe.NAMESPACE,
+					constants.enveloppe.localNonChauffe.RULES.sse,
+					item,
+				),
+			),
 		}),
-	);
-}
-
-export function parois_anciennes(
-	ctx: Context,
-): ReturnType<typeof formulas.calcule_parois_anciennes> {
-	return ctx.register(NAMESPACE, RULES.parois_anciennes, () =>
-		formulas.calcule_parois_anciennes({ murs: _murs(ctx) }),
-	);
-}
-
-function _baies(ctx: Context) {
-	return ctx.once(NAMESPACE, "baies", () =>
-		ctx.diagnostic.enveloppe.baies.map((item) => ({
-			sdep: ctx.resolve(
-				constants.enveloppe.baie.NAMESPACE,
-				constants.enveloppe.baie.RULES.sdep,
-				item,
-			),
-			dp: ctx.resolve(
-				constants.enveloppe.baie.NAMESPACE,
-				constants.enveloppe.baie.RULES.dp,
-				item,
-			),
-			sse: ctx.resolve(
-				constants.enveloppe.baie.NAMESPACE,
-				constants.enveloppe.baie.RULES.sse,
-				item,
-			),
-		})),
-	);
-}
-
-function _locaux_non_chauffes(ctx: Context) {
-	return ctx.once(NAMESPACE, "locaux_non_chauffes", () =>
-		ctx.diagnostic.enveloppe.locaux_non_chauffes.map((item) => ({
-			sse: ctx.resolve(
-				constants.enveloppe.localNonChauffe.NAMESPACE,
-				constants.enveloppe.localNonChauffe.RULES.sse,
-				item,
-			),
-		})),
-	);
-}
-
-function _murs(ctx: Context) {
-	return ctx.once(NAMESPACE, "murs", () =>
-		ctx.diagnostic.enveloppe.murs.map((item) => ({
-			surface: item.position.surface,
-			sdep: ctx.resolve(
-				constants.enveloppe.mur.NAMESPACE,
-				constants.enveloppe.mur.RULES.sdep,
-				item,
-			),
-			dp: ctx.resolve(
-				constants.enveloppe.mur.NAMESPACE,
-				constants.enveloppe.mur.RULES.dp,
-				item,
-			),
-			paroi_ancienne: ctx.resolve(
-				constants.enveloppe.mur.NAMESPACE,
-				constants.enveloppe.mur.RULES.paroi_ancienne,
-				item,
-			),
-			isolation: ctx.resolve(
-				constants.enveloppe.mur.NAMESPACE,
-				constants.enveloppe.mur.RULES.isolation,
-				item,
-			),
-		})),
-	);
-}
-
-function _planchers_bas(ctx: Context) {
-	return ctx.once(NAMESPACE, "planchers_bas", () =>
-		ctx.diagnostic.enveloppe.planchers_bas.map((item) => ({
-			sdep: ctx.resolve(
-				constants.enveloppe.plancherBas.NAMESPACE,
-				constants.enveloppe.plancherBas.RULES.sdep,
-				item,
-			),
-			dp: ctx.resolve(
-				constants.enveloppe.plancherBas.NAMESPACE,
-				constants.enveloppe.plancherBas.RULES.dp,
-				item,
-			),
-			isolation: ctx.resolve(
-				constants.enveloppe.plancherBas.NAMESPACE,
-				constants.enveloppe.plancherBas.RULES.isolation,
-				item,
-			),
-		})),
-	);
-}
-
-function _planchers_hauts(ctx: Context) {
-	return ctx.once(NAMESPACE, "planchers_hauts", () =>
-		ctx.diagnostic.enveloppe.planchers_hauts.map((item) => ({
-			sdep: ctx.resolve(
-				constants.enveloppe.plancherHaut.NAMESPACE,
-				constants.enveloppe.plancherHaut.RULES.sdep,
-				item,
-			),
-			dp: ctx.resolve(
-				constants.enveloppe.plancherHaut.NAMESPACE,
-				constants.enveloppe.plancherHaut.RULES.dp,
-				item,
-			),
-			isolation: ctx.resolve(
-				constants.enveloppe.plancherHaut.NAMESPACE,
-				constants.enveloppe.plancherHaut.RULES.isolation,
-				item,
-			),
-		})),
-	);
-}
-
-function _portes(ctx: Context) {
-	return ctx.once(NAMESPACE, "portes", () =>
-		ctx.diagnostic.enveloppe.portes.map((item) => ({
-			sdep: ctx.resolve(
-				constants.enveloppe.porte.NAMESPACE,
-				constants.enveloppe.porte.RULES.sdep,
-				item,
-			),
-			dp: ctx.resolve(
-				constants.enveloppe.porte.NAMESPACE,
-				constants.enveloppe.porte.RULES.dp,
-				item,
-			),
-		})),
 	);
 }

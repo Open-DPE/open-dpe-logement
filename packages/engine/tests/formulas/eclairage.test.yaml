@@ -1,5 +1,5 @@
 eclairage.nhecl:
-  run: calcule_nhecl
+  rule: nhecl
   cases:
     - title: Zone H1a → 1500 h/an
       with:
@@ -27,7 +27,7 @@ eclairage.nhecl:
       expectError: true
 
 eclairage.cecl:
-  run: calcule_cecl
+  rule: cecl
   cases:
     - title: Surface 100 m² - zone H1a (1500 h)
       with:

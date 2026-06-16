@@ -49,7 +49,7 @@ export class Etiquette extends HTMLElement {
 	}
 }
 
-const HTML_TAG = "open-dpe-etiquette";
+const HTML_TAG = "open-dpe-logement-etiquette";
 
 if (!customElements.get(HTML_TAG)) {
 	customElements.define(HTML_TAG, Etiquette);

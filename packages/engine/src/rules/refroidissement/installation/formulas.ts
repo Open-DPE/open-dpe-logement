@@ -12,9 +12,8 @@ export function calcule_rdim(props: {
 	sh: ReturnType<typeof batiment.calcule_sh>;
 }): number {
 	const { surface_installation, surface_installations, sh } = props;
-	if (surface_installations === 0) return 0;
-	return (
-		(surface_installations / sh) *
-		(surface_installation / surface_installations)
-	);
+	return surface_installations > 0
+		? (surface_installations / sh) *
+				(surface_installation / surface_installations)
+		: 0;
 }

@@ -58,11 +58,6 @@ properties:
     type: array
     items:
       $ref: /enveloppe/pont-thermique
-  masques:
-    title: Liste des masques
-    type: array
-    items:
-      $ref: /enveloppe/masque
   data:
     $ref: "#/$defs/data"
 required:
@@ -77,7 +72,6 @@ required:
   - baies
   - portes
   - ponts_thermiques
-  - masques
 
 $defs:
   data:
@@ -150,9 +144,6 @@ $defs:
       presence_joints:
         title: Présence majoritaire de joints d'étanchéité au niveau des menuiseries extérieures
         type: boolean
-      parois_anciennes:
-        title: Présence majoritaire de parois composées de matériaux anciens
-        type: boolean
       isolation_planchers_hauts:
         title: Isolation majoritaire des planchers hauts
         type: boolean
@@ -186,7 +177,6 @@ $defs:
       - hperm
       - hvent
       - presence_joints
-      - parois_anciennes
       - isolation_planchers_hauts
       - presence_protection_solaire
       - logement_traversant

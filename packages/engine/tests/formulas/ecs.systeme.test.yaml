@@ -1,0 +1,69 @@
+ecs.systeme.cecs:
+  rule: cecs
+  cases:
+    - title: Calcul de cecs
+      with:
+        becs:
+          "01": 100
+        fecs: 0.5
+        rdim: 0.5
+        iecs: 2
+      expect: 50
+
+ecs.systeme.caux_dist:
+  rule: caux_dist
+  cases:
+    - title: Conversion Wh -> kWh
+      with:
+        qcirb: 1000
+        qtrac: 1000
+      expect: 2
+
+ecs.systeme.rd:
+  rule: rd
+  cases:
+    - title: Valeur forfaitaire
+      with:
+        installation_collective: true
+        bouclage_reseau: non_boucle
+        alimentation_contigue: false
+        production_volume_habitable: false
+      expect: 0.26
+
+    - title: Erreur
+      with:
+        installation_collective: null
+        bouclage_reseau: null
+        alimentation_contigue: null
+        production_volume_habitable: null
+      expect_error: true
+
+ecs.systeme.rendements_systeme_thermodynamique:
+  rule: rendements_systeme_thermodynamique
+  cases:
+    - title: Cas général
+      with:
+        rd: 0.8
+        cop: 3
+      expect:
+        rgs: 3
+        rg: 1
+        rs: 1
+        rd: 0.8
+
+ecs.systeme.rendements_systeme_electrique:
+  rule: rendements_systeme_electrique
+  cases:
+    - title: Chauffe eau vertical - Catégorie C ou 3 étoiles
+      with:
+        rd: 0.8
+        type_generateur: chauffe_eau
+        becs: { "01": 1600 }
+        qgw: 650000
+        position_chauffe_eau: chauffe_eau_vertical
+        label_generateur: ne_performance_c
+      expect:
+        rgs: 1
+        rg: 1
+        rs: 0.815
+        rd: 0.8

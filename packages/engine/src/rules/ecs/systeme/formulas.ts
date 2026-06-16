@@ -66,9 +66,10 @@ export function calcule_cecs_elec(props: {
 	cecs: ReturnType<typeof calcule_cecs>;
 	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
 }): number {
-	return props.energie_generateur === models.common.EnergieEnum.electricite
-		? props.cecs
-		: 0;
+	return common.calcule_celec({
+		cef: props.cecs,
+		energie: props.energie_generateur,
+	});
 }
 
 /**

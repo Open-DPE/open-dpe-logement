@@ -77,7 +77,6 @@ export type EnveloppeData = {
 	hperm: number;
 	hvent: number;
 	presence_joints: boolean;
-	parois_anciennes: boolean;
 	isolation_planchers_hauts: boolean;
 	presence_protection_solaire: boolean;
 	logement_traversant: boolean;
