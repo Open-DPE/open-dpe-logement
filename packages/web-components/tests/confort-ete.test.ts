@@ -1,30 +1,69 @@
-import { describe, it, expect } from "vitest";
-import { renderConfortEte } from "../src/confort-ete/index.js";
-import { CONFORT_ETE_COLORS } from "../src/shared/colors.js";
+import { afterEach, describe, expect, it } from "vitest";
+import "../src/confort-ete/index.js";
+import "../src/icon-confort-ete/index.js"; // ConfortEte appelle getName("icon-confort-ete") — doit être enregistré
+import { mount, shadow } from "./helpers.js";
 
-describe("renderConfortEte", () => {
-	it("valeur 1 (Bon) → couleur verte #2CAF85", () => {
-		const result = renderConfortEte({ value: 1 });
-		expect(result).toContain(CONFORT_ETE_COLORS[1]);
-	});
+const TAG = "open-dpe-logement-confort-ete";
 
-	it("valeur 2 (Moyen) → couleur jaune #A5CC74", () => {
-		const result = renderConfortEte({ value: 2 });
-		expect(result).toContain(CONFORT_ETE_COLORS[2]);
-	});
+const COLORS: Record<string, string> = {
+  A: "#2CAF85",
+  B: "#F49838",
+  C: "#E52322",
+};
 
-	it("valeur 3 (Insuffisant) → couleur orange #F49838", () => {
-		const result = renderConfortEte({ value: 3 });
-		expect(result).toContain(CONFORT_ETE_COLORS[3]);
-	});
+describe(TAG, () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
 
-	it("affiche le libellé dans le rendu", () => {
-		const result = renderConfortEte({ value: 1 });
-		expect(result).toContain("Bon");
-	});
+  it("enregistré dans customElements", () => {
+    expect(customElements.get(TAG)).toBeDefined();
+  });
 
-	it("valeur inconnue → couleur fallback #000000", () => {
-		const result = renderConfortEte({ value: 99 as any });
-		expect(result).toContain("#000000");
-	});
+  describe("cycle de vie DOM", () => {
+    it("connectedCallback rend le composant avec value='A'", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("value", "A");
+      const { unmount } = mount(el);
+      expect(shadow(el)).not.toBe("");
+      unmount();
+    });
+
+    it("attributeChangedCallback re-rend lors d'un changement de value", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("value", "A");
+      const { unmount } = mount(el);
+      const before = shadow(el);
+      el.setAttribute("value", "C");
+      expect(shadow(el)).not.toBe(before);
+      unmount();
+    });
+
+    it("value absente → shadowRoot vide", () => {
+      const el = document.createElement(TAG);
+      const { unmount } = mount(el);
+      expect(shadow(el)).toBe("");
+      unmount();
+    });
+
+    it("value inconnue → shadowRoot vide", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("value", "Z");
+      const { unmount } = mount(el);
+      expect(shadow(el)).toBe("");
+      unmount();
+    });
+  });
+
+  describe("mapping value → couleur de fond", () => {
+    for (const [value, color] of Object.entries(COLORS)) {
+      it(`value='${value}' → background-color ${color}`, () => {
+        const el = document.createElement(TAG);
+        el.setAttribute("value", value);
+        const { unmount } = mount(el);
+        expect(shadow(el)).toContain(color);
+        unmount();
+      });
+    }
+  });
 });

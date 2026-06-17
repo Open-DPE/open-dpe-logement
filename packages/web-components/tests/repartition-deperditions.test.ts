@@ -1,102 +1,114 @@
-import { describe, it, expect } from "vitest";
-import { renderRepartitionDeperditions } from "../src/repartition-deperditions/index.js";
+import { afterEach, describe, expect, it } from "vitest";
+import "../src/repartition-deperditions/index.js";
+import { mount, shadow } from "./helpers.js";
 
-// Jeu de données de base équilibré (chaque composante = gv / 6)
-const BASE_PROPS = {
-	dp_murs: 100,
-	dp_planchers_bas: 100,
-	dp_planchers_hauts: 100,
-	dp_baies: 100,
-	dp_portes: 100,
-	pt: 100,
-	dr: 100,
+const TAG = "open-dpe-logement-repartition-deperditions";
+
+function makeEl(attrs: Record<string, string | number>): HTMLElement {
+  const el = document.createElement(TAG);
+  for (const [k, v] of Object.entries(attrs)) {
+    el.setAttribute(k, String(v));
+  }
+  return el;
+}
+
+const VALID_ATTRS = {
+  dp_murs: 100,
+  dp_planchers_bas: 80,
+  dp_planchers_hauts: 60,
+  dp_baies: 40,
+  dp_portes: 10,
+  pt: 30,
+  dr: 20,
 };
 
-describe("renderRepartitionDeperditions", () => {
-	// 1. Le rendu contient du SVG
-	it("retourne une chaîne contenant une balise <svg", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		expect(result).toContain("<svg");
-		expect(result).toContain("</svg>");
-	});
+describe(TAG, () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
 
-	// 2. Les proportions sont reflétées visuellement
-	it("une part à 50% produit un rendu différent d'une part à 10%", () => {
-		const props50 = { ...BASE_PROPS, dp_murs: 100 }; // murs = 50%
-		const props10 = { ...BASE_PROPS, dp_murs: 200 }; // murs = 10%
-		const result50 = renderRepartitionDeperditions(props50);
-		const result10 = renderRepartitionDeperditions(props10);
-		expect(result50).not.toBe(result10);
-	});
+  it("enregistré dans customElements", () => {
+    expect(customElements.get(TAG)).toBeDefined();
+  });
 
-	// 3. Les différentes catégories sont présentes dans le rendu
-	it("contient le label Murs", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		expect(result).toContain("Murs");
-	});
+  describe("cycle de vie DOM", () => {
+    it("connectedCallback rend le composant avec attributs valides", () => {
+      const el = makeEl(VALID_ATTRS);
+      const { unmount } = mount(el);
+      expect(shadow(el)).toContain("<text");
+      unmount();
+    });
 
-	it("contient le label Planchers", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		expect(result).toContain("Planchers");
-	});
+    it("attributeChangedCallback re-rend lors d'un changement de dp_murs", () => {
+      const el = makeEl(VALID_ATTRS);
+      const { unmount } = mount(el);
+      const before = shadow(el);
+      el.setAttribute("dp_murs", "200");
+      expect(shadow(el)).not.toBe(before);
+      unmount();
+    });
+  });
 
-	it("contient le label Toitures (planchers hauts)", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		expect(result).toContain("Toitures");
-	});
+  describe("attribut invalide → aucune donnée affichée", () => {
+    const invalids = [
+      "dp_murs",
+      "dp_planchers_bas",
+      "dp_planchers_hauts",
+      "dp_baies",
+      "dp_portes",
+      "pt",
+      "dr",
+    ];
+    for (const attr of invalids) {
+      it(`${attr}='invalide' → pas de libellés W/K`, () => {
+        const attrs = { ...VALID_ATTRS, [attr]: "invalide" };
+        const el = makeEl(attrs);
+        const { unmount } = mount(el);
+        expect(shadow(el)).not.toContain("W/K");
+        unmount();
+      });
+    }
+  });
 
-	it("contient le label Menuiseries", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		expect(result).toContain("Menuiseries");
-	});
+  describe("affichage des valeurs (mode W/K)", () => {
+    it("dp_murs=100 → affiche '100 W/K'", () => {
+      const el = makeEl(VALID_ATTRS);
+      const { unmount } = mount(el);
+      expect(shadow(el)).toContain("100 W/K");
+      unmount();
+    });
 
-	it("contient le label Ponts thermiques", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		expect(result).toContain("Ponts thermiques");
-	});
+    it("dr=20 → affiche '20 W/K'", () => {
+      const el = makeEl(VALID_ATTRS);
+      const { unmount } = mount(el);
+      expect(shadow(el)).toContain("20 W/K");
+      unmount();
+    });
 
-	it("contient le label Ventilation (renouvellement d'air)", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		expect(result).toContain("Ventilation");
-	});
+    it("dp_baies + dp_portes fusionnés dans Menuiseries", () => {
+      const el = makeEl({ ...VALID_ATTRS, dp_baies: 30, dp_portes: 10 });
+      const { unmount } = mount(el);
+      // dp_menuiseries = 30 + 10 = 40
+      expect(shadow(el)).toContain("40 W/K");
+      unmount();
+    });
+  });
 
-	// 4. Les valeurs nulles ou à zéro ne cassent pas le rendu
-	it("ne lève pas d'erreur quand toutes les déperditions sont à zéro (gv > 0)", () => {
-		const props = {
-			dp_murs: 0,
-			dp_planchers_bas: 0,
-			dp_planchers_hauts: 0,
-			pt: 0,
-			dp_baies: 0,
-			dp_portes: 0,
-			dr: 0,
-		};
-		expect(() => renderRepartitionDeperditions(props)).not.toThrow();
-		const result = renderRepartitionDeperditions(props);
-		expect(result).toContain("<svg");
-	});
+  describe("attribut percent", () => {
+    it("sans percent → affiche 'W/K'", () => {
+      const el = makeEl(VALID_ATTRS);
+      const { unmount } = mount(el);
+      expect(shadow(el)).toContain("W/K");
+      unmount();
+    });
 
-	it("produit un SVG même quand une seule catégorie a une valeur", () => {
-		const props = {
-			dp_murs: 100,
-			dp_planchers_bas: 0,
-			dp_planchers_hauts: 0,
-			pt: 0,
-			dp_baies: 0,
-			dp_portes: 0,
-			dr: 0,
-		};
-		const result = renderRepartitionDeperditions(props);
-		expect(result).toContain("<svg");
-		expect(result).toContain("</svg>");
-	});
-
-	// 5. Les proportions totalisent toujours 100% visuellement (le SVG est complet)
-	it("le SVG contient exactement une balise ouvrante <svg et une balise fermante </svg>", () => {
-		const result = renderRepartitionDeperditions(BASE_PROPS);
-		const openCount = (result.match(/<svg/g) ?? []).length;
-		const closeCount = (result.match(/<\/svg>/g) ?? []).length;
-		expect(openCount).toBe(1);
-		expect(closeCount).toBe(1);
-	});
+    it("avec percent → affiche '%' et non 'W/K'", () => {
+      const el = makeEl(VALID_ATTRS);
+      el.setAttribute("percent", "");
+      const { unmount } = mount(el);
+      expect(shadow(el)).toContain("%");
+      expect(shadow(el)).not.toContain("W/K");
+      unmount();
+    });
+  });
 });

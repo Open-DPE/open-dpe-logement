@@ -1,38 +1,72 @@
-import { describe, it, expect } from "vitest";
-import { renderClasseEnergie } from "../src/classe-energie/index.js";
+import { afterEach, describe, expect, it } from "vitest";
+import "../src/classe-energie/index.js"; // importe aussi icon-etiquette
+import { mount, shadow } from "./helpers.js";
 
-const ENERGIE_COLORS = {
-	A: "#00A06D",
-	B: "#52B153",
-	C: "#A5CC74",
-	D: "#F4E70F",
-	E: "#F0B40F",
-	F: "#EB8235",
-	G: "#D7221F",
+const TAG = "open-dpe-logement-classe-energie";
+
+const COLORS: Record<string, string> = {
+  A: "#00A06D",
+  B: "#52B153",
+  C: "#A5CC74",
+  D: "#F4E70F",
+  E: "#F0B40F",
+  F: "#EB8235",
+  G: "#D7221F",
 };
 
-describe("renderClasseEnergie", () => {
-	it("contient la couleur correcte pour chaque étiquette", () => {
-		for (const [value, color] of Object.entries(ENERGIE_COLORS)) {
-			const result = renderClasseEnergie({ value: value as any });
-			expect(result).toContain(`background-color: ${color}`);
-		}
-	});
+describe(TAG, () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+  });
 
-	it("taille par défaut est 32px", () => {
-		const result = renderClasseEnergie({ value: "A" });
-		expect(result).toContain("width: 32px");
-		expect(result).toContain("height: 32px");
-	});
+  it("enregistré dans customElements", () => {
+    expect(customElements.get(TAG)).toBeDefined();
+  });
 
-	it("accepte une taille personnalisée", () => {
-		const result = renderClasseEnergie({ value: "A", size: 64 });
-		expect(result).toContain("width: 64px");
-		expect(result).toContain("height: 64px");
-	});
+  describe("cycle de vie DOM", () => {
+    it("connectedCallback rend le composant avec value='A'", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("value", "A");
+      const { unmount } = mount(el);
+      expect(shadow(el)).not.toBe("");
+      unmount();
+    });
 
-	it("contient le SVG de la lettre", () => {
-		const result = renderClasseEnergie({ value: "A" });
-		expect(result).toContain("<svg");
-	});
+    it("attributeChangedCallback re-rend lors d'un changement de value", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("value", "A");
+      const { unmount } = mount(el);
+      const htmlA = shadow(el);
+      el.setAttribute("value", "G");
+      expect(shadow(el)).not.toBe(htmlA);
+      unmount();
+    });
+
+    it("value absente → shadowRoot vide", () => {
+      const el = document.createElement(TAG);
+      const { unmount } = mount(el);
+      expect(shadow(el)).toBe("");
+      unmount();
+    });
+
+    it("value inconnue → shadowRoot vide", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("value", "Z");
+      const { unmount } = mount(el);
+      expect(shadow(el)).toBe("");
+      unmount();
+    });
+  });
+
+  describe("mapping value → couleur de fond", () => {
+    for (const [value, color] of Object.entries(COLORS)) {
+      it(`value='${value}' → background-color ${color}`, () => {
+        const el = document.createElement(TAG);
+        el.setAttribute("value", value);
+        const { unmount } = mount(el);
+        expect(shadow(el)).toContain(color);
+        unmount();
+      });
+    }
+  });
 });

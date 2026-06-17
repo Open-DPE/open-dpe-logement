@@ -1,45 +1,93 @@
-import { describe, it, expect } from "vitest";
-import { renderEnum } from "../src/enum/index.js";
+import { afterEach, describe, expect, it } from "vitest";
+import "../src/enum/index.js";
+import { mount } from "./helpers.js";
 
-describe("renderEnum", () => {
-  it("retourne le libellé correct pour un couple clé/valeur connu", () => {
-    const result = renderEnum("scenario", "conventionnel");
-    expect(result).toContain("Scénario conventionnel");
+const TAG = "open-dpe-logement-enum";
+
+describe(TAG, () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
   });
 
-  it("retourne le libellé correct pour une énergie connue", () => {
-    const result = renderEnum("energie", "electricite");
-    expect(result).toContain("Électricité");
+  it("enregistré dans customElements", () => {
+    expect(customElements.get(TAG)).toBeDefined();
   });
 
-  it("retourne '-' pour une clé inconnue", () => {
-    const result = renderEnum("inexistant" as any, "valeur");
-    expect(result).toContain("-");
+  describe("cycle de vie DOM", () => {
+    it("connectedCallback rend la valeur après mount", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("name", "usage");
+      el.setAttribute("value", "chauffage");
+      const { unmount } = mount(el);
+      expect(el.textContent).toBe("Chauffage");
+      unmount();
+    });
+
+    it("attributeChangedCallback re-rend lors d'un changement de value", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("name", "usage");
+      el.setAttribute("value", "chauffage");
+      const { unmount } = mount(el);
+      el.setAttribute("value", "ecs");
+      expect(el.textContent).toBe("Eau chaude sanitaire");
+      unmount();
+    });
   });
 
-  it("encapsule le résultat dans un <span>", () => {
-    const result = renderEnum("etiquette", "A");
-    expect(result).toMatch(/^<span>.*<\/span>$/);
+  describe("mappings par domaine", () => {
+    const cases: [string, string, string][] = [
+      ["usage", "chauffage", "Chauffage"],
+      ["usage", "ecs", "Eau chaude sanitaire"],
+      ["usage", "refroidissement", "Refroidissement"],
+      ["usage", "eclairage", "Éclairage"],
+      ["usage", "auxiliaire", "Auxiliaire"],
+      ["etiquette", "A", "A"],
+      ["etiquette", "G", "G"],
+      ["confort-ete", "1", "Bon"],
+      ["confort-ete", "2", "Moyen"],
+      ["confort-ete", "3", "Insuffisant"],
+      ["type-batiment", "maison", "Maison individuelle"],
+      ["energie", "electricite", "Électricité"],
+    ];
+
+    for (const [name, value, expected] of cases) {
+      it(`name='${name}' value='${value}' → '${expected}'`, () => {
+        const el = document.createElement(TAG);
+        el.setAttribute("name", name);
+        el.setAttribute("value", value);
+        const { unmount } = mount(el);
+        expect(el.textContent).toBe(expected);
+        unmount();
+      });
+    }
   });
 
-  it("retourne le libellé de zone climatique", () => {
-    const result = renderEnum("zone-climatique", "H2d");
-    expect(result).toContain("H2d");
-  });
+  describe("cas invalides", () => {
+    it("value='null' → affiche '-'", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("name", "usage");
+      el.setAttribute("value", "null");
+      const { unmount } = mount(el);
+      expect(el.textContent).toBe("-");
+      unmount();
+    });
 
-  it("retourne le libellé de type de bâtiment", () => {
-    const result = renderEnum("type-batiment", "maison");
-    expect(result).toContain("Maison individuelle");
-  });
+    it("name inconnu → textContent inchangé (vide)", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("name", "inconnu");
+      el.setAttribute("value", "foo");
+      const { unmount } = mount(el);
+      expect(el.textContent).toBe("");
+      unmount();
+    });
 
-  it("retourne le libellé scénario dépensier", () => {
-    const result = renderEnum("scenario", "depensier");
-    expect(result).toContain("Scénario dépensier");
-  });
-
-  it("retourne '-' pour une valeur inconnue dans une clé existante", () => {
-    const result = renderEnum("scenario", "inconnu" as any);
-    expect(result).toContain("-");
-    expect(result).not.toContain("undefined");
+    it("value inconnue dans un name valide → textContent inchangé (vide)", () => {
+      const el = document.createElement(TAG);
+      el.setAttribute("name", "usage");
+      el.setAttribute("value", "inconnue");
+      const { unmount } = mount(el);
+      expect(el.textContent).toBe("");
+      unmount();
+    });
   });
 });

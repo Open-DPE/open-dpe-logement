@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it } from "vitest";
-import "../src/etiquette-energie/index.js";
+import "../src/icon-confort-ete/index.js";
 import { mount, shadow } from "./helpers.js";
 
-const TAG = "open-dpe-logement-etiquette-energie";
+const TAG = "open-dpe-logement-icon-confort-ete";
 
 describe(TAG, () => {
   afterEach(() => {
@@ -13,8 +13,8 @@ describe(TAG, () => {
     expect(customElements.get(TAG)).toBeDefined();
   });
 
-  describe("smoke : rend du contenu SVG pour chaque valeur", () => {
-    for (const value of ["A", "B", "C", "D", "E", "F", "G"]) {
+  describe("smoke : rend du SVG pour chaque valeur 1/2/3", () => {
+    for (const value of ["1", "2", "3"]) {
       it(`value='${value}' → shadowRoot contient <path`, () => {
         const el = document.createElement(TAG);
         el.setAttribute("value", value);
@@ -25,21 +25,11 @@ describe(TAG, () => {
     }
   });
 
-  it("value inconnue → shadowRoot sans <path de contenu", () => {
+  it("value inconnue → shadowRoot sans <path", () => {
     const el = document.createElement(TAG);
-    el.setAttribute("value", "Z");
+    el.setAttribute("value", "4");
     const { unmount } = mount(el);
     expect(shadow(el)).not.toContain("<path");
-    unmount();
-  });
-
-  it("attributeChangedCallback re-rend lors d'un changement de value", () => {
-    const el = document.createElement(TAG);
-    el.setAttribute("value", "A");
-    const { unmount } = mount(el);
-    const htmlA = shadow(el);
-    el.setAttribute("value", "G");
-    expect(shadow(el)).not.toBe(htmlA);
     unmount();
   });
 });
