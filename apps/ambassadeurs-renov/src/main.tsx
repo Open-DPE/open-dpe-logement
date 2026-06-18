@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home } from "./pages/test";
+import { Home } from "./pages/home";
 import { Simulation } from "./pages/simulation";
 import { Ressources } from "./pages/ressources";
 import { MonLogement } from "./pages/mon-logement";
