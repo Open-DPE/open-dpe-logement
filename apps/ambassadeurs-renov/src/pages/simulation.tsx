@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useStore } from "@nanostores/react";
 import { useNavigate } from "react-router";
 import { $user } from "../stores/user";
@@ -9,9 +10,14 @@ export function Simulation() {
   const navigate = useNavigate();
   const { diagnostic, simulation } = useStore($user);
 
+  useEffect(() => {
+    if (diagnostic === null || simulation === null) {
+      navigate("/mon-logement", { viewTransition: true });
+    }
+  }, [diagnostic, simulation, navigate]);
+
   if (diagnostic === null || simulation === null) {
-    navigate("/mon-logement", { viewTransition: true });
-    return;
+    return null;
   }
 
   return (

@@ -21,14 +21,14 @@ export function AvantApres({ hasDiagnostic, hasSimulation }: Props) {
               className="grow"
               asChild
             >
-              <NavLink to="/" viewTransition>Avant</NavLink>
+              <NavLink to="/" viewTransition>Avant travaux</NavLink>
             </Button>
           )
         }
         {
           !hasDiagnostic && (
             <Button variant="outline" disabled className="grow">
-              Avant
+              Avant travaux
             </Button>
           )
         }
@@ -39,14 +39,14 @@ export function AvantApres({ hasDiagnostic, hasSimulation }: Props) {
               className="grow"
               asChild
             >
-              <NavLink to="/simulation" viewTransition>Après</NavLink>
+              <NavLink to="/simulation" viewTransition>Après travaux</NavLink>
             </Button>
           )
         }
         {
           !hasSimulation && (
             <Button variant="outline" disabled className="grow">
-              Après
+              Après travaux
             </Button>
           )
         }

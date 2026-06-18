@@ -12,8 +12,6 @@ import { Dpe } from "@/components/dpe";
 export function Home() {
   const { diagnostic, simulation } = useStore($user);
 
-  console.log("Home", { diagnostic, simulation });
-
   return (
     <Layout>
       <header className="mb-8 text-center">

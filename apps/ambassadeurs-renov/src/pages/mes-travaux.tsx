@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import * as models from "@open-dpe-logement/models";
 import { createContext, services } from "@open-dpe-logement/engine";
@@ -27,8 +27,13 @@ export function MesTravaux() {
     gestes.filter((geste) => gestesIds.includes(geste.id)).map((geste) => geste.id),
   );
 
+  useEffect(() => {
+    if (null === diagnostic) {
+      navigate("/mon-logement", { viewTransition: true });
+    }
+  }, [diagnostic, navigate]);
+
   if (null === diagnostic) {
-    navigate("/mon-logement", { viewTransition: true });
     return;
   }
 
@@ -39,7 +44,6 @@ export function MesTravaux() {
       return null;
     }
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
     setPending(true);
 
     let data = structuredClone(diagnostic) as models.diagnostic.Diagnostic;
@@ -55,13 +59,12 @@ export function MesTravaux() {
       const context = createContext(data);
       const simulation = services.diagnostic.calcule(context);
       setSimulation(simulation, selectedGestes);
-      setPending(false);
       navigate("/simulation", { viewTransition: true, state: { toast: "Gestes mis à jour" } });
     } catch (error) {
       console.error(error, data);
       toast.error("Une erreur est survenue lors de la simulation.");
+    } finally {
       setPending(false);
-      return;
     }
   }
 

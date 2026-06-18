@@ -67,27 +67,27 @@ export function MonLogement() {
     setPending(true);
     setError(undefined);
 
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    try {
+      const scenario = scenarios.find((s) => s.id === scenarioId);
+      if (!scenario) {
+        setError(`Scénario introuvable`);
+        return;
+      }
 
-    const scenario = scenarios.find((s) => s.id === scenarioId);
-    if (!scenario) {
-      setError(`Scénario introuvable`);
+      let data = scenario.data;
+      const departement = departements.find((d) => d.code_departement === departementCode);
+      if (departement) data = withDepartement(data, departement);
+      if (altitude) data = withAltitude(data, Number(altitude));
+      if (anneeConstruction) data = withAnneeConstruction(data, Number(anneeConstruction));
+
+      const context = createContext(data);
+      const result = services.diagnostic.calcule(context);
+
+      setDiagnostic(scenario.id, result);
+      navigate("/", { viewTransition: true, state: { toast: "Scénario mis à jour" } });
+    } finally {
       setPending(false);
-      return;
     }
-
-    let data = scenario.data;
-    const departement = departements.find((d) => d.code_departement === departementCode);
-    if (departement) data = withDepartement(data, departement);
-    if (altitude) data = withAltitude(data, Number(altitude));
-    if (anneeConstruction) data = withAnneeConstruction(data, Number(anneeConstruction));
-
-    const context = createContext(data);
-    const result = services.diagnostic.calcule(context);
-
-    setDiagnostic(scenario.id, result);
-    setPending(false);
-    navigate("/", { viewTransition: true, state: {toast: "Scénario mis à jour"} });
   }
 
   return (
@@ -122,7 +122,7 @@ export function MonLogement() {
             <SelectGroup>
               <SelectLabel>Départements</SelectLabel>
               {departements.map(({ code_departement, departement }) => (
-                <SelectItem key={code_departement} value={code_departement}>{departement}</SelectItem>
+                <SelectItem key={code_departement} value={code_departement}>{`${code_departement} - ${departement}`}</SelectItem>
               ))}
             </SelectGroup>
           </SelectContent>
