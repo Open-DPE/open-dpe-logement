@@ -1,10 +1,11 @@
+import { validate } from "@open-dpe-logement/schemas/refroidissement/generateur";
 import type { Consommations, Energie, UUID } from "../common/common.js";
 import { EnergieEnum } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 
-export const isGenerateur = createGuard<Generateur>(
-	"/refroidissement/generateur",
-);
+export function isGenerateur(data: unknown): data is Generateur {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement/generateur

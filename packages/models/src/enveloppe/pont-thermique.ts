@@ -1,9 +1,10 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/pont-thermique";
 import type { UUID } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 
-export const isPontThermique = createGuard<PontThermique>(
-	"/enveloppe/pont-thermique",
-);
+export function isPontThermique(data: unknown): data is PontThermique {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/pont-thermique

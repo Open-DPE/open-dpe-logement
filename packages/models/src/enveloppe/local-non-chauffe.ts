@@ -1,21 +1,18 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/local-non-chauffe";
 import type {
 	UUID,
 	NonEmptyArray,
 	OrientationCardinale,
 } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
-import type {
-	Mitoyennete,
-	Orientation,
-	OrientationHorizontale,
-} from "./common.js";
-import type { Materiau, TypeVitrage, TypeVitrageEnum } from "./baie.js";
+import { buildEnum } from "../utils.js";
+import * as baie from "./local-non-chauffe/baie.js";
+import * as paroi from "./local-non-chauffe/paroi.js";
 
-export const isLocalNonChauffe = createGuard<LocalNonChauffe>(
-	"/enveloppe/local-non-chauffe",
-);
-export const isBaie = createGuard<Baie>("/enveloppe/local-non-chauffe/baie");
-export const isParoi = createGuard<Paroi>("/enveloppe/local-non-chauffe/paroi");
+export { baie, paroi };
+
+export function isLocalNonChauffe(data: unknown): data is LocalNonChauffe {
+	return validate(data).isValid;
+}
 
 export function isEspaceTamponSolarise(
 	localNonChauffe: LocalNonChauffe,
@@ -34,23 +31,29 @@ export function isAutreLocalNonChauffe(
  */
 export type LocalNonChauffe = EspaceTamponSolarise | AutreLocalNonChauffe;
 
-type LocalNonChauffeBase = {
+type LocalNonChauffeType<
+	T extends {
+		type: TypeLnc;
+		baies?: baie.Baie[];
+		parois?: paroi.Paroi[];
+	},
+> = {
 	id: UUID;
 	description: string;
 	type: TypeLnc;
-	parois: Paroi[];
-	baies: Baie[];
-};
+	parois: paroi.Paroi[];
+	baies: baie.Baie[];
+} & T;
 
-export type EspaceTamponSolarise = LocalNonChauffeBase & {
+export type EspaceTamponSolarise = LocalNonChauffeType<{
 	type: typeof TypeLncEnum.espace_tampon_solarise;
-	baies: NonEmptyArray<Baie>;
-};
+	baies: NonEmptyArray<baie.Baie>;
+}>;
 
-export type AutreLocalNonChauffe = LocalNonChauffeBase & {
+export type AutreLocalNonChauffe = LocalNonChauffeType<{
 	type: Exclude<TypeLnc, typeof TypeLncEnum.espace_tampon_solarise>;
-	parois: NonEmptyArray<Paroi>;
-};
+	parois: NonEmptyArray<paroi.Paroi>;
+}>;
 
 export type LocalNonChauffeWithData<
 	T extends LocalNonChauffe = LocalNonChauffe,
@@ -67,62 +70,6 @@ export type LocalNonChauffeData = {
 	sse: number;
 	orientations: OrientationCardinale[];
 	t: number;
-};
-
-export type Paroi = {
-	id: UUID;
-	description: string;
-	isolation: boolean | null;
-	position: PositionParoi;
-};
-
-export type PositionParoi = {
-	mitoyennete: Mitoyennete;
-	surface: number;
-};
-
-export type Baie = BaieVitree | BaieAutre;
-
-type BaieBase = {
-	id: UUID;
-	description: string;
-	type_vitrage: TypeVitrage | null;
-	materiau_menuiserie: Materiau | null;
-	presence_rupteur_pont_thermique: boolean | null;
-	position: PositionBaie;
-};
-
-export type BaieVitree = BaieBase & {
-	type_vitrage:
-		| typeof TypeVitrageEnum.polycarbonate
-		| typeof TypeVitrageEnum.brique_verre;
-	materiau_menuiserie: null;
-};
-
-export type BaieAutre = BaieBase & {
-	type_vitrage: Exclude<
-		TypeVitrage,
-		typeof TypeVitrageEnum.polycarbonate | typeof TypeVitrageEnum.brique_verre
-	>;
-};
-
-export type PositionBaie = PositionBaieHorizontale | PositionBaieVerticale;
-
-type PositionBaieBase = {
-	mitoyennete: Mitoyennete;
-	surface: number;
-	orientation: Orientation;
-	inclinaison: number;
-};
-
-export type PositionBaieHorizontale = PositionBaieBase & {
-	orientation: typeof OrientationHorizontale;
-	inclinaison: 0;
-};
-
-export type PositionBaieVerticale = PositionBaieBase & {
-	orientation: Exclude<Orientation, typeof OrientationHorizontale>;
-	inclinaison: number;
 };
 
 export const TYPES_LNC = [

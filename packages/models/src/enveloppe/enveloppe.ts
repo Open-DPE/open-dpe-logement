@@ -1,3 +1,4 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe";
 import * as baie from "./baie.js";
 import * as common from "./common.js";
 import * as localNonChauffe from "./local-non-chauffe.js";
@@ -10,7 +11,7 @@ import * as pontThermique from "./pont-thermique.js";
 import * as porte from "./porte.js";
 import type { UUID, NonEmptyArray } from "../common/common.js";
 import { EntityNotFoundError } from "../errors.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 
 export {
 	baie,
@@ -25,7 +26,9 @@ export {
 	porte,
 };
 
-export const isEnveloppe = createGuard<Enveloppe>("/enveloppe");
+export function isEnveloppe(data: unknown): data is Enveloppe {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe

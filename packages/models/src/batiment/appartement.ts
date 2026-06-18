@@ -1,8 +1,10 @@
+import { validate } from "@open-dpe-logement/schemas/batiment/appartement";
 import type { UUID } from "../common/common.js";
-import { createGuard, buildEnum } from "../utils.js";
+import { buildEnum } from "../utils.js";
 
-export const isAppartement = createGuard<Appartement>("/batiment/appartement");
-
+export function isAppartement(data: unknown): data is Appartement {
+	return validate(data).isValid;
+}
 /**
  * @see https://schemas.open-dpe.fr/batiment/appartement
  */

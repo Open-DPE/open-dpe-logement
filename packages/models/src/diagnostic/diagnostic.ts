@@ -1,4 +1,5 @@
-import { buildEnum, createGuard } from "../utils.js";
+import { validate } from "@open-dpe-logement/schemas/diagnostic";
+import { buildEnum } from "../utils.js";
 import type { Consommations } from "../common/common.js";
 import type { Chauffage, ChauffageWithData } from "../chauffage/chauffage.js";
 import type { Ecs, EcsWithData } from "../ecs/ecs.js";
@@ -17,7 +18,9 @@ import type {
 } from "../ventilation/ventilation.js";
 import type { Batiment, BatimentWithData } from "../batiment/batiment.js";
 
-export const isDiagnostic = createGuard<Diagnostic>("/diagnostic");
+export function isDiagnostic(data: unknown): data is Diagnostic {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/diagnostic

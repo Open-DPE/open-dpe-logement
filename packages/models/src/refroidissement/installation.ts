@@ -1,11 +1,11 @@
+import { validate } from "@open-dpe-logement/schemas/refroidissement/installation";
 import { EntityNotFoundError } from "../errors.js";
 import type { UUID, NonEmptyArray } from "../common/common.js";
-import { createGuard } from "../utils.js";
 import type { Generateur } from "./generateur.js";
 
-export const isInstallation = createGuard<Installation>(
-	"/refroidissement/installation",
-);
+export function isInstallation(data: unknown): data is Installation {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement/installation

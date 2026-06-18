@@ -17,7 +17,7 @@ export const REGISTRY = {
 	},
 };
 
-type Baie = models.enveloppe.localNonChauffe.Baie;
+type Baie = models.enveloppe.localNonChauffe.baie.Baie;
 
 export function aue(
 	ctx: Context,

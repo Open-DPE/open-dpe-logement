@@ -1,10 +1,13 @@
+import { validate } from "@open-dpe-logement/schemas/batiment";
 import type { Adresse } from "../common/common.js";
-import { createGuard, buildEnum } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import * as appartement from "./appartement.js";
 
 export { appartement };
 
-export const isBatiment = createGuard<Batiment>("/batiment");
+export function isBatiment(data: unknown): data is Batiment {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/batiment

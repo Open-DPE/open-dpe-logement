@@ -1,13 +1,15 @@
+import { validate } from "@open-dpe-logement/schemas/ecs";
 import type { NonEmptyArray, UUID } from "../common/common.js";
 import { EntityNotFoundError } from "../errors.js";
-import { createGuard } from "../utils.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
 import * as systeme from "./systeme.js";
 
 export { generateur, installation, systeme };
 
-export const isEcs = createGuard<Ecs>("/ecs");
+export function isEcs(data: unknown): data is Ecs {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/ecs

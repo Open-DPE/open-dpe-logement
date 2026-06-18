@@ -1,9 +1,11 @@
+import { validate } from "@open-dpe-logement/schemas/production/panneau-photovoltaique";
 import type { Orientation, UUID } from "../common/common.js";
-import { createGuard } from "../utils.js";
 
-export const isPanneauPhotovoltaique = createGuard<PanneauPhotovoltaique>(
-	"/production/panneau-photovoltaique",
-);
+export function isPanneauPhotovoltaique(
+	data: unknown,
+): data is PanneauPhotovoltaique {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/production/panneau-photovoltaique

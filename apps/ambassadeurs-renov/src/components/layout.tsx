@@ -1,73 +1,92 @@
 import type { ReactNode } from "react";
+import { useEffect, useRef } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { NavLink } from "react-router-dom";
+import { useStore } from "@nanostores/react";
+import { $user } from "../stores/user";
 import Logo from "@svg/ambassadeur-renov.svg";
 import LogoWhite from "@svg/ambassadeur-renov-white.svg";
-import { Button } from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner"
+import { Button } from "./ui/button";
+import { Toaster } from "./ui/sonner"
+import { ScrollToTop } from "./scroll-to-top";
+import { toast } from "sonner"
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet"
-import {
   CircleQuestionMarkIcon,
   HousePlusIcon,
+  MoveLeftIcon,
   ShieldUserIcon,
   TargetIcon,
   ToolboxIcon
 } from "lucide-react"
-import { Ressources } from "./ressources";
-import { Partenaires } from "./partenaires";
-import { ChangeScenario } from "./change-scenario";
-import { ChangeGestes } from "./change-gestes";
 
 interface Props {
   children: ReactNode;
+  prev?: boolean;
 }
 
-export function Layout({ children }: Props) {
+export function Layout({ children, prev }: Props) {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const toastShown = useRef(false);
+  const { diagnostic } = useStore($user);
+
+  useEffect(() => {
+    if (location.state?.toast && !toastShown.current) {
+      toastShown.current = true;
+      toast.success(location.state.toast);
+      window.history.replaceState({}, "");
+    }
+  }, [location.state]);
+
   return (
     <>
       <header className="sticky w-full top-0 left-0 right-0 bg-primary z-10 h-[48px] md:h-[60px]">
         <div className="flex items-center justify-between h-full gap-4 p-2 md:p-4 max-w-[1024px] m-auto">
-          <img src={LogoWhite} alt="Logo Ambassadeur Rénov'" className="w-[160px] md:w-[180px]" />
+          {
+            prev && (
+              <Button variant="ghost" size="icon" className="text-white" onClick={() => navigate(-1)}>
+                <MoveLeftIcon size={20} />
+              </Button>
+            )
+          }
+          <NavLink to="/" viewTransition>
+            <img src={LogoWhite} alt="Logo Ambassadeur Rénov'" className="w-[160px] md:w-[180px]" />
+          </NavLink>
 
           <div className="flex items-center gap-4 text-white">
-            <Sheet>
-              <SheetTrigger>
+            <Dialog>
+              <DialogTrigger>
                 <CircleQuestionMarkIcon size={20} />
-              </SheetTrigger>
+              </DialogTrigger>
 
-              <SheetContent side="bottom" className="!h-screen !max-h-screen p-4 md:!h-[75vh] md:!max-h-[75vh] text-center">
-                <SheetHeader className="text-center mt-4">
-                  <SheetTitle>
+              <DialogContent>
+                <DialogHeader className="text-center">
+                  <DialogTitle>
                     <img src={Logo} alt="Logo Ambassadeur Rénov'" className="w-[160px] md:w-[180px] m-auto" />
-                  </SheetTitle>
-                  <SheetDescription>
-                    Un projet Open Source gratuit et libre d'accès
-                  </SheetDescription>
-                </SheetHeader>
-                <div className="w-full max-w-[768px] m-auto p-4 no-scrollbar overflow-y-auto">
-                  <p>
-                    La rénovation énergétique est un enjeu majeur de la lutte contre le réchauffement climatique et
-                    raréfaction des ressources. Ce projet vise à sensibiliser le plus grand nombre aux gestes 
-                    les plus efficaces pour réduire l'empreinte énergétique et carbone des logements.
-                  </p>
-                  <Partenaires />
-                </div>
-              </SheetContent>
-            </Sheet>
+                  </DialogTitle>
+                  <DialogDescription>
+                    Comment ça marche ?
+                  </DialogDescription>
+                </DialogHeader>
+                <p>
+                  Cette application vous permet d'évaluer l'impact énergétique et carbone d'un plan de
+                  rénovation pour un logement. Vous pouvez modifier les caractéristiques d'un logement,
+                  sélectionner des scénarios de rénovation, et obtenir un diagnostic personnalisé.
+                  <br /><br />
+                  Les résultats sont basés sur la méthode de calcul officielle, vous permettant de comprendre
+                  l'impact de vos choix de rénovation sur la performance énergétique et l'empreinte carbone
+                  d'un logement.
+                </p>
+              </DialogContent>
+            </Dialog>
 
             <Dialog>
               <DialogTrigger>
@@ -75,7 +94,7 @@ export function Layout({ children }: Props) {
               </DialogTrigger>
 
               <DialogContent>
-                <DialogHeader>
+                <DialogHeader className="text-center">
                   <DialogTitle>Protection de vos données personnelles</DialogTitle>
                 </DialogHeader>
 
@@ -86,93 +105,43 @@ export function Layout({ children }: Props) {
         </div>
       </header>
 
-      <main className="max-w-[1024px] m-auto py-8 px-4 min-h-screen">
+      <main className="max-w-[768px] m-auto py-8 px-4 min-h-screen">
         {children}
       </main>
 
-      <nav className="sticky w-full h-[56px] bottom-0 left-0 right-0 md:w-auto bg-white shadow-2xl">
+      <nav className="sticky navbar w-full bottom-0 left-0 right-0 md:w-auto bg-white shadow-2xl">
         <div className="rounded-md grid grid-flow-col items-center justify-center gap-8 p-2">
-          <Sheet>
-            <SheetTrigger asChild>
-              <div className="flex flex-col items-center justify-center gap-1 cursor-pointer">
-                <HousePlusIcon size={20} />
-                <span className="font-medium text-xs">Mon logement</span>
-              </div>
-            </SheetTrigger>
-
-            <SheetContent side="bottom" className="!h-screen !max-h-screen p-4 md:!h-[75vh] md:!max-h-[75vh]">
-              <SheetHeader className="text-center mt-4">
-                <SheetTitle>Mon logement</SheetTitle>
-                <SheetDescription>
-                  Modifiez les caractéristiques de votre logement pour obtenir un diagnostic personnalisé.
-                </SheetDescription>
-              </SheetHeader>
-
-              <div className="w-full max-w-[540px] m-auto p-4 no-scrollbar overflow-y-auto">
-                <ChangeScenario />
-
-                <SheetFooter className="px-0">
-                  <SheetClose asChild>
-                    <Button variant="outline">Fermer</Button>
-                  </SheetClose>
-                </SheetFooter>
-              </div>
-            </SheetContent>
-          </Sheet>
-
-          <Sheet>
-            <SheetTrigger asChild>
-              <div className="flex flex-col items-center justify-center gap-1 cursor-pointer">
+          <Button variant="ghost" className="py-6" asChild>
+            <NavLink to="/mon-logement" className="flex flex-col" viewTransition>
+              <HousePlusIcon size={20} />
+              <span className="font-medium text-xs">Mon logement</span>
+            </NavLink>
+          </Button>
+          {
+            diagnostic ? (
+              <Button variant="ghost" className="py-6" asChild>
+                <NavLink to="/mes-travaux" className="flex flex-col" viewTransition>
+                  <TargetIcon size={20} />
+                  <span className="font-medium text-xs">Mes travaux</span>
+                </NavLink>
+              </Button>
+            ) : (
+              <Button variant="ghost" className="py-6 flex flex-col" disabled>
                 <TargetIcon size={20} />
-                <span className="font-medium text-xs">Mes gestes</span>
-              </div>
-            </SheetTrigger>
-            <SheetContent side="bottom" className="!h-screen !max-h-screen p-4 md:!h-[75vh] md:!max-h-[75vh]">
-              <SheetHeader className="text-center mt-4">
-                <SheetTitle>Modifiez vos gestes</SheetTitle>
-                <SheetDescription>
-                  Évaluez l'impact de vos gestes sur la performance de votre logement.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="w-full max-w-[768px] m-auto p-4 no-scrollbar overflow-y-auto">
-                <ChangeGestes />
-
-                <SheetFooter className="px-0">
-                  <SheetClose asChild>
-                    <Button variant="outline">Fermer</Button>
-                  </SheetClose>
-                </SheetFooter>
-              </div>
-            </SheetContent>
-          </Sheet>
-
-          <Sheet>
-            <SheetTrigger asChild>
-              <div className="flex flex-col items-center justify-center gap-1 cursor-pointer">
-                <ToolboxIcon size={20} />
-                <span className="font-medium text-xs">Ressources</span>
-              </div>
-            </SheetTrigger>
-            <SheetContent side="bottom" className="!h-screen !max-h-screen p-4 md:!h-[75vh] md:!max-h-[75vh]">
-              <SheetHeader className="text-center mt-4">
-                <SheetTitle>Outils et ressources</SheetTitle>
-                <SheetDescription>
-                  Vidéos, podcasts, quizz ou services pour me former à la rénovation énergétique.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="w-full max-w-[768px] m-auto p-4 no-scrollbar overflow-y-auto">
-                <Ressources />
-                <SheetFooter className="px-0">
-                  <SheetClose asChild>
-                    <Button variant="outline">Fermer</Button>
-                  </SheetClose>
-                </SheetFooter>
-              </div>
-            </SheetContent>
-          </Sheet>
+                <span className="font-medium text-xs">Mes travaux</span>
+              </Button>
+            )
+          }
+          <Button variant="ghost" className="py-6" asChild>
+            <NavLink to="/ressources" className="flex flex-col" viewTransition>
+              <ToolboxIcon size={20} />
+              <span className="font-medium text-xs">Ressources</span>
+            </NavLink>
+          </Button>
         </div>
-      </nav>
+      </nav >
 
+      <ScrollToTop />
       <Toaster />
     </>
   );

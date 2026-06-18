@@ -11,7 +11,7 @@ export const REGISTRY = {
 	},
 };
 
-type Paroi = models.enveloppe.localNonChauffe.Paroi;
+type Paroi = models.enveloppe.localNonChauffe.paroi.Paroi;
 
 export function aue(
 	ctx: Context,

@@ -1,10 +1,11 @@
+import { validate } from "@open-dpe-logement/schemas/chauffage/installation";
 import type { UUID, NonEmptyArray } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import * as systeme from "./systeme.js";
 
-export const isInstallation = createGuard<Installation>(
-	"/chauffage/installation",
-);
+export function isInstallation(data: unknown): data is Installation {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/installation

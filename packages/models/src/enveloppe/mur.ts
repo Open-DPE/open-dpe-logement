@@ -1,12 +1,15 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/mur";
 import type { UUID } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import type {
 	InertieParoi,
 	Isolation,
 	Position as PositionBase,
 } from "./common.js";
 
-export const isMur = createGuard<Mur>("/enveloppe/mur");
+export function isMur(data: unknown): data is Mur {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/mur

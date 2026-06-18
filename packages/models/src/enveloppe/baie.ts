@@ -1,5 +1,6 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/baie";
 import type { UUID } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import type { Masque } from "./masque.js";
 import type {
 	Orientation,
@@ -8,7 +9,9 @@ import type {
 	TypePose,
 } from "./common.js";
 
-export const isBaie = createGuard<Baie>("/enveloppe/baie");
+export function isBaie(data: unknown): data is Baie {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/baie

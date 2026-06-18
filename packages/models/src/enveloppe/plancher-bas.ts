@@ -1,5 +1,6 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/plancher-bas";
 import type { UUID } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import {
 	type InertieParoi,
 	type Isolation,
@@ -7,9 +8,9 @@ import {
 	MitoyenneteEnum,
 } from "./common.js";
 
-export const isPlancherBas = createGuard<PlancherBas>(
-	"/enveloppe/plancher-bas",
-);
+export function isPlancherBas(data: unknown): data is PlancherBas {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/plancher-bas

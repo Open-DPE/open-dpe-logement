@@ -9,14 +9,13 @@ import { bundle } from "@hyperjump/json-schema/bundle";
 
 const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
 const SCHEMAS_DIR = join(ROOT, "schemas");
-const TARGET = join(ROOT, "packages", "schemas", "src", "data");
+const TARGET = join(ROOT, "packages", "schemas", "data");
 
 mkdirSync(TARGET, { recursive: true });
 
 const schemaFiles = globSync(`${SCHEMAS_DIR}/**/*.yaml`);
 
 const VALID_SCHEMA = "https://json-schema.org/draft/2020-12/schema";
-
 
 /**
  * @param {string} file
@@ -83,18 +82,7 @@ for (const file of schemaFiles) {
 	const bundled = await bundle($id);
 
 	const name = toFilename($id);
-	const stringidied = [
-		"import type { Schema } from '../schemas';",
-		"",
-		"// ⚠️  Fichier auto-généré — ne pas modifier manuellement.",
-		"",
-		`const schema: Schema = ${JSON.stringify(bundled)};`,
-		"",
-		"export default schema;",
-		"",
-	].join("\n");
-
-	writeFileSync(`${TARGET}/${name}.ts`, stringidied, {
+	writeFileSync(`${TARGET}/${name}.json`, JSON.stringify(bundled), {
 		encoding: "utf-8",
 	});
 	console.log(`✓ ${name}`);

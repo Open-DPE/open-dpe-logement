@@ -1,8 +1,11 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/porte";
 import type { UUID } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import type { Position as PositionBase, TypePose } from "./common.js";
 
-export const isPorte = createGuard<Porte>("/enveloppe/porte");
+export function isPorte(data: unknown): data is Porte {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/porte

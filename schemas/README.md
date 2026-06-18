@@ -14,7 +14,6 @@ schemas/
 ├── refroidissement/
 ├── ventilation/
 ├── manifest.schema.yaml        # Schéma des manifestes de versions
-├── schemas.yaml                # Point d'entrée
 └── CHANGELOG.md
 ```
 

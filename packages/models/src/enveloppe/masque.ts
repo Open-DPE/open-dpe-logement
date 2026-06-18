@@ -1,7 +1,10 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/masque";
 import type { UUID } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 
-export const isMasque = createGuard<Masque>("/enveloppe/masque");
+export function isMasque(data: unknown): data is Masque {
+	return validate(data).isValid;
+}
 
 export function isMasqueProche(masque: Masque): masque is MasqueProche {
 	return TYPES_MASQUES_PROCHES.includes(masque.type);

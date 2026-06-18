@@ -1,9 +1,12 @@
+import { validate } from "@open-dpe-logement/schemas/ecs/systeme";
 import type { Consommations, UUID } from "../common/common.js";
 import type { Generateur } from "./generateur.js";
 import { EntityNotFoundError } from "../errors.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 
-export const isSysteme = createGuard<Systeme>("/ecs/systeme");
+export function isSysteme(data: unknown): data is Systeme {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/systeme

@@ -1,6 +1,7 @@
+import { validate } from "@open-dpe-logement/schemas/chauffage";
 import type { NonEmptyArray, UUID } from "../common/common.js";
 import { EntityNotFoundError } from "../errors.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 import * as emetteur from "./emetteur.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
@@ -8,7 +9,9 @@ import * as systeme from "./systeme.js";
 
 export { generateur, installation, emetteur, systeme };
 
-export const isChauffage = createGuard<Chauffage>("/chauffage");
+export function isChauffage(data: unknown): data is Chauffage {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage

@@ -1,4 +1,5 @@
-import { buildEnum, createGuard } from "../utils.js";
+import { validate } from "@open-dpe-logement/schemas/ecs/generateur";
+import { buildEnum } from "../utils.js";
 import { ENERGIES_COMBUSTION, EnergieEnum } from "../common/common.js";
 import type {
 	Consommations,
@@ -8,7 +9,9 @@ import type {
 	UUID,
 } from "../common/common.js";
 
-export const isGenerateur = createGuard<Generateur>("/ecs/generateur");
+export function isGenerateur(data: unknown): data is Generateur {
+	return validate(data).isValid;
+}
 
 export function isChaudiereCombustion(
 	generateur: Generateur,

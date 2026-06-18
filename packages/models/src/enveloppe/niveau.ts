@@ -1,8 +1,10 @@
+import { validate } from "@open-dpe-logement/schemas/enveloppe/niveau";
 import type { UUID } from "../common/common.js";
 import type { Inertie, InertieParoi } from "./common.js";
-import { createGuard } from "../utils.js";
 
-export const isNiveau = createGuard<Niveau>("/enveloppe/niveau");
+export function isNiveau(data: unknown): data is Niveau {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/niveau

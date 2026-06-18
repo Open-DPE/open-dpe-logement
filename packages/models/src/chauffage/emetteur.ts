@@ -1,7 +1,10 @@
+import { validate } from "@open-dpe-logement/schemas/chauffage/emetteur";
 import type { UUID } from "../common/common.js";
-import { buildEnum, createGuard } from "../utils.js";
+import { buildEnum } from "../utils.js";
 
-export const isEmetteur = createGuard<Emetteur>("/chauffage/emetteur");
+export function isEmetteur(data: unknown): data is Emetteur {
+	return validate(data).isValid;
+}
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/emetteur
