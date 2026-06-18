@@ -106,7 +106,7 @@ export function MonLogement() {
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectLabel>Scénarios</SelectLabel>
+              <SelectLabel>Chauffage</SelectLabel>
               {scenarios.map(({ id, titre }) => (
                 <SelectItem key={id} value={id}>{titre}</SelectItem>
               ))}
