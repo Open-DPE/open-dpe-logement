@@ -52,8 +52,8 @@ export function Consommations({ data, className = "" }: Props) {
           <thead>
             <tr>
               <th>Energie</th>
-              <th>EP</th>
               <th>EF</th>
+              <th>EP</th>
               <th>EGES</th>
             </tr>
           </thead>
@@ -87,8 +87,8 @@ export function Consommations({ data, className = "" }: Props) {
           <thead>
             <tr>
               <th>Usage</th>
-              <th>EP</th>
               <th>EF</th>
+              <th>EP</th>
               <th>EGES</th>
             </tr>
           </thead>

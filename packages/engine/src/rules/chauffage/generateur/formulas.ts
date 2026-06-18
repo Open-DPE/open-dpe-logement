@@ -65,7 +65,8 @@ export function calcule_caux_gen(props: {
 	paux: ReturnType<typeof calcule_paux>;
 	rdim: ReturnType<typeof calcule_rdim>;
 }): number {
-	const { pn, paux, rdim } = props;
+	const { pn, rdim } = props;
+	const paux = props.paux / 1000;
 	const bch = models.common.reduceParMois(props.bch);
 	return (paux * bch * rdim) / pn;
 }
@@ -143,7 +144,7 @@ export function calcule_pch(props: {
  * @formule chauffage.generateur.paux
  * @see abaques.chauffage.paux
  * @throws {ValeurForfaitaireError}
- * @return Puissance de l'auxiliaire de génération de chauffage en kW
+ * @return Puissance de l'auxiliaire de génération de chauffage en W
  */
 export function calcule_paux(props: {
 	type_generateur: ReturnType<typeof set_type_generateur>;

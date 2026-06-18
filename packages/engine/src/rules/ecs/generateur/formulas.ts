@@ -63,7 +63,8 @@ export function calcule_caux_gen(props: {
 	paux: ReturnType<typeof calcule_paux>;
 	rdim: ReturnType<typeof calcule_rdim>;
 }): number {
-	const { pn, paux, rdim } = props;
+	const { pn, rdim } = props;
+	const paux = props.paux / 1000;
 	const becs = models.common.reduceParMois(props.becs);
 	return (paux * becs * rdim) / pn;
 }
@@ -150,7 +151,7 @@ export function calcule_pecs(props: {
  * @formule ecs.generateur.paux
  * @see abaques.ecs.paux
  * @throws {ValeurForfaitaireError}
- * @returns Puissance de l'auxiliaire de génération d'eau chaude sanitaire en kW
+ * @returns Puissance de l'auxiliaire de génération d'eau chaude sanitaire en W
  */
 export function calcule_paux(props: {
 	type_generateur: ReturnType<typeof set_type_generateur>;

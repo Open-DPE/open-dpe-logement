@@ -19,7 +19,6 @@ export function Equipements({ data, className = "" }: Props) {
             <th>USAGE</th>
             <th className="text-left">DESCRIPTION</th>
             <th>ENERGIE</th>
-            <th>ANNÉE</th>
           </tr>
         </thead>
         <tbody>
@@ -28,7 +27,6 @@ export function Equipements({ data, className = "" }: Props) {
               <td><IconUsage value="chauffage" className="icon-primary" /></td>
               <td className="w-full text-left">{item.description}</td>
               <td>{item.energie ? <IconEnergie value={item.energie} className="icon-primary" /> : "-"}</td>
-              <td>{item.annee_installation ?? "-"}</td>
             </tr>
           ))}
           {data.ecs.generateurs.map((item: models.ecs.generateur.GenerateurWithData) => (
@@ -36,7 +34,6 @@ export function Equipements({ data, className = "" }: Props) {
               <td><IconUsage value="ecs" className="icon-primary" /></td>
               <td className="w-full text-left">{item.description}</td>
               <td>{item.energie ? <IconEnergie value={item.energie} className="icon-primary" /> : "-"}</td>
-              <td>{item.annee_installation ?? "-"}</td>
             </tr>
           ))}
           {data.refroidissement.generateurs.map((item: models.refroidissement.generateur.GenerateurWithData) => (
@@ -44,7 +41,6 @@ export function Equipements({ data, className = "" }: Props) {
               <td><IconUsage value="refroidissement" className="icon-primary" /></td>
               <td className="w-full text-left">{item.description}</td>
               <td>{item.energie ? <IconEnergie value={item.energie} className="icon-primary" /> : "-"}</td>
-              <td>{item.annee_installation ?? "-"}</td>
             </tr>
           ))}
           {generateursVentilation.map((item: models.ventilation.installation.InstallationWithData) => (
@@ -52,7 +48,6 @@ export function Equipements({ data, className = "" }: Props) {
               <td><IconUsage value="auxiliaire" className="icon-primary" /></td>
               <td className="w-full text-left">{item.description}</td>
               <td><IconEnergie value="electricite" className="icon-primary" /></td>
-              <td>{item.annee_installation ?? "-"}</td>
             </tr>
           ))}
         </tbody>
