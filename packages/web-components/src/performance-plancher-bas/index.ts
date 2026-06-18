@@ -1,42 +1,29 @@
 import { PERFORMANCE_COLORS } from "../shared/colors";
-import { renderChips } from "../shared/utils";
+import { define, BasePerformance } from "../shared/components.js";
+
+const THRESHOLDS: [number, number, number] = [0.25, 0.45, 0.65];
 
 function getColor(u: number): string {
-	if (u <= 0.25) return PERFORMANCE_COLORS[1];
-	else if (u <= 0.45) return PERFORMANCE_COLORS[2];
-	else if (u <= 0.65) return PERFORMANCE_COLORS[3];
-	return PERFORMANCE_COLORS[4];
+	const [t1, t2, t3] = THRESHOLDS;
+	if (u <= t1) return PERFORMANCE_COLORS["A"];
+	else if (u <= t2) return PERFORMANCE_COLORS["B"];
+	else if (u <= t3) return PERFORMANCE_COLORS["C"];
+	return PERFORMANCE_COLORS["D"];
 }
 
-export function renderPerformancePlancherBas(props: {
-	u: number;
-	style?: string | null | undefined;
-}): string {
-	const { u, style } = props;
-	const color = getColor(u);
-	const text = u.toFixed(2);
-	return renderChips({ text, color, textColor: "#FFFFFF", style });
-}
+export class PerformancePlancherBas extends BasePerformance {
+	static observedAttributes = ["u"];
 
-export class PerformancePlancherBas extends HTMLElement {
-	static observedAttributes = ["u", "style"];
-
-	connectedCallback() {
-		this.render();
-	}
-	attributeChangedCallback() {
-		this.render();
-	}
-
-	private render() {
+	protected parse(): { color: string; text: string } | null {
 		const u = Number(this.getAttribute("u"));
-		const style = this.getAttribute("style");
-		this.innerHTML = renderPerformancePlancherBas({ u, style });
+
+		if (Number.isNaN(u)) {
+			console.warn(`PerformancePlancherBas: Invalid u value: ${u}`);
+			return null;
+		}
+
+		return { color: getColor(u), text: u.toFixed(2) };
 	}
 }
 
-const HTML_TAG = "open-dpe-logement-performance-plancher-bas";
-
-if (!customElements.get(HTML_TAG)) {
-	customElements.define(HTML_TAG, PerformancePlancherBas);
-}
+define("performance-plancher-bas", PerformancePlancherBas);

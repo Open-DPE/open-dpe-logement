@@ -1,42 +1,29 @@
 import { PERFORMANCE_COLORS } from "../shared/colors";
-import { renderChips } from "../shared/utils";
+import { define, BasePerformance } from "../shared/components.js";
+
+const THRESHOLDS: [number, number, number] = [1.6, 2.2, 3];
 
 function getColor(u: number): string {
-	if (u <= 1.6) return PERFORMANCE_COLORS[1];
-	else if (u <= 2.2) return PERFORMANCE_COLORS[2];
-	else if (u <= 3) return PERFORMANCE_COLORS[3];
-	return PERFORMANCE_COLORS[4];
+	const [t1, t2, t3] = THRESHOLDS;
+	if (u <= t1) return PERFORMANCE_COLORS["A"];
+	else if (u <= t2) return PERFORMANCE_COLORS["B"];
+	else if (u <= t3) return PERFORMANCE_COLORS["C"];
+	return PERFORMANCE_COLORS["D"];
 }
 
-export function renderPerformanceMenuiserie(props: {
-	u: number;
-	style?: string | null | undefined;
-}): string {
-	const { u, style } = props;
-	const color = getColor(u);
-	const text = u.toFixed(2);
-	return renderChips({ text, color, textColor: "#FFFFFF", style });
-}
+export class PerformanceMenuiserie extends BasePerformance {
+	static observedAttributes = ["u"];
 
-export class PerformanceMenuiserie extends HTMLElement {
-	static observedAttributes = ["u", "style"];
-
-	connectedCallback() {
-		this.render();
-	}
-	attributeChangedCallback() {
-		this.render();
-	}
-
-	private render() {
+	protected parse(): { color: string; text: string } | null {
 		const u = Number(this.getAttribute("u"));
-		const style = this.getAttribute("style");
-		this.innerHTML = renderPerformanceMenuiserie({ u, style });
+
+		if (Number.isNaN(u)) {
+			console.warn(`PerformanceMenuiserie: Invalid u value: ${u}`);
+			return null;
+		}
+
+		return { color: getColor(u), text: u.toFixed(2) };
 	}
 }
 
-const HTML_TAG = "open-dpe-logement-performance-menuiserie";
-
-if (!customElements.get(HTML_TAG)) {
-	customElements.define(HTML_TAG, PerformanceMenuiserie);
-}
+define("performance-menuiserie", PerformanceMenuiserie);

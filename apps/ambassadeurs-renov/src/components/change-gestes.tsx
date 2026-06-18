@@ -1,79 +1,133 @@
 import { useState } from "react";
 import * as models from "@open-dpe-logement/models";
 import { createContext, services } from "@open-dpe-logement/engine";
-import { gestes, withGeste, type Geste } from "../models/geste";
+import { gestes, withGeste } from "../models/geste";
 import { $user, setSimulation } from "../stores/user";
-import { Button } from "@/components/ui/button"
 import {
-  Field,
-  FieldContent,
-  FieldDescription,
-  FieldLabel,
-  FieldTitle,
-} from "@/components/ui/field"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-
-import { IconPoste } from "./icon-poste";
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { toast } from "sonner"
+import { XIcon, PlusIcon } from "lucide-react"
+import { IconGeste } from "./icon-geste";
 
 interface Props {
-  onSuccess?: () => void;
   className?: string;
 }
 
-
-export function ChangeGestes({ className = "", onSuccess }: Props) {
+export function ChangeGestes({ className = "" }: Props) {
   const { diagnostic, gestes: gestesIds } = $user.get();
-  const [selectedGestes, setSelectedGestes] = useState<Geste[]>(() =>
-    gestes.filter((geste) => gestesIds.includes(geste.id)),
+  const [pending, setPending] = useState(false);
+  const [selectedGestes, setSelectedGestes] = useState<string[]>(() =>
+    gestes.filter((geste) => gestesIds.includes(geste.id)).map((geste) => geste.id),
   );
 
   if (!diagnostic) {
     return null;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
     if (!diagnostic) {
       return null;
     }
 
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    setPending(true);
+
     let data = structuredClone(diagnostic) as models.diagnostic.Diagnostic;
 
-    for (const geste of selectedGestes) {
-      data = withGeste(data, geste);
+    for (const gesteId of selectedGestes) {
+      const geste = gestes.find((g) => g.id === gesteId);
+      if (geste) {
+        data = withGeste(data, geste);
+      }
     }
 
-    const context = createContext(data);
-    const simulation = services.diagnostic.calcule(context);
-
-    setSimulation(simulation, selectedGestes.map(g => g.id));
-    onSuccess?.();
+    try {
+      const context = createContext(data);
+      const simulation = services.diagnostic.calcule(context);
+      setSimulation(simulation, selectedGestes);
+      setPending(false);
+      toast.success("Gestes mis à jour");
+    } catch (error) {
+      console.error(error, data);
+      toast.error("Une erreur est survenue lors de la simulation.");
+      setPending(false);
+      return;
+    }
   }
 
   return (
-    <form onSubmit={handleSubmit} className={`${className} flex flex-col gap-4`}>
-      <RadioGroup defaultValue="plus" className="max-w-sm">
-        {gestes.map((geste) => (
-          <FieldLabel htmlFor={`geste-${geste.id}`} key={geste.id}>
-            <Field orientation="horizontal">
-              <FieldContent>
-                <FieldTitle>
-                  <IconPoste poste={geste.poste}  />
-                    {geste.titre}
-                </FieldTitle>
-                <FieldDescription>
-                  {geste.description}
-                </FieldDescription>
-              </FieldContent>
-              <RadioGroupItem value={geste.id} id={`geste-${geste.id}`} />
-            </Field>
-          </FieldLabel>
-        ))}
-      </RadioGroup>
+    <form onSubmit={handleSubmit} className={className}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between gap-4">
 
-      <Button type="submit" className="self-end">
-        Simuler
+        {gestes.map((geste) => (
+          <Card
+            key={geste.id}
+            className="mx-auto w-full md:max-w-sm [--card-spacing:--spacing(4)] text-center"
+          >
+            <CardContent>
+              <IconGeste geste={geste.id} className="w-[92px] h-auto m-auto" />
+            </CardContent>
+            <CardHeader className="grow content-start">
+              <CardTitle>{geste.titre}</CardTitle>
+              <CardDescription>
+                <>
+                  {geste.description.split("\n").map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+                </>
+              </CardDescription>
+            </CardHeader>
+            <CardFooter>
+              {selectedGestes.includes(geste.id) ? (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  className="mx-auto"
+                  disabled={pending}
+                  onClick={() => {
+                    setSelectedGestes((prev) => prev.filter((id) => id !== geste.id));
+                  }}
+                >
+                  <XIcon /> Supprimer
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  variant="success"
+                  size="sm"
+                  className="mx-auto"
+                  disabled={pending}
+                  onClick={() => {
+                    setSelectedGestes((prev) => [...prev, geste.id]);
+                  }}
+                >
+                  <PlusIcon /> Ajouter
+                </Button>
+              )}
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
+
+      <Button className="mt-8 w-full" disabled={pending}>
+        {pending
+          ? <><Spinner data-icon="inline-start" /> Calcul...</>
+          : "Valider"
+        }
       </Button>
     </form>
   );

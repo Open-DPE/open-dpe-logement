@@ -17,9 +17,11 @@ export function DataCard({ title, children, dialog, className = "" }: Props) {
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle className="text-md text-center">
+        <CardTitle className="text-md text-center relative">
           {title}
-          {dialog && dialog}
+          {dialog && (
+            <div className="absolute -top-2 right-0">{dialog}</div>
+          )}
         </CardTitle>
       </CardHeader>
       <CardContent>

@@ -18,7 +18,13 @@ export type GenerateurWithData<T extends Generateur = Generateur> = T & {
 	data: GenerateurData;
 };
 
-type GenerateurBase = {
+type GenerateurType<
+	T extends {
+		type: TypeGenerateur;
+		energie: EnergieRefroidissement;
+		reseau_froid_id?: string | null;
+	},
+> = {
 	id: UUID;
 	description: string;
 	type: TypeGenerateur;
@@ -26,27 +32,28 @@ type GenerateurBase = {
 	annee_installation: number | null;
 	seer: number | null;
 	reseau_froid_id: string | null;
-};
+} & T;
 
-export type GenerateurPAC = GenerateurBase & {
-	type: TYPE_GENERATEUR_PAC;
+export type GenerateurPAC = GenerateurType<{
+	type: TypeGenerateurPac;
 	energie: typeof EnergieRefroidissementEnum.electricite;
 	reseau_froid_id: null;
-};
+}>;
 
-export type GenerateurClimatiseur = GenerateurBase & {
+export type GenerateurClimatiseur = GenerateurType<{
 	type: typeof TypeGenerateurEnum.autre;
 	energie: Exclude<
 		EnergieRefroidissement,
 		typeof EnergieRefroidissementEnum.reseau_froid
 	>;
 	reseau_froid_id: null;
-};
+}>;
 
-export type GenerateurReseauFroid = GenerateurBase & {
+export type GenerateurReseauFroid = GenerateurType<{
 	type: typeof TypeGenerateurEnum.reseau_froid;
 	energie: typeof EnergieRefroidissementEnum.reseau_froid;
-};
+	reseau_froid_id: string | null;
+}>;
 
 export type GenerateurData = {
 	rdim: number;
@@ -75,7 +82,7 @@ const TYPES_GENERATEUR_PAC = [
 	TypeGenerateurEnum.pac_geothermique,
 	TypeGenerateurEnum.autre_systeme_thermodynamique,
 ] as const satisfies readonly TypeGenerateur[];
-type TYPE_GENERATEUR_PAC = (typeof TYPES_GENERATEUR_PAC)[number];
+type TypeGenerateurPac = (typeof TYPES_GENERATEUR_PAC)[number];
 
 export const ENERGIES_REFROIDISSEMENT = [
 	EnergieEnum.electricite,

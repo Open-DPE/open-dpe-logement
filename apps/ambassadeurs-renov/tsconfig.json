@@ -6,9 +6,21 @@
     },
     {
       "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "../../packages/engine"
+    },
+    {
+      "path": "../../packages/models"
+    },
+    {
+      "path": "../../packages/web-components"
     }
   ],
   "compilerOptions": {
+    "types": [
+      "vite-plugin-pwa/client"
+    ],
     "paths": {
       "@/*": [
         "./src/*"

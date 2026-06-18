@@ -80,7 +80,7 @@ export function isPAC(generateur: Generateur): generateur is PAC {
 			generateur.type === TypeGenerateurEnum.pac_eau_eau ||
 			generateur.type === TypeGenerateurEnum.pac_eau_glycolee_eau ||
 			generateur.type === TypeGenerateurEnum.pac_geothermique) &&
-		generateur.bienergie !== null
+		generateur.bienergie === null
 	);
 }
 
@@ -359,6 +359,38 @@ export type PAC = GenerateurType<
 		};
 	}
 >;
+
+const base: Generateur = {
+	id: "uuid()",
+	description: "Pompe à chaleur air/eau",
+	type: "pac_air_eau",
+	energie: "electricite",
+	bienergie: null,
+	annee_installation: null,
+	position: {
+		cascade: null,
+		position_chaudiere: null,
+		generateur_collectif: false,
+		generateur_multi_batiment: false,
+		position_volume_chauffe: true,
+		generateur_mixte_id: null,
+		reseau_chaleur_id: null,
+	},
+	signaletique: {
+		scop: 3.5,
+		pn: null,
+		label: null,
+		mode_combustion: null,
+		presence_ventouse: null,
+		presence_regulation: null,
+		pveilleuse: null,
+		qp0: null,
+		rpn: null,
+		rpint: null,
+		tfonc30: null,
+		tfonc100: null,
+	},
+};
 
 export type PACHybride = GenerateurType<
 	GenerateurThermodynamique & {

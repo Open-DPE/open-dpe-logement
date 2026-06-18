@@ -1,6 +1,6 @@
 import { createContext, services } from "@open-dpe-logement/engine";
 import { scenarios } from "../models/scenario";
-import { $user } from "../stores/user";
+import { $user, setDiagnostic } from "../stores/user";
 
 export function initDefaultScenario() {
 	const { diagnostic } = $user.get();
@@ -12,5 +12,5 @@ export function initDefaultScenario() {
 	const context = createContext(defaultScenario.data);
 	const result = services.diagnostic.calcule(context);
 
-	$user.set({ ...$user.get(), diagnostic: result });
+	setDiagnostic(defaultScenario.id, result);
 }

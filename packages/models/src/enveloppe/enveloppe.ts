@@ -76,6 +76,7 @@ export type EnveloppeData = {
 	inertie: common.Inertie;
 	hperm: number;
 	hvent: number;
+	q4pa_conv: number;
 	presence_joints: boolean;
 	isolation_planchers_hauts: boolean;
 	presence_protection_solaire: boolean;

@@ -1,42 +1,29 @@
 import { PERFORMANCE_COLORS } from "../shared/colors";
-import { renderChips } from "../shared/utils";
+import { define, BasePerformance } from "../shared/components.js";
+
+const THRESHOLDS: [number, number, number] = [0.45, 0.65, 0.85];
 
 function getColor(ubat: number): string {
-	if (ubat <= 0.45) return PERFORMANCE_COLORS[1];
-	else if (ubat <= 0.65) return PERFORMANCE_COLORS[2];
-	else if (ubat <= 0.85) return PERFORMANCE_COLORS[3];
-	return PERFORMANCE_COLORS[4];
+	const [t1, t2, t3] = THRESHOLDS;
+	if (ubat <= t1) return PERFORMANCE_COLORS["A"];
+	if (ubat <= t2) return PERFORMANCE_COLORS["B"];
+	if (ubat <= t3) return PERFORMANCE_COLORS["C"];
+	return PERFORMANCE_COLORS["D"];
 }
 
-export function renderPerformanceEnveloppe(props: {
-	ubat: number;
-	style?: string | null | undefined;
-}): string {
-	const { ubat, style } = props;
-	const color = getColor(ubat);
-	const text = ubat.toFixed(2);
-	return renderChips({ text, color, textColor: "#FFFFFF", style });
-}
+export class PerformanceEnveloppe extends BasePerformance {
+	static observedAttributes = ["ubat"];
 
-export class PerformanceEnveloppe extends HTMLElement {
-	static observedAttributes = ["ubat", "style"];
-
-	connectedCallback() {
-		this.render();
-	}
-	attributeChangedCallback() {
-		this.render();
-	}
-
-	private render() {
+	protected parse(): { color: string; text: string } | null {
 		const ubat = Number(this.getAttribute("ubat"));
-		const style = this.getAttribute("style");
-		this.innerHTML = renderPerformanceEnveloppe({ ubat, style });
+
+		if (Number.isNaN(ubat)) {
+			console.warn(`PerformanceEnveloppe: Invalid ubat value: ${ubat}`);
+			return null;
+		}
+
+		return { color: getColor(ubat), text: ubat.toFixed(2) };
 	}
 }
 
-const HTML_TAG = "open-dpe-logement-performance-enveloppe";
-
-if (!customElements.get(HTML_TAG)) {
-	customElements.define(HTML_TAG, PerformanceEnveloppe);
-}
+define("performance-enveloppe", PerformanceEnveloppe);

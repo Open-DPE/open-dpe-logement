@@ -2,12 +2,14 @@ import { persistentAtom } from "@nanostores/persistent";
 import type * as models from "@open-dpe-logement/models";
 
 type Store = {
+	scenario: string | null;
 	diagnostic: models.diagnostic.DiagnosticWithData | null;
 	simulation: models.diagnostic.DiagnosticWithData | null;
 	gestes: string[];
 };
 
 const DEFAULT: Store = {
+	scenario: null,
 	diagnostic: null,
 	simulation: null,
 	gestes: [],
@@ -19,6 +21,10 @@ export const $user = persistentAtom<Store>("user", DEFAULT, {
 });
 
 // --- Getters ---
+
+export function getScenario() {
+	return $user.get().scenario;
+}
 
 export function getDiagnostic() {
 	return $user.get().diagnostic;
@@ -35,9 +41,10 @@ export function getGestes() {
 // --- Setters ---
 
 export function setDiagnostic(
+	scenario: string,
 	diagnostic: models.diagnostic.DiagnosticWithData,
 ) {
-	$user.set({ ...$user.get(), diagnostic });
+	$user.set({ ...$user.get(), scenario, diagnostic });
 }
 
 export function setSimulation(
@@ -49,18 +56,15 @@ export function setSimulation(
 
 // --- Reset ---
 
-export function clearDiagnostic() {
-	$user.set({ ...$user.get(), diagnostic: null });
-}
-
-export function clearSimulation() {
-	$user.set({ ...$user.get(), simulation: null, gestes: [] });
-}
-
 export function clearUser() {
 	$user.set(DEFAULT);
 }
 
 export function useUserStore() {
-	return $user;
+	return {
+		scenario: getScenario(),
+		diagnostic: getDiagnostic(),
+		simulation: getSimulation(),
+		gestes: getGestes(),
+	};
 }

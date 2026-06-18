@@ -1,13 +1,14 @@
 import * as models from "@open-dpe-logement/models";
+import { define } from "../shared/components.js";
 
-const MAP_ENUMS: Record<string, Record<string, string>> = {};
+const MAP: Record<string, Record<string, string>> = {};
 
-MAP_ENUMS["scenario"] = {
+MAP["scenario"] = {
 	[models.common.ScenarioEnum.conventionnel]: "Scénario conventionnel",
 	[models.common.ScenarioEnum.depensier]: "Scénario dépensier",
 };
 
-MAP_ENUMS["usage"] = {
+MAP["usage"] = {
 	[models.common.UsageEnum.chauffage]: "Chauffage",
 	[models.common.UsageEnum.ecs]: "Eau chaude sanitaire",
 	[models.common.UsageEnum.refroidissement]: "Refroidissement",
@@ -15,12 +16,12 @@ MAP_ENUMS["usage"] = {
 	[models.common.UsageEnum.auxiliaire]: "Auxiliaire",
 };
 
-MAP_ENUMS["type-batiment"] = {
+MAP["type-batiment"] = {
 	[models.batiment.TypeBatimentEnum.maison]: "Maison individuelle",
 	[models.batiment.TypeBatimentEnum.immeuble]: "Immeuble collectif",
 };
 
-MAP_ENUMS["zone-climatique"] = {
+MAP["zone-climatique"] = {
 	[models.batiment.ZoneClimatiqueEnum.H1a]: "H1a",
 	[models.batiment.ZoneClimatiqueEnum.H1b]: "H1b",
 	[models.batiment.ZoneClimatiqueEnum.H1c]: "H1c",
@@ -31,7 +32,7 @@ MAP_ENUMS["zone-climatique"] = {
 	[models.batiment.ZoneClimatiqueEnum.H3]: "H3",
 };
 
-MAP_ENUMS["energie"] = {
+MAP["energie"] = {
 	[models.common.EnergieEnum.electricite]: "Électricité",
 	[models.common.EnergieEnum.electricite_renouvelable]:
 		"Électricité d'origine renouvelable",
@@ -46,7 +47,7 @@ MAP_ENUMS["energie"] = {
 	[models.common.EnergieEnum.reseau_froid]: "Réseau de froid",
 };
 
-MAP_ENUMS["orientation"] = {
+MAP["orientation"] = {
 	[models.common.OrientationEnum.nord]: "Nord",
 	[models.common.OrientationEnum.nord_est]: "Nord-Est",
 	[models.common.OrientationEnum.est]: "Est",
@@ -57,14 +58,14 @@ MAP_ENUMS["orientation"] = {
 	[models.common.OrientationEnum.nord_ouest]: "Nord-Ouest",
 };
 
-MAP_ENUMS["orientation-cardinale"] = {
+MAP["orientation-cardinale"] = {
 	[models.common.OrientationCardinaleEnum.nord]: "Nord",
 	[models.common.OrientationCardinaleEnum.sud]: "Sud",
 	[models.common.OrientationCardinaleEnum.est]: "Est",
 	[models.common.OrientationCardinaleEnum.ouest]: "Ouest",
 };
 
-MAP_ENUMS["etiquette"] = {
+MAP["etiquette"] = {
 	[models.common.EtiquetteEnum.A]: "A",
 	[models.common.EtiquetteEnum.B]: "B",
 	[models.common.EtiquetteEnum.C]: "C",
@@ -74,7 +75,7 @@ MAP_ENUMS["etiquette"] = {
 	[models.common.EtiquetteEnum.G]: "G",
 };
 
-MAP_ENUMS["mois"] = {
+MAP["mois"] = {
 	[models.common.MoisEnum["01"]]: "Janvier",
 	[models.common.MoisEnum["02"]]: "Février",
 	[models.common.MoisEnum["03"]]: "Mars",
@@ -89,32 +90,32 @@ MAP_ENUMS["mois"] = {
 	[models.common.MoisEnum["12"]]: "Décembre",
 };
 
-MAP_ENUMS["type-diagnostic"] = {
+MAP["type-diagnostic"] = {
 	[models.diagnostic.TypeDiagnosticEnum.batiment]: "Bâtiment",
 	[models.diagnostic.TypeDiagnosticEnum.logement]: "Logement",
 };
 
-MAP_ENUMS["confort-ete"] = {
-	[1]: "Bon",
-	[2]: "Moyen",
-	[3]: "Insuffisant",
+MAP["confort-ete"] = {
+	"1": "Bon",
+	"2": "Moyen",
+	"3": "Insuffisant",
 };
 
 // --- Chauffage ---
 
-MAP_ENUMS["chauffage.installation.type"] = {
+MAP["chauffage.installation.type"] = {
 	[models.chauffage.installation.TypeInstallationEnum.central]:
 		"Chauffage central",
 	[models.chauffage.installation.TypeInstallationEnum.divise]:
 		"Chauffage divisé",
 };
 
-MAP_ENUMS["chauffage.systeme.type"] = {
+MAP["chauffage.systeme.type"] = {
 	[models.chauffage.systeme.TypeSystemeEnum.central]: "Chauffage central",
 	[models.chauffage.systeme.TypeSystemeEnum.divise]: "Chauffage divisé",
 };
 
-MAP_ENUMS["chauffage.type-generateur"] = {
+MAP["chauffage.type-generateur"] = {
 	[models.chauffage.generateur.TypeGenerateurEnum.chaudiere]: "Chaudière",
 	[models.chauffage.generateur.TypeGenerateurEnum.convecteur_bi_jonction]:
 		"Convecteur bi-jonction",
@@ -154,33 +155,33 @@ MAP_ENUMS["chauffage.type-generateur"] = {
 		"Réseau de chaleur",
 };
 
-MAP_ENUMS["chauffage.mode-combustion"] = {
+MAP["chauffage.mode-combustion"] = {
 	[models.chauffage.generateur.ModeCombustionEnum.standard]: "Standard",
 	[models.chauffage.generateur.ModeCombustionEnum.basse_temperature]:
 		"Basse température",
 	[models.chauffage.generateur.ModeCombustionEnum.condensation]: "Condensation",
 };
 
-MAP_ENUMS["chauffage.position-chaudiere"] = {
+MAP["chauffage.position-chaudiere"] = {
 	[models.chauffage.generateur.PositionChaudiereEnum.chaudiere_murale]:
 		"Chaudière murale",
 	[models.chauffage.generateur.PositionChaudiereEnum.chaudiere_sol]:
 		"Chaudière au sol",
 };
 
-MAP_ENUMS["chauffage.label-generateur"] = {
+MAP["chauffage.label-generateur"] = {
 	[models.chauffage.generateur.LabelEnum.flamme_verte]: "Flamme verte",
 	[models.chauffage.generateur.LabelEnum.nf_performance]: "NF Performance",
 };
 
-MAP_ENUMS["chauffage.type-distribution"] = {
+MAP["chauffage.type-distribution"] = {
 	[models.chauffage.systeme.TypeDistributionEnum.hydraulique]:
 		"Distribution hydraulique",
 	[models.chauffage.systeme.TypeDistributionEnum.aeraulique]:
 		"Distribution aeraulique",
 };
 
-MAP_ENUMS["chauffage.temperature-distribution"] = {
+MAP["chauffage.temperature-distribution"] = {
 	[models.chauffage.systeme.TemperatureDistributionEnum.basse]:
 		"Basse température",
 	[models.chauffage.systeme.TemperatureDistributionEnum.moyenne]:
@@ -189,7 +190,7 @@ MAP_ENUMS["chauffage.temperature-distribution"] = {
 		"Haute température",
 };
 
-MAP_ENUMS["chauffage.type-emetteur"] = {
+MAP["chauffage.type-emetteur"] = {
 	[models.chauffage.emetteur.TypeEmetteurEnum.plancher_chauffant]:
 		"Plancher chauffant",
 	[models.chauffage.emetteur.TypeEmetteurEnum.plafond_chauffant]:
@@ -202,7 +203,7 @@ MAP_ENUMS["chauffage.type-emetteur"] = {
 	[models.chauffage.emetteur.TypeEmetteurEnum.autres]: "Autres",
 };
 
-MAP_ENUMS["chauffage.type-emission"] = {
+MAP["chauffage.type-emission"] = {
 	[models.chauffage.systeme.TypeEmissionEnum.radiateur]: "Radiateur",
 	[models.chauffage.systeme.TypeEmissionEnum.air_souffle]: "Air soufflé",
 	[models.chauffage.systeme.TypeEmissionEnum.plancher_chauffant]:
@@ -211,8 +212,7 @@ MAP_ENUMS["chauffage.type-emission"] = {
 		"Plafond chauffant",
 };
 
-/*
-MAP_ENUMS["chauffage.type-programmation"] = {
+MAP["chauffage.type-programmation"] = {
 	[models.chauffage.installation.TypeProgrammationEnum.absent]:
 		"Absence de programmation",
 	[models.chauffage.installation.TypeProgrammationEnum
@@ -234,8 +234,8 @@ MAP_ENUMS["chauffage.type-programmation"] = {
 		.terminal_avec_minimum_temperature_detection_presence]:
 		"Programmation par pièce avec minimum de température et détection de présence",
 };
-*/
-MAP_ENUMS["chauffage.usage-solaire"] = {
+
+MAP["chauffage.usage-solaire"] = {
 	[models.chauffage.installation.UsageSolaireEnum.chauffage]: "Chauffage",
 	[models.chauffage.installation.UsageSolaireEnum.chauffage_ecs]:
 		"Chauffage + ECS",
@@ -243,7 +243,7 @@ MAP_ENUMS["chauffage.usage-solaire"] = {
 
 // --- ECS ---
 
-MAP_ENUMS["ecs:type-generateur"] = {
+MAP["ecs:type-generateur"] = {
 	[models.ecs.generateur.TypeGenerateurEnum.chauffe_eau]: "Chauffe eau",
 	[models.ecs.generateur.TypeGenerateurEnum.chaudiere]: "Chaudière",
 	[models.ecs.generateur.TypeGenerateurEnum.cet_air_ambiant]:
@@ -259,47 +259,47 @@ MAP_ENUMS["ecs:type-generateur"] = {
 		"Réseau de chaleur",
 };
 
-MAP_ENUMS["ecs:mode-combustion"] = {
+MAP["ecs:mode-combustion"] = {
 	[models.ecs.generateur.ModeCombustionEnum.standard]: "Standard",
 	[models.ecs.generateur.ModeCombustionEnum.basse_temperature]:
 		"Basse température",
 	[models.ecs.generateur.ModeCombustionEnum.condensation]: "Condensation",
 };
 
-MAP_ENUMS["ecs:position-chauffe-eau"] = {
+MAP["ecs:position-chauffe-eau"] = {
 	[models.ecs.generateur.PositionChauffeEauEnum.chauffe_eau_vertical]:
 		"Chauffe eau vertical",
 	[models.ecs.generateur.PositionChauffeEauEnum.chauffe_eau_horizontal]:
 		"Chauffe eau horizontal",
 };
 
-MAP_ENUMS["ecs:label-generateur"] = {
+MAP["ecs:label-generateur"] = {
 	[models.ecs.generateur.LabelEnum.ne_performance_a]: "NE Performance - A",
 	[models.ecs.generateur.LabelEnum.ne_performance_b]: "NE Performance - B",
 	[models.ecs.generateur.LabelEnum.ne_performance_c]: "NE Performance - C",
 };
 
-MAP_ENUMS["ecs:bouclage-reseau"] = {
+MAP["ecs:bouclage-reseau"] = {
 	[models.ecs.systeme.BouclageEnum.non_boucle]: "Réseau non bouclé",
 	[models.ecs.systeme.BouclageEnum.boucle]: "Réseau bouclé",
 	[models.ecs.systeme.BouclageEnum.trace]: "Réseau tracé",
 };
 
-MAP_ENUMS["ecs:type-stockage"] = {
+MAP["ecs:type-stockage"] = {
 	[models.ecs.generateur.TypeStockageEnum.integre]:
 		"Stockage intégré à la production",
 	[models.ecs.generateur.TypeStockageEnum.independant]:
 		"Stockage indépendant de la production",
 };
 
-MAP_ENUMS["ecs:usage-solaire"] = {
+MAP["ecs:usage-solaire"] = {
 	[models.ecs.installation.UsageSolaireEnum.ecs]: "ECS seule",
 	[models.ecs.installation.UsageSolaireEnum.chauffage_ecs]: "Chauffage + ECS",
 };
 
 // --- Refroidissement ---
 
-MAP_ENUMS["refroidissement:type-generateur"] = {
+MAP["refroidissement:type-generateur"] = {
 	[models.refroidissement.generateur.TypeGenerateurEnum.pac_air_air]:
 		"PAC air/air",
 	[models.refroidissement.generateur.TypeGenerateurEnum.pac_air_eau]:
@@ -320,7 +320,7 @@ MAP_ENUMS["refroidissement:type-generateur"] = {
 
 // --- Ventilation ---
 
-MAP_ENUMS["ventilation:type"] = {
+MAP["ventilation:type"] = {
 	[models.ventilation.installation.TypeVentilationEnum
 		.ventilation_ouverture_fenetres]: "Ventilation par ouverture des fenêtres",
 	[models.ventilation.installation.TypeVentilationEnum
@@ -366,7 +366,7 @@ MAP_ENUMS["ventilation:type"] = {
 
 // --- Bâtiment ---
 
-MAP_ENUMS["batiment:position-appartement"] = {
+MAP["batiment:position-appartement"] = {
 	[models.batiment.appartement.PositionEnum.rdc]:
 		"Appartement en rez-de-chaussée",
 	[models.batiment.appartement.PositionEnum.etage_intermediaire]:
@@ -375,7 +375,7 @@ MAP_ENUMS["batiment:position-appartement"] = {
 		"Appartement au dernier étage",
 };
 
-MAP_ENUMS["batiment:typologie-appartement"] = {
+MAP["batiment:typologie-appartement"] = {
 	[models.batiment.appartement.TypologieEnum.T1]: "T1",
 	[models.batiment.appartement.TypologieEnum.T2]: "T2",
 	[models.batiment.appartement.TypologieEnum.T3]: "T3",
@@ -387,7 +387,7 @@ MAP_ENUMS["batiment:typologie-appartement"] = {
 
 // --- Production ---
 
-MAP_ENUMS["production:usage-electricite"] = {
+MAP["production:usage-electricite"] = {
 	[models.production.UsageElectriciteEnum.chauffage]: "Chauffage",
 	[models.production.UsageElectriciteEnum.refroidissement]: "Refroidissement",
 	[models.production.UsageElectriciteEnum.ecs]: "Eau chaude sanitaire",
@@ -401,24 +401,24 @@ MAP_ENUMS["production:usage-electricite"] = {
 
 // --- Enveloppe ---
 
-MAP_ENUMS["enveloppe:inertie"] = {
+MAP["enveloppe:inertie"] = {
 	[models.enveloppe.common.InertieEnum.legere]: "Légère",
 	[models.enveloppe.common.InertieEnum.moyenne]: "Moyenne",
 	[models.enveloppe.common.InertieEnum.lourde]: "Lourde",
 	[models.enveloppe.common.InertieEnum.tres_lourde]: "Très lourde",
 };
 
-MAP_ENUMS["enveloppe:exposition"] = {
+MAP["enveloppe:exposition"] = {
 	[models.enveloppe.ExpositionEnum.simple]: "Exposition simple",
 	[models.enveloppe.ExpositionEnum.multiple]: "Exposition multiple",
 };
 
-MAP_ENUMS["enveloppe:orientation-paroi"] = {
-	...MAP_ENUMS["orientation-cardinale"],
+MAP["enveloppe:orientation-paroi"] = {
+	...MAP["orientation-cardinale"],
 	[models.enveloppe.common.OrientationHorizontale]: "Paroi horizontale",
 };
 
-MAP_ENUMS["enveloppe:paroi:mitoyennete"] = {
+MAP["enveloppe:paroi:mitoyennete"] = {
 	[models.enveloppe.common.MitoyenneteEnum.exterieur]: "Extérieur",
 	[models.enveloppe.common.MitoyenneteEnum.enterre]: "Enterré",
 	[models.enveloppe.common.MitoyenneteEnum.vide_sanitaire]: "Vide sanitaire",
@@ -435,12 +435,12 @@ MAP_ENUMS["enveloppe:paroi:mitoyennete"] = {
 		"Local non accessible",
 };
 
-MAP_ENUMS["enveloppe:paroi:inertie"] = {
+MAP["enveloppe:paroi:inertie"] = {
 	[models.enveloppe.common.InertieParoiEnum.legere]: "Inertie légère",
 	[models.enveloppe.common.InertieParoiEnum.lourde]: "Inertie lourde",
 };
 
-MAP_ENUMS["enveloppe:paroi:type-isolation"] = {
+MAP["enveloppe:paroi:type-isolation"] = {
 	[models.enveloppe.common.TypeIsolationEnum.iti]: "ITI",
 	[models.enveloppe.common.TypeIsolationEnum.ite]: "ITE",
 	[models.enveloppe.common.TypeIsolationEnum.itr]: "ITR",
@@ -450,13 +450,13 @@ MAP_ENUMS["enveloppe:paroi:type-isolation"] = {
 	[models.enveloppe.common.TypeIsolationEnum.itr_iti_ite]: "ITR + ITI + ITE",
 };
 
-MAP_ENUMS["enveloppe:paroi:type-pose"] = {
+MAP["enveloppe:paroi:type-pose"] = {
 	[models.enveloppe.common.TypePoseEnum.nu_exterieur]: "Nu extérieur",
 	[models.enveloppe.common.TypePoseEnum.nu_interieur]: "Nu intérieur",
 	[models.enveloppe.common.TypePoseEnum.tunnel]: "Tunnel",
 };
 
-MAP_ENUMS["enveloppe:mur:type"] = {
+MAP["enveloppe:mur:type"] = {
 	[models.enveloppe.mur.MateriauMurEnum.pierre_moellons]: "Pierre ou moellons",
 	[models.enveloppe.mur.MateriauMurEnum.pierre_moellons_avec_remplissage]:
 		"Pierre ou moellons avec remplissage",
@@ -491,7 +491,7 @@ MAP_ENUMS["enveloppe:mur:type"] = {
 		"Ossature bois avec remplissage isolant",
 };
 
-MAP_ENUMS["enveloppe:mur:type-doublage"] = {
+MAP["enveloppe:mur:type-doublage"] = {
 	[models.enveloppe.mur.TypeDoublageEnum.sans_doublage]: "Sans doublage",
 	[models.enveloppe.mur.TypeDoublageEnum.indetermine]:
 		"Doublage rapporté de nature indéterminé",
@@ -503,7 +503,7 @@ MAP_ENUMS["enveloppe:mur:type-doublage"] = {
 		"Doublage rapporté avec un matériau de doublage connu (plâtre, brique, bois)",
 };
 
-MAP_ENUMS["enveloppe:plancher-bas:type"] = {
+MAP["enveloppe:plancher-bas:type"] = {
 	[models.enveloppe.plancherBas.TypePlancherBasEnum
 		.plancher_avec_ou_sans_remplissage]: "Plancher avec ou sans remplissage",
 	[models.enveloppe.plancherBas.TypePlancherBasEnum
@@ -530,13 +530,13 @@ MAP_ENUMS["enveloppe:plancher-bas:type"] = {
 		"Plancher entrevous isolant",
 };
 
-MAP_ENUMS["enveloppe:plancher-haut:configuration"] = {
+MAP["enveloppe:plancher-haut:configuration"] = {
 	[models.enveloppe.plancherHaut.ConfigurationEnum.plancher]: "Plancher",
 	[models.enveloppe.plancherHaut.ConfigurationEnum.rampants]: "Rampants",
 	[models.enveloppe.plancherHaut.ConfigurationEnum.terrasse]: "Terrasse",
 };
 
-MAP_ENUMS["enveloppe:plancher-haut:type"] = {
+MAP["enveloppe:plancher-haut:type"] = {
 	[models.enveloppe.plancherHaut.TypePlancherHautEnum
 		.plafond_avec_ou_sans_remplissage]: "Plafond avec ou sans remplissage",
 	[models.enveloppe.plancherHaut.TypePlancherHautEnum
@@ -568,7 +568,7 @@ MAP_ENUMS["enveloppe:plancher-haut:type"] = {
 	[models.enveloppe.plancherHaut.TypePlancherHautEnum.bac_acier]: "Bac acier",
 };
 
-MAP_ENUMS["enveloppe:pont-thermique:type"] = {
+MAP["enveloppe:pont-thermique:type"] = {
 	[models.enveloppe.pontThermique.TypeLiaisonEnum.plancher_bas_mur]:
 		"Plancher bas / Mur",
 	[models.enveloppe.pontThermique.TypeLiaisonEnum.plancher_haut_mur]:
@@ -580,7 +580,7 @@ MAP_ENUMS["enveloppe:pont-thermique:type"] = {
 	[models.enveloppe.pontThermique.TypeLiaisonEnum.porte_mur]: "Porte / Mur",
 };
 
-MAP_ENUMS["enveloppe:baie:type"] = {
+MAP["enveloppe:baie:type"] = {
 	[models.enveloppe.baie.TypeBaieEnum.brique_verre_pleine]:
 		"Brique de verre pleine",
 	[models.enveloppe.baie.TypeBaieEnum.brique_verre_creuse]:
@@ -595,14 +595,14 @@ MAP_ENUMS["enveloppe:baie:type"] = {
 		"Porte fenêtre battante",
 };
 
-MAP_ENUMS["enveloppe:baie:materiau"] = {
+MAP["enveloppe:baie:materiau"] = {
 	[models.enveloppe.baie.MateriauEnum.pvc]: "PVC",
 	[models.enveloppe.baie.MateriauEnum.bois]: "Bois",
 	[models.enveloppe.baie.MateriauEnum.bois_metal]: "Bois-métal",
 	[models.enveloppe.baie.MateriauEnum.metal]: "Métal",
 };
 
-MAP_ENUMS["enveloppe:baie:type-vitrage"] = {
+MAP["enveloppe:baie:type-vitrage"] = {
 	[models.enveloppe.baie.TypeVitrageEnum.brique_verre]: "Brique de verre",
 	[models.enveloppe.baie.TypeVitrageEnum.polycarbonate]: "Polycarbonate",
 	[models.enveloppe.baie.TypeVitrageEnum.simple_vitrage]: "Simple vitrage",
@@ -614,20 +614,20 @@ MAP_ENUMS["enveloppe:baie:type-vitrage"] = {
 		"Triple vitrage à faible emissivité",
 };
 
-MAP_ENUMS["enveloppe:baie:nature-lame-air"] = {
+MAP["enveloppe:baie:nature-lame-air"] = {
 	[models.enveloppe.baie.NatureLameEnum.air]: "Air",
 	[models.enveloppe.baie.NatureLameEnum.argon]: "Argon",
 	[models.enveloppe.baie.NatureLameEnum.krypton]: "Krypton",
 };
 
-MAP_ENUMS["enveloppe:baie:type-survitrage"] = {
+MAP["enveloppe:baie:type-survitrage"] = {
 	[models.enveloppe.baie.TypeSurvitrageEnum.survitrage_simple]:
 		"Survitrage simple",
 	[models.enveloppe.baie.TypeSurvitrageEnum.survitrage_fe]:
 		"Survitrage à faible emissivité",
 };
 
-MAP_ENUMS["enveloppe:baie:type-fermeture"] = {
+MAP["enveloppe:baie:type-fermeture"] = {
 	[models.enveloppe.baie.TypeFermetureEnum.sans_fermeture]: "Sans fermeture",
 	[models.enveloppe.baie.TypeFermetureEnum.jalousie_accordeon]:
 		"Jalousie et accordéon",
@@ -665,19 +665,19 @@ MAP_ENUMS["enveloppe:baie:type-fermeture"] = {
 		"Femeture isolée sans ajours",
 };
 
-MAP_ENUMS["enveloppe:porte:materiau"] = {
+MAP["enveloppe:porte:materiau"] = {
 	[models.enveloppe.porte.MateriauEnum.pvc]: "PVC",
 	[models.enveloppe.porte.MateriauEnum.bois]: "Bois",
 	[models.enveloppe.porte.MateriauEnum.metal]: "Métal",
 };
 
-MAP_ENUMS["enveloppe:porte:type-vitrage"] = {
+MAP["enveloppe:porte:type-vitrage"] = {
 	[models.enveloppe.porte.TypeVitrageEnum.simple_vitrage]: "Simple vitrage",
 	[models.enveloppe.porte.TypeVitrageEnum.double_vitrage]: "Double vitrage",
 	[models.enveloppe.porte.TypeVitrageEnum.triple_vitrage]: "Triple vitrage",
 };
 
-MAP_ENUMS["enveloppe:masque:type"] = {
+MAP["enveloppe:masque:type"] = {
 	[models.enveloppe.masque.TypeMasqueEnum.homogene]: "Masque lointain homogène",
 	[models.enveloppe.masque.TypeMasqueEnum.non_homogene]:
 		"Masque lointain non homogène",
@@ -691,7 +691,7 @@ MAP_ENUMS["enveloppe:masque:type"] = {
 		"Paroi latérale avec obstacle au sud",
 };
 
-MAP_ENUMS["enveloppe:masque:secteur"] = {
+MAP["enveloppe:masque:secteur"] = {
 	[models.enveloppe.masque.SecteurEnum.lateral]: "Secteur latéral",
 	[models.enveloppe.masque.SecteurEnum.lateral_sud]:
 		"Secteur latéral vers le sud",
@@ -700,7 +700,7 @@ MAP_ENUMS["enveloppe:masque:secteur"] = {
 		"Secteur central vers le sud",
 };
 
-MAP_ENUMS["enveloppe:local-non-chauffe:type"] = {
+MAP["enveloppe:local-non-chauffe:type"] = {
 	[models.enveloppe.localNonChauffe.TypeLncEnum.garage]: "Garage",
 	[models.enveloppe.localNonChauffe.TypeLncEnum.cellier]: "Cellier",
 	[models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise]:
@@ -731,16 +731,8 @@ MAP_ENUMS["enveloppe:local-non-chauffe:type"] = {
 	[models.enveloppe.localNonChauffe.TypeLncEnum.autres]: "Autres",
 };
 
-type EnumKey = keyof typeof MAP_ENUMS;
-
-export function renderEnum(key: EnumKey, value: any) {
-	const map = MAP_ENUMS[key];
-	const text = map?.[value] ?? "-";
-	return `<span>${text}</span>`;
-}
-
 export class Enum extends HTMLElement {
-	static observedAttributes = ["data-key", "value"];
+	static observedAttributes = ["name", "value"];
 
 	connectedCallback() {
 		this.render();
@@ -750,13 +742,32 @@ export class Enum extends HTMLElement {
 	}
 
 	private render() {
-		const key = this.getAttribute("data-key") as EnumKey;
+		const name = this.getAttribute("name");
 		const value = this.getAttribute("value");
-		this.innerHTML = renderEnum(key, value);
+
+		if (name === null || value === null) {
+			return;
+		}
+
+		const keyMap = MAP[name];
+
+		if (!keyMap) {
+			console.warn(`Enum component: no mapping found for key "${name}"`);
+			return;
+		}
+		if (value === "null" || value === "undefined" || value === "") {
+			this.textContent = "-";
+			return;
+		}
+		const valueMap = keyMap[value];
+		if (!valueMap) {
+			console.warn(
+				`Enum component: no mapping found for value "${value}" in key "${name}"`,
+			);
+			return;
+		}
+		this.textContent = valueMap;
 	}
 }
-const HTML_TAG = "open-dpe-logement-enum";
 
-if (!customElements.get(HTML_TAG)) {
-	customElements.define(HTML_TAG, Enum);
-}
+define("enum", Enum);

@@ -1,31 +1,51 @@
-import { objectToHundred } from "../shared/utils";
+import { define, BaseIllustration } from "../shared/components.js";
 
-export function renderRepartitionDeperditions(props: {
-	dp_murs: number;
-	dp_planchers_bas: number;
-	dp_planchers_hauts: number;
-	dp_baies: number;
-	dp_portes: number;
-	pt: number;
-	dr: number;
-}): string {
-	const percents = objectToHundred({
-		murs: props.dp_murs,
-		planchers_bas: props.dp_planchers_bas,
-		planchers_hauts: props.dp_planchers_hauts,
-		menuiseries: props.dp_baies + props.dp_portes,
-		pt: props.pt,
-		dr: props.dr,
-	});
+function display(value: number, percent: boolean): string {
+	return percent ? `${Math.round(value)}%` : `${Math.round(value)} W/K`;
+}
 
-	return `
-    <svg
-      width='380'
-      height='240'
-      viewBox='0 0 380 240'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
-    >
+export class RepartitionDeperditions extends BaseIllustration {
+	static observedAttributes = [
+		"dp-murs",
+		"dp-planchers-bas",
+		"dp-planchers-hauts",
+		"dp-baies",
+		"dp-portes",
+		"pt",
+		"dr",
+		"percent",
+	];
+
+	protected viewBox(): string {
+		return "0 0 380 240";
+	}
+
+	protected content(): string {
+		const dp_murs = Number(this.getAttribute("dp-murs"));
+		const dp_planchers_bas = Number(this.getAttribute("dp-planchers-bas"));
+		const dp_planchers_hauts = Number(this.getAttribute("dp-planchers-hauts"));
+		const dp_baies = Number(this.getAttribute("dp-baies"));
+		const dp_portes = Number(this.getAttribute("dp-portes"));
+		const pt = Number(this.getAttribute("pt"));
+		const dr = Number(this.getAttribute("dr"));
+
+		if (
+			Number.isNaN(dp_murs) ||
+			Number.isNaN(dp_planchers_bas) ||
+			Number.isNaN(dp_planchers_hauts) ||
+			Number.isNaN(dp_baies) ||
+			Number.isNaN(dp_portes) ||
+			Number.isNaN(pt) ||
+			Number.isNaN(dr)
+		) {
+			console.warn("RepartitionDeperditions: all attributes must be numbers.");
+			return "";
+		}
+
+		const dp_menuiseries = dp_baies + dp_portes;
+		const percent = this.hasAttribute("percent") && this.getAttribute("percent") !== "false";
+
+		return `
       <path d='M132.164 89.2268V100.946H141.256V92.9464L162.627 71.5221L160.801 69.6823L157.268 66.1627L156.161 65.0828L132.164 89.2268ZM193.49 27.9003L162.627 58.6569L169.053 65.0828L193.384 40.7655L245.565 92.9464V156.793H141.189V140.888H132.164V165.885H254.724V89.2268L193.49 27.9003Z' fill='#DEDEDE'></path>
       <path d='M138.79 100.905H134.737V140.874H138.79V100.905Z' fill='#5BC5F2'></path>
       <path d='M200.836 148.22H189.491V181.43H183.851L195.157 201.001L206.462 181.43H200.836V148.22Z' fill='#E94B39'></path>
@@ -42,7 +62,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${percents.dr} %</tspan>
+        >${display(dr, percent)}</tspan>
       </text>
       <text y='20' fill='#1A1A1A' font-size='14'>
         <tspan x='280' text-anchor='middle'>Toitures</tspan>
@@ -51,7 +71,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${percents.planchers_hauts} %</tspan>
+        >${display(dp_planchers_hauts, percent)}</tspan>
       </text>
       <text
         id='murs'
@@ -65,7 +85,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${percents.murs} %</tspan>
+        >${display(dp_murs, percent)}</tspan>
       </text>
       <text y='220' fill='#1A1A1A' font-size='14'>
         <tspan x='198' text-anchor='middle'>Planchers</tspan>
@@ -74,7 +94,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${percents.planchers_bas} %</tspan>
+        >${display(dp_planchers_bas, percent)}</tspan>
       </text>
       <text y='210' fill='#1A1A1A' font-size='14'>
         <tspan x='90' text-anchor='middle'>Ponts thermiques</tspan>
@@ -83,7 +103,7 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${percents.pt} %</tspan>
+        >${display(pt, percent)}</tspan>
       </text>
       <text y='120' fill='#1A1A1A' font-size='14'>
         <tspan x='60' text-anchor='middle'>Menuiseries</tspan>
@@ -92,46 +112,10 @@ export function renderRepartitionDeperditions(props: {
           dy='1.2em'
           text-anchor='middle'
           font-weight='600'
-        >${percents.menuiseries} %</tspan>
+        >${display(dp_menuiseries, percent)}</tspan>
       </text>
-    </svg>
-  `;
-}
-
-export class RepartitionDeperditions extends HTMLElement {
-	static observedAttributes = [
-		"dp_murs",
-		"dp_planchers_bas",
-		"dp_planchers_hauts",
-		"dp_baies",
-		"dp_portes",
-		"pt",
-		"dr",
-	];
-
-	connectedCallback() {
-		this.render();
-	}
-	attributeChangedCallback() {
-		this.render();
-	}
-
-	private render() {
-		const value = {
-			dp_murs: Number(this.getAttribute("dp_murs")),
-			dp_planchers_bas: Number(this.getAttribute("dp_planchers_bas")),
-			dp_planchers_hauts: Number(this.getAttribute("dp_planchers_hauts")),
-			dp_baies: Number(this.getAttribute("dp_baies")),
-			dp_portes: Number(this.getAttribute("dp_portes")),
-			pt: Number(this.getAttribute("pt")),
-			dr: Number(this.getAttribute("dr")),
-		};
-		this.innerHTML = renderRepartitionDeperditions(value);
+    `;
 	}
 }
 
-const HTML_TAG = "open-dpe-logement-repartition-deperditions";
-
-if (!customElements.get(HTML_TAG)) {
-	customElements.define(HTML_TAG, RepartitionDeperditions);
-}
+define("repartition-deperditions", RepartitionDeperditions);

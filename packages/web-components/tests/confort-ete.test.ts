@@ -6,9 +6,9 @@ import { mount, shadow } from "./helpers.js";
 const TAG = "open-dpe-logement-confort-ete";
 
 const COLORS: Record<string, string> = {
-  A: "#2CAF85",
-  B: "#F49838",
-  C: "#E52322",
+  "1": "#2CAF85",
+  "2": "#F49838",
+  "3": "#E52322",
 };
 
 describe(TAG, () => {
@@ -23,7 +23,7 @@ describe(TAG, () => {
   describe("cycle de vie DOM", () => {
     it("connectedCallback rend le composant avec value='A'", () => {
       const el = document.createElement(TAG);
-      el.setAttribute("value", "A");
+      el.setAttribute("value", "1");
       const { unmount } = mount(el);
       expect(shadow(el)).not.toBe("");
       unmount();
@@ -31,10 +31,10 @@ describe(TAG, () => {
 
     it("attributeChangedCallback re-rend lors d'un changement de value", () => {
       const el = document.createElement(TAG);
-      el.setAttribute("value", "A");
+      el.setAttribute("value", "2");
       const { unmount } = mount(el);
       const before = shadow(el);
-      el.setAttribute("value", "C");
+      el.setAttribute("value", "3");
       expect(shadow(el)).not.toBe(before);
       unmount();
     });

@@ -1,248 +1,369 @@
 import * as models from "@open-dpe-logement/models";
 import { v4 as uuid } from "uuid";
-import _geste from "../data/geste/gestes.json";
-import _postes from "../data/geste/postes.json";
+import _geste from "../data/gestes.json";
+
+export type Geste = {
+	id: string;
+	titre: string;
+	description: string;
+};
 
 export const gestes = _geste as Geste[];
 
-export const postes: Poste[] = _postes;
-
-export type Poste = {
-	id: string;
-	titre: string;
-};
-
-export type Geste =
-	| IsolationParois
-	| IsolationMenuiseries
-	| ProtectionSolaire
-	| ChauffeEauThermodynamique
-	| VMCDoubleFlux
-	| PanneauPhotovoltaique;
-
 export function withGeste(
-	diagnostic: models.diagnostic.Diagnostic,
+	data: models.diagnostic.Diagnostic,
 	geste: Geste,
 ): models.diagnostic.Diagnostic {
-	switch (geste.poste) {
+	switch (geste.id) {
 		case "isolation-murs":
+			return withIsolationMurs(data);
 		case "isolation-planchers-bas":
+			return withIsolationPlanchersBas(data);
 		case "isolation-planchers-hauts":
-			return withIsolationParois(diagnostic, geste);
-		case "isolation-menuiseries":
-			return withIsolationMenuiseries(diagnostic, geste);
+			return withIsolationPlanchersHauts(data);
+		case "isolation-baies":
+			return withIsolationBaies(data);
+		case "isolation-portes":
+			return withIsolationPortes(data);
 		case "protection-solaire":
-			return withProtectionSolaire(diagnostic, geste);
+			return withProtectionSolaire(data);
+		case "chauffage":
+			return withChauffage(data);
 		case "ecs":
-			return withChauffeEauThermodynamique(diagnostic, geste);
+			return withEcs(data);
+		case "refroidissement":
+			return withRefroidissement(data);
 		case "ventilation":
-			return withVMCDoubleFlux(diagnostic, geste);
+			return withVentilation(data);
 		case "production":
-			return withPanneauPhotovoltaique(diagnostic, geste);
+			return withProduction(data);
+		default:
+			return data;
 	}
 }
 
-type CreateGeste<
-	T extends {
-		poste?: string;
-		data: object;
-	},
-> = {
-	id: string;
-	poste: string;
-	titre: string;
-	description: string;
-} & T;
-
-export type IsolationParois = CreateGeste<{
-	poste:
-		| "isolation-murs"
-		| "isolation-planchers-bas"
-		| "isolation-planchers-hauts";
-	data: models.enveloppe.common.IsolationConnue;
-}>;
-
-export function withIsolationParois(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: IsolationParois,
+export function withIsolationMurs(
+	data: models.diagnostic.Diagnostic,
 ): models.diagnostic.Diagnostic {
-	const data = structuredClone(diagnostic);
-	switch (geste.poste) {
-		case "isolation-murs":
-			data.enveloppe.murs = data.enveloppe.murs.map((paroi) => ({
+	return {
+		...data,
+		enveloppe: {
+			...data.enveloppe,
+			murs: data.enveloppe.murs.map((paroi) => ({
 				...paroi,
-				isolation: geste.data,
-			}));
-			return data;
-
-		case "isolation-planchers-bas":
-			data.enveloppe.planchers_bas = data.enveloppe.planchers_bas.map(
-				(paroi) => ({
-					...paroi,
-					isolation: geste.data,
-				}),
-			);
-			return data;
-
-		case "isolation-planchers-hauts":
-			data.enveloppe.planchers_hauts = data.enveloppe.planchers_hauts.map(
-				(paroi) => ({
-					...paroi,
-					isolation: geste.data,
-				}),
-			);
-			return data;
-	}
+				isolation: {
+					etat: true,
+					type: "ite",
+					epaisseur: 250,
+					resistance_thermique: 5.5,
+					annee_installation: null,
+				},
+			})),
+		},
+	};
 }
 
-export type IsolationMenuiseries = IsolationBaies | IsolationPortes;
+export function withIsolationPlanchersBas(
+	data: models.diagnostic.Diagnostic,
+): models.diagnostic.Diagnostic {
+	return {
+		...data,
+		enveloppe: {
+			...data.enveloppe,
+			planchers_bas: data.enveloppe.planchers_bas.map((paroi) => ({
+				...paroi,
+				isolation: {
+					etat: true,
+					type: "ite",
+					epaisseur: 200,
+					resistance_thermique: 4.5,
+					annee_installation: null,
+				},
+			})),
+		},
+	};
+}
+
+export function withIsolationPlanchersHauts(
+	data: models.diagnostic.Diagnostic,
+): models.diagnostic.Diagnostic {
+	return {
+		...data,
+		enveloppe: {
+			...data.enveloppe,
+			planchers_hauts: data.enveloppe.planchers_hauts.map((paroi) => ({
+				...paroi,
+				isolation: {
+					etat: true,
+					type: "ite",
+					epaisseur: 300,
+					resistance_thermique: 7.5,
+					annee_installation: null,
+				},
+			})),
+		},
+	};
+}
 
 export function withIsolationMenuiseries(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: IsolationMenuiseries,
+	data: models.diagnostic.Diagnostic,
 ): models.diagnostic.Diagnostic {
-	switch (geste.id) {
-		case "isolation-baies":
-			return withIsolationBaies(diagnostic, geste);
-		case "isolation-portes":
-			return withIsolationPortes(diagnostic, geste);
-	}
+	return withIsolationBaies(withIsolationPortes(data));
 }
-
-export type IsolationBaies = CreateGeste<{
-	poste: "isolation-menuiseries";
-	id: "isolation-baies";
-	data: Pick<
-		models.enveloppe.baie.BaieFenetreOuPorteFenetre,
-		"type" | "uw" | "sw" | "menuiserie" | "vitrage" | "survitrage"
-	>;
-}>;
 
 export function withIsolationBaies(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: IsolationBaies,
+	data: models.diagnostic.Diagnostic,
 ): models.diagnostic.Diagnostic {
-	const data = structuredClone(diagnostic);
-	data.enveloppe.baies = data.enveloppe.baies.map((baie) => ({
-		...baie,
-		...geste.data,
-	}));
-	return data;
+	return {
+		...data,
+		enveloppe: {
+			...data.enveloppe,
+			baies: data.enveloppe.baies.map((baie) => ({
+				...baie,
+				type: "fenetre_battante",
+				uw: 1.2,
+				sw: null,
+				survitrage: null,
+				vitrage: {
+					type: "double_vitrage_fe",
+					nature_lame: "argon",
+					epaisseur_lame: 12,
+				},
+				menuiserie: {
+					materiau: "pvc",
+					largeur_dormant: 60,
+					presence_soubassement: false,
+					presence_joint: true,
+					presence_retour_isolation: true,
+					presence_rupteur_pont_thermique: true,
+				},
+			})),
+		},
+	};
 }
-
-export type IsolationPortes = CreateGeste<{
-	poste: "isolation-menuiseries";
-	id: "isolation-portes";
-	data: Pick<
-		models.enveloppe.porte.Porte,
-		"isolation" | "materiau" | "u" | "menuiserie"
-	>;
-}>;
 
 export function withIsolationPortes(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: IsolationPortes,
+	data: models.diagnostic.Diagnostic,
 ): models.diagnostic.Diagnostic {
-	const data = structuredClone(diagnostic);
-	data.enveloppe.portes = data.enveloppe.portes.map((porte) => ({
-		...porte,
-		...geste.data,
-	}));
-	return data;
+	return {
+		...data,
+		enveloppe: {
+			...data.enveloppe,
+			portes: data.enveloppe.portes.map((porte) => ({
+				...porte,
+				isolation: true,
+				materiau: "pvc",
+				u: 1.2,
+				menuiserie: {
+					largeur_dormant: 60,
+					presence_joint: true,
+					presence_retour_isolation: true,
+				},
+			})),
+		},
+	};
 }
-
-export type ProtectionSolaire = CreateGeste<{
-	poste: "protection-solaire";
-	data: Pick<
-		models.enveloppe.baie.Baie,
-		"type_fermeture" | "presence_protection_solaire"
-	>;
-}>;
 
 export function withProtectionSolaire(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: ProtectionSolaire,
+	data: models.diagnostic.Diagnostic,
 ): models.diagnostic.Diagnostic {
-	const data = structuredClone(diagnostic);
-	data.enveloppe.baies = data.enveloppe.baies.map((baie) => ({
-		...baie,
-		...geste.data,
-	}));
-	return data;
-}
-
-export type ChauffeEauThermodynamique = CreateGeste<{
-	poste: "ecs";
-	data: Pick<
-		models.ecs.generateur.ChauffeEauThermodynamique,
-		"type" | "energie" | "bienergie" | "signaletique" | "position" | "stockage"
-	>;
-}>;
-
-export function withChauffeEauThermodynamique(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: ChauffeEauThermodynamique,
-): models.diagnostic.Diagnostic {
-	const data = structuredClone(diagnostic);
-	const generateurs = diagnostic.ecs.generateurs.map((generateur) => ({
-		...generateur,
-		...geste.data,
-	}));
-	data.ecs.generateurs = models.common.toNonEmptyArray(generateurs);
-	data.chauffage.generateurs.forEach((item, index) => {
-		if (generateurs.some((g) => g.id === item.id)) {
-			data.chauffage.generateurs[index].position.generateur_mixte_id = null;
-		}
-	});
-	return data;
-}
-
-export type VMCDoubleFlux = CreateGeste<{
-	poste: "ventilation";
-	data: Pick<
-		models.ventilation.installation.InstallationVMCDoubleFlux,
-		"type" | "installation_collective" | "presence_echangeur_thermique"
-	>;
-}>;
-
-export function withVMCDoubleFlux(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: VMCDoubleFlux,
-): models.diagnostic.Diagnostic {
-	const data = structuredClone(diagnostic);
-	const installations = diagnostic.ventilation.installations.map(
-		(installation) => ({
-			...installation,
-			...geste.data,
-		}),
-	);
-	data.ventilation.installations = models.common.toNonEmptyArray(installations);
-	return data;
-}
-
-export type PanneauPhotovoltaique = CreateGeste<{
-	poste: "production";
-	data: Pick<
-		models.production.panneauPhotovoltaique.PanneauPhotovoltaique,
-		| "description"
-		| "orientation"
-		| "inclinaison"
-		| "modules"
-		| "surface"
-		| "installation_collective"
-	>;
-}>;
-
-export function withPanneauPhotovoltaique(
-	diagnostic: models.diagnostic.Diagnostic,
-	geste: PanneauPhotovoltaique,
-): models.diagnostic.Diagnostic {
-	const data = structuredClone(diagnostic);
-	data.production.panneaux_photovoltaiques = [
-		{
-			id: uuid(),
-			...geste.data,
+	return {
+		...data,
+		enveloppe: {
+			...data.enveloppe,
+			baies: data.enveloppe.baies.map((baie) => ({
+				...baie,
+				type_fermeture: "fermeture_isolee_sans_ajours",
+				presence_protection_solaire: true,
+			})),
 		},
-	];
-	return data;
+	};
+}
+
+export function withChauffage(
+	data: models.diagnostic.Diagnostic,
+): models.diagnostic.Diagnostic {
+	const generateur: models.chauffage.generateur.Generateur = {
+		id: uuid(),
+		description: "Pompe à chaleur air/eau",
+		type: "pac_air_eau",
+		energie: "electricite",
+		bienergie: null,
+		annee_installation: null,
+		position: {
+			cascade: null,
+			position_chaudiere: null,
+			generateur_collectif: false,
+			generateur_multi_batiment: false,
+			position_volume_chauffe: true,
+			generateur_mixte_id: null,
+			reseau_chaleur_id: null,
+		},
+		signaletique: {
+			scop: 3.5,
+			pn: null,
+			label: null,
+			mode_combustion: null,
+			presence_ventouse: null,
+			presence_regulation: null,
+			pveilleuse: null,
+			qp0: null,
+			rpn: null,
+			rpint: null,
+			tfonc30: null,
+			tfonc100: null,
+		},
+	};
+	if (data.chauffage.emetteurs.length === 0) {
+		generateur.type = "pac_air_air";
+	}
+
+	const installations = data.chauffage.installations.map((installation) => {
+		const systemes = installation.systemes.map((systeme) => ({
+			...systeme,
+			generateur_id: generateur.id,
+		}));
+		return {
+			...installation,
+			systemes: models.common.toNonEmptyArray(systemes),
+		};
+	});
+
+	return {
+		...data,
+		chauffage: {
+			...data.chauffage,
+			generateurs: models.common.toNonEmptyArray([generateur]),
+			installations: models.common.toNonEmptyArray(installations),
+		},
+	};
+}
+
+export function withEcs(
+	data: models.diagnostic.Diagnostic,
+): models.diagnostic.Diagnostic {
+	const generateur: models.ecs.generateur.Generateur = {
+		id: uuid(),
+		description: "Chauffe-eau thermodynamique",
+		type: "cet_air_exterieur",
+		energie: "electricite",
+		bienergie: null,
+		annee_installation: null,
+		stockage: {
+			volume: 200,
+			type: "integre",
+			position_volume_chauffe: true,
+		},
+		position: {
+			position_chauffe_eau: null,
+			generateur_collectif: false,
+			generateur_multi_batiment: false,
+			position_volume_chauffe: true,
+			generateur_mixte_id: null,
+			reseau_chaleur_id: null,
+		},
+		signaletique: {
+			cop: 6,
+			pn: null,
+			label: null,
+			mode_combustion: null,
+			presence_ventouse: null,
+			pveilleuse: null,
+			qp0: null,
+			rpn: null,
+		},
+	};
+
+	const installations: models.ecs.installation.Installation[] =
+		data.ecs.installations.map((installation) => {
+			const systemes = installation.systemes.map((systeme) => ({
+				...systeme,
+				generateur_id: generateur.id,
+				reseau: {
+					...systeme.reseau,
+					isolation: true,
+				},
+			}));
+			return {
+				...installation,
+				systemes: models.common.toNonEmptyArray(systemes),
+			};
+		});
+
+	return {
+		...data,
+		ecs: {
+			generateurs: [generateur],
+			installations: models.common.toNonEmptyArray(installations),
+		},
+	};
+}
+
+export function withRefroidissement(
+	data: models.diagnostic.Diagnostic,
+): models.diagnostic.Diagnostic {
+	const generateur: models.refroidissement.generateur.Generateur = {
+		id: uuid(),
+		description: "Pompe à chaleur air/air",
+		type: "pac_air_air",
+		energie: "electricite",
+		seer: 7.5,
+		annee_installation: null,
+		reseau_froid_id: null,
+	};
+	const installation: models.refroidissement.installation.Installation = {
+		id: uuid(),
+		description: "Installation de refroidissement",
+		surface: data.batiment.surface_habitable,
+		generateurs: [generateur.id],
+	};
+	return {
+		...data,
+		refroidissement: {
+			generateurs: [generateur],
+			installations: [installation],
+		},
+	};
+}
+
+export function withVentilation(
+	data: models.diagnostic.Diagnostic,
+): models.diagnostic.Diagnostic {
+	return {
+		...data,
+		ventilation: {
+			installations: [
+				{
+					id: uuid(),
+					description: "VMC double flux",
+					surface: data.batiment.surface_habitable,
+					type: "vmc_double_flux",
+					presence_echangeur_thermique: true,
+					installation_collective: false,
+					annee_installation: null,
+				},
+			],
+		},
+	};
+}
+
+export function withProduction(
+	data: models.diagnostic.Diagnostic,
+): models.diagnostic.Diagnostic {
+	return {
+		...data,
+		production: {
+			panneaux_photovoltaiques: [
+				{
+					id: uuid(),
+					description: "Panneaux photovoltaïques",
+					orientation: "sud_est",
+					inclinaison: 30,
+					modules: 1,
+					surface: 5,
+					installation_collective: false,
+				},
+			],
+		},
+	};
 }

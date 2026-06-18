@@ -1,4 +1,4 @@
-import { createWebComponent } from "../../lib/createWebComponent";
+import { createWebComponent } from "../../lib/web-component";
 
 export const ClasseClimat = createWebComponent("open-dpe-logement-classe-climat");
 export const ClasseEnergie = createWebComponent("open-dpe-logement-classe-energie");
@@ -9,8 +9,7 @@ export const EtiquetteClimat = createWebComponent("open-dpe-logement-etiquette-c
 export const EtiquetteEnergie = createWebComponent("open-dpe-logement-etiquette-energie");
 export const IconConfortEte = createWebComponent("open-dpe-logement-icon-confort-ete");
 export const IconEnergie = createWebComponent("open-dpe-logement-icon-energie");
-export const IconEnveloppe = createWebComponent("open-dpe-logement-icon-enveloppe");
-export const IconPassoire = createWebComponent("open-dpe-logement-icon-passoire");
+export const Icon = createWebComponent("open-dpe-logement-icon");
 export const IconUsage = createWebComponent("open-dpe-logement-icon-usage");
 export const PerformanceEnveloppe = createWebComponent("open-dpe-logement-performance-enveloppe");
 export const PerformanceMenuiserie = createWebComponent("open-dpe-logement-performance-menuiserie");

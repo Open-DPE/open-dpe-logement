@@ -1,45 +1,64 @@
 import { useState } from "react";
 import { createContext, services } from "@open-dpe-logement/engine";
-import { scenarios, zones, withAltitude, withAnneeConstruction, withZone } from "../models/scenario";
-import { setDiagnostic } from "../stores/user";
+import { scenarios, withAltitude, withAnneeConstruction, withDepartement } from "../models/scenario";
+import { departements } from "../models/departement";
+import { useUserStore, setDiagnostic } from "../stores/user";
 import { Button } from "@/components/ui/button"
+import { Spinner } from "@/components/ui/spinner"
+import { toast } from "sonner"
 import {
   NativeSelect,
   NativeSelectOption,
 } from "@/components/ui/native-select"
 
 interface Props {
-  onSuccess?: () => void;
   className?: string;
 }
 
-export function ChangeScenario({ className = "", onSuccess }: Props) {
-  const [scenarioId, setScenarioId] = useState<string>(scenarios[0].id);
-  const [zoneClimatique, setZoneClimatique] = useState<string>(zones[0].zone_climatique);
-  const [altitude, setAltitude] = useState<string>("0");
-  const [anneeConstruction, setAnneeConstruction] = useState<string>("1970");
+export function ChangeScenario({ className = "" }: Props) {
+  const { diagnostic, scenario } = useUserStore();
+
+  const [pending, setPending] = useState(false);
+  const [scenarioId, setScenarioId] = useState<string>(
+    scenario ?? scenarios[0].id
+  );
+  const [departementCode, setDepartementCode] = useState<string>(
+    diagnostic?.batiment.adresse.code_insee.substring(0, 2) ?? departements[0].code_departement
+  );
+  const [altitude, setAltitude] = useState<string>(
+    diagnostic?.batiment.altitude.toString() ?? "0"
+  );
+  const [anneeConstruction, setAnneeConstruction] = useState<string>(
+    diagnostic?.batiment.annee_construction.toString() ?? "1900"
+  );
   const [error, setError] = useState<string>();
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
+    setPending(true);
     setError(undefined);
+
+    await new Promise((resolve) => setTimeout(resolve, 0));
 
     const scenario = scenarios.find((s) => s.id === scenarioId);
     if (!scenario) {
       setError(`Scénario introuvable`);
+      setPending(false);
       return;
     }
 
     let data = scenario.data;
-    if (zoneClimatique) data = withZone(data, zoneClimatique);
+    const departement = departements.find((d) => d.code_departement === departementCode);
+    if (departement) data = withDepartement(data, departement);
     if (altitude) data = withAltitude(data, Number(altitude));
     if (anneeConstruction) data = withAnneeConstruction(data, Number(anneeConstruction));
 
     const context = createContext(data);
     const result = services.diagnostic.calcule(context);
 
-    setDiagnostic(result);
-    onSuccess?.();
+    setDiagnostic(scenario.id, result);
+    setPending(false);
+    toast.success("Scénario mis à jour");
   }
 
   return (
@@ -57,15 +76,13 @@ export function ChangeScenario({ className = "", onSuccess }: Props) {
       </NativeSelect>
 
       <NativeSelect
-        value={zoneClimatique}
-        onChange={(e) => setZoneClimatique(e.target.value)}
+        value={departementCode}
+        onChange={(e) => setDepartementCode(e.target.value)}
         className="w-full"
       >
-        {
-          zones.map(({ zone_climatique, commune }) => (
-            <NativeSelectOption key={zone_climatique} value={zone_climatique}>{commune}</NativeSelectOption>
-          ))
-        }
+        {departements.map(({ code_departement, departement }) => (
+          <NativeSelectOption key={code_departement} value={code_departement}>{departement}</NativeSelectOption>
+        ))}
       </NativeSelect>
 
       <NativeSelect
@@ -97,7 +114,12 @@ export function ChangeScenario({ className = "", onSuccess }: Props) {
 
       {error && <p className="text-destructive text-sm">{error}</p>}
 
-      <Button type="submit">Valider</Button>
+      <Button type="submit" disabled={pending}>
+        {pending
+          ? <><Spinner data-icon="inline-start" /> Calcul...</>
+          : "Valider"
+        }
+      </Button>
     </form>
   )
 }

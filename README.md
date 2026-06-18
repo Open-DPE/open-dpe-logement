@@ -8,6 +8,13 @@ Monorepo communautaire pour la transparence, la fiabilité et la compréhension 
 - **Fiabilité** — garantir que deux DPE identiques et justes produisent systématiquement le même résultat
 - **Compréhension** — offrir un espace de référence partagé pour la communauté des exploitants et producteurs de données DPE
 
+## Support
+
+- [x] Maison individuelle
+- [x] Immeuble collectif
+- [x] Appartement
+- [ ] Appartement depuis les données d'un immeuble collectif  
+
 ## Organisation
 
 ```text

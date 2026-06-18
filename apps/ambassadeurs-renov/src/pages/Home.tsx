@@ -35,9 +35,6 @@ export function Home() {
             <TabsTrigger className="cursor-pointer" value="apres" disabled={!simulation}>
               Après travaux
             </TabsTrigger>
-            <TabsTrigger className="cursor-pointer" value="comparaison" disabled={!simulation}>
-              Comparaison
-            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="avant">
@@ -50,10 +47,13 @@ export function Home() {
             )}
           </TabsContent>
           <TabsContent value="apres">
-            <p>Contenu de l'onglet "Après"</p>
-          </TabsContent>
-          <TabsContent value="comparaison">
-            <p>Contenu de l'onglet "Comparaison"</p>
+            {simulation ? <Dpe data={simulation} /> : (
+              <Alert>
+                <AlertCircleIcon />
+                <AlertTitle>Erreur</AlertTitle>
+                <AlertDescription>Impossible de charger la simulation.</AlertDescription>
+              </Alert>
+            )}
           </TabsContent>
         </Tabs>
       </section>

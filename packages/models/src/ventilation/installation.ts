@@ -17,6 +17,18 @@ export function isVentilationMecanique(
 	return isTypeVentilationMecanique(installation.type);
 }
 
+export function isVentilationVMCDoubleFlux(
+	installation: Installation,
+): installation is InstallationVMCDoubleFlux {
+	return installation.type === TypeVentilationEnum.vmc_double_flux;
+}
+
+export function isVentilationPuitClimatique(
+	installation: Installation,
+): installation is InstallationPuitClimatique {
+	return installation.type === TypeVentilationEnum.puit_climatique;
+}
+
 export function isTypeVentilationNaturelle(type: TypeVentilation): boolean {
 	return TYPES_VENTILATION_NATURELLE.includes(type as any);
 }
@@ -48,7 +60,14 @@ export type InstallationData = {
 	consommations: Consommations;
 };
 
-type InstallationGeneric<T> = {
+type InstallationType<
+	T extends {
+		type: TypeVentilation;
+		annee_installation?: number | null;
+		installation_collective?: boolean | null;
+		presence_echangeur_thermique?: boolean | null;
+	},
+> = {
 	id: UUID;
 	description: string;
 	surface: number;
@@ -58,27 +77,30 @@ type InstallationGeneric<T> = {
 	presence_echangeur_thermique: boolean | null;
 } & T;
 
-export type InstallationNaturelle = InstallationGeneric<{
+export type InstallationNaturelle = InstallationType<{
 	type: TypeVentilationNaturelle;
 	annee_installation: null;
 	installation_collective: null;
 	presence_echangeur_thermique: null;
 }>;
 
-export type InstallationMecanique = InstallationGeneric<{
-	type: TypeVentilationMecanique;
-	installation_collective: boolean;
-	presence_echangeur_thermique: null;
-}>;
-
-export type InstallationVMCDoubleFlux = InstallationGeneric<{
+export type InstallationVMCDoubleFlux = InstallationType<{
 	type: typeof TypeVentilationEnum.vmc_double_flux;
 	installation_collective: boolean;
 }>;
 
-export type InstallationPuitClimatique = InstallationGeneric<{
+export type InstallationPuitClimatique = InstallationType<{
 	type: typeof TypeVentilationEnum.puit_climatique;
 	installation_collective: boolean;
+}>;
+
+export type InstallationMecanique = InstallationType<{
+	type: Exclude<
+		TypeVentilationMecanique,
+		| typeof TypeVentilationEnum.vmc_double_flux
+		| typeof TypeVentilationEnum.puit_climatique
+	>;
+	presence_echangeur_thermique: null;
 }>;
 
 export const TYPES_VENTILATION = [

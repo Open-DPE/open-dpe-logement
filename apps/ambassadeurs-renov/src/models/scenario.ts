@@ -1,20 +1,13 @@
 import * as models from "@open-dpe-logement/models";
 import { validate } from "@open-dpe-logement/schemas";
-import _scenarios from "../data/scenario/scenarios.json";
-import _zones from "../data/scenario/zones.json";
+import { type Departement } from "./departement";
+import _scenarios from "../data/scenarios.json";
 
 export type Scenario = {
 	id: string;
 	titre: string;
 	description: string;
 	data: models.diagnostic.Diagnostic;
-};
-
-export type Zone = {
-	code_postal: string;
-	code_insee: string;
-	commune: string;
-	zone_climatique: string;
 };
 
 export const scenarios: Scenario[] = _scenarios.map((scenario) => {
@@ -30,19 +23,14 @@ export const scenarios: Scenario[] = _scenarios.map((scenario) => {
 	return { ...scenario, data };
 });
 
-export const zones: Zone[] = _zones;
-
-export function withZone(
+export function withDepartement(
 	diagnostic: models.diagnostic.Diagnostic,
-	zoneClimatique: string,
+	departement: Departement,
 ): models.diagnostic.Diagnostic {
 	const data = structuredClone(diagnostic);
-	const zone = zones.find((z) => z.zone_climatique === zoneClimatique);
-	if (zone) {
-		data.batiment.adresse.code_postal = zone.code_postal;
-		data.batiment.adresse.code_insee = zone.code_insee;
-		data.batiment.adresse.commune = zone.commune;
-	}
+	data.batiment.adresse.code_postal = departement.code_insee;
+	data.batiment.adresse.code_insee = departement.code_insee;
+	data.batiment.adresse.commune = departement.commune;
 	return data;
 }
 

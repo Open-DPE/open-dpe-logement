@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ressources, tags } from '@/models/ressource';
+import { ressources, tags, filterRessourcesByTags } from '@/models/ressource';
 import { Button } from '@/components/ui/button';
 import { ChevronRightIcon } from "lucide-react"
 import {
@@ -20,7 +20,7 @@ export function Ressources() {
 
   const filteredRessources = selectedTags.length === 0
     ? ressources
-    : ressources.filter((r) => selectedTags.every((tag) => r.tags.includes(tag)));
+    : filterRessourcesByTags(ressources, selectedTags);
 
   function toggleTag(tag: string) {
     setSelectedTags((prev) =>

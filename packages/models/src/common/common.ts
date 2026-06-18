@@ -159,13 +159,6 @@ export function isEnergieCombustion(
 	return (ENERGIES_COMBUSTION as readonly Energie[]).includes(energie);
 }
 
-/**
- * @see https://schemas.open-dpe.fr/common/primitives#/$defs/type_pertes
- */
-export const TYPES_PERTES = ["generation", "stockage", "distribution"] as const;
-export type TypePertes = (typeof TYPES_PERTES)[number];
-export const TypePerteEnum = buildEnum(TYPES_PERTES);
-
 export const ETIQUETTES = ["A", "B", "C", "D", "E", "F", "G"] as const;
 export type Etiquette = (typeof ETIQUETTES)[number];
 export const EtiquetteEnum = buildEnum(ETIQUETTES);

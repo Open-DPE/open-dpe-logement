@@ -13,13 +13,13 @@ function makeEl(attrs: Record<string, string | number>): HTMLElement {
 }
 
 const VALID_ATTRS = {
-  dp_murs: 100,
-  dp_planchers_bas: 80,
-  dp_planchers_hauts: 60,
-  dp_baies: 40,
-  dp_portes: 10,
-  pt: 30,
-  dr: 20,
+  "dp-murs": 100,
+  "dp-planchers-bas": 80,
+  "dp-planchers-hauts": 60,
+  "dp-baies": 40,
+  "dp-portes": 10,
+  "pt": 30,
+  "dr": 20,
 };
 
 describe(TAG, () => {
@@ -39,11 +39,11 @@ describe(TAG, () => {
       unmount();
     });
 
-    it("attributeChangedCallback re-rend lors d'un changement de dp_murs", () => {
+    it("attributeChangedCallback re-rend lors d'un changement de dp-murs", () => {
       const el = makeEl(VALID_ATTRS);
       const { unmount } = mount(el);
       const before = shadow(el);
-      el.setAttribute("dp_murs", "200");
+      el.setAttribute("dp-murs", "200");
       expect(shadow(el)).not.toBe(before);
       unmount();
     });
@@ -51,11 +51,11 @@ describe(TAG, () => {
 
   describe("attribut invalide → aucune donnée affichée", () => {
     const invalids = [
-      "dp_murs",
-      "dp_planchers_bas",
-      "dp_planchers_hauts",
-      "dp_baies",
-      "dp_portes",
+      "dp-murs",
+      "dp-planchers-bas",
+      "dp-planchers-hauts",
+      "dp-baies",
+      "dp-portes",
       "pt",
       "dr",
     ];
@@ -71,7 +71,7 @@ describe(TAG, () => {
   });
 
   describe("affichage des valeurs (mode W/K)", () => {
-    it("dp_murs=100 → affiche '100 W/K'", () => {
+    it("dp-murs=100 → affiche '100 W/K'", () => {
       const el = makeEl(VALID_ATTRS);
       const { unmount } = mount(el);
       expect(shadow(el)).toContain("100 W/K");
@@ -85,8 +85,8 @@ describe(TAG, () => {
       unmount();
     });
 
-    it("dp_baies + dp_portes fusionnés dans Menuiseries", () => {
-      const el = makeEl({ ...VALID_ATTRS, dp_baies: 30, dp_portes: 10 });
+    it("dp-baies + dp-portes fusionnés dans Menuiseries", () => {
+      const el = makeEl({ ...VALID_ATTRS, "dp-baies": 30, "dp-portes": 10 });
       const { unmount } = mount(el);
       // dp_menuiseries = 30 + 10 = 40
       expect(shadow(el)).toContain("40 W/K");
