@@ -135,7 +135,7 @@ export function Layout({ children, prev }: Props) {
           <Button variant="ghost" className="py-6" asChild>
             <NavLink to="/ressources" className="flex flex-col" viewTransition>
               <ToolboxIcon size={20} />
-              <span className="font-medium text-xs">Formations</span>
+              <span className="font-medium text-xs">Mes formations</span>
             </NavLink>
           </Button>
         </div>

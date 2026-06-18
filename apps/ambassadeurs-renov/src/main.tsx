@@ -10,9 +10,6 @@ import { NotFound } from "./pages/404";
 
 import "@open-dpe-logement/web-components"
 import "./index.css";
-import { clearUser } from './stores/user';
-
-clearUser();
 
 const router = createBrowserRouter([
   {
