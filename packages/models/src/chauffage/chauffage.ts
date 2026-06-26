@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/chauffage";
 import type { NonEmptyArray, UUID } from "../common/common.js";
 import { EntityNotFoundError } from "../errors.js";
 import { buildEnum } from "../utils.js";
@@ -8,10 +7,6 @@ import * as installation from "./installation.js";
 import * as systeme from "./systeme.js";
 
 export { generateur, installation, emetteur, systeme };
-
-export function isChauffage(data: unknown): data is Chauffage {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage

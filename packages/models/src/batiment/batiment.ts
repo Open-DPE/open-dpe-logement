@@ -1,13 +1,8 @@
-import { validate } from "@open-dpe-logement/schemas/batiment";
 import type { Adresse } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 import * as appartement from "./appartement.js";
 
 export { appartement };
-
-export function isBatiment(data: unknown): data is Batiment {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/batiment

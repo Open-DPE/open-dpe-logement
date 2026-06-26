@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/enveloppe";
 import * as baie from "./baie.js";
 import * as common from "./common.js";
 import * as localNonChauffe from "./local-non-chauffe.js";
@@ -25,10 +24,6 @@ export {
 	pontThermique,
 	porte,
 };
-
-export function isEnveloppe(data: unknown): data is Enveloppe {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe

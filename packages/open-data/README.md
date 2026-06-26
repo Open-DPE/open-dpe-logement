@@ -19,15 +19,6 @@ const dpe = await fetchDPE("xxxxxxx", {
 });
 ```
 
-## Organisation
-
-```text
-/src
-├── audit.ts                        # XSD -> TS
-├── dpe.ts                          # XSD -> TS
-└── index.ts                        # Point d'entrée
-```
-
 ## Sources
 
 - [API DPE](https://eu1.anypoint.mulesoft.com/exchange/portals/ademe/5dbd7b95-bc7d-47ed-be4a-d40b49eb8e47/x-ademe-externe-api/minor/1.0/console/method/%236056/)

@@ -1,11 +1,6 @@
-import { validate } from "@open-dpe-logement/schemas/refroidissement/installation";
 import { EntityNotFoundError } from "../errors.js";
 import type { UUID, NonEmptyArray } from "../common/common.js";
 import type { Generateur } from "./generateur.js";
-
-export function isInstallation(data: unknown): data is Installation {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/refroidissement/installation

@@ -9,9 +9,11 @@ import { bundle } from "@hyperjump/json-schema/bundle";
 
 const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
 const SCHEMAS_DIR = join(ROOT, "schemas");
-const TARGET = join(ROOT, "packages", "schemas", "data");
+const SCHEMAS_TARGET = join(ROOT, "packages", "schemas", "data");
+const VALIDATOR_TARGET = join(ROOT, "packages", "validator", "data");
 
-mkdirSync(TARGET, { recursive: true });
+mkdirSync(SCHEMAS_TARGET, { recursive: true });
+mkdirSync(VALIDATOR_TARGET, { recursive: true });
 
 const schemaFiles = globSync(`${SCHEMAS_DIR}/**/*.yaml`);
 
@@ -32,6 +34,7 @@ function isPrivate(file) {
 function asSchema(value) {
 	if (typeof value !== "object" || value === null)
 		throw new Error("Schéma invalide");
+
 	return /** @type {any} */ (value);
 }
 
@@ -71,19 +74,27 @@ for (const file of schemaFiles) {
 		registerSchema(/** @type {any} */ (parsed));
 }
 
-// Compilation des schémas publics
 for (const file of schemaFiles) {
 	const content = readFileSync(file, { encoding: "utf-8" });
 	const parsed = asSchema(loadYaml(content));
 	const $id = parsed.$id;
 
-	if (!$id || isPrivate(file)) continue;
-
-	const bundled = await bundle($id);
+	if (!$id) continue;
 
 	const name = toFilename($id);
-	writeFileSync(`${TARGET}/${name}.json`, JSON.stringify(bundled), {
+
+	// Publication des schémas JSON
+	writeFileSync(`${VALIDATOR_TARGET}/${name}.json`, JSON.stringify(parsed), {
 		encoding: "utf-8",
 	});
+
+	// Compilation des schémas publics
+	if (false === isPrivate(file)) {
+		const bundled = await bundle($id);
+		writeFileSync(`${SCHEMAS_TARGET}/${name}.json`, JSON.stringify(bundled), {
+			encoding: "utf-8",
+		});
+	}
+
 	console.log(`✓ ${name}`);
 }

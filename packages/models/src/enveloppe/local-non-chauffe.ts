@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/enveloppe/local-non-chauffe";
 import type {
 	UUID,
 	NonEmptyArray,
@@ -9,10 +8,6 @@ import * as baie from "./local-non-chauffe/baie.js";
 import * as paroi from "./local-non-chauffe/paroi.js";
 
 export { baie, paroi };
-
-export function isLocalNonChauffe(data: unknown): data is LocalNonChauffe {
-	return validate(data).isValid;
-}
 
 export function isEspaceTamponSolarise(
 	localNonChauffe: LocalNonChauffe,

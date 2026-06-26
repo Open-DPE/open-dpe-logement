@@ -1,13 +1,8 @@
-import { validate } from "@open-dpe-logement/schemas/ventilation";
 import type { NonEmptyArray, UUID } from "../common/common.js";
 import { EntityNotFoundError } from "../errors.js";
 import * as installation from "./installation.js";
 
 export { installation };
-
-export function isVentilation(data: unknown): data is Ventilation {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/ventilation

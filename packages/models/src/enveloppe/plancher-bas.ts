@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/enveloppe/plancher-bas";
 import type { UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 import {
@@ -7,10 +6,6 @@ import {
 	type Position as PositionBase,
 	MitoyenneteEnum,
 } from "./common.js";
-
-export function isPlancherBas(data: unknown): data is PlancherBas {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/plancher-bas

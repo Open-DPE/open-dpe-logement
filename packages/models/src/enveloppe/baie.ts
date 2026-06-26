@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/enveloppe/baie";
 import type { UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 import type { Masque } from "./masque.js";
@@ -8,10 +7,6 @@ import type {
 	Position as BasePosition,
 	TypePose,
 } from "./common.js";
-
-export function isBaie(data: unknown): data is Baie {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/baie

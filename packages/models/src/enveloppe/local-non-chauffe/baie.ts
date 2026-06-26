@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/enveloppe/local-non-chauffe/baie";
 import type { UUID } from "../../common/common.js";
 import type { Materiau, TypeVitrage, TypeVitrageEnum } from "../baie.js";
 import type {
@@ -6,10 +5,6 @@ import type {
 	Orientation,
 	OrientationHorizontale,
 } from "../common.js";
-
-export function isBaie(data: unknown): data is Baie {
-	return validate(data).isValid;
-}
 
 export type Baie = BaieVitree | BaieAutre;
 

@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/ecs/generateur";
 import { buildEnum } from "../utils.js";
 import { ENERGIES_COMBUSTION, EnergieEnum } from "../common/common.js";
 import type {
@@ -8,10 +7,6 @@ import type {
 	EnergieCombustion,
 	UUID,
 } from "../common/common.js";
-
-export function isGenerateur(data: unknown): data is Generateur {
-	return validate(data).isValid;
-}
 
 export function isChaudiereCombustion(
 	generateur: Generateur,

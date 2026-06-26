@@ -1,4 +1,3 @@
-import { validate } from "@open-dpe-logement/schemas/enveloppe/plancher-haut";
 import type { UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 import type {
@@ -6,10 +5,6 @@ import type {
 	Isolation,
 	Position as PositionBase,
 } from "./common.js";
-
-export function isPlancherHaut(data: unknown): data is PlancherHaut {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/plancher-haut

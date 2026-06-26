@@ -8,9 +8,17 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
+    "./batiment": {
+      "types": "./dist/batiment/batiment.d.ts",
+      "import": "./dist/batiment/batiment.js"
+    },
     "./batiment/appartement": {
       "types": "./dist/batiment/appartement.d.ts",
       "import": "./dist/batiment/appartement.js"
+    },
+    "./chauffage": {
+      "types": "./dist/chauffage/chauffage.d.ts",
+      "import": "./dist/chauffage/chauffage.js"
     },
     "./chauffage/emetteur": {
       "types": "./dist/chauffage/emetteur.d.ts",
@@ -28,6 +36,10 @@
       "types": "./dist/chauffage/systeme.d.ts",
       "import": "./dist/chauffage/systeme.js"
     },
+    "./ecs": {
+      "types": "./dist/ecs/ecs.d.ts",
+      "import": "./dist/ecs/ecs.js"
+    },
     "./ecs/emetteur": {
       "types": "./dist/ecs/emetteur.d.ts",
       "import": "./dist/ecs/emetteur.js"
@@ -44,6 +56,10 @@
       "types": "./dist/ecs/systeme.d.ts",
       "import": "./dist/ecs/systeme.js"
     },
+    "./enveloppe": {
+      "types": "./dist/enveloppe/enveloppe.d.ts",
+      "import": "./dist/enveloppe/enveloppe.js"
+    },
     "./enveloppe/common": {
       "types": "./dist/enveloppe/common.d.ts",
       "import": "./dist/enveloppe/common.js"
@@ -55,6 +71,14 @@
     "./enveloppe/local-non-chauffe": {
       "types": "./dist/enveloppe/local-non-chauffe.d.ts",
       "import": "./dist/enveloppe/local-non-chauffe.js"
+    },
+    "./enveloppe/local-non-chauffe/baie": {
+      "types": "./dist/enveloppe/local-non-chauffe/baie.d.ts",
+      "import": "./dist/enveloppe/local-non-chauffe/baie.js"
+    },
+    "./enveloppe/local-non-chauffe/paroi": {
+      "types": "./dist/enveloppe/local-non-chauffe/paroi.d.ts",
+      "import": "./dist/enveloppe/local-non-chauffe/paroi.js"
     },
     "./enveloppe/masque": {
       "types": "./dist/enveloppe/masque.d.ts",
@@ -84,9 +108,17 @@
       "types": "./dist/enveloppe/porte.d.ts",
       "import": "./dist/enveloppe/porte.js"
     },
+    "./production": {
+      "types": "./dist/production/production.d.ts",
+      "import": "./dist/production/production.js"
+    },
     "./production/panneau-photovoltaique": {
       "types": "./dist/production/panneau-photovoltaique.d.ts",
       "import": "./dist/production/panneau-photovoltaique.js"
+    },
+    "./refroidissement": {
+      "types": "./dist/refroidissement/refroidissement.d.ts",
+      "import": "./dist/refroidissement/refroidissement.js"
     },
     "./refroidissement/generateur": {
       "types": "./dist/refroidissement/generateur.d.ts",
@@ -95,6 +127,10 @@
     "./refroidissement/installation": {
       "types": "./dist/refroidissement/installation.d.ts",
       "import": "./dist/refroidissement/installation.js"
+    },
+    "./ventilation": {
+      "types": "./dist/ventilation/ventilation.d.ts",
+      "import": "./dist/ventilation/ventilation.js"
     },
     "./ventilation/installation": {
       "types": "./dist/ventilation/installation.d.ts",
@@ -128,10 +164,8 @@
   "imports": {
     "#*": "./src/*"
   },
-  "dependencies": {
-    "@open-dpe-logement/schemas": "*"
-  },
   "devDependencies": {
+    "@open-dpe-logement/validator": "^1.0.0",
     "vitest": "^4.1.6"
   }
 }

@@ -1,10 +1,6 @@
-import { validate } from "@open-dpe-logement/schemas/batiment/appartement";
 import type { UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 
-export function isAppartement(data: unknown): data is Appartement {
-	return validate(data).isValid;
-}
 /**
  * @see https://schemas.open-dpe.fr/batiment/appartement
  */

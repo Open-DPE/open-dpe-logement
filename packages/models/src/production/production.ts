@@ -1,12 +1,7 @@
-import { validate } from "@open-dpe-logement/schemas/production";
 import { buildEnum } from "../utils.js";
 import * as panneauPhotovoltaique from "./panneau-photovoltaique.js";
 
 export { panneauPhotovoltaique };
-
-export function isProduction(data: unknown): data is Production {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/production

@@ -1,11 +1,6 @@
-import { validate } from "@open-dpe-logement/schemas/ecs/installation";
 import type { UUID, NonEmptyArray } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 import * as systeme from "./systeme.js";
-
-export function isInstallation(data: unknown): data is Installation {
-	return validate(data).isValid;
-}
 
 /**
  * @see https://schemas.open-dpe.fr/ecs/installation

@@ -1,10 +1,5 @@
-import { validate } from "@open-dpe-logement/schemas/ventilation/installation";
 import type { Consommations, UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
-
-export function isInstallation(data: unknown): data is Installation {
-	return validate(data).isValid;
-}
 
 export function isVentilationNaturelle(
 	installation: Installation,
