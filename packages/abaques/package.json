@@ -10,7 +10,10 @@
     }
   },
   "imports": {
-    "#*": "./src/*"
+    "#*": {
+      "development": "./src/*",
+      "default": "./dist/*"
+    }
   },
   "files": [
     "dist"
