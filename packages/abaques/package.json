@@ -10,6 +10,13 @@
     }
   },
   "imports": {
+    "#runtime/loader.js": {
+      "types": "./dist/runtime/loader.node.d.ts",
+      "development": "./src/runtime/loader.node.ts",
+      "node": "./dist/runtime/loader.node.js",
+      "browser": "./dist/runtime/loader.browser.js",
+      "default": "./dist/runtime/loader.node.js"
+    },
     "#*": {
       "development": "./src/*",
       "default": "./dist/*"
