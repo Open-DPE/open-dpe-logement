@@ -1,4 +1,0 @@
-// GÉNÉRÉ AUTOMATIQUEMENT — ne pas modifier manuellement
-// Source : doctrine/abaques/performance/feges.csv
-
-export default [{"energie":"electricite","usage":"chauffage","feges":0.079},{"energie":"electricite","usage":"ecs","feges":0.065},{"energie":"electricite","usage":"refroidissement","feges":0.064},{"energie":"electricite","usage":"eclairage","feges":0.069},{"energie":"electricite","usage":"auxiliaire","feges":0.069},{"energie":"gaz_naturel","usage":null,"feges":0.227},{"energie":"gpl","usage":null,"feges":0.272},{"energie":"fioul","usage":null,"feges":0.324},{"energie":"charbon","usage":null,"feges":0.385},{"energie":"bois_buche","usage":null,"feges":0.03},{"energie":"bois_plaquette","usage":null,"feges":0.024},{"energie":"bois_granule","usage":null,"feges":0.03},{"energie":"reseau_chaleur","usage":null,"feges":0.385},{"energie":"reseau_froid","usage":null,"feges":0.385}]
