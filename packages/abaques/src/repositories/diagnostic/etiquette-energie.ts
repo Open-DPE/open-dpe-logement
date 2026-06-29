@@ -19,7 +19,7 @@ export type Query = {
 	eges: number;
 };
 
-const TABLE_KEY = "performance/etiquette-energie";
+const TABLE_KEY = "diagnostic/etiquette-energie";
 registerTable(TABLE_KEY);
 
 export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);

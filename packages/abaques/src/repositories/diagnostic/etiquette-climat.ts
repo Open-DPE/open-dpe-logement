@@ -16,7 +16,7 @@ export type Query = {
 	eges: number;
 };
 
-const TABLE_KEY = "performance/etiquette-climat";
+const TABLE_KEY = "diagnostic/etiquette-climat";
 registerTable(TABLE_KEY);
 
 export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);
