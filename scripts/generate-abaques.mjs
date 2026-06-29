@@ -143,8 +143,6 @@ function parseCsv(csvContent, csvPath, relativeKey) {
 	});
 }
 
-const CHUNK_SIZE = 200;
-
 /**
  * Génère un fichier TypeScript de données brutes depuis un CSV.
  * N'émet aucun type TypeScript.
@@ -182,9 +180,44 @@ function findCsvFiles(dir) {
 
 const DOCTRINE = join(ROOT, "doctrine", "abaques");
 const PACKAGE = join(ROOT, "packages", "abaques", "data");
+const MANIFEST = join(
+	ROOT,
+	"packages",
+	"abaques",
+	"src",
+	"runtime",
+	"manifest.browser.ts",
+);
+
+/** @type {string[]} */
+const keys = [];
 
 for (const csv of findCsvFiles(DOCTRINE)) {
 	const relative = csv.slice(DOCTRINE.length + 1);
+	const relativeKey = relative.replaceAll("\\", "/").replace(/\.csv$/, "");
 	const out = join(PACKAGE, relative.replace(/\.csv$/, ".json"));
 	generateFromCsv(csv, out, relative);
+	keys.push(relativeKey);
 }
+
+keys.sort();
+const manifestEntries = keys
+	.map(
+		(key) =>
+			`\t"${key}": new URL("../../data/${key}.json", import.meta.url),`,
+	)
+	.join("\n");
+
+mkdirSync(dirname(MANIFEST), { recursive: true });
+writeFileSync(
+	MANIFEST,
+	[
+		"// GÉNÉRÉ AUTOMATIQUEMENT par scripts/generate-abaques.mjs — ne pas modifier manuellement",
+		"export const ASSET_URLS: Record<string, URL> = {",
+		manifestEntries,
+		"};",
+		"",
+	].join("\n"),
+	"utf-8",
+);
+console.log(`✓ ${MANIFEST.replace(ROOT, "").replaceAll("\\", "/")}`);
