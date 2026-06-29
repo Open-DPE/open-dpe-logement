@@ -1,4 +1,4 @@
-import data from "#data/enveloppe/plancher-bas/ue.js";
+import { getTable, registerTable } from "#runtime/cache.js";
 import { filter } from "#filter.js";
 
 export type Schema = {
@@ -15,7 +15,10 @@ export type Query = {
 	annee_construction: number;
 };
 
-export const load = (): Schema[] => data;
+const TABLE_KEY = "enveloppe/plancher-bas/ue";
+registerTable(TABLE_KEY);
+
+export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

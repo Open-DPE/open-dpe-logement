@@ -1,8 +1,11 @@
-import data from "#data/climat/nj.js";
+import { getTable, registerTable } from "#runtime/cache.js";
 
 export type Schema = {
 	mois: string;
 	nj: number;
 };
 
-export const load = (): Schema[] => data;
+const TABLE_KEY = "climat/nj";
+registerTable(TABLE_KEY);
+
+export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);

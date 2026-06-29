@@ -1,4 +1,4 @@
-import data from "#data/production/kpv.js";
+import { getTable, registerTable } from "#runtime/cache.js";
 import { filter } from "#filter.js";
 
 export type Schema = {
@@ -13,6 +13,9 @@ export type Query = {
 	inclinaison_pv: number;
 };
 
-export const load = (): Schema[] => data;
+const TABLE_KEY = "production/kpv";
+registerTable(TABLE_KEY);
+
+export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

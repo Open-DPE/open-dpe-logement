@@ -1,4 +1,4 @@
-import data from "#data/climat/sollicitations.js";
+import { getTable, registerTable } from "#runtime/cache.js";
 import { filter } from "#filter.js";
 
 export type Schema = {
@@ -35,7 +35,10 @@ export type Query = {
 	inertie: string;
 };
 
-export const load = (): Schema[] => data;
+const TABLE_KEY = "climat/sollicitations";
+registerTable(TABLE_KEY);
+
+export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

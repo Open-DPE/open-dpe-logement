@@ -1,4 +1,4 @@
-import data from "#data/ecs/rd.js";
+import { getTable, registerTable } from "#runtime/cache.js";
 import { filter } from "#filter.js";
 
 export type Schema = {
@@ -16,7 +16,10 @@ export type Query = {
 	production_volume_habitable: boolean | null;
 };
 
-export const load = (): Schema[] => data;
+const TABLE_KEY = "ecs/rd";
+registerTable(TABLE_KEY);
+
+export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);

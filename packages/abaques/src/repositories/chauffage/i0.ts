@@ -1,4 +1,4 @@
-import data from "#data/chauffage/i0.js";
+import { getTable, registerTable } from "#runtime/cache.js";
 import { filter } from "#filter.js";
 
 export type Schema = {
@@ -15,7 +15,10 @@ export type Schema = {
 
 export type Query = Omit<Schema, "i0">;
 
-export const load = (): Schema[] => data;
+const TABLE_KEY = "chauffage/i0";
+registerTable(TABLE_KEY);
+
+export const load = (): Schema[] => getTable<Schema[]>(TABLE_KEY);
 
 export const search = (query: Query, rows: Schema[]): Schema[] =>
 	filter(query, rows);
