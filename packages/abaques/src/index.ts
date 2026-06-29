@@ -9,6 +9,8 @@ import * as production from "./repositories/production/index.js";
 import * as refroidissement from "./repositories/refroidissement/index.js";
 import * as ventilation from "./repositories/ventilation/index.js";
 
+export { init } from "./runtime/cache.js";
+
 export const abaques = {
 	chauffage,
 	climat,
