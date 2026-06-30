@@ -11,7 +11,10 @@ npm i @open-dpe-logement/engine
 ## Usage
 
 ```ts
-import { createContext, rules, formulas, services } from "@open-dpe-logement/engine"
+import { createContext, init, rules, formulas, services } from "@open-dpe-logement/engine"
+
+// À appeler une seule fois au démarrage de l'application, avant tout calcul
+await init();
 
 const diagnostic = {...};
 
@@ -38,7 +41,8 @@ context.log();
 ```text
 /src
 ├── core/
-│   ├── cache.ts                    # Gestion du cache
+│   ├── cache.ts                    # Cache des contextes de calcul
+│   ├── init.ts                     # Point d'entrée d'initialisation des données abaques
 │   ├── context.ts                  # Contexte d'exécution du moteur de calcul
 │   └── registry.ts                 # Registre des règles de calcul
 ├── rules/
