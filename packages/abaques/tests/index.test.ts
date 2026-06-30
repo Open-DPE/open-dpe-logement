@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { abaques, init } from "./index.js";
+import { abaques, init } from "../src/index.js";
 
 describe("abaques (intégration)", () => {
 	it("load() échoue avant init()", () => {

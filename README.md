@@ -22,11 +22,15 @@ doctrine/                       # Référentiel doctrinal
 schemas/                        # Schémas de données publiques JSON Schema
 apps/                           # Applications
 packages/
+├── abaques/                    # Tables de valeurs forfaitaires 3CL-DPE 2021
+├── database/                   # Infrastructure SQL
 ├── engine/                     # Moteur de calcul 3CL-DPE
 ├── models/                     # Implémentation des schémas de données publiques
+├── open-data/                  # Wrapper de l'open data de l'ADEME
 ├── schemas/                    # Export des schémas de données publiques et validation
 ├── transformer/                # Transformers de données (schemas to schemas)
-└── database/                   # Infrastructure SQL
+├── validator/                  # Fonctions de validation des données
+└── web-components/             # Bibliothèque de composants web DPE
 ```
 
 ## Stack

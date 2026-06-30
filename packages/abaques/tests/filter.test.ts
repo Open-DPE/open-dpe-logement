@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { filter } from './filter.js'
+import { filter } from '../src/filter.js'
 
 describe('filter — enum string (pipe-séparé)', () => {
   it('match exacte sur valeur unique', () => {

@@ -11,9 +11,9 @@ npm i @open-dpe-logement/open-data
 ## Usage
 
 ```ts
-import { fetchDPE } from "@open-dpe-logement/open-data";
+import { type DPE, fetchDPE } from "@open-dpe-logement/open-data";
 
-const dpe = await fetchDPE("xxxxxxx", {
+const data = await fetchDPE("xxxxxxx", {
     client_id: "xxxxxxx",
     client_secret: "xxxxxxx",
 });
