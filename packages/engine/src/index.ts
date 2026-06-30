@@ -1,4 +1,5 @@
 export { createContext } from "./core/context.js";
+export { init } from "./core/init.js";
 export * as services from "./rules/services.js";
 export * as rules from "./rules/rules.js";
 export * as constants from "./rules/constants.js";
