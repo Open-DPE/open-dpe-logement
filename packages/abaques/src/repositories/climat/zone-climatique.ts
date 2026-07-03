@@ -1,5 +1,5 @@
-import { getTable, registerTable } from "#runtime/cache.js";
-import { filter } from "#filter.js";
+import { getTable, registerTable } from "../../cache.js";
+import { filter } from "../../filter.js";
 
 export type Schema = {
 	code_departement: string;

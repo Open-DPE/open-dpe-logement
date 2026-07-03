@@ -1,0 +1,2866 @@
+<dpe xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2">
+  
+  <numero_dpe>2310E0898211B</numero_dpe>
+  <statut>ACTIF</statut>
+<administratif>
+    <dpe_a_remplacer xsi:nil="true"></dpe_a_remplacer>
+    
+    <motif_remplacement></motif_remplacement>
+    <dpe_immeuble_associe xsi:nil="true"></dpe_immeuble_associe>
+    <enum_version_id>2.2</enum_version_id>
+    <date_visite_diagnostiqueur>2023-03-17</date_visite_diagnostiqueur>
+    
+    
+    
+    <date_etablissement_dpe>2023-03-17</date_etablissement_dpe>
+    <enum_modele_dpe_id>1</enum_modele_dpe_id>
+    <diagnostiqueur>
+      <usr_logiciel_id>26615</usr_logiciel_id>
+      <version_logiciel>LICIEL Diagnostics v4 [Version XML:222]</version_logiciel>
+      <version_moteur_calcul>3cl_tribu_1.4.25.1</version_moteur_calcul>
+      
+      
+      
+      
+      
+      
+      
+      
+    </diagnostiqueur>
+    <geolocalisation>
+      <invar_logement xsi:nil="true"></invar_logement>
+      
+      <rpls_log_id xsi:nil="true"></rpls_log_id>
+      <rpls_org_id xsi:nil="true"></rpls_org_id>
+      <idpar xsi:nil="true"></idpar>
+      <immatriculation_copropriete xsi:nil="true"></immatriculation_copropriete>
+      <adresses>
+        <adresse_bien>
+          <adresse_brut>30 bis rue du moulin</adresse_brut>
+          <code_postal_brut>10100</code_postal_brut>
+          <nom_commune_brut>ROMILLY SUR SEINE</nom_commune_brut>
+          <label_brut>30 bis rue du moulin 10100 ROMILLY SUR SEINE</label_brut>
+          <enum_statut_geocodage_ban_id>1</enum_statut_geocodage_ban_id>
+          <ban_date_appel>2023-03-16</ban_date_appel>
+          <ban_id>10323_1130_00030_bis</ban_id>
+          <ban_label>30bis Rue du Moulin 10100 Romilly-sur-Seine</ban_label>
+          <ban_housenumber>30bis</ban_housenumber>
+          <ban_street>Rue du Moulin</ban_street>
+          <ban_citycode>10323</ban_citycode>
+          <ban_postcode>10100</ban_postcode>
+          <ban_city>Romilly-sur-Seine</ban_city>
+          <ban_type>housenumber</ban_type>
+          <ban_score>0.59072</ban_score>
+          <ban_x>754284.58</ban_x>
+          <ban_y>6824303.77</ban_y>
+          <compl_nom_residence></compl_nom_residence>
+          <compl_ref_batiment>DO_2023-03-1126</compl_ref_batiment>
+          <compl_etage_appartement>0</compl_etage_appartement>
+          <compl_ref_cage_escalier></compl_ref_cage_escalier>
+          <compl_ref_logement></compl_ref_logement>
+        </adresse_bien>
+        
+        
+      </adresses>
+    </geolocalisation>
+  </administratif>
+  <logement>
+    <caracteristique_generale>
+      <annee_construction>2009</annee_construction>
+      <enum_periode_construction_id>8</enum_periode_construction_id>
+      <enum_methode_application_dpe_log_id>1</enum_methode_application_dpe_log_id>
+      <surface_habitable_logement>217.95</surface_habitable_logement>
+      <nombre_niveau_logement>2</nombre_niveau_logement>
+      <hsp>2.54</hsp>
+    </caracteristique_generale>
+    <meteo>
+      <enum_zone_climatique_id>2</enum_zone_climatique_id>
+      <enum_classe_altitude_id>1</enum_classe_altitude_id>
+      <batiment_materiaux_anciens>0</batiment_materiaux_anciens>
+    </meteo>
+    <enveloppe>
+      <inertie>
+        <inertie_plancher_bas_lourd>0</inertie_plancher_bas_lourd>
+        <inertie_plancher_haut_lourd>0</inertie_plancher_haut_lourd>
+        <inertie_paroi_verticale_lourd>0</inertie_paroi_verticale_lourd>
+        <enum_classe_inertie_id>4</enum_classe_inertie_id>
+      </inertie>
+      <mur_collection>
+        <mur>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est (p1) - Mur en blocs de béton creux d&apos;épaisseur 23 cm avec isolation intérieure (10 cm) donnant sur l&apos;extérieur</description>
+            <reference>2023_03_17_11_39_12_4410245009824067</reference>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <enum_orientation_id>2</enum_orientation_id>
+            <surface_paroi_totale>39.05</surface_paroi_totale>
+            <surface_paroi_opaque>39.05</surface_paroi_opaque>
+            <tv_umur0_id>79</tv_umur0_id>
+            <epaisseur_structure>23</epaisseur_structure>
+            <enum_materiaux_structure_mur_id>12</enum_materiaux_structure_mur_id>
+            <enum_methode_saisie_u0_id>2</enum_methode_saisie_u0_id>
+            <paroi_ancienne>0</paroi_ancienne><enum_type_doublage_id>2</enum_type_doublage_id>
+            <enum_type_isolation_id>3</enum_type_isolation_id>
+            <epaisseur_isolation>10</epaisseur_isolation>
+            <enum_methode_saisie_u_id>3</enum_methode_saisie_u_id></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <umur>0.34482758620689657</umur>
+            <umur0>2.5</umur0>
+          </donnee_intermediaire>
+        </mur>
+        <mur>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est (p2) - Mur en blocs de béton creux d&apos;épaisseur 23 cm avec isolation intérieure (10 cm) donnant sur l&apos;extérieur</description>
+            <reference>2023_03_17_11_39_12_4410245009824067(p2)</reference>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <enum_orientation_id>1</enum_orientation_id>
+            <surface_paroi_totale>39.05</surface_paroi_totale>
+            <surface_paroi_opaque>39.05</surface_paroi_opaque>
+            <tv_umur0_id>79</tv_umur0_id>
+            <epaisseur_structure>23</epaisseur_structure>
+            <enum_materiaux_structure_mur_id>12</enum_materiaux_structure_mur_id>
+            <enum_methode_saisie_u0_id>2</enum_methode_saisie_u0_id>
+            <paroi_ancienne>0</paroi_ancienne><enum_type_doublage_id>2</enum_type_doublage_id>
+            <enum_type_isolation_id>3</enum_type_isolation_id>
+            <epaisseur_isolation>10</epaisseur_isolation>
+            <enum_methode_saisie_u_id>3</enum_methode_saisie_u_id></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <umur>0.34482758620689657</umur>
+            <umur0>2.5</umur0>
+          </donnee_intermediaire>
+        </mur>
+        <mur>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est (p3) - Mur en blocs de béton creux d&apos;épaisseur 23 cm avec isolation intérieure (10 cm) donnant sur l&apos;extérieur</description>
+            <reference>2023_03_17_11_39_12_4410245009824067(p3)</reference>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <enum_orientation_id>3</enum_orientation_id>
+            <surface_paroi_totale>39.05</surface_paroi_totale>
+            <surface_paroi_opaque>39.05</surface_paroi_opaque>
+            <tv_umur0_id>79</tv_umur0_id>
+            <epaisseur_structure>23</epaisseur_structure>
+            <enum_materiaux_structure_mur_id>12</enum_materiaux_structure_mur_id>
+            <enum_methode_saisie_u0_id>2</enum_methode_saisie_u0_id>
+            <paroi_ancienne>0</paroi_ancienne><enum_type_doublage_id>2</enum_type_doublage_id>
+            <enum_type_isolation_id>3</enum_type_isolation_id>
+            <epaisseur_isolation>10</epaisseur_isolation>
+            <enum_methode_saisie_u_id>3</enum_methode_saisie_u_id></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <umur>0.34482758620689657</umur>
+            <umur0>2.5</umur0>
+          </donnee_intermediaire>
+        </mur>
+      </mur_collection>
+      <plancher_bas_collection>
+        <plancher_bas>
+          <donnee_entree>
+            <description>Plancher - Dalle béton donnant sur un terre-plein</description>
+            <reference>2023_03_17_11_45_56_57394530008128667</reference>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>5</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>5</enum_type_adjacence_id>
+            <surface_paroi_opaque>164.84</surface_paroi_opaque>
+            <tv_upb0_id>9</tv_upb0_id>
+            <enum_type_plancher_bas_id>9</enum_type_plancher_bas_id>
+            <enum_methode_saisie_u0_id>2</enum_methode_saisie_u0_id>
+            <enum_type_isolation_id>1</enum_type_isolation_id>
+            <enum_periode_isolation_id>8</enum_periode_isolation_id>
+            <tv_upb_id>38</tv_upb_id>
+            <enum_methode_saisie_u_id>7</enum_methode_saisie_u_id>
+            <calcul_ue>1</calcul_ue>
+            <perimetre_ue>50</perimetre_ue>
+            <surface_ue>164.84</surface_ue>
+            <ue>0.18</ue></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <upb>0.27</upb>
+            <upb_final>0.18</upb_final>
+            <upb0>2</upb0>
+          </donnee_intermediaire>
+        </plancher_bas>
+      </plancher_bas_collection>
+      <plancher_haut_collection>
+        <plancher_haut>
+          <donnee_entree>
+            <description>Plafond  1 - Combles aménagés sous rampants donnant sur un comble fortement ventilé avec isolation intérieure (20 cm)</description>
+            <reference>2023_03_17_11_41_43_3783823003302986</reference>
+            <reference_lnc>LNC2023_03_17_11_41_43_3783823003302986</reference_lnc>
+            <tv_coef_reduction_deperdition_id>252</tv_coef_reduction_deperdition_id>
+            <surface_aiu>131</surface_aiu>
+            <surface_aue>131</surface_aue>
+            <enum_cfg_isolation_lnc_id>5</enum_cfg_isolation_lnc_id>
+            <enum_type_adjacence_id>11</enum_type_adjacence_id>
+            <surface_paroi_opaque>131</surface_paroi_opaque>
+            <tv_uph0_id>12</tv_uph0_id>
+            <enum_type_plancher_haut_id>12</enum_type_plancher_haut_id>
+            <enum_methode_saisie_u0_id>2</enum_methode_saisie_u0_id>
+            <enum_type_isolation_id>3</enum_type_isolation_id>
+            <epaisseur_isolation>20</epaisseur_isolation>
+            <enum_methode_saisie_u_id>3</enum_methode_saisie_u_id></donnee_entree>
+          <donnee_intermediaire>
+            <b>0.95</b>
+            <uph>0.18518518518518517</uph>
+            <uph0>2.5</uph0>
+          </donnee_intermediaire>
+        </plancher_haut>
+        <plancher_haut>
+          <donnee_entree>
+            <description>Plafond  2 - Combles aménagés sous rampants donnant sur l&apos;extérieur (combles aménagés) avec isolation intérieure (20 cm)</description>
+            <reference>2023_03_17_11_43_56_5677736005103534</reference>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_paroi_opaque>5.8199999999999994</surface_paroi_opaque>
+            <tv_uph0_id>12</tv_uph0_id>
+            <enum_type_plancher_haut_id>12</enum_type_plancher_haut_id>
+            <enum_methode_saisie_u0_id>2</enum_methode_saisie_u0_id>
+            <enum_type_isolation_id>3</enum_type_isolation_id>
+            <epaisseur_isolation>20</epaisseur_isolation>
+            <enum_methode_saisie_u_id>3</enum_methode_saisie_u_id></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <uph>0.18518518518518517</uph>
+            <uph0>2.5</uph0>
+          </donnee_intermediaire>
+        </plancher_haut>
+      </plancher_haut_collection>
+      <baie_vitree_collection>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  1 Nord - Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Nord, double vitrage</description>
+            <reference>2023_03_17_12_12_46_8381203005544651</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>13.93</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>7</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>3</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>15</epaisseur_lame>
+            <vitrage_vir>0</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>67</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>6</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>5</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>3.3</uw_1>
+            <sw_1>0.52</sw_1>
+            <enum_type_fermeture_id>1</enum_type_fermeture_id><presence_retour_isolation>1</presence_retour_isolation><largeur_dormant>10</largeur_dormant>
+            <tv_sw_id>140</tv_sw_id>
+            <enum_type_pose_id>2</enum_type_pose_id>
+            <enum_orientation_id>2</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>2.7</ug>
+            <uw>3.3</uw>
+            <u_menuiserie>3.3</u_menuiserie>
+            <sw>0.52</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  2 Nord - Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Nord, double vitrage</description>
+            <reference>2023_03_17_12_18_32_5442258004125261</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>3.79</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>7</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>3</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>15</epaisseur_lame>
+            <vitrage_vir>0</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>67</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>6</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>5</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>3.3</uw_1>
+            <sw_1>0.52</sw_1>
+            <tv_deltar_id>5</tv_deltar_id>
+            <tv_ujn_id>204</tv_ujn_id>
+            <enum_type_fermeture_id>6</enum_type_fermeture_id><presence_retour_isolation>1</presence_retour_isolation><largeur_dormant>10</largeur_dormant>
+            <tv_sw_id>140</tv_sw_id>
+            <enum_type_pose_id>2</enum_type_pose_id>
+            <enum_orientation_id>2</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>2.7</ug>
+            <uw>3.3</uw>
+            <ujn>2.6</ujn>
+            <u_menuiserie>2.6</u_menuiserie>
+            <sw>0.52</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  3 Nord - Fenêtres battantes bois, orientées Nord, double vitrage</description>
+            <reference>2023_03_17_12_19_58_4468140002278939</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>0.25</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>7</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>3</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>15</epaisseur_lame>
+            <vitrage_vir>0</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>547</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>3</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>4</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>2.9</uw_1>
+            <sw_1>0.47</sw_1>
+            <enum_type_fermeture_id>1</enum_type_fermeture_id><presence_retour_isolation>0</presence_retour_isolation><largeur_dormant>10</largeur_dormant>
+            <tv_sw_id>90</tv_sw_id>
+            <enum_type_pose_id>3</enum_type_pose_id>
+            <enum_orientation_id>2</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>2.7</ug>
+            <uw>2.9</uw>
+            <u_menuiserie>2.9</u_menuiserie>
+            <sw>0.47</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  4 Nord - Fenêtres oscillantes bois, orientées Nord, double vitrage à isolation renforcée</description>
+            <reference>2023_03_17_12_22_10_4746030002574158</reference>
+            <reference_paroi>2023_03_17_11_43_56_5677736005103534</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>1.8900000000000001</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>51</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>2</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>14</epaisseur_lame>
+            <vitrage_vir>1</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>536</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>3</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>4</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>2</uw_1>
+            <sw_1>0.4</sw_1>
+            <enum_type_fermeture_id>1</enum_type_fermeture_id><presence_retour_isolation>0</presence_retour_isolation><largeur_dormant>10</largeur_dormant>
+            <tv_sw_id>91</tv_sw_id>
+            <enum_type_pose_id>3</enum_type_pose_id>
+            <enum_orientation_id>2</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>1.6</ug>
+            <uw>2</uw>
+            <u_menuiserie>2</u_menuiserie>
+            <sw>0.4</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  5 Nord - Fenêtres fixes bois, orientées Nord, double vitrage</description>
+            <reference>2023_03_17_12_25_50_0651261007966227</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>0.89</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>7</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>3</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>15</epaisseur_lame>
+            <vitrage_vir>0</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>547</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>3</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>4</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>2.9</uw_1>
+            <sw_1>0.47</sw_1>
+            <enum_type_fermeture_id>1</enum_type_fermeture_id><presence_retour_isolation>0</presence_retour_isolation><largeur_dormant>5</largeur_dormant>
+            <tv_sw_id>90</tv_sw_id>
+            <enum_type_pose_id>3</enum_type_pose_id>
+            <enum_orientation_id>2</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>2.7</ug>
+            <uw>2.9</uw>
+            <u_menuiserie>2.9</u_menuiserie>
+            <sw>0.47</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  6 Sud - Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Sud, double vitrage à isolation renforcée</description>
+            <reference>2023_03_17_12_14_19_1078776001286085</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>20.45</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>16</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>3</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>15</epaisseur_lame>
+            <vitrage_vir>1</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>54</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>6</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>5</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>2.1</uw_1>
+            <sw_1>0.45</sw_1>
+            <enum_type_fermeture_id>1</enum_type_fermeture_id><presence_retour_isolation>1</presence_retour_isolation><largeur_dormant>10</largeur_dormant>
+            <tv_sw_id>141</tv_sw_id>
+            <enum_type_pose_id>2</enum_type_pose_id>
+            <enum_orientation_id>1</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>1.4</ug>
+            <uw>2.1</uw>
+            <u_menuiserie>2.1</u_menuiserie>
+            <sw>0.45</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  7 Sud - Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Sud, double vitrage à isolation renforcée</description>
+            <reference>2023_03_17_12_18_59_8245654000180639</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>2.62</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>16</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>3</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>15</epaisseur_lame>
+            <vitrage_vir>1</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>54</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>6</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>5</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>2.1</uw_1>
+            <sw_1>0.45</sw_1>
+            <tv_deltar_id>5</tv_deltar_id>
+            <tv_ujn_id>192</tv_ujn_id>
+            <enum_type_fermeture_id>6</enum_type_fermeture_id><presence_retour_isolation>1</presence_retour_isolation><largeur_dormant>10</largeur_dormant>
+            <tv_sw_id>141</tv_sw_id>
+            <enum_type_pose_id>2</enum_type_pose_id>
+            <enum_orientation_id>1</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>1.4</ug>
+            <uw>2.1</uw>
+            <ujn>1.7</ujn>
+            <u_menuiserie>1.7</u_menuiserie>
+            <sw>0.45</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  8 Sud - Fenêtres oscillantes bois, orientées Sud, double vitrage à isolation renforcée</description>
+            <reference>2023_03_17_12_23_00_9598463009690973</reference>
+            <reference_paroi>2023_03_17_11_43_56_5677736005103534</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>1.8900000000000001</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>51</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>2</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>14</epaisseur_lame>
+            <vitrage_vir>1</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>536</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>3</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>4</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>2</uw_1>
+            <sw_1>0.4</sw_1>
+            <enum_type_fermeture_id>1</enum_type_fermeture_id><presence_retour_isolation>0</presence_retour_isolation><largeur_dormant>10</largeur_dormant>
+            <tv_sw_id>91</tv_sw_id>
+            <enum_type_pose_id>3</enum_type_pose_id>
+            <enum_orientation_id>1</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>1.6</ug>
+            <uw>2</uw>
+            <u_menuiserie>2</u_menuiserie>
+            <sw>0.4</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+        <baie_vitree>
+          <donnee_entree>
+            <description>Fenêtre  9 Sud - Fenêtres fixes bois, orientées Sud, double vitrage</description>
+            <reference>2023_03_17_12_23_10_9396566004094006</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <surface_totale_baie>1.09</surface_totale_baie>
+            <nb_baie>1</nb_baie>
+            <tv_ug_id>7</tv_ug_id>
+            <enum_type_vitrage_id>2</enum_type_vitrage_id>
+            <enum_inclinaison_vitrage_id>3</enum_inclinaison_vitrage_id>
+            <enum_type_gaz_lame_id>1</enum_type_gaz_lame_id>
+            <epaisseur_lame>15</epaisseur_lame>
+            <vitrage_vir>0</vitrage_vir>
+            <enum_methode_saisie_perf_vitrage_id>1</enum_methode_saisie_perf_vitrage_id>
+            <tv_uw_id>547</tv_uw_id>
+            <enum_type_materiaux_menuiserie_id>3</enum_type_materiaux_menuiserie_id>
+            <enum_type_baie_id>4</enum_type_baie_id>
+            <double_fenetre>0</double_fenetre>
+            
+            <uw_1>2.9</uw_1>
+            <sw_1>0.47</sw_1>
+            <enum_type_fermeture_id>1</enum_type_fermeture_id><presence_retour_isolation>0</presence_retour_isolation><largeur_dormant>5</largeur_dormant>
+            <tv_sw_id>90</tv_sw_id>
+            <enum_type_pose_id>3</enum_type_pose_id>
+            <enum_orientation_id>1</enum_orientation_id>
+            <tv_coef_masque_proche_id>19</tv_coef_masque_proche_id>
+            <masque_lointain_non_homogene_collection xsi:nil="true"></masque_lointain_non_homogene_collection></donnee_entree>
+          <donnee_intermediaire>
+            <b>1</b>
+            <ug>2.7</ug>
+            <uw>2.9</uw>
+            <u_menuiserie>2.9</u_menuiserie>
+            <sw>0.47</sw>
+            <fe1>1</fe1>
+            <fe2>1</fe2>
+          </donnee_intermediaire>
+        </baie_vitree>
+      </baie_vitree_collection>
+      <porte_collection>
+        <porte>
+          <donnee_entree>
+            <description>Porte - Porte(s) bois avec double vitrage</description>
+            <reference>2023_03_17_12_24_26_4702153009811976</reference>
+            <reference_paroi>2023_03_17_11_39_12_4410245009824067</reference_paroi>
+            <reference_lnc xsi:nil="true"></reference_lnc>
+            <enum_type_adjacence_id>1</enum_type_adjacence_id>
+            <tv_coef_reduction_deperdition_id>1</tv_coef_reduction_deperdition_id>
+            <surface_porte>2.94</surface_porte>
+            <tv_uporte_id>4</tv_uporte_id>
+            <enum_methode_saisie_uporte_id>1</enum_methode_saisie_uporte_id>
+            <enum_type_porte_id>4</enum_type_porte_id>
+            <nb_porte>1</nb_porte>
+            <largeur_dormant>10</largeur_dormant>
+            <presence_retour_isolation>1</presence_retour_isolation><enum_type_pose_id>2</enum_type_pose_id></donnee_entree>
+          <donnee_intermediaire>
+            <uporte>3.3</uporte>
+            <b>1</b>
+          </donnee_intermediaire>
+        </porte>
+      </porte_collection>
+      <ets_collection></ets_collection>
+      <pont_thermique_collection>
+        <pont_thermique>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est / Fenêtre  3 Nord</description>
+            <reference>PT_3</reference>
+            <reference_1>2023_03_17_12_19_58_4468140002278939</reference_1>
+            <reference_2>2023_03_17_11_39_12_4410245009824067</reference_2>
+            <tv_pont_thermique_id>86</tv_pont_thermique_id>
+            <pourcentage_valeur_pont_thermique>1</pourcentage_valeur_pont_thermique>
+            <l>2</l>
+            <enum_methode_saisie_pont_thermique_id>1</enum_methode_saisie_pont_thermique_id>
+            <enum_type_liaison_id>5</enum_type_liaison_id></donnee_entree>
+          <donnee_intermediaire>
+            <k>0.19</k>
+          </donnee_intermediaire>
+        </pont_thermique>
+        <pont_thermique>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est / Fenêtre  5 Nord</description>
+            <reference>PT_5</reference>
+            <reference_1>2023_03_17_12_25_50_0651261007966227</reference_1>
+            <reference_2>2023_03_17_11_39_12_4410245009824067</reference_2>
+            <tv_pont_thermique_id>85</tv_pont_thermique_id>
+            <pourcentage_valeur_pont_thermique>1</pourcentage_valeur_pont_thermique>
+            <l>5.26</l>
+            <enum_methode_saisie_pont_thermique_id>1</enum_methode_saisie_pont_thermique_id>
+            <enum_type_liaison_id>5</enum_type_liaison_id></donnee_entree>
+          <donnee_intermediaire>
+            <k>0.31</k>
+          </donnee_intermediaire>
+        </pont_thermique>
+        <pont_thermique>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est / Fenêtre  9 Sud</description>
+            <reference>PT_9</reference>
+            <reference_1>2023_03_17_12_23_10_9396566004094006</reference_1>
+            <reference_2>2023_03_17_11_39_12_4410245009824067</reference_2>
+            <tv_pont_thermique_id>85</tv_pont_thermique_id>
+            <pourcentage_valeur_pont_thermique>1</pourcentage_valeur_pont_thermique>
+            <l>5.02</l>
+            <enum_methode_saisie_pont_thermique_id>1</enum_methode_saisie_pont_thermique_id>
+            <enum_type_liaison_id>5</enum_type_liaison_id></donnee_entree>
+          <donnee_intermediaire>
+            <k>0.31</k>
+          </donnee_intermediaire>
+        </pont_thermique>
+        <pont_thermique>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est / Plancher Int.</description>
+            <reference>PT_11</reference>
+            <reference_1>Plancher_int</reference_1>
+            <reference_2>2023_03_17_11_39_12_4410245009824067</reference_2>
+            <tv_pont_thermique_id>30</tv_pont_thermique_id>
+            <pourcentage_valeur_pont_thermique>1</pourcentage_valeur_pont_thermique>
+            <l>73.98</l>
+            <enum_methode_saisie_pont_thermique_id>1</enum_methode_saisie_pont_thermique_id>
+            <enum_type_liaison_id>2</enum_type_liaison_id></donnee_entree>
+          <donnee_intermediaire>
+            <k>0.92</k>
+          </donnee_intermediaire>
+        </pont_thermique>
+        <pont_thermique>
+          <donnee_entree>
+            <description>Mur Nord, Sud, Est / Plancher</description>
+            <reference>PT_12</reference>
+            <reference_1>2023_03_17_11_45_56_57394530008128667</reference_1>
+            <reference_2>2023_03_17_11_39_12_4410245009824067</reference_2>
+            <tv_pont_thermique_id>7</tv_pont_thermique_id>
+            <pourcentage_valeur_pont_thermique>1</pourcentage_valeur_pont_thermique>
+            <l>32.11</l>
+            <enum_methode_saisie_pont_thermique_id>1</enum_methode_saisie_pont_thermique_id>
+            <enum_type_liaison_id>1</enum_type_liaison_id></donnee_entree>
+          <donnee_intermediaire>
+            <k>0.71</k>
+          </donnee_intermediaire>
+        </pont_thermique>
+      </pont_thermique_collection>
+    </enveloppe>
+    <ventilation_collection>
+      <ventilation>
+        <donnee_entree>
+          <surface_ventile>217.95</surface_ventile>
+          <description>VMC SF Auto réglable de 2001 à 2012</description>
+          <reference>2023_03_17_11_48_22_503037000521009</reference>
+          <data_complementaires data-annee-installation="2009" xsi:nil="true"></data_complementaires>
+          <plusieurs_facade_exposee>1</plusieurs_facade_exposee>
+          <tv_q4pa_conv_id>8</tv_q4pa_conv_id>
+          <enum_methode_saisie_q4pa_conv_id>1</enum_methode_saisie_q4pa_conv_id>
+          <tv_debits_ventilation_id>5</tv_debits_ventilation_id>
+          <enum_type_ventilation_id>5</enum_type_ventilation_id>
+          <ventilation_post_2012>0</ventilation_post_2012>
+          <ref_produit_ventilation></ref_produit_ventilation></donnee_entree>
+        <donnee_intermediaire>
+          <pvent_moy>65</pvent_moy>
+          <q4pa_conv>1.3</q4pa_conv>
+          <conso_auxiliaire_ventilation>569</conso_auxiliaire_ventilation>
+          <hperm>23.23488</hperm>
+          <hvent>111.1545</hvent>
+        </donnee_intermediaire>
+      </ventilation>
+    </ventilation_collection>
+    <climatisation_collection>
+      <climatisation>
+        <donnee_entree>
+          <description>Refroidissement - Electrique - Pompe à chaleur air/air</description>
+          <reference>2023_03_17_12_23_54_8344134009848226</reference>
+          <surface_clim>174.65</surface_clim>
+          <tv_seer_id>2</tv_seer_id>
+          <enum_methode_calcul_conso_id>1</enum_methode_calcul_conso_id>
+          <enum_periode_installation_fr_id>2</enum_periode_installation_fr_id>
+          <enum_type_generateur_fr_id>2</enum_type_generateur_fr_id>
+          <enum_type_energie_id>1</enum_type_energie_id>
+          <enum_methode_saisie_carac_sys_id>1</enum_methode_saisie_carac_sys_id>
+          <ref_produit_fr xsi:nil="true"></ref_produit_fr></donnee_entree>
+        <donnee_intermediaire>
+          <eer>6.175</eer>
+          <besoin_fr>1267.49552378724</besoin_fr>
+          <conso_fr>184.736189701785</conso_fr>
+          <conso_fr_depensier>435.923901631621</conso_fr_depensier>
+        </donnee_intermediaire>
+      </climatisation>
+    </climatisation_collection>
+    <production_elec_enr>
+      <donnee_entree>
+        <description>ENR Photovoltaique</description>
+        <reference>ENR</reference>
+        <presence_production_pv>1</presence_production_pv>
+        <enum_type_enr_id>1</enum_type_enr_id></donnee_entree>
+      <donnee_intermediaire>
+        <taux_autoproduction>0.096889963274401747</taux_autoproduction>
+        <production_pv>4264.1744640000006</production_pv>
+        <conso_elec_ac>1939.6043950237354</conso_elec_ac>
+      </donnee_intermediaire>
+      <panneaux_pv_collection>
+        <panneaux_pv>
+          <surface_totale_capteurs>14.399999999999999</surface_totale_capteurs>
+          <nombre_module>12</nombre_module>
+          <tv_coef_orientation_pv_id>2</tv_coef_orientation_pv_id>
+          <enum_orientation_pv_id>2</enum_orientation_pv_id>
+          <enum_inclinaison_pv_id>1</enum_inclinaison_pv_id>
+        </panneaux_pv>
+      </panneaux_pv_collection>
+    </production_elec_enr>
+    <installation_ecs_collection>
+      <installation_ecs>
+        <donnee_entree>
+          <description>Ballon électrique à accumulation vertical (catégorie B ou 2 étoiles), contenance ballon 200 L</description>
+          <reference>2023_03_17_11_49_55_81553730034218</reference>
+          <enum_cfg_installation_ecs_id>1</enum_cfg_installation_ecs_id>
+          <enum_type_installation_id>1</enum_type_installation_id>
+          <enum_methode_calcul_conso_id>1</enum_methode_calcul_conso_id>
+          <surface_habitable>217.95</surface_habitable>
+          <nombre_logement>1</nombre_logement><nombre_niveau_installation_ecs>2</nombre_niveau_installation_ecs>
+          <tv_rendement_distribution_ecs_id>1</tv_rendement_distribution_ecs_id>
+          <enum_bouclage_reseau_ecs_id>1</enum_bouclage_reseau_ecs_id></donnee_entree>
+        <donnee_intermediaire>
+          <rendement_distribution>0.93</rendement_distribution>
+          <besoin_ecs>1897.8397331614</besoin_ecs>
+          <besoin_ecs_depensier>2677.30962356697</besoin_ecs_depensier>
+          <conso_ecs>2749.52788511979</conso_ecs>
+          <conso_ecs_depensier>3587.66755222255</conso_ecs_depensier>
+        </donnee_intermediaire>
+        <generateur_ecs_collection>
+          <generateur_ecs>
+            <donnee_entree>
+              <description>Electrique - Ballon électrique à accumulation vertical (catégorie B ou 2 étoiles)</description>
+              <reference>Generateur:2023_03_17_11_49_55_81553730034218</reference>
+          <data_complementaires data-annee-installation="2011" xsi:nil="true"></data_complementaires>
+              <reference_generateur_mixte xsi:nil="true"></reference_generateur_mixte>
+              <enum_type_generateur_ecs_id>70</enum_type_generateur_ecs_id>
+              <ref_produit_generateur_ecs></ref_produit_generateur_ecs>
+              <enum_usage_generateur_id>2</enum_usage_generateur_id>
+              <enum_type_energie_id>1</enum_type_energie_id>
+              <enum_methode_saisie_carac_sys_id>1</enum_methode_saisie_carac_sys_id>
+              <tv_pertes_stockage_id>7</tv_pertes_stockage_id>
+              <identifiant_reseau_chaleur xsi:nil="true"></identifiant_reseau_chaleur>
+              <enum_type_stockage_ecs_id>3</enum_type_stockage_ecs_id>
+              <position_volume_chauffe>1</position_volume_chauffe>
+              <volume_stockage>200</volume_stockage></donnee_entree>
+            <donnee_intermediaire>
+              <ratio_besoin_ecs>1</ratio_besoin_ecs>
+              <rendement_generation>1</rendement_generation>
+              <conso_ecs>2749.52788511979</conso_ecs>
+              <conso_ecs_depensier>3587.66755222255</conso_ecs_depensier>
+              <rendement_stockage>0.742196</rendement_stockage>
+            </donnee_intermediaire>
+          </generateur_ecs>
+        </generateur_ecs_collection>
+      </installation_ecs>
+    </installation_ecs_collection>
+    <installation_chauffage_collection>
+      <installation_chauffage>
+        <donnee_entree>
+          <description>PAC air/air installée entre 2008 et 2014 réseau isolé (système individuel)</description>
+          <reference>2023_03_17_11_47_13_6384285003648728</reference>
+          <surface_chauffee>174.65</surface_chauffee><nombre_niveau_installation_ch>1</nombre_niveau_installation_ch>
+          <enum_cfg_installation_ch_id>1</enum_cfg_installation_ch_id>
+          <enum_type_installation_id>1</enum_type_installation_id>
+          <enum_methode_calcul_conso_id>1</enum_methode_calcul_conso_id></donnee_entree>
+        <donnee_intermediaire>
+          <besoin_ch>13775.9617698145</besoin_ch>
+          <besoin_ch_depensier>17227.6944974962</besoin_ch_depensier>
+          <conso_ch>6614.04017138505</conso_ch>
+          <conso_ch_depensier>8271.26739829243</conso_ch_depensier>
+        </donnee_intermediaire>
+        <emetteur_chauffage_collection>
+          <emetteur_chauffage>
+            <donnee_entree>
+              <description></description>
+              <reference>Emetteur:2023_03_17_11_47_13_6384285003648728#1</reference>
+              <surface_chauffee>174.65</surface_chauffee>
+              <tv_rendement_emission_id>4</tv_rendement_emission_id>
+              <tv_rendement_distribution_ch_id>7</tv_rendement_distribution_ch_id>
+              <tv_rendement_regulation_id>14</tv_rendement_regulation_id>
+              <enum_type_emission_distribution_id>5</enum_type_emission_distribution_id>
+              <tv_intermittence_id>1</tv_intermittence_id>
+              <reseau_distribution_isole>1</reseau_distribution_isole>
+              <enum_equipement_intermittence_id>1</enum_equipement_intermittence_id>
+              <enum_type_regulation_id>2</enum_type_regulation_id>
+              <enum_periode_installation_emetteur_id>3</enum_periode_installation_emetteur_id>
+              <enum_type_chauffage_id>1</enum_type_chauffage_id>
+              <enum_temp_distribution_ch_id>1</enum_temp_distribution_ch_id>
+              <enum_lien_generateur_emetteur_id>1</enum_lien_generateur_emetteur_id></donnee_entree>
+            <donnee_intermediaire>
+              <i0>0.84</i0>
+              <rendement_emission>0.95</rendement_emission>
+              <rendement_distribution>0.85</rendement_distribution>
+              <rendement_regulation>0.96</rendement_regulation>
+            </donnee_intermediaire>
+          </emetteur_chauffage>
+        </emetteur_chauffage_collection>
+        <generateur_chauffage_collection>
+          <generateur_chauffage>
+            <donnee_entree>
+              <description>Electrique - PAC air/air installée entre 2008 et 2014</description>
+              <reference>Generateur:2023_03_17_11_47_13_6384285003648728#1</reference>
+          <data_complementaires data-annee-installation="2009" xsi:nil="true"></data_complementaires>
+              <reference_generateur_mixte xsi:nil="true"></reference_generateur_mixte>
+              <ref_produit_generateur_ch>Sans Objet</ref_produit_generateur_ch>
+              <enum_type_generateur_ch_id>2</enum_type_generateur_ch_id>
+              <enum_usage_generateur_id>1</enum_usage_generateur_id>
+              <enum_type_energie_id>1</enum_type_energie_id>
+              <position_volume_chauffe>1</position_volume_chauffe>
+              <tv_scop_id>2</tv_scop_id>
+              <identifiant_reseau_chaleur xsi:nil="true"></identifiant_reseau_chaleur>
+              <enum_methode_saisie_carac_sys_id>1</enum_methode_saisie_carac_sys_id>
+              <enum_lien_generateur_emetteur_id>1</enum_lien_generateur_emetteur_id></donnee_entree>
+            <donnee_intermediaire>
+              <scop>2.3</scop>
+              <conso_ch>6614.04017138505</conso_ch>
+              <conso_ch_depensier>8271.26739829243</conso_ch_depensier>
+            </donnee_intermediaire>
+          </generateur_chauffage>
+        </generateur_chauffage_collection>
+      </installation_chauffage>
+      <installation_chauffage>
+        <donnee_entree>
+          <description>Panneau rayonnant électrique NFC, NF** et NF*** (système individuel)</description>
+          <reference>2023_03_17_11_48_29_725515500009463787</reference>
+          <surface_chauffee>43.3</surface_chauffee><nombre_niveau_installation_ch>1</nombre_niveau_installation_ch>
+          <enum_cfg_installation_ch_id>1</enum_cfg_installation_ch_id>
+          <enum_type_installation_id>1</enum_type_installation_id>
+          <enum_methode_calcul_conso_id>1</enum_methode_calcul_conso_id></donnee_entree>
+        <donnee_intermediaire>
+          <besoin_ch>3415.39733543067</besoin_ch>
+          <besoin_ch_depensier>4271.16617086508</besoin_ch_depensier>
+          <conso_ch>3044.53384220438</conso_ch>
+          <conso_ch_depensier>3807.37837380713</conso_ch_depensier>
+        </donnee_intermediaire>
+        <emetteur_chauffage_collection>
+          <emetteur_chauffage>
+            <donnee_entree>
+              <description></description>
+              <reference>Emetteur:2023_03_17_11_48_29_725515500009463787#1</reference>
+              <surface_chauffee>43.3</surface_chauffee>
+              <tv_rendement_emission_id>2</tv_rendement_emission_id>
+              <tv_rendement_distribution_ch_id>1</tv_rendement_distribution_ch_id>
+              <tv_rendement_regulation_id>2</tv_rendement_regulation_id>
+              <enum_type_emission_distribution_id>2</enum_type_emission_distribution_id>
+              <tv_intermittence_id>2</tv_intermittence_id>
+              <reseau_distribution_isole>0</reseau_distribution_isole>
+              <enum_equipement_intermittence_id>1</enum_equipement_intermittence_id>
+              <enum_type_regulation_id>2</enum_type_regulation_id>
+              <enum_periode_installation_emetteur_id>3</enum_periode_installation_emetteur_id>
+              <enum_type_chauffage_id>1</enum_type_chauffage_id>
+              <enum_temp_distribution_ch_id>1</enum_temp_distribution_ch_id>
+              <enum_lien_generateur_emetteur_id>1</enum_lien_generateur_emetteur_id></donnee_entree>
+            <donnee_intermediaire>
+              <i0>0.84</i0>
+              <rendement_emission>0.97</rendement_emission>
+              <rendement_distribution>1</rendement_distribution>
+              <rendement_regulation>0.99</rendement_regulation>
+            </donnee_intermediaire>
+          </emetteur_chauffage>
+        </emetteur_chauffage_collection>
+        <generateur_chauffage_collection>
+          <generateur_chauffage>
+            <donnee_entree>
+              <description>Electrique - Panneau rayonnant électrique NFC, NF** et NF***</description>
+              <reference>Generateur:2023_03_17_11_48_29_725515500009463787#1</reference>
+          <data_complementaires data-annee-installation="2009" xsi:nil="true"></data_complementaires>
+              <reference_generateur_mixte xsi:nil="true"></reference_generateur_mixte>
+              <ref_produit_generateur_ch>Sans Objet</ref_produit_generateur_ch>
+              <enum_type_generateur_ch_id>99</enum_type_generateur_ch_id>
+              <enum_usage_generateur_id>1</enum_usage_generateur_id>
+              <enum_type_energie_id>1</enum_type_energie_id>
+              <position_volume_chauffe>1</position_volume_chauffe>
+              <tv_rendement_generation_id>29</tv_rendement_generation_id>
+              <identifiant_reseau_chaleur xsi:nil="true"></identifiant_reseau_chaleur>
+              <enum_methode_saisie_carac_sys_id>1</enum_methode_saisie_carac_sys_id>
+              <enum_lien_generateur_emetteur_id>1</enum_lien_generateur_emetteur_id></donnee_entree>
+            <donnee_intermediaire>
+              <rendement_generation>1</rendement_generation>
+              <conso_ch>3044.53384220438</conso_ch>
+              <conso_ch_depensier>3807.37837380713</conso_ch_depensier>
+            </donnee_intermediaire>
+          </generateur_chauffage>
+        </generateur_chauffage_collection>
+      </installation_chauffage>
+    </installation_chauffage_collection>
+    <sortie>
+      <deperdition>
+        <hvent>111.1545</hvent>
+        <hperm>23.234879097755378</hperm>
+        <deperdition_renouvellement_air>134.38937909775538</deperdition_renouvellement_air>
+        <deperdition_mur>40.3965517241379</deperdition_mur>
+        <deperdition_plancher_bas>29.6712</deperdition_plancher_bas>
+        <deperdition_plancher_haut>24.12407407407408</deperdition_plancher_haut>
+        <deperdition_baie_vitree>117.24900000000001</deperdition_baie_vitree>
+        <deperdition_porte>9.702</deperdition_porte>
+        <deperdition_pont_thermique>94.4265</deperdition_pont_thermique>
+        <deperdition_enveloppe>449.95870489596734</deperdition_enveloppe>
+      </deperdition>
+      <apport_et_besoin>
+        <surface_sud_equivalente>216.075354</surface_sud_equivalente>
+        <apport_solaire_fr>1264.3946099200002</apport_solaire_fr>
+        <apport_interne_fr>173.52266073214287</apport_interne_fr>
+        <apport_solaire_ch>7796.472956900001</apport_solaire_ch>
+        <apport_interne_ch>5310.3750586071428</apport_interne_ch>
+        <fraction_apport_gratuit_ch>0.35420061689683757</fraction_apport_gratuit_ch>
+        <fraction_apport_gratuit_depensier_ch>0.31971420754055124</fraction_apport_gratuit_depensier_ch>
+        <pertes_distribution_ecs_recup>56.966389360318651</pertes_distribution_ecs_recup>
+        <pertes_distribution_ecs_recup_depensier>82.593168113326385</pertes_distribution_ecs_recup_depensier>
+        <pertes_stockage_ecs_recup>212.76852164383558</pertes_stockage_ecs_recup>
+        <pertes_generateur_ch_recup>0</pertes_generateur_ch_recup>
+        <pertes_generateur_ch_recup_depensier>0</pertes_generateur_ch_recup_depensier>
+        <nadeq>2.8596250000000003</nadeq>
+        <v40_ecs_journalier>160.139</v40_ecs_journalier>
+        <v40_ecs_journalier_depensier>225.91037500000002</v40_ecs_journalier_depensier>
+        <besoin_ch>17191.359105245148</besoin_ch>
+        <besoin_ch_depensier>21498.860668361318</besoin_ch_depensier>
+        <besoin_ecs>1897.8397331614005</besoin_ecs>
+        <besoin_ecs_depensier>2677.309623566975</besoin_ecs_depensier>
+        <besoin_fr>1581.7386167158879</besoin_fr>
+        <besoin_fr_depensier>3732.4450085999188</besoin_fr_depensier>
+      </apport_et_besoin>
+      <ef_conso>
+        <conso_ch>9553.2686033604132</conso_ch>
+        <conso_ch_depensier>11949.497510218353</conso_ch_depensier>
+        <conso_ecs>2674.5840679809157</conso_ecs>
+        <conso_ecs_depensier>3491.7666877300662</conso_ecs_depensier>
+        <conso_eclairage>386.00540890095954</conso_eclairage>
+        <conso_auxiliaire_generation_ch>0</conso_auxiliaire_generation_ch>
+        <conso_auxiliaire_generation_ch_depensier>0</conso_auxiliaire_generation_ch_depensier>
+        <conso_auxiliaire_distribution_ch>323.75725380471181</conso_auxiliaire_distribution_ch>
+        <conso_auxiliaire_generation_ecs>0</conso_auxiliaire_generation_ecs>
+        <conso_auxiliaire_generation_ecs_depensier>0</conso_auxiliaire_generation_ecs_depensier>
+        <conso_auxiliaire_distribution_ecs>0</conso_auxiliaire_distribution_ecs>
+        <conso_auxiliaire_ventilation>569.40000000000009</conso_auxiliaire_ventilation>
+        <conso_totale_auxiliaire>720.30674146263971</conso_totale_auxiliaire>
+        <conso_fr>159.55943973160032</conso_fr>
+        <conso_fr_depensier>377.66114677643372</conso_fr_depensier>
+        <conso_5_usages>13493.724261436528</conso_5_usages>
+        <conso_5_usages_m2>61</conso_5_usages_m2>
+      </ef_conso>
+      <ep_conso>
+        <ep_conso_ch>21972.51778772895</ep_conso_ch>
+        <ep_conso_ch_depensier>21972.51778772895</ep_conso_ch_depensier>
+        <ep_conso_ecs>6151.5433563561064</ep_conso_ecs>
+        <ep_conso_ecs_depensier>6151.5433563561064</ep_conso_ecs_depensier>
+        <ep_conso_eclairage>887.812440472207</ep_conso_eclairage>
+        <ep_conso_auxiliaire_generation_ch>0</ep_conso_auxiliaire_generation_ch>
+        <ep_conso_auxiliaire_generation_ch_depensier>0</ep_conso_auxiliaire_generation_ch_depensier>
+        <ep_conso_auxiliaire_distribution_ch>744.641683750837</ep_conso_auxiliaire_distribution_ch>
+        <ep_conso_auxiliaire_generation_ecs>0</ep_conso_auxiliaire_generation_ecs>
+        <ep_conso_auxiliaire_generation_ecs_depensier>0</ep_conso_auxiliaire_generation_ecs_depensier>
+        <ep_conso_auxiliaire_distribution_ecs>0</ep_conso_auxiliaire_distribution_ecs>
+        <ep_conso_auxiliaire_ventilation>1309.6200000000001</ep_conso_auxiliaire_ventilation>
+        <ep_conso_totale_auxiliaire>1656.7055053640711</ep_conso_totale_auxiliaire>
+        <ep_conso_fr>366.98671138268071</ep_conso_fr>
+        <ep_conso_fr_depensier>366.98671138268071</ep_conso_fr_depensier>
+        <ep_conso_5_usages>31035.565801304012</ep_conso_5_usages>
+        <ep_conso_5_usages_m2>142</ep_conso_5_usages_m2>
+        <classe_bilan_dpe>C</classe_bilan_dpe>
+      </ep_conso>
+      <emission_ges>
+        <emission_ges_ch>754.7082196654726</emission_ges_ch>
+        <emission_ges_ch_depensier>754.7082196654726</emission_ges_ch_depensier>
+        <emission_ges_ecs>173.84796441875955</emission_ges_ecs>
+        <emission_ges_ecs_depensier>173.84796441875955</emission_ges_ecs_depensier>
+        <emission_ges_eclairage>26.634373214166214</emission_ges_eclairage>
+        <emission_ges_auxiliaire_generation_ch>0</emission_ges_auxiliaire_generation_ch>
+        <emission_ges_auxiliaire_generation_ch_depensier>0</emission_ges_auxiliaire_generation_ch_depensier>
+        <emission_ges_auxiliaire_distribution_ch>20.720464243501556</emission_ges_auxiliaire_distribution_ch>
+        <emission_ges_auxiliaire_generation_ecs>0</emission_ges_auxiliaire_generation_ecs>
+        <emission_ges_auxiliaire_generation_ecs_depensier>0</emission_ges_auxiliaire_generation_ecs_depensier>
+        <emission_ges_auxiliaire_distribution_ecs>0</emission_ges_auxiliaire_distribution_ecs>
+        <emission_ges_auxiliaire_ventilation>36.441600000000008</emission_ges_auxiliaire_ventilation>
+        <emission_ges_totale_auxiliaire>46.099631453608936</emission_ges_totale_auxiliaire>
+        <emission_ges_fr>10.211804142822421</emission_ges_fr>
+        <emission_ges_fr_depensier>10.211804142822421</emission_ges_fr_depensier>
+        <emission_ges_5_usages>1011.5019928948295</emission_ges_5_usages>
+        <emission_ges_5_usages_m2>4</emission_ges_5_usages_m2>
+        <classe_emission_ges>A</classe_emission_ges>
+      </emission_ges>
+      <cout>
+        <cout_ch>1569.7568072624913</cout_ch>
+        <cout_ch_depensier>1569.7568072624913</cout_ch_depensier>
+        <cout_ecs>439.47749420884304</cout_ecs>
+        <cout_ecs_depensier>439.47749420884304</cout_ecs_depensier>
+        <cout_eclairage>63.426942486394864</cout_eclairage>
+        <cout_auxiliaire_generation_ch>0</cout_auxiliaire_generation_ch>
+        <cout_auxiliaire_generation_ch_depensier>0</cout_auxiliaire_generation_ch_depensier>
+        <cout_auxiliaire_distribution_ch>53.198562100702091</cout_auxiliaire_distribution_ch>
+        <cout_auxiliaire_generation_ecs>0</cout_auxiliaire_generation_ecs>
+        <cout_auxiliaire_generation_ecs_depensier>0</cout_auxiliaire_generation_ecs_depensier>
+        <cout_auxiliaire_distribution_ecs>0</cout_auxiliaire_distribution_ecs>
+        <cout_auxiliaire_ventilation>93.561645041662175</cout_auxiliaire_ventilation>
+        <cout_total_auxiliaire>118.35806755504709</cout_total_auxiliaire>
+        <cout_fr>26.218201024261457</cout_fr>
+        <cout_fr_depensier>26.218201024261457</cout_fr_depensier>
+        <cout_5_usages>2217.2375125370381</cout_5_usages>
+      </cout>
+      <production_electricite>
+        <production_pv>5814.6862132445476</production_pv>
+        <conso_elec_ac>1939.6043950237352</conso_elec_ac>
+        <conso_elec_ac_ch>105.30541022902179</conso_elec_ac_ch>
+        <conso_elec_ac_ecs>74.943817138869576</conso_elec_ac_ecs>
+        <conso_elec_ac_fr>25.176749970184247</conso_elec_ac_fr>
+        <conso_elec_ac_eclairage>10.816156099040409</conso_elec_ac_eclairage>
+        <conso_elec_ac_auxiliaire>172.85051234207225</conso_elec_ac_auxiliaire>
+        <conso_elec_ac_autre_usage>1550.511749244547</conso_elec_ac_autre_usage>
+      </production_electricite>
+      <sortie_par_energie_collection>
+        <sortie_par_energie>
+          <enum_type_energie_id>1</enum_type_energie_id>
+          <conso_ch>9553.2686033604132</conso_ch>
+          <conso_ecs>2674.5840679809157</conso_ecs>
+          <conso_5_usages>13493.724261436528</conso_5_usages>
+          <emission_ges_ch>754.7082196654726</emission_ges_ch>
+          <emission_ges_ecs>173.84796441875955</emission_ges_ecs>
+          <emission_ges_5_usages>1011.5019928948298</emission_ges_5_usages>
+          <cout_ch>1569.7568072624913</cout_ch>
+          <cout_ecs>439.47749420884304</cout_ecs>
+          <cout_5_usages>2217.2375125370372</cout_5_usages>
+        </sortie_par_energie>
+      </sortie_par_energie_collection>
+      <confort_ete>
+        <isolation_toiture>1</isolation_toiture>
+        <protection_solaire_exterieure>0</protection_solaire_exterieure>
+        <aspect_traversant>1</aspect_traversant>
+        <brasseur_air>0</brasseur_air>
+        <inertie_lourde>0</inertie_lourde>
+        <enum_indicateur_confort_ete_id>1</enum_indicateur_confort_ete_id>
+      </confort_ete>
+      <qualite_isolation>
+        <ubat>0.6735019225231289</ubat>
+        <qualite_isol_enveloppe>3</qualite_isol_enveloppe>
+        <qualite_isol_mur>2</qualite_isol_mur>
+        <qualite_isol_plancher_haut_comble_perdu>2</qualite_isol_plancher_haut_comble_perdu>
+        <qualite_isol_plancher_bas>2</qualite_isol_plancher_bas>
+        <qualite_isol_menuiserie>3</qualite_isol_menuiserie>
+      </qualite_isolation>
+    </sortie>
+    
+  </logement>
+  
+  <descriptif_enr_collection>
+    <descriptif_enr>
+      <description>pompe à chaleur</description>
+      <enum_categorie_enr_descriptif_id>1</enum_categorie_enr_descriptif_id>
+    </descriptif_enr>
+    <descriptif_enr>
+      <description>19,2 m² de panneaux solaires photovoltaïques</description>
+      <enum_categorie_enr_descriptif_id>3</enum_categorie_enr_descriptif_id>
+    </descriptif_enr>
+  </descriptif_enr_collection>
+  <descriptif_simplifie_collection>
+    <descriptif_simplifie>
+      <description>Mur en blocs de béton creux d&apos;épaisseur 23 cm avec isolation intérieure (10 cm) donnant sur l&apos;extérieur</description>
+      <enum_categorie_descriptif_simplifie_id>1</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Combles aménagés sous rampants donnant sur un comble fortement ventilé avec isolation intérieure (20 cm)</description>
+      <enum_categorie_descriptif_simplifie_id>3</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Combles aménagés sous rampants donnant sur l&apos;extérieur (combles aménagés) avec isolation intérieure (20 cm)</description>
+      <enum_categorie_descriptif_simplifie_id>3</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Dalle béton donnant sur un terre-plein</description>
+      <enum_categorie_descriptif_simplifie_id>2</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Nord, double vitrage</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Nord, double vitrage</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres battantes bois, orientées Nord, double vitrage</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres oscillantes bois, orientées Nord, double vitrage à isolation renforcée</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres fixes bois, orientées Nord, double vitrage</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Sud, double vitrage à isolation renforcée</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres coulissantes métal à rupture de ponts thermiques, orientées Sud, double vitrage à isolation renforcée</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres oscillantes bois, orientées Sud, double vitrage à isolation renforcée</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Fenêtres fixes bois, orientées Sud, double vitrage</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Porte(s) bois avec double vitrage</description>
+      <enum_categorie_descriptif_simplifie_id>4</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>PAC air/air installée entre 2008 et 2014 réseau isolé (système individuel)</description>
+      <enum_categorie_descriptif_simplifie_id>5</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>PAC air/air installée entre 2008 et 2014 réseau isolé (système individuel)</description>
+      <enum_categorie_descriptif_simplifie_id>9</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Panneau rayonnant électrique NFC, NF** et NF*** (système individuel)</description>
+      <enum_categorie_descriptif_simplifie_id>5</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Panneau rayonnant électrique NFC, NF** et NF*** (système individuel)</description>
+      <enum_categorie_descriptif_simplifie_id>9</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Ballon électrique à accumulation vertical (catégorie B ou 2 étoiles), contenance ballon 200 L</description>
+      <enum_categorie_descriptif_simplifie_id>6</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>Electrique - Pompe à chaleur air/air</description>
+      <enum_categorie_descriptif_simplifie_id>7</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+    <descriptif_simplifie>
+      <description>VMC SF Auto réglable de 2001 à 2012</description>
+      <enum_categorie_descriptif_simplifie_id>8</enum_categorie_descriptif_simplifie_id>
+    </descriptif_simplifie>
+  </descriptif_simplifie_collection>
+  <fiche_technique_collection>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>11</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Département: 10 Aube</description>
+          <valeur>10 Aube</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Altitude: 72 m</description>
+          <valeur>72 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>4</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de bien: Maison Individuelle</description>
+          <valeur>Maison Individuelle</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année de construction: 2009</description>
+          <valeur>2009</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>5</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Surface habitable du logement: 217,95 m²</description>
+          <valeur>217,95 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Nombre de niveaux du logement: 2</description>
+          <valeur>2</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Hauteur moyenne sous plafond: 2,54 m</description>
+          <valeur>2,54 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>1</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface du mur: 117,15 m²</description>
+          <valeur>117,15 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de local adjacent: l&apos;extérieur</description>
+          <valeur>l&apos;extérieur</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Matériau mur: Mur en blocs de béton creux</description>
+          <valeur>Mur en blocs de béton creux</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur mur: 23 cm</description>
+          <valeur>23 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Isolation: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur isolant: 10 cm</description>
+          <valeur>10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>2</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de plancher bas: 164,84 m²</description>
+          <valeur>164,84 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de local adjacent: un terre-plein</description>
+          <valeur>un terre-plein</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Etat isolation des parois Aue: isolé</description>
+          <valeur>isolé</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Périmètre plancher bâtiment déperditif: 50 m</description>
+          <valeur>50 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Surface plancher bâtiment déperditif: 164.84 m²</description>
+          <valeur>164.84 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de pb: Dalle béton</description>
+          <valeur>Dalle béton</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Isolation : oui / non / inconnue: inconnue</description>
+          <valeur>inconnue</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année de construction/rénovation: 2006 - 2012</description>
+          <valeur>2006 - 2012</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>3</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>3</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de plancher haut: 131 m²</description>
+          <valeur>131 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de local adjacent: un comble fortement ventilé</description>
+          <valeur>un comble fortement ventilé</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Surface Aiu: 131 m²</description>
+          <valeur>131 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Etat isolation des parois Aiu: isolé</description>
+          <valeur>isolé</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Surface Aue: 131 m²</description>
+          <valeur>131 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Etat isolation des parois Aue: isolé</description>
+          <valeur>isolé</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de ph: Combles aménagés sous rampants</description>
+          <valeur>Combles aménagés sous rampants</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Isolation: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur isolant: 20 cm</description>
+          <valeur>20 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>3</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de plancher haut: 5,82 m²</description>
+          <valeur>5,82 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de local adjacent: l&apos;extérieur (combles aménagés)</description>
+          <valeur>l&apos;extérieur (combles aménagés)</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de ph: Combles aménagés sous rampants</description>
+          <valeur>Combles aménagés sous rampants</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Isolation: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur isolant: 20 cm</description>
+          <valeur>20 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 13,93 m²</description>
+          <valeur>13,93 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Nord</description>
+          <valeur>Nord</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: vertical</description>
+          <valeur>vertical</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres coulissantes</description>
+          <valeur>Fenêtres coulissantes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Métal avec rupteur de ponts thermiques</description>
+          <valeur>Métal avec rupteur de ponts thermiques</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 15 mm</description>
+          <valeur>15 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: non</description>
+          <valeur>non</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 19,32 m</description>
+          <valeur>19,32 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: au nu intérieur</description>
+          <valeur>au nu intérieur</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Retour isolation autour menuiserie: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 3,79 m²</description>
+          <valeur>3,79 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Nord</description>
+          <valeur>Nord</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: vertical</description>
+          <valeur>vertical</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres coulissantes</description>
+          <valeur>Fenêtres coulissantes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Métal avec rupteur de ponts thermiques</description>
+          <valeur>Métal avec rupteur de ponts thermiques</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 15 mm</description>
+          <valeur>15 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: non</description>
+          <valeur>non</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 6,04 m</description>
+          <valeur>6,04 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: au nu intérieur</description>
+          <valeur>au nu intérieur</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Retour isolation autour menuiserie: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type volets: Volets roulants PVC (tablier &gt; 12mm)</description>
+          <valeur>Volets roulants PVC (tablier &gt; 12mm)</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 20,45 m²</description>
+          <valeur>20,45 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Sud</description>
+          <valeur>Sud</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: vertical</description>
+          <valeur>vertical</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres coulissantes</description>
+          <valeur>Fenêtres coulissantes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Métal avec rupteur de ponts thermiques</description>
+          <valeur>Métal avec rupteur de ponts thermiques</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 15 mm</description>
+          <valeur>15 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 30,9 m</description>
+          <valeur>30,9 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: au nu intérieur</description>
+          <valeur>au nu intérieur</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Retour isolation autour menuiserie: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 2,62 m²</description>
+          <valeur>2,62 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Sud</description>
+          <valeur>Sud</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: vertical</description>
+          <valeur>vertical</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres coulissantes</description>
+          <valeur>Fenêtres coulissantes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Métal avec rupteur de ponts thermiques</description>
+          <valeur>Métal avec rupteur de ponts thermiques</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 15 mm</description>
+          <valeur>15 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 5,49 m</description>
+          <valeur>5,49 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: au nu intérieur</description>
+          <valeur>au nu intérieur</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Retour isolation autour menuiserie: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type volets: Volets roulants PVC (tablier &gt; 12mm)</description>
+          <valeur>Volets roulants PVC (tablier &gt; 12mm)</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 0,25 m²</description>
+          <valeur>0,25 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Nord</description>
+          <valeur>Nord</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: vertical</description>
+          <valeur>vertical</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres battantes</description>
+          <valeur>Fenêtres battantes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Bois</description>
+          <valeur>Bois</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 15 mm</description>
+          <valeur>15 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: non</description>
+          <valeur>non</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 2 m</description>
+          <valeur>2 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 1,89 m²</description>
+          <valeur>1,89 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Plafond 2</description>
+          <valeur>Plafond 2</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Nord</description>
+          <valeur>Nord</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: 75°</description>
+          <valeur>75°</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres oscillantes</description>
+          <valeur>Fenêtres oscillantes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Bois</description>
+          <valeur>Bois</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 14 mm</description>
+          <valeur>14 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 9,6 m</description>
+          <valeur>9,6 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 1,89 m²</description>
+          <valeur>1,89 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Plafond 2</description>
+          <valeur>Plafond 2</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Sud</description>
+          <valeur>Sud</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: 75°</description>
+          <valeur>75°</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres oscillantes</description>
+          <valeur>Fenêtres oscillantes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Bois</description>
+          <valeur>Bois</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 14 mm</description>
+          <valeur>14 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 9,6 m</description>
+          <valeur>9,6 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 1,09 m²</description>
+          <valeur>1,09 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Sud</description>
+          <valeur>Sud</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: vertical</description>
+          <valeur>vertical</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres fixes</description>
+          <valeur>Fenêtres fixes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Bois</description>
+          <valeur>Bois</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 15 mm</description>
+          <valeur>15 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: non</description>
+          <valeur>non</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 5,02 m</description>
+          <valeur>5,02 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 5 cm</description>
+          <valeur>Lp: 5 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>4</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de baies: 0,89 m²</description>
+          <valeur>0,89 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Orientation des baies: Nord</description>
+          <valeur>Nord</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Inclinaison vitrage: vertical</description>
+          <valeur>vertical</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type ouverture: Fenêtres fixes</description>
+          <valeur>Fenêtres fixes</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type menuiserie: Bois</description>
+          <valeur>Bois</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de vitrage: double vitrage</description>
+          <valeur>double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Epaisseur lame air: 15 mm</description>
+          <valeur>15 mm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Présence couche peu émissive: non</description>
+          <valeur>non</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Gaz de remplissage: Air</description>
+          <valeur>Air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 5,26 m</description>
+          <valeur>5,26 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 5 cm</description>
+          <valeur>Lp: 5 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques proches: Absence de masque proche</description>
+          <valeur>Absence de masque proche</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de masques lointains: Absence de masque lointain</description>
+          <valeur>Absence de masque lointain</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>5</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Surface de porte: 2,94 m²</description>
+          <valeur>2,94 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Placement: Mur Nord, Sud, Est</description>
+          <valeur>Mur Nord, Sud, Est</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de local adjacent: l&apos;extérieur</description>
+          <valeur>l&apos;extérieur</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Nature de la menuiserie: Porte simple en bois</description>
+          <valeur>Porte simple en bois</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de porte: Porte avec double vitrage</description>
+          <valeur>Porte avec double vitrage</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur Pont Thermique: 5,78 m</description>
+          <valeur>5,78 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Positionnement de la menuiserie: au nu intérieur</description>
+          <valeur>au nu intérieur</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Retour isolation autour menuiserie: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>6</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type de pont thermique: Mur Nord, Sud, Est / Fenêtre 3 Nord</description>
+          <valeur>Mur Nord, Sud, Est / Fenêtre 3 Nord</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type isolation: ITI</description>
+          <valeur>ITI</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur du PT: 2 m</description>
+          <valeur>2 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie Lp: Lp: 10 cm</description>
+          <valeur>Lp: 10 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Position menuiseries: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>6</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type de pont thermique: Mur Nord, Sud, Est / Fenêtre 5 Nord</description>
+          <valeur>Mur Nord, Sud, Est / Fenêtre 5 Nord</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type isolation: ITI</description>
+          <valeur>ITI</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur du PT: 5,3 m</description>
+          <valeur>5,3 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie Lp: Lp: 5 cm</description>
+          <valeur>Lp: 5 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Position menuiseries: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>6</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type de pont thermique: Mur Nord, Sud, Est / Fenêtre 9 Sud</description>
+          <valeur>Mur Nord, Sud, Est / Fenêtre 9 Sud</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type isolation: ITI</description>
+          <valeur>ITI</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur du PT: 5 m</description>
+          <valeur>5 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Largeur du dormant menuiserie Lp: Lp: 5 cm</description>
+          <valeur>Lp: 5 cm</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Position menuiseries: en tunnel</description>
+          <valeur>en tunnel</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>6</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type PT: Mur Nord, Sud, Est / Plancher Int.</description>
+          <valeur>Mur Nord, Sud, Est / Plancher Int.</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type isolation: ITI / non isolé</description>
+          <valeur>ITI / non isolé</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur du PT: 74 m</description>
+          <valeur>74 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>6</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type PT: Mur Nord, Sud, Est / Plancher</description>
+          <valeur>Mur Nord, Sud, Est / Plancher</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type isolation: ITI / inconnue</description>
+          <valeur>ITI / inconnue</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Longueur du PT: 32,1 m</description>
+          <valeur>32,1 m</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>10</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type de ventilation: VMC SF Auto réglable de 2001 à 2012</description>
+          <valeur>VMC SF Auto réglable de 2001 à 2012</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année installation: 2009 (estimée en fonction de la marque et du modèle)</description>
+          <valeur>2009 (estimée en fonction de la marque et du modèle)</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Energie utilisée: Electrique</description>
+          <valeur>Electrique</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Façades exposées: plusieurs</description>
+          <valeur>plusieurs</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Logement Traversant: oui</description>
+          <valeur>oui</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>7</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type d&apos;installation de chauffage: Installation de chauffage simple</description>
+          <valeur>Installation de chauffage simple</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type générateur: Electrique - PAC air/air installée entre 2008 et 2014</description>
+          <valeur>Electrique - PAC air/air installée entre 2008 et 2014</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année installation générateur: 2009</description>
+          <valeur>2009</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Energie utilisée: Electrique</description>
+          <valeur>Electrique</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type émetteur: PAC air/air installée entre 2008 et 2014</description>
+          <valeur>PAC air/air installée entre 2008 et 2014</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année installation émetteur: 2009</description>
+          <valeur>2009</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de chauffage: central</description>
+          <valeur>central</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Equipement intermittence: Sans système d&apos;intermittence</description>
+          <valeur>Sans système d&apos;intermittence</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>7</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Type d&apos;installation de chauffage: Installation de chauffage simple</description>
+          <valeur>Installation de chauffage simple</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type générateur: Electrique - Panneau rayonnant électrique NFC, NF** et NF***</description>
+          <valeur>Electrique - Panneau rayonnant électrique NFC, NF** et NF***</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année installation générateur: 2009</description>
+          <valeur>2009</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Energie utilisée: Electrique</description>
+          <valeur>Electrique</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type émetteur: Panneau rayonnant électrique NFC, NF** et NF***</description>
+          <valeur>Panneau rayonnant électrique NFC, NF** et NF***</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année installation émetteur: 2009</description>
+          <valeur>2009</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Surface chauffée par l&apos;émetteur: 43,3 m²</description>
+          <valeur>43,3 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de chauffage: divisé</description>
+          <valeur>divisé</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Equipement intermittence: Sans système d&apos;intermittence</description>
+          <valeur>Sans système d&apos;intermittence</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>8</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Nombre de niveaux desservis: 2</description>
+          <valeur>2</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type générateur: Electrique - Ballon électrique à accumulation vertical (catégorie B ou 2 étoiles)</description>
+          <valeur>Electrique - Ballon électrique à accumulation vertical (catégorie B ou 2 étoiles)</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année installation générateur: 2011 (estimée en fonction de la marque et du modèle)</description>
+          <valeur>2011 (estimée en fonction de la marque et du modèle)</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Energie utilisée: Electrique</description>
+          <valeur>Electrique</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Chaudière murale: non</description>
+          <valeur>non</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de distribution: production en volume habitable alimentant des pièces contiguës</description>
+          <valeur>production en volume habitable alimentant des pièces contiguës</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Type de production: accumulation</description>
+          <valeur>accumulation</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Volume de stockage: 200 L</description>
+          <valeur>200 L</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+    <fiche_technique>
+      <enum_categorie_fiche_technique_id>9</enum_categorie_fiche_technique_id>
+      <sous_fiche_technique_collection>
+        <sous_fiche_technique>
+          <description>Système: Electrique - Pompe à chaleur air/air</description>
+          <valeur>Electrique - Pompe à chaleur air/air</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Surface habitable refroidie: 174,65 m²</description>
+          <valeur>174,65 m²</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Année installation équipement: 2011</description>
+          <valeur>2011</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+        <sous_fiche_technique>
+          <description>Energie utilisée: Electrique</description>
+          <valeur>Electrique</valeur>
+          <detail_origine_donnee></detail_origine_donnee>
+          <enum_origine_donnee_id>2</enum_origine_donnee_id>
+        </sous_fiche_technique>
+      </sous_fiche_technique_collection>
+    </fiche_technique>
+  </fiche_technique_collection>
+  <justificatif_collection></justificatif_collection>
+  <descriptif_geste_entretien_collection>
+    <descriptif_geste_entretien>
+      <description>Vérifier la température d&apos;eau du ballon (55°C-60°C) pour éviter le risque de développement de la légionnelle (en dessous de 50°C).</description>
+      <enum_picto_geste_entretien_id>9</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Chauffe-eau</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Eteindre les lumières lorsque personne n&apos;utilise la pièce.</description>
+      <enum_picto_geste_entretien_id>4</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Eclairage</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Faire vérifier les isolants et les compléter tous les 20 ans.</description>
+      <enum_picto_geste_entretien_id>13</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Isolation</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Nettoyer régulièrement les capteurs solaires.</description>
+      <enum_picto_geste_entretien_id>11</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Photovoltaïque</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Ne jamais placer un meuble devant un émetteur de chaleur.</description>
+      <enum_picto_geste_entretien_id>3</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Radiateur</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Privilégier les brasseurs d&apos;air.</description>
+      <enum_picto_geste_entretien_id>14</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Refroidissement</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Programmer le système de refroidissement ou l&apos;adapter en fonction de la présence des usagers.</description>
+      <enum_picto_geste_entretien_id>14</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Refroidissement</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Nettoyage et réglage de l&apos;installation tous les 3 ans par un professionnel.</description>
+      <enum_picto_geste_entretien_id>1</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Ventilation</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Nettoyer régulièrement les bouches.</description>
+      <enum_picto_geste_entretien_id>1</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Ventilation</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+    <descriptif_geste_entretien>
+      <description>Veiller à ouvrir les fenêtres de chaque pièce très régulièrement</description>
+      <enum_picto_geste_entretien_id>1</enum_picto_geste_entretien_id>
+      <categorie_geste_entretien>Ventilation</categorie_geste_entretien>
+    </descriptif_geste_entretien>
+  </descriptif_geste_entretien_collection>
+  <descriptif_travaux>
+    <pack_travaux_collection>
+      <pack_travaux>
+        <enum_num_pack_travaux_id>1</enum_num_pack_travaux_id>
+        <conso_5_usages_apres_travaux>142</conso_5_usages_apres_travaux>
+        <emission_ges_5_usages_apres_travaux>4</emission_ges_5_usages_apres_travaux>
+        <cout_pack_travaux_min>100</cout_pack_travaux_min>
+        <cout_pack_travaux_max>150</cout_pack_travaux_max>
+        <travaux_collection>
+          <travaux>
+            <description_travaux>Mettre à jour le système d&apos;intermittence / régulation (programmateur, robinets thermostatique, isolation réseau)</description_travaux>
+            <enum_lot_travaux_id>5</enum_lot_travaux_id>
+            <avertissement_travaux></avertissement_travaux>
+            <performance_recommande></performance_recommande>
+          </travaux>
+        </travaux_collection>
+      </pack_travaux>
+      <pack_travaux>
+        <enum_num_pack_travaux_id>3</enum_num_pack_travaux_id>
+        <conso_5_usages_apres_travaux>56</conso_5_usages_apres_travaux>
+        <emission_ges_5_usages_apres_travaux>1</emission_ges_5_usages_apres_travaux>
+        <cout_pack_travaux_min>100</cout_pack_travaux_min>
+        <cout_pack_travaux_max>150</cout_pack_travaux_max>
+        <travaux_collection>
+          <travaux>
+            <description_travaux>Remplacer les fenêtres par des fenêtres double vitrage à isolation renforcée.VbSimpleCrRemplacer les portes par des menuiseries plus performantes.</description_travaux>
+            <enum_lot_travaux_id>4</enum_lot_travaux_id>
+            <avertissement_travaux></avertissement_travaux>
+            <performance_recommande>Uw = 1,3 W/m².K, Sw = 0,42VbSimpleCrUw = 1,3 W/m².K</performance_recommande>
+          </travaux>
+          <travaux>
+            <description_travaux>Remplacer le système de chauffage par une pompe à chaleur air/air non réversible (la climatisation n&apos;est pas considérée, en cas de mise en place votre étiquette énergie augmentera sensiblement).</description_travaux>
+            <enum_lot_travaux_id>5</enum_lot_travaux_id>
+            <avertissement_travaux></avertissement_travaux>
+            <performance_recommande>SCOP = 4</performance_recommande>
+          </travaux>
+          <travaux>
+            <description_travaux>Remplacer le système actuel par un appareil de type pompe à chaleur.VbSimpleCrMettre en place un système Solaire</description_travaux>
+            <enum_lot_travaux_id>6</enum_lot_travaux_id>
+            <avertissement_travaux></avertissement_travaux>
+            <performance_recommande>COP = 3</performance_recommande>
+          </travaux>
+        </travaux_collection>
+      </pack_travaux>
+    </pack_travaux_collection>
+    <commentaire_travaux></commentaire_travaux>
+  </descriptif_travaux>
+</dpe>

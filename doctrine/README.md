@@ -1,4 +1,4 @@
-# Doctrine Open DPE
+# Doctrine
 
 ## Organisation
 

@@ -1,8 +1,28 @@
-export * as batiment from "./batiment/batiment.js";
-export * as chauffage from "./chauffage/chauffage.js";
-export * as ecs from "./ecs/ecs.js";
-export * as enveloppe from "./enveloppe/enveloppe.js";
-export * as production from "./production/production.js";
-export * as refroidissement from "./refroidissement/refroidissement.js";
-export * as ventilation from "./ventilation/ventilation.js";
-export * as diagnostic from "./diagnostic/diagnostic.js";
+import type { ValidationError, ValidationResponse } from "./types.js";
+import { MAP, type Key } from "./schemas.js";
+import { ajv } from "./services.js";
+
+export { MAP, type Key };
+
+export type { ValidationError, ValidationResponse };
+
+export function validate(key: Key, input: unknown): ValidationResponse {
+	const $id = MAP[key];
+	const validator = ajv.getSchema($id);
+
+	if (!validator) {
+		throw new Error(`Schéma introuvable dans le registre : ${$id}`);
+	}
+	const valid = validator(input);
+	return valid
+		? { valid: true }
+		: {
+				valid: false,
+				errors: (validator.errors ?? []).map((error) => ({
+					field: error.instancePath,
+					message: error.message ?? "Erreur de validation",
+					type: "json-schema",
+					details: error,
+				})),
+			};
+}

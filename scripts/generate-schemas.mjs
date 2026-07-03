@@ -3,21 +3,21 @@
 import { readFileSync, writeFileSync, mkdirSync, globSync } from "node:fs";
 import { basename, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { load as loadYaml } from "js-yaml";
+import { load as loadYaml, dump as dumpYaml } from "js-yaml";
 import { registerSchema } from "@hyperjump/json-schema/draft-2020-12";
 import { bundle } from "@hyperjump/json-schema/bundle";
 
 const ROOT = join(fileURLToPath(import.meta.url), "..", "..");
-const SCHEMAS_DIR = join(ROOT, "schemas");
-const SCHEMAS_TARGET = join(ROOT, "packages", "schemas", "data");
-const VALIDATOR_TARGET = join(ROOT, "packages", "validator", "data");
+const SOURCE = join(ROOT, "schemas");
+const DRAFT = "https://json-schema.org/draft/2020-12/schema";
+const OPENAPI_SCHEMAS = ["https://schemas.open-dpe.fr/diagnostic"];
 
-mkdirSync(SCHEMAS_TARGET, { recursive: true });
+const OPENAPI_TARGET = join(ROOT, "apps", "api", "schemas");
+const VALIDATOR_TARGET = join(ROOT, "packages", "validator", "data");
+mkdirSync(OPENAPI_TARGET, { recursive: true });
 mkdirSync(VALIDATOR_TARGET, { recursive: true });
 
-const schemaFiles = globSync(`${SCHEMAS_DIR}/**/*.yaml`);
-
-const VALID_SCHEMA = "https://json-schema.org/draft/2020-12/schema";
+const schemaFiles = globSync(`${SOURCE}/**/*.yaml`);
 
 /**
  * @param {string} file
@@ -70,7 +70,7 @@ for (const file of schemaFiles) {
 	const content = readFileSync(file, { encoding: "utf-8" });
 	const parsed = asSchema(loadYaml(content));
 	injectDynamicConstraints(parsed);
-	if (parsed.$id && parsed.$schema === VALID_SCHEMA)
+	if (parsed.$id && parsed.$schema === DRAFT)
 		registerSchema(/** @type {any} */ (parsed));
 }
 
@@ -89,9 +89,11 @@ for (const file of schemaFiles) {
 	});
 
 	// Compilation des schémas publics
-	if (false === isPrivate(file)) {
+	if (OPENAPI_SCHEMAS.includes($id)) {
 		const bundled = await bundle($id);
-		writeFileSync(`${SCHEMAS_TARGET}/${name}.json`, JSON.stringify(bundled), {
+		const yaml = dumpYaml(bundled);
+
+		writeFileSync(`${OPENAPI_TARGET}/${name}.yaml`, yaml, {
 			encoding: "utf-8",
 		});
 	}

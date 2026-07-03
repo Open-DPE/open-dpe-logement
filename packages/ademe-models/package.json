@@ -1,0 +1,43 @@
+{
+  "name": "@open-dpe-logement/ademe-models",
+  "version": "1.0.0",
+  "description": "Modèle de données publiques DPE-Audit",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "generate:enums:dpe": "node scripts/generate-enums-dpe.mjs",
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "keywords": [
+    "dpe",
+    "diagnostic",
+    "energie",
+    "3cl",
+    "open-data",
+    "ademe"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-dpe/open-dpe-logement"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "fast-xml-parser": "^4.5.0",
+    "vitest": "^4.1.6"
+  }
+}

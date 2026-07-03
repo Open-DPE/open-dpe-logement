@@ -1,4 +1,4 @@
-import { getTable, registerTable } from "#runtime/cache.js";
+import { getTable, registerTable } from "../../cache.js";
 
 export type Schema = {
 	mois: string;

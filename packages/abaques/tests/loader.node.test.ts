@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loadAsset } from "../src/runtime/loader.node.js";
+import { loadAsset } from "../src/loader.node.js";
 
 describe("loadAsset (Node)", () => {
 	it("charge un asset JSON existant relatif au package", async () => {

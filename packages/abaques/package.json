@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Tables de référence (abaques) pour le calcul 3CL-DPE",
   "type": "module",
+  "private": true,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -11,16 +12,12 @@
     }
   },
   "imports": {
-    "#runtime/loader.js": {
-      "types": "./dist/runtime/loader.node.d.ts",
-      "development": "./src/runtime/loader.node.ts",
-      "node": "./dist/runtime/loader.node.js",
-      "browser": "./dist/runtime/loader.browser.js",
-      "default": "./dist/runtime/loader.node.js"
-    },
-    "#*": {
-      "development": "./src/*",
-      "default": "./dist/*"
+    "#loader.js": {
+      "types": "./dist/loader.node.d.ts",
+      "development": "./src/loader.node.ts",
+      "node": "./dist/loader.node.js",
+      "browser": "./dist/loader.browser.js",
+      "default": "./dist/loader.node.js"
     }
   },
   "files": [
@@ -44,9 +41,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/open-dpe/open-dpe-logement"
-  },
-  "publishConfig": {
-    "access": "public"
   },
   "devDependencies": {
     "@types/node": "^25.9.3",

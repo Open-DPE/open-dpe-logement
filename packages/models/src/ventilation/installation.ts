@@ -25,22 +25,26 @@ export function isVentilationPuitClimatique(
 	return installation.type === TypeVentilationEnum.puit_climatique;
 }
 
-export function isTypeVentilationNaturelle(type: TypeVentilation): boolean {
-	return TYPES_VENTILATION_NATURELLE.includes(type as any);
+export function isTypeVentilationNaturelle(
+	type: TypeVentilation,
+): type is TypeVentilationNaturelle {
+	return (TYPES_VENTILATION_NATURELLE as readonly TypeVentilation[]).includes(
+		type,
+	);
 }
 
-export function isTypeVentilationMecanique(type: TypeVentilation): boolean {
-	return TYPES_VENTILATION_MECANIQUE.includes(type as any);
+export function isTypeVentilationMecanique(
+	type: TypeVentilation,
+): type is TypeVentilationMecanique {
+	return (TYPES_VENTILATION_MECANIQUE as readonly TypeVentilation[]).includes(
+		type,
+	);
 }
 
 /**
  * @see https://schemas.open-dpe.fr/ventilation/installation
  */
-export type Installation =
-	| InstallationNaturelle
-	| InstallationMecanique
-	| InstallationVMCDoubleFlux
-	| InstallationPuitClimatique;
+export type Installation = InstallationNaturelle | InstallationMecanique;
 
 export type InstallationWithData<T extends Installation = Installation> = T & {
 	data: InstallationData;
@@ -56,7 +60,7 @@ export type InstallationData = {
 	consommations: Consommations;
 };
 
-type InstallationType<
+type _Installation<
 	T extends {
 		type: TypeVentilation;
 		annee_installation?: number | null;
@@ -73,24 +77,29 @@ type InstallationType<
 	presence_echangeur_thermique: boolean | null;
 } & T;
 
-export type InstallationNaturelle = InstallationType<{
+export type InstallationNaturelle = _Installation<{
 	type: TypeVentilationNaturelle;
 	annee_installation: null;
 	installation_collective: null;
 	presence_echangeur_thermique: null;
 }>;
 
-export type InstallationVMCDoubleFlux = InstallationType<{
+export type InstallationMecanique =
+	| InstallationVMCDoubleFlux
+	| InstallationPuitClimatique
+	| InstallationMecaniqueAutres;
+
+export type InstallationVMCDoubleFlux = _Installation<{
 	type: typeof TypeVentilationEnum.vmc_double_flux;
 	installation_collective: boolean;
 }>;
 
-export type InstallationPuitClimatique = InstallationType<{
+export type InstallationPuitClimatique = _Installation<{
 	type: typeof TypeVentilationEnum.puit_climatique;
 	installation_collective: boolean;
 }>;
 
-export type InstallationMecanique = InstallationType<{
+export type InstallationMecaniqueAutres = _Installation<{
 	type: Exclude<
 		TypeVentilationMecanique,
 		| typeof TypeVentilationEnum.vmc_double_flux
