@@ -14,7 +14,6 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "generate:enums:dpe": "node scripts/generate-enums-dpe.mjs",
     "build": "tsc -p tsconfig.json",
     "check-types": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
@@ -36,8 +35,5 @@
   },
   "devDependencies": {
     "vitest": "^4.1.6"
-  },
-  "dependencies": {
-    "@open-dpe-logement/ademe-models": "^1.0.0"
   }
 }
