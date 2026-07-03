@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "fs";
 import { join } from "path";
 import { describe, expect, it } from "vitest";
-import { parseDpeXml } from "./parse-dpe-xml.js";
+import { parse } from "../../src/dpe/parser.js";
 
 export type FixtureCritere =
 	| "maison_individuelle"
@@ -30,7 +30,11 @@ export type FixtureManifestEntry = {
  * réelle des champs optionnels absents). C'est un détecteur de dérive
  * XSD <-> types, pas un validateur de schéma complet.
  */
-export function runDpeVersionSuite(versionLabel: string, fixturesDir: string, manifest: FixtureManifestEntry[]) {
+export function runDpeVersionSuite(
+	versionLabel: string,
+	fixturesDir: string,
+	manifest: FixtureManifestEntry[],
+) {
 	describe(`dpe ${versionLabel}`, () => {
 		for (const entry of manifest) {
 			const path = join(fixturesDir, entry.file);
@@ -42,7 +46,7 @@ export function runDpeVersionSuite(versionLabel: string, fixturesDir: string, ma
 
 			it(`${entry.critere} (${entry.numero_dpe})`, () => {
 				const xml = readFileSync(path, "utf-8");
-				const dpe = parseDpeXml(xml);
+				const dpe = parse(xml);
 
 				// Tous nos échantillons relèvent du périmètre "logement" du README
 				// (maison individuelle / appartement / immeuble collectif) : `logement`
@@ -61,7 +65,8 @@ export function runDpeVersionSuite(versionLabel: string, fixturesDir: string, ma
 
 				const logement = dpe.logement as Record<string, unknown>;
 				const administratif = dpe.administratif as Record<string, unknown>;
-				const caracteristiqueGenerale = logement.caracteristique_generale as Record<string, unknown>;
+				const caracteristiqueGenerale =
+					logement.caracteristique_generale as Record<string, unknown>;
 				const enveloppe = logement.enveloppe as Record<string, unknown>;
 
 				// La version DPE réelle est administratif.enum_version_id.
@@ -73,27 +78,43 @@ export function runDpeVersionSuite(versionLabel: string, fixturesDir: string, ma
 
 				// Collections : jamais collapsées en objet unique, même à 1 élément.
 				expect(Array.isArray(enveloppe.mur_collection)).toBe(true);
-				expect(Array.isArray(logement.installation_chauffage_collection)).toBe(true);
+				expect(Array.isArray(logement.installation_chauffage_collection)).toBe(
+					true,
+				);
 				expect(Array.isArray(logement.installation_ecs_collection)).toBe(true);
 
-				expect(typeof caracteristiqueGenerale.enum_methode_application_dpe_log_id).toBe("number");
+				expect(
+					typeof caracteristiqueGenerale.enum_methode_application_dpe_log_id,
+				).toBe("number");
 
 				switch (entry.critere) {
 					case "champs_optionnels_absents": {
-						expect(caracteristiqueGenerale.nombre_appartement == null).toBe(true);
+						expect(caracteristiqueGenerale.nombre_appartement == null).toBe(
+							true,
+						);
 						break;
 					}
 					case "immeuble_collectif": {
-						expect(typeof caracteristiqueGenerale.nombre_appartement).toBe("number");
-						expect(caracteristiqueGenerale.nombre_appartement as number).toBeGreaterThan(1);
+						expect(typeof caracteristiqueGenerale.nombre_appartement).toBe(
+							"number",
+						);
+						expect(
+							caracteristiqueGenerale.nombre_appartement as number,
+						).toBeGreaterThan(1);
 						break;
 					}
 					case "multi_generateurs": {
-						const installations = logement.installation_chauffage_collection as Array<Record<string, unknown>>;
-						const hasMultipleGenerateurs = installations.some((installation) => {
-							const generateurs = installation.generateur_chauffage_collection;
-							return Array.isArray(generateurs) && generateurs.length >= 2;
-						});
+						const installations =
+							logement.installation_chauffage_collection as Array<
+								Record<string, unknown>
+							>;
+						const hasMultipleGenerateurs = installations.some(
+							(installation) => {
+								const generateurs =
+									installation.generateur_chauffage_collection;
+								return Array.isArray(generateurs) && generateurs.length >= 2;
+							},
+						);
 						expect(hasMultipleGenerateurs).toBe(true);
 						break;
 					}

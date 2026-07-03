@@ -11,10 +11,8 @@ npm i @open-dpe-logement/ademe-models
 ## Usage
 
 ```ts
-import { type DPE, fetchDPE } from "@open-dpe-logement/open-data";
+import { dpe } from "@open-dpe-logement/ademe-models";
 
-const data = await fetchDPE("xxxxxxx", {
-    client_id: "xxxxxxx",
-    client_secret: "xxxxxxx",
-});
+const xml = `<dpe></dpe>`;
+const data = dpe.parse(xml); // type dpe.DPE
 ```

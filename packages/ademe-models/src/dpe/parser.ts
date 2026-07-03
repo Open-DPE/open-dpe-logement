@@ -1,4 +1,5 @@
 import { XMLParser } from "fast-xml-parser";
+import { type DPE } from "./types";
 
 /**
  * Champs dont le contenu XML est numérique en apparence mais typé string
@@ -43,7 +44,9 @@ function normalize(node: unknown): unknown {
 	}
 
 	const result: Record<string, unknown> = {};
-	for (const [key, rawValue] of Object.entries(node as Record<string, unknown>)) {
+	for (const [key, rawValue] of Object.entries(
+		node as Record<string, unknown>,
+	)) {
 		if (STRING_ONLY_TAGS.has(key)) {
 			result[key] = typeof rawValue === "number" ? String(rawValue) : rawValue;
 			continue;
@@ -57,7 +60,10 @@ function normalize(node: unknown): unknown {
 				result[key] = [];
 			} else if (Array.isArray(value)) {
 				result[key] = value;
-			} else if (typeof value === "object" && itemKey in (value as Record<string, unknown>)) {
+			} else if (
+				typeof value === "object" &&
+				itemKey in (value as Record<string, unknown>)
+			) {
 				const inner = (value as Record<string, unknown>)[itemKey];
 				result[key] = Array.isArray(inner) ? inner : [inner];
 			} else {
@@ -91,7 +97,7 @@ const parser = new XMLParser({
  * éléments nillable. À affiner si des fixtures réelles l'utilisent
  * (à date, non observé : les éditeurs omettent en général l'élément).
  */
-export function parseDpeXml(xml: string): Record<string, unknown> {
+export function parse(xml: string): DPE {
 	const parsed = parser.parse(xml) as { dpe: Record<string, unknown> };
-	return normalize(parsed.dpe) as Record<string, unknown>;
+	return normalize(parsed.dpe) as DPE;
 }
