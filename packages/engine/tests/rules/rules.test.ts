@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, beforeAll } from "vitest";
 import * as models from "@open-dpe-logement/models";
-import { createContext, services } from "../../src/index.js";
+import { engine } from "../../src/index.js";
 
 const DIAGNOSTIC = {
 	id: "019a7391-cd73-7c54-b29a-4795ec32a2fc",
@@ -733,15 +733,14 @@ const DIAGNOSTIC = {
 } as unknown as models.diagnostic.Diagnostic;
 
 describe("Rules", () => {
-	it("aucun cycle détecté", () => {
-		const context = createContext(DIAGNOSTIC);
+	beforeAll(async () => {
+		await engine.init();
+	});
 
-		try {
-			const data = services.diagnostic.calcule(context);
-			expect(data).toHaveProperty("data");
-		} catch (error) {
-			console.error(error);
-		}
-		console.log(JSON.stringify(Object.fromEntries(context.log())));
+	it("aucun cycle détecté", () => {
+		const { data, log } = engine.calcule(DIAGNOSTIC);
+
+		expect(data).toHaveProperty("data");
+		console.log(JSON.stringify(Object.fromEntries(log)));
 	});
 });

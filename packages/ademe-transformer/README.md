@@ -27,3 +27,12 @@ const data = toObservatoire(/** Open DPE data **/); //
 ├── utils.ts
 /to                                 # next
 ```
+
+
+```text
+/<domaine>
+├── transform.mapping.ts
+├── transform.ts
+├── reverse.mapping.ts
+├── reverse.ts
+```

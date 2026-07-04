@@ -11,29 +11,15 @@ npm i @open-dpe-logement/engine
 ## Usage
 
 ```ts
-import { createContext, init, rules, formulas, services } from "@open-dpe-logement/engine"
+import { engine } from "@open-dpe-logement/engine"
 
-// À appeler une seule fois au démarrage de l'application, avant tout calcul
-await init();
+// À appeler une seule fois (au démarrage de l'application
+await engine.init();
 
 const diagnostic = {...};
 
-createContext({ diagnostic }) // scenario: 'conventionnel'
-createContext({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
-
-// Application d'une formule de calcule
-formulas.climat.calcule_zone_climatique({ code_departement: "84" })
-
-// Application d'une règle
-const context = createContext({ diagnostic });
-rules.climat.zone_climatique(context);
-
-// Calcule d'un diagnostic
-const context = createContext({ diagnostic });
-const data = services.diagnostic.calcule(context);
-
-// Liste des données calculées
-context.log();
+const { data, log } = engine.calcule({ diagnostic }) // scenario: 'conventionnel'
+const { data, log } = engine.calcule({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
 ```
 
 ## Organisation
