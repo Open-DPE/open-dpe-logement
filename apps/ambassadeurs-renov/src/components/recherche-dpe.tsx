@@ -4,7 +4,6 @@ import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { useDebounce } from "@/hooks/use-debounce";
 import { searchAdresse, type Adresse } from "@/services/search-adresse";
 import { searchDPE, type DPE } from "@/services/search-dpe";
@@ -142,19 +141,10 @@ export function RechercheDpe({ onSelect }: Props) {
       </form>
 
       {results !== undefined && (
-        results.length === 0 ? (
-          <Alert>
-            <AlertTitle>Aucun résultat</AlertTitle>
-            <AlertDescription>
-              Aucun DPE n'a été trouvé pour l'adresse sélectionnée.
-            </AlertDescription>
-          </Alert>
-        ) : (
-          <RechercheDpeResultats
-            results={results}
-            onSelect={(dpe) => onSelect?.(dpe)}
-          />
-        )
+        <RechercheDpeResultats
+          results={results}
+          onSelect={(dpe) => onSelect?.(dpe)}
+        />
       )}
     </div>
   );
