@@ -1,6 +1,6 @@
 import * as models from "@open-dpe-logement/models";
 import { v4 as uuid } from "uuid";
-import _geste from "../data/gestes.json";
+import _geste from "../../data/gestes.json";
 
 export type Geste = {
 	id: string;

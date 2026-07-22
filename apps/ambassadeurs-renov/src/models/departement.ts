@@ -1,4 +1,4 @@
-import _departements from "../data/departements.json";
+import _departements from "../../data/departements.json";
 
 export type Departement = {
 	code_departement: string;

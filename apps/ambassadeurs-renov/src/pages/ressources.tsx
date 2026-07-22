@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ressources, tags, filterRessourcesByTags } from '@/models/ressource';
 import { ChevronRightIcon } from "lucide-react"
-import { Layout } from "@/components/layout";
+import { Layout } from "@/components/layout/layout";
 import { Button } from '@/components/ui/button';
 import {
   Item,

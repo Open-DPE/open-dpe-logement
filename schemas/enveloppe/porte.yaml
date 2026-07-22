@@ -28,7 +28,9 @@ properties:
   menuiserie:
     $ref: "#/$defs/menuiserie"
   vitrage:
-    $ref: "#/$defs/vitrage"
+    oneOf:
+      - $ref: /enveloppe/porte#/$defs/vitrage
+      - const: null
   data:
     $ref: "#/$defs/data"
 
@@ -89,7 +91,7 @@ $defs:
 
   vitrage:
     title: Vitrage
-    type: [object, "null"]
+    type: object
     additionalProperties: false
     properties:
       surface:

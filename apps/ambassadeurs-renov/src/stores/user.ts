@@ -56,8 +56,19 @@ export function setSimulation(
 
 // --- Reset ---
 
+export function clearDiagnostic() {
+	const { scenario, diagnostic } = DEFAULT;
+	$user.set({ ...$user.get(), scenario, diagnostic });
+}
+
+export function clearSimulation() {
+	const { simulation, gestes } = DEFAULT;
+	$user.set({ ...$user.get(), simulation, gestes });
+}
+
 export function clearUser() {
-	$user.set(DEFAULT);
+	clearDiagnostic();
+	clearSimulation();
 }
 
 export function useUserStore() {

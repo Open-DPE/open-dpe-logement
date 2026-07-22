@@ -1,9 +1,10 @@
 import { type ErrorObject } from "ajv";
 
-export type ValidationResponse = Valid | Invalid;
+export type ValidationResponse<T> = Valid<T> | Invalid;
 
-export type Valid = {
+export type Valid<T> = {
 	valid: true;
+	data: T;
 };
 
 export type Invalid = {

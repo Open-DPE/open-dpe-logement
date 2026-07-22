@@ -185,7 +185,6 @@ const MANIFEST = join(
 	"packages",
 	"abaques",
 	"src",
-	"runtime",
 	"manifest.browser.ts",
 );
 
@@ -204,7 +203,7 @@ keys.sort();
 const manifestEntries = keys
 	.map(
 		(key) =>
-			`\t"${key}": new URL("../../data/${key}.json", import.meta.url),`,
+			`\t"${key}": new URL("../data/${key}.json", import.meta.url),`,
 	)
 	.join("\n");
 

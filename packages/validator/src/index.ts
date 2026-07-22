@@ -6,7 +6,7 @@ export { MAP, type Key };
 
 export type { ValidationError, ValidationResponse };
 
-export function validate(key: Key, input: unknown): ValidationResponse {
+export function validate<T>(key: Key, input: unknown): ValidationResponse<T> {
 	const $id = MAP[key];
 	const validator = ajv.getSchema($id);
 
@@ -15,7 +15,7 @@ export function validate(key: Key, input: unknown): ValidationResponse {
 	}
 	const valid = validator(input);
 	return valid
-		? { valid: true }
+		? { valid: true, data: input as T }
 		: {
 				valid: false,
 				errors: (validator.errors ?? []).map((error) => ({

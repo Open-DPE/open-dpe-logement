@@ -14,9 +14,14 @@
   "imports": {
     "#loader.js": {
       "types": "./dist/loader.node.d.ts",
-      "development": "./src/loader.node.ts",
-      "node": "./dist/loader.node.js",
-      "browser": "./dist/loader.browser.js",
+      "browser": {
+        "development": "./src/loader.browser.ts",
+        "default": "./dist/loader.browser.js"
+      },
+      "node": {
+        "development": "./src/loader.node.ts",
+        "default": "./dist/loader.node.js"
+      },
       "default": "./dist/loader.node.js"
     }
   },

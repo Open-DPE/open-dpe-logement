@@ -1,4 +1,4 @@
-import _ressources from "../data/ressources.json";
+import _ressources from "../../data/ressources.json";
 
 export type Ressource = {
 	titre: string;

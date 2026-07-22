@@ -1,31 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
-import * as models from "@open-dpe-logement/models";
-import { createContext, services } from "@open-dpe-logement/engine";
-import { gestes, withGeste } from "../models/geste";
-import { $user, setSimulation } from "../stores/user";
-import { XIcon, PlusIcon } from "lucide-react"
+import { $user } from "../stores/user";
 import { Layout } from "@/components/layout";
-import { Button } from "@/components/ui/button"
-import { Spinner } from "@/components/ui/spinner"
-import { IconGeste } from "@/components/icon-geste";
-import { toast } from "sonner"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { GestesForm } from "@/components/forms";
 
 export function MesTravaux() {
   const navigate = useNavigate();
-  const { diagnostic, gestes: gestesIds } = $user.get();
-  const [pending, setPending] = useState(false);
-  const [selectedGestes, setSelectedGestes] = useState<string[]>(() =>
-    gestes.filter((geste) => gestesIds.includes(geste.id)).map((geste) => geste.id),
-  );
+  const { diagnostic } = $user.get();
 
   useEffect(() => {
     if (null === diagnostic) {
@@ -33,39 +14,8 @@ export function MesTravaux() {
     }
   }, [diagnostic, navigate]);
 
-  if (null === diagnostic) {
-    return;
-  }
-
-  async function handleSubmit(e: React.SubmitEvent) {
-    e.preventDefault();
-
-    if (!diagnostic) {
-      return null;
-    }
-
-    setPending(true);
-
-    let data = structuredClone(diagnostic) as models.diagnostic.Diagnostic;
-
-    for (const gesteId of selectedGestes) {
-      const geste = gestes.find((g) => g.id === gesteId);
-      if (geste) {
-        data = withGeste(data, geste);
-      }
-    }
-
-    try {
-      const context = createContext(data);
-      const simulation = services.diagnostic.calcule(context);
-      setSimulation(simulation, selectedGestes);
-      navigate("/simulation", { viewTransition: true, state: { toast: "Gestes mis à jour" } });
-    } catch (error) {
-      console.error(error, data);
-      toast.error("Une erreur est survenue lors de la simulation.");
-    } finally {
-      setPending(false);
-    }
+  function handleSuccess() {
+    navigate("/apres", { viewTransition: true, state: { toast: "Gestes mis à jour" } });
   }
 
   return (
@@ -76,70 +26,8 @@ export function MesTravaux() {
           Évaluez l'impact de vos travaux sur la performance de votre logement.
         </p>
       </header>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between gap-4">
 
-          {gestes.map((geste) => (
-            <Card
-              key={geste.id}
-              className="mx-auto w-full md:max-w-sm [--card-spacing:--spacing(4)] text-center"
-            >
-              <CardContent>
-                <IconGeste geste={geste.id} className="w-[92px] h-auto m-auto" />
-              </CardContent>
-              <CardHeader className="grow content-start">
-                <CardTitle>{geste.titre}</CardTitle>
-                <CardDescription>
-                  <>
-                    {geste.description.split("\n").map((line, index) => (
-                      <span key={index}>
-                        {line}
-                        <br />
-                      </span>
-                    ))}
-                  </>
-                </CardDescription>
-              </CardHeader>
-              <CardFooter>
-                {selectedGestes.includes(geste.id) ? (
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    className="mx-auto"
-                    disabled={pending}
-                    onClick={() => {
-                      setSelectedGestes((prev) => prev.filter((id) => id !== geste.id));
-                    }}
-                  >
-                    <XIcon /> Supprimer
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    variant="success"
-                    size="sm"
-                    className="mx-auto"
-                    disabled={pending}
-                    onClick={() => {
-                      setSelectedGestes((prev) => [...prev, geste.id]);
-                    }}
-                  >
-                    <PlusIcon /> Ajouter
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-
-        <Button className="mt-8 w-full" disabled={pending}>
-          {pending
-            ? <><Spinner data-icon="inline-start" /> Calcul...</>
-            : "Valider"
-          }
-        </Button>
-      </form>
+      <GestesForm onSuccess={handleSuccess} />
     </Layout>
   );
 }
