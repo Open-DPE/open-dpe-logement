@@ -1,0 +1,541 @@
+# logement/installation_chauffage_collection/installation_chauffage/emetteur_chauffage_collection/emetteur_chauffage/donnee_entree/enum_type_emission_distribution_id
+chauffage/emetteur/type:
+  - enum_type_emission_distribution_id: [11, 12, 13, 14, 43]
+    type: plancher_chauffant
+  - enum_type_emission_distribution_id: [15, 16, 17, 18, 44]
+    type: plafond_chauffant
+  - enum_type_emission_distribution_id: [24, 25, 26, 27, 28, 29, 30, 31]
+    type: radiateur_monotube
+  - enum_type_emission_distribution_id: [32, 33, 34, 35, 36, 37, 38, 39]
+    type: radiateur_bitube
+  - enum_type_emission_distribution_id: [41, 45]
+    type: radiateur
+
+# logement/installation_chauffage_collection/installation_chauffage/emetteur_chauffage_collection/emetteur_chauffage/donnee_entree/enum_temperature_distribution_id
+chauffage/emetteur/temperature_distribution:
+  - enum_temperature_distribution_id: 2
+    temperature_distribution: basse
+  - enum_temperature_distribution_id: 3
+    temperature_distribution: moyenne
+  - enum_temperature_distribution_id: 4
+    temperature_distribution: haute
+
+# logement/installation_chauffage_collection/installation_chauffage/emetteur_chauffage_collection/emetteur_chauffage/donnee_entree/enum_periode_installation_emetteur_id
+chauffage/emetteur/annee_installation:
+  - enum_periode_installation_emetteur_id: 1
+    annee_installation: 1980
+  - enum_periode_installation_emetteur_id: 2
+    annee_installation: 2000
+  - enum_periode_installation_emetteur_id: 3
+    annee_installation: $annee_etablissement
+
+# logement/installation_chauffage_collection/installation_chauffage/emetteur_chauffage_collection/emetteur_chauffage/donnee_entree/enum_type_emission_distribution_id
+chauffage/emetteur/presence_robinet_thermostatique:
+  - enum_type_emission_distribution_id: [24, 25, 26, 27, 28, 32, 33, 34, 35]
+    presence_robinet_thermostatique: false
+  - enum_type_emission_distribution_id: [29, 30, 31, 36, 37, 38, 39]
+    presence_robinet_thermostatique: true
+
+# logement/installation_ecs_collection/installation_ecs/generateur_ecs_collection/generateur_ecs/donnee_entree/enum_type_generateur_ecs_id
+ecs/generateur/type:
+  - enum_type_generateur_ecs_id: [1, 2, 3]
+    type_generateur_ecs: cet_air_ambiant
+  - enum_type_generateur_ecs_id: [4, 5, 6, 7, 8, 9]
+    type_generateur_ecs: cet_air_exterieur
+  - enum_type_generateur_ecs_id: [82, 83]
+    type_generateur_ecs: cet_air_extrait
+  - enum_type_generateur_ecs_id:
+      [
+        10,
+        11,
+        12,
+        77,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+      ]
+    type_generateur_ecs: pac_double_service
+  - enum_type_generateur_ecs_id: [13, 14, 115, 116]
+    type_generateur_ecs: poele_bouilleur
+  - enum_type_generateur_ecs_id:
+      [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        74,
+        75,
+        76,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        118,
+        134,
+      ]
+    type_generateur_ecs: chaudiere
+  - enum_type_generateur_ecs_id:
+      [
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        78,
+        79,
+        80,
+        81,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        117,
+      ]
+    type_generateur_ecs: chauffe_eau
+  - enum_type_generateur_ecs_id: [72, 73, 119]
+    type_generateur_ecs: reseau_chaleur
+
+# logement/installation_ecs_collection/installation_ecs/generateur_ecs_collection/generateur_ecs/donnee_entree/enum_type_generateur_ecs_id
+ecs/generateur/energie:
+  - enum_type_generateur_ecs_id: [80, 13, 14, 15, 16, 17, 18, 19, 20, 21]
+    energie: bois_buche
+  - enum_type_generateur_ecs_id: [29, 30, 31, 32, 33, 34, 115, 116]
+    energie: bois_granule
+  - enum_type_generateur_ecs_id: [22, 23, 24, 25, 26, 27, 28, 74]
+    energie: bois_plaquette
+  - enum_type_generateur_ecs_id: [81, 85, 86, 87, 88, 89, 90, 91, 134]
+    energie: charbon
+  - enum_type_generateur_ecs_id:
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        68,
+        69,
+        70,
+        71,
+        77,
+        82,
+        83,
+        117,
+        118,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+      ]
+    energie: electricite
+  - enum_type_generateur_ecs_id:
+      [35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 75, 79]
+    energie: fioul
+  - enum_type_generateur_ecs_id:
+      [
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        76,
+        78,
+      ]
+    energie: gaz_naturel
+  - enum_type_generateur_ecs_id:
+      [
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+      ]
+    energie: gpl
+  - enum_type_generateur_ecs_id: [72, 73, 119]
+    energie: reseau_chaleur
+
+# logement/installation_ecs_collection/installation_ecs/generateur_ecs_collection/generateur_ecs/donnee_entree/enum_type_generateur_ecs_id
+ecs/generateur/bienergie:
+  - enum_type_generateur_ecs_id: [120, 121]
+    bienergie: gaz_naturel
+  - enum_type_generateur_ecs_id: [122, 123]
+    bienergie: fioul
+  - enum_type_generateur_ecs_id: [124, 125]
+    bienergie: bois_granule
+  - enum_type_generateur_ecs_id: [126, 127, 128]
+    bienergie: bois_buche
+  - enum_type_generateur_ecs_id: [129, 130, 131]
+    bienergie: bois_plaquette
+  - enum_type_generateur_ecs_id: [132, 133]
+    bienergie: gpl
+
+# logement/installation_ecs_collection/installation_ecs/generateur_ecs_collection/generateur_ecs/donnee_entree/enum_type_generateur_ecs_id
+ecs/generateur/annee_installation:
+  - enum_type_generateur_ecs_id: 35
+    annee_installation: 1969
+  - enum_type_generateur_ecs_id: 36
+    annee_installation: 1975
+  - enum_type_generateur_ecs_id: [15, 22, 29, 85]
+    annee_installation: 1977
+  - enum_type_generateur_ecs_id: 16
+    annee_installation: 1978
+  - enum_type_generateur_ecs_id: [63, 110]
+    annee_installation: 1979
+  - enum_type_generateur_ecs_id: [37, 45, 92]
+    annee_installation: 1980
+  - enum_type_generateur_ecs_id: [46, 93, 101]
+    annee_installation: 1985
+  - enum_type_generateur_ecs_id: [58, 64, 105, 111]
+    annee_installation: 1989
+  - enum_type_generateur_ecs_id: [38, 47, 94]
+    annee_installation: 1990
+  - enum_type_generateur_ecs_id: [23, 30, 86]
+    annee_installation: 1994
+  - enum_type_generateur_ecs_id: 17
+    annee_installation: 1995
+  - enum_type_generateur_ecs_id:
+      [48, 51, 55, 59, 61, 65, 95, 98, 102, 106, 108, 112]
+    annee_installation: 2000
+  - enum_type_generateur_ecs_id: [24, 31, 87]
+    annee_installation: 2003
+  - enum_type_generateur_ecs_id: 18
+    annee_installation: 2004
+  - enum_type_generateur_ecs_id: [4, 7, 10]
+    annee_installation: 2009
+  - enum_type_generateur_ecs_id: 1
+    annee_installation: 2010
+  - enum_type_generateur_ecs_id: [13, 115]
+    annee_installation: 2011
+  - enum_type_generateur_ecs_id: [2, 5, 8, 11, 25, 32, 88]
+    annee_installation: 2012
+  - enum_type_generateur_ecs_id: 19
+    annee_installation: 2013
+  - enum_type_generateur_ecs_id:
+      [39, 41, 43, 44, 49, 52, 53, 56, 66, 96, 99, 103, 113, 120, 122, 132]
+    annee_installation: 2015
+  - enum_type_generateur_ecs_id: [26, 89, 126, 129]
+    annee_installation: 2017
+  - enum_type_generateur_ecs_id: 20
+    annee_installation: 2018
+  - enum_type_generateur_ecs_id: [27, 33, 90, 124, 127, 130]
+    annee_installation: 2019
+  - enum_type_generateur_ecs_id: 34
+    annee_installation: 2020
+  - enum_type_generateur_ecs_id:
+      [
+        3,
+        6,
+        9,
+        12,
+        14,
+        21,
+        28,
+        34,
+        40,
+        42,
+        44,
+        50,
+        54,
+        57,
+        60,
+        62,
+        67,
+        91,
+        97,
+        100,
+        104,
+        107,
+        109,
+        114,
+        116,
+        121,
+        123,
+        125,
+        128,
+        131,
+        133,
+      ]
+    annee_installation: $annee_etablissement
+
+# logement/installation_ecs_collection/installation_ecs/donnee_entree/enum_type_installation_id
+ecs/generateur/position/generateur_collectif:
+  - enum_type_installation_id: 1
+    generateur_collectif: false
+  - enum_type_installation_id: [2, 3, 4]
+    generateur_collectif: true
+
+# logement/installation_ecs_collection/installation_ecs/generateur_ecs_collection/generateur_ecs/donnee_entree/enum_type_generateur_ecs_id
+ecs/generateur/signaletique/mode_combustion:
+  - enum_type_generateur_ecs_id:
+      [
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        58,
+        59,
+        60,
+        63,
+        64,
+        65,
+        66,
+        67,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        105,
+        106,
+        107,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+      ]
+    mode_combustion: standard
+  - enum_type_generateur_ecs_id: [41, 42, 51, 52, 53, 98, 99, 100]
+    mode_combustion: basse_temperature
+  - enum_type_generateur_ecs_id:
+      [
+        43,
+        44,
+        54,
+        55,
+        56,
+        57,
+        61,
+        62,
+        101,
+        102,
+        103,
+        104,
+        108,
+        109,
+        120,
+        121,
+        122,
+        123,
+        132,
+        133,
+      ]
+    mode_combustion: condensation
+
+# logement/installation_ecs_collection/installation_ecs/generateur_ecs_collection/generateur_ecs/donnee_entree/enum_type_generateur_ecs_id
+ecs/generateur/signaletique/label:
+  - enum_type_generateur_ecs_id: 70
+    label: ne_performance_b
+  - enum_type_generateur_ecs_id: 71
+    label: ne_performance_c
+
+# logement/installation_ecs_collection/installation_ecs/donnee_entree/enum_type_installation_solaire_id
+ecs/installation/solaire_thermique/annee_installation:
+  - enum_type_installation_solaire: 2
+    annee_installation: $annee_etablissement - 6
+  - enum_type_installation_solaire: 3
+    annee_installation: $annee_etablissement
+
+# logement/installation_ecs_collection/installation_ecs/donnee_entree/tv_rendement_distribution_ecs_id
+ecs/systeme/reseau/alimentation_contigue:
+  - tv_rendement_distribution_ecs_id: [1, 4, 6]
+    alimentation_contigue: true
+  - tv_rendement_distribution_ecs_id: [2, 3, 5, 7, 8]
+    alimentation_contigue: false
+
+# logement/installation_ecs_collection/installation_ecs/donnee_entree/enum_bouclage_reseau_ecs_id
+ecs/systeme/reseau/bouclage:
+  - enum_bouclage_reseau_ecs_id: 1
+    bouclage: non_boucle
+  - enum_bouclage_reseau_ecs_id: 2
+    bouclage: boucle
+  - enum_bouclage_reseau_ecs_id: 3
+    bouclage: trace
+
+# logement/installation_ecs_collection/installation_ecs/generateur_ecs_collection/generateur_ecs/donnee_entree/enum_type_generateur_ecs_id
+ecs/systeme/reseau/isolation:
+  - enum_type_generateur_ecs_id: 72
+    isolation: false
+  - enum_type_generateur_ecs_id: 73
+    isolation: true

@@ -58,6 +58,24 @@ properties:
   annee_installation:
     $ref: /common#/$defs/annee_installation
   position:
+    $ref: "#/$defs/position"
+  signaletique:
+    $ref: "#/$defs/signaletique"
+  data:
+    $ref: "#/$defs/data"
+
+required:
+  - id
+  - description
+  - type
+  - energie
+  - bienergie
+  - annee_installation
+  - position
+  - signaletique
+
+$defs:
+  position:
     title: Position
     type: object
     unevaluatedProperties: false
@@ -123,6 +141,7 @@ properties:
         required:
           - generateur_collectif
           - position_volume_chauffe
+
   signaletique:
     title: Fiche signalétique
     type: object
@@ -201,20 +220,7 @@ properties:
       - rpint
       - tfonc30
       - tfonc100
-  data:
-    $ref: "#/$defs/data"
 
-required:
-  - id
-  - description
-  - type
-  - energie
-  - bienergie
-  - annee_installation
-  - position
-  - signaletique
-
-$defs:
   data:
     title: Données calculées
     type: object
