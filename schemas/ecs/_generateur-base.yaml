@@ -99,25 +99,51 @@ properties:
           - position_volume_chauffe
   stockage:
     title: Stockage
-    type: [object, "null"]
+    type: object
     unevaluatedProperties: false
     properties:
+      volume:
+        title: Volume de stockage en l
+        type: [integer, "null"]
+        minimum: 0
       type:
         title: Type de stockage
         type: [string, "null"]
         x-enum: ecs:type-stockage
         enum: [integre, independant, null]
-      volume:
-        title: Volume de stockage en l
-        type: integer
-        exclusiveMinimum: 0
       position_volume_chauffe:
         title: Position à l'intérieur volume chauffé
-        type: boolean
+        type: [boolean, "null"]
     required:
-      - type
       - volume
-      - position_volume_chauffe
+
+    oneOf:
+      - title: Absence de stockage
+        type: object
+        properties:
+          volume:
+            const: 0
+          type:
+            $ref: "/common#/$defs/non_applicable"
+          position_volume_chauffe:
+            $ref: "/common#/$defs/non_applicable"
+        required:
+          - volume
+      - title: Présence de stockage
+        type: object
+        properties:
+          volume:
+            not:
+              const: 0
+          type:
+            type: string
+          position_volume_chauffe:
+            type: boolean
+        required:
+          - volume
+          - type
+          - position_volume_chauffe
+
   signaletique:
     title: Fiche signalétique
     type: object

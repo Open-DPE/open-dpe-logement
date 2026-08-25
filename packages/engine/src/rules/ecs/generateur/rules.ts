@@ -358,7 +358,7 @@ export function volume_stockage(
 ): ReturnType<typeof formulas.set_volume_stockage> {
 	return ctx.register(NAMESPACE, RULES.volume_stockage, item, () =>
 		formulas.set_volume_stockage({
-			volume_stockage: item.stockage?.volume ?? null,
+			volume_stockage: item.stockage.volume,
 		}),
 	);
 }

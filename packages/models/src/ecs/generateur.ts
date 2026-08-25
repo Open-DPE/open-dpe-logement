@@ -78,11 +78,17 @@ export type Signaletique = {
 	rpn: number | null;
 };
 
-export type Stockage = {
-	volume: number;
-	type: TypeStockage;
-	position_volume_chauffe: boolean;
-};
+export type Stockage =
+	| {
+			volume: 0;
+			type: null;
+			position_volume_chauffe: null;
+	  }
+	| {
+			volume: number | null;
+			type: TypeStockage;
+			position_volume_chauffe: boolean;
+	  };
 
 export type GenerateurBase = {
 	id: UUID;
@@ -92,7 +98,7 @@ export type GenerateurBase = {
 	bienergie: Bienergie | null;
 	annee_installation: number | null;
 	position: Position;
-	stockage: Stockage | null;
+	stockage: Stockage;
 	signaletique: Signaletique;
 };
 
