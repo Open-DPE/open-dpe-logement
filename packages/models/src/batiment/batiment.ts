@@ -9,7 +9,11 @@ export { appartement };
  */
 export type Batiment = Maison | Immeuble;
 
-type BaseBatiment = {
+export function isBatiment(value: BatimentBase): value is Batiment {
+	return isMaison(value) || isImmeuble(value);
+}
+
+export type BatimentBase = {
 	type: TypeBatiment;
 	annee_construction: number;
 	annee_renovation: number | null;
@@ -24,16 +28,26 @@ type BaseBatiment = {
 	logement: Logement | null;
 };
 
-export type Maison = BaseBatiment & {
+type _Batiment<T extends Partial<BatimentBase>> = BatimentBase & T;
+
+export type Maison = _Batiment<{
 	type: typeof TypeBatimentEnum.maison;
 	logements: 1 | 2;
 	appartements_visites: [];
-};
+}>;
 
-export type Immeuble = BaseBatiment & {
+export function isMaison(value: BatimentBase): value is Maison {
+	return value.type === TypeBatimentEnum.maison;
+}
+
+export type Immeuble = _Batiment<{
 	type: typeof TypeBatimentEnum.immeuble;
 	logements: number;
-};
+}>;
+
+export function isImmeuble(value: BatimentBase): value is Immeuble {
+	return value.type === TypeBatimentEnum.immeuble;
+}
 
 export type BatimentWithData<T extends Batiment = Batiment> = T & {
 	data: BatimentData;

@@ -61,9 +61,13 @@ export type TypeIsolation = (typeof TYPES_ISOLATION)[number];
 export const TypeIsolationEnum = buildEnum(TYPES_ISOLATION);
 
 /**
- * @see https://schemas.open-dpe.fr/enveloppe/common/components../$defs/position
+ * @see https://schemas.open-dpe.fr/enveloppe/common/components/$defs/position
  */
 export type Position = PositionParoiLocalNonChauffe | PositionParoiAutres;
+
+export function isPosition(value: PositionBase): value is Position {
+	return isPositionParoiLocalNonChauffe(value) || isPositionParoiAutres(value);
+}
 
 export type PositionBase = {
 	surface: number;
@@ -71,26 +75,28 @@ export type PositionBase = {
 	local_non_chauffe_id: UUID | null;
 };
 
-export type PositionParoiLocalNonChauffe = PositionBase & {
+type _Position<T extends Partial<PositionBase>> = PositionBase & T;
+
+export type PositionParoiLocalNonChauffe = _Position<{
 	mitoyennete: typeof MitoyenneteEnum.local_non_chauffe;
 	local_non_chauffe_id: UUID;
-};
-
-export type PositionParoiAutres = PositionBase & {
-	mitoyennete: Exclude<Mitoyennete, typeof MitoyenneteEnum.local_non_chauffe>;
-	local_non_chauffe_id: null;
-};
+}>;
 
 export function isPositionParoiLocalNonChauffe(
-	position: Position,
-): position is PositionParoiLocalNonChauffe {
-	return position.mitoyennete === MitoyenneteEnum.local_non_chauffe;
+	value: PositionBase,
+): value is PositionParoiLocalNonChauffe {
+	return value.mitoyennete === MitoyenneteEnum.local_non_chauffe;
 }
 
+export type PositionParoiAutres = _Position<{
+	mitoyennete: Exclude<Mitoyennete, typeof MitoyenneteEnum.local_non_chauffe>;
+	local_non_chauffe_id: null;
+}>;
+
 export function isPositionParoiAutres(
-	position: Position,
-): position is PositionParoiAutres {
-	return position.mitoyennete !== MitoyenneteEnum.local_non_chauffe;
+	value: PositionBase,
+): value is PositionParoiAutres {
+	return value.mitoyennete !== MitoyenneteEnum.local_non_chauffe;
 }
 
 /**
@@ -102,58 +108,72 @@ export type Isolation =
 	| TypeIsolationInconnue
 	| IsolationConnue;
 
-export type SansIsolation = {
-	etat: false;
-	type: null;
-	annee_installation: null;
-	epaisseur: null;
-	resistance_thermique: null;
-};
+export function isIsolation(value: IsolationBase): value is Isolation {
+	return (
+		isSansIsolation(value) ||
+		isIsolationInconnue(value) ||
+		isTypeIsolationInconnue(value) ||
+		isIsolationConnue(value)
+	);
+}
 
-export type IsolationInconnue = {
-	etat: null;
-	type: null;
-	annee_installation: null;
-	epaisseur: null;
-	resistance_thermique: null;
-};
-
-export type TypeIsolationInconnue = {
-	etat: true;
-	type: null;
-	annee_installation: null;
-	epaisseur: null;
-	resistance_thermique: null;
-};
-
-export type IsolationConnue = {
-	etat: true;
-	type: TypeIsolation;
+export type IsolationBase = {
+	etat: boolean | null;
+	type: TypeIsolation | null;
 	annee_installation: number | null;
 	epaisseur: number | null;
 	resistance_thermique: number | null;
 };
 
-export function isSansIsolation(
-	isolation: Isolation,
-): isolation is SansIsolation {
-	return isolation.etat === false;
+type _Isolation<T extends Partial<IsolationBase>> = IsolationBase & T;
+
+export type SansIsolation = _Isolation<{
+	etat: false;
+	type: null;
+	annee_installation: null;
+	epaisseur: null;
+	resistance_thermique: null;
+}>;
+
+export function isSansIsolation(value: IsolationBase): value is SansIsolation {
+	return value.etat === false;
 }
+
+export type IsolationInconnue = _Isolation<{
+	etat: null;
+	type: null;
+	annee_installation: null;
+	epaisseur: null;
+	resistance_thermique: null;
+}>;
 
 export function isIsolationInconnue(
-	isolation: Isolation,
-): isolation is IsolationInconnue {
-	return isolation.etat === null;
+	value: IsolationBase,
+): value is IsolationInconnue {
+	return value.etat === null;
 }
+
+export type TypeIsolationInconnue = _Isolation<{
+	etat: true;
+	type: null;
+	annee_installation: null;
+	epaisseur: null;
+	resistance_thermique: null;
+}>;
 
 export function isTypeIsolationInconnue(
-	isolation: Isolation,
-): isolation is TypeIsolationInconnue {
-	return isolation.etat === true && isolation.type === null;
+	value: IsolationBase,
+): value is TypeIsolationInconnue {
+	return value.etat === true && value.type === null;
 }
 
+export type IsolationConnue = _Isolation<{
+	etat: true;
+	type: TypeIsolation;
+}>;
+
 export function isIsolationConnue(
-	isolation: Isolation,
-): isolation is IsolationConnue {
-	return isolation.etat === true && isolation.type !== null;
+	value: IsolationBase,
+): value is IsolationConnue {
+	return value.etat === true && value.type !== null;
 }

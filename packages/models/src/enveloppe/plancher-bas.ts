@@ -3,7 +3,7 @@ import { buildEnum } from "../utils.js";
 import {
 	type InertieParoi,
 	type Isolation,
-	type Position as PositionBase,
+	type Position as _Position,
 	MitoyenneteEnum,
 } from "./common.js";
 
@@ -37,6 +37,15 @@ export type PlancherBasData = {
 
 export type Position = PositionTerrePlein | PositionAutres;
 
+export function isPosition(value: PositionBase): value is Position {
+	return isPositionTerrePlein(value) || isPositionAutres(value);
+}
+
+export type PositionBase = _Position & {
+	surface_ue: number | null;
+	perimetre_ue: number | null;
+};
+
 export type PositionTerrePlein = PositionBase & {
 	mitoyennete:
 		| typeof MitoyenneteEnum.enterre
@@ -46,6 +55,17 @@ export type PositionTerrePlein = PositionBase & {
 	surface_ue: number;
 	perimetre_ue: number;
 };
+
+export function isPositionTerrePlein(
+	value: PositionBase,
+): value is PositionTerrePlein {
+	return (
+		value.mitoyennete === MitoyenneteEnum.enterre ||
+		value.mitoyennete === MitoyenneteEnum.vide_sanitaire ||
+		value.mitoyennete === MitoyenneteEnum.terre_plein ||
+		value.mitoyennete === MitoyenneteEnum.sous_sol_non_chauffe
+	);
+}
 
 export type PositionAutres = PositionBase & {
 	mitoyennete:
@@ -58,26 +78,13 @@ export type PositionAutres = PositionBase & {
 	perimetre_ue: null;
 };
 
-export function isPositionTerrePlein(
-	position: Position,
-): position is PositionTerrePlein {
+export function isPositionAutres(value: PositionBase): value is PositionAutres {
 	return (
-		position.mitoyennete === MitoyenneteEnum.enterre ||
-		position.mitoyennete === MitoyenneteEnum.vide_sanitaire ||
-		position.mitoyennete === MitoyenneteEnum.terre_plein ||
-		position.mitoyennete === MitoyenneteEnum.sous_sol_non_chauffe
-	);
-}
-
-export function isPositionAutres(
-	position: Position,
-): position is PositionAutres {
-	return (
-		position.mitoyennete === MitoyenneteEnum.exterieur ||
-		position.mitoyennete === MitoyenneteEnum.local_non_chauffe ||
-		position.mitoyennete === MitoyenneteEnum.local_non_residentiel ||
-		position.mitoyennete === MitoyenneteEnum.local_residentiel ||
-		position.mitoyennete === MitoyenneteEnum.local_non_accessible
+		value.mitoyennete === MitoyenneteEnum.exterieur ||
+		value.mitoyennete === MitoyenneteEnum.local_non_chauffe ||
+		value.mitoyennete === MitoyenneteEnum.local_non_residentiel ||
+		value.mitoyennete === MitoyenneteEnum.local_residentiel ||
+		value.mitoyennete === MitoyenneteEnum.local_non_accessible
 	);
 }
 

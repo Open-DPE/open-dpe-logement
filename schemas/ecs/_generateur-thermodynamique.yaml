@@ -13,7 +13,10 @@ properties:
       - cet_air_ambiant
       - cet_air_exterieur
       - cet_air_extrait
-      - pac_double_service
+      - pac_air_eau
+      - pac_eau_eau
+      - pac_eau_glycolee_eau
+      - pac_geothermique
   energie:
     const: electricite
   position:
@@ -86,7 +89,11 @@ oneOf:
     type: object
     properties:
       type:
-        const: pac_double_service
+        enum:
+          - pac_air_eau
+          - pac_eau_eau
+          - pac_eau_glycolee_eau
+          - pac_geothermique
       bienergie:
         $ref: "/common#/$defs/non_applicable"
       signaletique:
@@ -114,15 +121,25 @@ oneOf:
       - position
       - signaletique
 
-  - title: PAC hybride
+  - title: PAC double service hybride
     type: object
     properties:
       type:
-        const: pac_double_service
+        enum:
+          - pac_air_eau
+          - pac_eau_eau
+          - pac_eau_glycolee_eau
+          - pac_geothermique
       bienergie:
         type: string
         x-enum: energie
-        enum: [gaz_naturel, gpl, fioul]
+        enum:
+          - gaz_naturel
+          - gpl
+          - fioul
+          - bois_buche
+          - bois_plaquette
+          - bois_granule
     required:
       - type
       - bienergie

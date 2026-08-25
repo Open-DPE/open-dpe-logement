@@ -10,17 +10,19 @@ export type Generateur =
 	| GenerateurClimatiseur
 	| GenerateurReseauFroid;
 
+export function isGenerateur(value: GenerateurBase): value is Generateur {
+	return (
+		isGenerateurPAC(value) ||
+		isGenerateurClimatiseur(value) ||
+		isGenerateurReseauFroid(value)
+	);
+}
+
 export type GenerateurWithData<T extends Generateur = Generateur> = T & {
 	data: GenerateurData;
 };
 
-type GenerateurType<
-	T extends {
-		type: TypeGenerateur;
-		energie: EnergieRefroidissement;
-		reseau_froid_id?: string | null;
-	},
-> = {
+export type GenerateurBase = {
 	id: UUID;
 	description: string;
 	type: TypeGenerateur;
@@ -28,15 +30,25 @@ type GenerateurType<
 	annee_installation: number | null;
 	seer: number | null;
 	reseau_froid_id: string | null;
-} & T;
+};
 
-export type GenerateurPAC = GenerateurType<{
+type _Generateur<
+	T extends Partial<
+		Pick<GenerateurBase, "type" | "energie" | "reseau_froid_id">
+	>,
+> = GenerateurBase & T;
+
+export type GenerateurPAC = _Generateur<{
 	type: TypeGenerateurPac;
 	energie: typeof EnergieRefroidissementEnum.electricite;
 	reseau_froid_id: null;
 }>;
 
-export type GenerateurClimatiseur = GenerateurType<{
+export function isGenerateurPAC(value: GenerateurBase): value is GenerateurPAC {
+	return TYPES_GENERATEUR_PAC.includes(value.type as TypeGenerateurPac);
+}
+
+export type GenerateurClimatiseur = _Generateur<{
 	type: typeof TypeGenerateurEnum.autre;
 	energie: Exclude<
 		EnergieRefroidissement,
@@ -45,11 +57,23 @@ export type GenerateurClimatiseur = GenerateurType<{
 	reseau_froid_id: null;
 }>;
 
-export type GenerateurReseauFroid = GenerateurType<{
+export function isGenerateurClimatiseur(
+	value: GenerateurBase,
+): value is GenerateurClimatiseur {
+	return value.type === TypeGenerateurEnum.autre;
+}
+
+export type GenerateurReseauFroid = _Generateur<{
 	type: typeof TypeGenerateurEnum.reseau_froid;
 	energie: typeof EnergieRefroidissementEnum.reseau_froid;
 	reseau_froid_id: string | null;
 }>;
+
+export function isGenerateurReseauFroid(
+	value: GenerateurBase,
+): value is GenerateurReseauFroid {
+	return value.type === TypeGenerateurEnum.reseau_froid;
+}
 
 export type GenerateurData = {
 	rdim: number;

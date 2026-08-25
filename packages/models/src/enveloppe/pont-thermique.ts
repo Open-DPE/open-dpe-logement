@@ -30,7 +30,18 @@ export type Liaison =
 	| PorteMur
 	| BaieMur;
 
-type LiaisonBase = {
+export function isLiaison(value: LiaisonBase): value is Liaison {
+	return (
+		isRefendMur(value) ||
+		isPlancherBasMur(value) ||
+		isPlancherHautMur(value) ||
+		isPlancherIntermediaireMur(value) ||
+		isPorteMur(value) ||
+		isBaieMur(value)
+	);
+}
+
+export type LiaisonBase = {
 	type: TypeLiaison;
 	mur_id: UUID;
 	plancher_id: UUID | null;
@@ -38,49 +49,77 @@ type LiaisonBase = {
 	pont_thermique_partiel: boolean | null;
 };
 
-type LiaisonG<T = Partial<LiaisonBase>> = LiaisonBase & T;
+type _Liaison<T = Partial<LiaisonBase>> = LiaisonBase & T;
 
-export type RefendMur = LiaisonG<{
+export type RefendMur = _Liaison<{
 	type: typeof TypeLiaisonEnum.refend_mur;
 	plancher_id: null;
 	ouverture_id: null;
 	pont_thermique_partiel: boolean;
 }>;
 
-export type PlancherBasMur = LiaisonG<{
+export function isRefendMur(value: LiaisonBase): value is RefendMur {
+	return value.type === TypeLiaisonEnum.refend_mur;
+}
+
+export type PlancherBasMur = _Liaison<{
 	type: typeof TypeLiaisonEnum.plancher_bas_mur;
 	plancher_id: string;
 	ouverture_id: null;
 	pont_thermique_partiel: false;
 }>;
 
-export type PlancherHautMur = LiaisonG<{
+export function isPlancherBasMur(value: LiaisonBase): value is PlancherBasMur {
+	return value.type === TypeLiaisonEnum.plancher_bas_mur;
+}
+
+export type PlancherHautMur = _Liaison<{
 	type: typeof TypeLiaisonEnum.plancher_haut_mur;
 	plancher_id: string;
 	ouverture_id: null;
 	pont_thermique_partiel: false;
 }>;
 
-export type PlancherIntermediaireMur = LiaisonG<{
+export function isPlancherHautMur(
+	value: LiaisonBase,
+): value is PlancherHautMur {
+	return value.type === TypeLiaisonEnum.plancher_haut_mur;
+}
+
+export type PlancherIntermediaireMur = _Liaison<{
 	type: typeof TypeLiaisonEnum.plancher_intermediaire_mur;
 	plancher_id: null;
 	ouverture_id: null;
 	pont_thermique_partiel: boolean;
 }>;
 
-export type PorteMur = LiaisonG<{
+export function isPlancherIntermediaireMur(
+	value: LiaisonBase,
+): value is PlancherIntermediaireMur {
+	return value.type === TypeLiaisonEnum.plancher_intermediaire_mur;
+}
+
+export type PorteMur = _Liaison<{
 	type: typeof TypeLiaisonEnum.porte_mur;
 	plancher_id: null;
 	ouverture_id: string;
 	pont_thermique_partiel: false;
 }>;
 
-export type BaieMur = LiaisonG<{
+export function isPorteMur(value: LiaisonBase): value is PorteMur {
+	return value.type === TypeLiaisonEnum.porte_mur;
+}
+
+export type BaieMur = _Liaison<{
 	type: typeof TypeLiaisonEnum.baie_mur;
 	plancher_id: null;
 	ouverture_id: string;
 	pont_thermique_partiel: false;
 }>;
+
+export function isBaieMur(value: LiaisonBase): value is BaieMur {
+	return value.type === TypeLiaisonEnum.baie_mur;
+}
 
 export const TYPES_LIAISON = [
 	"plancher_bas_mur",

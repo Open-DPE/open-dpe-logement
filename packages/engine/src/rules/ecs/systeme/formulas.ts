@@ -245,7 +245,7 @@ export function calcule_rendements_reseau_chaleur(props: {
  * @guard :
  * - {@linkcode models.ecs.generateur.isChaudiereCombustion} ||
  * - {@linkcode models.ecs.generateur.isPoeleBoisBouilleur} ||
- * - {@linkcode models.ecs.generateur.isPacHybride} ||
+ * - {@linkcode models.ecs.generateur.isPacDoubleServiceHybride} ||
  * - {@linkcode models.ecs.generateur.isGenerateurCollectifInconnu}
  * @returns Rendements de la chaudière mixte
  */

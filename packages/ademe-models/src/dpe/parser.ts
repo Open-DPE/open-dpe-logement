@@ -27,6 +27,15 @@ const STRING_ONLY_TAGS = new Set([
 
 const COLLECTION_SUFFIX = "_collection";
 
+const REFERENCE_TAGS = new Set([
+	"reference",
+	"reference_1",
+	"reference_2",
+	"reference_lnc",
+	"reference_paroi",
+	"reference_generateur_mixte",
+]);
+
 /**
  * Normalise récursivement l'arbre issu de fast-xml-parser :
  * - force les tags de STRING_ONLY_TAGS à rester des chaînes
@@ -50,6 +59,11 @@ function normalize(node: unknown): unknown {
 		if (STRING_ONLY_TAGS.has(key)) {
 			result[key] = typeof rawValue === "number" ? String(rawValue) : rawValue;
 			continue;
+		}
+		if (REFERENCE_TAGS.has(key)) {
+			result[key] = (typeof rawValue !== "string" ? String(rawValue) : rawValue)
+				.trim()
+				.toLowerCase();
 		}
 
 		const value = normalize(rawValue);

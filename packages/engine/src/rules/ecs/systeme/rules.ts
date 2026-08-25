@@ -217,7 +217,7 @@ export function rendements(ctx: Context, item: Systeme): formulas.Rendements {
 
 			case models.ecs.generateur.isChaudiereCombustion(generateur):
 			case models.ecs.generateur.isPoeleBoisBouilleur(generateur):
-			case models.ecs.generateur.isPacHybride(generateur):
+			case models.ecs.generateur.isPacDoubleServiceHybride(generateur):
 			case models.ecs.generateur.isGenerateurCollectifInconnu(generateur):
 				return formulas.calcule_rendements_chaudiere_mixte({
 					rd,

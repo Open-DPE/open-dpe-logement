@@ -208,7 +208,7 @@ export function cop(
 		switch (true) {
 			case models.ecs.generateur.isChauffeEauThermodynamique(item):
 			case models.ecs.generateur.isPacDoubleService(item):
-			case models.ecs.generateur.isPacHybride(item):
+			case models.ecs.generateur.isPacDoubleServiceHybride(item):
 				return formulas.calcule_cop({
 					type_generateur: type_generateur(ctx, item),
 					cop_saisi: item.signaletique.cop,
@@ -234,7 +234,7 @@ export function combustion(
 			case models.ecs.generateur.isChaudiereCombustion(item):
 			case models.ecs.generateur.isPoeleBoisBouilleur(item):
 			case models.ecs.generateur.isChauffeEauGaz(item):
-			case models.ecs.generateur.isPacHybride(item):
+			case models.ecs.generateur.isPacDoubleServiceHybride(item):
 			case models.ecs.generateur.isGenerateurCollectifInconnu(item): {
 				return formulas.calcule_combustion({
 					type_generateur: type_generateur(ctx, item),

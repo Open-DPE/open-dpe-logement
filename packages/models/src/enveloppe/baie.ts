@@ -4,7 +4,7 @@ import type { Masque } from "./masque.js";
 import type {
 	Orientation,
 	OrientationHorizontale,
-	Position as BasePosition,
+	Position as _PositionBase,
 	TypePose,
 } from "./common.js";
 
@@ -16,7 +16,15 @@ export type Baie =
 	| BaiePolycarbonate
 	| BaieFenetreOuPorteFenetre;
 
-type BaieBase = {
+export function isBaie(value: BaieBase): value is Baie {
+	return (
+		isBaieBriqueVerre(value) ||
+		isBaiePolycarbonate(value) ||
+		isBaieFenetreOuPorteFenetre(value)
+	);
+}
+
+export type BaieBase = {
 	id: UUID;
 	description: string;
 	type: TypeBaie;
@@ -33,38 +41,55 @@ type BaieBase = {
 	survitrage: Survitrage | null;
 };
 
-export type BaieBriqueVerre = BaieBase & {
+type _Baie<T extends Partial<BaieBase>> = BaieBase & T;
+
+export type BaieBriqueVerre = _Baie<{
 	type:
 		| typeof TypeBaieEnum.brique_verre_pleine
 		| typeof TypeBaieEnum.brique_verre_creuse;
-	vitrage: {
-		type: typeof TypeVitrageEnum.brique_verre;
-	};
+	vitrage: BriqueVerre;
 	menuiserie: null;
-};
+}>;
 
-export type BaiePolycarbonate = BaieBase & {
+export function isBaieBriqueVerre(value: BaieBase): value is BaieBriqueVerre {
+	return (
+		value.type === TypeBaieEnum.brique_verre_pleine ||
+		value.type === TypeBaieEnum.brique_verre_creuse
+	);
+}
+
+export type BaiePolycarbonate = _Baie<{
 	type: typeof TypeBaieEnum.polycarbonate;
-	vitrage: {
-		type: typeof TypeVitrageEnum.polycarbonate;
-	};
+	vitrage: Polycarbonate;
 	menuiserie: null;
-};
+}>;
 
-export type BaieFenetreOuPorteFenetre = BaieBase & {
+export function isBaiePolycarbonate(
+	value: BaieBase,
+): value is BaiePolycarbonate {
+	return value.type === TypeBaieEnum.polycarbonate;
+}
+
+export type BaieFenetreOuPorteFenetre = _Baie<{
 	type:
 		| typeof TypeBaieEnum.fenetre_battante
 		| typeof TypeBaieEnum.fenetre_coulissante
 		| typeof TypeBaieEnum.porte_fenetre_coulissante
 		| typeof TypeBaieEnum.porte_fenetre_battante;
-	vitrage: {
-		type: Exclude<
-			TypeVitrage,
-			typeof TypeVitrageEnum.brique_verre | typeof TypeVitrageEnum.polycarbonate
-		>;
-	};
+	vitrage: VitrageComplexe | VitrageSimple | VitrageInconnu;
 	menuiserie: Menuiserie;
-};
+}>;
+
+export function isBaieFenetreOuPorteFenetre(
+	value: BaieBase,
+): value is BaieFenetreOuPorteFenetre {
+	return (
+		value.type === TypeBaieEnum.fenetre_battante ||
+		value.type === TypeBaieEnum.fenetre_coulissante ||
+		value.type === TypeBaieEnum.porte_fenetre_coulissante ||
+		value.type === TypeBaieEnum.porte_fenetre_battante
+	);
+}
 
 export type BaieWithData<T extends Baie = Baie> = T & {
 	data: BaieData;
@@ -83,24 +108,44 @@ export type BaieData = {
 	sse: number;
 };
 
-export type Position = BasePosition & {
+export type Position = PositionHorizontale | PositionVerticale;
+
+export function isPosition(value: PositionBase): value is Position {
+	return isPositionHorizontale(value) || isPositionVerticale(value);
+}
+
+export type PositionBase = _PositionBase & {
 	paroi_id: UUID | null;
 	baie_id: UUID | null;
-	type_pose: TypePose;
+	type_pose: TypePose | null;
 	inclinaison: number;
 	orientation: Orientation;
 	masques: Masque[];
-} & (PositionHorizontale | PositionVerticale);
+};
 
-export type PositionHorizontale = {
+type _Position<T extends Partial<PositionBase>> = PositionBase & T;
+
+export type PositionHorizontale = _Position<{
 	inclinaison: 0;
 	orientation: typeof OrientationHorizontale;
-};
+}>;
 
-export type PositionVerticale = {
+export function isPositionHorizontale(
+	value: PositionBase,
+): value is PositionHorizontale {
+	return value.inclinaison === 0;
+}
+
+export type PositionVerticale = _Position<{
 	inclinaison: number;
 	orientation: Exclude<Orientation, typeof OrientationHorizontale>;
-};
+}>;
+
+export function isPositionVerticale(
+	value: PositionBase,
+): value is PositionVerticale {
+	return value.inclinaison > 0;
+}
 
 export type Menuiserie = {
 	materiau: Materiau | null;
@@ -111,21 +156,42 @@ export type Menuiserie = {
 	presence_rupteur_pont_thermique: boolean | null;
 };
 
-export type Vitrage = VitrageSimple | VitrageComplexe | AutresVitrages;
+export type Vitrage =
+	| VitrageSimple
+	| VitrageComplexe
+	| BriqueVerre
+	| Polycarbonate
+	| VitrageInconnu;
 
-type VitrageBase = {
+export function isVitrage(value: VitrageBase): value is Vitrage {
+	return (
+		isVitrageSimple(value) ||
+		isVitrageComplexe(value) ||
+		isBriqueVerre(value) ||
+		isPolycarbonate(value) ||
+		isVitrageInconnu(value)
+	);
+}
+
+export type VitrageBase = {
 	type: TypeVitrage | null;
 	nature_lame: NatureLame | null;
 	epaisseur_lame: number | null;
 };
 
-export type VitrageSimple = VitrageBase & {
+type _Vitrage<T extends Partial<VitrageBase>> = VitrageBase & T;
+
+export type VitrageSimple = _Vitrage<{
 	type: typeof TypeVitrageEnum.simple_vitrage;
 	nature_lame: null;
 	epaisseur_lame: null;
-};
+}>;
 
-export type VitrageComplexe = VitrageBase & {
+export function isVitrageSimple(value: VitrageBase): value is VitrageSimple {
+	return value.type === TypeVitrageEnum.simple_vitrage;
+}
+
+export type VitrageComplexe = _Vitrage<{
 	type:
 		| typeof TypeVitrageEnum.double_vitrage
 		| typeof TypeVitrageEnum.double_vitrage_fe
@@ -133,16 +199,48 @@ export type VitrageComplexe = VitrageBase & {
 		| typeof TypeVitrageEnum.triple_vitrage_fe;
 	nature_lame: NatureLame | null;
 	epaisseur_lame: number | null;
-};
+}>;
 
-export type AutresVitrages = VitrageBase & {
-	type:
-		| typeof TypeVitrageEnum.polycarbonate
-		| typeof TypeVitrageEnum.brique_verre
-		| null;
+export function isVitrageComplexe(
+	value: VitrageBase,
+): value is VitrageComplexe {
+	return (
+		value.type === TypeVitrageEnum.double_vitrage ||
+		value.type === TypeVitrageEnum.double_vitrage_fe ||
+		value.type === TypeVitrageEnum.triple_vitrage ||
+		value.type === TypeVitrageEnum.triple_vitrage_fe
+	);
+}
+
+export type BriqueVerre = _Vitrage<{
+	type: typeof TypeVitrageEnum.brique_verre;
 	nature_lame: null;
 	epaisseur_lame: null;
-};
+}>;
+
+export function isBriqueVerre(value: VitrageBase): value is BriqueVerre {
+	return value.type === TypeVitrageEnum.brique_verre;
+}
+
+export type Polycarbonate = _Vitrage<{
+	type: typeof TypeVitrageEnum.polycarbonate;
+	nature_lame: null;
+	epaisseur_lame: null;
+}>;
+
+export function isPolycarbonate(value: VitrageBase): value is Polycarbonate {
+	return value.type === TypeVitrageEnum.polycarbonate;
+}
+
+export type VitrageInconnu = _Vitrage<{
+	type: null;
+	nature_lame: null;
+	epaisseur_lame: null;
+}>;
+
+export function isVitrageInconnu(value: VitrageBase): value is VitrageInconnu {
+	return value.type === null;
+}
 
 export type Survitrage = {
 	type: TypeSurvitrage | null;

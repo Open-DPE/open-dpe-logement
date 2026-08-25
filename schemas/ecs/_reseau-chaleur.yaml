@@ -28,6 +28,8 @@ properties:
         default: false
       generateur_mixte_id:
         $ref: "/common#/$defs/non_applicable"
+      position_chauffe_eau:
+        $ref: "/common#/$defs/non_applicable"
       reseau_chaleur_id:
         type: [string, "null"]
     required:
@@ -35,6 +37,7 @@ properties:
       - generateur_multi_batiment
       - position_volume_chauffe
       - generateur_mixte_id
+      - position_chauffe_eau
       - reseau_chaleur_id
   signaletique:
     type: object

@@ -549,6 +549,9 @@ export const BIENERGIES = [
 	EnergieEnum.gaz_naturel,
 	EnergieEnum.gpl,
 	EnergieEnum.fioul,
+	EnergieEnum.bois_buche,
+	EnergieEnum.bois_plaquette,
+	EnergieEnum.bois_granule,
 ] as const satisfies readonly EnergieChauffage[];
 export type Bienergie = (typeof BIENERGIES)[number];
 export const BienergieEnum = buildEnum(BIENERGIES);

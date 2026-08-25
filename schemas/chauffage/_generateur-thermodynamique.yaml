@@ -96,7 +96,13 @@ oneOf:
           - pac_geothermique
       bienergie:
         x-enum: energie
-        enum: [gaz_naturel, gpl, fioul]
+        enum:
+          - gaz_naturel
+          - gpl
+          - fioul
+          - bois_buche
+          - bois_plaquette
+          - bois_granule
       signaletique:
         type: object
         properties:

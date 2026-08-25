@@ -9,46 +9,54 @@ import * as paroi from "./local-non-chauffe/paroi.js";
 
 export { baie, paroi };
 
-export function isEspaceTamponSolarise(
-	localNonChauffe: LocalNonChauffe,
-): localNonChauffe is EspaceTamponSolarise {
-	return localNonChauffe.type === TypeLncEnum.espace_tampon_solarise;
-}
-
-export function isAutreLocalNonChauffe(
-	localNonChauffe: LocalNonChauffe,
-): localNonChauffe is AutreLocalNonChauffe {
-	return localNonChauffe.type !== TypeLncEnum.espace_tampon_solarise;
-}
-
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/local-non-chauffe
  */
 export type LocalNonChauffe = EspaceTamponSolarise | AutreLocalNonChauffe;
 
-type LocalNonChauffeType<
-	T extends {
-		type: TypeLnc;
-		baies?: baie.Baie[];
-		parois?: paroi.Paroi[];
-	},
-> = {
+export function isLocalNonChauffe(
+	value: LocalNonChauffeBase,
+): value is LocalNonChauffe {
+	return isEspaceTamponSolarise(value) || isAutreLocalNonChauffe(value);
+}
+
+export type LocalNonChauffeBase = {
 	id: UUID;
 	description: string;
 	type: TypeLnc;
 	parois: paroi.Paroi[];
 	baies: baie.Baie[];
-} & T;
+};
 
-export type EspaceTamponSolarise = LocalNonChauffeType<{
+type _LocalNonChauffe<
+	T extends {
+		type: TypeLnc;
+		baies?: baie.Baie[];
+		parois?: paroi.Paroi[];
+	},
+> = LocalNonChauffeBase & T;
+
+export type EspaceTamponSolarise = _LocalNonChauffe<{
 	type: typeof TypeLncEnum.espace_tampon_solarise;
 	baies: NonEmptyArray<baie.Baie>;
 }>;
 
-export type AutreLocalNonChauffe = LocalNonChauffeType<{
+export function isEspaceTamponSolarise(
+	value: LocalNonChauffeBase,
+): value is EspaceTamponSolarise {
+	return value.type === TypeLncEnum.espace_tampon_solarise;
+}
+
+export type AutreLocalNonChauffe = _LocalNonChauffe<{
 	type: Exclude<TypeLnc, typeof TypeLncEnum.espace_tampon_solarise>;
 	parois: NonEmptyArray<paroi.Paroi>;
 }>;
+
+export function isAutreLocalNonChauffe(
+	value: LocalNonChauffeBase,
+): value is AutreLocalNonChauffe {
+	return value.type !== TypeLncEnum.espace_tampon_solarise;
+}
 
 export type LocalNonChauffeWithData<
 	T extends LocalNonChauffe = LocalNonChauffe,

@@ -1,50 +1,18 @@
 import type { Consommations, UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 
-export function isVentilationNaturelle(
-	installation: Installation,
-): installation is InstallationNaturelle {
-	return isTypeVentilationNaturelle(installation.type);
-}
-
-export function isVentilationMecanique(
-	installation: Installation,
-): installation is InstallationMecanique {
-	return isTypeVentilationMecanique(installation.type);
-}
-
-export function isVentilationVMCDoubleFlux(
-	installation: Installation,
-): installation is InstallationVMCDoubleFlux {
-	return installation.type === TypeVentilationEnum.vmc_double_flux;
-}
-
-export function isVentilationPuitClimatique(
-	installation: Installation,
-): installation is InstallationPuitClimatique {
-	return installation.type === TypeVentilationEnum.puit_climatique;
-}
-
-export function isTypeVentilationNaturelle(
-	type: TypeVentilation,
-): type is TypeVentilationNaturelle {
-	return (TYPES_VENTILATION_NATURELLE as readonly TypeVentilation[]).includes(
-		type,
-	);
-}
-
-export function isTypeVentilationMecanique(
-	type: TypeVentilation,
-): type is TypeVentilationMecanique {
-	return (TYPES_VENTILATION_MECANIQUE as readonly TypeVentilation[]).includes(
-		type,
-	);
-}
-
 /**
  * @see https://schemas.open-dpe.fr/ventilation/installation
  */
 export type Installation = InstallationNaturelle | InstallationMecanique;
+
+export function isInstallation(
+	installation: InstallationBase,
+): installation is Installation {
+	return (
+		isVentilationNaturelle(installation) || isVentilationMecanique(installation)
+	);
+}
 
 export type InstallationWithData<T extends Installation = Installation> = T & {
 	data: InstallationData;
@@ -60,14 +28,7 @@ export type InstallationData = {
 	consommations: Consommations;
 };
 
-type _Installation<
-	T extends {
-		type: TypeVentilation;
-		annee_installation?: number | null;
-		installation_collective?: boolean | null;
-		presence_echangeur_thermique?: boolean | null;
-	},
-> = {
+export type InstallationBase = {
 	id: UUID;
 	description: string;
 	surface: number;
@@ -75,7 +36,19 @@ type _Installation<
 	annee_installation: number | null;
 	installation_collective: boolean | null;
 	presence_echangeur_thermique: boolean | null;
-} & T;
+};
+
+type _Installation<
+	T extends Partial<
+		Pick<
+			InstallationBase,
+			| "type"
+			| "annee_installation"
+			| "installation_collective"
+			| "presence_echangeur_thermique"
+		>
+	>,
+> = InstallationBase & T;
 
 export type InstallationNaturelle = _Installation<{
 	type: TypeVentilationNaturelle;
@@ -84,20 +57,44 @@ export type InstallationNaturelle = _Installation<{
 	presence_echangeur_thermique: null;
 }>;
 
+export function isVentilationNaturelle(
+	installation: InstallationBase,
+): installation is InstallationNaturelle {
+	return isTypeVentilationNaturelle(installation.type);
+}
+
 export type InstallationMecanique =
 	| InstallationVMCDoubleFlux
 	| InstallationPuitClimatique
 	| InstallationMecaniqueAutres;
+
+export function isVentilationMecanique(
+	installation: InstallationBase,
+): installation is InstallationMecanique {
+	return isTypeVentilationMecanique(installation.type);
+}
 
 export type InstallationVMCDoubleFlux = _Installation<{
 	type: typeof TypeVentilationEnum.vmc_double_flux;
 	installation_collective: boolean;
 }>;
 
+export function isVentilationVMCDoubleFlux(
+	installation: InstallationBase,
+): installation is InstallationVMCDoubleFlux {
+	return installation.type === TypeVentilationEnum.vmc_double_flux;
+}
+
 export type InstallationPuitClimatique = _Installation<{
 	type: typeof TypeVentilationEnum.puit_climatique;
 	installation_collective: boolean;
 }>;
+
+export function isVentilationPuitClimatique(
+	installation: InstallationBase,
+): installation is InstallationPuitClimatique {
+	return installation.type === TypeVentilationEnum.puit_climatique;
+}
 
 export type InstallationMecaniqueAutres = _Installation<{
 	type: Exclude<
@@ -107,6 +104,16 @@ export type InstallationMecaniqueAutres = _Installation<{
 	>;
 	presence_echangeur_thermique: null;
 }>;
+
+export function isVentilationMecaniqueAutres(
+	installation: InstallationBase,
+): installation is InstallationMecaniqueAutres {
+	return (
+		installation.type !== TypeVentilationEnum.vmc_double_flux &&
+		installation.type !== TypeVentilationEnum.puit_climatique &&
+		isTypeVentilationMecanique(installation.type)
+	);
+}
 
 export const TYPES_VENTILATION = [
 	"ventilation_ouverture_fenetres",
@@ -142,6 +149,12 @@ export const TypeVentilationNaturelleEnum = buildEnum(
 	TYPES_VENTILATION_NATURELLE,
 );
 
+export function isTypeVentilationNaturelle(type: TypeVentilation): boolean {
+	return (TYPES_VENTILATION_NATURELLE as readonly TypeVentilation[]).includes(
+		type,
+	);
+}
+
 export const TYPES_VENTILATION_MECANIQUE = [
 	TypeVentilationEnum.vmc_simple_flux_autoreglable,
 	TypeVentilationEnum.vmc_simple_flux_hygroreglable_a,
@@ -160,6 +173,12 @@ export type TypeVentilationMecanique =
 export const TypeVentilationMecaniqueEnum = buildEnum(
 	TYPES_VENTILATION_MECANIQUE,
 );
+
+export function isTypeVentilationMecanique(type: TypeVentilation): boolean {
+	return (TYPES_VENTILATION_MECANIQUE as readonly TypeVentilation[]).includes(
+		type,
+	);
+}
 
 export const TYPES_VENTILATION_HYBRIDE = [
 	TypeVentilationEnum.ventilation_hybride,

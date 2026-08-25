@@ -11,6 +11,38 @@ export { v2, v22, v23, v24, v25, v26 };
 
 export type DPE = v2.DPE | v22.DPE | v23.DPE | v24.DPE | v25.DPE | v26.DPE;
 
+export type DPELogement =
+	| v2.DPELogement
+	| v22.DPELogement
+	| v23.DPELogement
+	| v24.DPELogement
+	| v25.DPELogement
+	| v26.DPELogement;
+
+export type DPELogementNeuf =
+	| v2.DPELogementNeuf
+	| v22.DPELogementNeuf
+	| v23.DPELogementNeuf
+	| v24.DPELogementNeuf
+	| v25.DPELogementNeuf
+	| v26.DPELogementNeuf;
+
+export type DPETertiaire =
+	| v2.DPETertiaire
+	| v22.DPETertiaire
+	| v23.DPETertiaire
+	| v24.DPETertiaire
+	| v25.DPETertiaire
+	| v26.DPETertiaire;
+
+export type DPEImmeuble =
+	| v2.DPEImmeuble
+	| v22.DPEImmeuble
+	| v23.DPEImmeuble
+	| v24.DPEImmeuble
+	| v25.DPEImmeuble
+	| v26.DPEImmeuble;
+
 export type Logement =
 	| v2.Logement
 	| v22.Logement
@@ -108,6 +140,13 @@ export type BaieVitree =
 	| v24.BaieVitree
 	| v25.BaieVitree
 	| v26.BaieVitree;
+
+export type BaieVitreeDoubleFenetre =
+	| v22.BaieVitreeDoubleFenetre
+	| v23.BaieVitreeDoubleFenetre
+	| v24.BaieVitreeDoubleFenetre
+	| v25.BaieVitreeDoubleFenetre
+	| v26.BaieVitreeDoubleFenetre;
 
 export type MasqueLointainNonHomogene =
 	| v2.MasqueLointainNonHomogene
@@ -214,3 +253,11 @@ export type PanneauxPv =
 	| v24.PanneauxPv
 	| v25.PanneauxPv
 	| v26.PanneauxPv;
+
+export type LogementVisite =
+	| v2.LogementVisite
+	| v22.LogementVisite
+	| v23.LogementVisite
+	| v24.LogementVisite
+	| v25.LogementVisite
+	| v26.LogementVisite;

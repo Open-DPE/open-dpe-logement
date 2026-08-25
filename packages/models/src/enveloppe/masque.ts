@@ -1,75 +1,122 @@
 import type { UUID } from "../common/common.js";
 import { buildEnum } from "../utils.js";
 
-export function isMasqueProche(masque: Masque): masque is MasqueProche {
-	return TYPES_MASQUES_PROCHES.includes(masque.type);
-}
-
-export function isMasqueLointain(masque: Masque): masque is MasqueLointain {
-	return !TYPES_MASQUES_PROCHES.includes(masque.type);
-}
-
-export function isMasqueLointainHomogene(
-	masque: Masque,
-): masque is MasqueLointainHomogene {
-	return masque.type === TypeMasqueEnum.homogene;
-}
-
-export function isMasqueLointainNonHomogene(
-	masque: Masque,
-): masque is MasqueLointainNonHomogene {
-	return masque.type === TypeMasqueEnum.non_homogene;
-}
-
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/masque
  */
 export type Masque = MasqueProche | MasqueLointain;
 
-type MasqueG<T extends object> = {
+export type MasqueBase = {
 	id: UUID;
 	description: string;
 	type: TypeMasque;
 	hauteur: number | null;
 	profondeur: number | null;
 	secteur: Secteur | null;
-} & T;
+};
+
+type _Masque<
+	T extends {
+		type: TypeMasque;
+		hauteur: number | null;
+		profondeur: number | null;
+		secteur: Secteur | null;
+	},
+> = MasqueBase & T;
 
 export type MasqueProche =
 	| MasqueProcheParoiLaterale
 	| MasqueProcheFondBalconOuLoggias
 	| MasqueProcheBalconOuAuvent;
 
-export type MasqueProcheParoiLaterale = MasqueG<{
+export function isMasqueProche(value: MasqueBase): value is MasqueProche {
+	return (
+		isMasqueProcheParoiLaterale(value) ||
+		isMasqueProcheFondBalconOuLoggias(value) ||
+		isMasqueProcheBalconOuAuvent(value)
+	);
+}
+
+export type MasqueProcheParoiLaterale = _Masque<{
 	type:
 		| typeof TypeMasqueEnum.paroi_laterale_sans_obstacle_au_sud
 		| typeof TypeMasqueEnum.paroi_laterale_avec_obstacle_au_sud;
+	hauteur: null;
+	profondeur: null;
+	secteur: null;
 }>;
 
-export type MasqueProcheFondBalconOuLoggias = MasqueG<{
+export function isMasqueProcheParoiLaterale(
+	value: MasqueBase,
+): value is MasqueProcheParoiLaterale {
+	return (
+		value.type === TypeMasqueEnum.paroi_laterale_sans_obstacle_au_sud ||
+		value.type === TypeMasqueEnum.paroi_laterale_avec_obstacle_au_sud
+	);
+}
+
+export type MasqueProcheFondBalconOuLoggias = _Masque<{
 	type:
 		| typeof TypeMasqueEnum.fond_balcon
 		| typeof TypeMasqueEnum.fond_et_flanc_loggias;
 	profondeur: number;
+	hauteur: null;
+	secteur: null;
 }>;
 
-export type MasqueProcheBalconOuAuvent = MasqueG<{
+export function isMasqueProcheFondBalconOuLoggias(
+	value: MasqueBase,
+): value is MasqueProcheFondBalconOuLoggias {
+	return (
+		value.type === TypeMasqueEnum.fond_balcon ||
+		value.type === TypeMasqueEnum.fond_et_flanc_loggias
+	);
+}
+
+export type MasqueProcheBalconOuAuvent = _Masque<{
 	type: typeof TypeMasqueEnum.balcon_ou_auvent;
 	profondeur: number;
+	hauteur: null;
+	secteur: null;
 }>;
+
+export function isMasqueProcheBalconOuAuvent(
+	value: MasqueBase,
+): value is MasqueProcheBalconOuAuvent {
+	return value.type === TypeMasqueEnum.balcon_ou_auvent;
+}
 
 export type MasqueLointain = MasqueLointainHomogene | MasqueLointainNonHomogene;
 
-export type MasqueLointainHomogene = MasqueG<{
+export function isMasqueLointain(value: MasqueBase): value is MasqueLointain {
+	return isMasqueLointainHomogene(value) || isMasqueLointainNonHomogene(value);
+}
+
+export type MasqueLointainHomogene = _Masque<{
 	type: typeof TypeMasqueEnum.homogene;
 	hauteur: number;
+	profondeur: null;
+	secteur: null;
 }>;
 
-export type MasqueLointainNonHomogene = MasqueG<{
+export function isMasqueLointainHomogene(
+	value: MasqueBase,
+): value is MasqueLointainHomogene {
+	return value.type === TypeMasqueEnum.homogene;
+}
+
+export type MasqueLointainNonHomogene = _Masque<{
 	type: typeof TypeMasqueEnum.non_homogene;
 	hauteur: number;
 	secteur: Secteur;
+	profondeur: null;
 }>;
+
+export function isMasqueLointainNonHomogene(
+	value: MasqueBase,
+): value is MasqueLointainNonHomogene {
+	return value.type === TypeMasqueEnum.non_homogene;
+}
 
 export const TYPES_MASQUES = [
 	"homogene",

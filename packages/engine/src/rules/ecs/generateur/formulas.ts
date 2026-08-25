@@ -178,7 +178,7 @@ export function calcule_paux(props: {
  * @guard :
  * - {@linkcode models.ecs.generateur.isChauffeEauThermodynamique} ||
  * - {@linkcode models.ecs.generateur.isPacDoubleService} ||
- * - {@linkcode models.ecs.generateur.isPacHybride}
+ * - {@linkcode models.ecs.generateur.isPacDoubleServiceHybride}
  *
  * @see abaques.ecs.cop
  * @throws {ValeurForfaitaireError}
@@ -217,7 +217,7 @@ export type Combustion = {
  * - {@linkcode models.ecs.generateur.isChaudiereCombustion} ||
  * - {@linkcode models.ecs.generateur.isPoeleBoisBouilleur} ||
  * - {@linkcode models.ecs.generateur.isChauffeEauGaz} ||
- * - {@linkcode models.ecs.generateur.isPacHybride} ||
+ * - {@linkcode models.ecs.generateur.isPacDoubleServiceHybride} ||
  * - {@linkcode models.ecs.generateur.isGenerateurCollectifInconnu}
  *
  * @see abaques.ecs.combustion

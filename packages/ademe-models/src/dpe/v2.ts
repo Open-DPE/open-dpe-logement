@@ -5,13 +5,13 @@ import type * as enums from "./enums";
 // Source : DPEv2.xsd
 // ==================================================================================================
 
-export type DPE = {
+export type DPE = DPELogement | DPELogementNeuf | DPETertiaire;
+
+type DPEBase<T extends object> = {
 	id: string;
 	hashkey: string;
-	version: enums.VersionEnum;
-	logement?: Logement | null;
-	logement_neuf?: LogementNeuf | null;
-	tertiaire?: Tertiaire | null;
+	version: string;
+	administratif: Administratif;
 	dpe_immeuble?: DPEImmeuble | null;
 	descriptif_enr_collection: Array<DescriptifEnr>;
 	descriptif_simplifie_collection: Array<DescriptifSimplifie>;
@@ -19,7 +19,25 @@ export type DPE = {
 	justificatif_collection: Array<Justificatif>;
 	descriptif_geste_entretien_collection: Array<DescriptifGesteEntretien>;
 	descriptif_travaux?: DescriptifTravaux | null;
-};
+} & T;
+
+export type DPELogement = DPEBase<{
+	logement: Logement;
+	logement_neuf?: never;
+	tertiaire?: never;
+}>;
+
+export type DPELogementNeuf = DPEBase<{
+	logement_neuf: LogementNeuf;
+	logement?: never;
+	tertiaire?: never;
+}>;
+
+export type DPETertiaire = DPEBase<{
+	tertiaire: Tertiaire;
+	logement?: never;
+	logement_neuf?: never;
+}>;
 
 // ==================================================================================================
 // Common
@@ -34,7 +52,6 @@ export type OuiNon = 0 | 1;
 export type Logement = {
 	caracteristique_generale: CaracteristiqueGenerale;
 	meteo: Meteo;
-	administratif: Administratif;
 	enveloppe: Enveloppe;
 	ventilation_collection: Array<Ventilation>;
 	climatisation_collection: Array<Climatisation>;
@@ -85,7 +102,7 @@ export type Geolocalisation = {
 	numero_fiscal_local?: string | null;
 	rpls_log_id?: string | null;
 	rpls_org_id?: string | null;
-	Enumpar?: string | null;
+	idpar?: string | null;
 	immatriculation_copropriete?: string | null;
 	adresses: {
 		adresse_bien: Adresse;
@@ -127,7 +144,7 @@ export type Adresse = {
 	ban_score?: number | null;
 	ban_x?: number | null;
 	ban_y?: number | null;
-	compl_nom_resEnumence?: string | null;
+	compl_nom_residence?: string | null;
 	compl_ref_batiment?: string | null;
 	compl_etage_appartement?: number | null;
 	compl_ref_cage_escalier?: string | null;
@@ -484,7 +501,7 @@ export type GenerateurEcs = {
 		tv_pertes_stockage_id?: number | null;
 		tv_scop_id?: number | null;
 		enum_periode_installation_ecs_thermo_id?: enums.PeriodeInstallationEcsThermoEnum | null;
-		Enumentifiant_reseau_chaleur?: string | null;
+		identifiant_reseau_chaleur?: string | null;
 		tv_reseau_chaleur_id?: number | null;
 		enum_type_stockage_ecs_id?: enums.TypeStockageEcsEnum | null;
 		position_volume_chauffe?: OuiNon | null;
