@@ -1,0 +1,36 @@
+{
+  "name": "@open-dpe-logement/ademe-fixtures",
+  "version": "1.0.0",
+  "description": "Fixtures XML réelles de l'observatoire DPE-Audit (ADEME), partagées entre ademe-client, ademe-mapper et engine",
+  "type": "module",
+  "private": true,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "data"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "generate-manifest": "node scripts/generate-manifest.mjs",
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit"
+  },
+  "keywords": [
+    "dpe",
+    "diagnostic",
+    "energie",
+    "3cl",
+    "ademe",
+    "fixtures"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-dpe/open-dpe-logement"
+  }
+}
