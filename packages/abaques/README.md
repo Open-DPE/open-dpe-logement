@@ -8,6 +8,14 @@ Tables de valeurs forfaitaires utilisées par l'application de la méthode 3CL-D
 npm i @open-dpe-logement/abaques
 ```
 
+## Commandes
+
+| Commande              | Effet                                        |
+| --------------------- | -------------------------------------------- |
+| `npm run build`       | Compile `src/` → `dist/` (types + JS, `tsc`) |
+| `npm run check-types` | Vérification TypeScript sans émission        |
+| `npm test`            | Lance la suite de tests                      |
+
 ## Usages
 
 ```ts
