@@ -1,7 +1,7 @@
 {
   "name": "@open-dpe-logement/ademe-models",
   "version": "1.0.0",
-  "description": "Modèle de données publiques DPE-Audit",
+  "description": "Modèles TypeScript pour les exports XML de l'observatoire DPE-Audit (ADEME)",
   "type": "module",
   "exports": {
     ".": {
@@ -14,7 +14,7 @@
   ],
   "sideEffects": false,
   "scripts": {
-    "generate:enums:dpe": "node scripts/generate-enums-dpe.mjs",
+    "generate:enums": "node scripts/generate-enums.mjs",
     "build": "tsc -p tsconfig.json",
     "check-types": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
@@ -36,10 +36,12 @@
     "access": "public"
   },
   "dependencies": {
-    "fast-xml-parser": "^4.5.7"
+    "zod": "^4.4.3"
   },
   "devDependencies": {
-    "@types/node": "^25.9.3",
+    "@open-dpe-logement/ademe-fixtures": "^1.0.0",
+    "@open-dpe-logement/ademe-parser": "^1.0.0",
+    "@types/node": "^25.9.5",
     "vitest": "^4.1.6"
   }
 }

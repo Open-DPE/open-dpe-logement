@@ -1,58 +1,40 @@
 import * as types from "./types.js";
 
-export function isDPEv2<T extends types.DPE>(
-	value: T,
-): value is T & types.v2.DPE {
+export function isDPELogementExistantv2(
+	value: types.DPELogementExistant,
+): value is types.v2.DPELogementExistant {
 	return (
 		value.administratif.enum_version_id === "2" ||
 		value.administratif.enum_version_id === "2.1"
 	);
 }
 
-export function isDPEv22<T extends types.DPE>(
-	value: T,
-): value is T & types.v22.DPE {
+export function isDPELogementExistantv22(
+	value: types.DPELogementExistant,
+): value is types.v22.DPELogementExistant {
 	return value.administratif.enum_version_id === "2.2";
 }
 
-export function isDPEv23<T extends types.DPE>(
-	value: T,
-): value is T & types.v23.DPE {
+export function isDPELogementExistantv23(
+	value: types.DPELogementExistant,
+): value is types.v23.DPELogementExistant {
 	return value.administratif.enum_version_id === "2.3";
 }
 
-export function isDPEv24<T extends types.DPE>(
-	value: T,
-): value is T & types.v24.DPE {
+export function isDPELogementExistantv24(
+	value: types.DPELogementExistant,
+): value is types.v24.DPELogementExistant {
 	return value.administratif.enum_version_id === "2.4";
 }
 
-export function isDPEv25<T extends types.DPE>(
-	value: T,
-): value is T & types.v25.DPE {
+export function isDPELogementExistantv25(
+	value: types.DPELogementExistant,
+): value is types.v25.DPELogementExistant {
 	return value.administratif.enum_version_id === "2.5";
 }
 
-export function isDPEv26<T extends types.DPE>(
-	value: T,
-): value is T & types.v26.DPE {
+export function isDPELogementExistantv26(
+	value: types.DPELogementExistant,
+): value is types.v26.DPELogementExistant {
 	return value.administratif.enum_version_id === "2.6";
-}
-
-export function isDPELogement<T extends types.DPE>(
-	value: T,
-): value is T & types.DPELogement {
-	return value.logement !== undefined && value.logement !== null;
-}
-
-export function isDPELogementNeuf<T extends types.DPE>(
-	value: T,
-): value is T & types.DPELogementNeuf {
-	return value.logement_neuf !== undefined && value.logement_neuf !== null;
-}
-
-export function isDPETertiaire<T extends types.DPE>(
-	value: T,
-): value is T & types.DPETertiaire {
-	return value.tertiaire !== undefined && value.tertiaire !== null;
 }

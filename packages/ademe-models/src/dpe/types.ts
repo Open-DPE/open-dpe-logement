@@ -1,3 +1,4 @@
+import * as z from "zod";
 import * as v2 from "./v2";
 import * as v22 from "./v2.2";
 import * as v23 from "./v2.3";
@@ -9,31 +10,16 @@ export * as enums from "./enums";
 
 export { v2, v22, v23, v24, v25, v26 };
 
-export type DPE = v2.DPE | v22.DPE | v23.DPE | v24.DPE | v25.DPE | v26.DPE;
+export const DPELogementExistant = z.union([
+	v2.DPELogementExistant,
+	v22.DPELogementExistant,
+	v23.DPELogementExistant,
+	v24.DPELogementExistant,
+	v25.DPELogementExistant,
+	v26.DPELogementExistant,
+]);
 
-export type DPELogement =
-	| v2.DPELogement
-	| v22.DPELogement
-	| v23.DPELogement
-	| v24.DPELogement
-	| v25.DPELogement
-	| v26.DPELogement;
-
-export type DPELogementNeuf =
-	| v2.DPELogementNeuf
-	| v22.DPELogementNeuf
-	| v23.DPELogementNeuf
-	| v24.DPELogementNeuf
-	| v25.DPELogementNeuf
-	| v26.DPELogementNeuf;
-
-export type DPETertiaire =
-	| v2.DPETertiaire
-	| v22.DPETertiaire
-	| v23.DPETertiaire
-	| v24.DPETertiaire
-	| v25.DPETertiaire
-	| v26.DPETertiaire;
+export type DPELogementExistant = z.infer<typeof DPELogementExistant>;
 
 export type DPEImmeuble =
 	| v2.DPEImmeuble
@@ -82,14 +68,6 @@ export type Geolocalisation =
 	| v24.Geolocalisation
 	| v25.Geolocalisation
 	| v26.Geolocalisation;
-
-export type Diagnostiqueur =
-	| v2.Diagnostiqueur
-	| v22.Diagnostiqueur
-	| v23.Diagnostiqueur
-	| v24.Diagnostiqueur
-	| v25.Diagnostiqueur
-	| v26.Diagnostiqueur;
 
 export type Adresse =
 	| v2.Adresse

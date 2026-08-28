@@ -1,1437 +1,947 @@
-import type * as enums from "./enums";
+import * as z from "zod";
+import * as enums from "./enums";
 
 // ==================================================================================================
-// DPEv2.3 - TypeScript definitions
+// DPEv2.3 - Zod schemas
 // Source : DPEv2.3.xsd
 // ==================================================================================================
 
-export type DPE = DPELogement | DPELogementNeuf | DPETertiaire;
-
-type DPEBase<T extends object> = {
-	id: string;
-	hashkey: string;
-	version: string;
-	administratif: Administratif;
-	dpe_immeuble?: DPEImmeuble | null;
-	descriptif_enr_collection: Array<DescriptifEnr>;
-	descriptif_simplifie_collection: Array<DescriptifSimplifie>;
-	fiche_technique_collection: Array<FicheTechnique>;
-	justificatif_collection: Array<Justificatif>;
-	descriptif_geste_entretien_collection: Array<DescriptifGesteEntretien>;
-	descriptif_travaux?: DescriptifTravaux | null;
-} & T;
-
-export type DPELogement = DPEBase<{
-	logement: Logement;
-	logement_neuf?: never;
-	tertiaire?: never;
-}>;
-
-export type DPELogementNeuf = DPEBase<{
-	logement_neuf: LogementNeuf;
-	logement?: never;
-	tertiaire?: never;
-}>;
-
-export type DPETertiaire = DPEBase<{
-	tertiaire: Tertiaire;
-	logement?: never;
-	logement_neuf?: never;
-}>;
-
 // ==================================================================================================
-// Common
+// Travaux
 // ==================================================================================================
 
-export type OuiNon = 0 | 1;
-
-// ==================================================================================================
-// Logement
-// ==================================================================================================
-
-export type Logement = {
-	caracteristique_generale: CaracteristiqueGenerale;
-	meteo: Meteo;
-	enveloppe: Enveloppe;
-	ventilation_collection: Array<Ventilation>;
-	climatisation_collection: Array<Climatisation>;
-	installation_ecs_collection: Array<InstallationEcs>;
-	installation_chauffage_collection: Array<InstallationChauffage>;
-	production_elec_enr?: ProductionElecEnr | null;
-	sortie: Sortie;
-};
-
-export type CaracteristiqueGenerale = {
-	annee_construction?: number | null;
-	enum_periode_construction_id: enums.PeriodeConstructionEnum;
-	enum_methode_application_dpe_log_id: enums.MethodeApplicationDpeLogEnum;
-	enum_calcul_echantillonnage_id?: enums.CalculEchantillonnageEnum | null;
-	surface_habitable_logement?: number | null;
-	nombre_niveau_immeuble?: number | null;
-	nombre_niveau_logement?: number | null;
-	hsp: number;
-	surface_habitable_immeuble?: number | null;
-	surface_tertiaire_immeuble?: number | null;
-	nombre_appartement?: number | null;
-	appartement_non_visite?: OuiNon | null;
-};
-
-export type Meteo = {
-	enum_zone_climatique_id: enums.ZoneClimatiqueEnum;
-	altitude?: number | null;
-	enum_classe_altitude_id: enums.ClasseAltitudeEnum;
-	batiment_materiaux_anciens: OuiNon;
-};
-
-export type Administratif = {
-	dpe_a_remplacer?: string | null;
-	reference_interne_projet?: string | null;
-	motif_remplacement?: string | null;
-	dpe_immeuble_associe?: string | null;
-	enum_version_id: Exclude<enums.VersionEnum, "2.4" | "2.5" | "2.6">;
-	date_visite_diagnostiqueur: string;
-	nom_proprietaire: string;
-	siren_proprietaire?: string | null;
-	nom_proprietaire_installation_commune?: string | null;
-	date_etablissement_dpe: string;
-	enum_modele_dpe_id: enums.ModeleDpeEnum;
-	diagnostiqueur: Diagnostiqueur;
-	geolocalisation: Geolocalisation;
-	consentement_proprietaire?: OuiNon | null;
-	information_consentement_proprietaire?: InformationConsentementProprietaire | null;
-};
-
-export type InformationConsentementProprietaire = {
-	nom_proprietaire: string;
-	personne_morale: OuiNon;
-	siren_proprietaire?: string | null;
-	telephone?: string | null;
-	mail?: string | null;
-	label_adresse: string;
-	label_adresse_avec_complement: string;
-};
-
-export type Geolocalisation = {
-	numero_fiscal_local?: string | null;
-	id_batiment_rnb?: string | null;
-	rpls_log_id?: string | null;
-	rpls_org_id?: string | null;
-	idpar?: string | null;
-	immatriculation_copropriete?: string | null;
-	adresses: {
-		adresse_bien: Adresse;
-		adresse_proprietaire: Adresse;
-		adresse_proprietaire_installation_commune?: Adresse | null;
-	};
-};
-
-export type Diagnostiqueur = {
-	usr_logiciel_id: number;
-	version_logiciel: string;
-	version_moteur_calcul?: string | null;
-	nom_diagnostiqueur: string;
-	prenom_diagnostiqueur: string;
-	mail_diagnostiqueur: string;
-	telephone_diagnostiqueur: string;
-	adresse_diagnostiqueur: string;
-	entreprise_diagnostiqueur: string;
-	numero_certification_diagnostiqueur: string;
-	organisme_certificateur: string;
-};
-
-export type Adresse = {
-	adresse_brut: string;
-	code_postal_brut: string;
-	nom_commune_brut: string;
-	label_brut: string;
-	label_brut_avec_complement: string;
-	enum_statut_geocodage_ban_id: enums.StatutGeocodageBanEnum;
-	ban_date_appel: string;
-	ban_id?: string | null;
-	ban_id_ban_adresse?: string | null;
-	ban_label?: string | null;
-	ban_housenumber?: string | null;
-	ban_street?: string | null;
-	ban_citycode?: string | null;
-	ban_postcode?: string | null;
-	ban_city?: string | null;
-	ban_type?: "housenumber" | "street" | "municipality" | "locality" | null;
-	ban_score?: number | null;
-	ban_x?: number | null;
-	ban_y?: number | null;
-	compl_nom_residence?: string | null;
-	compl_ref_batiment?: string | null;
-	compl_etage_appartement?: number | null;
-	compl_ref_cage_escalier?: string | null;
-	compl_ref_logement?: string | null;
-};
-
-// ==================================================================================================
-// Enveloppe
-// ==================================================================================================
-
-export type Enveloppe = {
-	inertie: Inertie;
-	mur_collection: Array<Mur>;
-	plancher_bas_collection: Array<PlancherBas>;
-	plancher_haut_collection: Array<PlancherHaut>;
-	baie_vitree_collection: Array<BaieVitree>;
-	porte_collection: Array<Porte>;
-	ets_collection: Array<Ets>;
-	pont_thermique_collection: Array<PontThermique>;
-};
-
-export type Inertie = {
-	inertie_plancher_bas_lourd: OuiNon;
-	inertie_plancher_haut_lourd: OuiNon;
-	inertie_paroi_verticale_lourd: OuiNon;
-	enum_classe_inertie_id: enums.ClasseInertieEnum;
-};
-
-export type Mur = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_lnc?: string | null;
-		tv_coef_reduction_deperdition_id?: number | null;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		enum_orientation_id: enums.OrientationEnum;
-		surface_paroi_totale: number;
-		surface_paroi_opaque: number;
-		umur0_saisi?: number | null;
-		tv_umur0_id?: number | null;
-		epaisseur_structure?: number | null;
-		enum_materiaux_structure_mur_id?: enums.MateriauxStructureMurEnum | null;
-		enum_methode_saisie_u0_id: enums.MethodeSaisieU0Enum;
-		enduit_isolant_paroi_ancienne: OuiNon;
-		umur_saisi?: number | null;
-		enum_type_doublage_id?: enums.TypeDoublageEnum | null;
-		enum_type_isolation_id: enums.TypeIsolationEnum;
-		enum_periode_isolation_id?: enums.PeriodeIsolationEnum | null;
-		resistance_isolation?: number | null;
-		epaisseur_isolation?: number | null;
-		tv_umur_id?: number | null;
-		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		umur: number;
-		umur0: number;
-	};
-};
-
-export type PlancherBas = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_lnc?: string | null;
-		tv_coef_reduction_deperdition_id?: number | null;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		surface_paroi_opaque: number;
-		upb0_saisi?: number | null;
-		tv_upb0_id?: number | null;
-		enum_type_plancher_bas_id: enums.TypePlancherBasEnum;
-		enum_methode_saisie_u0_id: enums.MethodeSaisieU0Enum;
-		upb_saisi?: number | null;
-		enum_type_isolation_id: enums.TypeIsolationEnum;
-		enum_periode_isolation_id?: enums.PeriodeIsolationEnum | null;
-		resistance_isolation?: number | null;
-		epaisseur_isolation?: number | null;
-		tv_upb_id?: number | null;
-		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum;
-		calcul_ue?: OuiNon | null;
-		perimetre_ue?: number | null;
-		surface_ue?: number | null;
-		ue?: number | null;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		upb: number;
-		upb_final: number;
-		upb0: number;
-	};
-};
-
-export type PlancherHaut = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_lnc?: string | null;
-		tv_coef_reduction_deperdition_id?: number | null;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		surface_paroi_opaque: number;
-		uph0_saisi?: number | null;
-		tv_uph0_id?: number | null;
-		enum_type_plancher_haut_id: enums.TypePlancherHautEnum;
-		enum_methode_saisie_u0_id: enums.MethodeSaisieU0Enum;
-		uph_saisi?: number | null;
-		enum_type_isolation_id: enums.TypeIsolationEnum;
-		enum_periode_isolation_id?: enums.PeriodeIsolationEnum | null;
-		resistance_isolation?: number | null;
-		epaisseur_isolation?: number | null;
-		tv_uph_id?: number | null;
-		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		uph: number;
-		uph0: number;
-	};
-};
-
-export type BaieVitree = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_paroi?: string | null;
-		reference_lnc?: string | null;
-		tv_coef_reduction_deperdition_id?: number | null;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		surface_totale_baie: number;
-		nb_baie: number;
-		tv_ug_id?: number | null;
-		enum_type_vitrage_id: enums.TypeVitrageEnum;
-		enum_inclinaison_vitrage_id: enums.InclinaisonVitrageEnum;
-		enum_type_gaz_lame_id?: enums.TypeGazLameEnum | null;
-		epaisseur_lame?: number | null;
-		vitrage_vir?: OuiNon | null;
-		enum_methode_saisie_perf_vitrage_id: enums.MethodeSaisiePerfVitrageEnum;
-		ug_saisi?: number | null;
-		tv_uw_id?: number | null;
-		enum_type_materiaux_menuiserie_id: enums.TypeMateriauxMenuiserieEnum;
-		enum_type_baie_id: enums.TypeBaieEnum;
-		uw_saisi?: number | null;
-		double_fenetre?: OuiNon | null;
-		uw_1?: number | null;
-		sw_1?: number | null;
-		uw_2?: number | null;
-		sw_2?: number | null;
-		tv_deltar_id?: number | null;
-		tv_ujn_id?: number | null;
-		enum_type_fermeture_id: enums.TypeFermetureEnum;
-		presence_protection_solaire_hors_fermeture: OuiNon;
-		ujn_saisi?: number | null;
-		presence_retour_isolation?: OuiNon | null;
-		presence_joint: OuiNon;
-		largeur_dormant?: number | null;
-		tv_sw_id?: number | null;
-		sw_saisi?: number | null;
-		enum_type_pose_id: enums.TypePoseEnum;
-		enum_orientation_id: enums.OrientationEnum;
-		tv_coef_masque_proche_id?: number | null;
-		tv_coef_masque_lointain_homogene_id?: number | null;
-		masque_lointain_non_homogene_collection?: Array<MasqueLointainNonHomogene> | null;
-		baie_vitree_double_fenetre?: BaieVitreeDoubleFenetre | null;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		ug: number;
-		uw: number;
-		ujn: number;
-		u_menuiserie: number;
-		sw: number;
-		fe1: number;
-		fe2: number;
-	};
-};
-
-export type BaieVitreeDoubleFenetre = {
-	donnee_entree: {
-		tv_ug_id?: number | null;
-		enum_type_vitrage_id: enums.TypeVitrageEnum;
-		enum_inclinaison_vitrage_id: enums.InclinaisonVitrageEnum;
-		enum_type_gaz_lame_id?: enums.TypeGazLameEnum | null;
-		epaisseur_lame?: number | null;
-		vitrage_vir?: OuiNon | null;
-		enum_methode_saisie_perf_vitrage_id: enums.MethodeSaisiePerfVitrageEnum;
-		ug_saisi?: number | null;
-		tv_uw_id?: number | null;
-		enum_type_materiaux_menuiserie_id: enums.TypeMateriauxMenuiserieEnum;
-		enum_type_baie_id: enums.TypeBaieEnum;
-		uw_saisi?: number | null;
-		tv_sw_id?: number | null;
-		sw_saisi?: number | null;
-		enum_type_pose_id: enums.TypePoseEnum;
-	};
-	donnee_intermediaire: {
-		ug?: number | null;
-		uw: number;
-		sw: number;
-	};
-};
-
-export type MasqueLointainNonHomogene = {
-	tv_coef_masque_lointain_non_homogene_id: number;
-};
-
-export type Porte = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_paroi?: string | null;
-		reference_lnc?: string | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		tv_coef_reduction_deperdition_id?: number | null;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		surface_porte: number;
-		tv_uporte_id?: number | null;
-		enum_methode_saisie_uporte_id: enums.MethodeSaisieUporteEnum;
-		enum_type_porte_id: enums.TypePorteEnum;
-		uporte_saisi?: number | null;
-		nb_porte: number;
-		largeur_dormant?: number | null;
-		presence_retour_isolation?: OuiNon | null;
-		presence_joint: OuiNon;
-		enum_type_pose_id: enums.TypePoseEnum;
-	};
-	donnee_intermediaire: {
-		uporte: number;
-		b?: number | null;
-	};
-};
-
-export type Ets = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		tv_coef_reduction_deperdition_id?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		tv_coef_transparence_ets_id?: number | null;
-	};
-	baie_ets_collection: Array<BaieEts>;
-	donnee_intermediaire: {
-		coef_transparence_ets: number;
-		bver: number;
-	};
-};
-
-export type BaieEts = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		enum_orientation_id: enums.OrientationEnum;
-		enum_inclinaison_vitrage_id: enums.InclinaisonVitrageEnum;
-		surface_totale_baie: number;
-		nb_baie: number;
-	};
-};
-
-export type PontThermique = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_1?: string | null;
-		reference_2?: string | null;
-		tv_pont_thermique_id?: number | null;
-		pourcentage_valeur_pont_thermique: number;
-		l: number;
-		enum_methode_saisie_pont_thermique_id: enums.MethodeSaisiePontThermiqueEnum;
-		enum_type_liaison_id: enums.TypeLiaisonEnum;
-		k_saisi?: number | null;
-	};
-	donnee_intermediaire: {
-		k: number;
-	};
-};
-
-// ==================================================================================================
-// Systèmes
-// ==================================================================================================
-
-export type Ventilation = {
-	donnee_entree: {
-		surface_ventile: number;
-		description?: string | null;
-		reference: string;
-		plusieurs_facade_exposee: OuiNon;
-		tv_q4pa_conv_id?: number | null;
-		q4pa_conv_saisi?: number | null;
-		enum_methode_saisie_q4pa_conv_id: enums.MethodeSaisieQ4paConvEnum;
-		tv_debits_ventilation_id: number;
-		enum_type_ventilation_id: enums.TypeVentilationEnum;
-		ventilation_post_2012: OuiNon;
-		ref_produit_ventilation?: string | null;
-		cle_repartition_ventilation?: number | null;
-	};
-	donnee_intermediaire: {
-		pvent_moy?: number | null;
-		q4pa_conv: number;
-		conso_auxiliaire_ventilation: number;
-		hperm: number;
-		hvent: number;
-	};
-};
-
-export type Climatisation = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_clim: number;
-		tv_seer_id?: number | null;
-		nombre_logement_echantillon?: number | null;
-		enum_methode_calcul_conso_id: enums.MethodeCalculConsoEnum;
-		enum_periode_installation_fr_id: enums.PeriodeInstallationFrEnum;
-		cle_repartition_clim?: number | null;
-		enum_type_generateur_fr_id: enums.TypeGenerateurFrEnum;
-		enum_type_energie_id?: enums.TypeEnergieEnum | null;
-		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum;
-		ref_produit_fr?: string | null;
-	};
-	donnee_intermediaire: {
-		eer: number;
-		besoin_fr: number;
-		conso_fr: number;
-		conso_fr_depensier: number;
-	};
-};
-
-export type InstallationEcs = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		enum_cfg_installation_ecs_id: enums.CfgInstallationEcsEnum;
-		enum_type_installation_id: enums.TypeInstallationEnum;
-		enum_methode_calcul_conso_id: enums.MethodeCalculConsoEnum;
-		ratio_virtualisation?: number | null;
-		cle_repartition_ecs?: number | null;
-		surface_habitable: number;
-		rdim: number;
-		nombre_logement: number;
-		nombre_niveau_installation_ecs: number;
-		fecs_saisi?: number | null;
-		tv_facteur_couverture_solaire_id?: number | null;
-		enum_methode_saisie_fact_couv_sol_id?: enums.MethodeSaisieFactCouvSolEnum | null;
-		enum_type_installation_solaire_id?: enums.TypeInstallationSolaireEnum | null;
-		tv_rendement_distribution_ecs_id?: number | null;
-		enum_bouclage_reseau_ecs_id?: enums.BouclageReseauEcsEnum | null;
-		reseau_distribution_isole?: OuiNon | null;
-	};
-	donnee_intermediaire: {
-		rendement_distribution: number;
-		besoin_ecs: number;
-		besoin_ecs_depensier: number;
-		fecs: number;
-		production_ecs_solaire?: number | null;
-		conso_ecs: number;
-		conso_ecs_depensier: number;
-	};
-	generateur_ecs_collection: Array<GenerateurEcs>;
-};
-
-export type GenerateurEcs = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_generateur_mixte?: string | null;
-		enum_type_generateur_ecs_id: enums.TypeGenerateurEcsEnum;
-		ref_produit_generateur_ecs?: string | null;
-		enum_usage_generateur_id: enums.UsageGenerateurEnum;
-		enum_type_energie_id: enums.TypeEnergieEnum;
-		tv_generateur_combustion_id?: number | null;
-		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum;
-		tv_pertes_stockage_id?: number | null;
-		tv_scop_id?: number | null;
-		enum_periode_installation_ecs_thermo_id?: enums.PeriodeInstallationEcsThermoEnum | null;
-		identifiant_reseau_chaleur?: string | null;
-		date_arrete_reseau_chaleur?: string | null;
-		tv_reseau_chaleur_id?: number | null;
-		enum_type_stockage_ecs_id?: enums.TypeStockageEcsEnum | null;
-		position_volume_chauffe?: OuiNon | null;
-		position_volume_chauffe_stockage?: OuiNon | null;
-		volume_stockage?: number | null;
-		presence_ventouse?: OuiNon | null;
-	};
-	donnee_intermediaire: {
-		pn?: number | null;
-		qp0?: number | null;
-		pveilleuse?: number | null;
-		rpn?: number | null;
-		cop?: number | null;
-		ratio_besoin_ecs?: number | null;
-		rendement_generation?: number | null;
-		rendement_generation_stockage?: number | null;
-		conso_ecs: number;
-		conso_ecs_depensier: number;
-		rendement_stockage?: number | null;
-	};
-};
-
-export type InstallationChauffage = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_chauffee: number;
-		nombre_logement_echantillon?: number | null;
-		rdim: number;
-		nombre_niveau_installation_ch: number;
-		enum_cfg_installation_ch_id: enums.CfgInstallationChEnum;
-		ratio_virtualisation?: number | null;
-		coef_ifc?: number | null;
-		cle_repartition_ch?: number | null;
-		enum_type_installation_id: enums.TypeInstallationEnum;
-		enum_methode_calcul_conso_id: enums.MethodeCalculConsoEnum;
-		enum_methode_saisie_fact_couv_sol_id?: enums.MethodeSaisieFactCouvSolEnum | null;
-		tv_facteur_couverture_solaire_id?: number | null;
-		fch_saisi?: number | null;
-	};
-	donnee_intermediaire: {
-		besoin_ch: number;
-		besoin_ch_depensier: number;
-		production_ch_solaire?: number | null;
-		fch?: number | null;
-		conso_ch: number;
-		conso_ch_depensier: number;
-	};
-	emetteur_chauffage_collection: Array<EmetteurChauffage>;
-	generateur_chauffage_collection: Array<GenerateurChauffage>;
-};
-
-export type EmetteurChauffage = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_chauffee: number;
-		tv_rendement_emission_id?: number | null;
-		tv_rendement_distribution_ch_id?: number | null;
-		tv_rendement_regulation_id?: number | null;
-		enum_type_emission_distribution_id: enums.TypeEmissionDistributionEnum;
-		tv_intermittence_id?: number | null;
-		reseau_distribution_isole?: OuiNon | null;
-		enum_equipement_intermittence_id?: enums.EquipementIntermittenceEnum | null;
-		enum_type_regulation_id?: enums.TypeRegulationEnum | null;
-		enum_periode_installation_emetteur_id?: enums.PeriodeInstallationEmetteurEnum | null;
-		enum_type_chauffage_id: enums.TypeChauffageEnum;
-		enum_temp_distribution_ch_id?: enums.TempDistributionChEnum | null;
-		enum_lien_generateur_emetteur_id?: enums.LienGenerateurEmetteurEnum | null;
-	};
-	donnee_intermediaire: {
-		i0: number;
-		rendement_emission: number;
-		rendement_distribution: number;
-		rendement_regulation: number;
-	};
-};
-
-export type GenerateurChauffage = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_generateur_mixte?: string | null;
-		ref_produit_generateur_ch?: string | null;
-		enum_type_generateur_ch_id: enums.TypeGenerateurChEnum;
-		enum_usage_generateur_id: enums.UsageGenerateurEnum;
-		enum_type_energie_id: enums.TypeEnergieEnum;
-		position_volume_chauffe?: OuiNon | null;
-		tv_rendement_generation_id?: number | null;
-		tv_scop_id?: number | null;
-		tv_temp_fonc_100_id?: number | null;
-		tv_temp_fonc_30_id?: number | null;
-		tv_generateur_combustion_id?: number | null;
-		tv_reseau_chaleur_id?: number | null;
-		identifiant_reseau_chaleur?: string | null;
-		date_arrete_reseau_chaleur?: string | null;
-		n_radiateurs_gaz?: number | null;
-		priorite_generateur_cascade?: number | null;
-		presence_ventouse?: OuiNon | null;
-		presence_regulation_combustion?: OuiNon | null;
-		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum;
-		enum_lien_generateur_emetteur_id?: enums.LienGenerateurEmetteurEnum | null;
-	};
-	donnee_intermediaire: {
-		scop?: number | null;
-		pn?: number | null;
-		qp0?: number | null;
-		pveilleuse?: number | null;
-		temp_fonc_30?: number | null;
-		temp_fonc_100?: number | null;
-		rpn?: number | null;
-		rpint?: number | null;
-		rendement_generation?: number | null;
-		conso_ch: number;
-		conso_ch_depensier: number;
-	};
-};
-
-export type ProductionElecEnr = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		presence_production_pv: OuiNon;
-		enum_type_enr_id: enums.TypeEnrEnum;
-	};
-	donnee_intermediaire?: {
-		taux_autoproduction?: number | null;
-		production_pv: number;
-		conso_elec_ac: number;
-	} | null;
-	panneaux_pv_collection: Array<PanneauxPv>;
-};
-
-export type PanneauxPv = {
-	surface_totale_capteurs?: number | null;
-	ratio_virtualisation?: number | null;
-	nombre_module?: number | null;
-	tv_coef_orientation_pv_id?: number | null;
-	enum_orientation_pv_id?: enums.OrientationPvEnum | null;
-	enum_inclinaison_pv_id?: enums.InclinaisonPvEnum | null;
-};
-
-// ==================================================================================================
-// Sortie
-// ==================================================================================================
-
-export type Sortie = {
-	deperdition: Deperdition;
-	apport_et_besoin: ApportEtBesoin;
-	ef_conso: EfConso;
-	ep_conso: EpConso;
-	emission_ges: EmissionGes;
-	cout: Cout;
-	production_electricite?: ProductionElectricite | null;
-	sortie_par_energie_collection: Array<SortieParEnergie>;
-	confort_ete: ConfortEte;
-	qualite_isolation: QualiteIsolation;
-};
-
-export type Deperdition = {
-	hvent: number;
-	hperm: number;
-	deperdition_renouvellement_air: number;
-	deperdition_mur: number;
-	deperdition_plancher_bas: number;
-	deperdition_plancher_haut: number;
-	deperdition_baie_vitree: number;
-	deperdition_porte: number;
-	deperdition_pont_thermique: number;
-	deperdition_enveloppe: number;
-};
-
-export type ApportEtBesoin = {
-	surface_sud_equivalente: number;
-	apport_solaire_fr: number;
-	apport_interne_fr: number;
-	apport_solaire_ch: number;
-	apport_interne_ch: number;
-	fraction_apport_gratuit_ch: number;
-	fraction_apport_gratuit_depensier_ch: number;
-	pertes_distribution_ecs_recup: number;
-	pertes_distribution_ecs_recup_depensier: number;
-	pertes_stockage_ecs_recup: number;
-	pertes_generateur_ch_recup: number;
-	pertes_generateur_ch_recup_depensier: number;
-	nadeq: number;
-	v40_ecs_journalier: number;
-	v40_ecs_journalier_depensier: number;
-	besoin_ch: number;
-	besoin_ch_depensier: number;
-	besoin_ecs: number;
-	besoin_ecs_depensier: number;
-	besoin_fr: number;
-	besoin_fr_depensier: number;
-};
-
-export type EfConso = {
-	conso_ch: number;
-	conso_ch_depensier: number;
-	conso_ecs: number;
-	conso_ecs_depensier: number;
-	conso_eclairage: number;
-	conso_auxiliaire_generation_ch: number;
-	conso_auxiliaire_generation_ch_depensier: number;
-	conso_auxiliaire_distribution_ch: number;
-	conso_auxiliaire_generation_ecs: number;
-	conso_auxiliaire_generation_ecs_depensier: number;
-	conso_auxiliaire_distribution_ecs: number;
-	conso_auxiliaire_distribution_fr: number;
-	conso_auxiliaire_ventilation: number;
-	conso_totale_auxiliaire: number;
-	conso_fr: number;
-	conso_fr_depensier: number;
-	conso_5_usages: number;
-	conso_5_usages_m2: number;
-};
-
-export type EpConso = {
-	ep_conso_ch: number;
-	ep_conso_ch_depensier: number;
-	ep_conso_ecs: number;
-	ep_conso_ecs_depensier: number;
-	ep_conso_eclairage: number;
-	ep_conso_auxiliaire_generation_ch: number;
-	ep_conso_auxiliaire_generation_ch_depensier: number;
-	ep_conso_auxiliaire_distribution_ch: number;
-	ep_conso_auxiliaire_generation_ecs: number;
-	ep_conso_auxiliaire_generation_ecs_depensier: number;
-	ep_conso_auxiliaire_distribution_ecs: number;
-	ep_conso_auxiliaire_distribution_fr: number;
-	ep_conso_auxiliaire_ventilation: number;
-	ep_conso_totale_auxiliaire: number;
-	ep_conso_fr: number;
-	ep_conso_fr_depensier: number;
-	ep_conso_5_usages: number;
-	ep_conso_5_usages_m2: number;
-	classe_bilan_dpe: enums.ClasseEtiquetteEnum;
-};
-
-export type EmissionGes = {
-	emission_ges_ch: number;
-	emission_ges_ch_depensier: number;
-	emission_ges_ecs: number;
-	emission_ges_ecs_depensier: number;
-	emission_ges_eclairage: number;
-	emission_ges_auxiliaire_generation_ch: number;
-	emission_ges_auxiliaire_generation_ch_depensier: number;
-	emission_ges_auxiliaire_distribution_ch: number;
-	emission_ges_auxiliaire_generation_ecs: number;
-	emission_ges_auxiliaire_generation_ecs_depensier: number;
-	emission_ges_auxiliaire_distribution_ecs: number;
-	emission_ges_auxiliaire_distribution_fr: number;
-	emission_ges_auxiliaire_ventilation: number;
-	emission_ges_totale_auxiliaire: number;
-	emission_ges_fr: number;
-	emission_ges_fr_depensier: number;
-	emission_ges_5_usages: number;
-	emission_ges_5_usages_m2: number;
-	classe_emission_ges: enums.ClasseEtiquetteEnum;
-};
-
-export type Cout = {
-	cout_ch: number;
-	cout_ch_depensier: number;
-	cout_ecs: number;
-	cout_ecs_depensier: number;
-	cout_eclairage: number;
-	cout_auxiliaire_generation_ch: number;
-	cout_auxiliaire_generation_ch_depensier: number;
-	cout_auxiliaire_distribution_ch: number;
-	cout_auxiliaire_generation_ecs: number;
-	cout_auxiliaire_generation_ecs_depensier: number;
-	cout_auxiliaire_distribution_ecs: number;
-	cout_auxiliaire_distribution_fr: number;
-	cout_auxiliaire_ventilation: number;
-	cout_total_auxiliaire: number;
-	cout_fr: number;
-	cout_fr_depensier: number;
-	cout_5_usages: number;
-};
-
-export type ProductionElectricite = {
-	production_pv: number;
-	conso_elec_ac: number;
-	conso_elec_ac_ch: number;
-	conso_elec_ac_ecs: number;
-	conso_elec_ac_fr: number;
-	conso_elec_ac_eclairage: number;
-	conso_elec_ac_auxiliaire: number;
-	conso_elec_ac_autre_usage: number;
-};
-
-export type SortieParEnergie = {
-	enum_type_energie_id: enums.TypeEnergieEnum;
-	conso_ch: number;
-	conso_ecs: number;
-	conso_5_usages: number;
-	emission_ges_ch: number;
-	emission_ges_ecs: number;
-	emission_ges_5_usages: number;
-	cout_ch: number;
-	cout_ecs: number;
-	cout_5_usages: number;
-};
-
-export type ConfortEte = {
-	isolation_toiture: OuiNon;
-	protection_solaire_exterieure: OuiNon;
-	aspect_traversant: OuiNon;
-	brasseur_air: OuiNon;
-	inertie_lourde: OuiNon;
-	enum_indicateur_confort_ete_id: enums.IndicateurConfortEteEnum;
-};
-
-export type QualiteIsolation = {
-	ubat: number;
-	qualite_isol_enveloppe: enums.QualiteComposantEnum;
-	qualite_isol_mur: enums.QualiteComposantEnum;
-	qualite_isol_plancher_haut_toit_terrasse: enums.QualiteComposantEnum;
-	qualite_isol_plancher_haut_comble_perdu: enums.QualiteComposantEnum;
-	qualite_isol_plancher_haut_comble_amenage: enums.QualiteComposantEnum;
-	qualite_isol_plancher_bas: enums.QualiteComposantEnum;
-	qualite_isol_menuiserie: enums.QualiteComposantEnum;
-};
-
-// ==================================================================================================
-// LogementNeuf
-// ==================================================================================================
-
-export type LogementNeuf = {
-	caracteristique_generale: CaracteristiqueGenerale;
-	meteo: Meteo;
-	repartition_chauffage: RepartitionChauffage;
-	repartition_ecs: RepartitionEcs;
-	enveloppe: EnveloppeNeuf;
-	ventilation_collection: Array<VentilationNeuf>;
-	climatisation_collection: Array<ClimatisationNeuf>;
-	installation_ecs_collection: Array<InstallationEcsNeuf>;
-	installation_chauffage_collection: Array<InstallationChauffageNeuf>;
-	production_elec_enr?: ProductionElecEnrNeuf | null;
-	sortie: SortieNeuf;
-};
-
-export type RepartitionChauffage = {
-	surface_baie_nord: number;
-	surface_baie_sud: number;
-	surface_baie_est_ouest: number;
-	surface_paroi_verticale_ext: number;
-	surface_plancher_haut: number;
-	surface_plancher_bas: number;
-	coef_ifc: number;
-	deperdition_totale_logement: number;
-	deperdition_totale_batiment: number;
-	cle_repartition_ch: number;
-};
-
-export type RepartitionEcs = {
-	besoin_ecs_batiment: number;
-	besoin_ecs_logement: number;
-	cle_repartition_ecs: number;
-};
-
-export type EnveloppeNeuf = {
-	inertie: InertieNeuf;
-	mur_collection: Array<MurNeuf>;
-	plancher_bas_collection: Array<PlancherBasNeuf>;
-	plancher_haut_collection: Array<PlancherHautNeuf>;
-	baie_vitree_collection: Array<BaieVitreeNeuf>;
-	porte_collection: Array<PorteNeuf>;
-	pont_thermique_collection: Array<PontThermiqueNeuf>;
-};
-
-export type InertieNeuf = {
-	enum_classe_inertie_id: enums.ClasseInertieEnum;
-};
-
-export type MurNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		enum_orientation_id: enums.OrientationEnum;
-		surface_paroi_totale: number;
-		surface_paroi_opaque: number;
-		epaisseur_structure?: number | null;
-		enum_materiaux_structure_mur_id?: enums.MateriauxStructureMurEnum | null;
-		enduit_isolant_paroi_ancienne?: OuiNon | null;
-		enum_type_doublage_id?: enums.TypeDoublageEnum | null;
-		enum_type_isolation_id: enums.TypeIsolationEnum;
-		resistance_isolation?: number | null;
-		epaisseur_isolation?: number | null;
-		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		umur: number;
-		umur0: number;
-	};
-};
-
-export type PlancherBasNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		surface_paroi_opaque: number;
-		enum_type_plancher_bas_id: enums.TypePlancherBasEnum;
-		enum_type_isolation_id: enums.TypeIsolationEnum;
-		resistance_isolation?: number | null;
-		epaisseur_isolation?: number | null;
-		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		upb_final: number;
-		upb0: number;
-	};
-};
-
-export type PlancherHautNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		surface_paroi_opaque: number;
-		enum_type_plancher_haut_id: enums.TypePlancherHautEnum;
-		enum_type_isolation_id: enums.TypeIsolationEnum;
-		resistance_isolation?: number | null;
-		epaisseur_isolation?: number | null;
-		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		uph: number;
-		uph0: number;
-	};
-};
-
-export type BaieVitreeNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_paroi?: string | null;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		surface_totale_baie: number;
-		nb_baie: number;
-		enum_type_vitrage_id: enums.TypeVitrageEnum;
-		enum_inclinaison_vitrage_id: enums.InclinaisonVitrageEnum;
-		enum_type_gaz_lame_id?: enums.TypeGazLameEnum | null;
-		epaisseur_lame?: number | null;
-		vitrage_vir?: OuiNon | null;
-		enum_methode_saisie_perf_vitrage_id: enums.MethodeSaisiePerfVitrageEnum;
-		enum_type_materiaux_menuiserie_id: enums.TypeMateriauxMenuiserieEnum;
-		enum_type_baie_id: enums.TypeBaieEnum;
-		enum_type_fermeture_id: enums.TypeFermetureEnum;
-		presence_protection_solaire_hors_fermeture?: OuiNon | null;
-		presence_retour_isolation?: OuiNon | null;
-		presence_joint?: OuiNon | null;
-		enum_type_pose_id: enums.TypePoseEnum;
-		enum_orientation_id: enums.OrientationEnum;
-	};
-	donnee_intermediaire: {
-		b?: number | null;
-		ug: number;
-		uw: number;
-		ujn: number;
-		u_menuiserie: number;
-		sw: number;
-	};
-};
-
-export type PorteNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_paroi?: string | null;
-		enum_cfg_isolation_lnc_id?: enums.CfgIsolationLncEnum | null;
-		enum_type_adjacence_id: enums.TypeAdjacenceEnum;
-		surface_aiu?: number | null;
-		surface_aue?: number | null;
-		surface_porte: number;
-		enum_methode_saisie_uporte_id: enums.MethodeSaisieUporteEnum;
-		enum_type_porte_id: enums.TypePorteEnum;
-		nb_porte: number;
-		largeur_dormant?: number | null;
-		presence_retour_isolation?: OuiNon | null;
-		presence_joint?: OuiNon | null;
-		enum_type_pose_id: enums.TypePoseEnum;
-	};
-	donnee_intermediaire: {
-		uporte: number;
-		b?: number | null;
-	};
-};
-
-export type PontThermiqueNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		reference_1?: string | null;
-		reference_2?: string | null;
-		enum_methode_saisie_pont_thermique_id: enums.MethodeSaisiePontThermiqueEnum;
-		l: number;
-		enum_type_liaison_id: enums.TypeLiaisonEnum;
-	};
-	donnee_intermediaire: {
-		k: number;
-	};
-};
-
-export type VentilationNeuf = {
-	donnee_entree: {
-		surface_ventile: number;
-		description?: string | null;
-		reference: string;
-		plusieurs_facade_exposee: OuiNon;
-		enum_methode_saisie_q4pa_conv_id: enums.MethodeSaisieQ4paConvEnum;
-		enum_type_ventilation_id: enums.TypeVentilationEnum;
-		ventilation_post_2012: OuiNon;
-		ref_produit_ventilation?: string | null;
-	};
-	donnee_intermediaire: {
-		pvent_moy?: number | null;
-		q4pa_conv: number;
-		conso_auxiliaire_ventilation: number;
-		hperm: number;
-		hvent: number;
-	};
-};
-
-export type ClimatisationNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_clim?: number | null;
-		enum_type_generateur_fr_id: enums.TypeGenerateurFrEnum;
-		enum_type_energie_id?: enums.TypeEnergieEnum | null;
-		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum;
-		ref_produit_fr?: string | null;
-	};
-	donnee_intermediaire: {
-		eer: number;
-		besoin_fr: number;
-		conso_fr: number;
-	};
-};
-
-export type InstallationEcsNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		enum_cfg_installation_ecs_id: enums.CfgInstallationEcsEnum;
-		enum_type_installation_id: enums.TypeInstallationEnum;
-		surface_habitable?: number | null;
-		rdim?: number | null;
-		nombre_logement: number;
-		enum_type_installation_solaire_id?: enums.TypeInstallationSolaireEnum | null;
-		enum_bouclage_reseau_ecs_id?: enums.BouclageReseauEcsEnum | null;
-		reseau_distribution_isole?: OuiNon | null;
-	};
-	donnee_intermediaire: {
-		besoin_ecs: number;
-		production_ecs_solaire?: number | null;
-		conso_ecs: number;
-	};
-	generateur_ecs_collection: Array<GenerateurEcsNeuf>;
-};
-
-export type GenerateurEcsNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		enum_type_generateur_ecs_id: enums.TypeGenerateurEcsEnum;
-		ref_produit_generateur_ecs?: string | null;
-		enum_usage_generateur_id: enums.UsageGenerateurEnum;
-		enum_type_energie_id: enums.TypeEnergieEnum;
-		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum;
-		enum_type_stockage_ecs_id?: enums.TypeStockageEcsEnum | null;
-		position_volume_chauffe?: OuiNon | null;
-		position_volume_chauffe_stockage?: OuiNon | null;
-		volume_stockage?: number | null;
-		presence_ventouse?: OuiNon | null;
-		identifiant_reseau_chaleur?: string | null;
-		date_arrete_reseau_chaleur?: string | null;
-	};
-	donnee_intermediaire: {
-		pn?: number | null;
-		qp0?: number | null;
-		pveilleuse?: number | null;
-		rpn?: number | null;
-		cop?: number | null;
-		ratio_besoin_ecs?: number | null;
-		conso_ecs: number;
-	};
-};
-
-export type InstallationChauffageNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_chauffee?: number | null;
-		rdim?: number | null;
-		enum_cfg_installation_ch_id: enums.CfgInstallationChEnum;
-		enum_type_installation_id: enums.TypeInstallationEnum;
-	};
-	donnee_intermediaire: {
-		besoin_ch: number;
-		conso_ch: number;
-	};
-	emetteur_chauffage_collection: Array<EmetteurChauffageNeuf>;
-	generateur_chauffage_collection: Array<GenerateurChauffageNeuf>;
-};
-
-export type EmetteurChauffageNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		surface_chauffee: number;
-		enum_type_emission_distribution_id: enums.TypeEmissionDistributionEnum;
-		reseau_distribution_isole?: OuiNon | null;
-		enum_periode_installation_emetteur_id?: enums.PeriodeInstallationEmetteurEnum | null;
-		enum_temp_distribution_ch_id?: enums.TempDistributionChEnum | null;
-	};
-};
-
-export type GenerateurChauffageNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		ref_produit_generateur_ch?: string | null;
-		enum_type_generateur_ch_id: enums.TypeGenerateurChEnum;
-		enum_usage_generateur_id: enums.UsageGenerateurEnum;
-		enum_type_energie_id: enums.TypeEnergieEnum;
-		position_volume_chauffe?: OuiNon | null;
-		tv_reseau_chaleur_id?: number | null;
-		identifiant_reseau_chaleur?: string | null;
-		date_arrete_reseau_chaleur?: string | null;
-		n_radiateurs_gaz?: number | null;
-		presence_ventouse?: OuiNon | null;
-		presence_regulation_combustion?: OuiNon | null;
-		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum;
-	};
-	donnee_intermediaire: {
-		scop?: number | null;
-		pn?: number | null;
-		qp0?: number | null;
-		pveilleuse?: number | null;
-		temp_fonc_30?: number | null;
-		temp_fonc_100?: number | null;
-		rpn?: number | null;
-		rpint?: number | null;
-		conso_ch?: number | null;
-	};
-};
-
-export type ProductionElecEnrNeuf = {
-	donnee_entree: {
-		description?: string | null;
-		reference: string;
-		presence_production_pv: OuiNon;
-		enum_type_enr_id: enums.TypeEnrEnum;
-	};
-	donnee_intermediaire?: {
-		taux_autoproduction?: number | null;
-		production_pv: number;
-		conso_elec_ac: number;
-	} | null;
-	panneaux_pv_collection: Array<PanneauxPvNeuf>;
-};
-
-export type PanneauxPvNeuf = {
-	surface_totale_capteurs?: number | null;
-	nombre_module?: number | null;
-};
-
-export type SortieNeuf = {
-	deperdition: DeperditionNeuf;
-	apport_et_besoin: ApportEtBesoinNeuf;
-	ef_conso: EfConsoNeuf;
-	ep_conso: EpConsoNeuf;
-	emission_ges: EmissionGesNeuf;
-	cout: CoutNeuf;
-	production_electricite?: ProductionElectriciteNeuf | null;
-	sortie_par_energie_collection: Array<SortieParEnergieNeuf>;
-	confort_ete: ConfortEteNeuf;
-	qualite_isolation: QualiteIsolationNeuf;
-};
-
-export type DeperditionNeuf = {
-	hvent: number;
-	hperm: number;
-	deperdition_renouvellement_air: number;
-	deperdition_mur: number;
-	deperdition_plancher_bas: number;
-	deperdition_plancher_haut: number;
-	deperdition_baie_vitree: number;
-	deperdition_porte: number;
-	deperdition_pont_thermique: number;
-	deperdition_enveloppe: number;
-};
-
-export type ApportEtBesoinNeuf = {
-	besoin_ch: number;
-	besoin_ecs: number;
-	besoin_fr: number;
-};
-
-export type EfConsoNeuf = {
-	conso_ch: number;
-	conso_ch_depensier: number;
-	conso_ecs: number;
-	conso_ecs_depensier: number;
-	conso_eclairage: number;
-	conso_auxiliaire_ventilation: number;
-	conso_totale_auxiliaire: number;
-	conso_fr: number;
-	conso_fr_depensier: number;
-	conso_5_usages: number;
-	conso_5_usages_m2: number;
-};
-
-export type EpConsoNeuf = {
-	ep_conso_ch: number;
-	ep_conso_ch_depensier: number;
-	ep_conso_ecs: number;
-	ep_conso_ecs_depensier: number;
-	ep_conso_eclairage: number;
-	ep_conso_auxiliaire_ventilation: number;
-	ep_conso_totale_auxiliaire: number;
-	ep_conso_fr: number;
-	ep_conso_fr_depensier: number;
-	ep_conso_5_usages: number;
-	ep_conso_5_usages_m2: number;
-	classe_bilan_dpe: enums.ClasseEtiquetteEnum;
-};
-
-export type EmissionGesNeuf = {
-	emission_ges_ch: number;
-	emission_ges_ch_depensier: number;
-	emission_ges_ecs: number;
-	emission_ges_ecs_depensier: number;
-	emission_ges_eclairage: number;
-	emission_ges_auxiliaire_ventilation: number;
-	emission_ges_totale_auxiliaire: number;
-	emission_ges_fr: number;
-	emission_ges_fr_depensier: number;
-	emission_ges_5_usages: number;
-	emission_ges_5_usages_m2: number;
-	classe_emission_ges: enums.ClasseEtiquetteEnum;
-};
-
-export type CoutNeuf = {
-	cout_ch: number;
-	cout_ch_depensier: number;
-	cout_ecs: number;
-	cout_ecs_depensier: number;
-	cout_eclairage: number;
-	cout_auxiliaire_ventilation: number;
-	cout_total_auxiliaire: number;
-	cout_fr: number;
-	cout_fr_depensier: number;
-	cout_5_usages: number;
-};
-
-export type ProductionElectriciteNeuf = {
-	production_pv: number;
-};
-
-export type SortieParEnergieNeuf = {
-	enum_type_energie_id: enums.TypeEnergieEnum;
-	conso_ch: number;
-	conso_ecs: number;
-	conso_5_usages: number;
-	emission_ges_ch: number;
-	emission_ges_ecs: number;
-	emission_ges_5_usages: number;
-	cout_ch: number;
-	cout_ecs: number;
-	cout_5_usages: number;
-};
-
-export type ConfortEteNeuf = {
-	isolation_toiture: OuiNon;
-	protection_solaire_exterieure: OuiNon;
-	aspect_traversant: OuiNon;
-	brasseur_air: OuiNon;
-	inertie_lourde: OuiNon;
-	enum_indicateur_confort_ete_id: enums.IndicateurConfortEteEnum;
-};
-
-export type QualiteIsolationNeuf = {
-	ubat: number;
-	qualite_isol_enveloppe: enums.QualiteComposantEnum;
-	qualite_isol_mur: enums.QualiteComposantEnum;
-	qualite_isol_plancher_haut_toit_terrasse: enums.QualiteComposantEnum;
-	qualite_isol_plancher_haut_comble_perdu: enums.QualiteComposantEnum;
-	qualite_isol_plancher_haut_comble_amenage: enums.QualiteComposantEnum;
-	qualite_isol_plancher_bas: enums.QualiteComposantEnum;
-	qualite_isol_menuiserie: enums.QualiteComposantEnum;
-};
-
-// ==================================================================================================
-// Tertiaire
-// ==================================================================================================
-
-export type Tertiaire = Record<string, unknown>;
+export const Travaux = z.object({
+	description_travaux: z.string().nullable().optional().transform((v) => v ?? "Non renseigné"),
+	enum_lot_travaux_id: enums.LotTravauxEnum,
+	avertissement_travaux: z.string().nullable().optional(),
+	performance_recommande: z.string().nullable().optional().transform((v) => v ?? "Non renseigné"),
+});
+export type Travaux = z.infer<typeof Travaux>;
+
+export const PackTravaux = z.object({
+	enum_num_pack_travaux_id: enums.NumPackTravauxEnum,
+	conso_5_usages_apres_travaux: z.number().nullable().optional(),
+	emission_ges_5_usages_apres_travaux: z.number().nullable().optional(),
+	cout_pack_travaux_min: z.number().nullable().optional(),
+	cout_pack_travaux_max: z.number().nullable().optional(),
+	travaux_collection: z.array(Travaux),
+});
+export type PackTravaux = z.infer<typeof PackTravaux>;
+
+export const DescriptifTravaux = z.object({
+	pack_travaux_collection: z.array(PackTravaux),
+	commentaire_travaux: z.string().nullable().optional().transform((v) => v ?? "Non renseigné"),
+});
+export type DescriptifTravaux = z.infer<typeof DescriptifTravaux>;
 
 // ==================================================================================================
 // Collections et types auxiliaires
 // ==================================================================================================
 
-export type DPEImmeuble = {
-	logement_visite_collection: Array<LogementVisite>;
-};
+export const DescriptifGesteEntretien = z.object({
+	description: z.string(),
+	enum_picto_geste_entretien_id: enums.PictoGesteEntretienEnum,
+	categorie_geste_entretien: z.string(),
+});
+export type DescriptifGesteEntretien = z.infer<typeof DescriptifGesteEntretien>;
 
-export type LogementVisite = {
-	description: string;
-	enum_position_etage_logement_id: enums.PositionEtageLogementEnum;
-	enum_typologie_logement_id: enums.TypologieLogementEnum;
-	surface_habitable_logement: number;
-};
+export const Justificatif = z.object({
+	description: z.string().nullable().optional().transform((v) => v ?? "Non renseigné"),
+	enum_type_justificatif_id: enums.TypeJustificatifEnum,
+});
+export type Justificatif = z.infer<typeof Justificatif>;
 
-export type DescriptifEnr = {
-	description: string;
-	enum_categorie_enr_descriptif_id: enums.CategorieEnrDescriptifEnum;
-};
+export const SousFicheTechnique = z.object({
+	description: z.string(),
+	valeur: z.string().nullable().optional().transform((v) => v ?? "Non renseigné"),
+	detail_origine_donnee: z.string().nullable().optional(),
+	enum_origine_donnee_id: enums.OrigineDonneeEnum,
+});
+export type SousFicheTechnique = z.infer<typeof SousFicheTechnique>;
 
-export type DescriptifSimplifie = {
-	description: string;
-	enum_categorie_descriptif_simplifie_id: enums.CategorieDescriptifSimplifieEnum;
-};
+export const FicheTechnique = z.object({
+	enum_categorie_fiche_technique_id: enums.CategorieFicheTechniqueEnum,
+	sous_fiche_technique_collection: z.array(SousFicheTechnique),
+});
+export type FicheTechnique = z.infer<typeof FicheTechnique>;
 
-export type FicheTechnique = {
-	enum_categorie_fiche_technique_id: enums.CategorieFicheTechniqueEnum;
-	sous_fiche_technique_collection: Array<SousFicheTechnique>;
-};
+export const DescriptifSimplifie = z.object({
+	description: z.string().nullable().optional().transform((v) => v ?? "Non renseigné"),
+	enum_categorie_descriptif_simplifie_id: enums.CategorieDescriptifSimplifieEnum,
+});
+export type DescriptifSimplifie = z.infer<typeof DescriptifSimplifie>;
 
-export type SousFicheTechnique = {
-	description: string;
-	valeur: string;
-	detail_origine_donnee?: string | null;
-	enum_origine_donnee_id: enums.OrigineDonneeEnum;
-};
+export const DescriptifEnr = z.object({
+	description: z.string(),
+	enum_categorie_enr_descriptif_id: enums.CategorieEnrDescriptifEnum,
+});
+export type DescriptifEnr = z.infer<typeof DescriptifEnr>;
 
-export type Justificatif = {
-	description: string;
-	enum_type_justificatif_id: enums.TypeJustificatifEnum;
-};
+export const LogementVisite = z.object({
+	description: z.string().nullable().optional().transform((v) => v ?? "Non renseigné"),
+	enum_position_etage_logement_id: enums.PositionEtageLogementEnum,
+	enum_typologie_logement_id: enums.TypologieLogementEnum,
+	surface_habitable_logement: z.number(),
+});
+export type LogementVisite = z.infer<typeof LogementVisite>;
 
-export type DescriptifGesteEntretien = {
-	description: string;
-	enum_picto_geste_entretien_id: enums.PictoGesteEntretienEnum;
-	categorie_geste_entretien: string;
-};
+export const DPEImmeuble = z.object({
+	logement_visite_collection: z.array(LogementVisite),
+});
+export type DPEImmeuble = z.infer<typeof DPEImmeuble>;
 
-export type DescriptifTravaux = {
-	pack_travaux_collection: Array<PackTravaux>;
-	commentaire_travaux: string;
-};
+// ==================================================================================================
+// Sortie
+// ==================================================================================================
 
-export type PackTravaux = {
-	enum_num_pack_travaux_id: enums.NumPackTravauxEnum;
-	conso_5_usages_apres_travaux?: number | null;
-	emission_ges_5_usages_apres_travaux?: number | null;
-	cout_pack_travaux_min?: number | null;
-	cout_pack_travaux_max?: number | null;
-	travaux_collection: Array<Travaux>;
-};
+export const QualiteIsolation = z.object({
+	ubat: z.number(),
+	qualite_isol_enveloppe: enums.QualiteComposantEnum,
+	qualite_isol_mur: enums.QualiteComposantEnum,
+	qualite_isol_plancher_haut_toit_terrasse: enums.QualiteComposantEnum.nullable().optional(),
+	qualite_isol_plancher_haut_comble_perdu: enums.QualiteComposantEnum.nullable().optional(),
+	qualite_isol_plancher_haut_comble_amenage: enums.QualiteComposantEnum.nullable().optional(),
+	qualite_isol_plancher_bas: enums.QualiteComposantEnum.nullable().optional(),
+	qualite_isol_menuiserie: enums.QualiteComposantEnum,
+});
+export type QualiteIsolation = z.infer<typeof QualiteIsolation>;
 
-export type Travaux = {
-	description_travaux: string;
-	enum_lot_travaux_id: enums.LotTravauxEnum;
-	avertissement_travaux?: string | null;
-	performance_recommande: string;
-};
+export const ConfortEte = z.object({
+	isolation_toiture: z.boolean(),
+	protection_solaire_exterieure: z.boolean(),
+	aspect_traversant: z.boolean(),
+	brasseur_air: z.boolean(),
+	inertie_lourde: z.boolean(),
+	enum_indicateur_confort_ete_id: enums.IndicateurConfortEteEnum,
+});
+export type ConfortEte = z.infer<typeof ConfortEte>;
+
+export const SortieParEnergie = z.object({
+	enum_type_energie_id: enums.TypeEnergieEnum,
+	conso_ch: z.number(),
+	conso_ecs: z.number(),
+	conso_5_usages: z.number(),
+	emission_ges_ch: z.number(),
+	emission_ges_ecs: z.number(),
+	emission_ges_5_usages: z.number(),
+	cout_ch: z.number(),
+	cout_ecs: z.number(),
+	cout_5_usages: z.number(),
+});
+export type SortieParEnergie = z.infer<typeof SortieParEnergie>;
+
+export const ProductionElectricite = z.object({
+	production_pv: z.number(),
+	conso_elec_ac: z.number(),
+	conso_elec_ac_ch: z.number(),
+	conso_elec_ac_ecs: z.number(),
+	conso_elec_ac_fr: z.number(),
+	conso_elec_ac_eclairage: z.number(),
+	conso_elec_ac_auxiliaire: z.number(),
+	conso_elec_ac_autre_usage: z.number(),
+});
+export type ProductionElectricite = z.infer<typeof ProductionElectricite>;
+
+export const Cout = z.object({
+	cout_ch: z.number(),
+	cout_ch_depensier: z.number(),
+	cout_ecs: z.number(),
+	cout_ecs_depensier: z.number(),
+	cout_eclairage: z.number(),
+	cout_auxiliaire_generation_ch: z.number(),
+	cout_auxiliaire_generation_ch_depensier: z.number(),
+	cout_auxiliaire_distribution_ch: z.number(),
+	cout_auxiliaire_generation_ecs: z.number(),
+	cout_auxiliaire_generation_ecs_depensier: z.number(),
+	cout_auxiliaire_distribution_ecs: z.number(),
+	cout_auxiliaire_distribution_fr: z.number().nullable().optional(),
+	cout_auxiliaire_ventilation: z.number(),
+	cout_total_auxiliaire: z.number(),
+	cout_fr: z.number(),
+	cout_fr_depensier: z.number(),
+	cout_5_usages: z.number(),
+});
+export type Cout = z.infer<typeof Cout>;
+
+export const EmissionGes = z.object({
+	emission_ges_ch: z.number(),
+	emission_ges_ch_depensier: z.number(),
+	emission_ges_ecs: z.number(),
+	emission_ges_ecs_depensier: z.number(),
+	emission_ges_eclairage: z.number(),
+	emission_ges_auxiliaire_generation_ch: z.number(),
+	emission_ges_auxiliaire_generation_ch_depensier: z.number(),
+	emission_ges_auxiliaire_distribution_ch: z.number(),
+	emission_ges_auxiliaire_generation_ecs: z.number(),
+	emission_ges_auxiliaire_generation_ecs_depensier: z.number(),
+	emission_ges_auxiliaire_distribution_ecs: z.number(),
+	emission_ges_auxiliaire_distribution_fr: z.number().nullable().optional(),
+	emission_ges_auxiliaire_ventilation: z.number(),
+	emission_ges_totale_auxiliaire: z.number(),
+	emission_ges_fr: z.number(),
+	emission_ges_fr_depensier: z.number(),
+	emission_ges_5_usages: z.number(),
+	emission_ges_5_usages_m2: z.number(),
+	classe_emission_ges: enums.ClasseEtiquetteEnum,
+});
+export type EmissionGes = z.infer<typeof EmissionGes>;
+
+export const EpConso = z.object({
+	ep_conso_ch: z.number(),
+	ep_conso_ch_depensier: z.number(),
+	ep_conso_ecs: z.number(),
+	ep_conso_ecs_depensier: z.number(),
+	ep_conso_eclairage: z.number(),
+	ep_conso_auxiliaire_generation_ch: z.number(),
+	ep_conso_auxiliaire_generation_ch_depensier: z.number(),
+	ep_conso_auxiliaire_distribution_ch: z.number(),
+	ep_conso_auxiliaire_generation_ecs: z.number(),
+	ep_conso_auxiliaire_generation_ecs_depensier: z.number(),
+	ep_conso_auxiliaire_distribution_ecs: z.number(),
+	ep_conso_auxiliaire_distribution_fr: z.number().nullable().optional(),
+	ep_conso_auxiliaire_ventilation: z.number(),
+	ep_conso_totale_auxiliaire: z.number(),
+	ep_conso_fr: z.number(),
+	ep_conso_fr_depensier: z.number(),
+	ep_conso_5_usages: z.number(),
+	ep_conso_5_usages_m2: z.number(),
+	classe_bilan_dpe: enums.ClasseEtiquetteEnum,
+});
+export type EpConso = z.infer<typeof EpConso>;
+
+export const EfConso = z.object({
+	conso_ch: z.number(),
+	conso_ch_depensier: z.number(),
+	conso_ecs: z.number(),
+	conso_ecs_depensier: z.number(),
+	conso_eclairage: z.number(),
+	conso_auxiliaire_generation_ch: z.number(),
+	conso_auxiliaire_generation_ch_depensier: z.number(),
+	conso_auxiliaire_distribution_ch: z.number(),
+	conso_auxiliaire_generation_ecs: z.number(),
+	conso_auxiliaire_generation_ecs_depensier: z.number(),
+	conso_auxiliaire_distribution_ecs: z.number(),
+	conso_auxiliaire_distribution_fr: z.number().nullable().optional(),
+	conso_auxiliaire_ventilation: z.number(),
+	conso_totale_auxiliaire: z.number(),
+	conso_fr: z.number(),
+	conso_fr_depensier: z.number(),
+	conso_5_usages: z.number(),
+	conso_5_usages_m2: z.number(),
+});
+export type EfConso = z.infer<typeof EfConso>;
+
+export const ApportEtBesoin = z.object({
+	surface_sud_equivalente: z.number(),
+	apport_solaire_fr: z.number(),
+	apport_interne_fr: z.number(),
+	apport_solaire_ch: z.number(),
+	apport_interne_ch: z.number(),
+	fraction_apport_gratuit_ch: z.number(),
+	fraction_apport_gratuit_depensier_ch: z.number(),
+	pertes_distribution_ecs_recup: z.number(),
+	pertes_distribution_ecs_recup_depensier: z.number(),
+	pertes_stockage_ecs_recup: z.number(),
+	pertes_generateur_ch_recup: z.number(),
+	pertes_generateur_ch_recup_depensier: z.number(),
+	nadeq: z.number(),
+	v40_ecs_journalier: z.number(),
+	v40_ecs_journalier_depensier: z.number(),
+	besoin_ch: z.number(),
+	besoin_ch_depensier: z.number(),
+	besoin_ecs: z.number(),
+	besoin_ecs_depensier: z.number(),
+	besoin_fr: z.number(),
+	besoin_fr_depensier: z.number(),
+});
+export type ApportEtBesoin = z.infer<typeof ApportEtBesoin>;
+
+export const Deperdition = z.object({
+	hvent: z.number(),
+	hperm: z.number(),
+	deperdition_renouvellement_air: z.number(),
+	deperdition_mur: z.number(),
+	deperdition_plancher_bas: z.number(),
+	deperdition_plancher_haut: z.number(),
+	deperdition_baie_vitree: z.number(),
+	deperdition_porte: z.number(),
+	deperdition_pont_thermique: z.number(),
+	deperdition_enveloppe: z.number(),
+});
+export type Deperdition = z.infer<typeof Deperdition>;
+
+export const Sortie = z.object({
+	deperdition: Deperdition,
+	apport_et_besoin: ApportEtBesoin,
+	ef_conso: EfConso,
+	ep_conso: EpConso,
+	emission_ges: EmissionGes,
+	cout: Cout,
+	production_electricite: ProductionElectricite.nullable().optional(),
+	sortie_par_energie_collection: z.array(SortieParEnergie),
+	confort_ete: ConfortEte.nullable().optional(),
+	qualite_isolation: QualiteIsolation,
+});
+export type Sortie = z.infer<typeof Sortie>;
+
+// ==================================================================================================
+// Systèmes
+// ==================================================================================================
+
+export const PanneauxPv = z.object({
+	surface_totale_capteurs: z.number().nullable().optional(),
+	ratio_virtualisation: z.number().nullable().optional(),
+	nombre_module: z.number().nullable().optional(),
+	tv_coef_orientation_pv_id: z.number().nullable().optional(),
+	enum_orientation_pv_id: enums.OrientationPvEnum.nullable().optional(),
+	enum_inclinaison_pv_id: enums.InclinaisonPvEnum.nullable().optional(),
+});
+export type PanneauxPv = z.infer<typeof PanneauxPv>;
+
+export const ProductionElecEnr = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		presence_production_pv: z.boolean(),
+		enum_type_enr_id: enums.TypeEnrEnum,
+	}),
+	donnee_intermediaire: z
+		.object({
+			taux_autoproduction: z.number().nullable().optional(),
+			production_pv: z.number(),
+			conso_elec_ac: z.number(),
+		})
+		.nullable()
+		.optional(),
+	panneaux_pv_collection: z.array(PanneauxPv),
+});
+export type ProductionElecEnr = z.infer<typeof ProductionElecEnr>;
+
+export const GenerateurChauffage = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_generateur_mixte: z.string().nullable().optional(),
+		ref_produit_generateur_ch: z.string().nullable().optional(),
+		enum_type_generateur_ch_id: enums.TypeGenerateurChEnum,
+		enum_usage_generateur_id: enums.UsageGenerateurEnum,
+		enum_type_energie_id: enums.TypeEnergieEnum,
+		position_volume_chauffe: z.boolean().nullable().optional(),
+		tv_rendement_generation_id: z.number().nullable().optional(),
+		tv_scop_id: z.number().nullable().optional(),
+		tv_temp_fonc_100_id: z.number().nullable().optional(),
+		tv_temp_fonc_30_id: z.number().nullable().optional(),
+		tv_generateur_combustion_id: z.number().nullable().optional(),
+		tv_reseau_chaleur_id: z.number().nullable().optional(),
+		identifiant_reseau_chaleur: z.string().nullable().optional(),
+		date_arrete_reseau_chaleur: z.string().nullable().optional(),
+		n_radiateurs_gaz: z.number().nullable().optional(),
+		priorite_generateur_cascade: z.number().nullable().optional(),
+		presence_ventouse: z.boolean().nullable().optional(),
+		presence_regulation_combustion: z.boolean().nullable().optional(),
+		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum,
+		enum_lien_generateur_emetteur_id: enums.LienGenerateurEmetteurEnum.nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		scop: z.number().nullable().optional(),
+		pn: z.number().nullable().optional(),
+		qp0: z.number().nullable().optional(),
+		pveilleuse: z.number().nullable().optional(),
+		temp_fonc_30: z.number().nullable().optional(),
+		temp_fonc_100: z.number().nullable().optional(),
+		rpn: z.number().nullable().optional(),
+		rpint: z.number().nullable().optional(),
+		rendement_generation: z.number().nullable().optional(),
+		conso_ch: z.number(),
+		conso_ch_depensier: z.number(),
+	}),
+});
+export type GenerateurChauffage = z.infer<typeof GenerateurChauffage>;
+
+export const EmetteurChauffage = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		surface_chauffee: z.number(),
+		tv_rendement_emission_id: z.number().nullable().optional(),
+		tv_rendement_distribution_ch_id: z.number().nullable().optional(),
+		tv_rendement_regulation_id: z.number().nullable().optional(),
+		enum_type_emission_distribution_id: enums.TypeEmissionDistributionEnum,
+		tv_intermittence_id: z.number().nullable().optional(),
+		reseau_distribution_isole: z.boolean().nullable().optional(),
+		enum_equipement_intermittence_id: enums.EquipementIntermittenceEnum.nullable().optional(),
+		enum_type_regulation_id: enums.TypeRegulationEnum.nullable().optional(),
+		enum_periode_installation_emetteur_id: enums.PeriodeInstallationEmetteurEnum.nullable().optional(),
+		enum_type_chauffage_id: enums.TypeChauffageEnum,
+		enum_temp_distribution_ch_id: enums.TempDistributionChEnum.nullable().optional(),
+		enum_lien_generateur_emetteur_id: enums.LienGenerateurEmetteurEnum.nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		i0: z.number(),
+		rendement_emission: z.number(),
+		rendement_distribution: z.number(),
+		rendement_regulation: z.number(),
+	}),
+});
+export type EmetteurChauffage = z.infer<typeof EmetteurChauffage>;
+
+export const InstallationChauffage = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		surface_chauffee: z.number(),
+		nombre_logement_echantillon: z.number().nullable().optional(),
+		rdim: z.number(),
+		nombre_niveau_installation_ch: z.number(),
+		enum_cfg_installation_ch_id: enums.CfgInstallationChEnum,
+		ratio_virtualisation: z.number().nullable().optional(),
+		coef_ifc: z.number().nullable().optional(),
+		cle_repartition_ch: z.number().nullable().optional(),
+		enum_type_installation_id: enums.TypeInstallationEnum,
+		enum_methode_calcul_conso_id: enums.MethodeCalculConsoEnum,
+		enum_methode_saisie_fact_couv_sol_id: enums.MethodeSaisieFactCouvSolEnum.nullable().optional(),
+		tv_facteur_couverture_solaire_id: z.number().nullable().optional(),
+		fch_saisi: z.number().nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		besoin_ch: z.number(),
+		besoin_ch_depensier: z.number(),
+		production_ch_solaire: z.number().nullable().optional(),
+		fch: z.number().nullable().optional(),
+		conso_ch: z.number(),
+		conso_ch_depensier: z.number(),
+	}),
+	emetteur_chauffage_collection: z.array(EmetteurChauffage),
+	generateur_chauffage_collection: z.array(GenerateurChauffage),
+});
+export type InstallationChauffage = z.infer<typeof InstallationChauffage>;
+
+export const GenerateurEcs = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_generateur_mixte: z.string().nullable().optional(),
+		enum_type_generateur_ecs_id: enums.TypeGenerateurEcsEnum,
+		ref_produit_generateur_ecs: z.string().nullable().optional(),
+		enum_usage_generateur_id: enums.UsageGenerateurEnum,
+		enum_type_energie_id: enums.TypeEnergieEnum,
+		tv_generateur_combustion_id: z.number().nullable().optional(),
+		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum,
+		tv_pertes_stockage_id: z.number().nullable().optional(),
+		tv_scop_id: z.number().nullable().optional(),
+		enum_periode_installation_ecs_thermo_id: enums.PeriodeInstallationEcsThermoEnum.nullable().optional(),
+		identifiant_reseau_chaleur: z.string().nullable().optional(),
+		date_arrete_reseau_chaleur: z.string().nullable().optional(),
+		tv_reseau_chaleur_id: z.number().nullable().optional(),
+		enum_type_stockage_ecs_id: enums.TypeStockageEcsEnum.nullable().optional(),
+		position_volume_chauffe: z.boolean().nullable().optional(),
+		position_volume_chauffe_stockage: z.boolean().nullable().optional(),
+		volume_stockage: z.number().nullable().optional(),
+		presence_ventouse: z.boolean().nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		pn: z.number().nullable().optional(),
+		qp0: z.number().nullable().optional(),
+		pveilleuse: z.number().nullable().optional(),
+		rpn: z.number().nullable().optional(),
+		cop: z.number().nullable().optional(),
+		ratio_besoin_ecs: z.number().nullable().optional(),
+		rendement_generation: z.number().nullable().optional(),
+		rendement_generation_stockage: z.number().nullable().optional(),
+		conso_ecs: z.number(),
+		conso_ecs_depensier: z.number(),
+		rendement_stockage: z.number().nullable().optional(),
+	}),
+});
+export type GenerateurEcs = z.infer<typeof GenerateurEcs>;
+
+export const InstallationEcs = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		enum_cfg_installation_ecs_id: enums.CfgInstallationEcsEnum,
+		enum_type_installation_id: enums.TypeInstallationEnum,
+		enum_methode_calcul_conso_id: enums.MethodeCalculConsoEnum,
+		ratio_virtualisation: z.number().nullable().optional(),
+		cle_repartition_ecs: z.number().nullable().optional(),
+		surface_habitable: z.number(),
+		rdim: z.number(),
+		nombre_logement: z.number(),
+		nombre_niveau_installation_ecs: z.number(),
+		fecs_saisi: z.number().nullable().optional(),
+		tv_facteur_couverture_solaire_id: z.number().nullable().optional(),
+		enum_methode_saisie_fact_couv_sol_id: enums.MethodeSaisieFactCouvSolEnum.nullable().optional(),
+		enum_type_installation_solaire_id: enums.TypeInstallationSolaireEnum.nullable().optional(),
+		tv_rendement_distribution_ecs_id: z.number().nullable().optional(),
+		enum_bouclage_reseau_ecs_id: enums.BouclageReseauEcsEnum.nullable().optional(),
+		reseau_distribution_isole: z.boolean().nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		rendement_distribution: z.number(),
+		besoin_ecs: z.number(),
+		besoin_ecs_depensier: z.number(),
+		fecs: z.number().nullable().optional(),
+		production_ecs_solaire: z.number().nullable().optional(),
+		conso_ecs: z.number(),
+		conso_ecs_depensier: z.number(),
+	}),
+	generateur_ecs_collection: z.array(GenerateurEcs),
+});
+export type InstallationEcs = z.infer<typeof InstallationEcs>;
+
+export const Climatisation = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		surface_clim: z.number(),
+		tv_seer_id: z.number().nullable().optional(),
+		nombre_logement_echantillon: z.number().nullable().optional(),
+		enum_methode_calcul_conso_id: enums.MethodeCalculConsoEnum,
+		enum_periode_installation_fr_id: enums.PeriodeInstallationFrEnum,
+		cle_repartition_clim: z.number().nullable().optional(),
+		enum_type_generateur_fr_id: enums.TypeGenerateurFrEnum,
+		enum_type_energie_id: enums.TypeEnergieEnum.nullable().optional(),
+		enum_methode_saisie_carac_sys_id: enums.MethodeSaisieCaracSysEnum,
+		ref_produit_fr: z.string().nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		eer: z.number(),
+		besoin_fr: z.number(),
+		conso_fr: z.number(),
+		conso_fr_depensier: z.number(),
+	}),
+});
+export type Climatisation = z.infer<typeof Climatisation>;
+
+export const Ventilation = z.object({
+	donnee_entree: z.object({
+		surface_ventile: z.number(),
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		plusieurs_facade_exposee: z.boolean(),
+		tv_q4pa_conv_id: z.number().nullable().optional(),
+		q4pa_conv_saisi: z.number().nullable().optional(),
+		enum_methode_saisie_q4pa_conv_id: enums.MethodeSaisieQ4paConvEnum,
+		tv_debits_ventilation_id: z.number(),
+		enum_type_ventilation_id: enums.TypeVentilationEnum,
+		ventilation_post_2012: z.boolean(),
+		ref_produit_ventilation: z.string().nullable().optional(),
+		cle_repartition_ventilation: z.number().nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		pvent_moy: z.number().nullable().optional(),
+		q4pa_conv: z.number(),
+		conso_auxiliaire_ventilation: z.number(),
+		hperm: z.number(),
+		hvent: z.number(),
+	}),
+});
+export type Ventilation = z.infer<typeof Ventilation>;
+
+// ==================================================================================================
+// Enveloppe
+// ==================================================================================================
+
+export const PontThermique = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_1: z.string().nullable().optional(),
+		reference_2: z.string().nullable().optional(),
+		tv_pont_thermique_id: z.number().nullable().optional(),
+		pourcentage_valeur_pont_thermique: z.number(),
+		l: z.number(),
+		enum_methode_saisie_pont_thermique_id: enums.MethodeSaisiePontThermiqueEnum,
+		enum_type_liaison_id: enums.TypeLiaisonEnum,
+		k_saisi: z.number().nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		k: z.number(),
+	}),
+});
+export type PontThermique = z.infer<typeof PontThermique>;
+
+export const BaieEts = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		enum_orientation_id: enums.OrientationEnum,
+		enum_inclinaison_vitrage_id: enums.InclinaisonVitrageEnum,
+		surface_totale_baie: z.number(),
+		nb_baie: z.number(),
+	}),
+});
+export type BaieEts = z.infer<typeof BaieEts>;
+
+export const Ets = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		tv_coef_reduction_deperdition_id: z.number().nullable().optional(),
+		enum_cfg_isolation_lnc_id: enums.CfgIsolationLncEnum.nullable().optional(),
+		tv_coef_transparence_ets_id: z.number().nullable().optional(),
+	}),
+	baie_ets_collection: z.array(BaieEts),
+	donnee_intermediaire: z.object({
+		coef_transparence_ets: z.number(),
+		bver: z.number(),
+	}),
+});
+export type Ets = z.infer<typeof Ets>;
+
+export const Porte = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_paroi: z.string().nullable().optional(),
+		reference_lnc: z.string().nullable().optional(),
+		enum_cfg_isolation_lnc_id: enums.CfgIsolationLncEnum.nullable().optional(),
+		enum_type_adjacence_id: enums.TypeAdjacenceEnum,
+		tv_coef_reduction_deperdition_id: z.number().nullable().optional(),
+		surface_aiu: z.number().nullable().optional(),
+		surface_aue: z.number().nullable().optional(),
+		surface_porte: z.number(),
+		tv_uporte_id: z.number().nullable().optional(),
+		enum_methode_saisie_uporte_id: enums.MethodeSaisieUporteEnum,
+		enum_type_porte_id: enums.TypePorteEnum,
+		uporte_saisi: z.number().nullable().optional(),
+		nb_porte: z.number().nullable().optional(),
+		largeur_dormant: z.number().nullable().optional(),
+		presence_retour_isolation: z.boolean().nullable().optional(),
+		presence_joint: z.boolean(),
+		enum_type_pose_id: enums.TypePoseEnum,
+	}),
+	donnee_intermediaire: z.object({
+		uporte: z.number(),
+		b: z.number().nullable().optional(),
+	}),
+});
+export type Porte = z.infer<typeof Porte>;
+
+export const MasqueLointainNonHomogene = z.object({
+	tv_coef_masque_lointain_non_homogene_id: z.number(),
+});
+export type MasqueLointainNonHomogene = z.infer<typeof MasqueLointainNonHomogene>;
+
+export const BaieVitreeDoubleFenetre = z.object({
+	donnee_entree: z.object({
+		tv_ug_id: z.number().nullable().optional(),
+		enum_type_vitrage_id: enums.TypeVitrageEnum,
+		enum_inclinaison_vitrage_id: enums.InclinaisonVitrageEnum,
+		enum_type_gaz_lame_id: enums.TypeGazLameEnum.nullable().optional(),
+		epaisseur_lame: z.number().nullable().optional(),
+		vitrage_vir: z.boolean().nullable().optional(),
+		enum_methode_saisie_perf_vitrage_id: enums.MethodeSaisiePerfVitrageEnum,
+		ug_saisi: z.number().nullable().optional(),
+		tv_uw_id: z.number().nullable().optional(),
+		enum_type_materiaux_menuiserie_id: enums.TypeMateriauxMenuiserieEnum,
+		enum_type_baie_id: enums.TypeBaieEnum,
+		uw_saisi: z.number().nullable().optional(),
+		tv_sw_id: z.number().nullable().optional(),
+		sw_saisi: z.number().nullable().optional(),
+		enum_type_pose_id: enums.TypePoseEnum,
+	}),
+	donnee_intermediaire: z.object({
+		ug: z.number().nullable().optional(),
+		uw: z.number(),
+		sw: z.number(),
+	}),
+});
+export type BaieVitreeDoubleFenetre = z.infer<typeof BaieVitreeDoubleFenetre>;
+
+export const BaieVitree = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_paroi: z.string().nullable().optional(),
+		reference_lnc: z.string().nullable().optional(),
+		tv_coef_reduction_deperdition_id: z.number().nullable().optional(),
+		surface_aiu: z.number().nullable().optional(),
+		surface_aue: z.number().nullable().optional(),
+		enum_cfg_isolation_lnc_id: enums.CfgIsolationLncEnum.nullable().optional(),
+		enum_type_adjacence_id: enums.TypeAdjacenceEnum,
+		surface_totale_baie: z.number(),
+		nb_baie: z.number(),
+		tv_ug_id: z.number().nullable().optional(),
+		enum_type_vitrage_id: enums.TypeVitrageEnum,
+		enum_inclinaison_vitrage_id: enums.InclinaisonVitrageEnum,
+		enum_type_gaz_lame_id: enums.TypeGazLameEnum.nullable().optional(),
+		epaisseur_lame: z.number().nullable().optional(),
+		vitrage_vir: z.boolean().nullable().optional(),
+		enum_methode_saisie_perf_vitrage_id: enums.MethodeSaisiePerfVitrageEnum,
+		ug_saisi: z.number().nullable().optional(),
+		tv_uw_id: z.number().nullable().optional(),
+		enum_type_materiaux_menuiserie_id: enums.TypeMateriauxMenuiserieEnum,
+		enum_type_baie_id: enums.TypeBaieEnum,
+		uw_saisi: z.number().nullable().optional(),
+		double_fenetre: z.boolean().nullable().optional(),
+		uw_1: z.number().nullable().optional(),
+		sw_1: z.number().nullable().optional(),
+		uw_2: z.number().nullable().optional(),
+		sw_2: z.number().nullable().optional(),
+		tv_deltar_id: z.number().nullable().optional(),
+		tv_ujn_id: z.number().nullable().optional(),
+		enum_type_fermeture_id: enums.TypeFermetureEnum,
+		presence_protection_solaire_hors_fermeture: z.boolean(),
+		ujn_saisi: z.number().nullable().optional(),
+		presence_retour_isolation: z.boolean().nullable().optional(),
+		presence_joint: z.boolean(),
+		largeur_dormant: z.number().nullable().optional(),
+		tv_sw_id: z.number().nullable().optional(),
+		sw_saisi: z.number().nullable().optional(),
+		enum_type_pose_id: enums.TypePoseEnum,
+		enum_orientation_id: enums.OrientationEnum,
+		tv_coef_masque_proche_id: z.number().nullable().optional(),
+		tv_coef_masque_lointain_homogene_id: z.number().nullable().optional(),
+		masque_lointain_non_homogene_collection: z.array(MasqueLointainNonHomogene).nullable().optional(),
+		baie_vitree_double_fenetre: BaieVitreeDoubleFenetre.nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		b: z.number().nullable().optional(),
+		ug: z.number().nullable().optional(),
+		uw: z.number(),
+		ujn: z.number().nullable().optional(),
+		u_menuiserie: z.number(),
+		sw: z.number(),
+		fe1: z.number(),
+		fe2: z.number(),
+	}),
+});
+export type BaieVitree = z.infer<typeof BaieVitree>;
+
+export const PlancherHaut = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_lnc: z.string().nullable().optional(),
+		tv_coef_reduction_deperdition_id: z.number().nullable().optional(),
+		surface_aiu: z.number().nullable().optional(),
+		surface_aue: z.number().nullable().optional(),
+		enum_cfg_isolation_lnc_id: enums.CfgIsolationLncEnum.nullable().optional(),
+		enum_type_adjacence_id: enums.TypeAdjacenceEnum,
+		surface_paroi_opaque: z.number(),
+		uph0_saisi: z.number().nullable().optional(),
+		tv_uph0_id: z.number().nullable().optional(),
+		enum_type_plancher_haut_id: enums.TypePlancherHautEnum,
+		enum_methode_saisie_u0_id: enums.MethodeSaisieU0Enum,
+		uph_saisi: z.number().nullable().optional(),
+		enum_type_isolation_id: enums.TypeIsolationEnum,
+		enum_periode_isolation_id: enums.PeriodeIsolationEnum.nullable().optional(),
+		resistance_isolation: z.number().nullable().optional(),
+		epaisseur_isolation: z.number().nullable().optional(),
+		tv_uph_id: z.number().nullable().optional(),
+		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum,
+	}),
+	donnee_intermediaire: z.object({
+		b: z.number().nullable().optional(),
+		uph: z.number(),
+		uph0: z.number().nullable().optional(),
+	}),
+});
+export type PlancherHaut = z.infer<typeof PlancherHaut>;
+
+export const PlancherBas = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_lnc: z.string().nullable().optional(),
+		tv_coef_reduction_deperdition_id: z.number().nullable().optional(),
+		surface_aiu: z.number().nullable().optional(),
+		surface_aue: z.number().nullable().optional(),
+		enum_cfg_isolation_lnc_id: enums.CfgIsolationLncEnum.nullable().optional(),
+		enum_type_adjacence_id: enums.TypeAdjacenceEnum,
+		surface_paroi_opaque: z.number(),
+		upb0_saisi: z.number().nullable().optional(),
+		tv_upb0_id: z.number().nullable().optional(),
+		enum_type_plancher_bas_id: enums.TypePlancherBasEnum,
+		enum_methode_saisie_u0_id: enums.MethodeSaisieU0Enum,
+		upb_saisi: z.number().nullable().optional(),
+		enum_type_isolation_id: enums.TypeIsolationEnum,
+		enum_periode_isolation_id: enums.PeriodeIsolationEnum.nullable().optional(),
+		resistance_isolation: z.number().nullable().optional(),
+		epaisseur_isolation: z.number().nullable().optional(),
+		tv_upb_id: z.number().nullable().optional(),
+		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum,
+		calcul_ue: z.boolean().nullable().optional(),
+		perimetre_ue: z.number().nullable().optional(),
+		surface_ue: z.number().nullable().optional(),
+		ue: z.number().nullable().optional(),
+	}),
+	donnee_intermediaire: z.object({
+		b: z.number().nullable().optional(),
+		upb: z.number(),
+		upb_final: z.number(),
+		upb0: z.number().nullable().optional(),
+	}),
+});
+export type PlancherBas = z.infer<typeof PlancherBas>;
+
+export const Mur = z.object({
+	donnee_entree: z.object({
+		description: z.string().nullable().optional(),
+		reference: z.string(),
+		reference_lnc: z.string().nullable().optional(),
+		tv_coef_reduction_deperdition_id: z.number().nullable().optional(),
+		surface_aiu: z.number().nullable().optional(),
+		surface_aue: z.number().nullable().optional(),
+		enum_cfg_isolation_lnc_id: enums.CfgIsolationLncEnum.nullable().optional(),
+		enum_type_adjacence_id: enums.TypeAdjacenceEnum,
+		enum_orientation_id: enums.OrientationEnum,
+		surface_paroi_totale: z.number().nullable().optional(),
+		surface_paroi_opaque: z.number(),
+		umur0_saisi: z.number().nullable().optional(),
+		tv_umur0_id: z.number().nullable().optional(),
+		epaisseur_structure: z.number().nullable().optional(),
+		enum_materiaux_structure_mur_id: enums.MateriauxStructureMurEnum.nullable().optional(),
+		enum_methode_saisie_u0_id: enums.MethodeSaisieU0Enum,
+		enduit_isolant_paroi_ancienne: z.boolean(),
+		umur_saisi: z.number().nullable().optional(),
+		enum_type_doublage_id: enums.TypeDoublageEnum.nullable().optional(),
+		enum_type_isolation_id: enums.TypeIsolationEnum,
+		enum_periode_isolation_id: enums.PeriodeIsolationEnum.nullable().optional(),
+		resistance_isolation: z.number().nullable().optional(),
+		epaisseur_isolation: z.number().nullable().optional(),
+		tv_umur_id: z.number().nullable().optional(),
+		enum_methode_saisie_u_id: enums.MethodeSaisieUEnum,
+	}),
+	donnee_intermediaire: z.object({
+		b: z.number().nullable().optional(),
+		umur: z.number(),
+		umur0: z.number().nullable().optional(),
+	}),
+});
+export type Mur = z.infer<typeof Mur>;
+
+export const Inertie = z.object({
+	inertie_plancher_bas_lourd: z.boolean(),
+	inertie_plancher_haut_lourd: z.boolean(),
+	inertie_paroi_verticale_lourd: z.boolean(),
+	enum_classe_inertie_id: enums.ClasseInertieEnum,
+});
+export type Inertie = z.infer<typeof Inertie>;
+
+export const Enveloppe = z.object({
+	inertie: Inertie,
+	mur_collection: z.array(Mur),
+	plancher_bas_collection: z.array(PlancherBas),
+	plancher_haut_collection: z.array(PlancherHaut),
+	baie_vitree_collection: z.array(BaieVitree),
+	porte_collection: z.array(Porte),
+	ets_collection: z.array(Ets),
+	pont_thermique_collection: z.array(PontThermique),
+});
+export type Enveloppe = z.infer<typeof Enveloppe>;
+
+// ==================================================================================================
+// Logement
+// ==================================================================================================
+
+export const Adresse = z.object({
+	adresse_brut: z.string(),
+	code_postal_brut: z.string(),
+	nom_commune_brut: z.string(),
+	label_brut: z.string(),
+	label_brut_avec_complement: z.string(),
+	enum_statut_geocodage_ban_id: enums.StatutGeocodageBanEnum,
+	ban_date_appel: z.string(),
+	ban_id: z.string().nullable().optional(),
+	ban_id_ban_adresse: z.string().nullable().optional(),
+	ban_label: z.string().nullable().optional(),
+	ban_housenumber: z.string().nullable().optional(),
+	ban_street: z.string().nullable().optional(),
+	ban_citycode: z.string().nullable().optional(),
+	ban_postcode: z.string().nullable().optional(),
+	ban_city: z.string().nullable().optional(),
+	ban_type: z.enum(["housenumber", "street", "municipality", "locality"]).nullable().optional(),
+	ban_score: z.number().nullable().optional(),
+	ban_x: z.number().nullable().optional(),
+	ban_y: z.number().nullable().optional(),
+	compl_nom_residence: z.string().nullable().optional(),
+	compl_ref_batiment: z.string().nullable().optional(),
+	compl_etage_appartement: z.number().nullable().optional(),
+	compl_ref_cage_escalier: z.string().nullable().optional(),
+	compl_ref_logement: z.string().nullable().optional(),
+});
+export type Adresse = z.infer<typeof Adresse>;
+
+export const Geolocalisation = z.object({
+	numero_fiscal_local: z.string().nullable().optional(),
+	id_batiment_rnb: z.string().nullable().optional(),
+	rpls_log_id: z.string().nullable().optional(),
+	rpls_org_id: z.string().nullable().optional(),
+	idpar: z.string().nullable().optional(),
+	immatriculation_copropriete: z.string().nullable().optional(),
+	adresses: z.object({
+		adresse_bien: Adresse,
+		adresse_proprietaire_installation_commune: Adresse.nullable().optional(),
+	}),
+});
+export type Geolocalisation = z.infer<typeof Geolocalisation>;
+
+export const Administratif = z.object({
+	dpe_a_remplacer: z.string().nullable().optional(),
+	reference_interne_projet: z.string().nullable().optional(),
+	motif_remplacement: z.string().nullable().optional(),
+	dpe_immeuble_associe: z.string().nullable().optional(),
+	enum_version_id: enums.VersionEnum.exclude(["2.4", "2.5", "2.6"]),
+	date_visite_diagnostiqueur: z.string(),
+	date_etablissement_dpe: z.string(),
+	enum_modele_dpe_id: enums.ModeleDpeEnum,
+	geolocalisation: Geolocalisation,
+});
+export type Administratif = z.infer<typeof Administratif>;
+
+export const Meteo = z.object({
+	enum_zone_climatique_id: enums.ZoneClimatiqueEnum,
+	altitude: z.number().nullable().optional(),
+	enum_classe_altitude_id: enums.ClasseAltitudeEnum,
+	batiment_materiaux_anciens: z.boolean(),
+});
+export type Meteo = z.infer<typeof Meteo>;
+
+export const CaracteristiqueGenerale = z.object({
+	annee_construction: z.number().nullable().optional(),
+	enum_periode_construction_id: enums.PeriodeConstructionEnum,
+	enum_methode_application_dpe_log_id: enums.MethodeApplicationDpeLogEnum,
+	enum_calcul_echantillonnage_id: enums.CalculEchantillonnageEnum.nullable().optional(),
+	surface_habitable_logement: z.number().nullable().optional(),
+	nombre_niveau_immeuble: z.number().nullable().optional(),
+	nombre_niveau_logement: z.number().nullable().optional(),
+	hsp: z.number(),
+	surface_habitable_immeuble: z.number().nullable().optional(),
+	surface_tertiaire_immeuble: z.number().nullable().optional(),
+	nombre_appartement: z.number().nullable().optional(),
+	appartement_non_visite: z.boolean().nullable().optional(),
+});
+export type CaracteristiqueGenerale = z.infer<typeof CaracteristiqueGenerale>;
+
+export const Logement = z.object({
+	caracteristique_generale: CaracteristiqueGenerale,
+	meteo: Meteo,
+	enveloppe: Enveloppe,
+	ventilation_collection: z.array(Ventilation),
+	climatisation_collection: z.array(Climatisation),
+	installation_ecs_collection: z.array(InstallationEcs),
+	installation_chauffage_collection: z.array(InstallationChauffage),
+	production_elec_enr: ProductionElecEnr.nullable().optional(),
+	sortie: Sortie,
+});
+export type Logement = z.infer<typeof Logement>;
+
+// ==================================================================================================
+// DPE
+// ==================================================================================================
+
+export const DPELogementExistant = z.object({
+	numero_dpe: z.string(),
+	administratif: Administratif,
+	logement: Logement,
+	dpe_immeuble: DPEImmeuble.nullable().optional(),
+	descriptif_enr_collection: z.array(DescriptifEnr),
+	descriptif_simplifie_collection: z.array(DescriptifSimplifie),
+	fiche_technique_collection: z.array(FicheTechnique),
+	justificatif_collection: z.array(Justificatif),
+	descriptif_geste_entretien_collection: z.array(DescriptifGesteEntretien),
+	descriptif_travaux: DescriptifTravaux.nullable().optional(),
+});
+export type DPELogementExistant = z.infer<typeof DPELogementExistant>;

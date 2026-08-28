@@ -1,1404 +1,2648 @@
 // @generated
 // Source : enums.dpe.json
-// Ne pas modifier manuellement — relancer scripts/generate-enums-dpe.mjs
-export const VERSION = {
-  "1": "version du 1er juillet 2021",
-  "2": "version avec modèle complet sans contrôle de cohérence",
-  "1.1": "version corrective du 1er novembre",
-  "2.1": "version de fin de validation incluant les contrôles de cohérences",
-  "2.2": "version de préparation de compatibilité audit/dpe",
-  "2.3": "version corrective de janvier 2023",
-  "2.4": "version correspondant à l'arrêté des seuils pour les petites surfaces",
-  "2.5": "version correspondant à l'obligation de saisie du numéro fiscal de local",
-  "2.6": "version correspondant au changement du facteur de conversion en ep de l'électricité",
-} as const
-
-export type VersionEnum = keyof typeof VERSION
-
-export const MODELE_DPE = {
-  1: "dpe 3cl 2021 méthode logement",
-  2: "dpe neuf logement : rt2012",
-  3: "dpe neuf logement : re2020",
-  4: "dpe 2006 tertiaire et erp",
-} as const
-
-export type ModeleDpeEnum = keyof typeof MODELE_DPE
-
-export const USAGE_FONCTIONNEL_BATIMENT = {
-  1: "j : structures d’accueil pour personnes âgées ou personnes handicapées",
-  2: "l : salles d'auditions, de conférences, de réunions, de spectacles ou à usage multiple",
-  3: "m : magasins de vente, centres commerciaux",
-  4: "n : restaurants et débits de boisson",
-  5: "o : hôtels et pensions de famille",
-  6: "p : salles de danse et salles de jeux",
-  7: "r : établissements d’éveil, d’enseignement, de formation, centres de vacances, centres de loisirs sans hébergement",
-  8: "s : bibliothèques, centres de documentation",
-  9: "t : salles d'exposition à vocation commerciale",
-  10: "u : établissements de soins",
-  11: "v : établissements de divers cultes",
-  12: "w : administrations, banques, bureaux",
-  13: "x : établissements sportifs couverts",
-  14: "y : musées",
-  15: "pa : établissements de plein air",
-  16: "cts : chapiteaux, tentes et structures toile",
-  17: "sg : structures gonflables",
-  18: "ps : parcs de stationnement couverts",
-  19: "oa : hôtels-restaurants d'altitude",
-  20: "ga : gares accessibles au public (chemins de fer, téléphériques, remonte-pentes...)",
-  21: "ef : établissements flottants (eaux intérieures)",
-  22: "ref : refuges de montagne",
-  23: "gha : habitation",
-  24: "gho : hôtel",
-  25: "ghr : enseignement",
-  26: "ghs : dépôt d'archives",
-  27: "ghtc : tour de contrôle",
-  28: "ghu : usage sanitaire",
-  29: "ghw : bureaux",
-  30: "ghz : usage mixte",
-  31: "locaux d'entreprise (bureaux)",
-  32: "autres tertiaires non erp",
-} as const
-
-export type UsageFonctionnelBatimentEnum = keyof typeof USAGE_FONCTIONNEL_BATIMENT
-
-export const CONSENTEMENT_FORMULAIRE = {
-  0: "absence de consentement",
-  1: "consentement fourni",
-  2: "consentement non requis",
-} as const
-
-export type ConsentementFormulaireEnum = keyof typeof CONSENTEMENT_FORMULAIRE
-
-export const COMMANDITAIRE = {
-  1: "propriétaire",
-  2: "non propriétaire",
-} as const
-
-export type CommanditaireEnum = keyof typeof COMMANDITAIRE
-
-export const CATEGORIE_ERP = {
-  1: "1ère catégorie",
-  2: "2ème catégorie",
-  3: "3ème catégorie",
-  4: "4ème catégorie",
-  5: "5ème catégorie",
-} as const
-
-export type CategorieErpEnum = keyof typeof CATEGORIE_ERP
-
-export const METHODE_APPLICATION_DPE_LOG = {
-  1: "dpe maison individuelle",
-  2: "dpe appartement individuel chauffage individuel ecs individuel",
-  3: "dpe appartement individuel chauffage collectif ecs individuel",
-  4: "dpe appartement individuel chauffage individuel ecs collectif",
-  5: "dpe appartement individuel chauffage collectif ecs collectif",
-  6: "dpe immeuble collectif chauffage individuel ecs individuel",
-  7: "dpe immeuble collectif chauffage collectif ecs individuel",
-  8: "dpe immeuble collectif chauffage individuel ecs collectif",
-  9: "dpe immeuble collectif chauffage collectif ecs collectif",
-  10: "dpe appartement généré à partir des données dpe immeuble chauffage individuel ecs individuel",
-  11: "dpe appartement généré à partir des données dpe immeuble chauffage collectif ecs individuel",
-  12: "dpe appartement généré à partir des données dpe immeuble chauffage individuel ecs collectif",
-  13: "dpe appartement généré à partir des données dpe immeuble chauffage collectif ecs collectif",
-  14: "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : maison individuelle",
-  15: "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage collectif ecs collectif",
-  16: "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage individuel ecs collectif",
-  17: "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : immeuble",
-  18: "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : maison individuelle",
-  19: "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage collectif ecs collectif",
-  20: "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage individuel ecs collectif",
-  21: "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : immeuble",
-  22: "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage individuel ecs individuel",
-  23: "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage collectif ecs individuel",
-  24: "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage collectif ecs individuel",
-  25: "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage individuel ecs individuel",
-  26: "dpe immeuble collectif chauffage mixte (collectif-individuel) ecs mixte (collectif-individuel)",
-  27: "dpe immeuble collectif chauffage mixte (collectif-individuel) ecs individuel",
-  28: "dpe immeuble collectif chauffage mixte (collectif-individuel) ecs collectif",
-  29: "dpe immeuble collectif chauffage individuel ecs mixte (collectif-individuel)",
-  30: "dpe immeuble collectif chauffage collectif ecs mixte (collectif-individuel)",
-  31: "dpe appartement individuel chauffage mixte (collectif-individuel) ecs individuel",
-  32: "dpe appartement individuel chauffage mixte (collectif-individuel) ecs collectif",
-  33: "dpe appartement généré à partir des données dpe immeuble chauffage mixte (collectif-individuel) ecs individuel",
-  34: "dpe appartement généré à partir des données dpe immeuble chauffage mixte (collectif-individuel) ecs collectif",
-  35: "dpe appartement individuel chauffage mixte (collectif-individuel) ecs mixte (collectif-individuel)",
-  36: "dpe appartement individuel chauffage individuel ecs mixte (collectif-individuel)",
-  37: "dpe appartement individuel chauffage collectif ecs mixte (collectif-individuel)",
-  38: "dpe appartement généré à partir des données dpe immeuble chauffage mixte (collectif-individuel) ecs mixte (collectif-individuel)",
-  39: "dpe appartement généré à partir des données dpe immeuble chauffage individuel ecs mixte (collectif-individuel)",
-  40: "dpe appartement généré à partir des données dpe immeuble chauffage collectif ecs mixte (collectif-individuel)",
-} as const
-
-export type MethodeApplicationDpeLogEnum = keyof typeof METHODE_APPLICATION_DPE_LOG
-
-export const METHODE_APPLICATION_DPE_TER = {
-  1: "dpe tertiaire facture",
-  2: "dpe tertiaire bâtiment neuf",
-  3: "dpe tertiaire vierge",
-  4: "dpe tertiaire vierge neuf",
-  5: "dpe tertiaire facture dans un bâtiment de logement",
-  6: "dpe tertiaire bâtiment neuf dans un bâtiment de logement",
-  7: "dpe tertiaire vierge dans un bâtiment de logement",
-  8: "dpe tertiaire vierge neuf dans un bâtiment de logement",
-} as const
-
-export type MethodeApplicationDpeTerEnum = keyof typeof METHODE_APPLICATION_DPE_TER
-
-export const SOUS_MODELE_DPE_TER = {
-  1: "bureaux, services administratifs, enseignement",
-  2: "bâtiments à occupation continue",
-  3: "autres",
-  4: "centre commercial",
-} as const
-
-export type SousModeleDpeTerEnum = keyof typeof SOUS_MODELE_DPE_TER
-
-export const CALCUL_ECHANTILLONNAGE = {
-  1: "absence de méthode d’échantillonnage",
-  2: "calcul de l’échantillonnage effectué par un logiciel validé",
-  3: "calcul de l’échantillonnage effectué par le diagnostiqueur",
-} as const
-
-export type CalculEchantillonnageEnum = keyof typeof CALCUL_ECHANTILLONNAGE
-
-export const PERIODE_CONSTRUCTION = {
-  1: "avant 1948",
-  2: "1948-1974",
-  3: "1975-1977",
-  4: "1978-1982",
-  5: "1983-1988",
-  6: "1989-2000",
-  7: "2001-2005",
-  8: "2006-2012",
-  9: "2013-2021",
-  10: "après 2021",
-} as const
-
-export type PeriodeConstructionEnum = keyof typeof PERIODE_CONSTRUCTION
-
-export const PERIODE_ISOLATION = {
-  1: "avant 1948",
-  2: "1948-1974",
-  3: "1975-1977",
-  4: "1978-1982",
-  5: "1983-1988",
-  6: "1989-2000",
-  7: "2001-2005",
-  8: "2006-2012",
-  9: "2013-2021",
-  10: "après 2021",
-} as const
-
-export type PeriodeIsolationEnum = keyof typeof PERIODE_ISOLATION
-
-export const ZONE_CLIMATIQUE = {
-  1: "h1a",
-  2: "h1b",
-  3: "h1c",
-  4: "h2a",
-  5: "h2b",
-  6: "h2c",
-  7: "h2d",
-  8: "h3",
-} as const
-
-export type ZoneClimatiqueEnum = keyof typeof ZONE_CLIMATIQUE
-
-export const CLASSE_ALTITUDE = {
-  1: "inférieur à 400m",
-  2: "400-800m",
-  3: "supérieur à 800m",
-} as const
-
-export type ClasseAltitudeEnum = keyof typeof CLASSE_ALTITUDE
-
-export const METHODE_SAISIE_U = {
-  1: "non isolé",
-  2: "isolation inconnue  (table forfaitaire)",
-  3: "epaisseur isolation saisie justifiée par mesure ou observation",
-  4: "epaisseur isolation saisie justifiée à partir des documents justificatifs autorisés",
-  5: "resistance isolation saisie justifiée observation de l'isolant installé et mesure de son épaisseur",
-  6: "resistance isolation saisie justifiée  à partir des documents justificatifs autorisés",
-  7: "année d'isolation différente de l'année de construction saisie justifiée (table forfaitaire)",
-  8: "année de construction saisie (table forfaitaire)",
-  9: "saisie direct u justifiée  (à partir des documents justificatifs autorisés)",
-  10: "saisie direct u depuis rset/rsee( etude rt2012/re2020)",
-} as const
-
-export type MethodeSaisieUEnum = keyof typeof METHODE_SAISIE_U
-
-export const METHODE_SAISIE_U0 = {
-  1: "type de paroi inconnu (valeur par défaut)",
-  2: "déterminé selon le matériau et épaisseur à partir de la table de valeur forfaitaire",
-  3: "saisie direct u0 justifiée à partir des documents justificatifs autorisés",
-  4: "saisie direct u0 correspondant à la performance de la paroi avec son isolation antérieure iti (umur_iti) lorsqu'il y a une surisolation ite réalisée",
-  5: "u0 non saisi car le u est saisi connu et justifié.",
-} as const
-
-export type MethodeSaisieU0Enum = keyof typeof METHODE_SAISIE_U0
-
-export const METHODE_SAISIE_UPORTE = {
-  1: "valeur forfaitaire",
-  2: "valeur justifiée saisie à partir des documents justificatifs autorisés",
-  3: "saisie direct u depuis rset/rsee( etude rt2012/re2020)",
-} as const
-
-export type MethodeSaisieUporteEnum = keyof typeof METHODE_SAISIE_UPORTE
-
-export const METHODE_SAISIE_PONT_THERMIQUE = {
-  1: "valeur forfaitaire",
-  2: "valeur justifiée saisie à partir des documents justificatifs autorisés",
-  3: "saisie direct k depuis rset/rsee( etude rt2012/re2020)",
-} as const
-
-export type MethodeSaisiePontThermiqueEnum = keyof typeof METHODE_SAISIE_PONT_THERMIQUE
-
-export const METHODE_SAISIE_PERF_VITRAGE = {
-  1: "ug(opt),uw,ujn(opt) et sw saisi à l'aide des tables de valeurs forfaitaires et des relèves mesurées/observées",
-  2: "ug saisi directementà partir des documents justificatifs autorisés , autres paramètres calculés avec les tables forfaitaires",
-  3: "ug,uw saisi directement à partir des documents justificatifs autorisés , autres paramètres calculés avec les tables forfaitaires",
-  4: "ug,uw,sw saisi directement à partir des documents justificatifs autorisés , ujn calculés avec les tables forfaitaires",
-  5: "ug,uw,ujn saisi directement à partir des documents justificatifs autorisés , autres paramètres calculés avec les tables forfaitaires",
-  6: "ug,uw,sw,ujn saisi directement à partir des documents justificatifs autorisés",
-  7: "ujn, sw recalculés depuis rset/rsee( etude rt2012/re2020)",
-  8: "uw,sw saisi directement à partir des documents justificatifs autorisés , ujn calculés avec les tables forfaitaires",
-  9: "uw,ujn saisi directement à partir des documents justificatifs autorisés , sw calculés avec les tables forfaitaires",
-  10: "uw,ujn, sw saisi directement à partir des documents justificatifs autorisés",
-  11: "ujn, sw saisi directement à partir des documents justificatifs autorisés",
-  12: "ujn saisi directement à partir des documents justificatifs autorisés, sw calculés avec les tables forfaitaires",
-  13: "uw saisi directement à partir des documents justificatifs autorisés , ujn,sw calculés avec les tables forfaitaires",
-  14: "sw saisi directement à partir des documents justificatifs autorisés , ujn,uw calculés avec les tables forfaitaires",
-  15: "ug,sw saisi directement à partir des documents justificatifs autorisés , ujn,uw calculés avec les tables forfaitaires",
-} as const
-
-export type MethodeSaisiePerfVitrageEnum = keyof typeof METHODE_SAISIE_PERF_VITRAGE
-
-export const METHODE_SAISIE_CARAC_SYS = {
-  1: "valeurs forfaitaires",
-  2: "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, autres données forfaitaires",
-  3: "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, rpn,rpint, autres données forfaitaires",
-  4: "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, rpn,rpint,qp0, autres données forfaitaires",
-  5: "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, rpn,rpint,qp0,temp_fonc_30,temp_fonc_100",
-  6: "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système thermodynamique : scop/cop/eer",
-  7: "déterminé à partir du rset/rsee( etude rt2012/re2020)",
-  8: "seer saisi pour permettre la saisie de réseau de froid ou de système de climatisations qui ne sont pas éléctriques",
-} as const
-
-export type MethodeSaisieCaracSysEnum = keyof typeof METHODE_SAISIE_CARAC_SYS
-
-export const METHODE_SAISIE_Q4PA_CONV = {
-  1: "valeur forfaitaire",
-  2: "déterminé à partir d'une mesure d'étanchéité à l'air de moins de deux ans",
-  3: "déterminé à partir du rset/rsee( etude rt2012/re2020)",
-} as const
-
-export type MethodeSaisieQ4paConvEnum = keyof typeof METHODE_SAISIE_Q4PA_CONV
-
-export const METHODE_SAISIE_FACT_COUV_SOL = {
-  1: "valeur forfaitaire",
-  2: "déterminé à partir d'un document justificatif autorisé",
-} as const
-
-export type MethodeSaisieFactCouvSolEnum = keyof typeof METHODE_SAISIE_FACT_COUV_SOL
-
-export const CLASSE_INERTIE = {
-  1: "très lourde",
-  2: "lourde",
-  3: "moyenne",
-  4: "légère",
-} as const
-
-export type ClasseInertieEnum = keyof typeof CLASSE_INERTIE
-
-export const TYPE_ADJACENCE = {
-  1: "extérieur",
-  2: "paroi enterrée",
-  3: "vide sanitaire",
-  4: "bâtiment ou local à usage autre que d'habitation",
-  5: "terre-plein",
-  6: "sous-sol non chauffé",
-  7: "locaux non chauffés non accessible",
-  8: "garage",
-  9: "cellier",
-  10: "espace tampon solarisé (véranda,loggia fermée)",
-  11: "comble fortement ventilé",
-  12: "comble faiblement ventilé",
-  13: "comble très faiblement ventilé",
-  14: "circulation sans ouverture directe sur l'extérieur",
-  15: "circulation avec ouverture directe sur l'extérieur",
-  16: "circulation avec bouche ou gaine de désenfumage ouverte en permanence",
-  17: "hall d'entrée avec dispositif de fermeture automatique",
-  18: "hall d'entrée sans dispositif de fermeture automatique",
-  19: "garage privé collectif",
-  20: "local tertiaire à l'intérieur de l'immeuble en contact avec l'appartement",
-  21: "autres dépendances",
-  22: "local non déperditif ( local à usage d'habitation chauffé)",
-} as const
-
-export type TypeAdjacenceEnum = keyof typeof TYPE_ADJACENCE
-
-export const CFG_ISOLATION_LNC = {
-  1: "local chauffé non accessible",
-  2: "lc non isolé + lnc non isolé",
-  3: "lc non isolé + lnc isolé",
-  4: "lc isolé + lnc non isolé",
-  5: "lc isolé + lnc isolé",
-  6: "lc isolé + espace tampon solarisé orienté nord",
-  7: "lc isolé + espace tampon solarisé orienté sud",
-  8: "lc isolé + espace tampon solarisé orienté est/ouest",
-  9: "lc non isolé + espace tampon solarisé orienté nord",
-  10: "lc non isolé + espace tampon solarisé orienté sud",
-  11: "lc non isolé + espace tampon solarisé orienté est/ouest",
-} as const
-
-export type CfgIsolationLncEnum = keyof typeof CFG_ISOLATION_LNC
-
-export const MATERIAUX_STRUCTURE_MUR = {
-  1: "inconnu",
-  2: "murs en pierre de taille et moellons constitué d'un seul matériaux",
-  3: "murs en pierre de taille et moellons avec remplissage tout venant",
-  4: "murs en pisé ou béton de terre stabilisé (à partir d'argile crue)",
-  5: "murs en pan de bois sans remplissage tout venant",
-  6: "murs en pan de bois avec remplissage tout venant",
-  7: "murs bois (rondin)",
-  8: "murs en briques pleines simples",
-  9: "murs en briques pleines doubles avec lame d'air",
-  10: "murs en briques creuses",
-  11: "murs en blocs de béton pleins",
-  12: "murs en blocs de béton creux",
-  13: "murs en béton banché",
-  14: "murs en béton de mâchefer",
-  15: "brique terre cuite alvéolaire",
-  16: "béton cellulaire avant 2013",
-  17: "béton cellulaire à partir de 2013",
-  18: "murs en ossature bois avec isolant en remplissage ≥ 2006",
-  19: "murs sandwich béton/isolant/béton (sans isolation rapportée)",
-  20: "cloison de plâtre",
-  21: "autre matériau traditionel ancien",
-  22: "autre matériau innovant récent",
-  23: "autre matériau non répertorié",
-  24: "murs en ossature bois avec isolant en remplissage 2001-2005",
-  25: "murs en ossature bois sans remplissage",
-  26: "murs en ossature bois avec isolant en remplissage <2001",
-  27: "murs en ossature bois avec remplissage tout venant",
-} as const
-
-export type MateriauxStructureMurEnum = keyof typeof MATERIAUX_STRUCTURE_MUR
-
-export const TYPE_ISOLATION = {
-  1: "inconnu",
-  2: "non isolé",
-  3: "iti",
-  4: "ite",
-  5: "itr",
-  6: "iti+ite",
-  7: "iti+itr",
-  8: "ite+itr",
-  9: "isolé mais type d'isolation inconnu",
-} as const
-
-export type TypeIsolationEnum = keyof typeof TYPE_ISOLATION
-
-export const TYPE_DOUBLAGE = {
-  1: "inconnu",
-  2: "absence de doublage",
-  3: "doublage indéterminé ou lame d'air inf 15 mm",
-  4: "doublage indéterminé avec lame d'air sup 15 mm",
-  5: "doublage connu (plâtre brique bois)",
-} as const
-
-export type TypeDoublageEnum = keyof typeof TYPE_DOUBLAGE
-
-export const TYPE_PLANCHER_BAS = {
-  1: "inconnu",
-  2: "plancher avec ou sans remplissage",
-  3: "plancher entre solives métalliques avec ou sans remplissage",
-  4: "plancher entre solives bois avec ou sans remplissage",
-  5: "plancher bois sur solives métalliques",
-  6: "bardeaux et remplissage",
-  7: "voutains sur solives métalliques",
-  8: "voutains en briques ou moellons",
-  9: "dalle béton",
-  10: "plancher bois sur solives bois",
-  11: "plancher lourd type entrevous terre-cuite, poutrelles béton",
-  12: "plancher à entrevous isolant",
-  13: "autre type de plancher non répertorié",
-} as const
-
-export type TypePlancherBasEnum = keyof typeof TYPE_PLANCHER_BAS
-
-export const TYPE_PLANCHER_HAUT = {
-  1: "inconnu",
-  2: "plafond avec ou sans remplissage",
-  3: "plafond entre solives métalliques avec ou sans remplissage",
-  4: "plafond entre solives bois avec ou sans remplissage",
-  5: "plafond bois sur solives métalliques",
-  6: "plafond bois sous solives métalliques",
-  7: "bardeaux et remplissage",
-  8: "dalle béton",
-  9: "plafond bois sur solives bois",
-  10: "plafond bois sous solives bois",
-  11: "plafond lourd type entrevous terre-cuite, poutrelles béton",
-  12: "combles aménagés sous rampant",
-  13: "toiture en chaume",
-  14: "plafond en plaque de plâtre",
-  15: "autre type de plafond non répertorié",
-  16: "toitures en bac acier",
-} as const
-
-export type TypePlancherHautEnum = keyof typeof TYPE_PLANCHER_HAUT
-
-export const TYPE_VITRAGE = {
-  1: "simple vitrage",
-  2: "double vitrage",
-  3: "triple vitrage",
-  4: "survitrage",
-  5: "brique de verre",
-  6: "polycarbonate",
-} as const
-
-export type TypeVitrageEnum = keyof typeof TYPE_VITRAGE
-
-export const INCLINAISON_VITRAGE = {
-  1: "inf25°",
-  2: "25°-75°",
-  3: "sup75°",
-  4: "horizontal",
-} as const
-
-export type InclinaisonVitrageEnum = keyof typeof INCLINAISON_VITRAGE
-
-export const TYPE_MATERIAUX_MENUISERIE = {
-  1: "brique de verre",
-  2: "polycarbonate",
-  3: "bois",
-  4: "bois/métal",
-  5: "pvc",
-  6: "métal avec rupture de pont thermique",
-  7: "métal sans rupture de pont thermique",
-} as const
-
-export type TypeMateriauxMenuiserieEnum = keyof typeof TYPE_MATERIAUX_MENUISERIE
-
-export const TYPE_BAIE = {
-  1: "paroi en brique de verre pleine",
-  2: "paroi en brique de verre creuse",
-  3: "paroi en polycarbonnate",
-  4: "fenêtres battantes",
-  5: "fenêtres coulissantes",
-  6: "portes-fenêtres coulissantes",
-  7: "portes-fenêtres battantes sans soubassement",
-  8: "portes-fenêtres battantes avec soubassement",
-} as const
-
-export type TypeBaieEnum = keyof typeof TYPE_BAIE
-
-export const TYPE_POSE = {
-  1: "nu extérieur",
-  2: "nu intérieur",
-  3: "tunnel",
-  4: "sans objet (brique de verre/polycarbonate)",
-} as const
-
-export type TypePoseEnum = keyof typeof TYPE_POSE
-
-export const TYPE_GAZ_LAME = {
-  1: "air",
-  2: "argon ou krypton",
-  3: "inconnu",
-} as const
-
-export type TypeGazLameEnum = keyof typeof TYPE_GAZ_LAME
-
-export const ORIENTATION = {
-  1: "sud",
-  2: "nord",
-  3: "est",
-  4: "ouest",
-  5: "horizontal",
-} as const
-
-export type OrientationEnum = keyof typeof ORIENTATION
-
-export const TYPE_FERMETURE = {
-  1: "abscence de fermeture pour la baie vitrée",
-  2: "jalousie accordéon, fermeture à lames orientables y compris les vénitiens extérieurs tout métal, volets battants ou persiennes avec ajours fixes",
-  3: "fermeture sans ajours en position déployée, volets roulants alu",
-  4: "volets roulants pvc ou bois (e inf 12 mm)",
-  5: "persienne coulissante et volet battant pvc ou bois (e inf 22 mm)",
-  6: "volets roulants pvc ou bois (e sup 12 mm)",
-  7: "persienne coulissante et volet battant pvc ou bois (e sup 22 mm)",
-  8: "fermeture isolée sans ajours en position déployée",
-} as const
-
-export type TypeFermetureEnum = keyof typeof TYPE_FERMETURE
-
-export const TYPE_PORTE = {
-  1: "porte simple en bois porte opaque pleine",
-  2: "porte simple en bois porte avec moins de 30% de vitrage simple",
-  3: "porte simple en bois porte avec 30-60% de vitrage simple",
-  4: "porte simple en bois porte avec double vitrage",
-  5: "porte simple en pvc porte opaque pleine",
-  6: "porte simple en pvc porte avec moins de 30% de vitrage simple",
-  7: "porte simple en pvc porte avec 30-60% de vitrage simple",
-  8: "porte simple en pvc porte avec double vitrage",
-  9: "porte simple en métal porte opaque pleine",
-  10: "porte simple en métal porte avec vitrage simple",
-  11: "porte simple en métal porte avec moins de 30% de double vitrage",
-  12: "porte simple en métal porte avec 30-60% de double vitrage",
-  13: "toute menuiserie porte opaque pleine isolée",
-  14: "toute menuiserie porte précédée d’un sas",
-  15: "toute menuiserie porte isolée avec double vitrage",
-  16: "autre type de porte",
-} as const
-
-export type TypePorteEnum = keyof typeof TYPE_PORTE
-
-export const TYPE_LIAISON = {
-  1: "plancher bas / mur",
-  2: "plancher intermédiaire lourd / mur",
-  3: "plancher haut lourd / mur",
-  4: "refend / mur",
-  5: "menuiserie / mur",
-} as const
-
-export type TypeLiaisonEnum = keyof typeof TYPE_LIAISON
-
-export const TYPE_VENTILATION = {
-  1: "ventilation par ouverture des fenêtres",
-  2: "ventilation par entrées d'air hautes et basses",
-  3: "vmc sf auto réglable avant 1982",
-  4: "vmc sf auto réglable de 1982 à 2000",
-  5: "vmc sf auto réglable de 2001 à 2012",
-  6: "vmc sf auto réglable après 2012",
-  7: "vmc sf hygro a avant 2001",
-  8: "vmc sf hygro a de 2001 à 2012",
-  9: "vmc sf hygro a après 2012",
-  10: "vmc sf gaz avant  2001",
-  11: "vmc sf gaz de 2001 à 2012",
-  12: "vmc sf gaz après 2012",
-  13: "vmc sf hygro b avant  2001",
-  14: "vmc sf hygro b de 2001 à 2012",
-  15: "vmc sf hygro b après 2012",
-  16: "vmc basse pression auto-réglable",
-  17: "vmc basse pression hygro a",
-  18: "vmc basse pression hygro b",
-  19: "vmc df individuelle avec échangeur avant 2013",
-  20: "vmc df individuelle avec échangeur à partir de 2013",
-  21: "vmc df collective avec échangeur avant 2013",
-  22: "vmc df collective avec échangeur à partir de 2013",
-  23: "vmc df sans échangeur avant 2013",
-  24: "vmc df sans échangeur après 2012",
-  25: "ventilation naturelle par conduit",
-  26: "ventilation hybride avant  2001",
-  27: "ventilation hybride de 2001 à 2012",
-  28: "ventilation hybride après 2012",
-  29: "ventilation hybride avec entrées d'air hygro avant  2001",
-  30: "ventilation hybride avec entrées d'air hygro de 2001 à 2012",
-  31: "ventilation hybride avec entrées d'air hygro après 2012",
-  32: "ventilation mécanique sur conduit existant avant 2013",
-  33: "ventilation mécanique sur conduit existant à partir de 2013",
-  34: "ventilation naturelle par conduit avec entrées d'air hygro",
-  35: "puits climatique sans échangeur avant 2013",
-  36: "puits climatique sans échangeur à partir de 2013",
-  37: "puits climatique avec échangeur avant 2013",
-  38: "puits climatique avec échangeur à partir de 2013",
-} as const
-
-export type TypeVentilationEnum = keyof typeof TYPE_VENTILATION
-
-export const PERIODE_INSTALLATION_FR = {
-  1: "avant 2008",
-  2: "2008-2014",
-  3: "a partir de 2015",
-} as const
-
-export type PeriodeInstallationFrEnum = keyof typeof PERIODE_INSTALLATION_FR
-
-export const TYPE_GENERATEUR_FR = {
-  1: "pac air/air installée avant 2008",
-  2: "pac air/air installée entre 2008 et 2014",
-  3: "pac air/air installée à partir de 2015",
-  4: "pac air/eau installée avant 2008",
-  5: "pac air/eau installée entre 2008 et 2014",
-  6: "pac air/eau installée entre 2015 et 2016",
-  7: "pac air/eau installée après 2017",
-  8: "pac eau/eau installée avant 2008",
-  9: "pac eau/eau installée entre 2008 et 2014",
-  10: "pac eau/eau installée entre 2015 et 2016",
-  11: "pac eau/eau installée après 2017",
-  12: "pac eau glycolée/eau installée avant 2008",
-  13: "pac eau glycolée/eau installée entre 2008 et 2014",
-  14: "pac eau glycolée/eau installée entre 2015 et 2016",
-  15: "pac eau glycolée/eau installée après 2017",
-  16: "pac géothermique installée avant 2008",
-  17: "pac géothermique installée entre 2008 et 2014",
-  18: "pac géothermique installée entre 2015 et 2016",
-  19: "pac géothermique installée après 2017",
-  20: "autre système thermodynamique électrique",
-  21: "autre système thermodynamique gaz",
-  22: "autre système de refroidissement",
-  23: "réseau de froid urbain",
-} as const
-
-export type TypeGenerateurFrEnum = keyof typeof TYPE_GENERATEUR_FR
-
-export const TYPE_INSTALLATION_SOLAIRE = {
-  1: "chauffage solaire (seul ou combiné)",
-  2: "ecs solaire seule sup 5 ans",
-  3: "ecs solaire seule inf 5 ans",
-  4: "chauffage + ecs solaire",
-} as const
-
-export type TypeInstallationSolaireEnum = keyof typeof TYPE_INSTALLATION_SOLAIRE
-
-export const TYPE_INSTALLATION = {
-  1: "installation individuelle",
-  2: "installation collective",
-  3: "installation collective multi-bâtiment : modélisée comme un réseau de chaleur",
-  4: "installation hybride collective-individuelle (chauffage base + appoint individuel ou convecteur bi-jonction)",
-} as const
-
-export type TypeInstallationEnum = keyof typeof TYPE_INSTALLATION
-
-export const METHODE_CALCUL_CONSO = {
-  1: "calcul simple",
-  2: "installation collective rapportée à un logement : cas générateur à combustion virtuel ou ecs collective virtuelle",
-  3: "installation collective rapportée à un logement : cas générateurs simples (réseau de chaleur, effet joule, pac, cet)",
-  4: "échantillonage des installations individuelles pour le calcul dpe immeuble (calcul effectué sur un logement représentatif d'un ensemble de logements puis extrapolation sur l'ensemble de logements du groupe)",
-  5: "installation collective immeuble mixte rapporté à la partie logement : cas générateur à combustion virtuel ou ecs collective virtuelle",
-  6: "installation collective immeuble mixte rapporté à la partie logement : cas générateurs simples (réseau de chaleur, effet joule, pac, cet)",
-} as const
-
-export type MethodeCalculConsoEnum = keyof typeof METHODE_CALCUL_CONSO
-
-export const USAGE_GENERATEUR = {
-  1: "chauffage",
-  2: "ecs",
-  3: "chauffage + ecs",
-} as const
-
-export type UsageGenerateurEnum = keyof typeof USAGE_GENERATEUR
-
-export const CFG_INSTALLATION_CH = {
-  1: "installation de chauffage simple",
-  2: "installation de chauffage avec chauffage solaire",
-  3: "installation de chauffage avec insert ou poêle bois en appoint",
-  4: "installation de chauffage par insert, poêle bois (ou biomasse) avec un chauffage électrique dans la salle de bain",
-  5: "installation de chauffage avec en appoint un insert ou poêle bois et un chauffage électrique dans la salle de bain (différent du chauffage principal)",
-  6: "installation de chauffage avec une chaudière ou une pac en relève d’une chaudière bois",
-  7: "installation de chauffage avec chauffage solaire et insert ou poêle bois en appoint",
-  8: "installation de chauffage avec chaudière en relève de pac",
-  9: "installation de chauffage avec chaudière en relève de pac avec insert ou poêle bois en appoint",
-  10: "installation de chauffage collectif avec base + appoint",
-  11: "convecteurs bi-jonction",
-} as const
-
-export type CfgInstallationChEnum = keyof typeof CFG_INSTALLATION_CH
-
-export const LIEN_GENERATEUR_EMETTEUR = {
-  1: "génération principale - emetteur lié à la génération principale",
-  2: "génération appoint - emetteur lié à la génération d'appoint",
-  3: "génération appoint electrique salle de bain - emetteur lié à la génération appoint electrique salle de bain",
-} as const
-
-export type LienGenerateurEmetteurEnum = keyof typeof LIEN_GENERATEUR_EMETTEUR
-
-export const CFG_INSTALLATION_ECS = {
-  1: "un seul système d'ecs sans solaire",
-  2: "un seul système d'ecs avec solaire",
-  3: "deux systèmes d'ecs dans une maison ou un appartement",
-} as const
-
-export type CfgInstallationEcsEnum = keyof typeof CFG_INSTALLATION_ECS
-
-export const TYPE_GENERATEUR_CH = {
-  1: "pac air/air installée avant 2008",
-  2: "pac air/air installée entre 2008 et 2014",
-  3: "pac air/air installée à partir de 2015",
-  4: "pac air/eau installée avant 2008",
-  5: "pac air/eau installée entre 2008 et 2014",
-  6: "pac air/eau installée entre 2015 et 2016",
-  7: "pac air/eau installée après 2017",
-  8: "pac eau/eau installée avant 2008",
-  9: "pac eau/eau installée entre 2008 et 2014",
-  10: "pac eau/eau installée entre 2015 et 2016",
-  11: "pac eau/eau installée après 2017",
-  12: "pac eau glycolée/eau installée avant 2008",
-  13: "pac eau glycolée/eau installée entre 2008 et 2014",
-  14: "pac eau glycolée/eau installée entre 2015 et 2016",
-  15: "pac eau glycolée/eau installée après 2017",
-  16: "pac géothermique installée avant 2008",
-  17: "pac géothermique installée entre 2008 et 2014",
-  18: "pac géothermique installée entre 2015 et 2016",
-  19: "pac géothermique installée après 2017",
-  20: "cuisinière installé avant 1990",
-  21: "foyer fermé installé avant 1990",
-  22: "poêle bûche installé avant 1990",
-  23: "insert installé avant 1990",
-  24: "cuisinière installé entre 1990 et 2004",
-  25: "foyer fermé installé entre 1990 et 2004",
-  26: "poêle bûche installé entre 1990 et 2004",
-  27: "insert installé entre 1990 et 2004",
-  28: "cuisinière installé à partir de 2005 sans label flamme verte",
-  29: "foyer fermé installé à partir de 2005 sans label flamme verte",
-  30: "poêle bûche installé à partir de 2005 sans label flamme verte",
-  31: "insert installé à partir de 2005 sans label flamme verte",
-  32: "cuisinière installé installé de 2005 à 2006 avec label flamme verte",
-  33: "foyer fermé installé installé de 2005 à 2006 avec label flamme verte",
-  34: "poêle bûche installé installé de 2005 à 2006 avec label flamme verte",
-  35: "insert installé installé de 2005 à 2006 avec label flamme verte",
-  36: "cuisinière installé installé de 2007 à 2017 avec label flamme verte",
-  37: "foyer fermé installé installé de 2007 à 2017 avec label flamme verte",
-  38: "poêle bûche installé installé de 2007 à 2017 avec label flamme verte",
-  39: "insert installé installé de 2007 à 2017 avec label flamme verte",
-  40: "cuisinière installé installé à partir de 2018 avec label flamme verte",
-  41: "foyer fermé installé installé à partir de 2018 avec label flamme verte",
-  42: "poêle bûche installé installé à partir de 2018 avec label flamme verte",
-  43: "insert installé installé à partir de 2018 avec label flamme verte",
-  44: "poêle à granulés installée avant 2012 ou sans label flamme verte",
-  45: "poêle à granulés flamme verte installé entre 2012 et 2019",
-  46: "poêle à granulés flamme verte installé à partir de 2020",
-  47: "poêle fioul ou gpl ou charbon",
-  48: "poêle à bois bouilleur bûche installé avant 2012",
-  49: "poêle à bois bouilleur bûche installé à partir de 2012",
-  50: "générateur à air chaud à combustion avant 2006",
-  51: "générateur à air chaud à combustion standard a partir de 2006",
-  52: "générateur à air chaud à combustion à condensation a partir de 2006",
-  53: "radiateur à gaz indépendant ou autonome avant 2006",
-  54: "radiateur à gaz indépendant ou autonome après 2006",
-  55: "chaudière bois bûche avant 1978",
-  56: "chaudière bois bûche 1978-1994",
-  57: "chaudière bois bûche 1995-2003",
-  58: "chaudière bois bûche 2004-2012",
-  59: "chaudière bois bûche 2013-2017",
-  60: "chaudière bois bûche 2018-2019",
-  61: "chaudière bois bûche après 2019",
-  62: "chaudière bois plaquette avant 1978",
-  63: "chaudière bois plaquette 1978-1994",
-  64: "chaudière bois plaquette 1995-2003",
-  65: "chaudière bois plaquette 2004-2012",
-  66: "chaudière bois plaquette 2013-2017",
-  67: "chaudière bois plaquette 2018-2019",
-  68: "chaudière bois plaquette après 2019",
-  69: "chaudière bois granulés avant 1978",
-  70: "chaudière bois granulés 1978-1994",
-  71: "chaudière bois granulés 1995-2003",
-  72: "chaudière bois granulés 2004-2012",
-  73: "chaudière bois granulés 2013-2019",
-  74: "chaudière bois granulés après 2019",
-  75: "chaudière fioul classique avant 1970",
-  76: "chaudière fioul classique 1970-1975",
-  77: "chaudière fioul classique 1976-1980",
-  78: "chaudière fioul classique 1981-1990",
-  79: "chaudière fioul standard 1991-2015",
-  80: "chaudière fioul standard après 2015",
-  81: "chaudière fioul basse température 1991-2015",
-  82: "chaudière fioul basse température après 2015",
-  83: "chaudière fioul à condensation 1996-2015",
-  84: "chaudière fioul à condensation après 2015",
-  85: "chaudière gaz classique avant 1981",
-  86: "chaudière gaz classique 1981-1985",
-  87: "chaudière gaz classique 1986-1990",
-  88: "chaudière gaz standard 1991-2000",
-  89: "chaudière gaz standard 2001-2015",
-  90: "chaudière gaz standard après 2015",
-  91: "chaudière gaz basse température 1991-2000",
-  92: "chaudière gaz basse température 2001-2015",
-  93: "chaudière gaz basse température après 2015",
-  94: "chaudière gaz à condensation 1981-1985",
-  95: "chaudière gaz à condensation 1986-2000",
-  96: "chaudière gaz à condensation 2001-2015",
-  97: "chaudière gaz à condensation après 2015",
-  98: "convecteur électrique nfc, nf** et nf***",
-  99: "panneau rayonnant électrique nfc, nf** et nf***",
-  100: "radiateur électrique nfc, nf** et nf***",
-  101: "autres émetteurs à effet joule",
-  102: "plancher ou plafond rayonnant électrique avec régulation terminale",
-  103: "plancher ou plafond rayonnant électrique sans régulation terminale",
-  104: "radiateur électrique à accumulation",
-  105: "convecteur bi-jonction",
-  106: "chaudière électrique",
-  107: "réseau de chaleur non isolé",
-  108: "réseau de chaleur isolé",
-  109: "chaudière(s) bois multi bâtiment modélisée comme un réseau de chaleur",
-  110: "chaudière(s) fioul multi bâtiment modélisée comme un réseau de chaleur",
-  111: "chaudière(s) gaz multi bâtiment modélisée comme un réseau de chaleur",
-  112: "pompe(s) à chaleur multi bâtiment modélisée comme un réseau de chaleur",
-  113: "autre système à combustion gaz",
-  114: "autre système à combustion fioul",
-  115: "autre système à combustion bois",
-  116: "autre système à combustion autres energies fossiles (charbon,pétrole etc…)",
-  117: "autre système thermodynamique électrique",
-  118: "autre système thermodynamique gaz",
-  119: "système collectif par défaut en abscence d'information : chaudière fioul pénalisante",
-  120: "chaudière charbon avant 1978",
-  121: "chaudière charbon 1978-1994",
-  122: "chaudière charbon 1995-2003",
-  123: "chaudière charbon 2004-2012",
-  124: "chaudière charbon 2013-2017",
-  125: "chaudière charbon 2018-2019",
-  126: "chaudière charbon après 2019",
-  127: "chaudière gpl/propane/butane classique avant 1981",
-  128: "chaudière gpl/propane/butane classique 1981-1985",
-  129: "chaudière gpl/propane/butane classique 1986-1990",
-  130: "chaudière gpl/propane/butane standard 1991-2000",
-  131: "chaudière gpl/propane/butane standard 2001-2015",
-  132: "chaudière gpl/propane/butane standard après 2015",
-  133: "chaudière gpl/propane/butane basse température 1991-2000",
-  134: "chaudière gpl/propane/butane basse température 2001-2015",
-  135: "chaudière gpl/propane/butane basse température après 2015",
-  136: "chaudière gpl/propane/butane à condensation 1981-1985",
-  137: "chaudière gpl/propane/butane à condensation 1986-2000",
-  138: "chaudière gpl/propane/butane à condensation 2001-2015",
-  139: "chaudière gpl/propane/butane à condensation après 2015",
-  140: "poêle à bois bouilleur granulés installé avant 2012",
-  141: "poêle à bois bouilleur granulés installé à partir de 2012",
-  142: "réseau de chaleur non répertorié ou inconnu",
-  143: "pompe à chaleur hybride : partie pompe à chaleur (supprime)",
-  144: "pompe à chaleur hybride : partie chaudière (supprime)",
-  145: "pompe à chaleur hybride : partie pompe à chaleur pac air/eau installée entre 2008 et 2014",
-  146: "pompe à chaleur hybride : partie pompe à chaleur pac air/eau installée entre 2015 et 2016",
-  147: "pompe à chaleur hybride : partie pompe à chaleur pac air/eau installée après 2017",
-  148: "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation 2001-2015",
-  149: "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation après 2015",
-  150: "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation 1996-2015",
-  151: "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation après 2015",
-  152: "pompe à chaleur hybride : partie chaudière chaudière bois granulés 2013-2019",
-  153: "pompe à chaleur hybride : partie chaudière chaudière bois granulés après 2019",
-  154: "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2013-2017",
-  155: "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2018-2019",
-  156: "pompe à chaleur hybride : partie chaudière chaudière bois bûche après 2019",
-  157: "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2013-2017",
-  158: "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2018-2019",
-  159: "pompe à chaleur hybride : partie chaudière chaudière bois plaquette après 2019",
-  160: "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation 2001-2015",
-  161: "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation après 2015",
-  162: "pompe à chaleur hybride : partie pompe à chaleur pac eau/eau installée entre 2008 et 2014",
-  163: "pompe à chaleur hybride : partie pompe à chaleur pac eau/eau installée entre 2015 et 2016",
-  164: "pompe à chaleur hybride : partie pompe à chaleur pac eau/eau installée après 2017",
-  165: "pompe à chaleur hybride : partie pompe à chaleur pac eau glycolée/eau installée entre 2008 et 2014",
-  166: "pompe à chaleur hybride : partie pompe à chaleur pac eau glycolée/eau installée entre 2015 et 2016",
-  167: "pompe à chaleur hybride : partie pompe à chaleur pac eau glycolée/eau installée après 2017",
-  168: "pompe à chaleur hybride : partie pompe à chaleur pac géothermique installée entre 2008 et 2014",
-  169: "pompe à chaleur hybride : partie pompe à chaleur pac géothermique installée entre 2015 et 2016",
-  170: "pompe à chaleur hybride : partie pompe à chaleur pac géothermique installée après 2017",
-  171: "chaudière(s) charbon multi bâtiment modélisée comme un réseau de chaleur",
-} as const
-
-export type TypeGenerateurChEnum = keyof typeof TYPE_GENERATEUR_CH
-
-export const TYPE_EMISSION_DISTRIBUTION = {
-  1: "convecteur électrique nfc, nf** et nf***",
-  2: "panneau rayonnant nfc, nf** et nf***",
-  3: "radiateur électrique nfc, nf** et nf***",
-  4: "autres émetteurs à effet joule",
-  5: "soufflage d'air chaud (air soufflé) avec distribution par réseau aéraulique",
-  6: "plafond rayonnant électrique avec régulation terminale",
-  7: "plafond rayonnant électrique sans régulation",
-  8: "plancher rayonnant électrique avec régulation terminale",
-  9: "plancher rayonnant électrique sans régulation",
-  10: "radiateur électrique à accumulation",
-  11: "plancher chauffant sur réseau collectif eau chaude haute température(sup ou egal 65°c)",
-  12: "plancher chauffant sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)",
-  13: "plancher chauffant sur réseau individuel eau chaude haute température(sup ou egal 65°c)",
-  14: "plancher chauffant sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)",
-  15: "plafond chauffant sur réseau collectif eau chaude haute température(sup ou egal 65°c)",
-  16: "plafond chauffant sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)",
-  17: "plafond chauffant sur réseau individuel eau chaude haute température(sup ou egal 65°c)",
-  18: "plafond chauffant sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)",
-  19: "radiateur gaz à ventouse ou sur conduit de fumée",
-  20: "poêle charbon",
-  21: "poêle bois",
-  22: "poêle fioul",
-  23: "poêle gpl",
-  24: "radiateur monotube sans robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)",
-  25: "radiateur monotube sans robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)",
-  26: "radiateur monotube sans robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)",
-  27: "radiateur monotube sans robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)",
-  28: "radiateur monotube avec robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)",
-  29: "radiateur monotube avec robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)",
-  30: "radiateur monotube avec robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)",
-  31: "radiateur monotube avec robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)",
-  32: "radiateur bitube sans robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)",
-  33: "radiateur bitube sans robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)",
-  34: "radiateur bitube sans robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)",
-  35: "radiateur bitube sans robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)",
-  36: "radiateur bitube avec robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)",
-  37: "radiateur bitube avec robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)",
-  38: "radiateur bitube avec robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)",
-  39: "radiateur bitube avec robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)",
-  40: "convecteur bi-jonction",
-  41: "autres équipements",
-  42: "soufflage d'air chaud (air soufflé) avec distribution par fluide frigorigène",
-  43: "plancher chauffant avec distribution par fluide frigorigène (plancher chauffant à détente directe)",
-  44: "plafond chauffant avec distribution par fluide frigorigène (plafond chauffant à détente directe)",
-  45: "radiateur avec distribution par fluide frigorigène (à détente directe)",
-  46: "soufflage d'air chaud (ventiloconvecteur) sur réseau collectif eau chaude haute température(sup ou egal 65°c)",
-  47: "soufflage d'air chaud (ventiloconvecteur) sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)",
-  48: "soufflage d'air chaud (ventiloconvecteur) sur réseau individuel eau chaude haute température(sup ou egal 65°c)",
-  49: "soufflage d'air chaud (ventiloconvecteur) sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)",
-  50: "soufflage d'air chaud sans réseau de distribution (ventiloconvecteur éléctrique)",
-} as const
-
-export type TypeEmissionDistributionEnum = keyof typeof TYPE_EMISSION_DISTRIBUTION
-
-export const TEMP_DISTRIBUTION_CH = {
-  1: "abscence de réseau de distribution",
-  2: "basse",
-  3: "moyenne",
-  4: "haute",
-} as const
-
-export type TempDistributionChEnum = keyof typeof TEMP_DISTRIBUTION_CH
-
-export const EQUIPEMENT_INTERMITTENCE = {
-  1: "absent",
-  2: "central sans minimum de température",
-  3: "central avec minimum de température",
-  4: "par pièce avec minimum de température",
-  5: "par pièce avec minimum de température et détection de présence",
-  6: "central collectif",
-  7: "central collectif avec détection de présence",
-} as const
-
-export type EquipementIntermittenceEnum = keyof typeof EQUIPEMENT_INTERMITTENCE
-
-export const TYPE_REGULATION = {
-  1: "sans régulation pièce par pièce",
-  2: "avec régulation pièce par pièce",
-} as const
-
-export type TypeRegulationEnum = keyof typeof TYPE_REGULATION
-
-export const PERIODE_INSTALLATION_EMETTEUR = {
-  1: "avant 1981",
-  2: "entre 1981 et 2000",
-  3: "après 2000",
-} as const
-
-export type PeriodeInstallationEmetteurEnum = keyof typeof PERIODE_INSTALLATION_EMETTEUR
-
-export const TYPE_CHAUFFAGE = {
-  1: "chauffage divisé",
-  2: "chauffage central",
-} as const
-
-export type TypeChauffageEnum = keyof typeof TYPE_CHAUFFAGE
-
-export const TYPE_GENERATEUR_ECS = {
-  1: "cet sur air ambiant (sur local non chauffé) avant 2010",
-  2: "cet sur air ambiant (sur local non chauffé) 2010-2014",
-  3: "cet sur air ambiant (sur local non chauffé) après 2014",
-  4: "cet sur air extérieur avant 2010",
-  5: "cet sur air extérieur 2010-2014",
-  6: "cet sur air extérieur après 2014",
-  7: "cet sur air extrait avant 2010",
-  8: "cet sur air extrait 2010-2014",
-  9: "cet sur air extrait après 2014",
-  10: "pac double service avant 2010",
-  11: "pac double service 2010-2014",
-  12: "pac double service après 2014",
-  13: "poêle à bois bouilleur bûche installé avant 2012",
-  14: "poêle à bois bouilleur bûche installé à partir de 2012",
-  15: "chaudière bois bûche avant 1978",
-  16: "chaudière bois bûche 1978-1994",
-  17: "chaudière bois bûche 1995-2003",
-  18: "chaudière bois bûche 2004-2012",
-  19: "chaudière bois bûche 2013-2017",
-  20: "chaudière bois bûche 2018-2019",
-  21: "chaudière bois bûche après 2019",
-  22: "chaudière bois plaquette avant 1978",
-  23: "chaudière bois plaquette 1978-1994",
-  24: "chaudière bois plaquette 1995-2003",
-  25: "chaudière bois plaquette 2004-2012",
-  26: "chaudière bois plaquette 2013-2017",
-  27: "chaudière bois plaquette 2018-2019",
-  28: "chaudière bois plaquette après 2019",
-  29: "chaudière bois granulés avant 1978",
-  30: "chaudière bois granulés 1978-1994",
-  31: "chaudière bois granulés 1995-2003",
-  32: "chaudière bois granulés 2004-2012",
-  33: "chaudière bois granulés 2013-2019",
-  34: "chaudière bois granulés après 2019",
-  35: "chaudière fioul classique avant 1970",
-  36: "chaudière fioul classique 1970-1975",
-  37: "chaudière fioul classique 1976-1980",
-  38: "chaudière fioul classique 1981-1990",
-  39: "chaudière fioul standard 1991-2015",
-  40: "chaudière fioul standard après 2015",
-  41: "chaudière fioul basse température 1991-2015",
-  42: "chaudière fioul basse température après 2015",
-  43: "chaudière fioul à condensation 1996-2015",
-  44: "chaudière fioul à condensation après 2015",
-  45: "chaudière gaz classique avant 1981",
-  46: "chaudière gaz classique 1981-1985",
-  47: "chaudière gaz classique 1986-1990",
-  48: "chaudière gaz standard 1991-2000",
-  49: "chaudière gaz standard 2001-2015",
-  50: "chaudière gaz standard après 2015",
-  51: "chaudière gaz basse température 1991-2000",
-  52: "chaudière gaz basse température 2001-2015",
-  53: "chaudière gaz basse température après 2015",
-  54: "chaudière gaz à condensation 1981-1985",
-  55: "chaudière gaz à condensation 1986-2000",
-  56: "chaudière gaz à condensation 2001-2015",
-  57: "chaudière gaz à condensation après 2015",
-  58: "accumulateur gaz classique avant 1990",
-  59: "accumulateur gaz classique 1990-2000",
-  60: "accumulateur gaz classique après 2000",
-  61: "accumulateur gaz à condensation 1996-2000",
-  62: "accumulateur gaz à condensation après 2000",
-  63: "chauffe-eau gaz à production instantanée avant 1980",
-  64: "chauffe-eau gaz à production instantanée 1981-1989",
-  65: "chauffe-eau gaz à production instantanée 1990-2000",
-  66: "chauffe-eau gaz à production instantanée 2001-2015",
-  67: "chauffe-eau gaz à production instantanée après 2015",
-  68: "ballon électrique à accumulation horizontal",
-  69: "ballon électrique à accumulation vertical autres ou inconnue",
-  70: "ballon électrique à accumulation vertical catégorie b ou 2 étoiles",
-  71: "ballon électrique à accumulation vertical catégorie c ou 3 étoiles",
-  72: "réseau de chaleur non isolé",
-  73: "réseau de chaleur isolé",
-  74: "chaudière(s) bois multi bâtiment modélisée comme un réseau de chaleur",
-  75: "chaudière(s) fioul multi bâtiment modélisée comme un réseau de chaleur",
-  76: "chaudière(s) gaz multi bâtiment modélisée comme un réseau de chaleur",
-  77: "pompe(s) à chaleur multi bâtiment modélisée comme un réseau de chaleur",
-  78: "autre système à combustion gaz",
-  79: "autre système à combustion fioul",
-  80: "autre système à combustion bois",
-  81: "autre système à combustion autres energies fossiles (charbon,pétrole etc…)",
-  82: "autre système thermodynamique électrique",
-  83: "autre système thermodynamique gaz",
-  84: "système collectif par défaut en abscence d'information : chaudière fioul pénalisante",
-  85: "chaudière charbon avant 1978",
-  86: "chaudière charbon 1978-1994",
-  87: "chaudière charbon 1995-2003",
-  88: "chaudière charbon 2004-2012",
-  89: "chaudière charbon 2013-2017",
-  90: "chaudière charbon 2018-2019",
-  91: "chaudière charbon après 2019",
-  92: "chaudière gpl/propane/butane classique avant 1981",
-  93: "chaudière gpl/propane/butane classique 1981-1985",
-  94: "chaudière gpl/propane/butane classique 1986-1990",
-  95: "chaudière gpl/propane/butane standard 1991-2000",
-  96: "chaudière gpl/propane/butane standard 2001-2015",
-  97: "chaudière gpl/propane/butane standard après 2015",
-  98: "chaudière gpl/propane/butane basse température 1991-2000",
-  99: "chaudière gpl/propane/butane basse température 2001-2015",
-  100: "chaudière gpl/propane/butane basse température après 2015",
-  101: "chaudière gpl/propane/butane à condensation 1981-1985",
-  102: "chaudière gpl/propane/butane à condensation 1986-2000",
-  103: "chaudière gpl/propane/butane à condensation 2001-2015",
-  104: "chaudière gpl/propane/butane à condensation après 2015",
-  105: "accumulateur gpl/propane/butane classique avant 1990",
-  106: "accumulateur gpl/propane/butane classique 1990-2000",
-  107: "accumulateur gpl/propane/butane classique après 2000",
-  108: "accumulateur gpl/propane/butane à condensation 1996-2000",
-  109: "accumulateur gpl/propane/butane à condensation après 2000",
-  110: "chauffe-eau gpl/propane/butane à production instantanée avant 1980",
-  111: "chauffe-eau gpl/propane/butane à production instantanée 1981-1989",
-  112: "chauffe-eau gpl/propane/butane à production instantanée 1990-2000",
-  113: "chauffe-eau gpl/propane/butane à production instantanée 2001-2015",
-  114: "chauffe-eau gpl/propane/butane à production instantanée après 2015",
-  115: "poêle à bois bouilleur granulés installé avant 2012",
-  116: "poêle à bois bouilleur granulés installé à partir de 2012",
-  117: "chauffe-eau électrique instantané",
-  118: "chaudière électrique",
-  119: "réseau de chaleur non répertorié ou inconnu",
-  120: "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation 2001-2015",
-  121: "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation après 2015",
-  122: "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation 1996-2015",
-  123: "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation après 2015",
-  124: "pompe à chaleur hybride : partie chaudière chaudière bois granulés 2013-2019",
-  125: "pompe à chaleur hybride : partie chaudière chaudière bois granulés après 2019",
-  126: "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2013-2017",
-  127: "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2018-2019",
-  128: "pompe à chaleur hybride : partie chaudière chaudière bois bûche après 2019",
-  129: "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2013-2017",
-  130: "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2018-2019",
-  131: "pompe à chaleur hybride : partie chaudière chaudière bois plaquette après 2019",
-  132: "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation 2001-2015",
-  133: "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation après 2015",
-  134: "chaudière(s) charbon multi bâtiment modélisée comme un réseau de chaleur",
-} as const
-
-export type TypeGenerateurEcsEnum = keyof typeof TYPE_GENERATEUR_ECS
-
-export const BOUCLAGE_RESEAU_ECS = {
-  1: "réseau d'ecs non bouclé",
-  2: "réseau d'ecs bouclé",
-  3: "réseau d'ecs avec présence d'un traceur chauffant",
-} as const
-
-export type BouclageReseauEcsEnum = keyof typeof BOUCLAGE_RESEAU_ECS
-
-export const TYPE_STOCKAGE_ECS = {
-  1: "abscence de stockage d'ecs (production instantanée)",
-  2: "stockage indépendant de la production",
-  3: "stockage intégré à la production",
-} as const
-
-export type TypeStockageEcsEnum = keyof typeof TYPE_STOCKAGE_ECS
-
-export const PERIODE_INSTALLATION_ECS_THERMO = {
-  1: "avant 2010",
-  2: "2010-2014",
-  3: "a partir de 2015",
-} as const
-
-export type PeriodeInstallationEcsThermoEnum = keyof typeof PERIODE_INSTALLATION_ECS_THERMO
-
-export const TYPE_ENR = {
-  1: "solaire photovoltaïque",
-  2: "eolien",
-  3: "solaire photovoltaïque + eolien",
-  4: "cogénération",
-  5: "solaire photovoltaïque + cogénération",
-  6: "eolien + cogénération",
-  7: "solaire photovoltaïque + eolien + cogénération",
-} as const
-
-export type TypeEnrEnum = keyof typeof TYPE_ENR
-
-export const ORIENTATION_PV = {
-  1: "est",
-  2: "sud-est",
-  3: "sud",
-  4: "sud-ouest",
-  5: "ouest",
-} as const
-
-export type OrientationPvEnum = keyof typeof ORIENTATION_PV
-
-export const INCLINAISON_PV = {
-  1: "≤ 15°",
-  2: "15° <   ≤ 45°",
-  3: "45° <   ≤ 75°",
-  4: "> 75°",
-} as const
-
-export type InclinaisonPvEnum = keyof typeof INCLINAISON_PV
-
-export const TYPE_ENERGIE = {
-  1: "électricité",
-  2: "gaz naturel",
-  3: "fioul domestique",
-  4: "bois – bûches",
-  5: "bois – granulés (pellets) ou briquettes",
-  6: "bois – plaquettes forestières",
-  7: "bois – plaquettes d’industrie",
-  8: "réseau de chauffage urbain",
-  9: "propane",
-  10: "butane",
-  11: "charbon",
-  12: "électricité d'origine renouvelable utilisée dans le bâtiment",
-  13: "gpl",
-  14: "autre combustible fossile",
-  15: "réseau de froid urbain",
-} as const
-
-export type TypeEnergieEnum = keyof typeof TYPE_ENERGIE
-
-export const TYPE_USAGE = {
-  1: "chauffage",
-  2: "eau chaude sanitaire",
-  3: "refroidissement",
-  4: "eclairage",
-  5: "bureautique",
-  6: "ascenseur(s)",
-  7: "autres usages",
-  8: "production d'électricité à demeure",
-  9: "abonnements",
-  10: "transports mécaniques",
-  11: "chauffage et eau chaude sanitaire",
-  12: "périmètre de l'usage inconnu",
-  13: "chauffage, eau chaude sanitaire et climatisation",
-  14: "chauffage et climatisation",
-  15: "eau chaude sanitaire et climatisation",
-  16: "auxiliaires et ventilation",
-} as const
-
-export type TypeUsageEnum = keyof typeof TYPE_USAGE
-
-export const CLASSE_ETIQUETTE = {
-  "A": "A",
-  "B": "B",
-  "C": "C",
-  "D": "D",
-  "E": "E",
-  "F": "F",
-  "G": "G",
-} as const
-
-export type ClasseEtiquetteEnum = keyof typeof CLASSE_ETIQUETTE
-
-export const STATUT_GEOCODAGE_BAN = {
-  1: "adresse géocodée ban à l'adresse",
-  2: "adresse non géocodée ban car aucune correspondance trouvée",
-} as const
-
-export type StatutGeocodageBanEnum = keyof typeof STATUT_GEOCODAGE_BAN
-
-export const QUALITE_COMPOSANT = {
-  1: "très bonne",
-  2: "bonne",
-  3: "moyenne",
-  4: "insuffisante",
-} as const
-
-export type QualiteComposantEnum = keyof typeof QUALITE_COMPOSANT
-
-export const POSITION_ETAGE_LOGEMENT = {
-  1: "rdc",
-  2: "étage intermédiaire",
-  3: "dernier étage",
-} as const
-
-export type PositionEtageLogementEnum = keyof typeof POSITION_ETAGE_LOGEMENT
-
-export const TYPOLOGIE_LOGEMENT = {
-  1: "t1",
-  2: "t2",
-  3: "t3",
-  4: "t4",
-  5: "t5",
-  6: "t6",
-  7: "t7 ou plus",
-} as const
-
-export type TypologieLogementEnum = keyof typeof TYPOLOGIE_LOGEMENT
-
-export const CATEGORIE_ENR_DESCRIPTIF = {
-  1: "pompe à chaleur",
-  2: "chauffe-eau thermodynamique",
-  3: "panneaux solaires photovoltaïques",
-  4: "panneaux solaires thermiques",
-  5: "géothermie",
-  6: "réseau de chaleur ou de froid vertueux",
-  7: "chauffage au bois",
-  8: "éolienne",
-  9: "cogénération",
-} as const
-
-export type CategorieEnrDescriptifEnum = keyof typeof CATEGORIE_ENR_DESCRIPTIF
-
-export const CATEGORIE_DESCRIPTIF_SIMPLIFIE = {
-  1: "murs",
-  2: "planchers bas",
-  3: "toiture/plafond",
-  4: "portes et fenêtres",
-  5: "système de chauffage",
-  6: "système d'ecs",
-  7: "sytème de refroidissement",
-  8: "système de ventilation",
-  9: "dispositifs de pilotage chauffage/climatisation",
-  10: "système de production d'électricité d'origine renouvelable",
-} as const
-
-export type CategorieDescriptifSimplifieEnum = keyof typeof CATEGORIE_DESCRIPTIF_SIMPLIFIE
-
-export const CATEGORIE_FICHE_TECHNIQUE = {
-  1: "murs",
-  2: "planchers bas",
-  3: "toiture/plafond",
-  4: "baies vitrées",
-  5: "portes",
-  6: "pont thermique",
-  7: "système de chauffage",
-  8: "système d'ecs",
-  9: "sytème de refroidissement",
-  10: "système de ventilation",
-  11: "général",
-  12: "description échantillon logement pour dpe immeuble",
-} as const
-
-export type CategorieFicheTechniqueEnum = keyof typeof CATEGORIE_FICHE_TECHNIQUE
-
-export const NUM_PACK_TRAVAUX = {
-  1: "1",
-  2: "2",
-  3: "1+2",
-} as const
-
-export type NumPackTravauxEnum = keyof typeof NUM_PACK_TRAVAUX
-
-export const LOT_TRAVAUX = {
-  1: "murs",
-  2: "planchers bas",
-  3: "toiture/plafond",
-  4: "portes et fenêtres",
-  5: "système de chauffage",
-  6: "système d'ecs",
-  7: "sytème de refroidissement",
-  8: "système de ventilation",
-  9: "energie renouvelable",
-} as const
-
-export type LotTravauxEnum = keyof typeof LOT_TRAVAUX
-
-export const TYPE_JUSTIFICATIF = {
-  1: "plans de la maison, de l’appartement ou de l’immeuble",
-  2: "plan de situation ou plan de masse du bâtiment",
-  3: "diagnostic surface habitable",
-  4: "avis de taxe d’habitation",
-  5: "relevé de propriété",
-  6: "règlement de copropriété",
-  7: "descriptifs des équipements collectifs fournis par le propriétaire des installations collectives ou le syndic de copropriété",
-  8: "descriptifs des équipements individuels des logements non visités par le diagnostiqueur, fournis par le gestionnaire professionnel unique du bâtiment dans le cas d’un propriétaire unique certifiant que tous les lots font l’objet d’une gestion homogène",
-  9: "contrat de maintenance ou d’entretien des équipements",
-  10: "notices techniques des équipements, y compris celles mise à disposition publiquement par les fabricants",
-  11: "permis de construire du bâtiment et, le cas échéant, de ses extensions",
-  12: "étude thermique réglementaire",
-  13: "rapport de mesure de la perméabilité à l’air",
-  14: "rapport mentionnant la composition des parois, obtenue par sondage",
-  15: "factures de travaux ou bordereaux de livraison décrivant les travaux réalisés, mentionnant l’adresse du bien",
-  16: "photographies des travaux d’isolation, permettant d’identifier le bien et la paroi concernée",
-  17: "justificatifs d’obtention d’un crédit d’impôt ou d’une prime de transition énergétique (cite, maprimerénov’).",
-  18: "déclaration préalable des travaux de rénovation, dans le cas où cette procédure était nécessaire (par exemple pour une isolation thermique par l’extérieur)",
-  19: "cahier des charges ou programme de travaux",
-  20: "url/api",
-} as const
-
-export type TypeJustificatifEnum = keyof typeof TYPE_JUSTIFICATIF
-
-export const ORIGINE_DONNEE = {
-  1: "valeur par défaut",
-  2: "mesuré/observé",
-  3: "issu d'un document justificatif autorisé",
-  4: "obtenu en ligne",
-  5: "estimé",
-  6: "valeur par défaut pénalisante",
-} as const
-
-export type OrigineDonneeEnum = keyof typeof ORIGINE_DONNEE
-
-export const PICTO_GESTE_ENTRETIEN = {
-  1: "ventilation",
-  2: "chaudière",
-  3: "radiateur",
-  4: "éclairage",
-  5: "vitrages",
-  6: "circuit de distribution",
-  7: "pompe à chaleur",
-  8: "insert/poêle bois",
-  9: "chauffe-eau",
-  10: "chauffe-eau thermodynamique",
-  11: "panneau solaire",
-  12: "picto \"neutre\"",
-  13: "isolation",
-  14: "climatisation",
-  15: "système chauffage",
-  16: "système ecs",
-  17: "baies et portes",
-} as const
-
-export type PictoGesteEntretienEnum = keyof typeof PICTO_GESTE_ENTRETIEN
-
-export const INDICATEUR_CONFORT_ETE = {
-  1: "insuffisant",
-  2: "moyen",
-  3: "bon",
-} as const
-
-export type IndicateurConfortEteEnum = keyof typeof INDICATEUR_CONFORT_ETE
+// Ne pas modifier manuellement — relancer scripts/generate-enums.mjs
+
+import * as z from "zod"
+/**
+ * "1": "version du 1er juillet 2021"
+ * "2": "version avec modèle complet sans contrôle de cohérence"
+ * "1.1": "version corrective du 1er novembre"
+ * "2.1": "version de fin de validation incluant les contrôles de cohérences"
+ * "2.2": "version de préparation de compatibilité audit/dpe"
+ * "2.3": "version corrective de janvier 2023"
+ * "2.4": "version correspondant à l'arrêté des seuils pour les petites surfaces"
+ * "2.5": "version correspondant à l'obligation de saisie du numéro fiscal de local"
+ * "2.6": "version correspondant au changement du facteur de conversion en ep de l'électricité"
+ */
+export const VERSION = [
+  "1",
+  "2",
+  "1.1",
+  "2.1",
+  "2.2",
+  "2.3",
+  "2.4",
+  "2.5",
+  "2.6",
+] as const
+
+export const VersionEnum = z.enum(VERSION)
+export type VersionEnum = z.infer<typeof VersionEnum>
+
+/**
+ * "1": "dpe 3cl 2021 méthode logement"
+ * "2": "dpe neuf logement : rt2012"
+ * "3": "dpe neuf logement : re2020"
+ * "4": "dpe 2006 tertiaire et erp"
+ */
+export const MODELE_DPE = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const ModeleDpeEnum = z.enum(MODELE_DPE)
+export type ModeleDpeEnum = z.infer<typeof ModeleDpeEnum>
+
+/**
+ * "1": "j : structures d’accueil pour personnes âgées ou personnes handicapées"
+ * "2": "l : salles d'auditions, de conférences, de réunions, de spectacles ou à usage multiple"
+ * "3": "m : magasins de vente, centres commerciaux"
+ * "4": "n : restaurants et débits de boisson"
+ * "5": "o : hôtels et pensions de famille"
+ * "6": "p : salles de danse et salles de jeux"
+ * "7": "r : établissements d’éveil, d’enseignement, de formation, centres de vacances, centres de loisirs sans hébergement"
+ * "8": "s : bibliothèques, centres de documentation"
+ * "9": "t : salles d'exposition à vocation commerciale"
+ * "10": "u : établissements de soins"
+ * "11": "v : établissements de divers cultes"
+ * "12": "w : administrations, banques, bureaux"
+ * "13": "x : établissements sportifs couverts"
+ * "14": "y : musées"
+ * "15": "pa : établissements de plein air"
+ * "16": "cts : chapiteaux, tentes et structures toile"
+ * "17": "sg : structures gonflables"
+ * "18": "ps : parcs de stationnement couverts"
+ * "19": "oa : hôtels-restaurants d'altitude"
+ * "20": "ga : gares accessibles au public (chemins de fer, téléphériques, remonte-pentes...)"
+ * "21": "ef : établissements flottants (eaux intérieures)"
+ * "22": "ref : refuges de montagne"
+ * "23": "gha : habitation"
+ * "24": "gho : hôtel"
+ * "25": "ghr : enseignement"
+ * "26": "ghs : dépôt d'archives"
+ * "27": "ghtc : tour de contrôle"
+ * "28": "ghu : usage sanitaire"
+ * "29": "ghw : bureaux"
+ * "30": "ghz : usage mixte"
+ * "31": "locaux d'entreprise (bureaux)"
+ * "32": "autres tertiaires non erp"
+ */
+export const USAGE_FONCTIONNEL_BATIMENT = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+] as const
+
+export const UsageFonctionnelBatimentEnum = z.enum(USAGE_FONCTIONNEL_BATIMENT)
+export type UsageFonctionnelBatimentEnum = z.infer<typeof UsageFonctionnelBatimentEnum>
+
+/**
+ * "0": "absence de consentement"
+ * "1": "consentement fourni"
+ * "2": "consentement non requis"
+ */
+export const CONSENTEMENT_FORMULAIRE = [
+  "0",
+  "1",
+  "2",
+] as const
+
+export const ConsentementFormulaireEnum = z.enum(CONSENTEMENT_FORMULAIRE)
+export type ConsentementFormulaireEnum = z.infer<typeof ConsentementFormulaireEnum>
+
+/**
+ * "1": "propriétaire"
+ * "2": "non propriétaire"
+ */
+export const COMMANDITAIRE = [
+  "1",
+  "2",
+] as const
+
+export const CommanditaireEnum = z.enum(COMMANDITAIRE)
+export type CommanditaireEnum = z.infer<typeof CommanditaireEnum>
+
+/**
+ * "1": "1ère catégorie"
+ * "2": "2ème catégorie"
+ * "3": "3ème catégorie"
+ * "4": "4ème catégorie"
+ * "5": "5ème catégorie"
+ */
+export const CATEGORIE_ERP = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+] as const
+
+export const CategorieErpEnum = z.enum(CATEGORIE_ERP)
+export type CategorieErpEnum = z.infer<typeof CategorieErpEnum>
+
+/**
+ * "1": "dpe maison individuelle"
+ * "2": "dpe appartement individuel chauffage individuel ecs individuel"
+ * "3": "dpe appartement individuel chauffage collectif ecs individuel"
+ * "4": "dpe appartement individuel chauffage individuel ecs collectif"
+ * "5": "dpe appartement individuel chauffage collectif ecs collectif"
+ * "6": "dpe immeuble collectif chauffage individuel ecs individuel"
+ * "7": "dpe immeuble collectif chauffage collectif ecs individuel"
+ * "8": "dpe immeuble collectif chauffage individuel ecs collectif"
+ * "9": "dpe immeuble collectif chauffage collectif ecs collectif"
+ * "10": "dpe appartement généré à partir des données dpe immeuble chauffage individuel ecs individuel"
+ * "11": "dpe appartement généré à partir des données dpe immeuble chauffage collectif ecs individuel"
+ * "12": "dpe appartement généré à partir des données dpe immeuble chauffage individuel ecs collectif"
+ * "13": "dpe appartement généré à partir des données dpe immeuble chauffage collectif ecs collectif"
+ * "14": "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : maison individuelle"
+ * "15": "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage collectif ecs collectif"
+ * "16": "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage individuel ecs collectif"
+ * "17": "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : immeuble"
+ * "18": "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : maison individuelle"
+ * "19": "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage collectif ecs collectif"
+ * "20": "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage individuel ecs collectif"
+ * "21": "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : immeuble"
+ * "22": "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage individuel ecs individuel"
+ * "23": "dpe issu d'une étude thermique réglementaire rt2012 bâtiment : appartement chauffage collectif ecs individuel"
+ * "24": "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage collectif ecs individuel"
+ * "25": "dpe issu d'une étude energie environement réglementaire re2020 bâtiment : appartement chauffage individuel ecs individuel"
+ * "26": "dpe immeuble collectif chauffage mixte (collectif-individuel) ecs mixte (collectif-individuel)"
+ * "27": "dpe immeuble collectif chauffage mixte (collectif-individuel) ecs individuel"
+ * "28": "dpe immeuble collectif chauffage mixte (collectif-individuel) ecs collectif"
+ * "29": "dpe immeuble collectif chauffage individuel ecs mixte (collectif-individuel)"
+ * "30": "dpe immeuble collectif chauffage collectif ecs mixte (collectif-individuel)"
+ * "31": "dpe appartement individuel chauffage mixte (collectif-individuel) ecs individuel"
+ * "32": "dpe appartement individuel chauffage mixte (collectif-individuel) ecs collectif"
+ * "33": "dpe appartement généré à partir des données dpe immeuble chauffage mixte (collectif-individuel) ecs individuel"
+ * "34": "dpe appartement généré à partir des données dpe immeuble chauffage mixte (collectif-individuel) ecs collectif"
+ * "35": "dpe appartement individuel chauffage mixte (collectif-individuel) ecs mixte (collectif-individuel)"
+ * "36": "dpe appartement individuel chauffage individuel ecs mixte (collectif-individuel)"
+ * "37": "dpe appartement individuel chauffage collectif ecs mixte (collectif-individuel)"
+ * "38": "dpe appartement généré à partir des données dpe immeuble chauffage mixte (collectif-individuel) ecs mixte (collectif-individuel)"
+ * "39": "dpe appartement généré à partir des données dpe immeuble chauffage individuel ecs mixte (collectif-individuel)"
+ * "40": "dpe appartement généré à partir des données dpe immeuble chauffage collectif ecs mixte (collectif-individuel)"
+ */
+export const METHODE_APPLICATION_DPE_LOG = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+  "33",
+  "34",
+  "35",
+  "36",
+  "37",
+  "38",
+  "39",
+  "40",
+] as const
+
+export const MethodeApplicationDpeLogEnum = z.enum(METHODE_APPLICATION_DPE_LOG)
+export type MethodeApplicationDpeLogEnum = z.infer<typeof MethodeApplicationDpeLogEnum>
+
+/**
+ * "1": "dpe tertiaire facture"
+ * "2": "dpe tertiaire bâtiment neuf"
+ * "3": "dpe tertiaire vierge"
+ * "4": "dpe tertiaire vierge neuf"
+ * "5": "dpe tertiaire facture dans un bâtiment de logement"
+ * "6": "dpe tertiaire bâtiment neuf dans un bâtiment de logement"
+ * "7": "dpe tertiaire vierge dans un bâtiment de logement"
+ * "8": "dpe tertiaire vierge neuf dans un bâtiment de logement"
+ */
+export const METHODE_APPLICATION_DPE_TER = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+] as const
+
+export const MethodeApplicationDpeTerEnum = z.enum(METHODE_APPLICATION_DPE_TER)
+export type MethodeApplicationDpeTerEnum = z.infer<typeof MethodeApplicationDpeTerEnum>
+
+/**
+ * "1": "bureaux, services administratifs, enseignement"
+ * "2": "bâtiments à occupation continue"
+ * "3": "autres"
+ * "4": "centre commercial"
+ */
+export const SOUS_MODELE_DPE_TER = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const SousModeleDpeTerEnum = z.enum(SOUS_MODELE_DPE_TER)
+export type SousModeleDpeTerEnum = z.infer<typeof SousModeleDpeTerEnum>
+
+/**
+ * "1": "absence de méthode d’échantillonnage"
+ * "2": "calcul de l’échantillonnage effectué par un logiciel validé"
+ * "3": "calcul de l’échantillonnage effectué par le diagnostiqueur"
+ */
+export const CALCUL_ECHANTILLONNAGE = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const CalculEchantillonnageEnum = z.enum(CALCUL_ECHANTILLONNAGE)
+export type CalculEchantillonnageEnum = z.infer<typeof CalculEchantillonnageEnum>
+
+/**
+ * "1": "avant 1948"
+ * "2": "1948-1974"
+ * "3": "1975-1977"
+ * "4": "1978-1982"
+ * "5": "1983-1988"
+ * "6": "1989-2000"
+ * "7": "2001-2005"
+ * "8": "2006-2012"
+ * "9": "2013-2021"
+ * "10": "après 2021"
+ */
+export const PERIODE_CONSTRUCTION = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+] as const
+
+export const PeriodeConstructionEnum = z.enum(PERIODE_CONSTRUCTION)
+export type PeriodeConstructionEnum = z.infer<typeof PeriodeConstructionEnum>
+
+/**
+ * "1": "avant 1948"
+ * "2": "1948-1974"
+ * "3": "1975-1977"
+ * "4": "1978-1982"
+ * "5": "1983-1988"
+ * "6": "1989-2000"
+ * "7": "2001-2005"
+ * "8": "2006-2012"
+ * "9": "2013-2021"
+ * "10": "après 2021"
+ */
+export const PERIODE_ISOLATION = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+] as const
+
+export const PeriodeIsolationEnum = z.enum(PERIODE_ISOLATION)
+export type PeriodeIsolationEnum = z.infer<typeof PeriodeIsolationEnum>
+
+/**
+ * "1": "h1a"
+ * "2": "h1b"
+ * "3": "h1c"
+ * "4": "h2a"
+ * "5": "h2b"
+ * "6": "h2c"
+ * "7": "h2d"
+ * "8": "h3"
+ */
+export const ZONE_CLIMATIQUE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+] as const
+
+export const ZoneClimatiqueEnum = z.enum(ZONE_CLIMATIQUE)
+export type ZoneClimatiqueEnum = z.infer<typeof ZoneClimatiqueEnum>
+
+/**
+ * "1": "inférieur à 400m"
+ * "2": "400-800m"
+ * "3": "supérieur à 800m"
+ */
+export const CLASSE_ALTITUDE = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const ClasseAltitudeEnum = z.enum(CLASSE_ALTITUDE)
+export type ClasseAltitudeEnum = z.infer<typeof ClasseAltitudeEnum>
+
+/**
+ * "1": "non isolé"
+ * "2": "isolation inconnue  (table forfaitaire)"
+ * "3": "epaisseur isolation saisie justifiée par mesure ou observation"
+ * "4": "epaisseur isolation saisie justifiée à partir des documents justificatifs autorisés"
+ * "5": "resistance isolation saisie justifiée observation de l'isolant installé et mesure de son épaisseur"
+ * "6": "resistance isolation saisie justifiée  à partir des documents justificatifs autorisés"
+ * "7": "année d'isolation différente de l'année de construction saisie justifiée (table forfaitaire)"
+ * "8": "année de construction saisie (table forfaitaire)"
+ * "9": "saisie direct u justifiée  (à partir des documents justificatifs autorisés)"
+ * "10": "saisie direct u depuis rset/rsee( etude rt2012/re2020)"
+ */
+export const METHODE_SAISIE_U = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+] as const
+
+export const MethodeSaisieUEnum = z.enum(METHODE_SAISIE_U)
+export type MethodeSaisieUEnum = z.infer<typeof MethodeSaisieUEnum>
+
+/**
+ * "1": "type de paroi inconnu (valeur par défaut)"
+ * "2": "déterminé selon le matériau et épaisseur à partir de la table de valeur forfaitaire"
+ * "3": "saisie direct u0 justifiée à partir des documents justificatifs autorisés"
+ * "4": "saisie direct u0 correspondant à la performance de la paroi avec son isolation antérieure iti (umur_iti) lorsqu'il y a une surisolation ite réalisée"
+ * "5": "u0 non saisi car le u est saisi connu et justifié."
+ */
+export const METHODE_SAISIE_U0 = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+] as const
+
+export const MethodeSaisieU0Enum = z.enum(METHODE_SAISIE_U0)
+export type MethodeSaisieU0Enum = z.infer<typeof MethodeSaisieU0Enum>
+
+/**
+ * "1": "valeur forfaitaire"
+ * "2": "valeur justifiée saisie à partir des documents justificatifs autorisés"
+ * "3": "saisie direct u depuis rset/rsee( etude rt2012/re2020)"
+ */
+export const METHODE_SAISIE_UPORTE = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const MethodeSaisieUporteEnum = z.enum(METHODE_SAISIE_UPORTE)
+export type MethodeSaisieUporteEnum = z.infer<typeof MethodeSaisieUporteEnum>
+
+/**
+ * "1": "valeur forfaitaire"
+ * "2": "valeur justifiée saisie à partir des documents justificatifs autorisés"
+ * "3": "saisie direct k depuis rset/rsee( etude rt2012/re2020)"
+ */
+export const METHODE_SAISIE_PONT_THERMIQUE = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const MethodeSaisiePontThermiqueEnum = z.enum(METHODE_SAISIE_PONT_THERMIQUE)
+export type MethodeSaisiePontThermiqueEnum = z.infer<typeof MethodeSaisiePontThermiqueEnum>
+
+/**
+ * "1": "ug(opt),uw,ujn(opt) et sw saisi à l'aide des tables de valeurs forfaitaires et des relèves mesurées/observées"
+ * "2": "ug saisi directementà partir des documents justificatifs autorisés , autres paramètres calculés avec les tables forfaitaires"
+ * "3": "ug,uw saisi directement à partir des documents justificatifs autorisés , autres paramètres calculés avec les tables forfaitaires"
+ * "4": "ug,uw,sw saisi directement à partir des documents justificatifs autorisés , ujn calculés avec les tables forfaitaires"
+ * "5": "ug,uw,ujn saisi directement à partir des documents justificatifs autorisés , autres paramètres calculés avec les tables forfaitaires"
+ * "6": "ug,uw,sw,ujn saisi directement à partir des documents justificatifs autorisés"
+ * "7": "ujn, sw recalculés depuis rset/rsee( etude rt2012/re2020)"
+ * "8": "uw,sw saisi directement à partir des documents justificatifs autorisés , ujn calculés avec les tables forfaitaires"
+ * "9": "uw,ujn saisi directement à partir des documents justificatifs autorisés , sw calculés avec les tables forfaitaires"
+ * "10": "uw,ujn, sw saisi directement à partir des documents justificatifs autorisés"
+ * "11": "ujn, sw saisi directement à partir des documents justificatifs autorisés"
+ * "12": "ujn saisi directement à partir des documents justificatifs autorisés, sw calculés avec les tables forfaitaires"
+ * "13": "uw saisi directement à partir des documents justificatifs autorisés , ujn,sw calculés avec les tables forfaitaires"
+ * "14": "sw saisi directement à partir des documents justificatifs autorisés , ujn,uw calculés avec les tables forfaitaires"
+ * "15": "ug,sw saisi directement à partir des documents justificatifs autorisés , ujn,uw calculés avec les tables forfaitaires"
+ */
+export const METHODE_SAISIE_PERF_VITRAGE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+] as const
+
+export const MethodeSaisiePerfVitrageEnum = z.enum(METHODE_SAISIE_PERF_VITRAGE)
+export type MethodeSaisiePerfVitrageEnum = z.infer<typeof MethodeSaisiePerfVitrageEnum>
+
+/**
+ * "1": "valeurs forfaitaires"
+ * "2": "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, autres données forfaitaires"
+ * "3": "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, rpn,rpint, autres données forfaitaires"
+ * "4": "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, rpn,rpint,qp0, autres données forfaitaires"
+ * "5": "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système à combustion : pn, rpn,rpint,qp0,temp_fonc_30,temp_fonc_100"
+ * "6": "caractéristiques saisies à partir de la plaque signalétique ou d'une documentation technique du système thermodynamique : scop/cop/eer"
+ * "7": "déterminé à partir du rset/rsee( etude rt2012/re2020)"
+ * "8": "seer saisi pour permettre la saisie de réseau de froid ou de système de climatisations qui ne sont pas éléctriques"
+ */
+export const METHODE_SAISIE_CARAC_SYS = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+] as const
+
+export const MethodeSaisieCaracSysEnum = z.enum(METHODE_SAISIE_CARAC_SYS)
+export type MethodeSaisieCaracSysEnum = z.infer<typeof MethodeSaisieCaracSysEnum>
+
+/**
+ * "1": "valeur forfaitaire"
+ * "2": "déterminé à partir d'une mesure d'étanchéité à l'air de moins de deux ans"
+ * "3": "déterminé à partir du rset/rsee( etude rt2012/re2020)"
+ */
+export const METHODE_SAISIE_Q4PA_CONV = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const MethodeSaisieQ4paConvEnum = z.enum(METHODE_SAISIE_Q4PA_CONV)
+export type MethodeSaisieQ4paConvEnum = z.infer<typeof MethodeSaisieQ4paConvEnum>
+
+/**
+ * "1": "valeur forfaitaire"
+ * "2": "déterminé à partir d'un document justificatif autorisé"
+ */
+export const METHODE_SAISIE_FACT_COUV_SOL = [
+  "1",
+  "2",
+] as const
+
+export const MethodeSaisieFactCouvSolEnum = z.enum(METHODE_SAISIE_FACT_COUV_SOL)
+export type MethodeSaisieFactCouvSolEnum = z.infer<typeof MethodeSaisieFactCouvSolEnum>
+
+/**
+ * "1": "très lourde"
+ * "2": "lourde"
+ * "3": "moyenne"
+ * "4": "légère"
+ */
+export const CLASSE_INERTIE = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const ClasseInertieEnum = z.enum(CLASSE_INERTIE)
+export type ClasseInertieEnum = z.infer<typeof ClasseInertieEnum>
+
+/**
+ * "1": "extérieur"
+ * "2": "paroi enterrée"
+ * "3": "vide sanitaire"
+ * "4": "bâtiment ou local à usage autre que d'habitation"
+ * "5": "terre-plein"
+ * "6": "sous-sol non chauffé"
+ * "7": "locaux non chauffés non accessible"
+ * "8": "garage"
+ * "9": "cellier"
+ * "10": "espace tampon solarisé (véranda,loggia fermée)"
+ * "11": "comble fortement ventilé"
+ * "12": "comble faiblement ventilé"
+ * "13": "comble très faiblement ventilé"
+ * "14": "circulation sans ouverture directe sur l'extérieur"
+ * "15": "circulation avec ouverture directe sur l'extérieur"
+ * "16": "circulation avec bouche ou gaine de désenfumage ouverte en permanence"
+ * "17": "hall d'entrée avec dispositif de fermeture automatique"
+ * "18": "hall d'entrée sans dispositif de fermeture automatique"
+ * "19": "garage privé collectif"
+ * "20": "local tertiaire à l'intérieur de l'immeuble en contact avec l'appartement"
+ * "21": "autres dépendances"
+ * "22": "local non déperditif ( local à usage d'habitation chauffé)"
+ */
+export const TYPE_ADJACENCE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+] as const
+
+export const TypeAdjacenceEnum = z.enum(TYPE_ADJACENCE)
+export type TypeAdjacenceEnum = z.infer<typeof TypeAdjacenceEnum>
+
+/**
+ * "1": "local chauffé non accessible"
+ * "2": "lc non isolé + lnc non isolé"
+ * "3": "lc non isolé + lnc isolé"
+ * "4": "lc isolé + lnc non isolé"
+ * "5": "lc isolé + lnc isolé"
+ * "6": "lc isolé + espace tampon solarisé orienté nord"
+ * "7": "lc isolé + espace tampon solarisé orienté sud"
+ * "8": "lc isolé + espace tampon solarisé orienté est/ouest"
+ * "9": "lc non isolé + espace tampon solarisé orienté nord"
+ * "10": "lc non isolé + espace tampon solarisé orienté sud"
+ * "11": "lc non isolé + espace tampon solarisé orienté est/ouest"
+ */
+export const CFG_ISOLATION_LNC = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+] as const
+
+export const CfgIsolationLncEnum = z.enum(CFG_ISOLATION_LNC)
+export type CfgIsolationLncEnum = z.infer<typeof CfgIsolationLncEnum>
+
+/**
+ * "1": "inconnu"
+ * "2": "murs en pierre de taille et moellons constitué d'un seul matériaux"
+ * "3": "murs en pierre de taille et moellons avec remplissage tout venant"
+ * "4": "murs en pisé ou béton de terre stabilisé (à partir d'argile crue)"
+ * "5": "murs en pan de bois sans remplissage tout venant"
+ * "6": "murs en pan de bois avec remplissage tout venant"
+ * "7": "murs bois (rondin)"
+ * "8": "murs en briques pleines simples"
+ * "9": "murs en briques pleines doubles avec lame d'air"
+ * "10": "murs en briques creuses"
+ * "11": "murs en blocs de béton pleins"
+ * "12": "murs en blocs de béton creux"
+ * "13": "murs en béton banché"
+ * "14": "murs en béton de mâchefer"
+ * "15": "brique terre cuite alvéolaire"
+ * "16": "béton cellulaire avant 2013"
+ * "17": "béton cellulaire à partir de 2013"
+ * "18": "murs en ossature bois avec isolant en remplissage ≥ 2006"
+ * "19": "murs sandwich béton/isolant/béton (sans isolation rapportée)"
+ * "20": "cloison de plâtre"
+ * "21": "autre matériau traditionel ancien"
+ * "22": "autre matériau innovant récent"
+ * "23": "autre matériau non répertorié"
+ * "24": "murs en ossature bois avec isolant en remplissage 2001-2005"
+ * "25": "murs en ossature bois sans remplissage"
+ * "26": "murs en ossature bois avec isolant en remplissage <2001"
+ * "27": "murs en ossature bois avec remplissage tout venant"
+ */
+export const MATERIAUX_STRUCTURE_MUR = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+] as const
+
+export const MateriauxStructureMurEnum = z.enum(MATERIAUX_STRUCTURE_MUR)
+export type MateriauxStructureMurEnum = z.infer<typeof MateriauxStructureMurEnum>
+
+/**
+ * "1": "inconnu"
+ * "2": "non isolé"
+ * "3": "iti"
+ * "4": "ite"
+ * "5": "itr"
+ * "6": "iti+ite"
+ * "7": "iti+itr"
+ * "8": "ite+itr"
+ * "9": "isolé mais type d'isolation inconnu"
+ */
+export const TYPE_ISOLATION = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+] as const
+
+export const TypeIsolationEnum = z.enum(TYPE_ISOLATION)
+export type TypeIsolationEnum = z.infer<typeof TypeIsolationEnum>
+
+/**
+ * "1": "inconnu"
+ * "2": "absence de doublage"
+ * "3": "doublage indéterminé ou lame d'air inf 15 mm"
+ * "4": "doublage indéterminé avec lame d'air sup 15 mm"
+ * "5": "doublage connu (plâtre brique bois)"
+ */
+export const TYPE_DOUBLAGE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+] as const
+
+export const TypeDoublageEnum = z.enum(TYPE_DOUBLAGE)
+export type TypeDoublageEnum = z.infer<typeof TypeDoublageEnum>
+
+/**
+ * "1": "inconnu"
+ * "2": "plancher avec ou sans remplissage"
+ * "3": "plancher entre solives métalliques avec ou sans remplissage"
+ * "4": "plancher entre solives bois avec ou sans remplissage"
+ * "5": "plancher bois sur solives métalliques"
+ * "6": "bardeaux et remplissage"
+ * "7": "voutains sur solives métalliques"
+ * "8": "voutains en briques ou moellons"
+ * "9": "dalle béton"
+ * "10": "plancher bois sur solives bois"
+ * "11": "plancher lourd type entrevous terre-cuite, poutrelles béton"
+ * "12": "plancher à entrevous isolant"
+ * "13": "autre type de plancher non répertorié"
+ */
+export const TYPE_PLANCHER_BAS = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+] as const
+
+export const TypePlancherBasEnum = z.enum(TYPE_PLANCHER_BAS)
+export type TypePlancherBasEnum = z.infer<typeof TypePlancherBasEnum>
+
+/**
+ * "1": "inconnu"
+ * "2": "plafond avec ou sans remplissage"
+ * "3": "plafond entre solives métalliques avec ou sans remplissage"
+ * "4": "plafond entre solives bois avec ou sans remplissage"
+ * "5": "plafond bois sur solives métalliques"
+ * "6": "plafond bois sous solives métalliques"
+ * "7": "bardeaux et remplissage"
+ * "8": "dalle béton"
+ * "9": "plafond bois sur solives bois"
+ * "10": "plafond bois sous solives bois"
+ * "11": "plafond lourd type entrevous terre-cuite, poutrelles béton"
+ * "12": "combles aménagés sous rampant"
+ * "13": "toiture en chaume"
+ * "14": "plafond en plaque de plâtre"
+ * "15": "autre type de plafond non répertorié"
+ * "16": "toitures en bac acier"
+ */
+export const TYPE_PLANCHER_HAUT = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+] as const
+
+export const TypePlancherHautEnum = z.enum(TYPE_PLANCHER_HAUT)
+export type TypePlancherHautEnum = z.infer<typeof TypePlancherHautEnum>
+
+/**
+ * "1": "simple vitrage"
+ * "2": "double vitrage"
+ * "3": "triple vitrage"
+ * "4": "survitrage"
+ * "5": "brique de verre"
+ * "6": "polycarbonate"
+ */
+export const TYPE_VITRAGE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+] as const
+
+export const TypeVitrageEnum = z.enum(TYPE_VITRAGE)
+export type TypeVitrageEnum = z.infer<typeof TypeVitrageEnum>
+
+/**
+ * "1": "inf25°"
+ * "2": "25°-75°"
+ * "3": "sup75°"
+ * "4": "horizontal"
+ */
+export const INCLINAISON_VITRAGE = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const InclinaisonVitrageEnum = z.enum(INCLINAISON_VITRAGE)
+export type InclinaisonVitrageEnum = z.infer<typeof InclinaisonVitrageEnum>
+
+/**
+ * "1": "brique de verre"
+ * "2": "polycarbonate"
+ * "3": "bois"
+ * "4": "bois/métal"
+ * "5": "pvc"
+ * "6": "métal avec rupture de pont thermique"
+ * "7": "métal sans rupture de pont thermique"
+ */
+export const TYPE_MATERIAUX_MENUISERIE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+] as const
+
+export const TypeMateriauxMenuiserieEnum = z.enum(TYPE_MATERIAUX_MENUISERIE)
+export type TypeMateriauxMenuiserieEnum = z.infer<typeof TypeMateriauxMenuiserieEnum>
+
+/**
+ * "1": "paroi en brique de verre pleine"
+ * "2": "paroi en brique de verre creuse"
+ * "3": "paroi en polycarbonnate"
+ * "4": "fenêtres battantes"
+ * "5": "fenêtres coulissantes"
+ * "6": "portes-fenêtres coulissantes"
+ * "7": "portes-fenêtres battantes sans soubassement"
+ * "8": "portes-fenêtres battantes avec soubassement"
+ */
+export const TYPE_BAIE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+] as const
+
+export const TypeBaieEnum = z.enum(TYPE_BAIE)
+export type TypeBaieEnum = z.infer<typeof TypeBaieEnum>
+
+/**
+ * "1": "nu extérieur"
+ * "2": "nu intérieur"
+ * "3": "tunnel"
+ * "4": "sans objet (brique de verre/polycarbonate)"
+ */
+export const TYPE_POSE = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const TypePoseEnum = z.enum(TYPE_POSE)
+export type TypePoseEnum = z.infer<typeof TypePoseEnum>
+
+/**
+ * "1": "air"
+ * "2": "argon ou krypton"
+ * "3": "inconnu"
+ */
+export const TYPE_GAZ_LAME = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const TypeGazLameEnum = z.enum(TYPE_GAZ_LAME)
+export type TypeGazLameEnum = z.infer<typeof TypeGazLameEnum>
+
+/**
+ * "1": "sud"
+ * "2": "nord"
+ * "3": "est"
+ * "4": "ouest"
+ * "5": "horizontal"
+ */
+export const ORIENTATION = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+] as const
+
+export const OrientationEnum = z.enum(ORIENTATION)
+export type OrientationEnum = z.infer<typeof OrientationEnum>
+
+/**
+ * "1": "abscence de fermeture pour la baie vitrée"
+ * "2": "jalousie accordéon, fermeture à lames orientables y compris les vénitiens extérieurs tout métal, volets battants ou persiennes avec ajours fixes"
+ * "3": "fermeture sans ajours en position déployée, volets roulants alu"
+ * "4": "volets roulants pvc ou bois (e inf 12 mm)"
+ * "5": "persienne coulissante et volet battant pvc ou bois (e inf 22 mm)"
+ * "6": "volets roulants pvcenum_type_pose_id ou bois (e sup 12 mm)"
+ * "7": "persienne coulissante et volet battant pvc ou bois (e sup 22 mm)"
+ * "8": "fermeture isolée sans ajours en position déployée"
+ */
+export const TYPE_FERMETURE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+] as const
+
+export const TypeFermetureEnum = z.enum(TYPE_FERMETURE)
+export type TypeFermetureEnum = z.infer<typeof TypeFermetureEnum>
+
+/**
+ * "1": "porte simple en bois porte opaque pleine"
+ * "2": "porte simple en bois porte avec moins de 30% de vitrage simple"
+ * "3": "porte simple en bois porte avec 30-60% de vitrage simple"
+ * "4": "porte simple en bois porte avec double vitrage"
+ * "5": "porte simple en pvc porte opaque pleine"
+ * "6": "porte simple en pvc porte avec moins de 30% de vitrage simple"
+ * "7": "porte simple en pvc porte avec 30-60% de vitrage simple"
+ * "8": "porte simple en pvc porte avec double vitrage"
+ * "9": "porte simple en métal porte opaque pleine"
+ * "10": "porte simple en métal porte avec vitrage simple"
+ * "11": "porte simple en métal porte avec moins de 30% de double vitrage"
+ * "12": "porte simple en métal porte avec 30-60% de double vitrage"
+ * "13": "toute menuiserie porte opaque pleine isolée"
+ * "14": "toute menuiserie porte précédée d’un sas"
+ * "15": "toute menuiserie porte isolée avec double vitrage"
+ * "16": "autre type de porte"
+ */
+export const TYPE_PORTE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+] as const
+
+export const TypePorteEnum = z.enum(TYPE_PORTE)
+export type TypePorteEnum = z.infer<typeof TypePorteEnum>
+
+/**
+ * "1": "plancher bas / mur"
+ * "2": "plancher intermédiaire lourd / mur"
+ * "3": "plancher haut lourd / mur"
+ * "4": "refend / mur"
+ * "5": "menuiserie / mur"
+ */
+export const TYPE_LIAISON = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+] as const
+
+export const TypeLiaisonEnum = z.enum(TYPE_LIAISON)
+export type TypeLiaisonEnum = z.infer<typeof TypeLiaisonEnum>
+
+/**
+ * "1": "ventilation par ouverture des fenêtres"
+ * "2": "ventilation par entrées d'air hautes et basses"
+ * "3": "vmc sf auto réglable avant 1982"
+ * "4": "vmc sf auto réglable de 1982 à 2000"
+ * "5": "vmc sf auto réglable de 2001 à 2012"
+ * "6": "vmc sf auto réglable après 2012"
+ * "7": "vmc sf hygro a avant 2001"
+ * "8": "vmc sf hygro a de 2001 à 2012"
+ * "9": "vmc sf hygro a après 2012"
+ * "10": "vmc sf gaz avant  2001"
+ * "11": "vmc sf gaz de 2001 à 2012"
+ * "12": "vmc sf gaz après 2012"
+ * "13": "vmc sf hygro b avant  2001"
+ * "14": "vmc sf hygro b de 2001 à 2012"
+ * "15": "vmc sf hygro b après 2012"
+ * "16": "vmc basse pression auto-réglable"
+ * "17": "vmc basse pression hygro a"
+ * "18": "vmc basse pression hygro b"
+ * "19": "vmc df individuelle avec échangeur avant 2013"
+ * "20": "vmc df individuelle avec échangeur à partir de 2013"
+ * "21": "vmc df collective avec échangeur avant 2013"
+ * "22": "vmc df collective avec échangeur à partir de 2013"
+ * "23": "vmc df sans échangeur avant 2013"
+ * "24": "vmc df sans échangeur après 2012"
+ * "25": "ventilation naturelle par conduit"
+ * "26": "ventilation hybride avant  2001"
+ * "27": "ventilation hybride de 2001 à 2012"
+ * "28": "ventilation hybride après 2012"
+ * "29": "ventilation hybride avec entrées d'air hygro avant  2001"
+ * "30": "ventilation hybride avec entrées d'air hygro de 2001 à 2012"
+ * "31": "ventilation hybride avec entrées d'air hygro après 2012"
+ * "32": "ventilation mécanique sur conduit existant avant 2013"
+ * "33": "ventilation mécanique sur conduit existant à partir de 2013"
+ * "34": "ventilation naturelle par conduit avec entrées d'air hygro"
+ * "35": "puits climatique sans échangeur avant 2013"
+ * "36": "puits climatique sans échangeur à partir de 2013"
+ * "37": "puits climatique avec échangeur avant 2013"
+ * "38": "puits climatique avec échangeur à partir de 2013"
+ */
+export const TYPE_VENTILATION = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+  "33",
+  "34",
+  "35",
+  "36",
+  "37",
+  "38",
+] as const
+
+export const TypeVentilationEnum = z.enum(TYPE_VENTILATION)
+export type TypeVentilationEnum = z.infer<typeof TypeVentilationEnum>
+
+/**
+ * "1": "avant 2008"
+ * "2": "2008-2014"
+ * "3": "a partir de 2015"
+ */
+export const PERIODE_INSTALLATION_FR = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const PeriodeInstallationFrEnum = z.enum(PERIODE_INSTALLATION_FR)
+export type PeriodeInstallationFrEnum = z.infer<typeof PeriodeInstallationFrEnum>
+
+/**
+ * "1": "pac air/air installée avant 2008"
+ * "2": "pac air/air installée entre 2008 et 2014"
+ * "3": "pac air/air installée à partir de 2015"
+ * "4": "pac air/eau installée avant 2008"
+ * "5": "pac air/eau installée entre 2008 et 2014"
+ * "6": "pac air/eau installée entre 2015 et 2016"
+ * "7": "pac air/eau installée après 2017"
+ * "8": "pac eau/eau installée avant 2008"
+ * "9": "pac eau/eau installée entre 2008 et 2014"
+ * "10": "pac eau/eau installée entre 2015 et 2016"
+ * "11": "pac eau/eau installée après 2017"
+ * "12": "pac eau glycolée/eau installée avant 2008"
+ * "13": "pac eau glycolée/eau installée entre 2008 et 2014"
+ * "14": "pac eau glycolée/eau installée entre 2015 et 2016"
+ * "15": "pac eau glycolée/eau installée après 2017"
+ * "16": "pac géothermique installée avant 2008"
+ * "17": "pac géothermique installée entre 2008 et 2014"
+ * "18": "pac géothermique installée entre 2015 et 2016"
+ * "19": "pac géothermique installée après 2017"
+ * "20": "autre système thermodynamique électrique"
+ * "21": "autre système thermodynamique gaz"
+ * "22": "autre système de refroidissement"
+ * "23": "réseau de froid urbain"
+ */
+export const TYPE_GENERATEUR_FR = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+] as const
+
+export const TypeGenerateurFrEnum = z.enum(TYPE_GENERATEUR_FR)
+export type TypeGenerateurFrEnum = z.infer<typeof TypeGenerateurFrEnum>
+
+/**
+ * "1": "chauffage solaire (seul ou combiné)"
+ * "2": "ecs solaire seule sup 5 ans"
+ * "3": "ecs solaire seule inf 5 ans"
+ * "4": "chauffage + ecs solaire"
+ */
+export const TYPE_INSTALLATION_SOLAIRE = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const TypeInstallationSolaireEnum = z.enum(TYPE_INSTALLATION_SOLAIRE)
+export type TypeInstallationSolaireEnum = z.infer<typeof TypeInstallationSolaireEnum>
+
+/**
+ * "1": "installation individuelle"
+ * "2": "installation collective"
+ * "3": "installation collective multi-bâtiment : modélisée comme un réseau de chaleur"
+ * "4": "installation hybride collective-individuelle (chauffage base + appoint individuel ou convecteur bi-jonction)"
+ */
+export const TYPE_INSTALLATION = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const TypeInstallationEnum = z.enum(TYPE_INSTALLATION)
+export type TypeInstallationEnum = z.infer<typeof TypeInstallationEnum>
+
+/**
+ * "1": "calcul simple"
+ * "2": "installation collective rapportée à un logement : cas générateur à combustion virtuel ou ecs collective virtuelle"
+ * "3": "installation collective rapportée à un logement : cas générateurs simples (réseau de chaleur, effet joule, pac, cet)"
+ * "4": "échantillonage des installations individuelles pour le calcul dpe immeuble (calcul effectué sur un logement représentatif d'un ensemble de logements puis extrapolation sur l'ensemble de logements du groupe)"
+ * "5": "installation collective immeuble mixte rapporté à la partie logement : cas générateur à combustion virtuel ou ecs collective virtuelle"
+ * "6": "installation collective immeuble mixte rapporté à la partie logement : cas générateurs simples (réseau de chaleur, effet joule, pac, cet)"
+ */
+export const METHODE_CALCUL_CONSO = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+] as const
+
+export const MethodeCalculConsoEnum = z.enum(METHODE_CALCUL_CONSO)
+export type MethodeCalculConsoEnum = z.infer<typeof MethodeCalculConsoEnum>
+
+/**
+ * "1": "chauffage"
+ * "2": "ecs"
+ * "3": "chauffage + ecs"
+ */
+export const USAGE_GENERATEUR = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const UsageGenerateurEnum = z.enum(USAGE_GENERATEUR)
+export type UsageGenerateurEnum = z.infer<typeof UsageGenerateurEnum>
+
+/**
+ * "1": "installation de chauffage simple"
+ * "2": "installation de chauffage avec chauffage solaire"
+ * "3": "installation de chauffage avec insert ou poêle bois en appoint"
+ * "4": "installation de chauffage par insert, poêle bois (ou biomasse) avec un chauffage électrique dans la salle de bain"
+ * "5": "installation de chauffage avec en appoint un insert ou poêle bois et un chauffage électrique dans la salle de bain (différent du chauffage principal)"
+ * "6": "installation de chauffage avec une chaudière ou une pac en relève d’une chaudière bois"
+ * "7": "installation de chauffage avec chauffage solaire et insert ou poêle bois en appoint"
+ * "8": "installation de chauffage avec chaudière en relève de pac"
+ * "9": "installation de chauffage avec chaudière en relève de pac avec insert ou poêle bois en appoint"
+ * "10": "installation de chauffage collectif avec base + appoint"
+ * "11": "convecteurs bi-jonction"
+ */
+export const CFG_INSTALLATION_CH = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+] as const
+
+export const CfgInstallationChEnum = z.enum(CFG_INSTALLATION_CH)
+export type CfgInstallationChEnum = z.infer<typeof CfgInstallationChEnum>
+
+/**
+ * "1": "génération principale - emetteur lié à la génération principale"
+ * "2": "génération appoint - emetteur lié à la génération d'appoint"
+ * "3": "génération appoint electrique salle de bain - emetteur lié à la génération appoint electrique salle de bain"
+ */
+export const LIEN_GENERATEUR_EMETTEUR = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const LienGenerateurEmetteurEnum = z.enum(LIEN_GENERATEUR_EMETTEUR)
+export type LienGenerateurEmetteurEnum = z.infer<typeof LienGenerateurEmetteurEnum>
+
+/**
+ * "1": "un seul système d'ecs sans solaire"
+ * "2": "un seul système d'ecs avec solaire"
+ * "3": "deux systèmes d'ecs dans une maison ou un appartement"
+ */
+export const CFG_INSTALLATION_ECS = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const CfgInstallationEcsEnum = z.enum(CFG_INSTALLATION_ECS)
+export type CfgInstallationEcsEnum = z.infer<typeof CfgInstallationEcsEnum>
+
+/**
+ * "1": "pac air/air installée avant 2008"
+ * "2": "pac air/air installée entre 2008 et 2014"
+ * "3": "pac air/air installée à partir de 2015"
+ * "4": "pac air/eau installée avant 2008"
+ * "5": "pac air/eau installée entre 2008 et 2014"
+ * "6": "pac air/eau installée entre 2015 et 2016"
+ * "7": "pac air/eau installée après 2017"
+ * "8": "pac eau/eau installée avant 2008"
+ * "9": "pac eau/eau installée entre 2008 et 2014"
+ * "10": "pac eau/eau installée entre 2015 et 2016"
+ * "11": "pac eau/eau installée après 2017"
+ * "12": "pac eau glycolée/eau installée avant 2008"
+ * "13": "pac eau glycolée/eau installée entre 2008 et 2014"
+ * "14": "pac eau glycolée/eau installée entre 2015 et 2016"
+ * "15": "pac eau glycolée/eau installée après 2017"
+ * "16": "pac géothermique installée avant 2008"
+ * "17": "pac géothermique installée entre 2008 et 2014"
+ * "18": "pac géothermique installée entre 2015 et 2016"
+ * "19": "pac géothermique installée après 2017"
+ * "20": "cuisinière installé avant 1990"
+ * "21": "foyer fermé installé avant 1990"
+ * "22": "poêle bûche installé avant 1990"
+ * "23": "insert installé avant 1990"
+ * "24": "cuisinière installé entre 1990 et 2004"
+ * "25": "foyer fermé installé entre 1990 et 2004"
+ * "26": "poêle bûche installé entre 1990 et 2004"
+ * "27": "insert installé entre 1990 et 2004"
+ * "28": "cuisinière installé à partir de 2005 sans label flamme verte"
+ * "29": "foyer fermé installé à partir de 2005 sans label flamme verte"
+ * "30": "poêle bûche installé à partir de 2005 sans label flamme verte"
+ * "31": "insert installé à partir de 2005 sans label flamme verte"
+ * "32": "cuisinière installé installé de 2005 à 2006 avec label flamme verte"
+ * "33": "foyer fermé installé installé de 2005 à 2006 avec label flamme verte"
+ * "34": "poêle bûche installé installé de 2005 à 2006 avec label flamme verte"
+ * "35": "insert installé installé de 2005 à 2006 avec label flamme verte"
+ * "36": "cuisinière installé installé de 2007 à 2017 avec label flamme verte"
+ * "37": "foyer fermé installé installé de 2007 à 2017 avec label flamme verte"
+ * "38": "poêle bûche installé installé de 2007 à 2017 avec label flamme verte"
+ * "39": "insert installé installé de 2007 à 2017 avec label flamme verte"
+ * "40": "cuisinière installé installé à partir de 2018 avec label flamme verte"
+ * "41": "foyer fermé installé installé à partir de 2018 avec label flamme verte"
+ * "42": "poêle bûche installé installé à partir de 2018 avec label flamme verte"
+ * "43": "insert installé installé à partir de 2018 avec label flamme verte"
+ * "44": "poêle à granulés installée avant 2012 ou sans label flamme verte"
+ * "45": "poêle à granulés flamme verte installé entre 2012 et 2019"
+ * "46": "poêle à granulés flamme verte installé à partir de 2020"
+ * "47": "poêle fioul ou gpl ou charbon"
+ * "48": "poêle à bois bouilleur bûche installé avant 2012"
+ * "49": "poêle à bois bouilleur bûche installé à partir de 2012"
+ * "50": "générateur à air chaud à combustion avant 2006"
+ * "51": "générateur à air chaud à combustion standard a partir de 2006"
+ * "52": "générateur à air chaud à combustion à condensation a partir de 2006"
+ * "53": "radiateur à gaz indépendant ou autonome avant 2006"
+ * "54": "radiateur à gaz indépendant ou autonome après 2006"
+ * "55": "chaudière bois bûche avant 1978"
+ * "56": "chaudière bois bûche 1978-1994"
+ * "57": "chaudière bois bûche 1995-2003"
+ * "58": "chaudière bois bûche 2004-2012"
+ * "59": "chaudière bois bûche 2013-2017"
+ * "60": "chaudière bois bûche 2018-2019"
+ * "61": "chaudière bois bûche après 2019"
+ * "62": "chaudière bois plaquette avant 1978"
+ * "63": "chaudière bois plaquette 1978-1994"
+ * "64": "chaudière bois plaquette 1995-2003"
+ * "65": "chaudière bois plaquette 2004-2012"
+ * "66": "chaudière bois plaquette 2013-2017"
+ * "67": "chaudière bois plaquette 2018-2019"
+ * "68": "chaudière bois plaquette après 2019"
+ * "69": "chaudière bois granulés avant 1978"
+ * "70": "chaudière bois granulés 1978-1994"
+ * "71": "chaudière bois granulés 1995-2003"
+ * "72": "chaudière bois granulés 2004-2012"
+ * "73": "chaudière bois granulés 2013-2019"
+ * "74": "chaudière bois granulés après 2019"
+ * "75": "chaudière fioul classique avant 1970"
+ * "76": "chaudière fioul classique 1970-1975"
+ * "77": "chaudière fioul classique 1976-1980"
+ * "78": "chaudière fioul classique 1981-1990"
+ * "79": "chaudière fioul standard 1991-2015"
+ * "80": "chaudière fioul standard après 2015"
+ * "81": "chaudière fioul basse température 1991-2015"
+ * "82": "chaudière fioul basse température après 2015"
+ * "83": "chaudière fioul à condensation 1996-2015"
+ * "84": "chaudière fioul à condensation après 2015"
+ * "85": "chaudière gaz classique avant 1981"
+ * "86": "chaudière gaz classique 1981-1985"
+ * "87": "chaudière gaz classique 1986-1990"
+ * "88": "chaudière gaz standard 1991-2000"
+ * "89": "chaudière gaz standard 2001-2015"
+ * "90": "chaudière gaz standard après 2015"
+ * "91": "chaudière gaz basse température 1991-2000"
+ * "92": "chaudière gaz basse température 2001-2015"
+ * "93": "chaudière gaz basse température après 2015"
+ * "94": "chaudière gaz à condensation 1981-1985"
+ * "95": "chaudière gaz à condensation 1986-2000"
+ * "96": "chaudière gaz à condensation 2001-2015"
+ * "97": "chaudière gaz à condensation après 2015"
+ * "98": "convecteur électrique nfc, nf** et nf***"
+ * "99": "panneau rayonnant électrique nfc, nf** et nf***"
+ * "100": "radiateur électrique nfc, nf** et nf***"
+ * "101": "autres émetteurs à effet joule"
+ * "102": "plancher ou plafond rayonnant électrique avec régulation terminale"
+ * "103": "plancher ou plafond rayonnant électrique sans régulation terminale"
+ * "104": "radiateur électrique à accumulation"
+ * "105": "convecteur bi-jonction"
+ * "106": "chaudière électrique"
+ * "107": "réseau de chaleur non isolé"
+ * "108": "réseau de chaleur isolé"
+ * "109": "chaudière(s) bois multi bâtiment modélisée comme un réseau de chaleur"
+ * "110": "chaudière(s) fioul multi bâtiment modélisée comme un réseau de chaleur"
+ * "111": "chaudière(s) gaz multi bâtiment modélisée comme un réseau de chaleur"
+ * "112": "pompe(s) à chaleur multi bâtiment modélisée comme un réseau de chaleur"
+ * "113": "autre système à combustion gaz"
+ * "114": "autre système à combustion fioul"
+ * "115": "autre système à combustion bois"
+ * "116": "autre système à combustion autres energies fossiles (charbon,pétrole etc…)"
+ * "117": "autre système thermodynamique électrique"
+ * "118": "autre système thermodynamique gaz"
+ * "119": "système collectif par défaut en abscence d'information : chaudière fioul pénalisante"
+ * "120": "chaudière charbon avant 1978"
+ * "121": "chaudière charbon 1978-1994"
+ * "122": "chaudière charbon 1995-2003"
+ * "123": "chaudière charbon 2004-2012"
+ * "124": "chaudière charbon 2013-2017"
+ * "125": "chaudière charbon 2018-2019"
+ * "126": "chaudière charbon après 2019"
+ * "127": "chaudière gpl/propane/butane classique avant 1981"
+ * "128": "chaudière gpl/propane/butane classique 1981-1985"
+ * "129": "chaudière gpl/propane/butane classique 1986-1990"
+ * "130": "chaudière gpl/propane/butane standard 1991-2000"
+ * "131": "chaudière gpl/propane/butane standard 2001-2015"
+ * "132": "chaudière gpl/propane/butane standard après 2015"
+ * "133": "chaudière gpl/propane/butane basse température 1991-2000"
+ * "134": "chaudière gpl/propane/butane basse température 2001-2015"
+ * "135": "chaudière gpl/propane/butane basse température après 2015"
+ * "136": "chaudière gpl/propane/butane à condensation 1981-1985"
+ * "137": "chaudière gpl/propane/butane à condensation 1986-2000"
+ * "138": "chaudière gpl/propane/butane à condensation 2001-2015"
+ * "139": "chaudière gpl/propane/butane à condensation après 2015"
+ * "140": "poêle à bois bouilleur granulés installé avant 2012"
+ * "141": "poêle à bois bouilleur granulés installé à partir de 2012"
+ * "142": "réseau de chaleur non répertorié ou inconnu"
+ * "143": "pompe à chaleur hybride : partie pompe à chaleur (supprime)"
+ * "144": "pompe à chaleur hybride : partie chaudière (supprime)"
+ * "145": "pompe à chaleur hybride : partie pompe à chaleur pac air/eau installée entre 2008 et 2014"
+ * "146": "pompe à chaleur hybride : partie pompe à chaleur pac air/eau installée entre 2015 et 2016"
+ * "147": "pompe à chaleur hybride : partie pompe à chaleur pac air/eau installée après 2017"
+ * "148": "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation 2001-2015"
+ * "149": "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation après 2015"
+ * "150": "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation 1996-2015"
+ * "151": "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation après 2015"
+ * "152": "pompe à chaleur hybride : partie chaudière chaudière bois granulés 2013-2019"
+ * "153": "pompe à chaleur hybride : partie chaudière chaudière bois granulés après 2019"
+ * "154": "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2013-2017"
+ * "155": "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2018-2019"
+ * "156": "pompe à chaleur hybride : partie chaudière chaudière bois bûche après 2019"
+ * "157": "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2013-2017"
+ * "158": "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2018-2019"
+ * "159": "pompe à chaleur hybride : partie chaudière chaudière bois plaquette après 2019"
+ * "160": "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation 2001-2015"
+ * "161": "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation après 2015"
+ * "162": "pompe à chaleur hybride : partie pompe à chaleur pac eau/eau installée entre 2008 et 2014"
+ * "163": "pompe à chaleur hybride : partie pompe à chaleur pac eau/eau installée entre 2015 et 2016"
+ * "164": "pompe à chaleur hybride : partie pompe à chaleur pac eau/eau installée après 2017"
+ * "165": "pompe à chaleur hybride : partie pompe à chaleur pac eau glycolée/eau installée entre 2008 et 2014"
+ * "166": "pompe à chaleur hybride : partie pompe à chaleur pac eau glycolée/eau installée entre 2015 et 2016"
+ * "167": "pompe à chaleur hybride : partie pompe à chaleur pac eau glycolée/eau installée après 2017"
+ * "168": "pompe à chaleur hybride : partie pompe à chaleur pac géothermique installée entre 2008 et 2014"
+ * "169": "pompe à chaleur hybride : partie pompe à chaleur pac géothermique installée entre 2015 et 2016"
+ * "170": "pompe à chaleur hybride : partie pompe à chaleur pac géothermique installée après 2017"
+ * "171": "chaudière(s) charbon multi bâtiment modélisée comme un réseau de chaleur"
+ */
+export const TYPE_GENERATEUR_CH = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+  "33",
+  "34",
+  "35",
+  "36",
+  "37",
+  "38",
+  "39",
+  "40",
+  "41",
+  "42",
+  "43",
+  "44",
+  "45",
+  "46",
+  "47",
+  "48",
+  "49",
+  "50",
+  "51",
+  "52",
+  "53",
+  "54",
+  "55",
+  "56",
+  "57",
+  "58",
+  "59",
+  "60",
+  "61",
+  "62",
+  "63",
+  "64",
+  "65",
+  "66",
+  "67",
+  "68",
+  "69",
+  "70",
+  "71",
+  "72",
+  "73",
+  "74",
+  "75",
+  "76",
+  "77",
+  "78",
+  "79",
+  "80",
+  "81",
+  "82",
+  "83",
+  "84",
+  "85",
+  "86",
+  "87",
+  "88",
+  "89",
+  "90",
+  "91",
+  "92",
+  "93",
+  "94",
+  "95",
+  "96",
+  "97",
+  "98",
+  "99",
+  "100",
+  "101",
+  "102",
+  "103",
+  "104",
+  "105",
+  "106",
+  "107",
+  "108",
+  "109",
+  "110",
+  "111",
+  "112",
+  "113",
+  "114",
+  "115",
+  "116",
+  "117",
+  "118",
+  "119",
+  "120",
+  "121",
+  "122",
+  "123",
+  "124",
+  "125",
+  "126",
+  "127",
+  "128",
+  "129",
+  "130",
+  "131",
+  "132",
+  "133",
+  "134",
+  "135",
+  "136",
+  "137",
+  "138",
+  "139",
+  "140",
+  "141",
+  "142",
+  "143",
+  "144",
+  "145",
+  "146",
+  "147",
+  "148",
+  "149",
+  "150",
+  "151",
+  "152",
+  "153",
+  "154",
+  "155",
+  "156",
+  "157",
+  "158",
+  "159",
+  "160",
+  "161",
+  "162",
+  "163",
+  "164",
+  "165",
+  "166",
+  "167",
+  "168",
+  "169",
+  "170",
+  "171",
+] as const
+
+export const TypeGenerateurChEnum = z.enum(TYPE_GENERATEUR_CH)
+export type TypeGenerateurChEnum = z.infer<typeof TypeGenerateurChEnum>
+
+/**
+ * "1": "convecteur électrique nfc, nf** et nf***"
+ * "2": "panneau rayonnant nfc, nf** et nf***"
+ * "3": "radiateur électrique nfc, nf** et nf***"
+ * "4": "autres émetteurs à effet joule"
+ * "5": "soufflage d'air chaud (air soufflé) avec distribution par réseau aéraulique"
+ * "6": "plafond rayonnant électrique avec régulation terminale"
+ * "7": "plafond rayonnant électrique sans régulation"
+ * "8": "plancher rayonnant électrique avec régulation terminale"
+ * "9": "plancher rayonnant électrique sans régulation"
+ * "10": "radiateur électrique à accumulation"
+ * "11": "plancher chauffant sur réseau collectif eau chaude haute température(sup ou egal 65°c)"
+ * "12": "plancher chauffant sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)"
+ * "13": "plancher chauffant sur réseau individuel eau chaude haute température(sup ou egal 65°c)"
+ * "14": "plancher chauffant sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)"
+ * "15": "plafond chauffant sur réseau collectif eau chaude haute température(sup ou egal 65°c)"
+ * "16": "plafond chauffant sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)"
+ * "17": "plafond chauffant sur réseau individuel eau chaude haute température(sup ou egal 65°c)"
+ * "18": "plafond chauffant sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)"
+ * "19": "radiateur gaz à ventouse ou sur conduit de fumée"
+ * "20": "poêle charbon"
+ * "21": "poêle bois"
+ * "22": "poêle fioul"
+ * "23": "poêle gpl"
+ * "24": "radiateur monotube sans robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)"
+ * "25": "radiateur monotube sans robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)"
+ * "26": "radiateur monotube sans robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)"
+ * "27": "radiateur monotube sans robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)"
+ * "28": "radiateur monotube avec robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)"
+ * "29": "radiateur monotube avec robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)"
+ * "30": "radiateur monotube avec robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)"
+ * "31": "radiateur monotube avec robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)"
+ * "32": "radiateur bitube sans robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)"
+ * "33": "radiateur bitube sans robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)"
+ * "34": "radiateur bitube sans robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)"
+ * "35": "radiateur bitube sans robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)"
+ * "36": "radiateur bitube avec robinet thermostatique sur réseau collectif eau chaude haute température(sup ou egal 65°c)"
+ * "37": "radiateur bitube avec robinet thermostatique sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)"
+ * "38": "radiateur bitube avec robinet thermostatique sur réseau individuel eau chaude haute température(sup ou egal 65°c)"
+ * "39": "radiateur bitube avec robinet thermostatique sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)"
+ * "40": "convecteur bi-jonction"
+ * "41": "autres équipements"
+ * "42": "soufflage d'air chaud (air soufflé) avec distribution par fluide frigorigène"
+ * "43": "plancher chauffant avec distribution par fluide frigorigène (plancher chauffant à détente directe)"
+ * "44": "plafond chauffant avec distribution par fluide frigorigène (plafond chauffant à détente directe)"
+ * "45": "radiateur avec distribution par fluide frigorigène (à détente directe)"
+ * "46": "soufflage d'air chaud (ventiloconvecteur) sur réseau collectif eau chaude haute température(sup ou egal 65°c)"
+ * "47": "soufflage d'air chaud (ventiloconvecteur) sur réseau collectif eau chaude basse ou moyenne température(inf 65°c)"
+ * "48": "soufflage d'air chaud (ventiloconvecteur) sur réseau individuel eau chaude haute température(sup ou egal 65°c)"
+ * "49": "soufflage d'air chaud (ventiloconvecteur) sur réseau individuel eau chaude basse ou moyenne température(inf 65°c)"
+ * "50": "soufflage d'air chaud sans réseau de distribution (ventiloconvecteur éléctrique)"
+ */
+export const TYPE_EMISSION_DISTRIBUTION = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+  "33",
+  "34",
+  "35",
+  "36",
+  "37",
+  "38",
+  "39",
+  "40",
+  "41",
+  "42",
+  "43",
+  "44",
+  "45",
+  "46",
+  "47",
+  "48",
+  "49",
+  "50",
+] as const
+
+export const TypeEmissionDistributionEnum = z.enum(TYPE_EMISSION_DISTRIBUTION)
+export type TypeEmissionDistributionEnum = z.infer<typeof TypeEmissionDistributionEnum>
+
+/**
+ * "1": "abscence de réseau de distribution"
+ * "2": "basse"
+ * "3": "moyenne"
+ * "4": "haute"
+ */
+export const TEMP_DISTRIBUTION_CH = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const TempDistributionChEnum = z.enum(TEMP_DISTRIBUTION_CH)
+export type TempDistributionChEnum = z.infer<typeof TempDistributionChEnum>
+
+/**
+ * "1": "absent"
+ * "2": "central sans minimum de température"
+ * "3": "central avec minimum de température"
+ * "4": "par pièce avec minimum de température"
+ * "5": "par pièce avec minimum de température et détection de présence"
+ * "6": "central collectif"
+ * "7": "central collectif avec détection de présence"
+ */
+export const EQUIPEMENT_INTERMITTENCE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+] as const
+
+export const EquipementIntermittenceEnum = z.enum(EQUIPEMENT_INTERMITTENCE)
+export type EquipementIntermittenceEnum = z.infer<typeof EquipementIntermittenceEnum>
+
+/**
+ * "1": "sans régulation pièce par pièce"
+ * "2": "avec régulation pièce par pièce"
+ */
+export const TYPE_REGULATION = [
+  "1",
+  "2",
+] as const
+
+export const TypeRegulationEnum = z.enum(TYPE_REGULATION)
+export type TypeRegulationEnum = z.infer<typeof TypeRegulationEnum>
+
+/**
+ * "1": "avant 1981"
+ * "2": "entre 1981 et 2000"
+ * "3": "après 2000"
+ */
+export const PERIODE_INSTALLATION_EMETTEUR = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const PeriodeInstallationEmetteurEnum = z.enum(PERIODE_INSTALLATION_EMETTEUR)
+export type PeriodeInstallationEmetteurEnum = z.infer<typeof PeriodeInstallationEmetteurEnum>
+
+/**
+ * "1": "chauffage divisé"
+ * "2": "chauffage central"
+ */
+export const TYPE_CHAUFFAGE = [
+  "1",
+  "2",
+] as const
+
+export const TypeChauffageEnum = z.enum(TYPE_CHAUFFAGE)
+export type TypeChauffageEnum = z.infer<typeof TypeChauffageEnum>
+
+/**
+ * "1": "cet sur air ambiant (sur local non chauffé) avant 2010"
+ * "2": "cet sur air ambiant (sur local non chauffé) 2010-2014"
+ * "3": "cet sur air ambiant (sur local non chauffé) après 2014"
+ * "4": "cet sur air extérieur avant 2010"
+ * "5": "cet sur air extérieur 2010-2014"
+ * "6": "cet sur air extérieur après 2014"
+ * "7": "cet sur air extrait avant 2010"
+ * "8": "cet sur air extrait 2010-2014"
+ * "9": "cet sur air extrait après 2014"
+ * "10": "pac double service avant 2010"
+ * "11": "pac double service 2010-2014"
+ * "12": "pac double service après 2014"
+ * "13": "poêle à bois bouilleur bûche installé avant 2012"
+ * "14": "poêle à bois bouilleur bûche installé à partir de 2012"
+ * "15": "chaudière bois bûche avant 1978"
+ * "16": "chaudière bois bûche 1978-1994"
+ * "17": "chaudière bois bûche 1995-2003"
+ * "18": "chaudière bois bûche 2004-2012"
+ * "19": "chaudière bois bûche 2013-2017"
+ * "20": "chaudière bois bûche 2018-2019"
+ * "21": "chaudière bois bûche après 2019"
+ * "22": "chaudière bois plaquette avant 1978"
+ * "23": "chaudière bois plaquette 1978-1994"
+ * "24": "chaudière bois plaquette 1995-2003"
+ * "25": "chaudière bois plaquette 2004-2012"
+ * "26": "chaudière bois plaquette 2013-2017"
+ * "27": "chaudière bois plaquette 2018-2019"
+ * "28": "chaudière bois plaquette après 2019"
+ * "29": "chaudière bois granulés avant 1978"
+ * "30": "chaudière bois granulés 1978-1994"
+ * "31": "chaudière bois granulés 1995-2003"
+ * "32": "chaudière bois granulés 2004-2012"
+ * "33": "chaudière bois granulés 2013-2019"
+ * "34": "chaudière bois granulés après 2019"
+ * "35": "chaudière fioul classique avant 1970"
+ * "36": "chaudière fioul classique 1970-1975"
+ * "37": "chaudière fioul classique 1976-1980"
+ * "38": "chaudière fioul classique 1981-1990"
+ * "39": "chaudière fioul standard 1991-2015"
+ * "40": "chaudière fioul standard après 2015"
+ * "41": "chaudière fioul basse température 1991-2015"
+ * "42": "chaudière fioul basse température après 2015"
+ * "43": "chaudière fioul à condensation 1996-2015"
+ * "44": "chaudière fioul à condensation après 2015"
+ * "45": "chaudière gaz classique avant 1981"
+ * "46": "chaudière gaz classique 1981-1985"
+ * "47": "chaudière gaz classique 1986-1990"
+ * "48": "chaudière gaz standard 1991-2000"
+ * "49": "chaudière gaz standard 2001-2015"
+ * "50": "chaudière gaz standard après 2015"
+ * "51": "chaudière gaz basse température 1991-2000"
+ * "52": "chaudière gaz basse température 2001-2015"
+ * "53": "chaudière gaz basse température après 2015"
+ * "54": "chaudière gaz à condensation 1981-1985"
+ * "55": "chaudière gaz à condensation 1986-2000"
+ * "56": "chaudière gaz à condensation 2001-2015"
+ * "57": "chaudière gaz à condensation après 2015"
+ * "58": "accumulateur gaz classique avant 1990"
+ * "59": "accumulateur gaz classique 1990-2000"
+ * "60": "accumulateur gaz classique après 2000"
+ * "61": "accumulateur gaz à condensation 1996-2000"
+ * "62": "accumulateur gaz à condensation après 2000"
+ * "63": "chauffe-eau gaz à production instantanée avant 1980"
+ * "64": "chauffe-eau gaz à production instantanée 1981-1989"
+ * "65": "chauffe-eau gaz à production instantanée 1990-2000"
+ * "66": "chauffe-eau gaz à production instantanée 2001-2015"
+ * "67": "chauffe-eau gaz à production instantanée après 2015"
+ * "68": "ballon électrique à accumulation horizontal"
+ * "69": "ballon électrique à accumulation vertical autres ou inconnue"
+ * "70": "ballon électrique à accumulation vertical catégorie b ou 2 étoiles"
+ * "71": "ballon électrique à accumulation vertical catégorie c ou 3 étoiles"
+ * "72": "réseau de chaleur non isolé"
+ * "73": "réseau de chaleur isolé"
+ * "74": "chaudière(s) bois multi bâtiment modélisée comme un réseau de chaleur"
+ * "75": "chaudière(s) fioul multi bâtiment modélisée comme un réseau de chaleur"
+ * "76": "chaudière(s) gaz multi bâtiment modélisée comme un réseau de chaleur"
+ * "77": "pompe(s) à chaleur multi bâtiment modélisée comme un réseau de chaleur"
+ * "78": "autre système à combustion gaz"
+ * "79": "autre système à combustion fioul"
+ * "80": "autre système à combustion bois"
+ * "81": "autre système à combustion autres energies fossiles (charbon,pétrole etc…)"
+ * "82": "autre système thermodynamique électrique"
+ * "83": "autre système thermodynamique gaz"
+ * "84": "système collectif par défaut en abscence d'information : chaudière fioul pénalisante"
+ * "85": "chaudière charbon avant 1978"
+ * "86": "chaudière charbon 1978-1994"
+ * "87": "chaudière charbon 1995-2003"
+ * "88": "chaudière charbon 2004-2012"
+ * "89": "chaudière charbon 2013-2017"
+ * "90": "chaudière charbon 2018-2019"
+ * "91": "chaudière charbon après 2019"
+ * "92": "chaudière gpl/propane/butane classique avant 1981"
+ * "93": "chaudière gpl/propane/butane classique 1981-1985"
+ * "94": "chaudière gpl/propane/butane classique 1986-1990"
+ * "95": "chaudière gpl/propane/butane standard 1991-2000"
+ * "96": "chaudière gpl/propane/butane standard 2001-2015"
+ * "97": "chaudière gpl/propane/butane standard après 2015"
+ * "98": "chaudière gpl/propane/butane basse température 1991-2000"
+ * "99": "chaudière gpl/propane/butane basse température 2001-2015"
+ * "100": "chaudière gpl/propane/butane basse température après 2015"
+ * "101": "chaudière gpl/propane/butane à condensation 1981-1985"
+ * "102": "chaudière gpl/propane/butane à condensation 1986-2000"
+ * "103": "chaudière gpl/propane/butane à condensation 2001-2015"
+ * "104": "chaudière gpl/propane/butane à condensation après 2015"
+ * "105": "accumulateur gpl/propane/butane classique avant 1990"
+ * "106": "accumulateur gpl/propane/butane classique 1990-2000"
+ * "107": "accumulateur gpl/propane/butane classique après 2000"
+ * "108": "accumulateur gpl/propane/butane à condensation 1996-2000"
+ * "109": "accumulateur gpl/propane/butane à condensation après 2000"
+ * "110": "chauffe-eau gpl/propane/butane à production instantanée avant 1980"
+ * "111": "chauffe-eau gpl/propane/butane à production instantanée 1981-1989"
+ * "112": "chauffe-eau gpl/propane/butane à production instantanée 1990-2000"
+ * "113": "chauffe-eau gpl/propane/butane à production instantanée 2001-2015"
+ * "114": "chauffe-eau gpl/propane/butane à production instantanée après 2015"
+ * "115": "poêle à bois bouilleur granulés installé avant 2012"
+ * "116": "poêle à bois bouilleur granulés installé à partir de 2012"
+ * "117": "chauffe-eau électrique instantané"
+ * "118": "chaudière électrique"
+ * "119": "réseau de chaleur non répertorié ou inconnu"
+ * "120": "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation 2001-2015"
+ * "121": "pompe à chaleur hybride : partie chaudière chaudière gaz à condensation après 2015"
+ * "122": "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation 1996-2015"
+ * "123": "pompe à chaleur hybride : partie chaudière chaudière fioul à condensation après 2015"
+ * "124": "pompe à chaleur hybride : partie chaudière chaudière bois granulés 2013-2019"
+ * "125": "pompe à chaleur hybride : partie chaudière chaudière bois granulés après 2019"
+ * "126": "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2013-2017"
+ * "127": "pompe à chaleur hybride : partie chaudière chaudière bois bûche 2018-2019"
+ * "128": "pompe à chaleur hybride : partie chaudière chaudière bois bûche après 2019"
+ * "129": "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2013-2017"
+ * "130": "pompe à chaleur hybride : partie chaudière chaudière bois plaquette 2018-2019"
+ * "131": "pompe à chaleur hybride : partie chaudière chaudière bois plaquette après 2019"
+ * "132": "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation 2001-2015"
+ * "133": "pompe à chaleur hybride : partie chaudière chaudière gpl/propane/butane à condensation après 2015"
+ * "134": "chaudière(s) charbon multi bâtiment modélisée comme un réseau de chaleur"
+ */
+export const TYPE_GENERATEUR_ECS = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+  "21",
+  "22",
+  "23",
+  "24",
+  "25",
+  "26",
+  "27",
+  "28",
+  "29",
+  "30",
+  "31",
+  "32",
+  "33",
+  "34",
+  "35",
+  "36",
+  "37",
+  "38",
+  "39",
+  "40",
+  "41",
+  "42",
+  "43",
+  "44",
+  "45",
+  "46",
+  "47",
+  "48",
+  "49",
+  "50",
+  "51",
+  "52",
+  "53",
+  "54",
+  "55",
+  "56",
+  "57",
+  "58",
+  "59",
+  "60",
+  "61",
+  "62",
+  "63",
+  "64",
+  "65",
+  "66",
+  "67",
+  "68",
+  "69",
+  "70",
+  "71",
+  "72",
+  "73",
+  "74",
+  "75",
+  "76",
+  "77",
+  "78",
+  "79",
+  "80",
+  "81",
+  "82",
+  "83",
+  "84",
+  "85",
+  "86",
+  "87",
+  "88",
+  "89",
+  "90",
+  "91",
+  "92",
+  "93",
+  "94",
+  "95",
+  "96",
+  "97",
+  "98",
+  "99",
+  "100",
+  "101",
+  "102",
+  "103",
+  "104",
+  "105",
+  "106",
+  "107",
+  "108",
+  "109",
+  "110",
+  "111",
+  "112",
+  "113",
+  "114",
+  "115",
+  "116",
+  "117",
+  "118",
+  "119",
+  "120",
+  "121",
+  "122",
+  "123",
+  "124",
+  "125",
+  "126",
+  "127",
+  "128",
+  "129",
+  "130",
+  "131",
+  "132",
+  "133",
+  "134",
+] as const
+
+export const TypeGenerateurEcsEnum = z.enum(TYPE_GENERATEUR_ECS)
+export type TypeGenerateurEcsEnum = z.infer<typeof TypeGenerateurEcsEnum>
+
+/**
+ * "1": "réseau d'ecs non bouclé"
+ * "2": "réseau d'ecs bouclé"
+ * "3": "réseau d'ecs avec présence d'un traceur chauffant"
+ */
+export const BOUCLAGE_RESEAU_ECS = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const BouclageReseauEcsEnum = z.enum(BOUCLAGE_RESEAU_ECS)
+export type BouclageReseauEcsEnum = z.infer<typeof BouclageReseauEcsEnum>
+
+/**
+ * "1": "abscence de stockage d'ecs (production instantanée)"
+ * "2": "stockage indépendant de la production"
+ * "3": "stockage intégré à la production"
+ */
+export const TYPE_STOCKAGE_ECS = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const TypeStockageEcsEnum = z.enum(TYPE_STOCKAGE_ECS)
+export type TypeStockageEcsEnum = z.infer<typeof TypeStockageEcsEnum>
+
+/**
+ * "1": "avant 2010"
+ * "2": "2010-2014"
+ * "3": "a partir de 2015"
+ */
+export const PERIODE_INSTALLATION_ECS_THERMO = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const PeriodeInstallationEcsThermoEnum = z.enum(PERIODE_INSTALLATION_ECS_THERMO)
+export type PeriodeInstallationEcsThermoEnum = z.infer<typeof PeriodeInstallationEcsThermoEnum>
+
+/**
+ * "1": "solaire photovoltaïque"
+ * "2": "eolien"
+ * "3": "solaire photovoltaïque + eolien"
+ * "4": "cogénération"
+ * "5": "solaire photovoltaïque + cogénération"
+ * "6": "eolien + cogénération"
+ * "7": "solaire photovoltaïque + eolien + cogénération"
+ */
+export const TYPE_ENR = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+] as const
+
+export const TypeEnrEnum = z.enum(TYPE_ENR)
+export type TypeEnrEnum = z.infer<typeof TypeEnrEnum>
+
+/**
+ * "1": "est"
+ * "2": "sud-est"
+ * "3": "sud"
+ * "4": "sud-ouest"
+ * "5": "ouest"
+ */
+export const ORIENTATION_PV = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+] as const
+
+export const OrientationPvEnum = z.enum(ORIENTATION_PV)
+export type OrientationPvEnum = z.infer<typeof OrientationPvEnum>
+
+/**
+ * "1": "≤ 15°"
+ * "2": "15° <   ≤ 45°"
+ * "3": "45° <   ≤ 75°"
+ * "4": "> 75°"
+ */
+export const INCLINAISON_PV = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const InclinaisonPvEnum = z.enum(INCLINAISON_PV)
+export type InclinaisonPvEnum = z.infer<typeof InclinaisonPvEnum>
+
+/**
+ * "1": "électricité"
+ * "2": "gaz naturel"
+ * "3": "fioul domestique"
+ * "4": "bois – bûches"
+ * "5": "bois – granulés (pellets) ou briquettes"
+ * "6": "bois – plaquettes forestières"
+ * "7": "bois – plaquettes d’industrie"
+ * "8": "réseau de chauffage urbain"
+ * "9": "propane"
+ * "10": "butane"
+ * "11": "charbon"
+ * "12": "électricité d'origine renouvelable utilisée dans le bâtiment"
+ * "13": "gpl"
+ * "14": "autre combustible fossile"
+ * "15": "réseau de froid urbain"
+ */
+export const TYPE_ENERGIE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+] as const
+
+export const TypeEnergieEnum = z.enum(TYPE_ENERGIE)
+export type TypeEnergieEnum = z.infer<typeof TypeEnergieEnum>
+
+/**
+ * "1": "chauffage"
+ * "2": "eau chaude sanitaire"
+ * "3": "refroidissement"
+ * "4": "eclairage"
+ * "5": "bureautique"
+ * "6": "ascenseur(s)"
+ * "7": "autres usages"
+ * "8": "production d'électricité à demeure"
+ * "9": "abonnements"
+ * "10": "transports mécaniques"
+ * "11": "chauffage et eau chaude sanitaire"
+ * "12": "périmètre de l'usage inconnu"
+ * "13": "chauffage, eau chaude sanitaire et climatisation"
+ * "14": "chauffage et climatisation"
+ * "15": "eau chaude sanitaire et climatisation"
+ * "16": "auxiliaires et ventilation"
+ */
+export const TYPE_USAGE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+] as const
+
+export const TypeUsageEnum = z.enum(TYPE_USAGE)
+export type TypeUsageEnum = z.infer<typeof TypeUsageEnum>
+
+/**
+ * "A": "A"
+ * "B": "B"
+ * "C": "C"
+ * "D": "D"
+ * "E": "E"
+ * "F": "F"
+ * "G": "G"
+ */
+export const CLASSE_ETIQUETTE = [
+  "A",
+  "B",
+  "C",
+  "D",
+  "E",
+  "F",
+  "G",
+] as const
+
+export const ClasseEtiquetteEnum = z.enum(CLASSE_ETIQUETTE)
+export type ClasseEtiquetteEnum = z.infer<typeof ClasseEtiquetteEnum>
+
+/**
+ * "1": "adresse géocodée ban à l'adresse"
+ * "2": "adresse non géocodée ban car aucune correspondance trouvée"
+ */
+export const STATUT_GEOCODAGE_BAN = [
+  "1",
+  "2",
+] as const
+
+export const StatutGeocodageBanEnum = z.enum(STATUT_GEOCODAGE_BAN)
+export type StatutGeocodageBanEnum = z.infer<typeof StatutGeocodageBanEnum>
+
+/**
+ * "1": "très bonne"
+ * "2": "bonne"
+ * "3": "moyenne"
+ * "4": "insuffisante"
+ */
+export const QUALITE_COMPOSANT = [
+  "1",
+  "2",
+  "3",
+  "4",
+] as const
+
+export const QualiteComposantEnum = z.enum(QUALITE_COMPOSANT)
+export type QualiteComposantEnum = z.infer<typeof QualiteComposantEnum>
+
+/**
+ * "1": "rdc"
+ * "2": "étage intermédiaire"
+ * "3": "dernier étage"
+ */
+export const POSITION_ETAGE_LOGEMENT = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const PositionEtageLogementEnum = z.enum(POSITION_ETAGE_LOGEMENT)
+export type PositionEtageLogementEnum = z.infer<typeof PositionEtageLogementEnum>
+
+/**
+ * "1": "t1"
+ * "2": "t2"
+ * "3": "t3"
+ * "4": "t4"
+ * "5": "t5"
+ * "6": "t6"
+ * "7": "t7 ou plus"
+ */
+export const TYPOLOGIE_LOGEMENT = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+] as const
+
+export const TypologieLogementEnum = z.enum(TYPOLOGIE_LOGEMENT)
+export type TypologieLogementEnum = z.infer<typeof TypologieLogementEnum>
+
+/**
+ * "1": "pompe à chaleur"
+ * "2": "chauffe-eau thermodynamique"
+ * "3": "panneaux solaires photovoltaïques"
+ * "4": "panneaux solaires thermiques"
+ * "5": "géothermie"
+ * "6": "réseau de chaleur ou de froid vertueux"
+ * "7": "chauffage au bois"
+ * "8": "éolienne"
+ * "9": "cogénération"
+ */
+export const CATEGORIE_ENR_DESCRIPTIF = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+] as const
+
+export const CategorieEnrDescriptifEnum = z.enum(CATEGORIE_ENR_DESCRIPTIF)
+export type CategorieEnrDescriptifEnum = z.infer<typeof CategorieEnrDescriptifEnum>
+
+/**
+ * "1": "murs"
+ * "2": "planchers bas"
+ * "3": "toiture/plafond"
+ * "4": "portes et fenêtres"
+ * "5": "système de chauffage"
+ * "6": "système d'ecs"
+ * "7": "sytème de refroidissement"
+ * "8": "système de ventilation"
+ * "9": "dispositifs de pilotage chauffage/climatisation"
+ * "10": "système de production d'électricité d'origine renouvelable"
+ */
+export const CATEGORIE_DESCRIPTIF_SIMPLIFIE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+] as const
+
+export const CategorieDescriptifSimplifieEnum = z.enum(CATEGORIE_DESCRIPTIF_SIMPLIFIE)
+export type CategorieDescriptifSimplifieEnum = z.infer<typeof CategorieDescriptifSimplifieEnum>
+
+/**
+ * "1": "murs"
+ * "2": "planchers bas"
+ * "3": "toiture/plafond"
+ * "4": "baies vitrées"
+ * "5": "portes"
+ * "6": "pont thermique"
+ * "7": "système de chauffage"
+ * "8": "système d'ecs"
+ * "9": "sytème de refroidissement"
+ * "10": "système de ventilation"
+ * "11": "général"
+ * "12": "description échantillon logement pour dpe immeuble"
+ */
+export const CATEGORIE_FICHE_TECHNIQUE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+] as const
+
+export const CategorieFicheTechniqueEnum = z.enum(CATEGORIE_FICHE_TECHNIQUE)
+export type CategorieFicheTechniqueEnum = z.infer<typeof CategorieFicheTechniqueEnum>
+
+/**
+ * "1": "1"
+ * "2": "2"
+ * "3": "1+2"
+ */
+export const NUM_PACK_TRAVAUX = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const NumPackTravauxEnum = z.enum(NUM_PACK_TRAVAUX)
+export type NumPackTravauxEnum = z.infer<typeof NumPackTravauxEnum>
+
+/**
+ * "1": "murs"
+ * "2": "planchers bas"
+ * "3": "toiture/plafond"
+ * "4": "portes et fenêtres"
+ * "5": "système de chauffage"
+ * "6": "système d'ecs"
+ * "7": "sytème de refroidissement"
+ * "8": "système de ventilation"
+ * "9": "energie renouvelable"
+ */
+export const LOT_TRAVAUX = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+] as const
+
+export const LotTravauxEnum = z.enum(LOT_TRAVAUX)
+export type LotTravauxEnum = z.infer<typeof LotTravauxEnum>
+
+/**
+ * "1": "plans de la maison, de l’appartement ou de l’immeuble"
+ * "2": "plan de situation ou plan de masse du bâtiment"
+ * "3": "diagnostic surface habitable"
+ * "4": "avis de taxe d’habitation"
+ * "5": "relevé de propriété"
+ * "6": "règlement de copropriété"
+ * "7": "descriptifs des équipements collectifs fournis par le propriétaire des installations collectives ou le syndic de copropriété"
+ * "8": "descriptifs des équipements individuels des logements non visités par le diagnostiqueur, fournis par le gestionnaire professionnel unique du bâtiment dans le cas d’un propriétaire unique certifiant que tous les lots font l’objet d’une gestion homogène"
+ * "9": "contrat de maintenance ou d’entretien des équipements"
+ * "10": "notices techniques des équipements, y compris celles mise à disposition publiquement par les fabricants"
+ * "11": "permis de construire du bâtiment et, le cas échéant, de ses extensions"
+ * "12": "étude thermique réglementaire"
+ * "13": "rapport de mesure de la perméabilité à l’air"
+ * "14": "rapport mentionnant la composition des parois, obtenue par sondage"
+ * "15": "factures de travaux ou bordereaux de livraison décrivant les travaux réalisés, mentionnant l’adresse du bien"
+ * "16": "photographies des travaux d’isolation, permettant d’identifier le bien et la paroi concernée"
+ * "17": "justificatifs d’obtention d’un crédit d’impôt ou d’une prime de transition énergétique (cite, maprimerénov’)."
+ * "18": "déclaration préalable des travaux de rénovation, dans le cas où cette procédure était nécessaire (par exemple pour une isolation thermique par l’extérieur)"
+ * "19": "cahier des charges ou programme de travaux"
+ * "20": "url/api"
+ */
+export const TYPE_JUSTIFICATIF = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "20",
+] as const
+
+export const TypeJustificatifEnum = z.enum(TYPE_JUSTIFICATIF)
+export type TypeJustificatifEnum = z.infer<typeof TypeJustificatifEnum>
+
+/**
+ * "1": "valeur par défaut"
+ * "2": "mesuré/observé"
+ * "3": "issu d'un document justificatif autorisé"
+ * "4": "obtenu en ligne"
+ * "5": "estimé"
+ * "6": "valeur par défaut pénalisante"
+ */
+export const ORIGINE_DONNEE = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+] as const
+
+export const OrigineDonneeEnum = z.enum(ORIGINE_DONNEE)
+export type OrigineDonneeEnum = z.infer<typeof OrigineDonneeEnum>
+
+/**
+ * "1": "ventilation"
+ * "2": "chaudière"
+ * "3": "radiateur"
+ * "4": "éclairage"
+ * "5": "vitrages"
+ * "6": "circuit de distribution"
+ * "7": "pompe à chaleur"
+ * "8": "insert/poêle bois"
+ * "9": "chauffe-eau"
+ * "10": "chauffe-eau thermodynamique"
+ * "11": "panneau solaire"
+ * "12": "picto "neutre""
+ * "13": "isolation"
+ * "14": "climatisation"
+ * "15": "système chauffage"
+ * "16": "système ecs"
+ * "17": "baies et portes"
+ */
+export const PICTO_GESTE_ENTRETIEN = [
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+] as const
+
+export const PictoGesteEntretienEnum = z.enum(PICTO_GESTE_ENTRETIEN)
+export type PictoGesteEntretienEnum = z.infer<typeof PictoGesteEntretienEnum>
+
+/**
+ * "1": "insuffisant"
+ * "2": "moyen"
+ * "3": "bon"
+ */
+export const INDICATEUR_CONFORT_ETE = [
+  "1",
+  "2",
+  "3",
+] as const
+
+export const IndicateurConfortEteEnum = z.enum(INDICATEUR_CONFORT_ETE)
+export type IndicateurConfortEteEnum = z.infer<typeof IndicateurConfortEteEnum>
