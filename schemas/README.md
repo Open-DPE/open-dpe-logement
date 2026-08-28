@@ -102,7 +102,33 @@ oneOf:
 
 ### Valeurs inconnues
 
+Une propriété PEUT être inconnue si le producteur est dans l'incapacité d'observer/mesurer/estimer l'information correspondante.
+
+Sur une propriété donnée, `null` ne porte qu'une seule signification. Deux cas se présentent.
+
+#### Cas général — aucune notion de "non applicable" ne s'exprime à ce niveau*
+
+`null` signifie "inconnu".
+
 ```yaml
-# "null" signifie ici inconnue
-type: [number, "null"]
+type: object
+properties:
+  foo:
+    type: number
+  bar:
+    type: [number, "null"]   # "null" = inconnu
+required: [foo, bar]
 ```
+
+#### Cas particulier — la propriété exprime elle-même une existence conditionnelle
+
+`null` est réservé à "absence / non applicable". "Inconnu" s'exprime alors par un objet défini dont toutes les propriétés sont elles-mêmes `null` (récursivement).
+
+```yaml
+solaire_thermique:
+  oneOf:
+    - $ref: "#/$defs/solaire"   # défini = connu (partiellement ou totalement) ou inconnu
+    - const: null                 # absence / non applicable
+```
+
+Sur `solaire_thermique`, `null` NE signifie PAS "inconnu" : il signifie qu'il n'y a pas d'installation solaire thermique. "Inconnu" se traduit par un `solaire_thermique` défini dont toutes les propriétés valent `null`.
