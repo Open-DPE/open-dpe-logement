@@ -8,7 +8,13 @@ Librairie de composants web (Web Components) dédiés à l'affichage des donnée
 npm i @open-dpe-logement/web-components
 ```
 
-## Usage
+## Commandes
+
+| Commande              | Effet                                        |
+| --------------------- | -------------------------------------------- |
+| `npm run build`       | Compile `src/` → `dist/` (types + JS, `tsc`) |
+| `npm run check-types` | Vérification TypeScript sans émission        |
+| `npm test`            | Lance la suite de tests                      |
 
 ## Organisation
 
