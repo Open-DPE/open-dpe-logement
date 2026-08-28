@@ -1,0 +1,46 @@
+{
+  "name": "@open-dpe-logement/ademe-parser",
+  "version": "1.0.0",
+  "description": "Normalisation du XML brut de l'observatoire DPE-Audit (ADEME) vers un objet JS, indépendamment du transport (HTTP) et de la validation (schémas)",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "keywords": [
+    "dpe",
+    "diagnostic",
+    "energie",
+    "3cl",
+    "ademe",
+    "xml",
+    "parser"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-dpe/open-dpe-logement"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.5.7"
+  },
+  "devDependencies": {
+    "@open-dpe-logement/ademe-fixtures": "^1.0.0",
+    "@types/node": "^25.9.5",
+    "vitest": "^4.1.6"
+  }
+}
