@@ -1,7 +1,7 @@
 {
   "name": "@open-dpe-logement/ademe-client",
   "version": "1.0.0",
-  "description": "Wrapper de l'API publique de l'observatoire DPE-Audit",
+  "description": "Client HTTP pour l'API publique de l'observatoire DPE-Audit (récupération d'un DPE au format XML)",
   "type": "module",
   "exports": {
     ".": {
@@ -34,6 +34,11 @@
     "access": "public"
   },
   "devDependencies": {
+    "@open-dpe-logement/ademe-fixtures": "^1.0.0",
     "vitest": "^4.1.6"
+  },
+  "dependencies": {
+    "@open-dpe-logement/ademe-models": "^1.0.0",
+    "@open-dpe-logement/ademe-parser": "^1.0.0"
   }
 }

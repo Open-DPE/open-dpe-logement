@@ -1,25 +1,25 @@
 export class APIError extends Error {
-	readonly type: string;
-	readonly title: string;
-	readonly status: number;
-	readonly detail: string | null;
-	readonly instance: string | null;
-
-	constructor(props: {
-		type: string;
-		title: string;
-		status: number;
-		detail?: string | null;
-		instance?: string | null;
-	}) {
-		super(props.title);
-		this.type = props.type;
-		this.title = props.title;
-		this.status = props.status;
-		this.detail = props.detail ?? null;
-		this.instance = props.instance ?? null;
+	constructor(
+		readonly code: number,
+		readonly reason: string,
+		message: string,
+	) {
+		super(message);
 	}
 }
+
+type ResponseError = {
+	correlationId: string;
+	success: false;
+	timestamp: string;
+	apiName: string;
+	version: string;
+	errorDetails: {
+		code: number;
+		reason: string;
+		message: string;
+	};
+};
 
 export type Options = {
 	client_id: string;
@@ -27,11 +27,13 @@ export type Options = {
 	timeoutMs?: number;
 };
 
-export async function call<T>(
+/** Nombre de caractères conservés du corps brut d'une réponse d'erreur non-JSON. */
+const MALFORMED_BODY_PREVIEW_LENGTH = 500;
+
+export async function call(
 	url: string,
 	options: Options,
-	handler: (response: Response) => Promise<T>,
-): Promise<T> {
+): Promise<string | null> {
 	const { timeoutMs = 5000 } = options;
 	const controller = new AbortController();
 	const timeout = setTimeout(() => controller.abort(), timeoutMs);
@@ -48,54 +50,45 @@ export async function call<T>(
 		});
 	} catch (err) {
 		if (err instanceof Error && err.name === "AbortError") {
-			throw new APIError({
-				type: "timeout",
-				title: `Request timed out after ${timeoutMs}ms`,
-				status: 408,
-			});
+			throw new APIError(
+				408,
+				"timeout",
+				`Request timed out after ${timeoutMs}ms`,
+			);
 		}
-		throw new APIError({
-			type: "network_error",
-			title: "Network error calling external API",
-			status: 500,
-			detail: err instanceof Error ? err.message : String(err),
-		});
+		throw new APIError(
+			500,
+			"network_error",
+			err instanceof Error ? err.message : String(err),
+		);
 	} finally {
 		clearTimeout(timeout);
 	}
 
-	if (response.status !== 200) {
-		const body = await response.text();
-		let message: { errorDetails?: { reason?: string; message?: string } };
-		try {
-			message = JSON.parse(body);
-		} catch {
-			throw new APIError({
-				type: "malformed_error_response",
-				title: "Unable to parse error response",
-				status: response.status,
-				detail: body || null,
-			});
-		}
+	if (response.status === 200) return await response.text();
+	if (response.status === 404) return null;
 
-		throw new APIError({
-			type: "api_error",
-			title: message.errorDetails?.reason ?? "Unknown error",
-			status: response.status,
-			detail: message.errorDetails?.message ?? null,
-		});
-	}
+	// Lu en texte d'abord (jamais .json() directement) : le corps n'est
+	// consommable qu'une fois, et une réponse d'erreur peut ne pas être du
+	// JSON valide (ex. passerelle HTTP renvoyant une page HTML sur un 502).
+	const rawBody = await response.text();
 
+	let body: ResponseError | undefined;
 	try {
-		const result = await handler(response);
-		return result;
-	} catch (err) {
-		if (err instanceof APIError) throw err;
-		throw new APIError({
-			type: "handler_error",
-			title: "Error processing response",
-			status: 500,
-			detail: err instanceof Error ? err.message : String(err),
-		});
+		body = JSON.parse(rawBody) as ResponseError;
+	} catch {
+		throw new APIError(
+			response.status,
+			"malformed_error_response",
+			rawBody.length > MALFORMED_BODY_PREVIEW_LENGTH
+				? `${rawBody.slice(0, MALFORMED_BODY_PREVIEW_LENGTH)}...`
+				: rawBody,
+		);
 	}
+
+	throw new APIError(
+		body?.errorDetails?.code ?? response.status ?? 500,
+		body?.errorDetails?.reason ?? "Unknown error",
+		body?.errorDetails?.message ?? "Unknown error",
+	);
 }
