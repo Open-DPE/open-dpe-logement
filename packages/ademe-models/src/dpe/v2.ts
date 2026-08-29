@@ -1,5 +1,5 @@
 import * as z from "zod";
-import * as enums from "./enums";
+import * as enums from "./enums.js";
 
 // ==================================================================================================
 // DPEv2.0 - TypeScript definitions

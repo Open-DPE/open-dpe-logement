@@ -1,12 +1,12 @@
 import * as z from "zod";
-import * as v20 from "./v2.0";
-import * as v21 from "./v2.1";
-import * as v22 from "./v2.2";
-import * as v23 from "./v2.3";
-import * as v24 from "./v2.4";
-import * as v25 from "./v2.5";
+import * as v20 from "./v2.0.js";
+import * as v21 from "./v2.1.js";
+import * as v22 from "./v2.2.js";
+import * as v23 from "./v2.3.js";
+import * as v24 from "./v2.4.js";
+import * as v25 from "./v2.5.js";
 
-export * as enums from "./enums";
+export * as enums from "./enums.js";
 
 export { v20, v21, v22, v23, v24, v25 };
 

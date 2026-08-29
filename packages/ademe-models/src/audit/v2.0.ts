@@ -1,6 +1,6 @@
 import * as z from "zod";
-import * as enums from "./enums";
-import * as dpeEnums from "../dpe/enums";
+import * as enums from "./enums.js";
+import * as dpeEnums from "../dpe/enums.js";
 
 // ==================================================================================================
 // Audit énergétique v2.0 - TypeScript definitions
@@ -1095,7 +1095,7 @@ export type Logement = z.infer<typeof Logement>;
 export const Audit = z.object({
 	numero_audit: z.string(),
 	administratif: Administratif,
-	logement_collection: z.array(Logement),
+	logement_collection: z.array(Logement).min(1),
 	dpe_immeuble: DpeImmeuble.nullable().optional(),
 	vue_ensemble_logement: VueEnsembleLogement,
 	expertise_auditeur: ExpertiseAuditeur,
