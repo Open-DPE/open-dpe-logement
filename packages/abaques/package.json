@@ -31,6 +31,8 @@
   ],
   "sideEffects": false,
   "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "prebuild": "npm run generate",
     "build": "tsc -p tsconfig.json",
     "check-types": "tsc --noEmit",
     "test": "vitest run --passWithNoTests"
@@ -48,7 +50,9 @@
     "url": "https://github.com/open-dpe/open-dpe-logement"
   },
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.9.3",
+    "js-yaml": "^4.1.1",
     "vitest": "^4.1.6"
   }
 }

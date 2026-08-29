@@ -1,0 +1,13 @@
+id: climat:nj
+name: nj
+fields:
+  - name: mois
+    title: Mois
+    type: string
+    format: enums
+    x-enum: mois
+    required: true
+  - name: nj
+    title: Nombre de jours dans le mois
+    type: number
+    required: true

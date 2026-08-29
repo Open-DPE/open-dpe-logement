@@ -1,0 +1,37 @@
+id: climat:c1
+name: c1
+fields:
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: orientation
+    title: Orientation
+    type: string
+    format: enums
+    x-enum: enveloppe:paroi:orientation
+    required: true
+  - name: inclinaison/gte
+    title: Inclinaison (supérieure ou égale à)
+    type: number
+    required: false
+  - name: inclinaison/lt
+    title: Inclinaison (inférieure à)
+    type: number
+    required: false
+  - name: inclinaison/lte
+    title: Inclinaison (inférieure ou égale à)
+    type: number
+    required: false
+  - name: mois
+    title: Mois
+    type: string
+    format: enums
+    x-enum: mois
+    required: true
+  - name: c1
+    title: Coefficients d'orientation et d'inclinaison des parois vitrées
+    type: number
+    required: true

@@ -1,0 +1,14 @@
+id: chauffage:kpcs
+name: kpcs
+title: Facteur de conversion PCI/PCS
+fields:
+  - name: energie
+    title: Énergie
+    type: string
+    format: enums
+    x-enum: energie
+    required: true
+  - name: kpcs
+    title: Facteur de conversion PCI/PCS
+    type: number
+    required: true

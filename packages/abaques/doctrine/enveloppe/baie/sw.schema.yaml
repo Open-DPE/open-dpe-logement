@@ -1,0 +1,41 @@
+id: enveloppe:baie:sw
+name: sw
+fields:
+  - name: type_baie
+    title: Type de baie
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type
+    required: true
+  - name: presence_soubassement
+    title: Présence d'un soubassement
+    type: boolean
+    required: false
+  - name: materiau
+    title: Matériau du cadre
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:materiau
+    required: false
+  - name: type_vitrage
+    title: Type de vitrage
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type-vitrage
+    required: false
+  - name: type_pose
+    title: Type de pose
+    type: string
+    format: enums
+    x-enum: enveloppe:paroi:type-pose
+    required: false
+  - name: type_survitrage
+    title: Type de survitrage
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type-survitrage
+    required: false
+  - name: sw
+    title: Proportion d'énergie solaire incidente transmise par la baie
+    type: number
+    required: true

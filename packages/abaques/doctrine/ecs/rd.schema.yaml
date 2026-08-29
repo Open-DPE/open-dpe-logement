@@ -1,0 +1,25 @@
+id: ecs:rd
+name: rd
+fields:
+  - name: installation_collective
+    title: Installation collective
+    type: boolean
+    required: true
+  - name: bouclage_reseau
+    title: Présence d'un bouclage réseau
+    type: string
+    format: enums
+    x-enum: ecs:bouclage-reseau
+    required: false
+  - name: alimentation_contigue
+    title: Alimentation contiguë au volume habitable
+    type: boolean
+    required: false
+  - name: production_volume_habitable
+    title: Production en volume habitable
+    type: boolean
+    required: false
+  - name: rd
+    title: Rendement de distribution de l'eau chaude sanitaire
+    type: number
+    required: true

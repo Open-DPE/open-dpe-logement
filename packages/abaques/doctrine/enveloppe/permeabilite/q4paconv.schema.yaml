@@ -1,0 +1,29 @@
+id: enveloppe:permeabilite:q4paconv
+name: q4paconv
+fields:
+  - name: type_batiment
+    title: Type de bâtiment
+    type: string
+    format: enums
+    x-enum: type-batiment
+    required: true
+  - name: annee_construction/gte
+    title: Année de construction (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_construction/lte
+    title: Année de construction (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: presence_joints_menuiserie
+    title: Présence de joints de menuiserie
+    type: boolean
+    required: false
+  - name: isolation_murs_plafonds
+    title: Isolation des murs et plafonds
+    type: boolean
+    required: false
+  - name: q4paconv
+    title: Débit d'air conventionnel par infiltration sous 4 Pa en m³/(h·m²)
+    type: number
+    required: true

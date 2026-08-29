@@ -1,0 +1,29 @@
+id: enveloppe:plancher-bas:ue
+name: ue
+fields:
+  - name: mitoyennete
+    title: Mitoyenneté du plancher bas
+    type: string
+    format: enums
+    x-enum: enveloppe:paroi:mitoyennete
+    required: true
+  - name: annee_construction/gte
+    title: Année de construction (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_construction/lte
+    title: Année de construction (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: 2s/p
+    title: Ratio 2s/p du plancher bas
+    type: number
+    required: true
+  - name: u
+    title: Coefficient de transmission thermique du plancher bas non isolé en W/(m²·K)
+    type: number
+    required: true
+  - name: ue
+    title: Coefficient de transmission thermique du plancher bas en W/(m²·K)
+    type: number
+    required: true

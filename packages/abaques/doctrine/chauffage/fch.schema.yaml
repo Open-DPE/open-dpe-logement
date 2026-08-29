@@ -1,0 +1,19 @@
+id: chauffage:fch
+name: fch
+fields:
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: type_batiment
+    title: Type de bâtiment
+    type: string
+    format: enums
+    x-enum: batiment:type
+    required: true
+  - name: fch
+    title: Facteur de couverture solaire pour le chauffage
+    type: number
+    required: true

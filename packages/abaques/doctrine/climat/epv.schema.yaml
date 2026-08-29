@@ -1,0 +1,17 @@
+id: production:epv
+name: epv
+fields:
+  - name: mois
+    title: Mois
+    type: string
+    x-enum: mois
+    required: true
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    x-enum: zone-climatique
+    required: true
+  - name: epv
+    title: Ensoleillement mensuel en kWh/m²
+    type: number
+    required: true

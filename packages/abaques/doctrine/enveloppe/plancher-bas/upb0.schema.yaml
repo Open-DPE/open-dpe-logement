@@ -1,0 +1,13 @@
+id: enveloppe:plancher-bas:upb0
+name: upb0
+fields:
+  - name: type_structure
+    title: Type de structure du plancher bas
+    type: string
+    format: enums
+    x-enum: enveloppe:plancher-bas:type
+    required: true
+  - name: u0
+    title: Coefficient de transmission thermique de référence du plancher bas nu en W/(m²·K)
+    type: number
+    required: true

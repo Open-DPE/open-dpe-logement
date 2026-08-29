@@ -1,0 +1,43 @@
+id: enveloppe:porte:uporte
+name: uporte
+fields:
+  - name: presence_sas
+    title: Présence d'un sas
+    type: boolean
+    required: false
+  - name: materiau
+    title: Matériau de la porte
+    type: string
+    format: enums
+    x-enum: enveloppe:porte:materiau
+    required: false
+  - name: isolation
+    title: Présence d'une isolation de la porte
+    type: boolean
+    required: false
+  - name: type_vitrage
+    title: Type de vitrage de la porte
+    type: string
+    format: enums
+    x-enum: enveloppe:porte:type-vitrage
+    required: false
+  - name: taux_vitrage/gt
+    title: Taux de vitrage (supérieur à) en %
+    type: number
+    required: false
+  - name: taux_vitrage/lt
+    title: Taux de vitrage (inférieur à) en %
+    type: number
+    required: false
+  - name: taux_vitrage/gte
+    title: Taux de vitrage (supérieur ou égal à) en %
+    type: number
+    required: false
+  - name: taux_vitrage/eq
+    title: Taux de vitrage (égal à) en %
+    type: number
+    required: false
+  - name: u
+    title: Coefficient de transmission thermique de la porte en W/(m²·K)
+    type: number
+    required: true

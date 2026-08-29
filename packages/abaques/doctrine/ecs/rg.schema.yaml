@@ -1,0 +1,19 @@
+id: ecs:rg
+name: rg
+fields:
+  - name: type_generateur
+    title: Type de générateur
+    type: string
+    format: enums
+    x-enum: ecs:type-generateur
+    required: true
+  - name: energie_generateur
+    title: Énergie du générateur
+    type: string
+    format: enums
+    x-enum: energie
+    required: false
+  - name: rg
+    title: Rendement du générateur ECS
+    type: number
+    required: true

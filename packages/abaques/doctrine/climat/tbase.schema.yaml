@@ -1,0 +1,29 @@
+id: climat:tbase
+name: tbase
+fields:
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: altitude/gt
+    title: Altitude (supérieure à)
+    type: number
+    required: false
+  - name: altitude/gte
+    title: Altitude (supérieure ou égale à)
+    type: number
+    required: false
+  - name: altitude/lt
+    title: Altitude (inférieure à)
+    type: number
+    required: false
+  - name: altitude/lte
+    title: Altitude (inférieure ou égale à)
+    type: number
+    required: false
+  - name: tbase
+    title: Température extérieure de base (°)
+    type: number
+    required: true

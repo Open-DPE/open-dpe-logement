@@ -1,0 +1,13 @@
+id: enveloppe:plancher-haut:uph0
+name: uph0
+fields:
+  - name: type_plancher_haut
+    title: Type de plancher haut
+    type: string
+    format: enums
+    x-enum: enveloppe:plancher-haut:type
+    required: true
+  - name: u0
+    title: Coefficient de transmission thermique de référence du plancher haut nu en W/(m²·K)
+    type: number
+    required: true

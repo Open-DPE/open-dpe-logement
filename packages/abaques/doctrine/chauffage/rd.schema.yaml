@@ -1,0 +1,31 @@
+id: chauffage:rd
+name: rd
+fields:
+  - name: type_distribution
+    title: Type de distribution
+    type: string
+    format: enums
+    x-enum: chauffage:type-distribution
+    required: true
+  - name: temperature_distribution
+    title: Température de distribution
+    type: string
+    format: enums
+    x-enum: chauffage:temperature-distribution
+    required: false
+  - name: presence_fluide_frigorigene
+    title: Présence d'un fluide frigorigène
+    type: boolean
+    required: false
+  - name: reseau_collectif
+    title: Réseau collectif
+    type: boolean
+    required: false
+  - name: isolation_reseau
+    title: Réseau isolé
+    type: boolean
+    required: false
+  - name: rd
+    title: Rendement de distribution
+    type: number
+    required: true

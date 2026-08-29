@@ -1,0 +1,35 @@
+id: ecs:paux
+name: paux
+fields:
+  - name: type_generateur
+    title: Type de générateur
+    type: string
+    format: enums
+    x-enum: ecs:type-generateur
+    required: true
+  - name: energie_generateur
+    title: Énergie du générateur
+    type: string
+    format: enums
+    x-enum: energie
+    required: false
+  - name: presence_ventouse
+    title: Présence d'une ventouse
+    type: boolean
+    required: false
+  - name: G
+    title: Coefficient G de la formule de puissance auxiliaire en W
+    type: number
+    required: false
+  - name: H
+    title: Coefficient H de la formule de puissance auxiliaire en W/kW
+    type: number
+    required: false
+  - name: paux
+    title: Puissance auxiliaire en W (expression mathématique ou valeur)
+    type: string
+    required: true
+  - name: pn_max
+    title: Puissance nominale maximale en kW
+    type: number
+    required: false

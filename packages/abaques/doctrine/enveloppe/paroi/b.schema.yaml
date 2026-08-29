@@ -1,0 +1,13 @@
+id: enveloppe:paroi:b
+name: b
+fields:
+  - name: mitoyennete
+    title: Mitoyenneté de la paroi
+    type: string
+    format: enums
+    x-enum: enveloppe:paroi:mitoyennete
+    required: true
+  - name: b
+    title: Coefficient de réduction des déperditions thermiques
+    type: number
+    required: true

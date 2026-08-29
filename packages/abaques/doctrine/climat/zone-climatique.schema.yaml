@@ -1,0 +1,12 @@
+id: climat:zone-climatique
+name: zone-climatique
+fields:
+  - name: code_departement
+    title: Code département
+    type: string
+    required: true
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    x-enum: zone-climatique
+    required: true

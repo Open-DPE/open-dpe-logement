@@ -1,0 +1,31 @@
+id: enveloppe:plancher-haut:uph
+name: uph
+fields:
+  - name: configuration
+    title: Configuration du plancher haut
+    type: string
+    format: enums
+    x-enum: enveloppe:plancher-haut:configuration
+    required: true
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: effet_joule
+    title: Présence d'un effet Joule (chauffage électrique)
+    type: boolean
+    required: true
+  - name: annee_construction_isolation/lte
+    title: Année de construction ou d'isolation (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_construction_isolation/gte
+    title: Année de construction ou d'isolation (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: u
+    title: Coefficient de transmission thermique du plancher haut en W/(m²·K)
+    type: number
+    required: true

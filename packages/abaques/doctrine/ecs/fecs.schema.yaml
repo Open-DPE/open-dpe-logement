@@ -1,0 +1,33 @@
+id: ecs:fecs
+name: fecs
+fields:
+  - name: type_batiment
+    title: Type de bâtiment
+    type: string
+    format: enums
+    x-enum: batiment:type
+    required: true
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: usage_solaire
+    title: Usage de l'installation solaire
+    type: string
+    format: enums
+    x-enum: ecs:usage-solaire
+    required: true
+  - name: anciennete_installation/gt
+    title: Ancienneté de l'installation en années (supérieure à)
+    type: integer
+    required: false
+  - name: anciennete_installation/lte
+    title: Ancienneté de l'installation en années (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: fecs
+    title: Facteur de couverture solaire pour l'eau chaude sanitaire
+    type: number
+    required: true

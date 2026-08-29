@@ -1,0 +1,31 @@
+id: enveloppe:baie:uw
+name: uw
+fields:
+  - name: type_baie
+    title: Type de baie
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type
+    required: true
+  - name: presence_soubassement
+    title: Présence d'un soubassement
+    type: boolean
+    required: false
+  - name: materiau
+    title: Matériau du cadre
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:materiau
+    required: false
+  - name: presence_rupteur_pont_thermique
+    title: Présence d'un rupteur de pont thermique
+    type: boolean
+    required: false
+  - name: ug
+    title: Coefficient de transmission thermique du vitrage en W/(m²·K)
+    type: number
+    required: false
+  - name: uw
+    title: Coefficient de transmission thermique de la baie en W/(m²·K)
+    type: number
+    required: true

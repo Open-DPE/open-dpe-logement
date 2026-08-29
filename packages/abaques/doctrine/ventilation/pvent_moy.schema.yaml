@@ -1,0 +1,21 @@
+id: ventilation:pvent_moy
+name: pvent_moy
+fields:
+  - name: type_ventilation
+    title: Type de ventilation
+    type: string
+    format: enums
+    x-enum: ventilation:type
+    required: true
+  - name: annee_installation/gt
+    title: Année d'installation du système de ventilation (supérieure à)
+    type: integer
+    required: false
+  - name: annee_installation/lte
+    title: Année d'installation du système de ventilation (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: pvent_moy
+    title: Puissance moyenne de l'auxiliaire de ventilation en W
+    type: number
+    required: true

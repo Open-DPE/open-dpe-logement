@@ -1,4 +1,4 @@
-// GÉNÉRÉ AUTOMATIQUEMENT par scripts/generate-abaques.mjs — ne pas modifier manuellement
+// GÉNÉRÉ AUTOMATIQUEMENT par scripts/generate.mjs — ne pas modifier manuellement
 export const ASSET_URLS: Record<string, URL> = {
 	"chauffage/combustion": new URL("../data/chauffage/combustion.json", import.meta.url),
 	"chauffage/emission": new URL("../data/chauffage/emission.json", import.meta.url),

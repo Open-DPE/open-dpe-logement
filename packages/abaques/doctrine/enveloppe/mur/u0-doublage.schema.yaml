@@ -1,0 +1,13 @@
+id: enveloppe:mur:u0-doublage
+name: u0-doublage
+fields:
+  - name: type_doublage
+    title: Type de doublage
+    type: string
+    format: enums
+    x-enum: enveloppe:mur:type-doublage
+    required: true
+  - name: u0_doublage
+    title: Résistance thermique additionnelle apportée par le doublage en m²·K/W
+    type: number
+    required: true

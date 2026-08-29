@@ -1,0 +1,13 @@
+id: enveloppe:local-non-chauffe:uvue
+name: uvue
+fields:
+  - name: type_local_non_chauffe
+    title: Type de local non chauffé
+    type: string
+    format: enums
+    x-enum: enveloppe:local-non-chauffe:type
+    required: true
+  - name: uvue
+    title: Coefficient de transmission thermique équivalent du local non chauffé en W/(m²·K)
+    type: number
+    required: true

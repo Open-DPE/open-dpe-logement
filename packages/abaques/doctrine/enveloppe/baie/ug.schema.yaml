@@ -1,0 +1,51 @@
+id: enveloppe:baie:ug
+name: ug
+fields:
+  - name: type_vitrage
+    title: Type de vitrage
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type-vitrage
+    required: true
+  - name: type_survitrage
+    title: Type de survitrage
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type-survitrage
+    required: false
+  - name: type_baie
+    title: Type de baie
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type
+    required: false
+  - name: nature_lame_air
+    title: Nature de la lame d'air
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:nature-lame-air
+    required: false
+  - name: epaisseur_lame_air/eq
+    title: Épaisseur de la lame d'air (égale à) en mm
+    type: number
+    required: false
+  - name: epaisseur_lame_air/gte
+    title: Épaisseur de la lame d'air (supérieure ou égale à) en mm
+    type: number
+    required: false
+  - name: epaisseur_lame_air/lt
+    title: Épaisseur de la lame d'air (inférieure à) en mm
+    type: number
+    required: false
+  - name: inclinaison_vitrage/lt
+    title: Inclinaison du vitrage (inférieure à) en degrés
+    type: number
+    required: false
+  - name: inclinaison_vitrage/gte
+    title: Inclinaison du vitrage (supérieure ou égale à) en degrés
+    type: number
+    required: false
+  - name: ug
+    title: Coefficient de transmission thermique du vitrage en W/(m²·K)
+    type: number
+    required: true

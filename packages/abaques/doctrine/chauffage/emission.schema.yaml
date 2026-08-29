@@ -1,0 +1,28 @@
+id: chauffage:emission
+name: emission
+title: Type d'émission
+fields:
+  - name: type_generateur
+    title: Type de générateur
+    type: string
+    format: enums
+    x-enum: chauffage:type-generateur
+    required: true
+  - name: type_distribution
+    title: Type de distribution
+    type: string
+    format: enums
+    x-enum: chauffage:type-distribution
+    required: false
+  - name: type_emetteur
+    title: Type d'émetteur
+    type: string
+    format: enums
+    x-enum: chauffage:type-emetteur
+    required: false
+  - name: type_emission
+    title: Type d'émission
+    type: string
+    format: enums
+    x-enum: chauffage:type-emission
+    required: true
