@@ -181,10 +181,24 @@ export function toStringValue(value: unknown): string | null {
 			: null;
 }
 
-/** REFERENCE_TAGS : identifiant de référencement interne, normalisé en minuscules. */
+/**
+ * REFERENCE_TAGS : identifiant de référencement interne, normalisé en
+ * minuscules et en espacement (espaces de bord retirés, espaces internes
+ * multiples réduits à un seul).
+ *
+ * Le XML ADEME contient des références au double espacement irrégulier
+ * (ex. `"mur  1"` sur un pont thermique référençant un mur nommé `"mur 1"`
+ * par ailleurs, observé sur le corpus réel) — une même référence
+ * conceptuelle, corrompue par une saisie ou un export ADEME imparfait, pas
+ * deux entités distinctes. Sans cette normalisation, aucune comparaison
+ * stricte en aval (mapper, moteur...) ne peut faire le lien.
+ */
 export function toReferenceValue(value: unknown): string | null {
 	if (isEmpty(value)) return null;
-	return (typeof value !== "string" ? String(value) : value).toLowerCase();
+	return (typeof value !== "string" ? String(value) : value)
+		.toLowerCase()
+		.trim()
+		.replace(/\s+/g, " ");
 }
 
 /** Tags `enum_*` : toujours une chaîne (convention documentée dans le README). */

@@ -25,7 +25,10 @@ const parsed = parse(xml); // objet JS brut, non typé, non validé
 
 ### Références
 
-Les références internes sont converties en minuscules.
+Les références internes sont converties en minuscules et normalisées en
+espacement (espaces de bord retirés, espaces internes multiples réduits à
+un seul — le XML ADEME contient des références au double espacement
+irrégulier, ex. `"mur  1"`, corpus réel).
 
 Propriétés concernées :
 
@@ -135,7 +138,7 @@ npm run test
 ## Scripts
 
 | Commande              | Effet                                        |
-| ---------------------- | -------------------------------------------- |
+| --------------------- | -------------------------------------------- |
 | `npm run build`       | Compile `src/` → `dist/` (types + JS, `tsc`) |
 | `npm run check-types` | Vérification TypeScript sans émission        |
 | `npm run test`        | Lance la suite Vitest                        |

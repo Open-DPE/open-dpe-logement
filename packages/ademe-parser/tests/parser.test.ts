@@ -130,6 +130,15 @@ describe("toReferenceValue", () => {
 		expect(toReferenceValue(null)).toBeNull();
 		expect(toReferenceValue("")).toBeNull();
 	});
+
+	it("réduit les espaces internes multiples à un seul (double espacement irrégulier ADEME constaté sur le corpus réel)", () => {
+		expect(toReferenceValue("mur  1")).toBe("mur 1");
+		expect(toReferenceValue("pont   thermique  1")).toBe("pont thermique 1");
+	});
+
+	it("retire les espaces de bord", () => {
+		expect(toReferenceValue("  mur 1  ")).toBe("mur 1");
+	});
 });
 
 describe("toEnumValue", () => {
