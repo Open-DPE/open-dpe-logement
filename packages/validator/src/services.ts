@@ -1,6 +1,6 @@
+import { SCHEMAS } from "@open-dpe-logement/schemas";
 import Ajv2020 from "ajv/dist/2020.js";
 import addFormats from "ajv-formats";
-import { SCHEMAS } from "./schemas.js";
 
 function createValidator() {
 	const ajv = new Ajv2020({
