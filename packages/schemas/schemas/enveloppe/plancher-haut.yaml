@@ -1,0 +1,94 @@
+$id: https://schemas.open-dpe.fr/enveloppe/plancher-haut
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Plancher haut
+type: object
+unevaluatedProperties: false
+properties:
+  id:
+    $ref: /common#/$defs/id
+  description:
+    $ref: /common#/$defs/description
+  configuration:
+    title: Configuration
+    type: string
+    x-enum: enveloppe:plancher-haut:configuration
+    enum: [plancher, rampants, terrasse]
+  type:
+    title: Type de plancher haut
+    type: [string, "null"]
+    x-enum: enveloppe:plancher-haut:type
+    enum:
+      - plafond_avec_ou_sans_remplissage
+      - plafond_entre_solives_metalliques
+      - plafond_entre_solives_bois
+      - plafond_bois_sur_solives_metalliques
+      - plafond_bois_sous_solives_metalliques
+      - bardeaux_et_remplissage
+      - plafond_bois_sur_solives_bois
+      - plafond_bois_sous_solives_bois
+      - dalle_beton
+      - plafond_lourd
+      - combles_amenages_sous_rampant
+      - toiture_chaume
+      - plafond_patre
+      - bac_acier
+      - null
+  inertie:
+    $ref: /enveloppe/paroi#/$defs/inertie
+  annee_construction:
+    $ref: /common#/$defs/annee_construction
+  annee_renovation:
+    $ref: /common#/$defs/annee_renovation
+  u0:
+    title: Coefficient de transmission thermique du plancher haut nu connu et justifié en W/m².K
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
+  u:
+    title: Coefficient de transmission thermique du plancher haut connu et justifié en W/m².K
+    oneOf:
+      - $ref: /common#/$defs/nombre_positif
+      - const: null
+  position:
+    $ref: /enveloppe/paroi#/$defs/position
+  isolation:
+    $ref: /enveloppe/paroi#/$defs/isolation
+  data:
+    $ref: "#/$defs/data"
+
+required:
+  - id
+  - description
+  - configuration
+  - type
+  - inertie
+  - annee_construction
+  - annee_renovation
+  - u0
+  - u
+  - position
+  - isolation
+
+$defs:
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      sdep:
+        title: Surface déperditive du plancher haut en m²
+        type: number
+      b:
+        title: Coefficient de réduction des déperditions thermiques du plancher haut
+        type: number
+      dp:
+        title: Déperditions thermiques du plancher haut en W/K
+        type: number
+      u:
+        title: Coefficient de transmission thermique du plancher haut en W/(m².K)
+        type: number
+      u0:
+        title: Coefficient de transmission thermique du plancher haut sans isolation en W/(m².K)
+        type: number
+    required: [sdep, b, dp, u, u0]

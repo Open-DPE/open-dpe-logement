@@ -1,0 +1,171 @@
+$id: https://schemas.open-dpe.fr/chauffage/systeme
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Système de chauffage
+type: object
+unevaluatedProperties: false
+properties:
+  id:
+    $ref: /common#/$defs/id
+  description:
+    $ref: /common#/$defs/description
+  type:
+    title: Type de système
+    type: string
+    x-enum: chauffage:type
+    enum: [central, divise]
+  generateur_id:
+    $ref: /common#/$defs/id
+  reseau:
+    oneOf:
+      - $ref: "#/$defs/reseau"
+      - const: null
+  data:
+    $ref: "#/$defs/data"
+
+required:
+  - id
+  - description
+  - type
+  - generateur_id
+  - reseau
+
+oneOf:
+  - title: Système de chauffage central
+    properties:
+      type:
+        const: central
+      reseau:
+        type: object
+    required:
+      - type
+      - reseau
+
+  - title: Système de chauffage divisé
+    properties:
+      type:
+        const: divise
+      reseau:
+        $ref: "/common#/$defs/non_applicable"
+    required:
+      - type
+      - reseau
+
+$defs:
+  reseau:
+    title: Réseau de distribution
+    type: object
+    unevaluatedProperties: false
+    properties:
+      type_distribution:
+        title: Type de distribution
+        type: string
+        x-enum: chauffage:type-distribution
+        enum: [hydraulique, aeraulique]
+      temperature_distribution:
+        title: Température de distribution de l'émetteur de chaleur
+        type: [string, "null"]
+        x-enum: chauffage:temperature-distribution
+        enum: [basse, moyenne, haute, null]
+      presence_fluide_frigorigene:
+        title: Distribution avec fluide frigorigène
+        type: boolean
+      presence_circulateur_externe:
+        title: Présence d'un circulateur externe
+        type: boolean
+      niveaux_desservis:
+        title: Nombre de niveaux desservis par le réseau
+        type: integer
+        minimum: 1
+      isolation:
+        title: Isolation du réseau
+        type: [boolean, "null"]
+      emetteurs:
+        title: Liste des émetteurs
+        type: array
+        items:
+          $ref: /common#/$defs/id
+    required:
+      - type_distribution
+      - presence_fluide_frigorigene
+      - presence_circulateur_externe
+      - niveaux_desservis
+      - isolation
+      - emetteurs
+
+    oneOf:
+      - title: Chauffage central avec distribution hydraulique
+        type: object
+        properties:
+          type_distribution:
+            const: hydraulique
+          emetteurs:
+            type: array
+            minItems: 1
+        required:
+          - type_distribution
+          - temperature_distribution
+          - emetteurs
+
+      - title: Chauffage central avec distribution aéraulique
+        type: object
+        properties:
+          type_distribution:
+            const: aeraulique
+          temperature_distribution:
+            $ref: "/common#/$defs/non_applicable"
+          emetteurs:
+            type: array
+            minItems: 0
+            maxItems: 0
+        required:
+          - type_distribution
+          - temperature_distribution
+          - emetteurs
+
+  data:
+    title: Données calculées
+    type: object
+    readOnly: true
+    additionalProperties: false
+    properties:
+      consommations:
+        title: Consommations par usage et par énergie du système de chauffage
+        $ref: /common#/$defs/consommations
+      rdim:
+        title: Ratio de dimensionnement du système de chauffage
+        type: number
+      pch:
+        title: Puissance du système de chauffage collectif en kW
+        type: number
+      int:
+        title: Facteur d'intermittence moyen du système de chauffage
+        type: number
+      ich:
+        title: Inverse du rendement moyen du système de chauffage
+        type: number
+      rd:
+        title: Rendement de distribution du système de chauffage
+        type: number
+      re:
+        title: Rendement d'émission moyen du système de chauffage
+        type: number
+      rg:
+        title: Rendement de génération du système de chauffage
+        type: number
+      rr:
+        title: Rendement de régulation moyen du système de chauffage
+        type: number
+      pcircem:
+        title: Puissance du circulateur de l'installation de chauffage en W
+        type: number
+    required:
+      - consommations
+      - rdim
+      - pch
+      - int
+      - ich
+      - rd
+      - re
+      - rg
+      - rr
+      - pcircem

@@ -1,0 +1,124 @@
+$id: https://schemas.open-dpe.fr/ecs/generateur-combustion
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Générateur à combustion
+type: object
+unevaluatedProperties: false
+
+allOf:
+  - $ref: /ecs/generateur-base
+
+properties:
+  type:
+    enum: [chaudiere, poele_bouilleur, chauffe_eau]
+  energie:
+    enum:
+      - gaz_naturel
+      - gpl
+      - fioul
+      - charbon
+      - bois_buche
+      - bois_plaquette
+      - bois_granule
+  bienergie:
+    $ref: "/common#/$defs/non_applicable"
+  position:
+    type: object
+    properties:
+      reseau_chaleur_id:
+        $ref: "/common#/$defs/non_applicable"
+    required:
+      - reseau_chaleur_id
+  signaletique:
+    type: object
+    properties:
+      cop:
+        $ref: "/common#/$defs/non_applicable"
+      label:
+        $ref: "/common#/$defs/non_applicable"
+    required:
+      - cop
+      - label
+required:
+  - type
+  - energie
+  - position
+  - signaletique
+
+oneOf:
+  - title: Chaudière à combustion
+    type: object
+    properties:
+      type:
+        const: chaudiere
+      position:
+        type: object
+        properties:
+          position_chauffe_eau:
+            $ref: "/common#/$defs/non_applicable"
+        required:
+          - position_chauffe_eau
+    required:
+      - type
+      - position
+
+  - title: Poèle à bois bouilleur
+    type: object
+    properties:
+      type:
+        const: poele_bouilleur
+      energie:
+        enum: [bois_buche, bois_plaquette, bois_granule]
+      position:
+        type: object
+        properties:
+          position_chauffe_eau:
+            $ref: "/common#/$defs/non_applicable"
+          generateur_collectif:
+            const: false
+            default: false
+          generateur_multi_batiment:
+            const: false
+            default: false
+        required:
+          - position_chauffe_eau
+          - generateur_collectif
+          - generateur_multi_batiment
+    required:
+      - type
+      - energie
+      - position
+
+  - title: Chauffe-eau gaz
+    type: object
+    properties:
+      type:
+        const: chauffe_eau
+      energie:
+        enum: [gaz_naturel, gpl]
+      position:
+        type: object
+        properties:
+          generateur_collectif:
+            const: false
+            default: false
+          generateur_multi_batiment:
+            const: false
+            default: false
+          generateur_mixte_id:
+            $ref: "/common#/$defs/non_applicable"
+        required:
+          - generateur_collectif
+          - generateur_multi_batiment
+          - generateur_mixte_id
+      signaletique:
+        type: object
+        properties:
+          mode_combustion:
+            enum: [standard, condensation, null]
+        required:
+          - mode_combustion
+    required:
+      - type
+      - energie
+      - position
+      - signaletique

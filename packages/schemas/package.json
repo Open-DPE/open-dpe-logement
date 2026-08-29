@@ -1,0 +1,45 @@
+{
+  "name": "@open-dpe-logement/schemas",
+  "description": "Schémas de données publique au format JSON Schema",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "prebuild": "npm run generate",
+    "build": "tsc -p tsconfig.json",
+    "check-types": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "keywords": [
+    "dpe",
+    "diagnostic",
+    "energie",
+    "3cl",
+    "schemas"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/open-dpe/open-dpe-logement"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@hyperjump/json-schema": "^1.17.6",
+    "@types/js-yaml": "^4.0.9",
+    "js-yaml": "^4.1.1",
+    "vitest": "^4.1.6"
+  }
+}

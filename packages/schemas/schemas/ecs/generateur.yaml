@@ -1,0 +1,11 @@
+$id: https://schemas.open-dpe.fr/ecs/generateur
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Générateur d'eau chaude sanitaire
+type: object
+unevaluatedProperties: false
+oneOf:
+  - $ref: /ecs/generateur-combustion
+  - $ref: /ecs/generateur-electrique
+  - $ref: /ecs/generateur-thermodynamique
+  - $ref: /ecs/reseau-chaleur
+  - $ref: /ecs/generateur-inconnu
