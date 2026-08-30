@@ -149,17 +149,6 @@ export function isEnumTag(tagName: string): boolean {
 }
 
 /**
- * Arrondit une valeur numérique à deux chiffres après la virgule (règle
- * "Nombres" du README). Un entier n'est pas affecté (5 -> 5). N'est
- * appliqué qu'aux `number` qui arrivent jusqu'ici : les tags déjà forcés en
- * string plus haut (STRING_ONLY_TAGS, REFERENCE_TAGS, `enum_*`) ne passent
- * jamais par cette fonction.
- */
-export function round(n: number): number {
-	return Number(n.toFixed(2));
-}
-
-/**
  * Absence de contenu XML significatif — à ne pas confondre avec une valeur
  * "fausse" au sens JS : `0` est une valeur significative (ex.
  * `enum_consentement_formulaire_id: "0"` = "absence de consentement", une
@@ -242,9 +231,6 @@ function normalize(node: unknown): unknown {
 	if (Array.isArray(node)) {
 		return node.map(normalize);
 	}
-	if (typeof node === "number") {
-		return round(node);
-	}
 	if (node === null || typeof node !== "object") {
 		return node;
 	}
@@ -316,7 +302,12 @@ const parser = new XMLParser({
 	// inchangé laisse le comportement par défaut (number/boolean
 	// auto-détecté) pour tous les autres tags.
 	tagValueProcessor: (tagName, val) => {
-		if (isStringOnlyTag(tagName) || isReferenceTag(tagName) || isEnumTag(tagName) || isBooleanTag(tagName)) {
+		if (
+			isStringOnlyTag(tagName) ||
+			isReferenceTag(tagName) ||
+			isEnumTag(tagName) ||
+			isBooleanTag(tagName)
+		) {
 			return undefined;
 		}
 		// fast-xml-parser (strnum) refuse de convertir une chaîne décimale en
