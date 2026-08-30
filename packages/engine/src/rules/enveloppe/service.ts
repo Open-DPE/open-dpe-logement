@@ -23,10 +23,6 @@ export {
 };
 
 export function calcule(ctx: Context): models.enveloppe.EnveloppeWithData {
-	const niveaux = ctx.diagnostic.enveloppe.niveaux.map((item) =>
-		niveau.calcule(ctx, item),
-	);
-
 	return {
 		...ctx.diagnostic.enveloppe,
 
@@ -39,7 +35,9 @@ export function calcule(ctx: Context): models.enveloppe.EnveloppeWithData {
 
 		murs: ctx.diagnostic.enveloppe.murs.map((item) => mur.calcule(ctx, item)),
 
-		niveaux: models.common.toNonEmptyArray(niveaux),
+		niveaux: ctx.diagnostic.enveloppe.niveaux.map((item) =>
+			niveau.calcule(ctx, item),
+		),
 
 		planchers_bas: ctx.diagnostic.enveloppe.planchers_bas.map((item) =>
 			plancherBas.calcule(ctx, item),

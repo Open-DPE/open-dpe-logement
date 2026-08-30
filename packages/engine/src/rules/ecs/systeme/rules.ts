@@ -305,15 +305,15 @@ export function isolation_reseau(
 
 function _installation(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, "installation", item, () =>
-		models.ecs.getInstallationBySysteme(ctx.diagnostic.ecs, item.id),
+		models.ecs.findInstallationBySysteme(item.id, ctx.diagnostic.ecs),
 	);
 }
 
 function _generateur(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, "generateur", item, () => {
-		const generateur = models.ecs.getGenerateur(
-			ctx.diagnostic.ecs,
+		const generateur = models.ecs.findGenerateur(
 			item.generateur_id,
+			ctx.diagnostic.ecs,
 		);
 		return {
 			...generateur,

@@ -1,5 +1,5 @@
 import * as models from "@open-dpe-logement/models";
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import type * as production from "../production/formulas.js";
 
 /**
@@ -8,8 +8,8 @@ import type * as production from "../production/formulas.js";
 export function calcule_consommations(props: {
 	cef: number;
 	cef_enr: number;
-	usage: models.common.Usage;
-	energie: models.common.Energie;
+	usage: models.common.UsageEnum;
+	energie: models.common.EnergieEnum;
 	reseau_id: string | null;
 }): models.common.Consommations {
 	const { cef_enr, usage, energie, reseau_id } = props;
@@ -23,8 +23,8 @@ export function calcule_consommations(props: {
 			eges: cef * calcule_feges({ usage, energie, reseau_id }),
 		},
 	};
-	if (cef_enr > 0 && energie === models.common.EnergieEnum.electricite) {
-		const enr = models.common.EnergieEnum.electricite_renouvelable;
+	if (cef_enr > 0 && energie === models.common.ENERGIES.electricite) {
+		const enr = models.common.ENERGIES.electricite_renouvelable;
 		consommations[usage][enr] = {
 			cef: cef_enr,
 			cep: cef_enr * calcule_fcep({ energie: enr }),
@@ -40,11 +40,11 @@ export function calcule_consommations(props: {
  * @returns Facteur de conversion énergie finale/énergie primaire
  */
 export function calcule_fcep(props: {
-	energie: models.common.Energie;
+	energie: models.common.EnergieEnum;
 }): number {
 	switch (props.energie) {
-		case models.common.EnergieEnum.electricite:
-		case models.common.EnergieEnum.electricite_renouvelable:
+		case models.common.ENERGIES.electricite:
+		case models.common.ENERGIES.electricite_renouvelable:
 			return 1.9;
 		default:
 			return 1;
@@ -60,8 +60,8 @@ export function calcule_fcep(props: {
  * @returns Facteur de conversion énergie finale/émissions de gaz à effet de serre en kgCO2eq
  */
 export function calcule_feges(props: {
-	usage: models.common.Usage;
-	energie: models.common.Energie;
+	usage: models.common.UsageEnum;
+	energie: models.common.EnergieEnum;
 	reseau_id?: string | null;
 }): number {
 	const { usage, energie, reseau_id } = props;
@@ -76,38 +76,38 @@ export function calcule_feges(props: {
 	}
 
 	// Cas de l'électricité
-	if (energie === models.common.EnergieEnum.electricite) {
+	if (energie === models.common.ENERGIES.electricite) {
 		switch (usage) {
-			case models.common.UsageEnum.chauffage:
+			case models.common.USAGES.chauffage:
 				return 0.079;
-			case models.common.UsageEnum.ecs:
+			case models.common.USAGES.ecs:
 				return 0.065;
-			case models.common.UsageEnum.refroidissement:
+			case models.common.USAGES.refroidissement:
 				return 0.064;
-			case models.common.UsageEnum.eclairage:
-			case models.common.UsageEnum.auxiliaire:
+			case models.common.USAGES.eclairage:
+			case models.common.USAGES.auxiliaire:
 				return 0.069;
 		}
 	}
 
 	switch (energie) {
-		case models.common.EnergieEnum.electricite_renouvelable:
+		case models.common.ENERGIES.electricite_renouvelable:
 			return 0;
-		case models.common.EnergieEnum.gaz_naturel:
+		case models.common.ENERGIES.gaz_naturel:
 			return 0.227;
-		case models.common.EnergieEnum.gpl:
+		case models.common.ENERGIES.gpl:
 			return 0.272;
-		case models.common.EnergieEnum.fioul:
+		case models.common.ENERGIES.fioul:
 			return 0.324;
-		case models.common.EnergieEnum.charbon:
+		case models.common.ENERGIES.charbon:
 			return 0.385;
-		case models.common.EnergieEnum.bois_buche:
-		case models.common.EnergieEnum.bois_granule:
+		case models.common.ENERGIES.bois_buche:
+		case models.common.ENERGIES.bois_granule:
 			return 0.03;
-		case models.common.EnergieEnum.bois_plaquette:
+		case models.common.ENERGIES.bois_plaquette:
 			return 0.024;
-		case models.common.EnergieEnum.reseau_chaleur:
-		case models.common.EnergieEnum.reseau_froid:
+		case models.common.ENERGIES.reseau_chaleur:
+		case models.common.ENERGIES.reseau_froid:
 			return 0.385;
 	}
 }
@@ -117,20 +117,20 @@ export function calcule_feges(props: {
  * @returns Facteur de conversion PCI/PCS
  */
 export function calcule_kpcs(props: {
-	energie: models.common.Energie;
+	energie: models.common.EnergieEnum;
 }): number {
 	switch (props.energie) {
-		case models.common.EnergieEnum.gaz_naturel:
+		case models.common.ENERGIES.gaz_naturel:
 			return 1.11;
-		case models.common.EnergieEnum.gpl:
+		case models.common.ENERGIES.gpl:
 			return 1.09;
-		case models.common.EnergieEnum.fioul:
+		case models.common.ENERGIES.fioul:
 			return 1.07;
-		case models.common.EnergieEnum.charbon:
+		case models.common.ENERGIES.charbon:
 			return 1.04;
-		case models.common.EnergieEnum.bois_buche:
-		case models.common.EnergieEnum.bois_plaquette:
-		case models.common.EnergieEnum.bois_granule:
+		case models.common.ENERGIES.bois_buche:
+		case models.common.ENERGIES.bois_plaquette:
+		case models.common.ENERGIES.bois_granule:
 			return 1.08;
 		default:
 			return 1;
@@ -158,9 +158,7 @@ export function calcule_cener(props: {
  */
 export function calcule_celec(props: {
 	cef: number;
-	energie: models.common.Energie;
+	energie: models.common.EnergieEnum;
 }): number {
-	return props.energie === models.common.EnergieEnum.electricite
-		? props.cef
-		: 0;
+	return props.energie === models.common.ENERGIES.electricite ? props.cef : 0;
 }

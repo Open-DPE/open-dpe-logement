@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as batiment from "../../batiment/formulas.js";
 import type * as climat from "../../climat/formulas.js";
@@ -8,18 +8,27 @@ import type * as installation from "../installation/formulas.js";
 import type * as systeme from "../systeme/formulas.js";
 import { ValeurForfaitaireError } from "../../errors.js";
 
+export const TYPES_EMISSION = {
+	radiateur: "radiateur",
+	air_souffle: "air_souffle",
+	plancher_chauffant: "plancher_chauffant",
+	plafond_chauffant: "plafond_chauffant",
+} as const;
+
+export type TypeEmissionEnum = keyof typeof TYPES_EMISSION;
+
 /**
  * Facteur d'utilisation de la PAC pour les générateurs hybrides
  */
 export const FUT_PAC_HYBRIDE = {
-	[models.batiment.ZoneClimatiqueEnum.H1a]: 0.8,
-	[models.batiment.ZoneClimatiqueEnum.H1b]: 0.8,
-	[models.batiment.ZoneClimatiqueEnum.H1c]: 0.8,
-	[models.batiment.ZoneClimatiqueEnum.H2a]: 0.83,
-	[models.batiment.ZoneClimatiqueEnum.H2b]: 0.83,
-	[models.batiment.ZoneClimatiqueEnum.H2c]: 0.83,
-	[models.batiment.ZoneClimatiqueEnum.H2d]: 0.83,
-	[models.batiment.ZoneClimatiqueEnum.H3]: 0.88,
+	[models.batiment.ZONES_CLIMATIQUES.H1a]: 0.8,
+	[models.batiment.ZONES_CLIMATIQUES.H1b]: 0.8,
+	[models.batiment.ZONES_CLIMATIQUES.H1c]: 0.8,
+	[models.batiment.ZONES_CLIMATIQUES.H2a]: 0.83,
+	[models.batiment.ZONES_CLIMATIQUES.H2b]: 0.83,
+	[models.batiment.ZONES_CLIMATIQUES.H2c]: 0.83,
+	[models.batiment.ZONES_CLIMATIQUES.H2d]: 0.83,
+	[models.batiment.ZONES_CLIMATIQUES.H3]: 0.88,
 };
 
 /**
@@ -104,14 +113,14 @@ export function calcule_int(props: {
  * @returns Coefficient d'intermittence du système de chauffage
  */
 export function calcule_i0(props: {
-	type_batiment: models.batiment.TypeBatiment;
-	type_chauffage: models.chauffage.installation.TypeInstallation;
+	type_batiment: models.batiment.TypeBatimentEnum;
+	type_chauffage: models.chauffage.TypeChauffageEnum;
 	type_emission: ReturnType<typeof calcule_type_emission>;
 	inertie: ReturnType<typeof enveloppe.calcule_inertie>;
 	installation_collective: boolean;
 	comptage_individuel: boolean | null;
 	regulation_terminale: boolean | null;
-	type_programmation: models.chauffage.installation.TypeProgrammation;
+	type_programmation: models.chauffage.installation.TypeProgrammationEnum;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 }): number {
 	const { type_generateur, ...query } = props;
@@ -121,7 +130,7 @@ export function calcule_i0(props: {
 	// Cas des convecteurs bi-jonction
 	if (
 		type_generateur ===
-		models.chauffage.generateur.TypeGenerateurEnum.convecteur_bi_jonction
+		models.chauffage.generateur.TYPES_GENERATEUR.convecteur_bi_jonction
 	) {
 		const q1 = { ...query, installation_collective: true };
 		const match1 = abaque.search(q1, data).at(0);
@@ -198,7 +207,7 @@ export function calcule_ich2(props: {
 export function calcule_re(props: {
 	type_emission: ReturnType<typeof calcule_type_emission>;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
-	label_generateur: models.chauffage.generateur.Label | null;
+	label_generateur: models.chauffage.generateur.LabelEnum | null;
 }): number {
 	const query = props;
 	const abaque = abaques.chauffage.re;
@@ -220,7 +229,7 @@ export function calcule_re(props: {
 export function calcule_rr(props: {
 	type_emission: ReturnType<typeof calcule_type_emission>;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
-	label_generateur: models.chauffage.generateur.Label | null;
+	label_generateur: models.chauffage.generateur.LabelEnum | null;
 	reseau_collectif: boolean | null;
 	presence_robinet_thermostatique: boolean | null;
 	presence_regulation_terminale: boolean | null;
@@ -242,12 +251,12 @@ export function calcule_rr(props: {
  */
 export function calcule_type_emission(props: {
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
-	type_distribution: models.chauffage.systeme.TypeDistribution | null;
-	type_emetteur: models.chauffage.emetteur.TypeEmetteur | null;
-}): models.chauffage.systeme.TypeEmission {
+	type_distribution: models.chauffage.systeme.TypeDistributionEnum | null;
+	type_emetteur: models.chauffage.emetteur.TypeEmetteurEnum | null;
+}): TypeEmissionEnum {
 	const query = props;
 	const abaque = abaques.chauffage.emission;
 	const match = abaque.search(query, abaque.load()).at(0);
 	if (!match) throw new ValeurForfaitaireError(query);
-	return match.type_emission as models.chauffage.systeme.TypeEmission;
+	return match.type_emission as TypeEmissionEnum;
 }

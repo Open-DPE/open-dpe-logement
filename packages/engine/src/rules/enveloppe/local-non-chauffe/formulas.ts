@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import * as baie from "./baie/formulas.js";
 import * as paroi from "./paroi/formulas.js";
@@ -11,7 +11,6 @@ import type { calcule_isolation_aiu as calcule_isolation_aiu_pb } from "../planc
 import type { calcule_isolation_aiu as calcule_isolation_aiu_ph } from "../plancher-haut/formulas.js";
 import type { calcule_isolation_aiu as calcule_isolation_aiu_porte } from "../porte/formulas.js";
 import { ValeurForfaitaireError } from "../../errors.js";
-import { createParMois } from "../../helpers.js";
 
 export { baie, paroi };
 
@@ -73,7 +72,7 @@ export function calcule_bver(props: {
  * @returns Coefficient de transmission thermique équivalent du local non chauffé en W/m².K
  */
 export function calcule_uvue(props: {
-	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLnc;
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLncEnum;
 }): number {
 	const abaque = abaques.enveloppe.localNonChauffe.uvue;
 	const match = abaque.search(props, abaque.load()).at(0);
@@ -178,7 +177,7 @@ export function calcule_sse(props: {
 	b: b;
 }): models.common.ParMois<number> {
 	const sst = models.common.mergeParMois(props.baies.map((baie) => baie.sst));
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		const sse = props.sse.reduce((acc, sse) => acc + sse[mois], 0);
 		return (sst[mois] - sse) * props.b;
 	});
@@ -191,22 +190,22 @@ export function calcule_sse(props: {
  * @returns Coefficient de transparence moyen du local non chauffé
  */
 export function calcule_t(props: {
-	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLnc;
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLncEnum;
 	baies: {
-		mitoyennete: models.enveloppe.common.Mitoyennete;
+		mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 		surface: number;
 		t: ReturnType<typeof baie.calcule_t>;
 	}[];
 }): number {
 	if (
 		props.type_local_non_chauffe !==
-		models.enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise
+		models.enveloppe.localNonChauffe.TYPES_LNC.espace_tampon_solarise
 	)
 		return 0;
 
 	const baies = props.baies.filter(
 		({ mitoyennete }) =>
-			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur,
+			mitoyennete === models.enveloppe.common.MITOYENNETES.exterieur,
 	);
 	const s = baies.reduce((acc, baie) => acc + baie.surface, 0);
 	const w = baies.reduce((acc, baie) => acc + baie.surface * baie.t, 0);
@@ -220,20 +219,24 @@ export function calcule_t(props: {
  */
 export function calcule_orientations(props: {
 	baies: {
-		mitoyennete: models.enveloppe.common.Mitoyennete;
+		mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 		surface: number;
-		orientation: models.enveloppe.common.Orientation;
+		orientation: models.enveloppe.common.OrientationParoiEnum;
 	}[];
-}): models.common.OrientationCardinale[] {
+}): models.common.OrientationCardinaleEnum[] {
 	const baies = props.baies.filter(
 		({ mitoyennete }) =>
-			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur,
+			mitoyennete === models.enveloppe.common.MITOYENNETES.exterieur,
 	);
 
-	const parOrientation = new Map<models.common.OrientationCardinale, number>();
+	const parOrientation = new Map<
+		models.common.OrientationCardinaleEnum,
+		number
+	>();
 	for (const baie of baies) {
 		if (baie.orientation === models.enveloppe.common.OrientationHorizontale)
 			continue;
+
 		const current = parOrientation.get(baie.orientation) ?? 0;
 		parOrientation.set(baie.orientation, current + baie.surface);
 	}

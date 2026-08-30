@@ -1,8 +1,7 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as enveloppe from "../enveloppe/formulas.js";
 import { ValeurForfaitaireError } from "../errors.js";
-import { createParMoisFrom, containsAllMois, mapParMois } from "../helpers.js";
 
 /**
  * @formule climat.zone_climatique
@@ -12,11 +11,11 @@ import { createParMoisFrom, containsAllMois, mapParMois } from "../helpers.js";
  */
 export function calcule_zone_climatique(props: {
 	code_departement: string;
-}): models.batiment.ZoneClimatique {
+}): models.batiment.ZoneClimatiqueEnum {
 	const abaque = abaques.climat.zoneClimatique;
 	const match = abaque.search(props, abaque.load()).at(0);
 	if (!match) throw new ValeurForfaitaireError(props);
-	return match.zone_climatique as models.batiment.ZoneClimatique;
+	return match.zone_climatique as models.batiment.ZoneClimatiqueEnum;
 }
 
 /**
@@ -83,7 +82,7 @@ export function calcule_sollicitations(props: {
 }): Sollicitations {
 	const abaque = abaques.climat.sollicitations;
 	const matches = abaque.search(props, abaque.load());
-	return createParMoisFrom(matches);
+	return models.common.createParMoisFrom(matches);
 }
 
 /**
@@ -95,13 +94,19 @@ export function calcule_sollicitations(props: {
  */
 export function calcule_c1(props: {
 	zone_climatique: ReturnType<typeof calcule_zone_climatique>;
-	orientation: models.enveloppe.common.Orientation;
+	orientation: models.enveloppe.common.OrientationParoiEnum;
 	inclinaison: number;
 }): models.common.ParMois<number> {
 	const abaque = abaques.climat.c1;
 	const matches = abaque.search(props, abaque.load());
-	if (!containsAllMois(matches)) throw new ValeurForfaitaireError(props);
-	return mapParMois(createParMoisFrom(matches), (value) => value.c1);
+
+	if (!models.common.containsAllMois(matches))
+		throw new ValeurForfaitaireError(props);
+
+	return models.common.mapParMois(
+		models.common.createParMoisFrom(matches),
+		(value) => value.c1,
+	);
 }
 
 /**
@@ -111,18 +116,18 @@ export function calcule_c1(props: {
  */
 export function calcule_nj(): models.common.ParMois<number> {
 	return {
-		[models.common.MoisEnum["01"]]: 31,
-		[models.common.MoisEnum["02"]]: 28,
-		[models.common.MoisEnum["03"]]: 31,
-		[models.common.MoisEnum["04"]]: 30,
-		[models.common.MoisEnum["05"]]: 31,
-		[models.common.MoisEnum["06"]]: 30,
-		[models.common.MoisEnum["07"]]: 31,
-		[models.common.MoisEnum["08"]]: 31,
-		[models.common.MoisEnum["09"]]: 30,
-		[models.common.MoisEnum["10"]]: 31,
-		[models.common.MoisEnum["11"]]: 30,
-		[models.common.MoisEnum["12"]]: 24,
+		[models.common.MOIS.Janvier]: 31,
+		[models.common.MOIS.Février]: 28,
+		[models.common.MOIS.Mars]: 31,
+		[models.common.MOIS.Avril]: 30,
+		[models.common.MOIS.Mai]: 31,
+		[models.common.MOIS.Juin]: 30,
+		[models.common.MOIS.Juillet]: 31,
+		[models.common.MOIS.Août]: 31,
+		[models.common.MOIS.Septembre]: 30,
+		[models.common.MOIS.Octobre]: 31,
+		[models.common.MOIS.Novembre]: 30,
+		[models.common.MOIS.Décembre]: 24, // convention 3CL : une semaine d'absence est comptée en décembre (arrêté 2021-10-08, annexe 1, §11)
 	};
 }
 
@@ -137,6 +142,12 @@ export function calcule_epv(props: {
 }): models.common.ParMois<number> {
 	const abaque = abaques.climat.epv;
 	const matches = abaque.search(props, abaque.load());
-	if (!containsAllMois(matches)) throw new ValeurForfaitaireError(props);
-	return mapParMois(createParMoisFrom(matches), (value) => value.epv);
+
+	if (!models.common.containsAllMois(matches))
+		throw new ValeurForfaitaireError(props);
+
+	return models.common.mapParMois(
+		models.common.createParMoisFrom(matches),
+		(value) => value.epv,
+	);
 }

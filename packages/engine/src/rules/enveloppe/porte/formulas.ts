@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as paroi from "../paroi/formulas.js";
 import { ValeurForfaitaireError } from "../../errors.js";
@@ -73,9 +73,9 @@ export function set_isolation(props: { isolation: boolean | null }): boolean {
  * @returns Matériau de la porte retenu
  */
 export function set_materiau(props: {
-	materiau: models.enveloppe.porte.Materiau | null;
-}): models.enveloppe.porte.Materiau {
-	return props.materiau ?? models.enveloppe.porte.MateriauEnum.pvc;
+	materiau: models.enveloppe.porte.MateriauEnum | null;
+}): models.enveloppe.porte.MateriauEnum {
+	return props.materiau ?? models.enveloppe.porte.MATERIAUX.pvc;
 }
 
 /**
@@ -83,9 +83,9 @@ export function set_materiau(props: {
  * @returns Type de vitrage de la porte retenu
  */
 export function set_type_vitrage(props: {
-	type_vitrage: models.enveloppe.porte.TypeVitrage | null;
-}): models.enveloppe.porte.TypeVitrage {
+	type_vitrage: models.enveloppe.porte.TypeVitrageEnum | null;
+}): models.enveloppe.porte.TypeVitrageEnum {
 	return (
-		props.type_vitrage ?? models.enveloppe.porte.TypeVitrageEnum.simple_vitrage
+		props.type_vitrage ?? models.enveloppe.porte.TYPES_VITRAGE.simple_vitrage
 	);
 }

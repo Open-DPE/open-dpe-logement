@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "../../common/formulas.js";
 import type * as climat from "../../climat/formulas.js";
@@ -17,22 +17,22 @@ export function calcule_consommations(props: {
 	cfr: ReturnType<typeof calcule_cfr>;
 	cfr_enr: ReturnType<typeof calcule_cfr_enr>;
 	caux: ReturnType<typeof calcule_caux>;
-	energie: models.refroidissement.generateur.EnergieRefroidissement;
+	energie: models.refroidissement.generateur.EnergieRefroidissementEnum;
 	reseau_id: string | null;
 }): models.common.Consommations {
 	return models.common.mergeConsommations(
 		common.calcule_consommations({
 			cef: props.cfr,
 			cef_enr: props.cfr_enr,
-			usage: models.common.UsageEnum.refroidissement,
+			usage: models.common.USAGES.refroidissement,
 			energie: props.energie,
 			reseau_id: props.reseau_id,
 		}),
 		common.calcule_consommations({
 			cef: props.caux,
 			cef_enr: 0,
-			usage: models.common.UsageEnum.auxiliaire,
-			energie: models.common.EnergieEnum.electricite,
+			usage: models.common.USAGES.auxiliaire,
+			energie: models.common.ENERGIES.electricite,
 			reseau_id: null,
 		}),
 	);
@@ -64,7 +64,7 @@ export function calcule_cfr_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.UsageElectriciteEnum.refroidissement,
+		usage: models.production.USAGES_ELECTRICITE.refroidissement,
 		cef: props.cfr_elec,
 	});
 }
@@ -75,7 +75,7 @@ export function calcule_cfr_enr(props: {
  */
 export function calcule_cfr_elec(props: {
 	cfr: ReturnType<typeof calcule_cfr>;
-	energie_generateur: models.refroidissement.generateur.EnergieRefroidissement;
+	energie_generateur: models.refroidissement.generateur.EnergieRefroidissementEnum;
 }): number {
 	return common.calcule_celec({
 		cef: props.cfr,

@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "../../common/formulas.js";
 import type * as production from "../../production/formulas.js";
@@ -22,8 +22,8 @@ export function calcule_consommations(props: {
 	return common.calcule_consommations({
 		cef: props.caux,
 		cef_enr: props.caux_enr,
-		usage: models.common.UsageEnum.auxiliaire,
-		energie: models.common.EnergieEnum.electricite,
+		usage: models.common.USAGES.auxiliaire,
+		energie: models.common.ENERGIES.electricite,
 		reseau_id: null,
 	});
 }
@@ -40,7 +40,7 @@ export function calcule_caux_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.UsageElectriciteEnum.auxiliaires_ventilation,
+		usage: models.production.USAGES_ELECTRICITE.auxiliaires_ventilation,
 		cef: props.caux,
 	});
 }
@@ -63,29 +63,29 @@ export function calcule_caux(props: {
  * @returns Puissance moyenne de l'auxiliaire de ventilation en W
  */
 export function calcule_pvent_moy(props: {
-	type_batiment: models.batiment.TypeBatiment;
+	type_batiment: models.batiment.TypeBatimentEnum;
 	type_ventilation: ReturnType<typeof set_type_ventilation>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
 	surface_installation: Sh;
 	qvarep_conv: ReturnType<typeof calcule_debits>["qvarep_conv"];
 }): number {
 	const { type_batiment, type_ventilation } = props;
-	const enums = models.ventilation.installation.TypeVentilationEnum;
+	const ENUMS = models.ventilation.installation.TYPES_VENTILATION;
 
 	switch (type_ventilation) {
 		// Ventilations naturelles
-		case enums.ventilation_ouverture_fenetres:
-		case enums.ventilation_entrees_air_hautes_basses:
-		case enums.ventilation_naturelle_conduit_entrees_air_hygroreglables:
-		case enums.ventilation_naturelle_conduit: {
+		case ENUMS.ventilation_ouverture_fenetres:
+		case ENUMS.ventilation_entrees_air_hautes_basses:
+		case ENUMS.ventilation_naturelle_conduit_entrees_air_hygroreglables:
+		case ENUMS.ventilation_naturelle_conduit: {
 			return 0;
 		}
 		// Ventilations mécaniques
 		default: {
 			switch (type_batiment) {
-				case models.batiment.TypeBatimentEnum.maison:
+				case models.batiment.TYPES_BATIMENT.maison:
 					return calcule_pvent_moy_maison(props);
-				case models.batiment.TypeBatimentEnum.immeuble:
+				case models.batiment.TYPES_BATIMENT.immeuble:
 					return calcule_pvent_moy_immeuble(props);
 			}
 		}
@@ -134,18 +134,18 @@ export function calcule_rut(props: {
 	installation_collective: boolean | null;
 }): number {
 	const { type_ventilation, installation_collective } = props;
-	const enums = models.ventilation.installation.TypeVentilationEnum;
+	const TYPES_VENTILATION = models.ventilation.installation.TYPES_VENTILATION;
 	switch (type_ventilation) {
 		// Ventilations naturelles
-		case enums.ventilation_ouverture_fenetres:
-		case enums.ventilation_entrees_air_hautes_basses:
-		case enums.ventilation_naturelle_conduit_entrees_air_hygroreglables:
-		case enums.ventilation_naturelle_conduit: {
+		case TYPES_VENTILATION.ventilation_ouverture_fenetres:
+		case TYPES_VENTILATION.ventilation_entrees_air_hautes_basses:
+		case TYPES_VENTILATION.ventilation_naturelle_conduit_entrees_air_hygroreglables:
+		case TYPES_VENTILATION.ventilation_naturelle_conduit: {
 			return 0;
 		}
 		// Ventilations hybrides
-		case enums.ventilation_hybride:
-		case enums.ventilation_hybride_entrees_air_hygroreglables: {
+		case TYPES_VENTILATION.ventilation_hybride:
+		case TYPES_VENTILATION.ventilation_hybride_entrees_air_hygroreglables: {
 			return installation_collective ? 0.167 : 0.083;
 		}
 		// Ventilations mécaniques
@@ -223,12 +223,12 @@ export function calcule_hvent(props: {
  * @returns Type de ventilation retenu
  */
 export function set_type_ventilation(props: {
-	type_ventilation: models.ventilation.installation.TypeVentilation | null;
-}): models.ventilation.installation.TypeVentilation {
+	type_ventilation: models.ventilation.installation.TypeVentilationEnum | null;
+}): models.ventilation.installation.TypeVentilationEnum {
 	const { type_ventilation } = props;
 	return (
 		type_ventilation ??
-		models.ventilation.installation.TypeVentilationEnum
+		models.ventilation.installation.TYPES_VENTILATION
 			.ventilation_ouverture_fenetres
 	);
 }

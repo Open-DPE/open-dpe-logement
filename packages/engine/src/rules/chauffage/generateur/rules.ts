@@ -168,7 +168,7 @@ export function pdim(
 				? ctx.resolve(
 						constants.ecs.generateur.NAMESPACE,
 						constants.ecs.generateur.RULES.pdim,
-						models.ecs.getGenerateur(ctx.diagnostic.ecs, generateur_mixte_id),
+						models.ecs.findGenerateur(generateur_mixte_id, ctx.diagnostic.ecs),
 					)
 				: null,
 		});
@@ -215,10 +215,10 @@ export function combustion(
 	return ctx.register(NAMESPACE, RULES.combustion, item, () => {
 		switch (true) {
 			case models.chauffage.generateur.isChaudiereCombustion(item):
-			case models.chauffage.generateur.isPoeleBouilleur(item):
+			case models.chauffage.generateur.isPoeleBoisBouilleur(item):
 			case models.chauffage.generateur.isGenerateurAirChaudCombustion(item):
 			case models.chauffage.generateur.isRadiateurGaz(item):
-			case models.chauffage.generateur.isPACHybride(item):
+			case models.chauffage.generateur.isPacHybride(item):
 			case models.chauffage.generateur.isGenerateurCollectifInconnu(item):
 				return formulas.calcule_combustion({
 					type_generateur: type_generateur(ctx, item),
@@ -245,8 +245,8 @@ export function scop(
 ): ReturnType<typeof formulas.calcule_scop> | null {
 	return ctx.register(NAMESPACE, RULES.scop, item, () => {
 		switch (true) {
-			case models.chauffage.generateur.isPAC(item):
-			case models.chauffage.generateur.isPACHybride(item):
+			case models.chauffage.generateur.isPacClassique(item):
+			case models.chauffage.generateur.isPacHybride(item):
 				return formulas.calcule_scop({
 					type_generateur: type_generateur(ctx, item),
 					scop_saisi: item.signaletique.scop,
@@ -271,8 +271,8 @@ export function tfonc30(
 	return ctx.register(NAMESPACE, RULES.tfonc30, item, () => {
 		switch (true) {
 			case models.chauffage.generateur.isChaudiereCombustion(item):
-			case models.chauffage.generateur.isPoeleBouilleur(item):
-			case models.chauffage.generateur.isPACHybride(item):
+			case models.chauffage.generateur.isPoeleBoisBouilleur(item):
+			case models.chauffage.generateur.isPacHybride(item):
 			case models.chauffage.generateur.isGenerateurCollectifInconnu(item):
 				return formulas.calcule_tfonc30({
 					tfonc30_saisi: item.signaletique.tfonc30,
@@ -293,8 +293,8 @@ export function tfonc100(
 	return ctx.register(NAMESPACE, RULES.tfonc100, item, () => {
 		switch (true) {
 			case models.chauffage.generateur.isChaudiereCombustion(item):
-			case models.chauffage.generateur.isPoeleBouilleur(item):
-			case models.chauffage.generateur.isPACHybride(item):
+			case models.chauffage.generateur.isPoeleBoisBouilleur(item):
+			case models.chauffage.generateur.isPacHybride(item):
 			case models.chauffage.generateur.isGenerateurCollectifInconnu(item):
 				return formulas.calcule_tfonc100({
 					tfonc100_saisi: item.signaletique.tfonc100,

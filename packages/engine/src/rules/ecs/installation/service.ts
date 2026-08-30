@@ -7,12 +7,10 @@ export function calcule(
 	ctx: Context,
 	item: models.ecs.installation.Installation,
 ): models.ecs.installation.InstallationWithData {
-	const systemes = item.systemes.map((s) => calcule_systeme(ctx, s));
-
 	return {
 		...item,
 
-		systemes: models.common.toNonEmptyArray(systemes),
+		systemes: item.systemes.map((s) => calcule_systeme(ctx, s)),
 
 		data: {
 			becs: models.common.reduceParMois(

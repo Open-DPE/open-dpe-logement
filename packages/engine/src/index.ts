@@ -1,6 +1,6 @@
 import { common, diagnostic } from "@open-dpe-logement/models";
 import { createContext } from "./core/context.js";
-import { init as initAbaques } from "@open-dpe-logement/abaques";
+import { init as initAbaques } from "@open-dpe-logement/engine-abaques";
 import { calcule as calculeDiagnostic } from "./rules/diagnostic/service.js";
 import * as formulas from "./rules/formulas.js";
 
@@ -21,7 +21,7 @@ class Engine {
 
 	calcule(
 		diagnostic: diagnostic.Diagnostic,
-		scenario: common.Scenario = common.ScenarioEnum.conventionnel,
+		scenario: common.ScenarioEnum = common.SCENARIOS.conventionnel,
 	): CalculeResponse {
 		if (!this.initialized) throw new Error("Call init() first.");
 

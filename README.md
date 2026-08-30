@@ -19,16 +19,17 @@ Monorepo communautaire pour la transparence, la fiabilité et la compréhension 
 
 ```text
 doctrine/                       # Référentiel doctrinal
-schemas/                        # Schémas de données publiques JSON Schema
 apps/                           # Applications
 packages/
-├── abaques/                    # Tables de valeurs forfaitaires 3CL-DPE 2021
+├── ademe-client/               # Client HTTP pour l'API publique de l'observatoire DPE-Audit
+├── ademe-fixtures/             # Fixtures XML réelles de l'observatoire DPE-Audit
+├── ademe-mapper/               # Couversion schéma Observatoire DPE-Audit -> Open DPE Logement
+├── ademe-models/               # Modèles TypeScript pour les exports XML de l'observatoire DPE-Audit (ADEME)
 ├── engine/                     # Moteur de calcul 3CL-DPE
+├── engine-abaques/             # Tables de valeurs forfaitaires 3CL-DPE 2021
 ├── models/                     # Implémentation des schémas de données publiques
-├── open-data/                  # Wrapper de l'open data de l'ADEME
-├── schemas/                    # Export des schémas de données publiques et validation
 ├── storage/                    # Infrastructure SQL
-├── transformer/                # Conversion de données (schemas to schemas)
+├── schemas/                    # Schémas de données publiques JSON Schema
 ├── validator/                  # Fonctions de validation des données
 └── web-components/             # Bibliothèque de composants web DPE
 ```
@@ -51,7 +52,7 @@ npx turbo build --filter=@dpe-audit/core    # Build un workspace spécifique
 npm run lint                                # Lint l'ensemble du monorepo
 npm run check-types                         # Vérification TypeScript
 npm run format                              # Formatage avec Prettier
-npm run abaques:generate                    # Exporte les abaques depuis `/doctrine/abaques` vers `/packages/abaques`
+npm run abaques:generate                    # Régénère `/packages/abaques/data` depuis `/packages/abaques/doctrine`
 npm run schemas:generate                    # Exporte les schémas de données publiques depuis `/schemas` vers `/packages/schemas`
 
 ```

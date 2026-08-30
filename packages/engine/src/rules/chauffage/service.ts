@@ -10,12 +10,6 @@ import * as systeme from "./systeme/service.js";
 export { emetteur, generateur, installation, systeme };
 
 export function calcule(ctx: Context): models.chauffage.ChauffageWithData {
-	const generateurs = ctx.diagnostic.chauffage.generateurs.map((item) =>
-		generateur.calcule(ctx, item),
-	);
-	const installations = ctx.diagnostic.chauffage.installations.map((item) =>
-		installation.calcule(ctx, item),
-	);
 	return {
 		...ctx.diagnostic.chauffage,
 
@@ -23,9 +17,13 @@ export function calcule(ctx: Context): models.chauffage.ChauffageWithData {
 			emetteur.calcule(ctx, item),
 		),
 
-		generateurs: models.common.toNonEmptyArray(generateurs),
+		generateurs: ctx.diagnostic.chauffage.generateurs.map((item) =>
+			generateur.calcule(ctx, item),
+		),
 
-		installations: models.common.toNonEmptyArray(installations),
+		installations: ctx.diagnostic.chauffage.installations.map((item) =>
+			installation.calcule(ctx, item),
+		),
 
 		data: {
 			bch: models.common.reduceParMois(ctx.resolve(NAMESPACE, RULES.bch)),

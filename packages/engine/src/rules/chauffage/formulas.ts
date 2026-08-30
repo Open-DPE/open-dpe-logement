@@ -8,7 +8,6 @@ import * as emission from "./emission/formulas.js";
 import * as generateur from "./generateur/formulas.js";
 import * as installation from "./installation/formulas.js";
 import * as systeme from "./systeme/formulas.js";
-import { createParMois } from "../helpers.js";
 
 export { generateur, installation, systeme, emetteur, emission };
 
@@ -82,7 +81,7 @@ export function calcule_bch(props: {
 	qdw_rec: ReturnType<typeof calcule_qdw_rec>;
 	qgen_rec: ReturnType<typeof calcule_qgen_rec>;
 }): models.common.ParMois<number> {
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const bch_hp = props.bch_hp[mois];
 		const qgw_rec = props.qgw_rec[mois];
 		const qdw_rec = props.qdw_rec[mois];
@@ -99,7 +98,7 @@ export function calcule_bch_hp(props: {
 	bv: ReturnType<typeof calcule_bv>;
 	dh: ReturnType<typeof calcule_dh>;
 }): models.common.ParMois<number> {
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const bv = props.bv[mois];
 		const dh = props.dh[mois];
 		return (bv * dh) / 1000;
@@ -114,7 +113,7 @@ export function calcule_bv(props: {
 	gv: ReturnType<typeof enveloppe.calcule_gv>;
 	f: ReturnType<typeof calcule_f>;
 }): models.common.ParMois<number> {
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const f = props.f[mois];
 		return props.gv * (1 - f);
 	});
@@ -149,7 +148,7 @@ export function calcule_f(props: {
 }): models.common.ParMois<number> {
 	const { inertie, gv } = props;
 
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const dh = props.dh[mois];
 		const as = props.as[mois];
 		const ai = props.ai[mois];
@@ -159,13 +158,13 @@ export function calcule_f(props: {
 		const x = (as + ai) / (gv * dh);
 
 		switch (inertie) {
-			case models.enveloppe.common.InertieEnum.tres_lourde:
+			case models.enveloppe.common.INERTIES.tres_lourde:
 				return (x - x ** 3.6) / (1 - x ** 3.6);
-			case models.enveloppe.common.InertieEnum.lourde:
+			case models.enveloppe.common.INERTIES.lourde:
 				return (x - x ** 3.6) / (1 - x ** 3.6);
-			case models.enveloppe.common.InertieEnum.moyenne:
+			case models.enveloppe.common.INERTIES.moyenne:
 				return (x - x ** 2.9) / (1 - x ** 2.9);
-			case models.enveloppe.common.InertieEnum.legere:
+			case models.enveloppe.common.INERTIES.legere:
 				return (x - x ** 2.5) / (1 - x ** 2.5);
 		}
 	});
@@ -179,7 +178,7 @@ export function calcule_as(props: {
 	sse: ReturnType<typeof enveloppe.calcule_sse>;
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
 }): models.common.ParMois<number> {
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const sse = props.sse[mois];
 		const e = props.sollicitations[mois].e;
 		return sse * e * 1000;
@@ -196,7 +195,7 @@ export function calcule_ai(props: {
 	nref: ReturnType<typeof calcule_nref>;
 }): models.common.ParMois<number> {
 	const { sh, nadeq } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const nref = props.nref[mois];
 		return ((3.18 + 0.34) * sh + 90 * (132 / 168) * nadeq) * nref;
 	});
@@ -211,7 +210,7 @@ export function calcule_qgw_rec(props: {
 	nref: ReturnType<typeof calcule_nref>;
 }): models.common.ParMois<number> {
 	const { qgw } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const nref = props.nref[mois];
 		return 0.48 * nref * (qgw / 8760);
 	});
@@ -227,7 +226,7 @@ export function calcule_qdw_rec(props: {
 	nref: ReturnType<typeof calcule_nref>;
 }): models.common.ParMois<number> {
 	const { qdw_ind_vc, qdw_col_vc } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const nref = props.nref[mois];
 		return 0.48 * nref * ((qdw_ind_vc + qdw_col_vc) / 8760);
 	});
@@ -242,7 +241,7 @@ export function calcule_qgen_rec(props: {
 	qgen_ecs_rec: ReturnType<typeof calcule_qgen_ecs_rec>;
 }): models.common.ParMois<number> {
 	const qgen_ch_rec = models.common.mergeParMois(props.qgen_ch_rec);
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		return qgen_ch_rec[mois] + props.qgen_ecs_rec[mois];
 	});
 }
@@ -256,7 +255,7 @@ export function calcule_qgen_ecs_rec(props: {
 	nref: ReturnType<typeof calcule_nref>;
 }): models.common.ParMois<number> {
 	const { qgen } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const nref = props.nref[mois];
 		const dper = nref * (1790 / 8760);
 		return qgen * dper;
@@ -289,14 +288,14 @@ export function calcule_effet_joule(props: {
  */
 export function calcule_nref(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 }): models.common.ParMois<number> {
 	const { sollicitations, scenario } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.ScenarioEnum.conventionnel:
+			case models.common.SCENARIOS.conventionnel:
 				return sollicitations[mois].nref19;
-			case models.common.ScenarioEnum.depensier:
+			case models.common.SCENARIOS.depensier:
 				return sollicitations[mois].nref21;
 		}
 	});
@@ -308,14 +307,14 @@ export function calcule_nref(props: {
  */
 export function calcule_dh(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 }): models.common.ParMois<number> {
 	const { sollicitations, scenario } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.ScenarioEnum.conventionnel:
+			case models.common.SCENARIOS.conventionnel:
 				return sollicitations[mois].dh19;
-			case models.common.ScenarioEnum.depensier:
+			case models.common.SCENARIOS.depensier:
 				return sollicitations[mois].dh21;
 		}
 	});

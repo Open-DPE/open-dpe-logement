@@ -17,10 +17,10 @@ export type Configuration = {
 };
 
 export type ConfigurationSystemeProps = {
-	type_systeme: models.chauffage.systeme.TypeSysteme;
+	type_systeme: models.chauffage.TypeChauffageEnum;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
-	bienergie_generateur: models.chauffage.generateur.Bienergie | null;
+	bienergie_generateur: models.chauffage.generateur.BienergieEnum | null;
 	generateur_multi_batiment: boolean;
 	generateur_collectif: boolean;
 	pn_saisi: number | null;

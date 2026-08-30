@@ -27,10 +27,10 @@ export function sdep(item: Paroi): ReturnType<typeof formulas.calcule_sdep> {
 }
 
 export function b(ctx: Context, item: Paroi, isolation: boolean): formulas.b {
-	if (models.enveloppe.common.isPositionParoiLocalNonChauffe(item.position)) {
-		const lnc = models.enveloppe.getLocalNonChauffe(
-			ctx.diagnostic.enveloppe,
+	if (models.enveloppe.common.isPositionLocalNonChauffe(item.position)) {
+		const lnc = models.enveloppe.findLocalNonChauffe(
 			item.position.local_non_chauffe_id,
+			ctx.diagnostic.enveloppe,
 		);
 		const type_local_non_chauffe = lnc.type;
 

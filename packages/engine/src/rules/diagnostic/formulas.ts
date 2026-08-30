@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as batiment from "../batiment/formulas.js";
 import type * as climat from "../climat/formulas.js";
@@ -76,7 +76,7 @@ export function calcule_etiquette_energie(props: {
 	altitude: number;
 	cep: ReturnType<typeof calcule_cep>;
 	eges: ReturnType<typeof calcule_eges>;
-}): models.diagnostic.Etiquette {
+}): models.diagnostic.EtiquetteEnum {
 	const query = {
 		...props,
 		cep: Math.floor(props.cep),
@@ -85,7 +85,7 @@ export function calcule_etiquette_energie(props: {
 	const abaque = abaques.diagnostic.etiquetteEnergie;
 	const match = abaque.search(query, abaque.load()).at(0);
 	if (!match) throw new ValeurForfaitaireError(query);
-	return match.etiquette_energie as models.diagnostic.Etiquette;
+	return match.etiquette_energie as models.diagnostic.EtiquetteEnum;
 }
 
 /**
@@ -98,7 +98,7 @@ export function calcule_etiquette_climat(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	altitude: number;
 	eges: ReturnType<typeof calcule_eges>;
-}): models.diagnostic.Etiquette {
+}): models.diagnostic.EtiquetteEnum {
 	const query = {
 		...props,
 		eges: Math.floor(props.eges),
@@ -106,7 +106,7 @@ export function calcule_etiquette_climat(props: {
 	const abaque = abaques.diagnostic.etiquetteClimat;
 	const match = abaque.search(query, abaque.load()).at(0);
 	if (!match) throw new ValeurForfaitaireError(query);
-	return match.etiquette_climat as models.diagnostic.Etiquette;
+	return match.etiquette_climat as models.diagnostic.EtiquetteEnum;
 }
 
 /**
@@ -115,7 +115,7 @@ export function calcule_etiquette_climat(props: {
  * @returns Niveau de confort d'été du logement
  */
 export function calcule_confort_ete(props: {
-	type_diagnostic: models.diagnostic.TypeDiagnostic;
+	type_diagnostic: models.diagnostic.TypeDiagnosticEnum;
 	presence_protection_solaire: ReturnType<
 		typeof enveloppe.calcule_presence_protection_solaire
 	>;
@@ -125,16 +125,16 @@ export function calcule_confort_ete(props: {
 	inertie: ReturnType<typeof enveloppe.calcule_inertie>;
 	logement_traversant: ReturnType<typeof enveloppe.calcule_logement_traversant>;
 	presence_brasseur_air: boolean;
-}): models.diagnostic.ConfortEte | null {
+}): models.diagnostic.ConfortEteEnum | null {
 	if (
 		false === props.presence_protection_solaire ||
 		false === props.isolation_planchers_hauts
 	)
-		return 1;
+		return models.diagnostic.CONFORTS_ETE.insuffisant;
 
 	const inertie_lourde =
-		props.inertie === models.enveloppe.common.InertieEnum.tres_lourde ||
-		props.inertie === models.enveloppe.common.InertieEnum.lourde;
+		props.inertie === models.enveloppe.common.INERTIES.tres_lourde ||
+		props.inertie === models.enveloppe.common.INERTIES.lourde;
 
 	const conditions = [
 		inertie_lourde,
@@ -142,5 +142,7 @@ export function calcule_confort_ete(props: {
 		props.presence_brasseur_air,
 	];
 
-	return conditions.filter(Boolean).length >= 2 ? 2 : 3;
+	return conditions.filter(Boolean).length >= 2
+		? models.diagnostic.CONFORTS_ETE.bon
+		: models.diagnostic.CONFORTS_ETE.moyen;
 }

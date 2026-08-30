@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "../../climat/formulas.js";
 import type * as chauffage from "../../chauffage/formulas.js";
@@ -49,7 +49,7 @@ export function calcule_u(props: {
 	effet_joule: ReturnType<typeof chauffage.calcule_effet_joule>;
 	u0: ReturnType<typeof calcule_u0>;
 	isolation: boolean | null;
-	type_isolation: models.enveloppe.common.TypeIsolation | null;
+	type_isolation: models.enveloppe.common.TypeIsolationEnum | null;
 	epaisseur_isolation: number | null;
 	resistance_thermique_isolation: number | null;
 	annee_isolation: number | null;
@@ -102,7 +102,7 @@ export function calcule_u0(props: {
 	u0_doublage: ReturnType<typeof calcule_u0_doublage>;
 	annee_construction: ReturnType<typeof paroi.set_annee_construction>;
 	structures: {
-		materiau: models.enveloppe.mur.MateriauMur | null;
+		materiau: models.enveloppe.mur.MateriauMurEnum | null;
 		epaisseur: number | null;
 	}[];
 }): number {
@@ -164,18 +164,18 @@ export function calcule_u0_enduit_isolant(props: {
  * Coefficient de transmission thermique additionnel dû au doublage en W/m².K
  */
 export function calcule_u0_doublage(props: {
-	type_doublage: models.enveloppe.mur.TypeDoublage | null;
+	type_doublage: models.enveloppe.mur.TypeDoublageEnum | null;
 }): number {
 	switch (props.type_doublage) {
-		case models.enveloppe.mur.TypeDoublageEnum.sans_doublage:
+		case models.enveloppe.mur.TYPES_DOUBLAGE.sans_doublage:
 			return 0;
-		case models.enveloppe.mur.TypeDoublageEnum.indetermine:
+		case models.enveloppe.mur.TYPES_DOUBLAGE.indetermine:
 			return 10;
-		case models.enveloppe.mur.TypeDoublageEnum.lame_air_inferieur_15mm:
+		case models.enveloppe.mur.TYPES_DOUBLAGE.lame_air_inferieur_15mm:
 			return 10;
-		case models.enveloppe.mur.TypeDoublageEnum.lame_air_superieur_15mm:
+		case models.enveloppe.mur.TYPES_DOUBLAGE.lame_air_superieur_15mm:
 			return 21;
-		case models.enveloppe.mur.TypeDoublageEnum.materiaux_connu:
+		case models.enveloppe.mur.TYPES_DOUBLAGE.materiaux_connu:
 			return 21;
 		default:
 			return 0;

@@ -1,7 +1,6 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "../../climat/formulas.js";
-import { createParMois } from "../../helpers.js";
 import { ValeurForfaitaireError } from "../../errors.js";
 
 /**
@@ -13,7 +12,9 @@ export function calcule_ppv(props: {
 	epv: ReturnType<typeof climat.calcule_epv>;
 }): models.common.ParMois<number> {
 	const { spv, kpv } = props;
-	return createParMois((mois) => kpv * spv * 0.17 * props.epv[mois] * 0.86);
+	return models.common.createParMois(
+		(mois) => kpv * spv * 0.17 * props.epv[mois] * 0.86,
+	);
 }
 
 /**
@@ -24,7 +25,7 @@ export function calcule_ppv(props: {
  * @returns Coefficient de pondération prenant en compte l'altération par rapport à l'orientation optimale du panneau photovoltaïque
  */
 export function calcule_kpv(props: {
-	orientation_pv: models.common.Orientation;
+	orientation_pv: models.common.OrientationEnum;
 	inclinaison_pv: number;
 }): number {
 	const abaque = abaques.production.kpv;

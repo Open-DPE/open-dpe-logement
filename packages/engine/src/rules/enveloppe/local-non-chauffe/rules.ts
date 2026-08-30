@@ -90,7 +90,7 @@ export function uvue(
 	item: LocalNonChauffe,
 ): ReturnType<typeof formulas.calcule_uvue> | null {
 	return ctx.register(NAMESPACE, RULES.uvue, item, () =>
-		models.enveloppe.localNonChauffe.isAutreLocalNonChauffe(item)
+		models.enveloppe.localNonChauffe.isLocalNonChauffeAutre(item)
 			? formulas.calcule_uvue({ type_local_non_chauffe: item.type })
 			: null,
 	);
@@ -373,39 +373,42 @@ export function t(
 
 function _baies_lnc(ctx: Context, item: LocalNonChauffe) {
 	return ctx.once(NAMESPACE, "baies_lnc", item, () =>
-		models.enveloppe.getBaiesLocalNonChauffe(ctx.diagnostic.enveloppe, item.id),
+		models.enveloppe.findBaiesLocalNonChauffe(
+			item.id,
+			ctx.diagnostic.enveloppe,
+		),
 	);
 }
 
 function _murs_lnc(ctx: Context, item: LocalNonChauffe) {
 	return ctx.once(NAMESPACE, "murs_lnc", item, () =>
-		models.enveloppe.getMursLocalNonChauffe(ctx.diagnostic.enveloppe, item.id),
+		models.enveloppe.findMursLocalNonChauffe(item.id, ctx.diagnostic.enveloppe),
 	);
 }
 
 function _planchers_bas_lnc(ctx: Context, item: LocalNonChauffe) {
 	return ctx.once(NAMESPACE, "planchers_bas_lnc", item, () =>
-		models.enveloppe.getPlanchersBasLocalNonChauffe(
-			ctx.diagnostic.enveloppe,
+		models.enveloppe.findPlanchersBasLocalNonChauffe(
 			item.id,
+			ctx.diagnostic.enveloppe,
 		),
 	);
 }
 
 function _planchers_hauts_lnc(ctx: Context, item: LocalNonChauffe) {
 	return ctx.once(NAMESPACE, "planchers_hauts_lnc", item, () =>
-		models.enveloppe.getPlanchersHautsLocalNonChauffe(
-			ctx.diagnostic.enveloppe,
+		models.enveloppe.findPlanchersHautsLocalNonChauffe(
 			item.id,
+			ctx.diagnostic.enveloppe,
 		),
 	);
 }
 
 function _portes_lnc(ctx: Context, item: LocalNonChauffe) {
 	return ctx.once(NAMESPACE, "portes_lnc", item, () =>
-		models.enveloppe.getPortesLocalNonChauffe(
-			ctx.diagnostic.enveloppe,
+		models.enveloppe.findPortesLocalNonChauffe(
 			item.id,
+			ctx.diagnostic.enveloppe,
 		),
 	);
 }

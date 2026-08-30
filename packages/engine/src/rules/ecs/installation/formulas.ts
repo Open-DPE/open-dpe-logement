@@ -1,10 +1,9 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "../../climat/formulas.js";
 import type * as ecs from "../formulas.js";
 import type * as systeme from "../systeme/formulas.js";
 import { ValeurForfaitaireError } from "../../errors.js";
-import { createParMois } from "../../helpers.js";
 
 /**
  * @returns Besoins d'eau chaude sanitaire proratisés à l'installation en kWh/mois
@@ -14,7 +13,7 @@ export function calcule_becs(props: {
 	rdim: ReturnType<typeof calcule_rdim>;
 }): models.common.ParMois<number> {
 	const { rdim } = props;
-	return createParMois((mois) => props.becs[mois] * rdim);
+	return models.common.createParMois((mois) => props.becs[mois] * rdim);
 }
 
 /**
@@ -51,9 +50,9 @@ export function calcule_rdim(props: {
 export function calcule_fecs(props: {
 	fecs_saisi: number | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
-	type_batiment: models.batiment.TypeBatiment;
+	type_batiment: models.batiment.TypeBatimentEnum;
 	installation_solaire: {
-		usage: models.ecs.installation.UsageSolaire;
+		usage: models.ecs.installation.UsageSolaireEnum;
 		anciennete: ReturnType<typeof set_anciennete_installation_solaire>;
 	} | null;
 }): number {

@@ -111,9 +111,9 @@ export function effet_joule(
 function _systemes(ctx: Context, item: Installation) {
 	return ctx.once(NAMESPACE, "systemes", item, () =>
 		item.systemes.map((systeme) => {
-			const generateur = models.chauffage.getGenerateur(
-				ctx.diagnostic.chauffage,
+			const generateur = models.chauffage.findGenerateur(
 				systeme.generateur_id,
+				ctx.diagnostic.chauffage,
 			);
 
 			return {

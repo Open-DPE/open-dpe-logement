@@ -1,5 +1,4 @@
 import * as models from "@open-dpe-logement/models";
-import { validate } from "@open-dpe-logement/validator";
 import { type Departement } from "./departement";
 import _scenarios from "../../data/scenarios.json";
 
@@ -12,14 +11,7 @@ export type Scenario = {
 
 export const scenarios: Scenario[] = _scenarios.map((scenario) => {
 	const { data } = scenario;
-	const result = validate<models.diagnostic.Diagnostic>("/diagnostic", data);
-
-	if (false === result.valid) {
-		throw new Error(
-			`Invalid diagnostic data for scenario ${scenario.id} : ${JSON.stringify(result.errors)}`,
-		);
-	}
-	return { ...scenario, data: result.data };
+	return { ...scenario, data: models.diagnostic.Diagnostic.parse(data) };
 });
 
 export function withDepartement(

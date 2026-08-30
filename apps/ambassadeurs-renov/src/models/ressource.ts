@@ -5,14 +5,37 @@ export type Ressource = {
 	description: string;
 	url: string;
 	img: string;
-	tags: string[];
+	tags: Tag[];
 };
 
-export const ressources: Ressource[] = _ressources;
+export type Tag = string;
 
-export const tags: string[] = Array.from(
-	new Set(_ressources.flatMap((r) => r.tags)),
-);
+export interface RessourcesRepository {
+	all(): Ressource[];
+	byTags(tags: Tag[]): Ressource[];
+}
+
+export interface TagsRepository {
+	all(): Tag[];
+}
+
+export const ressource: RessourcesRepository = {
+	all(): Ressource[] {
+		return _ressources;
+	},
+
+	byTags(tags: Tag[]): Ressource[] {
+		return _ressources.filter((ressource) => {
+			return tags.every((tag) => ressource.tags.includes(tag));
+		});
+	},
+};
+
+export const tag: TagsRepository = {
+	all(): Tag[] {
+		return Array.from(new Set(_ressources.flatMap((r) => r.tags)));
+	},
+};
 
 export function filterRessourcesByTags(
 	ressources: Ressource[],

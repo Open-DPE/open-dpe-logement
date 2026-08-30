@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import { ValeurForfaitaireError } from "../../errors.js";
 
@@ -9,8 +9,8 @@ import { ValeurForfaitaireError } from "../../errors.js";
  * @returns Facteur d'ensoleillement du masque
  */
 export function calcule_fe1(props: {
-	type_masque: models.enveloppe.masque.TypeMasque;
-	orientation_facade: models.enveloppe.common.Orientation;
+	type_masque: models.enveloppe.masque.TypeMasqueEnum;
+	orientation_facade: models.enveloppe.common.OrientationParoiEnum;
 	avancee_masque: number | null;
 }): number {
 	const abaque = abaques.enveloppe.masque.fe1;
@@ -26,8 +26,8 @@ export function calcule_fe1(props: {
  * @returns Facteur d'ensoleillement du masque lointain homogène
  */
 export function calcule_fe2(props: {
-	type_masque: models.enveloppe.masque.TypeMasque;
-	orientation_facade: models.enveloppe.common.Orientation;
+	type_masque: models.enveloppe.masque.TypeMasqueEnum;
+	orientation_facade: models.enveloppe.common.OrientationParoiEnum;
 	hauteur_alpha_masque: number;
 }): number {
 	const abaque = abaques.enveloppe.masque.fe2;
@@ -43,9 +43,9 @@ export function calcule_fe2(props: {
  * @returns Coefficient d'ombrage du masque lointain non homogène
  */
 export function calcule_omb(props: {
-	type_masque: models.enveloppe.masque.TypeMasque;
-	orientation_facade: models.enveloppe.common.Orientation;
-	secteur_orientation: models.enveloppe.masque.Secteur;
+	type_masque: models.enveloppe.masque.TypeMasqueEnum;
+	orientation_facade: models.enveloppe.common.OrientationParoiEnum;
+	secteur_orientation: models.enveloppe.masque.SecteurEnum;
 	hauteur_alpha_masque: number;
 }): number {
 	const abaque = abaques.enveloppe.masque.omb;

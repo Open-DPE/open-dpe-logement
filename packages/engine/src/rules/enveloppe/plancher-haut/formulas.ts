@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "../../climat/formulas.js";
 import type * as chauffage from "../../chauffage/formulas.js";
@@ -48,10 +48,10 @@ export function calcule_u(props: {
 	u_saisi: number | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	effet_joule: ReturnType<typeof chauffage.calcule_effet_joule>;
-	configuration: models.enveloppe.plancherHaut.Configuration;
+	configuration: models.enveloppe.plancherHaut.ConfigurationEnum;
 	u0: ReturnType<typeof calcule_u0>;
 	isolation: boolean | null;
-	type_isolation: models.enveloppe.common.TypeIsolation | null;
+	type_isolation: models.enveloppe.common.TypeIsolationEnum | null;
 	epaisseur_isolation: number | null;
 	resistance_thermique_isolation: number | null;
 	annee_isolation: number | null;
@@ -97,7 +97,7 @@ export function calcule_u(props: {
  */
 export function calcule_u0(props: {
 	u0_saisi: number | null;
-	type_plancher_haut: models.enveloppe.plancherHaut.TypePlancherHaut | null;
+	type_plancher_haut: models.enveloppe.plancherHaut.TypePlancherHautEnum | null;
 }): number {
 	const { u0_saisi, type_plancher_haut } = props;
 

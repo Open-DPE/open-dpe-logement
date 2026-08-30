@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "../common/formulas.js";
 import * as batiment from "../batiment/formulas.js";
@@ -19,8 +19,8 @@ export function calcule_consommations(props: {
 	return common.calcule_consommations({
 		cef: props.cecl,
 		cef_enr: props.celec_ac.eclairage,
-		usage: models.common.UsageEnum.eclairage,
-		energie: models.common.EnergieEnum.electricite,
+		usage: models.common.USAGES.eclairage,
+		energie: models.common.ENERGIES.electricite,
 		reseau_id: null,
 	});
 }

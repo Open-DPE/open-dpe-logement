@@ -442,16 +442,16 @@ export function rg(ctx: Context, item: Systeme): formulas.Rg {
 			case models.chauffage.generateur.isGenerateurMultiBatiment(generateur):
 				return formulas.calcule_rg_reseau_chaleur();
 
-			case models.chauffage.generateur.isPAC(generateur):
+			case models.chauffage.generateur.isPacClassique(generateur):
 				return formulas.calcule_rg_pac();
 
 			case models.chauffage.generateur.isChaudiereCombustion(generateur):
-			case models.chauffage.generateur.isPoeleBouilleur(generateur):
+			case models.chauffage.generateur.isPoeleBoisBouilleur(generateur):
 			case models.chauffage.generateur.isGenerateurAirChaudCombustion(
 				generateur,
 			):
 			case models.chauffage.generateur.isRadiateurGaz(generateur):
-			case models.chauffage.generateur.isPACHybride(generateur):
+			case models.chauffage.generateur.isPacHybride(generateur):
 			case models.chauffage.generateur.isGenerateurCollectifInconnu(
 				generateur,
 			): {
@@ -582,9 +582,9 @@ function _emissions(ctx: Context, item: Systeme) {
 
 function _installation(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, "installation", item, () =>
-		models.chauffage.getInstallationBySysteme(
-			ctx.diagnostic.chauffage,
+		models.chauffage.findInstallationBySysteme(
 			item.id,
+			ctx.diagnostic.chauffage,
 		),
 	);
 }
@@ -597,9 +597,9 @@ function _generateurs(ctx: Context, item: Systeme) {
 
 function _generateur(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, `generateur:${item.generateur_id}`, item, () => {
-		const generateur = models.chauffage.getGenerateur(
-			ctx.diagnostic.chauffage,
+		const generateur = models.chauffage.findGenerateur(
 			item.generateur_id,
+			ctx.diagnostic.chauffage,
 		);
 		return {
 			...generateur,
@@ -649,7 +649,7 @@ function _emetteurs(ctx: Context, item: Systeme) {
 	return ctx.once(NAMESPACE, "emetteurs", item, () => {
 		if (null === item.reseau) return [];
 		return item.reseau.emetteurs.map((id) =>
-			models.chauffage.getEmetteur(ctx.diagnostic.chauffage, id),
+			models.chauffage.findEmetteur(id, ctx.diagnostic.chauffage),
 		);
 	});
 }

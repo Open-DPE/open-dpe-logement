@@ -4,7 +4,6 @@ import type * as climat from "../climat/formulas.js";
 import * as generateur from "./generateur/formulas.js";
 import * as installation from "./installation/formulas.js";
 import * as systeme from "./systeme/formulas.js";
-import { createParMois } from "../helpers.js";
 
 export { generateur, installation, systeme };
 
@@ -126,19 +125,19 @@ export function calcule_qdw_col_hvc(props: {
  * @returns Besoins d'eau chaude sanitaire en kWh/mois
  */
 export function calcule_becs(props: {
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 	nadeq: ReturnType<typeof calcule_nadeq>;
 	nj: ReturnType<typeof climat.calcule_nj>;
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
 }): models.common.ParMois<number> {
 	const { scenario, nadeq } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const tefs = props.sollicitations[mois].tefs;
 		const nj = props.nj[mois];
 		switch (scenario) {
-			case models.common.ScenarioEnum.conventionnel:
+			case models.common.SCENARIOS.conventionnel:
 				return (1.163 * nadeq * 56 * (40 - tefs) * nj) / 1000;
-			case models.common.ScenarioEnum.depensier:
+			case models.common.SCENARIOS.depensier:
 				return (1.163 * nadeq * 79 * (40 - tefs) * nj) / 1000;
 		}
 	});
@@ -165,7 +164,7 @@ export function calcule_nadeq(props: {
  * @returns Coefficient d'occupation maximal
  */
 export function calcule_nmax(props: {
-	type_batiment: models.batiment.TypeBatiment;
+	type_batiment: models.batiment.TypeBatimentEnum;
 	logements: number;
 	sh: ReturnType<typeof batiment.calcule_sh>;
 }): number {
@@ -173,12 +172,12 @@ export function calcule_nmax(props: {
 	const shmoy = sh / logements;
 
 	switch (type_batiment) {
-		case models.batiment.TypeBatimentEnum.maison:
+		case models.batiment.TYPES_BATIMENT.maison:
 			if (shmoy < 30) return 1;
 			if (shmoy < 70) return 1.75 - 0.01875 * (70 - shmoy);
 			return 0.025 * shmoy;
 
-		case models.batiment.TypeBatimentEnum.immeuble:
+		case models.batiment.TYPES_BATIMENT.immeuble:
 			if (shmoy < 10) return 1;
 			if (shmoy < 50) return 1.75 - 0.01875 * (50 - shmoy);
 			return 0.035 * shmoy;

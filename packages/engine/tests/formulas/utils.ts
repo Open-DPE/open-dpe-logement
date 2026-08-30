@@ -36,16 +36,35 @@ export function runTests(path: string, formulas: Formulas) {
 					if (expectError) {
 						expect(() => formulas[test.rule](input)).toThrow();
 					} else if (expected !== undefined) {
-						if (typeof expected === "number") {
-							expect(formulas[test.rule](input)).toBeCloseTo(expected);
-						} else {
-							expect(formulas[test.rule](input)).toEqual(expected);
-						}
+						expect(formulas[test.rule](input)).toEqual(toCloseMatcher(expected));
 					}
 				},
 			);
 		});
 	});
+}
+
+/**
+ * Transforme récursivement une valeur attendue (nombre, objet ou tableau) en
+ * structure équivalente où chaque nombre est remplacé par un matcher de
+ * proximité (expect.closeTo). Nécessaire car les résultats des formules 3CL
+ * sont des flottants (divisions, coefficients abaques, etc.) : une égalité
+ * stricte (toEqual) sur un objet contenant un flottant échoue presque
+ * toujours à cause des imprécisions de calcul, y compris quand la valeur
+ * est correcte au nombre de décimales significatif pour le DPE.
+ */
+function toCloseMatcher(expected: Expect): unknown {
+	if (typeof expected === "number") return expect.closeTo(expected);
+	if (Array.isArray(expected)) return expected.map(toCloseMatcher);
+	if (expected !== null && typeof expected === "object") {
+		return Object.fromEntries(
+			Object.entries(expected).map(([key, value]) => [
+				key,
+				toCloseMatcher(value as Expect),
+			]),
+		);
+	}
+	return expected;
 }
 
 export function loadTests(path: string): Tests {

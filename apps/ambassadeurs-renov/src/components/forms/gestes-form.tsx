@@ -1,10 +1,8 @@
 
 import { useState } from "react";
-import * as models from "@open-dpe-logement/models";
-import { engine } from "@open-dpe-logement/engine";
-import { gestes, withGeste } from "../../models/geste";
-import { useUserStore, setSimulation } from "../../stores/user";
-
+import { gestes } from "../../models/geste";
+import { useUserStore } from "../../stores/user";
+import { changeGestes } from "../../handlers/change-gestes";
 import { XIcon, PlusIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
@@ -32,32 +30,19 @@ export function GestesForm({ onSuccess }: Props) {
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
-
-    if (!diagnostic) {
-      return null;
-    }
-
+    if (!diagnostic) return null;
     setPending(true);
 
-    let data = structuredClone(diagnostic) as models.diagnostic.Diagnostic;
+    const response = await changeGestes({ diagnostic, gestesIDs: selectedGestes });
+    const { success, message } = response;
 
-    for (const gesteId of selectedGestes) {
-      const geste = gestes.find((g) => g.id === gesteId);
-      if (geste) {
-        data = withGeste(data, geste);
-      }
-    }
-
-    try {
-      const simulation = engine.calcule(data);
-      setSimulation(simulation.data, selectedGestes);
+    if (success) {
+      toast.success(message);
       onSuccess();
-    } catch (error) {
-      console.error(error, data);
-      toast.error("Une erreur est survenue lors de la simulation.");
-    } finally {
-      setPending(false);
+    } else {
+      toast.error(message);
     }
+    setPending(false);
   }
 
   return (

@@ -219,13 +219,12 @@ export function withChauffage(
 	}
 
 	const installations = data.chauffage.installations.map((installation) => {
-		const systemes = installation.systemes.map((systeme) => ({
-			...systeme,
-			generateur_id: generateur.id,
-		}));
 		return {
 			...installation,
-			systemes: models.common.toNonEmptyArray(systemes),
+			systemes: installation.systemes.map((systeme) => ({
+				...systeme,
+				generateur_id: generateur.id,
+			})),
 		};
 	});
 
@@ -233,8 +232,8 @@ export function withChauffage(
 		...data,
 		chauffage: {
 			...data.chauffage,
-			generateurs: models.common.toNonEmptyArray([generateur]),
-			installations: models.common.toNonEmptyArray(installations),
+			generateurs: [generateur],
+			installations: installations,
 		},
 	};
 }
@@ -276,17 +275,16 @@ export function withEcs(
 
 	const installations: models.ecs.installation.Installation[] =
 		data.ecs.installations.map((installation) => {
-			const systemes = installation.systemes.map((systeme) => ({
-				...systeme,
-				generateur_id: generateur.id,
-				reseau: {
-					...systeme.reseau,
-					isolation: true,
-				},
-			}));
 			return {
 				...installation,
-				systemes: models.common.toNonEmptyArray(systemes),
+				systemes: installation.systemes.map((systeme) => ({
+					...systeme,
+					generateur_id: generateur.id,
+					reseau: {
+						...systeme.reseau,
+						isolation: true,
+					},
+				})),
 			};
 		});
 
@@ -294,7 +292,7 @@ export function withEcs(
 		...data,
 		ecs: {
 			generateurs: [generateur],
-			installations: models.common.toNonEmptyArray(installations),
+			installations: installations,
 		},
 	};
 }

@@ -163,9 +163,9 @@ export function pdim(
 				? ctx.resolve(
 						constants.chauffage.generateur.NAMESPACE,
 						constants.chauffage.generateur.RULES.pch,
-						models.chauffage.getGenerateur(
-							ctx.diagnostic.chauffage,
+						models.chauffage.findGenerateur(
 							item.position.generateur_mixte_id,
+							ctx.diagnostic.chauffage,
 						),
 					)
 				: null,

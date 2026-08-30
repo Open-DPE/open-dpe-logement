@@ -22,9 +22,9 @@ export const REGISTRY = {
 
 export type Emission = {
 	id: string;
-	systeme_id: models.common.UUID;
-	emetteur_id: models.common.UUID | null;
-	type_distribution: models.chauffage.systeme.TypeDistribution | null;
+	systeme_id: string;
+	emetteur_id: string | null;
+	type_distribution: models.chauffage.systeme.TypeDistributionEnum | null;
 	presence_robinet_thermostatique: boolean | null;
 };
 
@@ -54,7 +54,7 @@ export function cch1(
 				constants.climat.NAMESPACE,
 				constants.climat.RULES.zone_climatique,
 			),
-			pac_hybride: models.chauffage.generateur.isPACHybride(generateur),
+			pac_hybride: models.chauffage.generateur.isPacHybride(generateur),
 			bch: ctx.resolve(
 				constants.chauffage.systeme.NAMESPACE,
 				constants.chauffage.systeme.RULES.bch,
@@ -96,7 +96,7 @@ export function cch2(
 				constants.climat.NAMESPACE,
 				constants.climat.RULES.zone_climatique,
 			),
-			pac_hybride: models.chauffage.generateur.isPACHybride(generateur),
+			pac_hybride: models.chauffage.generateur.isPacHybride(generateur),
 			bch: ctx.resolve(
 				constants.chauffage.systeme.NAMESPACE,
 				constants.chauffage.systeme.RULES.bch,
@@ -135,7 +135,7 @@ export function ich(
 				constants.climat.NAMESPACE,
 				constants.climat.RULES.zone_climatique,
 			),
-			pac_hybride: models.chauffage.generateur.isPACHybride(generateur),
+			pac_hybride: models.chauffage.generateur.isPacHybride(generateur),
 			ich1: ich1(ctx, item),
 			ich2: ich2(ctx, item),
 		});
@@ -178,7 +178,7 @@ export function ich2(
 	return ctx.register(NAMESPACE, RULES.ich2, item, () => {
 		const generateur = _generateur(ctx, item);
 		const systeme = _systeme(ctx, item);
-		return models.chauffage.generateur.isPACHybride(generateur)
+		return models.chauffage.generateur.isPacHybride(generateur)
 			? formulas.calcule_ich2({
 					rd: ctx.resolve(
 						constants.chauffage.systeme.NAMESPACE,
@@ -294,24 +294,24 @@ export function type(
 function _emetteur(ctx: Context, item: Emission) {
 	return ctx.once(NAMESPACE, "emetteur", item, () => {
 		if (!item.emetteur_id) return null;
-		return models.chauffage.getEmetteur(
-			ctx.diagnostic.chauffage,
+		return models.chauffage.findEmetteur(
 			item.emetteur_id,
+			ctx.diagnostic.chauffage,
 		);
 	});
 }
 
 function _systeme(ctx: Context, item: Emission) {
 	return ctx.once(NAMESPACE, "systeme", item, () =>
-		models.chauffage.getSysteme(ctx.diagnostic.chauffage, item.systeme_id),
+		models.chauffage.findSysteme(item.systeme_id, ctx.diagnostic.chauffage),
 	);
 }
 
 function _installation(ctx: Context, item: Emission) {
 	return ctx.once(NAMESPACE, "installation", item, () =>
-		models.chauffage.getInstallationBySysteme(
-			ctx.diagnostic.chauffage,
+		models.chauffage.findInstallationBySysteme(
 			item.systeme_id,
+			ctx.diagnostic.chauffage,
 		),
 	);
 }
@@ -319,9 +319,9 @@ function _installation(ctx: Context, item: Emission) {
 function _generateur(ctx: Context, item: Emission) {
 	return ctx.once(NAMESPACE, "generateur", item, () => {
 		const systeme = _systeme(ctx, item);
-		const generateur = models.chauffage.getGenerateur(
-			ctx.diagnostic.chauffage,
+		const generateur = models.chauffage.findGenerateur(
 			systeme.generateur_id,
+			ctx.diagnostic.chauffage,
 		);
 		return {
 			...generateur,

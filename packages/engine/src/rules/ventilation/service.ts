@@ -6,14 +6,12 @@ import { NAMESPACE, RULES } from "./constants.js";
 export { installation };
 
 export function calcule(ctx: Context): models.ventilation.VentilationWithData {
-	const installations = ctx.diagnostic.ventilation.installations.map((item) =>
-		installation.calcule(ctx, item),
-	);
-
 	return {
 		...ctx.diagnostic.ventilation,
 
-		installations: models.common.toNonEmptyArray(installations),
+		installations: ctx.diagnostic.ventilation.installations.map((item) =>
+			installation.calcule(ctx, item),
+		),
 
 		data: {
 			qvarep_conv: ctx.resolve(NAMESPACE, RULES.qvarep_conv),

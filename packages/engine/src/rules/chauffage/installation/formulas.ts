@@ -1,11 +1,10 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "../../climat/formulas.js";
 import type * as chauffage from "../formulas.js";
 import type * as generateur from "../generateur/formulas.js";
 import type * as systeme from "../systeme/formulas.js";
 import { ValeurForfaitaireError } from "../../errors.js";
-import { createParMois } from "../../helpers.js";
 
 /**
  * @formule chauffage.installation.caux_dist
@@ -26,7 +25,7 @@ export function calcule_bch(props: {
 	rdim: ReturnType<typeof calcule_rdim>;
 }): models.common.ParMois<number> {
 	const { rdim } = props;
-	return createParMois((mois) => props.bch[mois] * rdim);
+	return models.common.createParMois((mois) => props.bch[mois] * rdim);
 }
 
 /**
@@ -66,9 +65,9 @@ export function calcule_pch(props: {
  */
 export function calcule_fch(props: {
 	fch_saisi: number | null;
-	usage: models.chauffage.installation.UsageSolaire | null;
+	usage: models.chauffage.installation.UsageSolaireEnum | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
-	type_batiment: models.batiment.TypeBatiment;
+	type_batiment: models.batiment.TypeBatimentEnum;
 }): number {
 	const { fch_saisi, usage, ...query } = props;
 	if (null === usage) return 0;
@@ -84,25 +83,25 @@ export function calcule_fch(props: {
  * @returns Installation chauffée par effet de joule
  */
 export function calcule_effet_joule(props: {
-	type_installation: models.chauffage.installation.TypeInstallation;
+	type_installation: models.chauffage.TypeChauffageEnum;
 	systemes: {
-		type_systeme: models.chauffage.systeme.TypeSysteme;
+		type_systeme: models.chauffage.TypeChauffageEnum;
 		energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
 	}[];
 }): boolean {
 	switch (props.type_installation) {
-		case models.chauffage.installation.TypeInstallationEnum.central:
+		case models.chauffage.TYPES_CHAUFFAGE.central:
 			return props.systemes.some(({ type_systeme, energie_generateur }) => {
 				return (
-					type_systeme === models.chauffage.systeme.TypeSystemeEnum.central &&
-					energie_generateur === models.common.EnergieEnum.electricite
+					type_systeme === models.chauffage.TYPES_CHAUFFAGE.central &&
+					energie_generateur === models.common.ENERGIES.electricite
 				);
 			});
-		case models.chauffage.installation.TypeInstallationEnum.divise:
+		case models.chauffage.TYPES_CHAUFFAGE.divise:
 			return (
 				props.systemes.filter(
 					({ energie_generateur }) =>
-						energie_generateur === models.common.EnergieEnum.electricite,
+						energie_generateur === models.common.ENERGIES.electricite,
 				).length >
 				props.systemes.length / 2
 			);

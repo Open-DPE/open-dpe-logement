@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { engine } from "@open-dpe-logement/engine";
-import { scenarios, withAltitude, withAnneeConstruction, withDepartement } from "../../models/scenario";
-import { departements } from "../../models/departement";
-import { useUserStore, setDiagnostic, clearSimulation } from "../../stores/user";
+import { scenarios } from "../../models/scenario";
+import { departement } from "../../models/departement";
+import { useUserStore } from "../../stores/user";
+import { changeScenario } from "../../handlers/change-scenario";
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import {
@@ -14,9 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { toast } from "sonner";
 
 function toDepartement(code: string | null | undefined): string {
-  if (!code) return departements[0].code_departement;
+  if (!code) return departement.all()[0].code_departement;
   return code.substring(0, 2);
 }
 
@@ -68,26 +69,21 @@ export function ScenarioForm({ onSuccess }: Props) {
     setPending(true);
     setError(undefined);
 
-    try {
-      const scenario = scenarios.find((s) => s.id === scenarioId);
-      if (!scenario) {
-        setError(`Scénario introuvable`);
-        return;
-      }
+    const { success, message } = await changeScenario({
+      scenarioId,
+      departementCode,
+      altitude,
+      anneeConstruction,
+    });
 
-      let data = scenario.data;
-      const departement = departements.find((d) => d.code_departement === departementCode);
-      if (departement) data = withDepartement(data, departement);
-      if (altitude) data = withAltitude(data, Number(altitude));
-      if (anneeConstruction) data = withAnneeConstruction(data, Number(anneeConstruction));
-
-      const simulation = engine.calcule(data);
-      setDiagnostic(scenario.id, simulation.data);
-      clearSimulation();
+    if (success) {
+      toast.success(message);
       onSuccess();
-    } finally {
-      setPending(false);
+    } else {
+      toast.error(message);
     }
+
+    setPending(false);
   }
 
   return (
@@ -113,7 +109,7 @@ export function ScenarioForm({ onSuccess }: Props) {
         <SelectContent>
           <SelectGroup>
             <SelectLabel>Départements</SelectLabel>
-            {departements.map(({ code_departement, departement }) => (
+            {departement.all().map(({ code_departement, departement }) => (
               <SelectItem key={code_departement} value={code_departement}>{`${code_departement} - ${departement}`}</SelectItem>
             ))}
           </SelectGroup>

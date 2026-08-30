@@ -6,16 +6,16 @@ import type * as generateur from "../../generateur/formulas.js";
 import * as utils from "./utils.js";
 
 export type Props = {
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 	gv: ReturnType<typeof enveloppe.calcule_gv>;
 	tbase: ReturnType<typeof climat.calcule_tbase>;
 	pn: ReturnType<typeof generateur.calcule_pn>;
 	pn_combustion: ReturnType<typeof calcule_pn_combustion>;
 	pn_cascade: ReturnType<typeof calcule_pn_cascade>;
-	cascade: models.chauffage.generateur.Cascade | null;
+	cascade: models.chauffage.generateur.CascadeEnum | null;
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
-	bienergie_generateur: models.chauffage.generateur.Bienergie | null;
+	bienergie_generateur: models.chauffage.generateur.BienergieEnum | null;
 	rpn: ReturnType<typeof generateur.calcule_combustion>["rpn"];
 	rpint: ReturnType<typeof generateur.calcule_combustion>["rpint"];
 	qp0: ReturnType<typeof generateur.calcule_combustion>["qp0"];
@@ -74,8 +74,8 @@ export function calcule_rg(props: Props): number {
  * @returns Température de consigne en °C
  */
 const TCONS = {
-	[models.common.ScenarioEnum.conventionnel]: 19,
-	[models.common.ScenarioEnum.depensier]: 21,
+	[models.common.SCENARIOS.conventionnel]: 19,
+	[models.common.SCENARIOS.depensier]: 21,
 };
 
 /**
@@ -190,7 +190,7 @@ export function calcule_coeff_pond_final(props: {
 		const ctch_x = ctch[x];
 		const tch_dim_x = tch_dim[x];
 
-		const somme = models.chauffage.TAUX_CHARGE.reduce((acc, x) => {
+		const somme = Object.values(TAUX_CHARGE).reduce((acc, x) => {
 			const tch_dim_x = tch_dim[x];
 			const coeff_pond_dim_x = coeff_pond_dim[x];
 			const ctch_x = ctch[x];
@@ -332,7 +332,7 @@ export function calcule_pn_cascade(props: {
 	systemes: {
 		generateur_collectif: boolean;
 		pn: ReturnType<typeof generateur.calcule_pn>;
-		cascade: models.chauffage.generateur.Cascade | null;
+		cascade: models.chauffage.generateur.CascadeEnum | null;
 	}[];
 }): number {
 	return props.systemes
@@ -381,13 +381,13 @@ export function calcule_qpx_chaudiere(props: QPProps): ParTauxCharge<number> {
 		const tch = props.tch_final[x];
 
 		switch (props.mode_combustion) {
-			case models.chauffage.generateur.ModeCombustionEnum.standard: {
+			case models.chauffage.generateur.MODES_COMBUSTION.standard: {
 				return tch < 30
 					? ((qp30 - 0.15 * qp0) * tch) / 0.3 + 0.15 * qp0
 					: ((qp100 - qp30) * tch) / 0.7 + qp30 - ((qp100 - qp30) * 0.3) / 0.7;
 			}
-			case models.chauffage.generateur.ModeCombustionEnum.basse_temperature:
-			case models.chauffage.generateur.ModeCombustionEnum.condensation: {
+			case models.chauffage.generateur.MODES_COMBUSTION.basse_temperature:
+			case models.chauffage.generateur.MODES_COMBUSTION.condensation: {
 				const qp15 = qp30 / 2;
 
 				if (tch < 15) {
@@ -450,14 +450,14 @@ export function calcule_qp30(props: Props): number {
 	}
 
 	switch (props.mode_combustion) {
-		case models.chauffage.generateur.ModeCombustionEnum.basse_temperature:
+		case models.chauffage.generateur.MODES_COMBUSTION.basse_temperature:
 			return (
 				0.3 *
 				pn *
 				((100 - (rpint + 0.1 * (40 - tfonc))) / (rpint + 0.1 * (40 - tfonc)))
 			);
 
-		case models.chauffage.generateur.ModeCombustionEnum.condensation:
+		case models.chauffage.generateur.MODES_COMBUSTION.condensation:
 			return (
 				0.3 *
 				pn *

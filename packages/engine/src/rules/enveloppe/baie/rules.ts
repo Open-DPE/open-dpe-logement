@@ -91,9 +91,9 @@ export function deltar(
 	return ctx.register(NAMESPACE, RULES.deltar, item, () => {
 		const types_fermetures = [item.type_fermeture];
 		if (item.position.baie_id) {
-			const baie = models.enveloppe.getBaie(
-				ctx.diagnostic.enveloppe,
+			const baie = models.enveloppe.findBaie(
 				item.position.baie_id,
+				ctx.diagnostic.enveloppe,
 			);
 			types_fermetures.push(baie.type_fermeture);
 		}
@@ -139,9 +139,9 @@ export function uw2(
 		item.position.baie_id
 			? uw1(
 					ctx,
-					models.enveloppe.getBaie(
-						ctx.diagnostic.enveloppe,
+					models.enveloppe.findBaie(
 						item.position.baie_id,
+						ctx.diagnostic.enveloppe,
 					),
 				)
 			: null,
@@ -170,9 +170,9 @@ export function sse(
 ): ReturnType<typeof formulas.calcule_sse> {
 	return ctx.register(NAMESPACE, RULES.sse, item, () => {
 		const lnc = item.position.local_non_chauffe_id
-			? models.enveloppe.getLocalNonChauffe(
-					ctx.diagnostic.enveloppe,
+			? models.enveloppe.findLocalNonChauffe(
 					item.position.local_non_chauffe_id,
+					ctx.diagnostic.enveloppe,
 				)
 			: null;
 
@@ -231,9 +231,9 @@ export function sw2(
 		item.position.baie_id
 			? sw1(
 					ctx,
-					models.enveloppe.getBaie(
-						ctx.diagnostic.enveloppe,
+					models.enveloppe.findBaie(
 						item.position.baie_id,
+						ctx.diagnostic.enveloppe,
 					),
 				)
 			: null,

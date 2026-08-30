@@ -31,10 +31,10 @@ export function kpt(
 	item: PontThermique,
 ): ReturnType<typeof formulas.calcule_kpt> {
 	return ctx.register(NAMESPACE, RULES.kpt, item, () => {
-		const enums = models.enveloppe.pontThermique.TypeLiaisonEnum;
-		const mur = models.enveloppe.getMur(
-			ctx.diagnostic.enveloppe,
+		const enums = models.enveloppe.pontThermique.TYPES_LIAISON;
+		const mur = models.enveloppe.findMur(
 			item.liaison.mur_id,
+			ctx.diagnostic.enveloppe,
 		);
 
 		const props = {
@@ -51,9 +51,9 @@ export function kpt(
 
 		switch (item.liaison.type) {
 			case enums.plancher_bas_mur: {
-				const plancher = models.enveloppe.getPlancherBas(
-					ctx.diagnostic.enveloppe,
+				const plancher = models.enveloppe.findPlancherBas(
 					item.liaison.plancher_id,
+					ctx.diagnostic.enveloppe,
 				);
 				return formulas.calcule_kpt({
 					...props,
@@ -62,9 +62,9 @@ export function kpt(
 				});
 			}
 			case enums.plancher_haut_mur: {
-				const plancher = models.enveloppe.getPlancherHaut(
-					ctx.diagnostic.enveloppe,
+				const plancher = models.enveloppe.findPlancherHaut(
 					item.liaison.plancher_id,
+					ctx.diagnostic.enveloppe,
 				);
 				return formulas.calcule_kpt({
 					...props,
@@ -74,9 +74,9 @@ export function kpt(
 			}
 
 			case enums.baie_mur: {
-				const baie = models.enveloppe.getBaie(
-					ctx.diagnostic.enveloppe,
+				const baie = models.enveloppe.findBaie(
 					item.liaison.ouverture_id,
+					ctx.diagnostic.enveloppe,
 				);
 				return formulas.calcule_kpt({
 					...props,
@@ -87,9 +87,9 @@ export function kpt(
 			}
 
 			case enums.porte_mur: {
-				const porte = models.enveloppe.getPorte(
-					ctx.diagnostic.enveloppe,
+				const porte = models.enveloppe.findPorte(
 					item.liaison.ouverture_id,
+					ctx.diagnostic.enveloppe,
 				);
 				return formulas.calcule_kpt({
 					...props,

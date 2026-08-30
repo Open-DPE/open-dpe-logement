@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ressources, tags, filterRessourcesByTags } from '@/models/ressource';
+import { ressource, tag } from '@/models/ressource';
 import { ChevronRightIcon } from "lucide-react"
 import { Layout } from "@/components/layout/layout";
 import { Button } from '@/components/ui/button';
@@ -14,14 +14,14 @@ import {
 export function Ressources() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const filters = tags.map((tag) => ({
+  const filters = tag.all().map((tag) => ({
     label: tag,
-    count: ressources.filter((r) => r.tags.includes(tag)).length,
+    count: ressource.all().filter((r) => r.tags.includes(tag)).length,
   }));
 
-  const filteredRessources = selectedTags.length === 0
-    ? ressources
-    : filterRessourcesByTags(ressources, selectedTags);
+  const ressources = selectedTags.length === 0
+    ? ressource.all()
+    : ressource.byTags(selectedTags);
 
   function toggleTag(tag: string) {
     setSelectedTags((prev) =>
@@ -62,14 +62,14 @@ export function Ressources() {
 
         <div className="flex w-full flex-col gap-4">
           {
-            filteredRessources.map((ressource) => (
-              <Item key={ressource.titre} variant="outline" className="white bg-white hover:bg-gray-50">
+            ressources.map((r) => (
+              <Item key={r.titre} variant="outline" className="white bg-white hover:bg-gray-50">
                 <ItemContent>
-                  <ItemTitle>{ressource.titre}</ItemTitle>
-                  <ItemDescription>{ressource.description}</ItemDescription>
+                  <ItemTitle>{r.titre}</ItemTitle>
+                  <ItemDescription>{r.description}</ItemDescription>
                 </ItemContent>
                 <ItemActions>
-                  <a href={ressource.url} target="_blank" rel="noopener noreferrer">
+                  <a href={r.url} target="_blank" rel="noopener noreferrer">
                     <ChevronRightIcon />
                   </a>
                 </ItemActions>

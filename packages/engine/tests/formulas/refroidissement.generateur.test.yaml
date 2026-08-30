@@ -6,7 +6,7 @@ refroidissement.generateur.caux:
       expect: 0
 
 refroidissement.generateur.set_annee_installation:
-  run: set_annee_installation
+  rule: set_annee_installation
   cases:
     - title: Année fournie → retournée telle quelle
       with:

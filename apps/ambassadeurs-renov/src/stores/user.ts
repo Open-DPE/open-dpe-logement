@@ -40,10 +40,12 @@ export function getGestes() {
 
 // --- Setters ---
 
-export function setDiagnostic(
-	scenario: string,
-	diagnostic: models.diagnostic.DiagnosticWithData,
-) {
+export function setDiagnostic(props: {
+	diagnostic: models.diagnostic.DiagnosticWithData;
+	scenario?: string;
+}) {
+	const { diagnostic } = props;
+	const scenario = props.scenario ?? null;
 	$user.set({ ...$user.get(), scenario, diagnostic });
 }
 

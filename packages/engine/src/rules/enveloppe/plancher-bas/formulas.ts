@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "../../climat/formulas.js";
 import type * as chauffage from "../../chauffage/formulas.js";
@@ -27,12 +27,11 @@ export function calcule_dp(props: {
  */
 export function calcule_isolation_aiu(props: {
 	isolation: boolean | null;
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	annee_construction: number;
 }): boolean {
 	if (props.isolation !== null) return props.isolation;
-	return props.mitoyennete ===
-		models.enveloppe.common.MitoyenneteEnum.terre_plein
+	return props.mitoyennete === models.enveloppe.common.MITOYENNETES.terre_plein
 		? props.annee_construction >= 2001
 		: props.annee_construction >= 1975;
 }
@@ -65,7 +64,7 @@ export function calcule_uint(props: {
 	effet_joule: ReturnType<typeof chauffage.calcule_effet_joule>;
 	u0: ReturnType<typeof calcule_u0>;
 	isolation: boolean | null;
-	type_isolation: models.enveloppe.common.TypeIsolation | null;
+	type_isolation: models.enveloppe.common.TypeIsolationEnum | null;
 	epaisseur_isolation: number | null;
 	resistance_thermique_isolation: number | null;
 	annee_isolation: number | null;
@@ -100,17 +99,6 @@ export function calcule_uint(props: {
 	return Math.min(match.u, u0);
 }
 
-export function is_calcule_ue_applicable(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
-}): boolean {
-	const scope: models.enveloppe.common.Mitoyennete[] = [
-		models.enveloppe.common.MitoyenneteEnum.terre_plein,
-		models.enveloppe.common.MitoyenneteEnum.vide_sanitaire,
-		models.enveloppe.common.MitoyenneteEnum.sous_sol_non_chauffe,
-	];
-	return scope.includes(props.mitoyennete);
-}
-
 /**
  * @guard {@linkcode models.enveloppe.plancherBas.isPositionTerrePlein}
  * @props props.surface_ue : Surface du plancher du bâtiment ou du lot sur terre-plein, vide sanitaire ou sous-sol non chauffé en m²
@@ -120,7 +108,7 @@ export function is_calcule_ue_applicable(props: {
  * @returns Coefficient de transmission thermique du plancher bas en W/m².K
  */
 export function calcule_ue(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	annee_construction: ReturnType<typeof paroi.set_annee_construction>;
 	uint: ReturnType<typeof calcule_uint>;
 	surface_ue: number;
@@ -150,12 +138,13 @@ export function calcule_ue(props: {
  * @returns Indique si la méthode de calcul Ue est applicable pour le plancher bas
  */
 export function calcule_ue_applicable(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 }): boolean {
-	const scopes: models.enveloppe.common.Mitoyennete[] = [
-		models.enveloppe.common.MitoyenneteEnum.terre_plein,
-		models.enveloppe.common.MitoyenneteEnum.vide_sanitaire,
-		models.enveloppe.common.MitoyenneteEnum.sous_sol_non_chauffe,
+	const scopes: models.enveloppe.common.MitoyenneteEnum[] = [
+		models.enveloppe.common.MITOYENNETES.enterre,
+		models.enveloppe.common.MITOYENNETES.terre_plein,
+		models.enveloppe.common.MITOYENNETES.vide_sanitaire,
+		models.enveloppe.common.MITOYENNETES.sous_sol_non_chauffe,
 	];
 	return scopes.includes(props.mitoyennete);
 }
@@ -170,7 +159,7 @@ export function calcule_ue_applicable(props: {
  */
 export function calcule_u0(props: {
 	u0_saisi: number | null;
-	type_plancher_bas: models.enveloppe.plancherBas.TypePlancherBas | null;
+	type_plancher_bas: models.enveloppe.plancherBas.TypePlancherBasEnum | null;
 }): number {
 	const { u0_saisi, type_plancher_bas } = props;
 
@@ -189,13 +178,13 @@ export function calcule_u0(props: {
  * @returns État d'isolation retenu
  */
 export function set_isolation(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	isolation: boolean | null;
 	annee_construction: number;
 }): boolean {
 	if (props.isolation !== null) return props.isolation;
 	return props.mitoyennete ===
-		models.enveloppe.common.MitoyenneteEnum.terre_plein
+		models.enveloppe.common.MITOYENNETES.terre_plein
 		? props.annee_construction >= 2001
 		: props.annee_construction >= 1975;
 }

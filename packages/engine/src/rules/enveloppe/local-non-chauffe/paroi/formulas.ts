@@ -8,13 +8,13 @@ import * as models from "@open-dpe-logement/models";
  * @returns Surface de la paroi du local non chauffé donnant sur l'extérieur ou en contact avec le sol en m²
  */
 export function calcule_aue(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	surface: number;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MitoyenneteEnum.exterieur:
-		case models.enveloppe.common.MitoyenneteEnum.enterre:
-		case models.enveloppe.common.MitoyenneteEnum.local_non_accessible:
+		case models.enveloppe.common.MITOYENNETES.exterieur:
+		case models.enveloppe.common.MITOYENNETES.enterre:
+		case models.enveloppe.common.MITOYENNETES.local_non_accessible:
 			return props.surface;
 		default:
 			return 0;
@@ -28,12 +28,12 @@ export function calcule_aue(props: {
  * @returns Surface de la paroi du local non chauffé donnant sur un espace chauffé en m²
  */
 export function calcule_aiu(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	surface: number;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MitoyenneteEnum.local_residentiel:
-		case models.enveloppe.common.MitoyenneteEnum.local_non_residentiel:
+		case models.enveloppe.common.MITOYENNETES.local_residentiel:
+		case models.enveloppe.common.MITOYENNETES.local_non_residentiel:
 			return props.surface;
 		default:
 			return 0;

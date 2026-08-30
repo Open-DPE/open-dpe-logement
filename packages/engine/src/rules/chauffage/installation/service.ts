@@ -7,11 +7,10 @@ export function calcule(
 	ctx: Context,
 	item: models.chauffage.installation.Installation,
 ): models.chauffage.installation.InstallationWithData {
-	const systemes = item.systemes.map((systeme) => calculeSysteme(ctx, systeme));
 	return {
 		...item,
 
-		systemes: models.common.toNonEmptyArray(systemes),
+		systemes: item.systemes.map((systeme) => calculeSysteme(ctx, systeme)),
 
 		data: {
 			bch: models.common.reduceParMois(ctx.resolve(NAMESPACE, RULES.bch, item)),

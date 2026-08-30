@@ -18,8 +18,8 @@ await engine.init();
 
 const diagnostic = {...};
 
-const { data, log } = engine.calcule({ diagnostic }) // scenario: 'conventionnel'
-const { data, log } = engine.calcule({ diagnostic, scenario: 'depensier' }) // scenario: 'depensier'
+const { data, log } = engine.calcule(diagnostic) // scenario: 'conventionnel'
+const { data, log } = engine.calcule(diagnostic, 'depensier') // scenario: 'depensier'
 ```
 
 ## Organisation

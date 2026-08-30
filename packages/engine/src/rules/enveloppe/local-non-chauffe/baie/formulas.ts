@@ -1,8 +1,7 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as climat from "../../../climat/formulas.js";
 import { ValeurForfaitaireError } from "../../..//errors.js";
-import { createParMois } from "../../../helpers.js";
 
 export { calcule_c1 } from "../../../climat/formulas.js";
 
@@ -14,13 +13,13 @@ export { calcule_c1 } from "../../../climat/formulas.js";
  * @returns Surface de la paroi du local non chauffé donnant sur l'extérieur ou en contact avec le sol en m²
  */
 export function calcule_aue(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	surface: number;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MitoyenneteEnum.exterieur:
-		case models.enveloppe.common.MitoyenneteEnum.enterre:
-		case models.enveloppe.common.MitoyenneteEnum.local_non_accessible:
+		case models.enveloppe.common.MITOYENNETES.exterieur:
+		case models.enveloppe.common.MITOYENNETES.enterre:
+		case models.enveloppe.common.MITOYENNETES.local_non_accessible:
 			return props.surface;
 		default:
 			return 0;
@@ -34,12 +33,12 @@ export function calcule_aue(props: {
  * @returns Surface de la paroi du local non chauffé donnant sur un espace chauffé en m²
  */
 export function calcule_aiu(props: {
-	mitoyennete: models.enveloppe.common.Mitoyennete;
+	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	surface: number;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MitoyenneteEnum.local_residentiel:
-		case models.enveloppe.common.MitoyenneteEnum.local_non_residentiel:
+		case models.enveloppe.common.MITOYENNETES.local_residentiel:
+		case models.enveloppe.common.MITOYENNETES.local_non_residentiel:
 			return props.surface;
 		default:
 			return 0;
@@ -57,8 +56,8 @@ export function calcule_sst(props: {
 	c1: ReturnType<typeof climat.calcule_c1>;
 }): models.common.ParMois<number> {
 	const { surface, t, c1 } = props;
-	return createParMois(
-		(mois: models.common.Mois) => surface * (0.8 * t + 0.024) * c1[mois],
+	return models.common.createParMois(
+		(mois) => surface * (0.8 * t + 0.024) * c1[mois],
 	);
 }
 
@@ -90,8 +89,8 @@ export function set_isolation(props: {
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
 }): boolean {
 	switch (props.type_vitrage) {
-		case models.enveloppe.baie.TypeVitrageEnum.triple_vitrage:
-		case models.enveloppe.baie.TypeVitrageEnum.triple_vitrage_fe:
+		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage:
+		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage_fe:
 			return true;
 		default:
 			return false;
@@ -103,10 +102,10 @@ export function set_isolation(props: {
  * @returns Type de vitrage de la baie séparant le local non chauffé de l'extérieur retenu
  */
 export function set_type_vitrage(props: {
-	type_vitrage: models.enveloppe.baie.TypeVitrage | null;
-}): models.enveloppe.baie.TypeVitrage {
+	type_vitrage: models.enveloppe.baie.TypeVitrageEnum | null;
+}): models.enveloppe.baie.TypeVitrageEnum {
 	return (
-		props.type_vitrage ?? models.enveloppe.baie.TypeVitrageEnum.simple_vitrage
+		props.type_vitrage ?? models.enveloppe.baie.TYPES_VITRAGE.simple_vitrage
 	);
 }
 
@@ -115,9 +114,9 @@ export function set_type_vitrage(props: {
  * @returns Matériau de la baie séparant le local non chauffé de l'extérieur retenu
  */
 export function set_materiau(props: {
-	materiau: models.enveloppe.baie.Materiau | null;
-}): models.enveloppe.baie.Materiau {
-	return props.materiau ?? models.enveloppe.baie.MateriauEnum.pvc;
+	materiau: models.enveloppe.baie.MateriauEnum | null;
+}): models.enveloppe.baie.MateriauEnum {
+	return props.materiau ?? models.enveloppe.baie.MATERIAUX.pvc;
 }
 
 /**

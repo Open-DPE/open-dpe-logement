@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import * as common from "../../common/formulas.js";
 import type * as climat from "../../climat/formulas.js";
@@ -12,7 +12,6 @@ import type * as generateur from "../generateur/formulas.js";
 import * as combustion from "./combustion/formulas.js";
 import * as dimensionnement from "./dimensionnement/formulas.js";
 import { ValeurForfaitaireError } from "../../errors.js";
-import { createParMois } from "../../helpers.js";
 
 export { combustion, dimensionnement };
 
@@ -27,22 +26,22 @@ export function calcule_consommations(props: {
 	cch_enr: ReturnType<typeof calcule_cch_enr>;
 	caux_dist: ReturnType<typeof calcule_caux_dist>;
 	caux_dist_enr: ReturnType<typeof calcule_caux_dist_enr>;
-	energie: models.chauffage.generateur.EnergieChauffage;
+	energie: models.chauffage.generateur.EnergieChauffageEnum;
 	reseau_id: string | null;
 }): models.common.Consommations {
 	return models.common.mergeConsommations(
 		common.calcule_consommations({
 			cef: props.cch,
 			cef_enr: props.cch_enr,
-			usage: models.common.UsageEnum.chauffage,
+			usage: models.common.USAGES.chauffage,
 			energie: props.energie,
 			reseau_id: props.reseau_id,
 		}),
 		common.calcule_consommations({
 			cef: props.caux_dist,
 			cef_enr: props.caux_dist_enr,
-			usage: models.common.UsageEnum.auxiliaire,
-			energie: models.common.EnergieEnum.electricite,
+			usage: models.common.USAGES.auxiliaire,
+			energie: models.common.ENERGIES.electricite,
 			reseau_id: null,
 		}),
 	);
@@ -85,7 +84,7 @@ export function calcule_cch_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.UsageElectriciteEnum.chauffage,
+		usage: models.production.USAGES_ELECTRICITE.chauffage,
 		cef: props.cch_elec,
 	});
 }
@@ -135,7 +134,7 @@ export function calcule_caux_dist_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.UsageElectriciteEnum.auxiliaires_distribution,
+		usage: models.production.USAGES_ELECTRICITE.auxiliaires_distribution,
 		cef: props.caux_dist,
 	});
 }
@@ -185,7 +184,7 @@ export function calcule_bch(props: {
 		installation_collective &&
 		(generateur_individuel || systemes.length > 0)
 	) {
-		return createParMois((mois) => {
+		return models.common.createParMois((mois) => {
 			const dht = props.dht[mois];
 			const dh14 = props.sollicitations[mois].dh14;
 			const bch = props.bch[mois];
@@ -246,7 +245,7 @@ export function calcule_dht(props: {
 	nref: ReturnType<typeof chauffage.calcule_nref>;
 }): models.common.ParMois<number> {
 	const { tbase } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const t = props.t[mois];
 		const text = props.sollicitations[mois].text;
 		const nref = props.nref[mois];
@@ -270,7 +269,7 @@ export function calcule_t(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
 }): models.common.ParMois<number> {
 	const { pe } = props;
-	return createParMois((mois) => {
+	return models.common.createParMois((mois) => {
 		const bch = props.bch[mois];
 		const dh14 = props.sollicitations[mois].dh14;
 		return bch ? 14 - (pe * dh14) / bch : 0;
@@ -286,7 +285,7 @@ export function calcule_t(props: {
  * @returns Rendement de distribution du système de chauffage
  */
 export function calcule_rd(props: {
-	type_distribution: models.chauffage.systeme.TypeDistribution | null;
+	type_distribution: models.chauffage.systeme.TypeDistributionEnum | null;
 	temperature_distribution: ReturnType<
 		typeof set_temperature_distribution
 	> | null;
@@ -333,10 +332,10 @@ export type Rg = number;
 /**
  * @guard :
  * 	- {@linkcode models.chauffage.generateur.isChaudiereCombustion} ||
- * 	- {@linkcode models.chauffage.generateur.isPoeleBouilleur} ||
+ * 	- {@linkcode models.chauffage.generateur.isPoeleBoisBouilleur} ||
  * 	- {@linkcode models.chauffage.generateur.isGenerateurAirChaudCombustion} ||
  * 	- {@linkcode models.chauffage.generateur.isRadiateurGaz} ||
- * 	- {@linkcode models.chauffage.generateur.isPACHybride} ||
+ * 	- {@linkcode models.chauffage.generateur.isPacHybride} ||
  * 	- {@linkcode models.chauffage.generateur.isGenerateurCollectifInconnu}
  *
  * @returns Rendement de génération des générateurs à combustion
@@ -349,7 +348,7 @@ export function calcule_rg_combustion(
 
 /**
  * @formule chauffage.systeme.rg
- * @guard {@linkcode models.chauffage.generateur.isPAC}
+ * @guard {@linkcode models.chauffage.generateur.isPacClassique}
  * @returns Rendement de génération des pompes à chaleur (hors PAC hybrides)
  */
 export function calcule_rg_pac(): number {
@@ -369,7 +368,7 @@ export function calcule_rg_reseau_chaleur(): number {
  * @formule chauffage.systeme.rg
  *
  * @guard :
- * - {@linkcode models.chauffage.generateur.isPoeleInsert} ||
+ * - {@linkcode models.chauffage.generateur.isPoeleOuInsert} ||
  * - {@linkcode models.chauffage.generateur.isChaudiereElectrique} ||
  * - {@linkcode models.chauffage.generateur.isEmetteurElectrique}
  *
@@ -381,7 +380,7 @@ export function calcule_rg_reseau_chaleur(): number {
 export function calcule_rg_autres(props: {
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
-	label_generateur: models.chauffage.generateur.Label | null;
+	label_generateur: models.chauffage.generateur.LabelEnum | null;
 	annee_installation_generateur: ReturnType<
 		typeof generateur.set_annee_installation
 	>;
@@ -452,12 +451,12 @@ export function set_presence_circulateur_externe(props: {
  * @returns Température de distribution du réseau de chauffage retenue
  */
 export function set_temperature_distribution(props: {
-	temperature_distribution: models.chauffage.systeme.TemperatureDistribution | null;
-}): models.chauffage.systeme.TemperatureDistribution {
+	temperature_distribution: models.chauffage.emetteur.TemperatureDistributionEnum | null;
+}): models.chauffage.emetteur.TemperatureDistributionEnum {
 	const { temperature_distribution } = props;
 	return (
 		temperature_distribution ??
-		models.chauffage.systeme.TemperatureDistributionEnum.haute
+		models.chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute
 	);
 }
 

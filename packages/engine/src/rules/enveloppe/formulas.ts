@@ -1,4 +1,4 @@
-import { abaques } from "@open-dpe-logement/abaques";
+import { abaques } from "@open-dpe-logement/engine-abaques";
 import * as models from "@open-dpe-logement/models";
 import type * as batiment from "../batiment/formulas.js";
 import type * as ventilation from "../ventilation/formulas.js";
@@ -13,7 +13,6 @@ import * as plancherHaut from "./plancher-haut/formulas.js";
 import * as pontThermique from "./pont-thermique/formulas.js";
 import * as porte from "./porte/formulas.js";
 import { ValeurForfaitaireError } from "../errors.js";
-import { createParMois } from "../helpers.js";
 
 export {
 	baie,
@@ -114,14 +113,17 @@ export function calcule_inertie(props: {
 		inertie: ReturnType<typeof niveau.calcule_inertie>;
 		sh: number;
 	}>;
-}): models.enveloppe.common.Inertie {
+}): models.enveloppe.common.InertieEnum {
 	const { niveaux } = props;
 
 	// Valeur par défaut
-	if (niveaux.length === 0) return models.enveloppe.common.InertieEnum.legere;
+	if (niveaux.length === 0) return models.enveloppe.common.INERTIES.legere;
 
 	// Surface totale par inertie
-	const surfaceParInertie = new Map<models.enveloppe.common.Inertie, number>();
+	const surfaceParInertie = new Map<
+		models.enveloppe.common.InertieEnum,
+		number
+	>();
 	for (const niveau of niveaux) {
 		const current = surfaceParInertie.get(niveau.inertie) ?? 0;
 		surfaceParInertie.set(niveau.inertie, current + niveau.sh);
@@ -129,7 +131,7 @@ export function calcule_inertie(props: {
 
 	// Inerties majoritaires (surface strictement supérieure à toutes les autres)
 	const maxSurface = Math.max(...surfaceParInertie.values());
-	const inertiesMajoritaires: models.enveloppe.common.Inertie[] = [
+	const inertiesMajoritaires: models.enveloppe.common.InertieEnum[] = [
 		...surfaceParInertie.entries(),
 	]
 		.filter(([, surface]) => surface === maxSurface)
@@ -137,15 +139,13 @@ export function calcule_inertie(props: {
 
 	// Une seule inertie majoritaire
 	if (inertiesMajoritaires.length === 1)
-		return inertiesMajoritaires[0] as models.enveloppe.common.Inertie;
+		return inertiesMajoritaires[0] as models.enveloppe.common.InertieEnum;
 
 	// Plusieurs inerties majoritaires
-	if (
-		!inertiesMajoritaires.includes(models.enveloppe.common.InertieEnum.legere)
-	)
-		return models.enveloppe.common.InertieEnum.lourde;
+	if (!inertiesMajoritaires.includes(models.enveloppe.common.INERTIES.legere))
+		return models.enveloppe.common.INERTIES.lourde;
 
-	return models.enveloppe.common.InertieEnum.moyenne;
+	return models.enveloppe.common.INERTIES.moyenne;
 }
 
 /**
@@ -164,7 +164,7 @@ export function calcule_hperm(props: {
  * @returns Débit d'air dû aux infiltrations liées au vent en m3/h
  */
 export function calcule_qvinf(props: {
-	exposition: models.enveloppe.Exposition;
+	exposition: models.enveloppe.ExpositionEnum;
 	sh: ReturnType<typeof batiment.calcule_sh>;
 	hsp: ReturnType<typeof batiment.calcule_hsp>;
 	qvarep_conv: ReturnType<typeof ventilation.calcule_qvarep_conv>;
@@ -173,8 +173,8 @@ export function calcule_qvinf(props: {
 }): number {
 	const { exposition, sh, hsp, qvarep_conv, qvasouf_conv, n50 } = props;
 
-	const e = exposition === models.enveloppe.ExpositionEnum.simple ? 0.02 : 0.07;
-	const f = exposition === models.enveloppe.ExpositionEnum.simple ? 20 : 15;
+	const e = exposition === models.enveloppe.EXPOSITIONS.simple ? 0.02 : 0.07;
+	const f = exposition === models.enveloppe.EXPOSITIONS.simple ? 20 : 15;
 
 	return (
 		(hsp * sh * e) /
@@ -229,7 +229,7 @@ export function calcule_q4paenv(props: {
  * @returns Perméabilité de l'enveloppe sous 4Pa en m3/(h.m²)
  */
 export function calcule_q4paconv(props: {
-	type_batiment: models.batiment.TypeBatiment;
+	type_batiment: models.batiment.TypeBatimentEnum;
 	annee_construction: number;
 	isolation_murs_plafonds: ReturnType<typeof calcule_isolation_murs_plafonds>;
 	presence_joints_menuiserie: ReturnType<typeof calcule_presence_joints>;
@@ -284,13 +284,13 @@ export function calcule_presence_joints(props: {
  */
 export function calcule_isolation_planchers_hauts(props: {
 	planchers_hauts: {
-		mitoyennete: models.enveloppe.common.Mitoyennete;
+		mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 		isolation: boolean | null;
 	}[];
 }): boolean {
 	const planchers_hauts = props.planchers_hauts.filter(
 		({ mitoyennete, isolation }) =>
-			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur &&
+			mitoyennete === models.enveloppe.common.MITOYENNETES.exterieur &&
 			isolation === false,
 	);
 	return planchers_hauts.length === 0;
@@ -308,23 +308,23 @@ export function calcule_isolation_planchers_hauts(props: {
 export function calcule_presence_protection_solaire(props: {
 	baies: {
 		surface: number;
-		orientation: models.enveloppe.common.Orientation;
-		mitoyennete: models.enveloppe.common.Mitoyennete;
-		type_fermeture: models.enveloppe.baie.TypeFermeture;
+		orientation: models.enveloppe.common.OrientationParoiEnum;
+		mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+		type_fermeture: models.enveloppe.baie.TypeFermetureEnum;
 	}[];
 }): boolean {
-	const orientationsExposees: Set<models.enveloppe.common.Orientation> =
+	const orientationsExposees: Set<models.enveloppe.common.OrientationParoiEnum> =
 		new Set([
-			models.common.OrientationEnum.sud,
-			models.common.OrientationEnum.est,
-			models.common.OrientationEnum.ouest,
+			models.common.ORIENTATIONS_CARDINALES.sud,
+			models.common.ORIENTATIONS_CARDINALES.est,
+			models.common.ORIENTATIONS_CARDINALES.ouest,
 			models.enveloppe.common.OrientationHorizontale,
 		]);
 
 	// Baies extérieures orientées côtés exposés (Sud, Est, Ouest, toiture)
 	const baiesExposees = props.baies.filter(
 		({ mitoyennete, orientation }) =>
-			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur &&
+			mitoyennete === models.enveloppe.common.MITOYENNETES.exterieur &&
 			orientationsExposees.has(orientation),
 	);
 
@@ -362,8 +362,7 @@ export function calcule_presence_protection_solaire(props: {
 	const surfaceProtegee = baiesPrisesEnCompte.reduce(
 		(acc, i) =>
 			acc +
-			(i.type_fermeture !==
-			models.enveloppe.baie.TypeFermetureEnum.sans_fermeture
+			(i.type_fermeture !== models.enveloppe.baie.TYPES_FERMETURE.sans_fermeture
 				? i.surface
 				: 0),
 		0,
@@ -379,19 +378,19 @@ export function calcule_presence_protection_solaire(props: {
 export function calcule_logement_traversant(props: {
 	baies: {
 		surface: number;
-		orientation: models.enveloppe.common.Orientation;
-		mitoyennete: models.enveloppe.common.Mitoyennete;
+		orientation: models.enveloppe.common.OrientationParoiEnum;
+		mitoyennete: models.enveloppe.common.MitoyenneteEnum;
 	}[];
 }): boolean {
 	const baies = props.baies.filter(
 		({ mitoyennete, orientation }) =>
-			mitoyennete === models.enveloppe.common.MitoyenneteEnum.exterieur &&
+			mitoyennete === models.enveloppe.common.MITOYENNETES.exterieur &&
 			orientation !== models.enveloppe.common.OrientationHorizontale,
 	);
 	// 1. On détermine la surface totale des baies pour chaque orientation
 	// 2. Pour chaque orientation, on vérifie que les surfaces correspondantes sont inférieures à 75% de la surface totale des baies
 	const surfaceParOrientation = new Map<
-		models.enveloppe.common.Orientation,
+		models.enveloppe.common.OrientationParoiEnum,
 		number
 	>();
 	for (const baie of baies) {
@@ -413,7 +412,7 @@ export function calcule_sse(props: {
 	sse: ReturnType<typeof baie.calcule_sse>[];
 	sse_ets: ReturnType<typeof localNonChauffe.calcule_sse>[];
 }): models.common.ParMois<number> {
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		const sse = props.sse.reduce((acc, sse) => acc + sse[mois], 0);
 		const sse_ets = props.sse_ets.reduce((acc, sse) => acc + sse[mois], 0);
 		return sse + sse_ets;

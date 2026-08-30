@@ -1,4 +1,4 @@
-import { useState, type SubmitEvent, type MouseEvent } from "react";
+import { useState, type FormEvent, type MouseEvent } from "react";
 import { toast } from "sonner"
 import { SearchIcon } from "lucide-react";
 import {
@@ -16,6 +16,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { type Adresse } from "@/services/search-adresse";
 import { searchDPE, type DPE } from "@/services/search-dpe";
 import { AdresseAutocomplete } from "./adresse-autocomplete";
+import { importDiagnostic } from "@/handlers/import-diagnostic";
 
 interface Props {
   onSuccess: () => void;
@@ -32,9 +33,21 @@ export function RechercheDpeForm({ onSuccess }: Props) {
 
   const [searchPending, setSearchPending] = useState(false);
   const [searchError, setSearchError] = useState<string>();
-
-  const [pending, setPending] = useState(false);
   const [results, setResults] = useState<Array<DPE>>();
+
+  const [selectedNumero, setSelectedNumero] = useState<string>();
+  const [selectionError, setSelectionError] = useState<string>();
+
+  const [error, setError] = useState<string>();
+  const [pending, setPending] = useState(false);
+
+  function handleAdresseChange(value: Adresse | null) {
+    setAdresse(value);
+    setResults(undefined);
+    setSelectedNumero(undefined);
+    setSelectionError(undefined);
+    setError(undefined);
+  }
 
   async function handleSearch(e: MouseEvent) {
     e.preventDefault();
@@ -46,23 +59,40 @@ export function RechercheDpeForm({ onSuccess }: Props) {
 
     setSearchPending(true);
     setSearchError(undefined);
+    setSelectedNumero(undefined);
+    setSelectionError(undefined);
+    setError(undefined);
 
     try {
       const { results } = await searchDPE(adresse.properties.label);
       setResults(results);
     } catch (error) {
+      setResults(undefined);
       toast.error(error instanceof Error ? error.message : "Erreur inconnue");
     } finally {
       setSearchPending(false);
     }
   }
 
-  async function handleSubmit(e: SubmitEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
+    if (!selectedNumero) {
+      setSelectionError("Sélectionnez un DPE dans la liste.");
+      return;
+    }
+
     setPending(true);
+
+    const { success, message } = await importDiagnostic({ numero: selectedNumero });
+
+    if (success) {
+      toast.success(message);
+      onSuccess();
+    } else {
+      toast.error(message);
+    }
     setPending(false);
-    onSuccess()
   }
 
   return (
@@ -70,8 +100,8 @@ export function RechercheDpeForm({ onSuccess }: Props) {
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Field>
           <ButtonGroup>
-            <AdresseAutocomplete className="flex-1 bg-white" onChange={setAdresse} />
-            <Button type="button" onClick={(e) => handleSearch(e)} disabled={searchPending || !adresse}>
+            <AdresseAutocomplete className="flex-1 bg-white" onChange={handleAdresseChange} />
+            <Button type="button" onClick={handleSearch} disabled={searchPending || !adresse}>
               {searchPending
                 ? (<><Spinner data-icon="inline-start" /> Recherche...</>)
                 : (<><SearchIcon /> Rechercher</>)
@@ -89,28 +119,45 @@ export function RechercheDpeForm({ onSuccess }: Props) {
           </p>
         )}
 
-        <RadioGroup required>
-          {results && results.map((dpe) => (
-            <FieldLabel key={dpe.numero_dpe} htmlFor={dpe.numero_dpe} className="bg-white">
-              <Field orientation="horizontal">
-                <FieldContent>
-                  <FieldTitle>{dpe.adresse_ban ?? dpe.adresse_complete_brut}</FieldTitle>
-                  <FieldDescription>
-                    Type de bâtiment : {dpe.type_batiment} <br />
-                    Date d'établissement : {formatDate(dpe.date_etablissement_dpe)}
-                  </FieldDescription>
-                </FieldContent>
-                <RadioGroupItem value={dpe.numero_dpe} id={dpe.numero_dpe} />
-              </Field>
-            </FieldLabel>
-          ))}
-        </RadioGroup>
+        {results && results.length > 0 && (
+          <Field>
+            <RadioGroup
+              name="numero_dpe"
+              required
+              value={selectedNumero}
+              onValueChange={(value: string) => {
+                setSelectedNumero(value);
+                setSelectionError(undefined);
+              }}
+            >
+              {results.map((dpe) => (
+                <FieldLabel key={dpe.numero_dpe} htmlFor={dpe.numero_dpe} className="bg-white">
+                  <Field orientation="horizontal">
+                    <FieldContent>
+                      <FieldTitle>{dpe.adresse_ban ?? dpe.adresse_complete_brut}</FieldTitle>
+                      <FieldDescription>
+                        Type de bâtiment : {dpe.type_batiment} <br />
+                        Date d'établissement : {formatDate(dpe.date_etablissement_dpe)}
+                      </FieldDescription>
+                    </FieldContent>
+                    <RadioGroupItem value={dpe.numero_dpe} id={dpe.numero_dpe} />
+                  </Field>
+                </FieldLabel>
+              ))}
+            </RadioGroup>
+            {selectionError && (
+              <FieldError className="mt-1">{selectionError}</FieldError>
+            )}
+          </Field>
+        )}
+
+        {error && <FieldError>{error}</FieldError>}
 
         {
-          results && (
-            <Button type="submit" className="w-full" disabled={pending}>
+          results && results.length > 0 && (
+            <Button type="submit" className="w-full" disabled={pending || !selectedNumero}>
               {pending
-                ? <><Spinner data-icon="inline-start" /> Calcul...</>
+                ? <><Spinner data-icon="inline-start" /> En cours...</>
                 : "Valider"
               }
             </Button>

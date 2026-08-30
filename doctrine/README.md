@@ -4,46 +4,11 @@
 
 ```text
 doctrine/
-├── abaques/                    # Tables de valeurs forfaitaires
 ├── corpus/                     # Textes réglementaires
 ├── dict/                       # Dictionnaire
 ├── extras/                     # Doctrine extra-réglementaire
 └── formules/                   # Formules de calcul
 ```
-
-## [Abaques](./abaques/)
-
-### Spécifications
-
-- CSV
-- Encodage UTF-8
-- Séparateur ";"
-
-#### En-têtes
-
-- Snake case
-- Minuscules sans accents
-
-#### En tête de comparaison
-
-- `<filtre>/eq` : Équivalent à
-- `<filtre>/lt` : Inférieur à
-- `<filtre>/lte` : Inférieur ou égal à
-- `<filtre>/gt` : Supérieur à
-- `<filtre>/gte` : Supérieur ou égal à
-
-### Schémas
-
-Chaque fichier CSV est décrit par un schéma [Table Schéma](https://datapackage.org/standard/table-schema/) au format YAML :
-
-```text
-/abaques/chauffage/combustion.csv
-/abaques/chauffage/combustion.schema.yaml
-```
-
-#### Mots clés
-
-- **x-enum** : Référence une valeur dans le dictionnaire des énumérations.
 
 ## [Corpus](./corpus/)
 

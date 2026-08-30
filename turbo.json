@@ -1,25 +1,30 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "tasks": {
-    "check-types": {
-      "outputs": [],
-      "cache": false
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "outputs": ["dist"],
-      "cache": true
-    },
-    "dev": {
-      "cache": false
-    },
-    "lint": {
-      "cache": false
-    },
-    "test": {
-      "dependsOn": ["build"],
-      "outputs": [],
-      "cache": false
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"tasks": {
+		"check-types": {
+			"outputs": [],
+			"cache": false
+		},
+		"build": {
+			"dependsOn": ["^build"],
+			"outputs": ["dist"],
+			"cache": true
+		},
+		"dev": {
+			"cache": false
+		},
+		"lint": {
+			"cache": false
+		},
+		"test": {
+			"dependsOn": ["build"],
+			"outputs": [],
+			"cache": false
+		},
+		"coverage": {
+			"dependsOn": ["build"],
+			"outputs": [],
+			"cache": false
+		}
+	}
 }

@@ -9,17 +9,16 @@ import * as systeme from "./systeme/service.js";
 export { generateur, installation, systeme };
 
 export function calcule(ctx: Context): models.ecs.EcsWithData {
-	const generateurs = ctx.diagnostic.ecs.generateurs.map((item) =>
-		generateur.calcule(ctx, item),
-	);
-	const installations = ctx.diagnostic.ecs.installations.map((item) =>
-		installation.calcule(ctx, item),
-	);
 	return {
 		...ctx.diagnostic.ecs,
 
-		generateurs: models.common.toNonEmptyArray(generateurs),
-		installations: models.common.toNonEmptyArray(installations),
+		generateurs: ctx.diagnostic.ecs.generateurs.map((item) =>
+			generateur.calcule(ctx, item),
+		),
+
+		installations: ctx.diagnostic.ecs.installations.map((item) =>
+			installation.calcule(ctx, item),
+		),
 
 		data: {
 			becs: models.common.reduceParMois(ctx.resolve(NAMESPACE, RULES.becs)),

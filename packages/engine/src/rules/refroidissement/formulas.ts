@@ -4,7 +4,6 @@ import type * as climat from "../climat/formulas.js";
 import type * as ecs from "../ecs/formulas.js";
 import type * as enveloppe from "../enveloppe/formulas.js";
 import type * as generateur from "../refroidissement/generateur/formulas.js";
-import { createParMois } from "../helpers.js";
 
 /**
  * @formule refroidissement.cef
@@ -63,7 +62,7 @@ export function calcule_bfr(props: {
 	nref: ReturnType<typeof calcule_nref>;
 }): models.common.ParMois<number> {
 	const { gv, tint } = props;
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		const rbth = props.rbth[mois];
 		const as = props.as[mois];
 		const ai = props.ai[mois];
@@ -87,7 +86,7 @@ export function calcule_fut(props: {
 }): models.common.ParMois<number> {
 	const { t } = props;
 	const a = 1 + t / 15;
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		const rbth = props.rbth[mois];
 		if (rbth > 0 && rbth != 1) return (1 - rbth ** -a) / (1 - rbth ** (-a - 1));
 		else if (rbth == 1) return a / (a + 1);
@@ -110,7 +109,7 @@ export function calcule_rbth(props: {
 }): models.common.ParMois<number> {
 	const { gv, tint } = props;
 
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		const textmoy = props.textmoy[mois];
 		const nref = props.nref[mois];
 		const as = props.as[mois];
@@ -131,7 +130,7 @@ export function calcule_as(props: {
 	sse: ReturnType<typeof enveloppe.calcule_sse>;
 	e: ReturnType<typeof calcule_e>;
 }): models.common.ParMois<number> {
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		const sse = props.sse[mois];
 		const e = props.e[mois];
 		return sse * e * 1000;
@@ -148,7 +147,7 @@ export function calcule_ai(props: {
 	nref: ReturnType<typeof calcule_nref>;
 }): models.common.ParMois<number> {
 	const { sh, nadeq } = props;
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		const nref = props.nref[mois];
 		return ((3.18 + 0.34) * sh + 90 * (132 / 168) * nadeq) * nref;
 	});
@@ -159,15 +158,15 @@ export function calcule_ai(props: {
  * @returns Ensoleillement reçu en période de refroidissement en kWh/m²/mois
  */
 export function calcule_e(props: {
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
 }): models.common.ParMois<number> {
 	const { scenario, sollicitations } = props;
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.ScenarioEnum.conventionnel:
+			case models.common.SCENARIOS.conventionnel:
 				return sollicitations[mois].efr28;
-			case models.common.ScenarioEnum.depensier:
+			case models.common.SCENARIOS.depensier:
 				return sollicitations[mois].efr26;
 		}
 	});
@@ -179,14 +178,14 @@ export function calcule_e(props: {
  */
 export function calcule_textmoy(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 }): models.common.ParMois<number | null> {
 	const { sollicitations, scenario } = props;
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.ScenarioEnum.conventionnel:
+			case models.common.SCENARIOS.conventionnel:
 				return sollicitations[mois].textmoy28;
-			case models.common.ScenarioEnum.depensier:
+			case models.common.SCENARIOS.depensier:
 				return sollicitations[mois].textmoy26;
 		}
 	});
@@ -198,14 +197,14 @@ export function calcule_textmoy(props: {
  */
 export function calcule_nref(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 }): models.common.ParMois<number> {
 	const { sollicitations, scenario } = props;
-	return createParMois((mois: models.common.Mois) => {
+	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.ScenarioEnum.conventionnel:
+			case models.common.SCENARIOS.conventionnel:
 				return sollicitations[mois].nref28;
-			case models.common.ScenarioEnum.depensier:
+			case models.common.SCENARIOS.depensier:
 				return sollicitations[mois].nref26;
 		}
 	});
@@ -216,13 +215,13 @@ export function calcule_nref(props: {
  * @returns Température de consigne en froid en °C
  */
 export function calcule_tint(props: {
-	scenario: models.common.Scenario;
+	scenario: models.common.ScenarioEnum;
 }): number {
 	const { scenario } = props;
 	switch (scenario) {
-		case models.common.ScenarioEnum.conventionnel:
+		case models.common.SCENARIOS.conventionnel:
 			return 28;
-		case models.common.ScenarioEnum.depensier:
+		case models.common.SCENARIOS.depensier:
 			return 26;
 	}
 }
@@ -250,13 +249,13 @@ export function calcule_cin(props: {
 	const { sh, inertie } = props;
 
 	switch (inertie) {
-		case models.enveloppe.common.InertieEnum.legere:
+		case models.enveloppe.common.INERTIES.legere:
 			return 110000 * sh;
-		case models.enveloppe.common.InertieEnum.moyenne:
+		case models.enveloppe.common.INERTIES.moyenne:
 			return 165000 * sh;
-		case models.enveloppe.common.InertieEnum.lourde:
+		case models.enveloppe.common.INERTIES.lourde:
 			return 260000 * sh;
-		case models.enveloppe.common.InertieEnum.tres_lourde:
+		case models.enveloppe.common.INERTIES.tres_lourde:
 			return 260000 * sh;
 	}
 }

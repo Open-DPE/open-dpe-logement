@@ -7,4 +7,17 @@ export type Departement = {
 	code_insee: string;
 };
 
-export const departements = _departements as Departement[];
+export interface Repository {
+	all(): Departement[];
+	byCode(code: string): Departement | null;
+}
+
+export const departement: Repository = {
+	all(): Departement[] {
+		return _departements;
+	},
+
+	byCode(code: string): Departement | null {
+		return _departements.find((d) => d.code_departement === code) ?? null;
+	},
+};
