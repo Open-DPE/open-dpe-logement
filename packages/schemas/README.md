@@ -157,11 +157,10 @@ Path : `diagnostic.batiment.adresse`
 
 Contrainte : `code_postal` et `code_insee` vérifiés depuis la Base d'Adresse Nationale.
 
-### RC-002 : Cohérence des années d'installation / construction / rénovation
+### RC-002 : Cohérence des années de construction / rénovation
 
 Paths:
 
-- `diagnostic..annee_installation`
 - `diagnostic..annee_construction`
 - `diagnostic..annee_renovation`
 

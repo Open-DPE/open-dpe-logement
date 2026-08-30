@@ -18,7 +18,10 @@ properties:
       - cet_air_ambiant
       - cet_air_exterieur
       - cet_air_extrait
-      - pac_double_service
+      - pac_air_eau
+      - pac_eau_eau
+      - pac_eau_glycolee_eau
+      - pac_geothermique
       - poele_bouilleur
       - reseau_chaleur
       - null
@@ -44,6 +47,26 @@ properties:
     enum: [gaz_naturel, gpl, fioul, null]
   annee_installation:
     $ref: /common#/$defs/annee_installation
+  position:
+    $ref: "#/$defs/position"
+  stockage:
+    $ref: "#/$defs/stockage"
+  signaletique:
+    $ref: "#/$defs/signaletique"
+  data:
+    $ref: "#/$defs/data"
+required:
+  - id
+  - description
+  - type
+  - energie
+  - bienergie
+  - annee_installation
+  - position
+  - stockage
+  - signaletique
+
+$defs:
   position:
     title: Position
     type: object
@@ -92,11 +115,9 @@ properties:
         properties:
           generateur_collectif:
             const: true
-          position_volume_chauffe:
-            const: false
         required:
           - generateur_collectif
-          - position_volume_chauffe
+
   stockage:
     title: Stockage
     type: object
@@ -204,20 +225,7 @@ properties:
       - pveilleuse
       - qp0
       - rpn
-  data:
-    $ref: "#/$defs/data"
-required:
-  - id
-  - description
-  - type
-  - energie
-  - bienergie
-  - annee_installation
-  - position
-  - stockage
-  - signaletique
 
-$defs:
   data:
     title: Données calculées
     type: object

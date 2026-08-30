@@ -52,7 +52,7 @@ oneOf:
       type:
         const: homogene
       hauteur:
-        type: integer
+        type: number
       profondeur:
         $ref: "/common#/$defs/non_applicable"
       secteur:
@@ -69,7 +69,7 @@ oneOf:
       type:
         const: non_homogene
       hauteur:
-        type: integer
+        type: number
       secteur:
         type: string
       profondeur:

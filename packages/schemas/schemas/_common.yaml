@@ -17,16 +17,13 @@ $defs:
   nombre:
     title: Nombre
     type: number
-    multipleOf: 0.01
   nombre_positif:
     title: Nombre positif
     type: number
-    multipleOf: 0.01
     exclusiveMinimum: 0
   annee:
     title: Année
     type: integer
-    minimum: 1900
   annee_construction:
     title: Année de construction
     anyOf:

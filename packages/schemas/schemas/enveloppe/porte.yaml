@@ -28,9 +28,7 @@ properties:
   menuiserie:
     $ref: "#/$defs/menuiserie"
   vitrage:
-    oneOf:
-      - $ref: /enveloppe/porte#/$defs/vitrage
-      - const: null
+    $ref: "#/$defs/vitrage"
   data:
     $ref: "#/$defs/data"
 
@@ -97,7 +95,8 @@ $defs:
       surface:
         title: Surface de vitrage en m²
         description: Une porte avec un taux de vitrage supérieur à 60% est à considérer comme une porte-fenètre avec soubassement
-        $ref: /common#/$defs/nombre_positif
+        type: number
+        minimum: 0
       type:
         title: Type de vitrage
         type: [string, "null"]
@@ -106,6 +105,23 @@ $defs:
     required:
       - surface
       - type
+    oneOf:
+      - title: Porte sans vitrage
+        properties:
+          surface:
+            const: 0
+          type:
+            $ref: "/common#/$defs/non_applicable"
+        required:
+          - surface
+          - type
+      - title: Porte avec vitrage
+        properties:
+          surface:
+            type: number
+            minimumExclusive: 0
+        required:
+          - surface
 
   data:
     title: Données calculées

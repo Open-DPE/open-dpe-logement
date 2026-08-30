@@ -46,6 +46,25 @@ required:
   - parois
   - baies
 
+oneOf:
+  - title: Espace tampon solarisé
+    properties:
+      type:
+        const: espace_tampon_solarise
+      baies:
+        minItems: 1
+    required:
+      - type
+      - baies
+
+  - title: Autres local non chauffé
+    properties:
+      type:
+        not:
+          const: espace_tampon_solarise
+    required:
+      - type
+
 anyOf:
   - properties:
       parois:

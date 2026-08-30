@@ -21,27 +21,9 @@ properties:
     items:
       $ref: /ecs/systeme
   solaire_thermique:
-    title: Solaire thermique
-    type: [object, "null"]
-    additionalProperties: false
-    properties:
-      usage:
-        title: Usages couverts par le solaire thermique
-        type: string
-        x-enum: ecs:usage-solaire
-        enum: [ecs, chauffage_ecs]
-      annee_installation:
-        $ref: /common#/$defs/annee_installation
-      fecs:
-        title: Facteur de couverture solaire
-        oneOf:
-          - $ref: /common#/$defs/nombre
-          - const: null
-        maximum: 1
-    required:
-      - usage
-      - annee_installation
-      - fecs
+    oneOf:
+      - $ref: "#/$defs/solaire_thermique"
+      - const: null
   data:
     $ref: "#/$defs/data"
 required:
@@ -88,3 +70,26 @@ $defs:
       - qdw_ind_vc
       - qdw_col_vc
       - qdw_col_hvc
+
+  solaire_thermique:
+    title: Solaire thermique
+    type: object
+    additionalProperties: false
+    properties:
+      usage:
+        title: Usages couverts par le solaire thermique
+        type: string
+        x-enum: ecs:usage-solaire
+        enum: [ecs, chauffage_ecs]
+      annee_installation:
+        $ref: /common#/$defs/annee_installation
+      fecs:
+        title: Facteur de couverture solaire
+        oneOf:
+          - $ref: /common#/$defs/nombre
+          - const: null
+        maximum: 1
+    required:
+      - usage
+      - annee_installation
+      - fecs

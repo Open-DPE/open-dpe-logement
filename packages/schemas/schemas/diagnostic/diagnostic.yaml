@@ -51,17 +51,42 @@ required:
   - production
 
 oneOf:
-  - title: Diagnostic bâtiment
+  - title: Diagnostic bâtiment - Maison individuelle
     properties:
       type:
         const: batiment
       batiment:
         type: object
         properties:
+          type:
+            const: maison
           logement:
             $ref: /common#/$defs/non_applicable
         required:
+          - type
           - logement
+    required:
+      - type
+      - batiment
+
+  - title: Diagnostic bâtiment - Immeuble
+    properties:
+      type:
+        const: batiment
+      batiment:
+        type: object
+        properties:
+          type:
+            const: immeuble
+          logement:
+            $ref: /common#/$defs/non_applicable
+          appartements_visites:
+            type: array
+            minItems: 1
+        required:
+          - type
+          - logement
+          - appartements_visites
     required:
       - type
       - batiment

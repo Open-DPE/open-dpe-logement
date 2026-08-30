@@ -120,7 +120,7 @@ $defs:
       - position_volume_chauffe
       - generateur_mixte_id
       - reseau_chaleur_id
-    anyOf:
+    oneOf:
       - title: Générateur individuel
         type: object
         properties:
@@ -136,11 +136,8 @@ $defs:
         properties:
           generateur_collectif:
             const: true
-          position_volume_chauffe:
-            const: false
         required:
           - generateur_collectif
-          - position_volume_chauffe
 
   signaletique:
     title: Fiche signalétique
