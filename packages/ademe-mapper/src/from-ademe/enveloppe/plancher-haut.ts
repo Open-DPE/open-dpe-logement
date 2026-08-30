@@ -2,15 +2,16 @@ import { enveloppe } from "@open-dpe-logement/models";
 import { mapIsolation } from "./paroi/isolation.js";
 import { mapPosition } from "./paroi/position.js";
 import type { Input, PlancherHaut } from "./types.js";
+import { resolveId } from "../common.js";
 
 export type PlancherHautProps = {
 	paroi: PlancherHaut;
 	input: Input;
 };
 
-const ConfigurationEnum = enveloppe.plancherHaut.ConfigurationEnum;
-const TypePlancherHautEnum = enveloppe.plancherHaut.TypePlancherHautEnum;
-const InertieEnum = enveloppe.common.InertieEnum;
+const CONFIGURATIONS = enveloppe.plancherHaut.CONFIGURATIONS;
+const TYPES_PLANCHER_HAUT = enveloppe.plancherHaut.TYPES_PLANCHER_HAUT;
+const INERTIES = enveloppe.common.INERTIES;
 
 export function mapPlancherHaut(
 	props: PlancherHautProps,
@@ -33,7 +34,7 @@ export function mapPlancherHaut(
 export function mapId(
 	props: PlancherHautProps["paroi"],
 ): enveloppe.plancherHaut.PlancherHaut["id"] {
-	return props.donnee_entree.reference;
+	return resolveId(props.donnee_entree.reference);
 }
 
 export function mapDescription(
@@ -46,24 +47,24 @@ export function mapConfiguration(
 	props: PlancherHautProps["paroi"],
 ): enveloppe.plancherHaut.PlancherHaut["configuration"] {
 	switch (props.donnee_entree.enum_type_plancher_haut_id) {
-		case 8:
-		case 11:
-		case 16:
-			return ConfigurationEnum.terrasse;
+		case "8":
+		case "11":
+		case "16":
+			return CONFIGURATIONS.terrasse;
 
-		case 12:
-		case 13:
-			return ConfigurationEnum.rampants;
+		case "12":
+		case "13":
+			return CONFIGURATIONS.rampants;
 	}
 	switch (props.donnee_entree.enum_type_adjacence_id) {
-		case 1:
-		case 2:
-		case 3:
-		case 5:
-		case 6:
-			return ConfigurationEnum.rampants;
+		case "1":
+		case "2":
+		case "3":
+		case "5":
+		case "6":
+			return CONFIGURATIONS.rampants;
 		default:
-			return ConfigurationEnum.plancher;
+			return CONFIGURATIONS.plancher;
 	}
 }
 
@@ -71,34 +72,34 @@ export function mapType(
 	props: PlancherHautProps["paroi"],
 ): enveloppe.plancherHaut.PlancherHaut["type"] {
 	switch (props.donnee_entree.enum_type_plancher_haut_id) {
-		case 1:
-			return TypePlancherHautEnum.plafond_avec_ou_sans_remplissage;
-		case 2:
-			return TypePlancherHautEnum.plafond_entre_solives_metalliques;
-		case 3:
-			return TypePlancherHautEnum.plafond_entre_solives_bois;
-		case 4:
-			return TypePlancherHautEnum.plafond_bois_sur_solives_metalliques;
-		case 5:
-			return TypePlancherHautEnum.plafond_bois_sous_solives_metalliques;
-		case 6:
-			return TypePlancherHautEnum.bardeaux_et_remplissage;
-		case 7:
-			return TypePlancherHautEnum.plafond_bois_sur_solives_bois;
-		case 8:
-			return TypePlancherHautEnum.plafond_bois_sous_solives_bois;
-		case 9:
-			return TypePlancherHautEnum.dalle_beton;
-		case 10:
-			return TypePlancherHautEnum.plafond_lourd;
-		case 11:
-			return TypePlancherHautEnum.combles_amenages_sous_rampant;
-		case 12:
-			return TypePlancherHautEnum.toiture_chaume;
-		case 13:
-			return TypePlancherHautEnum.plafond_patre;
-		case 14:
-			return TypePlancherHautEnum.bac_acier;
+		case "1":
+			return TYPES_PLANCHER_HAUT.plafond_avec_ou_sans_remplissage;
+		case "2":
+			return TYPES_PLANCHER_HAUT.plafond_entre_solives_metalliques;
+		case "3":
+			return TYPES_PLANCHER_HAUT.plafond_entre_solives_bois;
+		case "4":
+			return TYPES_PLANCHER_HAUT.plafond_bois_sur_solives_metalliques;
+		case "5":
+			return TYPES_PLANCHER_HAUT.plafond_bois_sous_solives_metalliques;
+		case "6":
+			return TYPES_PLANCHER_HAUT.bardeaux_et_remplissage;
+		case "7":
+			return TYPES_PLANCHER_HAUT.plafond_bois_sur_solives_bois;
+		case "8":
+			return TYPES_PLANCHER_HAUT.plafond_bois_sous_solives_bois;
+		case "9":
+			return TYPES_PLANCHER_HAUT.dalle_beton;
+		case "10":
+			return TYPES_PLANCHER_HAUT.plafond_lourd;
+		case "11":
+			return TYPES_PLANCHER_HAUT.combles_amenages_sous_rampant;
+		case "12":
+			return TYPES_PLANCHER_HAUT.toiture_chaume;
+		case "13":
+			return TYPES_PLANCHER_HAUT.plafond_patre;
+		case "14":
+			return TYPES_PLANCHER_HAUT.bac_acier;
 		default:
 			return null;
 	}
@@ -121,10 +122,10 @@ export function inertie(
 ): enveloppe.plancherHaut.PlancherHaut["inertie"] {
 	if ("paroi_lourde" in props.donnee_entree) {
 		switch (props.donnee_entree.paroi_lourde) {
-			case 1:
-				return InertieEnum.lourde;
-			case 0:
-				return InertieEnum.legere;
+			case true:
+				return INERTIES.lourde;
+			case false:
+				return INERTIES.legere;
 		}
 	}
 	return null;

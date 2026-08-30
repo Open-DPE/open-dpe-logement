@@ -1,9 +1,10 @@
 import { enveloppe } from "@open-dpe-logement/models";
 import { createId } from "../common.js";
 import type { BaieVitree, MasqueLointainNonHomogene } from "./types.js";
+import { MappingError } from "../errors.js";
 
-const TypeMasqueEnum = enveloppe.masque.TypeMasqueEnum;
-const SecteurEnum = enveloppe.masque.SecteurEnum;
+const TypeMasqueEnum = enveloppe.masque.TYPES_MASQUE;
+const SecteurEnum = enveloppe.masque.SECTEURS;
 
 export type MasqueProps =
 	| MasqueProcheProps
@@ -57,9 +58,7 @@ export namespace masqueProche {
 		};
 
 		if (!enveloppe.masque.isMasqueProche(value))
-			throw new Error(
-				`Le masque proche ne peut être déterminé pour : ${JSON.stringify(props)}`,
-			);
+			throw new MappingError("masque.type", props);
 
 		return value;
 	}
@@ -151,9 +150,7 @@ export namespace masqueLointainHomogene {
 		};
 
 		if (!enveloppe.masque.isMasqueLointainHomogene(value))
-			throw new Error(
-				`Le masque lointain homogène ne peut être déterminé pour : ${JSON.stringify(props)}`,
-			);
+			throw new MappingError("masque.type", props);
 
 		return value;
 	}
@@ -210,9 +207,7 @@ export namespace masqueLointainNonHomogene {
 		};
 
 		if (!enveloppe.masque.isMasqueLointainNonHomogene(value))
-			throw new Error(
-				`Le masque lointain non homogène ne peut être déterminé pour : ${JSON.stringify(props)}`,
-			);
+			throw new MappingError("masque.type", props);
 
 		return value;
 	}
@@ -247,7 +242,7 @@ export namespace masqueLointainNonHomogene {
 			case 12:
 			case 16:
 			case 20:
-				return 60;
+				return 75;
 
 			default:
 				return null;

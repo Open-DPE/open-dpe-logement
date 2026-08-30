@@ -14,18 +14,13 @@ export type DPEImmeuble =
 	| from.dpe.v23.DPEImmeuble
 	| from.dpe.v24.DPEImmeuble
 	| from.dpe.v25.DPEImmeuble
-	| from.dpe.v26.DPEImmeuble;
+	| from.dpe.v26.DPEImmeuble
+	| from.audit.DpeImmeuble;
 
 export type LogementVisite =
+	| from.dpe.v22.LogementVisite
 	| from.dpe.v23.LogementVisite
 	| from.dpe.v24.LogementVisite
 	| from.dpe.v25.LogementVisite
-	| from.dpe.v26.LogementVisite;
-
-export function isDPEImmeuble(props: Input): props is InputWithDPEImmeuble {
-	return (
-		props.dpe_immeuble !== undefined &&
-		props.dpe_immeuble !== null &&
-		!from.dpe.isDPEv23(props)
-	);
-}
+	| from.dpe.v26.LogementVisite
+	| from.audit.LogementVisite;

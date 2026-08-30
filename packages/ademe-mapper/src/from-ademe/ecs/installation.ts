@@ -1,6 +1,6 @@
-import { common, ecs } from "@open-dpe-logement/models";
+import { ecs } from "@open-dpe-logement/models";
 import type { Input, InstallationEcs } from "./types.js";
-import { mapAnneeEtablissement } from "../common.js";
+import { mapAnneeEtablissement, resolveId, toNonEmptyArray } from "../common.js";
 import * as systeme from "./systeme.js";
 
 export { systeme };
@@ -24,7 +24,7 @@ export function mapInstallation(props: Props): ecs.installation.Installation {
 export function mapID(
 	props: InstallationEcs,
 ): ecs.installation.Installation["id"] {
-	return props.donnee_entree.reference;
+	return resolveId(props.donnee_entree.reference);
 }
 
 export function mapDescription(
@@ -43,9 +43,9 @@ export function mapInstallationCollective(
 	props: InstallationEcs,
 ): ecs.installation.Installation["installation_collective"] {
 	switch (props.donnee_entree.enum_type_installation_id) {
-		case 2:
-		case 3:
-		case 4:
+		case "2":
+		case "3":
+		case "4":
 			return true;
 		default:
 			return false;
@@ -63,7 +63,7 @@ export function mapSystemes(
 		}),
 	);
 
-	return common.toNonEmptyArray(systemes);
+	return toNonEmptyArray(systemes);
 }
 
 export function mapSolaireThermique(
@@ -82,12 +82,12 @@ export function mapSolaireThermique(
 export function mapUsageSolaire(
 	props: InstallationEcs,
 ): ecs.installation.SolaireThermique["usage"] | null {
-	const Enum = ecs.installation.UsageSolaireEnum;
+	const Enum = ecs.installation.USAGES_SOLAIRE;
 	switch (props.donnee_entree.enum_type_installation_solaire_id) {
-		case 2:
-		case 3:
+		case "2":
+		case "3":
 			return Enum.ecs;
-		case 4:
+		case "4":
 			return Enum.chauffage_ecs;
 		default:
 			return null;
@@ -98,7 +98,7 @@ export function mapAnneeInstallationSolaire(
 	props: Props,
 ): ecs.installation.SolaireThermique["annee_installation"] | null {
 	switch (props.installation.donnee_entree.enum_type_installation_solaire_id) {
-		case 3:
+		case "3":
 			return mapAnneeEtablissement(props.input);
 		default:
 			return null;

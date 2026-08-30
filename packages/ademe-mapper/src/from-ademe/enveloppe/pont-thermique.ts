@@ -1,14 +1,14 @@
 import { enveloppe } from "@open-dpe-logement/models";
 import type { Input, PontThermique } from "./types.js";
-import { MappingError } from "../../errors.js";
-import { mapReferences } from "../common.js";
+import { MappingError } from "../errors.js";
+import { findReference, resolveId } from "../common.js";
 
 export type Props = {
 	pontThermique: PontThermique;
 	input: Input;
 };
 
-const TypeLiaisonEnum = enveloppe.pontThermique.TypeLiaisonEnum;
+const TYPES_LIAISON = enveloppe.pontThermique.TYPES_LIAISON;
 
 export function mapPontThermique(
 	props: Props,
@@ -23,7 +23,7 @@ export function mapPontThermique(
 }
 
 export function mapId(props: PontThermique): string {
-	return props.donnee_entree.reference;
+	return resolveId(props.donnee_entree.reference);
 }
 
 export function mapDescription(props: PontThermique): string {
@@ -55,28 +55,81 @@ export function mapLiaison(props: Props): enveloppe.pontThermique.Liaison {
 
 export function mapTypeLiaison(
 	props: Props,
-): enveloppe.pontThermique.TypeLiaison {
+): enveloppe.pontThermique.TypeLiaisonEnum {
 	switch (props.pontThermique.donnee_entree.enum_type_liaison_id) {
-		case 1:
-			return TypeLiaisonEnum.plancher_bas_mur;
-		case 2:
-			return TypeLiaisonEnum.plancher_intermediaire_mur;
-		case 3:
-			return TypeLiaisonEnum.plancher_haut_mur;
-		case 4:
-			return TypeLiaisonEnum.refend_mur;
-		case 5:
+		case "1":
+			return TYPES_LIAISON.plancher_bas_mur;
+		case "2":
+			return TYPES_LIAISON.plancher_intermediaire_mur;
+		case "3":
+			return TYPES_LIAISON.plancher_haut_mur;
+		case "4":
+			return TYPES_LIAISON.refend_mur;
+		case "5":
 			return mapBaieId(props)
-				? TypeLiaisonEnum.baie_mur
-				: TypeLiaisonEnum.porte_mur;
+				? TYPES_LIAISON.baie_mur
+				: TYPES_LIAISON.porte_mur;
 	}
 }
 
 export function mapMurId(props: Props): string {
-	const haystack = props.input.logement.enveloppe.mur_collection;
-	const id = mapReference(props.pontThermique, haystack);
+	const haystack = props.input.logement.enveloppe.mur_collection.map(
+		(mur) => mur.donnee_entree.reference,
+	);
+	const id =
+		mapReference(props.pontThermique, haystack) ?? mapMurIdViaOuverture(props);
 	if (!id) throw new MappingError("mur_id", props.pontThermique);
 	return id;
+}
+
+/**
+ * Repli pour les liaisons baie_mur/porte_mur (type "5") : contrairement aux
+ * autres types de liaison, `reference_1`/`reference_2` du pont thermique ne
+ * référencent jamais le mur directement — seulement l'ouverture (ex.
+ * "fen0"/"porte0", cf. `mapBaieId`/`mapPorteId`). Le mur associé se résout
+ * transitivement via `reference_paroi` de cette ouverture, le même champ que
+ * `paroi_id` de la baie/porte elle-même (voir
+ * `enveloppe/paroi/position.ts::mapParoiId`) — constaté sur le corpus réel,
+ * voir `claude/rapport-correctifs-known-failures.md` §4.
+ */
+function mapMurIdViaOuverture(props: Props): string | null {
+	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== "5")
+		return null;
+
+	const ouvertures = [
+		...props.input.logement.enveloppe.baie_vitree_collection,
+		...props.input.logement.enveloppe.porte_collection,
+	];
+	const ouvertureReferences = ouvertures.map(
+		(ouverture) => ouverture.donnee_entree.reference,
+	);
+	const needles = [
+		props.pontThermique.donnee_entree.reference_1,
+		props.pontThermique.donnee_entree.reference_2,
+	].filter(
+		(needle): needle is string => needle !== null && needle !== undefined,
+	);
+
+	for (const needle of needles) {
+		const matchedOuvertureRef = findReference(needle, ouvertureReferences);
+		if (!matchedOuvertureRef) continue;
+
+		const ouverture = ouvertures.find(
+			(candidate) => candidate.donnee_entree.reference === matchedOuvertureRef,
+		);
+		if (!ouverture?.donnee_entree.reference_paroi) continue;
+
+		const murReferences = props.input.logement.enveloppe.mur_collection.map(
+			(mur) => mur.donnee_entree.reference,
+		);
+		const matchedMurRef = findReference(
+			ouverture.donnee_entree.reference_paroi,
+			murReferences,
+		);
+		if (matchedMurRef) return resolveId(matchedMurRef);
+	}
+
+	return null;
 }
 
 export function mapPlancherId(props: Props): string | null {
@@ -84,41 +137,54 @@ export function mapPlancherId(props: Props): string | null {
 }
 
 export function mapPlancherBasId(props: Props): string | null {
-	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== 1) return null;
-	const haystack = props.input.logement.enveloppe.plancher_bas_collection;
+	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== "1")
+		return null;
+	const haystack = props.input.logement.enveloppe.plancher_bas_collection.map(
+		(plancher) => plancher.donnee_entree.reference,
+	);
 	const id = mapReference(props.pontThermique, haystack);
 	if (!id) throw new MappingError("plancher_id", props.pontThermique);
 	return id;
 }
 
 export function mapPlancherHautId(props: Props): string | null {
-	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== 3) return null;
-	const haystack = props.input.logement.enveloppe.plancher_haut_collection;
+	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== "3")
+		return null;
+	const haystack = props.input.logement.enveloppe.plancher_haut_collection.map(
+		(plancher) => plancher.donnee_entree.reference,
+	);
 	const id = mapReference(props.pontThermique, haystack);
 	if (!id) throw new MappingError("plancher_id", props.pontThermique);
 	return id;
 }
 
 export function mapOuvertureId(props: Props): string | null {
-	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== 5) return null;
+	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== "5")
+		return null;
 	const id = mapBaieId(props) || mapPorteId(props);
 	if (!id) throw new MappingError("ouverture_id", props.pontThermique);
 	return id;
 }
 
 export function mapBaieId(props: Props): string | null {
-	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== 5) return null;
-	const haystack = props.input.logement.enveloppe.baie_vitree_collection;
+	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== "5")
+		return null;
+	const haystack = props.input.logement.enveloppe.baie_vitree_collection.map(
+		(baie) => baie.donnee_entree.reference,
+	);
 	return mapReference(props.pontThermique, haystack);
 }
 
 export function mapPorteId(props: Props): string | null {
-	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== 5) return null;
-	const haystack = props.input.logement.enveloppe.porte_collection;
+	if (props.pontThermique.donnee_entree.enum_type_liaison_id !== "5")
+		return null;
+	const haystack = props.input.logement.enveloppe.porte_collection.map(
+		(porte) => porte.donnee_entree.reference,
+	);
 	return mapReference(props.pontThermique, haystack);
 }
 
-export function mapPontThermiquePartiel(props: Props): boolean | null {
+export function mapPontThermiquePartiel(props: Props): boolean {
 	return (
 		props.pontThermique.donnee_entree.pourcentage_valeur_pont_thermique < 1
 	);
@@ -126,18 +192,16 @@ export function mapPontThermiquePartiel(props: Props): boolean | null {
 
 function mapReference(
 	pontThermique: PontThermique,
-	haystack: Array<{ donnee_entree: { reference: string } }>,
-) {
-	const needle =
-		pontThermique.donnee_entree.reference_1 ||
-		pontThermique.donnee_entree.reference_2;
+	haystack: string[],
+): string | null {
+	const needles = [
+		pontThermique.donnee_entree.reference_1,
+		pontThermique.donnee_entree.reference_2,
+	].filter((needle) => needle !== null && needle !== undefined);
 
-	if (needle) {
-		for (const item of haystack) {
-			const ref = mapReferences(needle, item.donnee_entree.reference);
-			if (ref) return ref;
-		}
+	for (const needle of needles) {
+		const match = findReference(needle, haystack);
+		if (match) return resolveId(match);
 	}
-
 	return null;
 }

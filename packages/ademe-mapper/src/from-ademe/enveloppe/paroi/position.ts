@@ -1,9 +1,9 @@
 import { enveloppe } from "@open-dpe-logement/models";
 import type { Input, Paroi, ParoiVitree } from "../types.js";
-import { mapReferences } from "../../common.js";
-import { MappingError } from "../../../errors.js";
+import { findReference, resolveId } from "../../common.js";
+import { MappingError } from "../../errors.js";
 
-const MitoyenneteEnum = enveloppe.common.MitoyenneteEnum;
+const MITOYENNETES = enveloppe.common.MITOYENNETES;
 
 export function mapPosition(props: {
 	paroi: Paroi;
@@ -32,27 +32,27 @@ export function mapSurface(props: Paroi): number {
 	return props.donnee_entree.surface_paroi_opaque;
 }
 
-export function mapMitoyennete(props: Paroi): enveloppe.common.Mitoyennete {
+export function mapMitoyennete(props: Paroi): enveloppe.common.MitoyenneteEnum {
 	switch (props.donnee_entree.enum_type_adjacence_id) {
-		case 1:
-			return MitoyenneteEnum.exterieur;
-		case 2:
-		case 5:
-			return MitoyenneteEnum.enterre;
-		case 3:
-			return MitoyenneteEnum.vide_sanitaire;
-		case 4:
-			return MitoyenneteEnum.local_non_residentiel;
-		case 6:
-			return MitoyenneteEnum.sous_sol_non_chauffe;
-		case 7:
-			return MitoyenneteEnum.local_non_accessible;
-		case 20:
-			return MitoyenneteEnum.local_non_residentiel;
-		case 22:
-			return MitoyenneteEnum.local_residentiel;
+		case "1":
+			return MITOYENNETES.exterieur;
+		case "2":
+		case "5":
+			return MITOYENNETES.enterre;
+		case "3":
+			return MITOYENNETES.vide_sanitaire;
+		case "4":
+			return MITOYENNETES.local_non_residentiel;
+		case "6":
+			return MITOYENNETES.sous_sol_non_chauffe;
+		case "7":
+			return MITOYENNETES.local_non_accessible;
+		case "20":
+			return MITOYENNETES.local_non_residentiel;
+		case "22":
+			return MITOYENNETES.local_residentiel;
 		default:
-			return MitoyenneteEnum.local_non_chauffe;
+			return MITOYENNETES.local_non_chauffe;
 	}
 }
 
@@ -63,15 +63,16 @@ export function mapLocalNonChauffeId(props: {
 	const { paroi, input } = props;
 
 	// Absence de local non chauffé mitoyen
-	if (mapMitoyennete(paroi) !== MitoyenneteEnum.local_non_chauffe) return null;
+	if (mapMitoyennete(paroi) !== MITOYENNETES.local_non_chauffe) return null;
 
 	// Cas des espaces tampons solarisés
-	if (paroi.donnee_entree.enum_type_adjacence_id === 10) {
+	if (paroi.donnee_entree.enum_type_adjacence_id === "10") {
 		const reference_lnc = paroi.donnee_entree.reference_lnc;
 
 		if (reference_lnc) {
 			for (const ets of input.logement.enveloppe.ets_collection) {
-				if (reference_lnc === ets.donnee_entree.reference) return reference_lnc;
+				if (reference_lnc === ets.donnee_entree.reference)
+					return resolveId(reference_lnc);
 			}
 		}
 		// Référence absente ou non trouvée dans les ETS du logement
@@ -79,7 +80,7 @@ export function mapLocalNonChauffeId(props: {
 	}
 
 	// Autres locaux non chauffés
-	return paroi.donnee_entree.reference;
+	return resolveId(paroi.donnee_entree.reference);
 }
 
 export function mapParoiId(props: {
@@ -96,13 +97,8 @@ export function mapParoiId(props: {
 		...input.logement.enveloppe.plancher_haut_collection,
 	];
 
-	for (const item of collection) {
-		const reference = mapReferences(
-			item.donnee_entree.reference,
-			paroi.donnee_entree.reference_paroi,
-		);
-		if (reference) return reference;
-	}
+	const references = collection.map((item) => item.donnee_entree.reference);
 
-	return null;
+	const match = findReference(paroi.donnee_entree.reference_paroi, references);
+	return match ? resolveId(match) : null;
 }

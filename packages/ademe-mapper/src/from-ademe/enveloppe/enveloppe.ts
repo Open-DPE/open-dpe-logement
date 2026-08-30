@@ -8,7 +8,6 @@ import * as plancherBas from "./plancher-bas.js";
 import * as plancherHaut from "./plancher-haut.js";
 import * as porte from "./porte.js";
 import * as pontThermique from "./pont-thermique.js";
-import { mapBoolean } from "../common.js";
 
 export {
 	baie,
@@ -39,10 +38,10 @@ export function mapEnveloppe(props: Input): enveloppe.Enveloppe {
 
 export function mapExposition(props: Input): enveloppe.Enveloppe["exposition"] {
 	for (const ventilation of props.logement.ventilation_collection) {
-		if (ventilation.donnee_entree.plusieurs_facade_exposee === 1)
-			return enveloppe.ExpositionEnum.multiple;
+		if (ventilation.donnee_entree.plusieurs_facade_exposee)
+			return enveloppe.EXPOSITIONS.multiple;
 	}
-	return enveloppe.ExpositionEnum.simple;
+	return enveloppe.EXPOSITIONS.simple;
 }
 
 export function mapQ4paConv(props: Input): number | null {
@@ -58,7 +57,7 @@ export function mapQ4paConv(props: Input): number | null {
 }
 
 export function mapPresenceBrasseursAir(props: Input): boolean {
-	return mapBoolean(props.logement.sortie.confort_ete.brasseur_air) ?? false;
+	return props.logement.sortie.confort_ete?.brasseur_air ?? false;
 }
 
 export function mapNiveaux(props: Input): enveloppe.Enveloppe["niveaux"] {
@@ -126,7 +125,10 @@ export function mapBaies(props: Input): enveloppe.Enveloppe["baies"] {
 			baie.mapBaie({ key: "baie_vitree", baie_vitree: item, input: props }),
 		);
 
-		if (item.donnee_entree.baie_vitree_double_fenetre)
+		if (
+			"baie_vitree_double_fenetre" in item.donnee_entree &&
+			item.donnee_entree.baie_vitree_double_fenetre
+		) {
 			collection.push(
 				baie.mapBaie({
 					key: "double_fenetre",
@@ -135,6 +137,20 @@ export function mapBaies(props: Input): enveloppe.Enveloppe["baies"] {
 					input: props,
 				}),
 			);
+		}
+		if (
+			"baie_vitree_double_fenetre" in item &&
+			item.baie_vitree_double_fenetre
+		) {
+			collection.push(
+				baie.mapBaie({
+					key: "double_fenetre",
+					baie_vitree: item,
+					double_fenetre: item.baie_vitree_double_fenetre,
+					input: props,
+				}),
+			);
+		}
 	}
 
 	return collection.filter((item) => item !== null);

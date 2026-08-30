@@ -1,5 +1,6 @@
-import { common, ecs } from "@open-dpe-logement/models";
+import { ecs } from "@open-dpe-logement/models";
 import type { Input } from "./types.js";
+import { toNonEmptyArray } from "../common.js";
 import * as generateur from "./generateur.js";
 import * as installation from "./installation.js";
 
@@ -26,7 +27,7 @@ export function mapEcs(props: Input): ecs.Ecs {
 	}
 
 	return {
-		installations: common.toNonEmptyArray(installations),
-		generateurs: common.toNonEmptyArray(generateurs),
+		installations: toNonEmptyArray(installations),
+		generateurs: toNonEmptyArray(generateurs),
 	};
 }

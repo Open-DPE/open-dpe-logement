@@ -1,8 +1,9 @@
 import { enveloppe } from "@open-dpe-logement/models";
 import * as baie from "./local-non-chauffe/baie.js";
-import { createId } from "../common.js";
+import { createId, resolveId } from "../common.js";
 import type { Input, Paroi, Ets } from "./types.js";
 import { mapMitoyennete } from "./paroi/position.js";
+import { MappingError } from "../errors.js";
 
 export function mapLocalNonChauffe(
 	props: LocalNonChauffeProps,
@@ -41,9 +42,9 @@ export namespace fromEts {
 		const { ets } = props;
 
 		const value: enveloppe.localNonChauffe.LocalNonChauffeBase = {
-			id: ets.donnee_entree.reference,
+			id: resolveId(ets.donnee_entree.reference),
 			description: ets.donnee_entree.description ?? "Non renseigné",
-			type: enveloppe.localNonChauffe.TypeLncEnum.espace_tampon_solarise,
+			type: enveloppe.localNonChauffe.TYPES_LNC.espace_tampon_solarise,
 			parois: [],
 			baies: ets.baie_ets_collection.map((baieEts) =>
 				baie.mapBaie({ baie: baieEts, ets }),
@@ -51,9 +52,7 @@ export namespace fromEts {
 		};
 
 		if (!enveloppe.localNonChauffe.isEspaceTamponSolarise(value))
-			throw new Error(
-				`Le local non chauffé ne peut être déterminé pour : ${JSON.stringify(ets)}`,
-			);
+			throw new MappingError("local_non_chauffe", props);
 
 		return value;
 	}
@@ -62,7 +61,7 @@ export namespace fromEts {
 export namespace fromParoi {
 	export function mapLocalNonChauffe(
 		props: LocalNonChauffeFromParoi,
-	): enveloppe.localNonChauffe.AutreLocalNonChauffe | null {
+	): enveloppe.localNonChauffe.LocalNonChauffeAutre | null {
 		const { paroi } = props;
 		const mitoyennete = mapMitoyennete(paroi);
 		const surface_paroi = surfaceParoi(paroi);
@@ -70,7 +69,7 @@ export namespace fromParoi {
 		const surface_aiu = surfaceAiu(paroi);
 
 		if (
-			mitoyennete !== enveloppe.common.MitoyenneteEnum.local_non_chauffe ||
+			mitoyennete !== enveloppe.common.MITOYENNETES.local_non_chauffe ||
 			!surface_aue ||
 			!surface_aiu
 		)
@@ -79,13 +78,10 @@ export namespace fromParoi {
 		const type = mapType(paroi);
 		const isolation = mapIsolation(paroi);
 
-		if (!type)
-			throw new Error(
-				`Le type du local non chauffé ne peut être déterminé pour : ${JSON.stringify(paroi)}`,
-			);
+		if (!type) throw new MappingError("local_non_chauffe.type", paroi);
 
 		const value: enveloppe.localNonChauffe.LocalNonChauffeBase = {
-			id: paroi.donnee_entree.reference,
+			id: resolveId(paroi.donnee_entree.reference),
 			description: "Local non chauffé reconstitué",
 			type,
 			baies: [],
@@ -97,7 +93,7 @@ export namespace fromParoi {
 			description: "Paroi reconstituée",
 			isolation,
 			position: {
-				mitoyennete: enveloppe.common.MitoyenneteEnum.exterieur,
+				mitoyennete: enveloppe.common.MITOYENNETES.exterieur,
 				surface: surface_aue,
 			},
 		});
@@ -108,16 +104,14 @@ export namespace fromParoi {
 				description: "Paroi reconstituée",
 				isolation,
 				position: {
-					mitoyennete: enveloppe.common.MitoyenneteEnum.local_residentiel,
+					mitoyennete: enveloppe.common.MITOYENNETES.local_residentiel,
 					surface: surface_aiu - surface_paroi,
 				},
 			});
 		}
 
-		if (!enveloppe.localNonChauffe.isAutreLocalNonChauffe(value))
-			throw new Error(
-				`Le local non chauffé ne peut être déterminé pour : ${JSON.stringify(paroi)}`,
-			);
+		if (!enveloppe.localNonChauffe.isLocalNonChauffeAutre(value))
+			throw new MappingError("local_non_chauffe", paroi);
 
 		return value;
 	}
@@ -125,32 +119,32 @@ export namespace fromParoi {
 	export function mapType(
 		props: Paroi,
 	): enveloppe.localNonChauffe.LocalNonChauffe["type"] | null {
-		const TypeLncEnum = enveloppe.localNonChauffe.TypeLncEnum;
+		const TypeLncEnum = enveloppe.localNonChauffe.TYPES_LNC;
 
 		switch (props.donnee_entree.enum_type_adjacence_id) {
-			case 8:
+			case "8":
 				return TypeLncEnum.garage;
-			case 9:
+			case "9":
 				return TypeLncEnum.cellier;
-			case 11:
+			case "11":
 				return TypeLncEnum.comble_fortement_ventile;
-			case 12:
+			case "12":
 				return TypeLncEnum.comble_faiblement_ventile;
-			case 13:
+			case "13":
 				return TypeLncEnum.comble_tres_faiblement_ventile;
-			case 14:
+			case "14":
 				return TypeLncEnum.circulation_sans_ouverture_exterieure;
-			case 15:
+			case "15":
 				return TypeLncEnum.circulation_avec_ouverture_exterieure;
-			case 16:
+			case "16":
 				return TypeLncEnum.circulation_avec_bouche_ou_gaine_desenfumage_ouverte;
-			case 17:
+			case "17":
 				return TypeLncEnum.hall_entree_avec_fermeture_automatique;
-			case 18:
+			case "18":
 				return TypeLncEnum.hall_entree_sans_fermeture_automatique;
-			case 19:
+			case "19":
 				return TypeLncEnum.garage_collectif;
-			case 21:
+			case "21":
 				return TypeLncEnum.autres;
 			default:
 				return null;
@@ -161,11 +155,11 @@ export namespace fromParoi {
 		props: Paroi,
 	): enveloppe.localNonChauffe.paroi.Paroi["isolation"] | null {
 		switch (props.donnee_entree.enum_cfg_isolation_lnc_id) {
-			case 2:
-			case 4:
+			case "2":
+			case "4":
 				return false;
-			case 3:
-			case 5:
+			case "3":
+			case "5":
 				return true;
 			default:
 				return null;

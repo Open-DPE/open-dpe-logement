@@ -1,6 +1,7 @@
 import { batiment } from "@open-dpe-logement/models";
 import { createId } from "../common.js";
 import type { Input, LogementVisite } from "./types.js";
+import { MappingError } from "../errors.js";
 
 type Props = {
 	logement_visite: LogementVisite;
@@ -18,6 +19,13 @@ export function mapAppartement(props: Props): batiment.appartement.Appartement {
 	};
 }
 
+export function supports(props: Props): boolean {
+	return (
+		null != props.logement_visite.surface_habitable_logement &&
+		props.logement_visite.surface_habitable_logement > 0
+	);
+}
+
 export function mapDescription(
 	props: Props["logement_visite"],
 ): batiment.appartement.Appartement["description"] {
@@ -27,7 +35,16 @@ export function mapDescription(
 export function mapSurfaceHabitable(
 	props: Props,
 ): batiment.appartement.Appartement["surface_habitable"] {
-	return props.logement_visite.surface_habitable_logement;
+	if (
+		props.logement_visite.surface_habitable_logement &&
+		props.logement_visite.surface_habitable_logement > 0
+	) {
+		return props.logement_visite.surface_habitable_logement;
+	}
+	throw new MappingError(
+		"batiment.appartements.surface_habitable",
+		props.logement_visite,
+	);
 }
 
 export function mapHauteurSousPlafond(
@@ -39,35 +56,35 @@ export function mapHauteurSousPlafond(
 export function mapPosition(
 	props: Props["logement_visite"],
 ): batiment.appartement.Appartement["position"] {
-	const PositionEnum = batiment.appartement.PositionEnum;
+	const POSITIONS = batiment.appartement.POSITIONS;
 	switch (props.enum_position_etage_logement_id) {
-		case 1:
-			return PositionEnum.rdc;
-		case 2:
-			return PositionEnum.etage_intermediaire;
-		case 3:
-			return PositionEnum.dernier_etage;
+		case "1":
+			return POSITIONS.rdc;
+		case "2":
+			return POSITIONS.etage_intermediaire;
+		case "3":
+			return POSITIONS.dernier_etage;
 	}
 }
 
 export function mapTypologie(
 	props: Props["logement_visite"],
 ): batiment.appartement.Appartement["typologie"] {
-	const TypologieEnum = batiment.appartement.TypologieEnum;
+	const TYPOLOGIES = batiment.appartement.TYPOLOGIES;
 	switch (props.enum_typologie_logement_id) {
-		case 1:
-			return TypologieEnum.T1;
-		case 2:
-			return TypologieEnum.T2;
-		case 3:
-			return TypologieEnum.T3;
-		case 4:
-			return TypologieEnum.T4;
-		case 5:
-			return TypologieEnum.T5;
-		case 6:
-			return TypologieEnum.T6;
-		case 7:
-			return TypologieEnum.T7;
+		case "1":
+			return TYPOLOGIES.T1;
+		case "2":
+			return TYPOLOGIES.T2;
+		case "3":
+			return TYPOLOGIES.T3;
+		case "4":
+			return TYPOLOGIES.T4;
+		case "5":
+			return TYPOLOGIES.T5;
+		case "6":
+			return TYPOLOGIES.T6;
+		case "7":
+			return TYPOLOGIES.T7;
 	}
 }

@@ -1,6 +1,7 @@
 import { enveloppe } from "@open-dpe-logement/models";
 import { createId } from "../common.js";
 import type { Input } from "./types.js";
+import { MappingError } from "../errors.js";
 
 export function mapNiveau(props: Input): enveloppe.niveau.Niveau {
 	return {
@@ -18,10 +19,7 @@ export function mapSurface(props: Input): enveloppe.niveau.Niveau["surface"] {
 		props.logement.caracteristique_generale.surface_habitable_immeuble ||
 		props.logement.caracteristique_generale.surface_habitable_logement;
 
-	if (!value)
-		throw new Error(
-			`La surface habitable du niveau ne peut être déterminée pour : ${JSON.stringify(props)}`,
-		);
+	if (!value) throw new MappingError("niveau.surface", props);
 
 	return value;
 }
@@ -30,22 +28,22 @@ export function mapInertieParoiVerticale(
 	props: Input,
 ): enveloppe.niveau.Niveau["inertie_paroi_verticale"] {
 	return props.logement.enveloppe.inertie.inertie_paroi_verticale_lourd
-		? enveloppe.common.InertieParoiEnum.lourde
-		: enveloppe.common.InertieParoiEnum.legere;
+		? enveloppe.common.INERTIES_PAROI.lourde
+		: enveloppe.common.INERTIES_PAROI.legere;
 }
 
 export function mapInertiePlancherHaut(
 	props: Input,
 ): enveloppe.niveau.Niveau["inertie_plancher_haut"] {
 	return props.logement.enveloppe.inertie.inertie_plancher_haut_lourd
-		? enveloppe.common.InertieParoiEnum.lourde
-		: enveloppe.common.InertieParoiEnum.legere;
+		? enveloppe.common.INERTIES_PAROI.lourde
+		: enveloppe.common.INERTIES_PAROI.legere;
 }
 
 export function mapInertiePlancherBas(
 	props: Input,
 ): enveloppe.niveau.Niveau["inertie_plancher_bas"] {
 	return props.logement.enveloppe.inertie.inertie_plancher_bas_lourd
-		? enveloppe.common.InertieParoiEnum.lourde
-		: enveloppe.common.InertieParoiEnum.legere;
+		? enveloppe.common.INERTIES_PAROI.lourde
+		: enveloppe.common.INERTIES_PAROI.legere;
 }

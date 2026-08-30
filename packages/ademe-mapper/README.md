@@ -1,40 +1,20 @@
-# @open-dpe-logement/ademe-transformer
+# @open-dpe-logement/ademe-mapper
 
 Conversion des données DPE de l'observatoire DPE-Audit.
 
 ## Installation
 
 ```sh
-npm i @open-dpe-logement/ademe-transformer
+npm i @open-dpe-logement/ademe-mapper
 ```
 
 ## Usages
 
 ```ts
-import { fromDPE, toDPE } from "@open-dpe-logement/transformer"
+import { mapFromDPE, mapFromAudit } from "@open-dpe-logement/ademe-mapper"
 
-const data = fromObservatoire(/** Observatoire DPE data **/);
-const data = toObservatoire(/** Open DPE data **/); //
-```
-
-
-```text
-/from
-├── refroidissement.ts
-├── refroidissement.mapping.ts
-├── ventilation.ts
-├── ventilation.mapping.ts
-├── utils.ts
-/to                                 # next
-```
-
-
-```text
-/<domaine>
-├── transform.mapping.ts
-├── transform.ts
-├── reverse.mapping.ts
-├── reverse.ts
+const data = mapFromDPE({/* dpe */})
+const data = mapFromAudit({/* audit */}, "0")
 ```
 
 ## Tests
@@ -47,12 +27,18 @@ Tests d'intégration.
 
 ## Support
 
-|   XSD   | Support |                 Commentaire                 |
-| :-----: | :-----: | :-----------------------------------------: |
-|  DPEv1  |   non   |              Version obsolète               |
-|  DPEv2  |   non   | Double fenêtre manquante dans le modèle XSD |
-| DPEv2.2 |   oui   |                      -                      |
-| DPEv2.3 |   oui   |                      -                      |
-| DPEv2.4 |   oui   |                      -                      |
-| DPEv2.5 |   oui   |                      -                      |
-| DPEv2.6 |   oui   |                      -                      |
+|    XSD     | Support |       Commentaire       |
+| :--------: | :-----: | :---------------------: |
+|   DPEv1    |   non   |    Version obsolète     |
+|   DPEv2    |   non   | Références optionnelles |
+|  DPEv2.2   |   oui   |            -            |
+|  DPEv2.3   |   oui   |            -            |
+|  DPEv2.4   |   oui   |            -            |
+|  DPEv2.5   |   oui   |            -            |
+|  DPEv2.6   |   oui   |            -            |
+| Audit_v2.0 |   oui   |            -            |
+| Audit_v2.1 |   oui   |            -            |
+| Audit_v2.2 |   oui   |            -            |
+| Audit_v2.3 |   oui   |            -            |
+| Audit_v2.4 |   oui   |            -            |
+| Audit_v2.5 |   oui   |            -            |

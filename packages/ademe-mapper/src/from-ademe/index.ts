@@ -1,21 +1,33 @@
 import * as from from "@open-dpe-logement/ademe-models";
 import * as to from "@open-dpe-logement/models";
-import type { Input } from "./types.js";
+import { resetIdRegistry } from "./common.js";
+import { mapDiagnostic } from "./diagnostic/diagnostic.js";
+import { SupportError } from "./errors.js";
 
-export function fromAdeme(props: from.dpe.DPE): to.diagnostic.Diagnostic {
-	throw new Error("Not implemented");
+export function mapFromDPE(
+	dpe: from.dpe.DPELogementExistant,
+): to.diagnostic.Diagnostic {
+	resetIdRegistry();
+
+	if (from.dpe.isDPELogementExistantv2(dpe))
+		throw new SupportError(
+			`Version DPE ${dpe.administratif.enum_version_id} non supportée`,
+		);
+
+	return mapDiagnostic({ type: "dpe", ...dpe });
 }
 
-/**
- * 86% des DPE couverts
- */
-export function supports(props: from.dpe.DPE): props is Input {
-	return (
-		from.dpe.isDPELogement(props) &&
-		(from.dpe.isDPEv22(props) ||
-			from.dpe.isDPEv23(props) ||
-			from.dpe.isDPEv24(props) ||
-			from.dpe.isDPEv25(props) ||
-			from.dpe.isDPEv26(props))
+export function mapFromAudit(
+	audit: from.audit.Audit,
+	scenario: from.audit.enums.ScenarioEnum,
+): to.diagnostic.Diagnostic {
+	resetIdRegistry();
+
+	const logement = audit.logement_collection.find(
+		(logement) =>
+			logement.caracteristique_generale.enum_scenario_id === scenario,
 	);
+	if (!logement) throw new SupportError(`Scénario ${scenario} introuvable`);
+
+	return mapDiagnostic({ type: "audit", logement, ...audit });
 }

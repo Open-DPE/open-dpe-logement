@@ -1,6 +1,6 @@
 import { ecs } from "@open-dpe-logement/models";
 import type { Input, InstallationEcs, GenerateurEcs } from "./types.js";
-import { mapBoolean } from "../common.js";
+import { resolveId } from "../common.js";
 
 type Props = {
 	input: Input;
@@ -18,7 +18,7 @@ export function mapSysteme(props: Props): ecs.systeme.Systeme {
 }
 
 export function mapID(props: GenerateurEcs): ecs.systeme.Systeme["id"] {
-	return props.donnee_entree.reference;
+	return resolveId(props.donnee_entree.reference);
 }
 
 export function mapDescription(
@@ -30,7 +30,7 @@ export function mapDescription(
 export function mapGenerateurID(
 	props: GenerateurEcs,
 ): ecs.systeme.Systeme["generateur_id"] {
-	return props.donnee_entree.reference;
+	return resolveId(props.donnee_entree.reference);
 }
 
 export function mapReseau(
@@ -68,19 +68,19 @@ export function mapNiveauxDesservis(
 export function mapIsolation(
 	props: InstallationEcs,
 ): ecs.systeme.Reseau["isolation"] {
-	return mapBoolean(props.donnee_entree.reseau_distribution_isole);
+	return props.donnee_entree.reseau_distribution_isole ?? null;
 }
 
 export function mapBouclage(
 	props: InstallationEcs,
 ): ecs.systeme.Reseau["bouclage"] {
-	const Enum = ecs.systeme.BouclageEnum;
+	const Enum = ecs.systeme.BOUCLAGES;
 	switch (props.donnee_entree.enum_bouclage_reseau_ecs_id) {
-		case 1:
+		case "1":
 			return Enum.non_boucle;
-		case 2:
+		case "2":
 			return Enum.boucle;
-		case 3:
+		case "3":
 			return Enum.trace;
 		default:
 			return null;

@@ -1,6 +1,7 @@
 import { production } from "@open-dpe-logement/models";
 import { createId } from "../common.js";
 import type { PanneauxPv } from "./types.js";
+import { MappingError } from "../errors.js";
 
 export function mapPanneauPhotovoltaique(
 	props: PanneauxPv,
@@ -20,15 +21,15 @@ export function mapOrientation(
 	props: PanneauxPv,
 ): production.panneauPhotovoltaique.PanneauPhotovoltaique["orientation"] {
 	switch (props.enum_orientation_pv_id) {
-		case 1:
+		case "1":
 			return "est";
-		case 2:
+		case "2":
 			return "sud_est";
-		case 3:
+		case "3":
 			return "sud";
-		case 4:
+		case "4":
 			return "sud_ouest";
-		case 5:
+		case "5":
 			return "ouest";
 	}
 	switch (props.tv_coef_orientation_pv_id) {
@@ -63,10 +64,9 @@ export function mapOrientation(
 			return "ouest";
 	}
 
-	throw new Error(
-		`L'orientation du panneau photovoltaïque ne peut être déterminée pour : ${JSON.stringify(
-			props,
-		)}`,
+	throw new MappingError(
+		"production.panneau_photovoltaique.orientation",
+		props,
 	);
 }
 
@@ -74,13 +74,13 @@ export function mapInclinaison(
 	props: PanneauxPv,
 ): production.panneauPhotovoltaique.PanneauPhotovoltaique["inclinaison"] {
 	switch (props.enum_inclinaison_pv_id) {
-		case 1:
+		case "1":
 			return 10;
-		case 2:
+		case "2":
 			return 30;
-		case 3:
+		case "3":
 			return 60;
-		case 4:
+		case "4":
 			return 80;
 	}
 	switch (props.tv_coef_orientation_pv_id) {
@@ -113,8 +113,9 @@ export function mapInclinaison(
 			return 80;
 	}
 
-	throw new Error(
-		`L'inclinaison du panneau photovoltaïque ne peut être déterminée pour : ${JSON.stringify(props)}`,
+	throw new MappingError(
+		"production.panneau_photovoltaique.inclinaison",
+		props,
 	);
 }
 

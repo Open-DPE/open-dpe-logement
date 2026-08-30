@@ -1,5 +1,6 @@
 import { refroidissement } from "@open-dpe-logement/models";
 import type { Climatisation } from "./types.js";
+import { resolveId } from "../common.js";
 
 export function mapInstallation(
 	props: Climatisation,
@@ -15,7 +16,7 @@ export function mapInstallation(
 export function mapID(
 	props: Climatisation,
 ): refroidissement.installation.Installation["id"] {
-	return props.donnee_entree.reference;
+	return resolveId(props.donnee_entree.reference);
 }
 
 export function mapDescription(
@@ -33,5 +34,5 @@ export function mapSurface(
 export function mapGenerateurs(
 	props: Climatisation,
 ): refroidissement.installation.Installation["generateurs"] {
-	return [props.donnee_entree.reference];
+	return [resolveId(props.donnee_entree.reference)];
 }

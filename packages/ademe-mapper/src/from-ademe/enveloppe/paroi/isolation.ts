@@ -1,9 +1,9 @@
 import { enveloppe } from "@open-dpe-logement/models";
 import { mapAnneeEtablissement } from "../../common.js";
 import type { Input, ParoiOpaque } from "../types.js";
-import { MappingError } from "../../../errors.js";
+import { MappingError } from "../../errors.js";
 
-const TypeIsolationEnum = enveloppe.common.TypeIsolationEnum;
+const TYPES_ISOLATION = enveloppe.common.TYPES_ISOLATION;
 
 export type IsolationProps = {
 	paroi: ParoiOpaque;
@@ -16,11 +16,22 @@ export function mapIsolation(
 	const value: enveloppe.common.IsolationBase = {
 		etat: mapEtat(props.paroi),
 		type: mapType(props.paroi),
-		epaisseur: mapEpaisseur(props.paroi),
-		resistance_thermique: mapResistanceThermique(props.paroi),
-		annee_installation: mapAnneeInstallation(props),
+		epaisseur: null,
+		resistance_thermique: null,
+		annee_installation: null,
 	};
 
+	if (
+		enveloppe.common.isSansIsolation(value) ||
+		enveloppe.common.isIsolationInconnue(value)
+	) {
+		value.type = null;
+	}
+	if (enveloppe.common.isIsolationConnue(value)) {
+		value.epaisseur = mapEpaisseur(props.paroi);
+		value.resistance_thermique = mapResistanceThermique(props.paroi);
+		value.annee_installation = mapAnneeInstallation(props);
+	}
 	if (!enveloppe.common.isIsolation(value))
 		throw new MappingError("isolation", props.paroi);
 
@@ -31,17 +42,17 @@ export function mapEtat(
 	props: IsolationProps["paroi"],
 ): enveloppe.common.Isolation["etat"] {
 	switch (props.donnee_entree.enum_type_isolation_id) {
-		case 1:
+		case "1":
 			return null;
-		case 2:
+		case "2":
 			return false;
-		case 3:
-		case 4:
-		case 5:
-		case 6:
-		case 7:
-		case 8:
-		case 9:
+		case "3":
+		case "4":
+		case "5":
+		case "6":
+		case "7":
+		case "8":
+		case "9":
 			return true;
 	}
 }
@@ -50,22 +61,22 @@ export function mapType(
 	props: IsolationProps["paroi"],
 ): enveloppe.common.Isolation["type"] {
 	switch (props.donnee_entree.enum_type_isolation_id) {
-		case 1:
-		case 2:
-		case 9:
+		case "1":
+		case "2":
+		case "9":
 			return null;
-		case 3:
-			return TypeIsolationEnum.iti;
-		case 4:
-			return TypeIsolationEnum.ite;
-		case 5:
-			return TypeIsolationEnum.itr;
-		case 6:
-			return TypeIsolationEnum.iti_ite;
-		case 7:
-			return TypeIsolationEnum.itr_iti;
-		case 8:
-			return TypeIsolationEnum.itr_ite;
+		case "3":
+			return TYPES_ISOLATION.iti;
+		case "4":
+			return TYPES_ISOLATION.ite;
+		case "5":
+			return TYPES_ISOLATION.itr;
+		case "6":
+			return TYPES_ISOLATION.iti_ite;
+		case "7":
+			return TYPES_ISOLATION.itr_iti;
+		case "8":
+			return TYPES_ISOLATION.itr_ite;
 	}
 }
 
@@ -89,25 +100,25 @@ export function mapAnneeInstallation(
 	const { input, paroi } = props;
 
 	switch (paroi.donnee_entree.enum_periode_isolation_id) {
-		case 1:
+		case "1":
 			return 1947;
-		case 2:
+		case "2":
 			return 1974;
-		case 3:
+		case "3":
 			return 1977;
-		case 4:
+		case "4":
 			return 1982;
-		case 5:
+		case "5":
 			return 1988;
-		case 6:
+		case "6":
 			return 2000;
-		case 7:
+		case "7":
 			return 2005;
-		case 8:
+		case "8":
 			return 2012;
-		case 9:
+		case "9":
 			return 2021;
-		case 10:
+		case "10":
 			return mapAnneeEtablissement(input);
 		default:
 			return null;
