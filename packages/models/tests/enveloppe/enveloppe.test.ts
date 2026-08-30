@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
 import {
-	getMur,
-	getBaie,
-	getPorte,
-	getPlancherHaut,
-	getPlancherBas,
-	getLocalNonChauffe,
-	getParoisLocalNonChauffe,
-	getBaiesLocalNonChauffe,
-	getMursLocalNonChauffe,
+	findMur,
+	findBaie,
+	findPorte,
+	findPlancherHaut,
+	findPlancherBas,
+	findLocalNonChauffe,
+	findParoisLocalNonChauffe,
+	findBaiesLocalNonChauffe,
+	findMursLocalNonChauffe,
 	type Enveloppe,
-} from "../../src/enveloppe/enveloppe.js";
+} from "../../src/enveloppe/index.js";
 import { EntityNotFoundError } from "../../src/errors.js";
 
 const LNC_ID = "550e8400-e29b-41d4-a716-446655440099";
@@ -67,7 +67,14 @@ const BAIE_LNC = {
 		orientation: "nord" as const,
 		masques: [],
 	},
-	menuiserie: null,
+	menuiserie: {
+		materiau: null,
+		largeur_dormant: null,
+		presence_soubassement: false,
+		presence_joint: null,
+		presence_retour_isolation: null,
+		presence_rupteur_pont_thermique: null,
+	},
 	vitrage: { type: "simple_vitrage" as const, nature_lame: null, epaisseur_lame: null },
 	survitrage: null,
 };
@@ -88,14 +95,21 @@ const PORTE = {
 		presence_sas: false,
 	},
 	menuiserie: { largeur_dormant: null, presence_joint: null, presence_retour_isolation: null },
-	vitrage: null,
+	vitrage: { surface: 0 as const, type: null },
 };
 
 const LNC = {
 	id: LNC_ID,
 	description: "Garage attenant",
 	type: "garage" as const,
-	parois: [MUR_LNC],
+	parois: [
+		{
+			id: "550e8400-e29b-41d4-a716-446655440006",
+			description: "Paroi enterrée du local",
+			isolation: null,
+			position: { mitoyennete: "enterre" as const, surface: 5 },
+		},
+	],
 	baies: [],
 };
 
@@ -123,60 +137,60 @@ const ENVELOPPE: Enveloppe = {
 };
 
 describe("getters par id — succès", () => {
-	it("getMur retrouve le mur par id", () => {
-		expect(getMur(ENVELOPPE, MUR_EXT.id)).toBe(MUR_EXT);
+	it("findMur retrouve le mur par id", () => {
+		expect(findMur(MUR_EXT.id, ENVELOPPE)).toBe(MUR_EXT);
 	});
 
-	it("getBaie retrouve la baie par id", () => {
-		expect(getBaie(ENVELOPPE, BAIE_LNC.id)).toBe(BAIE_LNC);
+	it("findBaie retrouve la baie par id", () => {
+		expect(findBaie(BAIE_LNC.id, ENVELOPPE)).toBe(BAIE_LNC);
 	});
 
-	it("getPorte retrouve la porte par id", () => {
-		expect(getPorte(ENVELOPPE, PORTE.id)).toBe(PORTE);
+	it("findPorte retrouve la porte par id", () => {
+		expect(findPorte(PORTE.id, ENVELOPPE)).toBe(PORTE);
 	});
 
-	it("getLocalNonChauffe retrouve le local par id", () => {
-		expect(getLocalNonChauffe(ENVELOPPE, LNC_ID)).toBe(LNC);
+	it("findLocalNonChauffe retrouve le local par id", () => {
+		expect(findLocalNonChauffe(LNC_ID, ENVELOPPE)).toBe(LNC);
 	});
 });
 
 describe("getters par id — échec", () => {
-	it("getMur lève EntityNotFoundError si absent", () => {
-		expect(() => getMur(ENVELOPPE, "inconnu")).toThrow(EntityNotFoundError);
-		expect(() => getMur(ENVELOPPE, "inconnu")).toThrow("Mur with id inconnu not found");
+	it("findMur lève EntityNotFoundError si absent", () => {
+		expect(() => findMur("inconnu", ENVELOPPE)).toThrow(EntityNotFoundError);
+		expect(() => findMur("inconnu", ENVELOPPE)).toThrow("Mur with id inconnu not found");
 	});
 
-	it("getPlancherHaut lève EntityNotFoundError si absent", () => {
-		expect(() => getPlancherHaut(ENVELOPPE, "inconnu")).toThrow(EntityNotFoundError);
+	it("findPlancherHaut lève EntityNotFoundError si absent", () => {
+		expect(() => findPlancherHaut("inconnu", ENVELOPPE)).toThrow(EntityNotFoundError);
 	});
 
-	it("getPlancherBas lève EntityNotFoundError si absent", () => {
-		expect(() => getPlancherBas(ENVELOPPE, "inconnu")).toThrow(EntityNotFoundError);
+	it("findPlancherBas lève EntityNotFoundError si absent", () => {
+		expect(() => findPlancherBas("inconnu", ENVELOPPE)).toThrow(EntityNotFoundError);
 	});
 
-	it("getLocalNonChauffe lève EntityNotFoundError si absent", () => {
-		expect(() => getLocalNonChauffe(ENVELOPPE, "inconnu")).toThrow(EntityNotFoundError);
+	it("findLocalNonChauffe lève EntityNotFoundError si absent", () => {
+		expect(() => findLocalNonChauffe("inconnu", ENVELOPPE)).toThrow(EntityNotFoundError);
 	});
 });
 
 describe("filtres par local non chauffé", () => {
-	it("getParoisLocalNonChauffe regroupe murs/baies/portes rattachés au LNC", () => {
-		const parois = getParoisLocalNonChauffe(ENVELOPPE, LNC_ID);
+	it("findParoisLocalNonChauffe regroupe murs/baies/portes rattachés au LNC", () => {
+		const parois = findParoisLocalNonChauffe(LNC_ID, ENVELOPPE);
 		expect(parois).toContain(MUR_LNC);
 		expect(parois).toContain(BAIE_LNC);
 		expect(parois).not.toContain(MUR_EXT);
 		expect(parois).not.toContain(PORTE);
 	});
 
-	it("getBaiesLocalNonChauffe ne retourne que les baies du LNC", () => {
-		expect(getBaiesLocalNonChauffe(ENVELOPPE, LNC_ID)).toEqual([BAIE_LNC]);
+	it("findBaiesLocalNonChauffe ne retourne que les baies du LNC", () => {
+		expect(findBaiesLocalNonChauffe(LNC_ID, ENVELOPPE)).toEqual([BAIE_LNC]);
 	});
 
-	it("getMursLocalNonChauffe ne retourne que les murs du LNC", () => {
-		expect(getMursLocalNonChauffe(ENVELOPPE, LNC_ID)).toEqual([MUR_LNC]);
+	it("findMursLocalNonChauffe ne retourne que les murs du LNC", () => {
+		expect(findMursLocalNonChauffe(LNC_ID, ENVELOPPE)).toEqual([MUR_LNC]);
 	});
 
 	it("retourne un tableau vide pour un local sans parois associées", () => {
-		expect(getMursLocalNonChauffe(ENVELOPPE, "autre-lnc")).toEqual([]);
+		expect(findMursLocalNonChauffe("autre-lnc", ENVELOPPE)).toEqual([]);
 	});
 });

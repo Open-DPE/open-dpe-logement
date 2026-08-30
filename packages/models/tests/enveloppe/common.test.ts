@@ -4,11 +4,11 @@ import {
 	isIsolationInconnue,
 	isTypeIsolationInconnue,
 	isIsolationConnue,
-	isPositionParoiLocalNonChauffe,
-	isPositionParoiAutres,
+	isPositionLocalNonChauffe,
+	isPositionAutres,
 	type Isolation,
 	type Position,
-} from "../../src/enveloppe/common.js";
+} from "../../src/enveloppe/common/index.js";
 
 describe("discriminateurs Isolation", () => {
 	const sansIsolation: Isolation = {
@@ -67,23 +67,23 @@ describe("discriminateurs Isolation", () => {
 });
 
 describe("discriminateurs Position (paroi)", () => {
-	it("isPositionParoiLocalNonChauffe vrai uniquement pour mitoyennete=local_non_chauffe", () => {
+	it("isPositionLocalNonChauffe vrai uniquement pour mitoyennete=local_non_chauffe", () => {
 		const position: Position = {
 			surface: 10,
 			mitoyennete: "local_non_chauffe",
 			local_non_chauffe_id: "550e8400-e29b-41d4-a716-446655440000",
 		};
-		expect(isPositionParoiLocalNonChauffe(position)).toBe(true);
-		expect(isPositionParoiAutres(position)).toBe(false);
+		expect(isPositionLocalNonChauffe(position)).toBe(true);
+		expect(isPositionAutres(position)).toBe(false);
 	});
 
-	it("isPositionParoiAutres vrai pour les autres mitoyennetés", () => {
+	it("isPositionAutres vrai pour les autres mitoyennetés", () => {
 		const position: Position = {
 			surface: 10,
 			mitoyennete: "exterieur",
 			local_non_chauffe_id: null,
 		};
-		expect(isPositionParoiAutres(position)).toBe(true);
-		expect(isPositionParoiLocalNonChauffe(position)).toBe(false);
+		expect(isPositionAutres(position)).toBe(true);
+		expect(isPositionLocalNonChauffe(position)).toBe(false);
 	});
 });

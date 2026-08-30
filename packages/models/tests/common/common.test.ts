@@ -5,13 +5,11 @@ import {
 	reduceConsommationsParEnergie,
 	reduceConsommationsParUsage,
 	mergeConsommations,
-	isEnergieGaz,
-	isEnergieBois,
-	isEnergieCombustion,
-	toNonEmptyArray,
+	isGaz,
+	isBois,
 	type ParMois,
 	type Consommations,
-} from "../../src/common/common.js";
+} from "../../src/common/index.js";
 
 describe("mergeParMois", () => {
 	it("additionne les valeurs mois par mois", () => {
@@ -104,35 +102,24 @@ describe("mergeConsommations", () => {
 	});
 });
 
-describe("isEnergieGaz / isEnergieBois / isEnergieCombustion", () => {
+describe("isGaz / isBois", () => {
 	it("identifie correctement les énergies gaz", () => {
-		expect(isEnergieGaz("gaz_naturel")).toBe(true);
-		expect(isEnergieGaz("gpl")).toBe(true);
-		expect(isEnergieGaz("electricite")).toBe(false);
+		expect(isGaz("gaz_naturel")).toBe(true);
+		expect(isGaz("gpl")).toBe(true);
+		expect(isGaz("electricite")).toBe(false);
 	});
 
 	it("identifie correctement les énergies bois", () => {
-		expect(isEnergieBois("bois_buche")).toBe(true);
-		expect(isEnergieBois("bois_granule")).toBe(true);
-		expect(isEnergieBois("fioul")).toBe(false);
-	});
-
-	it("identifie correctement les énergies de combustion (union gaz/bois/fioul/charbon)", () => {
-		expect(isEnergieCombustion("gaz_naturel")).toBe(true);
-		expect(isEnergieCombustion("bois_buche")).toBe(true);
-		expect(isEnergieCombustion("fioul")).toBe(true);
-		expect(isEnergieCombustion("charbon")).toBe(true);
-		expect(isEnergieCombustion("electricite")).toBe(false);
-		expect(isEnergieCombustion("reseau_chaleur")).toBe(false);
+		expect(isBois("bois_buche")).toBe(true);
+		expect(isBois("bois_granule")).toBe(true);
+		expect(isBois("fioul")).toBe(false);
 	});
 });
 
-describe("toNonEmptyArray", () => {
-	it("retourne le tableau inchangé s'il contient au moins un élément", () => {
-		expect(toNonEmptyArray([1, 2, 3])).toEqual([1, 2, 3]);
-	});
-
-	it("lève une erreur pour un tableau vide", () => {
-		expect(() => toNonEmptyArray([])).toThrow("Array is empty");
-	});
-});
+// `isEnergieCombustion` et `toNonEmptyArray` ont été retirés de
+// `@open-dpe-logement/models` lors de la migration zod (2026-08) : le premier
+// est redevenu un calcul local à chaque domaine (cf. `ENERGIES_COMBUSTION`
+// dans `chauffage/generateur/guards.ts`, potentiellement différent d'un
+// domaine à l'autre) plutôt qu'une notion générique côté `common` ; le second
+// est un utilitaire TS générique sans lien avec un schéma public, réintroduit
+// localement côté `ademe-mapper` (`from-ademe/common.ts`) plutôt qu'ici.
