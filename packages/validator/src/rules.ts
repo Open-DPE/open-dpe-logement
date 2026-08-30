@@ -168,7 +168,7 @@ function checkAnneesCoherence(diagnostic: Diagnostic): CustomError[] {
 		return errors;
 	}
 
-	for (const champ of ["annee_installation", "annee_construction", "annee_renovation"] as const) {
+	for (const champ of ["annee_construction", "annee_renovation"] as const) {
 		for (const { path, value } of collectByKey(diagnostic, champ)) {
 			if (value === null || typeof value !== "number") {
 				continue;

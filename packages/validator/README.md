@@ -40,11 +40,10 @@ Contrainte : `code_postal` et `code_insee` vérifiés depuis la Base d'Adresse N
 > que `validate()` et le reste du package sont synchrones. Traitement à concevoir séparément (fonction async
 > dédiée, ou passage de `validate()` en async) — voir `claude/design-regles-validator.md` §5.2.
 
-### RC-002 : Cohérence des années d'installation / construction / rénovation
+### RC-002 : Cohérence des années de construction / rénovation
 
 Paths:
 
-- `diagnostic..annee_installation`
 - `diagnostic..annee_construction`
 - `diagnostic..annee_renovation`
 
