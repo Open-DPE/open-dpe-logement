@@ -9,6 +9,7 @@ import {
 } from "./guards.js";
 
 export { NotSupportedError };
+export { APIError } from "./api.js";
 
 type Config = {
 	client_id: string;
