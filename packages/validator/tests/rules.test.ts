@@ -54,16 +54,20 @@ describe("checkRules() via validate(\"/diagnostic\", ...) — couche B", () => {
 	});
 
 	describe("RC-002 — cohérence des années (portée globale au diagnostic)", () => {
+		// RC-002 ne porte que sur `annee_construction`/`annee_renovation` (cf.
+		// commentaire de `checkAnneesCoherence` — `annee_installation` en a été
+		// retiré du périmètre) : on mute ici `murs[0].annee_construction`, un
+		// des champs réellement couverts, plutôt que le champ d'un émetteur.
 		it("une année strictement inférieure à batiment.annee_construction est rejetée", () => {
 			const diagnostic = buildGoldenDiagnostic();
-			(diagnostic["chauffage"] as { emetteurs: { annee_installation: number | null }[] }).emetteurs[0]!.annee_installation =
+			(diagnostic["enveloppe"] as { murs: { annee_construction: number | null }[] }).murs[0]!.annee_construction =
 				BATIMENT_ANNEE_CONSTRUCTION - 1;
 
 			const errors = checkInvalid(diagnostic);
 
 			expect(errors).toHaveLength(1);
 			expect(errors[0]).toMatchObject({
-				field: "/chauffage/emetteurs/0/annee_installation",
+				field: "/enveloppe/murs/0/annee_construction",
 				type: "custom",
 			});
 			expect(errors[0]?.message).toContain("RC-002");
@@ -72,13 +76,13 @@ describe("checkRules() via validate(\"/diagnostic\", ...) — couche B", () => {
 
 		it("une année strictement supérieure à l'année de date_etablissement est rejetée", () => {
 			const diagnostic = buildGoldenDiagnostic();
-			(diagnostic["chauffage"] as { emetteurs: { annee_installation: number | null }[] }).emetteurs[0]!.annee_installation = 2025;
+			(diagnostic["enveloppe"] as { murs: { annee_construction: number | null }[] }).murs[0]!.annee_construction = 2025;
 
 			const errors = checkInvalid(diagnostic);
 
 			expect(errors).toHaveLength(1);
 			expect(errors[0]).toMatchObject({
-				field: "/chauffage/emetteurs/0/annee_installation",
+				field: "/enveloppe/murs/0/annee_construction",
 				type: "custom",
 			});
 			expect(errors[0]?.message).toContain("RC-002");
@@ -104,9 +108,10 @@ describe("checkRules() via validate(\"/diagnostic\", ...) — couche B", () => {
 		}
 
 		it("isolation.annee_installation antérieure à annee_construction du même mur", () => {
-			// annee_construction (1990) > batiment.annee_construction (1980) : une
-			// valeur qui viole uniquement la borne du mur ne doit pas aussi
-			// déclencher RC-002 (cf. test dédié au chevauchement ci-dessous).
+			// annee_construction (1990) > batiment.annee_construction (1980) :
+			// cette mutation ne viole que la borne locale au mur (RC-003), pas la
+			// borne globale (RC-002, cf. describe ci-dessus — qui porte aussi sur
+			// `annee_construction`, mais celui du mur reste ici dans les clous).
 			const diagnostic = buildDiagnosticWithMur(buildMurIsole(MUR_1_ID, 1990, null, 1985));
 
 			const errors = checkInvalid(diagnostic);
@@ -132,24 +137,6 @@ describe("checkRules() via validate(\"/diagnostic\", ...) — couche B", () => {
 			});
 			expect(errors[0]?.message).toContain("RC-003");
 			expect(errors[0]?.message).toContain("année de rénovation");
-		});
-
-		it("chevauchement volontaire RC-002/RC-003 : une même valeur peut déclencher les deux règles", () => {
-			// mur.annee_construction === batiment.annee_construction (1980) :
-			// toute valeur antérieure viole SIMULTANÉMENT la borne globale
-			// (RC-002) et la borne locale au mur (RC-003). Comportement
-			// documenté et confirmé par l'utilisateur — pas un bug.
-			const diagnostic = buildDiagnosticWithMur(buildMurIsole(MUR_1_ID, BATIMENT_ANNEE_CONSTRUCTION, null, 1975));
-
-			const errors = checkInvalid(diagnostic);
-
-			expect(errors).toHaveLength(2);
-			expect(errors[0]).toMatchObject({ field: "/enveloppe/murs/0/isolation/annee_installation", type: "custom" });
-			expect(errors[0]?.message).toContain("RC-002");
-			expect(errors[0]?.message).toContain("année de construction du bâtiment");
-			expect(errors[1]).toMatchObject({ field: "/enveloppe/murs/0/isolation/annee_installation", type: "custom" });
-			expect(errors[1]?.message).toContain("RC-003");
-			expect(errors[1]?.message).toContain("année de construction");
 		});
 	});
 

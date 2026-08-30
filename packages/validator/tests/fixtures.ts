@@ -200,8 +200,7 @@ export function buildMurNonIsole(id: string, anneeConstruction: number | null, a
  * valeur (ou `null` explicitement) — nécessaire pour exercer RC-003.
  * N'est PAS utilisé dans la golden fixture partagée (cf. plan : le mur de la
  * golden fixture est volontairement non isolé) ; utilisé uniquement par les
- * variantes locales de `rules.test.ts` dédiées à RC-003 et au chevauchement
- * RC-002/RC-003.
+ * variantes locales de `rules.test.ts` dédiées à RC-003.
  */
 export function buildMurIsole(
 	id: string,
@@ -341,7 +340,10 @@ export function buildPorte(id: string, paroiId: string | null): unknown {
 			local_non_chauffe_id: null,
 		},
 		menuiserie: { largeur_dormant: null, presence_joint: null, presence_retour_isolation: null },
-		vitrage: null,
+		// Porte sans vitrage : `vitrage` porte le polymorphisme via
+		// surface (const 0) / type (non_applicable), ce n'est jamais `null`
+		// tel quel — cf. schemas/enveloppe/porte.yaml $defs.vitrage.
+		vitrage: { surface: 0, type: null },
 	};
 }
 

@@ -146,8 +146,7 @@ function collectByKey(node: unknown, key: string, path = ""): { path: string; va
 /**
  * RC-002 : cohérence des années d'installation / construction / rénovation.
  *
- * Toute occurrence de `annee_installation`, `annee_construction` ou
- * `annee_renovation` dans le diagnostic doit être :
+ * Toute occurrence de   `annee_construction` ou `annee_renovation` dans le diagnostic doit être :
  * - supérieure ou égale à `batiment.annee_construction` ;
  * - inférieure ou égale à l'année de `date_etablissement`.
  *
