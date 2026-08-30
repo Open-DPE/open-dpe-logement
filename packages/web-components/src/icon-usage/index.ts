@@ -29,11 +29,11 @@ const AUXILIAIRE = `
 
 export class IconUsage extends DynamicIcon {
 	protected registry: Record<string, string> = {
-		[models.common.UsageEnum.chauffage]: CHAUFFAGE,
-		[models.common.UsageEnum.ecs]: ECS,
-		[models.common.UsageEnum.refroidissement]: REFROIDISSEMENT,
-		[models.common.UsageEnum.eclairage]: ECLAIRAGE,
-		[models.common.UsageEnum.auxiliaire]: AUXILIAIRE,
+		[models.common.USAGES.chauffage]: CHAUFFAGE,
+		[models.common.USAGES.ecs]: ECS,
+		[models.common.USAGES.refroidissement]: REFROIDISSEMENT,
+		[models.common.USAGES.eclairage]: ECLAIRAGE,
+		[models.common.USAGES.auxiliaire]: AUXILIAIRE,
 	};
 }
 

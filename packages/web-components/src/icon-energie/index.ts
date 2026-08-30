@@ -25,17 +25,17 @@ const RESEAU = `
 
 export class IconEnergie extends DynamicIcon {
 	protected registry: Record<string, string> = {
-		[models.common.EnergieEnum.electricite]: ELECTRICITE,
-		[models.common.EnergieEnum.electricite_renouvelable]: ELECTRICITE,
-		[models.common.EnergieEnum.gaz_naturel]: GAZ,
-		[models.common.EnergieEnum.gpl]: GAZ,
-		[models.common.EnergieEnum.fioul]: FIOUL,
-		[models.common.EnergieEnum.bois_buche]: BOIS,
-		[models.common.EnergieEnum.bois_plaquette]: BOIS,
-		[models.common.EnergieEnum.bois_granule]: BOIS,
-		[models.common.EnergieEnum.charbon]: CHARBON,
-		[models.common.EnergieEnum.reseau_chaleur]: RESEAU,
-		[models.common.EnergieEnum.reseau_froid]: RESEAU,
+		[models.common.ENERGIES.electricite]: ELECTRICITE,
+		[models.common.ENERGIES.electricite_renouvelable]: ELECTRICITE,
+		[models.common.ENERGIES.gaz_naturel]: GAZ,
+		[models.common.ENERGIES.gpl]: GAZ,
+		[models.common.ENERGIES.fioul]: FIOUL,
+		[models.common.ENERGIES.bois_buche]: BOIS,
+		[models.common.ENERGIES.bois_plaquette]: BOIS,
+		[models.common.ENERGIES.bois_granule]: BOIS,
+		[models.common.ENERGIES.charbon]: CHARBON,
+		[models.common.ENERGIES.reseau_chaleur]: RESEAU,
+		[models.common.ENERGIES.reseau_froid]: RESEAU,
 	};
 }
 
