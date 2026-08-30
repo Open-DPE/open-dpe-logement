@@ -1,0 +1,51 @@
+id: enveloppe:pont-thermique:kpt
+name: kpt
+fields:
+  - name: type_liaison
+    title: Type de liaison thermique
+    type: string
+    format: enums
+    x-enum: enveloppe:pont-thermique:type
+    required: true
+  - name: isolation_mur
+    title: Présence d'une isolation du mur
+    type: boolean
+    required: true
+  - name: type_isolation_mur
+    title: Type d'isolation du mur
+    type: string
+    format: enums
+    x-enum: enveloppe:paroi:type-isolation
+    required: false
+  - name: isolation_plancher
+    title: Présence d'une isolation du plancher
+    type: boolean
+    required: false
+  - name: type_isolation_plancher
+    title: Type d'isolation du plancher
+    type: string
+    format: enums
+    x-enum: enveloppe:paroi:type-isolation
+    required: false
+  - name: type_pose_menuiserie
+    title: Type de pose de la menuiserie
+    type: string
+    format: enums
+    x-enum: enveloppe:paroi:type-pose
+    required: false
+  - name: presence_retour_isolation
+    title: Présence d'un retour d'isolation
+    type: boolean
+    required: false
+  - name: largeur_dormant/lte
+    title: Largeur du dormant (inférieure ou égale à) en cm
+    type: number
+    required: false
+  - name: largeur_dormant/gt
+    title: Largeur du dormant (supérieure à) en cm
+    type: number
+    required: false
+  - name: kpt
+    title: Coefficient de pont thermique linéique en W/(m·K)
+    type: number
+    required: true

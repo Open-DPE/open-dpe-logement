@@ -1,0 +1,33 @@
+id: chauffage:rg
+name: rg
+fields:
+  - name: type_generateur
+    title: Type de générateur
+    type: string
+    format: enums
+    x-enum: chauffage:type-generateur
+    required: true
+  - name: energie_generateur
+    title: Énergie du générateur
+    type: string
+    format: enums
+    x-enum: energie
+    required: false
+  - name: label_generateur
+    title: Label du générateur
+    type: string
+    format: enums
+    x-enum: chauffage:label-generateur
+    required: false
+  - name: annee_installation_generateur/gte
+    title: Année d'installation du générateur (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation_generateur/lte
+    title: Année d'installation du générateur (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: rg
+    title: Rendement du générateur
+    type: number
+    required: true

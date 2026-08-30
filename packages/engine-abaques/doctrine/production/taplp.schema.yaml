@@ -1,0 +1,14 @@
+id: production:taplp
+name: taplp
+title: Valeur d'autoproduction partielle pour l'usage de l'électricité
+fields:
+  - name: usage_electricite
+    title: Usage de l'électricité
+    type: string
+    format: enums
+    x-enum: production:usage-electricite
+    required: true
+  - name: taplp
+    title: Valeur d'autoproduction partielle pour l'usage de l'électricité
+    type: number
+    required: true

@@ -1,0 +1,21 @@
+id: production:kpv
+name: kpv
+fields:
+  - name: orientation_pv
+    title: Orientation du panneau photovoltaïque
+    type: string
+    format: enums
+    x-enum: production:photovoltaique:orientation-pv
+    required: true
+  - name: inclinaison_pv/gt
+    title: Inclinaison du panneau photovoltaïque (supérieure à)
+    type: number
+    required: false
+  - name: inclinaison_pv/lte
+    title: Inclinaison du panneau photovoltaïque (inférieure ou égale à)
+    type: number
+    required: false
+  - name: kpv
+    title: Coefficient de pondération prenant en compte l'altération par rapport à l'orientation optimale
+    type: number
+    required: true

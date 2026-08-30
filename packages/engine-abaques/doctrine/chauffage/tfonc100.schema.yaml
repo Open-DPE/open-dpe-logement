@@ -1,0 +1,21 @@
+id: chauffage:tfonc100
+name: tfonc100
+fields:
+  - name: temperature_distribution
+    title: Température de distribution
+    type: string
+    format: enums
+    x-enum: chauffage:temperature-distribution
+    required: true
+  - name: annee_installation_emetteur/gte
+    title: Année d'installation de l'émetteur (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation_emetteur/lte
+    title: Année d'installation de l'émetteur (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: tfonc100
+    title: Température de fonctionnement à pleine charge en °C
+    type: number
+    required: true

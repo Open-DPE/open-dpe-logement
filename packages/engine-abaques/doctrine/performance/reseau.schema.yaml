@@ -1,0 +1,23 @@
+id: performance:reseau
+name: reseau
+fields:
+  - name: id
+    title: Identifiant du réseau
+    type: string
+    required: true
+  - name: contenu_co2
+    title: Contenu CO2 en kgCO2/kWh
+    type: number
+    required: true
+  - name: contenu_co2_acv
+    title: Contenu CO2 ACV en kgCO2/kWh
+    type: number
+    required: true
+  - name: taux_enr
+    title: Taux d'énergie renouvelable
+    type: number
+    required: true
+  - name: feges
+    title: Facteur de conversion des consommations d'énergie finale en émissions de gaz à effet de serre
+    type: number
+    required: true

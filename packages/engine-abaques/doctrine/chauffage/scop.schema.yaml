@@ -1,0 +1,37 @@
+id: chauffage:scop
+name: scop
+fields:
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: type_generateur
+    title: Type de générateur
+    type: string
+    format: enums
+    x-enum: chauffage:type-generateur
+    required: true
+  - name: type_emetteur
+    title: Type d'émetteur
+    type: string
+    format: enums
+    x-enum: chauffage:type-emetteur
+    required: false
+  - name: annee_installation/lte
+    title: Année d'installation du générateur (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation/gte
+    title: Année d'installation du générateur (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: scop_cop
+    title: Type de coefficient de performance (scop ou cop)
+    type: string
+    required: true
+  - name: scop
+    title: Coefficient de performance saisonnier (SCOP ou COP)
+    type: number
+    required: true

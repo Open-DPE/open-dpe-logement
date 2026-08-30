@@ -1,0 +1,37 @@
+id: enveloppe:mur:umur0
+name: umur0
+fields:
+  - name: type_mur
+    title: Type de mur
+    type: string
+    format: enums
+    x-enum: enveloppe:mur:type
+    required: true
+  - name: epaisseur_mur/lt
+    title: Épaisseur du mur en cm (inférieure à)
+    type: number
+    required: false
+  - name: epaisseur_mur/lte
+    title: Épaisseur du mur en cm (inférieure ou égale à)
+    type: number
+    required: false
+  - name: epaisseur_mur/gt
+    title: Épaisseur du mur en cm (supérieure à)
+    type: number
+    required: false
+  - name: epaisseur_mur/gte
+    title: Épaisseur du mur en cm (supérieure ou égale à)
+    type: number
+    required: false
+  - name: annee_construction/lte
+    title: Année de construction (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_construction/gte
+    title: Année de construction (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: u0
+    title: Coefficient de transmission thermique de référence du mur nu en W/(m²·K)
+    type: number
+    required: true

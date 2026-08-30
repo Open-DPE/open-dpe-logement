@@ -1,0 +1,13 @@
+id: enveloppe:baie:deltar
+name: deltar
+fields:
+  - name: type_fermeture
+    title: Type de fermeture
+    type: string
+    format: enums
+    x-enum: enveloppe:baie:type-fermeture
+    required: true
+  - name: deltar
+    title: Résistance thermique additionnelle dûe à la présence de fermeture en m²·K/W
+    type: number
+    required: true

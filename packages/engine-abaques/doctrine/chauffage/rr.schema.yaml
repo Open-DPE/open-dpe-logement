@@ -1,0 +1,37 @@
+id: chauffage:rr
+name: rr
+fields:
+  - name: type_emission
+    title: Type d'émission de chaleur
+    type: string
+    format: enums
+    x-enum: chauffage:type-emission
+    required: true
+  - name: type_generateur
+    title: Type de générateur
+    type: string
+    format: enums
+    x-enum: chauffage:type-generateur
+    required: false
+  - name: label_generateur
+    title: Label du générateur
+    type: string
+    format: enums
+    x-enum: chauffage:label-generateur
+    required: false
+  - name: reseau_collectif
+    title: Réseau collectif
+    type: boolean
+    required: false
+  - name: presence_robinet_thermostatique
+    title: Présence d'un robinet thermostatique
+    type: boolean
+    required: false
+  - name: presence_regulation_terminale
+    title: Présence d'une régulation terminale
+    type: boolean
+    required: false
+  - name: rr
+    title: Rendement de régulation
+    type: number
+    required: true

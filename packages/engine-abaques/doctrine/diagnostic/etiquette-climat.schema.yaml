@@ -1,0 +1,29 @@
+id: diagnostic:etiquette-climat
+name: etiquette-climat
+fields:
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: altitude/gt
+    title: Altitude (supérieure à)
+    type: number
+    required: false
+  - name: altitude/lte
+    title: Altitude (inférieure ou égale à)
+    type: number
+    required: false
+  - name: eges/gte
+    title: Émissions de gaz à effet de serre (supérieure ou égale à)
+    type: number
+    required: false
+  - name: eges/lt
+    title: Émissions de gaz à effet de serre (inférieure à)
+    type: number
+    required: false
+  - name: etiquette_climat
+    title: Étiquette climat
+    type: string
+    required: true

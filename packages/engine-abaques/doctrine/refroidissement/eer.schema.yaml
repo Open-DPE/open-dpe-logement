@@ -1,0 +1,25 @@
+id: refroidissement:eer
+name: eer
+fields:
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: annee_installation/gte
+    title: Année d'installation du système de refroidissement (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation/lte
+    title: Année d'installation du système de refroidissement (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: seer
+    title: Coefficient d'efficience énergétique saisonnier
+    type: number
+    required: true
+  - name: eer
+    title: Coefficient d'efficience énergétique
+    type: number
+    required: true

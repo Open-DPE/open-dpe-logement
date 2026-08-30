@@ -1,0 +1,23 @@
+id: enveloppe:paroi:bver
+name: bver
+fields:
+  - name: zone_climatique
+    title: Zone climatique
+    type: string
+    format: enums
+    x-enum: zone-climatique
+    required: true
+  - name: orientation_ets
+    title: Orientation de la paroi vers l'espace tampon solarisé
+    type: string
+    format: enums
+    x-enum: orientation
+    required: true
+  - name: isolation_paroi
+    title: Présence d'une isolation de la paroi
+    type: boolean
+    required: true
+  - name: bver
+    title: Coefficient de réduction des déperditions thermiques
+    type: number
+    required: true

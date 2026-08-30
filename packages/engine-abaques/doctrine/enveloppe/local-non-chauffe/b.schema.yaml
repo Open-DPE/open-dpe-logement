@@ -1,0 +1,27 @@
+id: enveloppe:local-non-chauffe:b
+name: b
+fields:
+  - name: uvue
+    title: Coefficient de transmission thermique équivalent du local non chauffé en W/(m²·K)
+    type: number
+    required: true
+  - name: isolation_aiu
+    title: Isolation de la paroi entre le local non chauffé et l'intérieur
+    type: boolean
+    required: true
+  - name: isolation_aue
+    title: Isolation de la paroi entre le local non chauffé et l'extérieur
+    type: boolean
+    required: true
+  - name: aiu_aue/gt
+    title: Ratio surfaces intérieures sur surfaces extérieures du local non chauffé (supérieur à)
+    type: number
+    required: true
+  - name: aiu_aue/lte
+    title: Ratio surfaces intérieures sur surfaces extérieures du local non chauffé (inférieur ou égal à)
+    type: number
+    required: true
+  - name: b
+    title: Coefficient de réduction des déperditions thermiques
+    type: number
+    required: true

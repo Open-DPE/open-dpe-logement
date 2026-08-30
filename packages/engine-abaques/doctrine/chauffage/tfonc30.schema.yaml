@@ -1,0 +1,35 @@
+id: chauffage:tfonc30
+name: tfonc30
+fields:
+  - name: mode_combustion
+    title: Mode de combustion
+    type: string
+    format: enums
+    x-enum: chauffage:mode-combustion
+    required: true
+  - name: temperature_distribution
+    title: Température de distribution
+    type: string
+    format: enums
+    x-enum: chauffage:temperature-distribution
+    required: true
+  - name: annee_installation_emetteur/lte
+    title: Année d'installation de l'émetteur (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation_emetteur/gte
+    title: Année d'installation de l'émetteur (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation_generateur/lte
+    title: Année d'installation du générateur (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation_generateur/gte
+    title: Année d'installation du générateur (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: tfonc30
+    title: Température de fonctionnement à charge partielle (30%) en °C
+    type: number
+    required: true

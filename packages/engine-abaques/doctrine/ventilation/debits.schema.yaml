@@ -1,0 +1,37 @@
+id: ventilation:debits
+name: debits
+fields:
+  - name: type_ventilation
+    title: Type de ventilation
+    type: string
+    format: enums
+    x-enum: ventilation:type
+    required: true
+  - name: presence_echangeur_thermique
+    title: Présence d'un échangeur thermique
+    type: boolean
+    required: false
+  - name: installation_collective
+    title: Présence d'une installation collective
+    type: boolean
+    required: false
+  - name: annee_installation/gte
+    title: Année d'installation du système de ventilation (supérieure ou égale à)
+    type: integer
+    required: false
+  - name: annee_installation/lte
+    title: Année d'installation du système de ventilation (inférieure ou égale à)
+    type: integer
+    required: false
+  - name: qvarep_conv
+    title: Débit volumique conventionnel à reprendre en m3/(h.m2)
+    type: number
+    required: true
+  - name: qvasouf_conv
+    title: Débit volumique conventionnel à souffler en m3/(h.m2)
+    type: number
+    required: true
+  - name: smea_conv
+    title: Somme des modules d'entrée d'air sous 20 Pa en m3/(h.m2)
+    type: number
+    required: true
