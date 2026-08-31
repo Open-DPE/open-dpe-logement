@@ -8,43 +8,42 @@ import {
 	Consommations,
 } from "../../common/index.js";
 import {
-	TYPES_VENTILATION,
-	TypeVentilationEnum,
-	TypeVentilationNaturelleEnum,
-	TypeVentilationMecaniqueEnum,
+	TypeVentilation,
+	TypeVentilationNaturelle,
+	TypeVentilationMecanique,
 } from "./enums.js";
 
 export const InstallationBase = z.object({
 	id,
 	description,
 	surface,
-	type: TypeVentilationEnum,
+	type: TypeVentilation,
 	annee_installation,
 	installation_collective: z.boolean().nullable().default(null),
 	presence_echangeur_thermique: z.boolean().nullable().default(null),
 });
 
 export const InstallationNaturelle = InstallationBase.extend({
-	type: TypeVentilationNaturelleEnum,
+	type: TypeVentilationNaturelle,
 	annee_installation: non_applicable,
 	installation_collective: non_applicable,
 	presence_echangeur_thermique: non_applicable,
 });
 
 export const InstallationVMCDoubleFlux = InstallationBase.extend({
-	type: TypeVentilationEnum.extract([TYPES_VENTILATION.vmc_double_flux]),
+	type: TypeVentilation.extract(["vmc_double_flux"]),
 	installation_collective: z.boolean(),
 });
 
 export const InstallationPuitClimatique = InstallationBase.extend({
-	type: TypeVentilationEnum.extract([TYPES_VENTILATION.puit_climatique]),
+	type: TypeVentilation.extract(["puit_climatique"]),
 	installation_collective: z.boolean(),
 });
 
 export const InstallationMecaniqueAutres = InstallationBase.extend({
-	type: TypeVentilationMecaniqueEnum.exclude([
-		TYPES_VENTILATION.vmc_double_flux,
-		TYPES_VENTILATION.puit_climatique,
+	type: TypeVentilationMecanique.exclude([
+		"vmc_double_flux",
+		"puit_climatique",
 	]),
 	presence_echangeur_thermique: non_applicable,
 });

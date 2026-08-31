@@ -1,0 +1,101 @@
+chauffage.emetteur.delta_pem:
+  rule: delta_pem
+  cases:
+    - title: Plancher chauffant → 15 kPa
+      with:
+        type_emetteur: plancher_chauffant
+      expect: 15
+
+    - title: Plafond chauffant → 15 kPa
+      with:
+        type_emetteur: plafond_chauffant
+      expect: 15
+
+    - title: Radiateur monotube → 30 kPa
+      with:
+        type_emetteur: radiateur_monotube
+      expect: 30
+
+    - title: Radiateur bitube → 10 kPa
+      with:
+        type_emetteur: radiateur_bitube
+      expect: 10
+
+    - title: Radiateur → 10 kPa
+      with:
+        type_emetteur: radiateur
+      expect: 10
+
+    - title: Autres émetteurs → 35 kPa
+      with:
+        type_emetteur: autres
+      expect: 35
+
+chauffage.emetteur.fcot:
+  rule: fcot
+  cases:
+    - title: Plancher chauffant → 0.156
+      with:
+        type_emetteur: plancher_chauffant
+      expect: 0.156
+
+    - title: Radiateur → 0.802
+      with:
+        type_emetteur: radiateur
+      expect: 0.802
+
+    - title: Plafond chauffant → 0.802 (valeur par défaut)
+      with:
+        type_emetteur: plafond_chauffant
+      expect: 0.802
+
+    - title: Autres émetteurs → 0.802
+      with:
+        type_emetteur: autres
+      expect: 0.802
+
+chauffage.emetteur.dtheta_dim:
+  rule: dtheta_dim
+  cases:
+    - title: Distribution à haute température → 15 °C
+      with:
+        temperature_distribution: haute
+      expect: 15
+
+    - title: Distribution à moyenne température → 7.5 °C
+      with:
+        temperature_distribution: moyenne
+      expect: 7.5
+
+    - title: Distribution à basse température → 7.5 °C
+      with:
+        temperature_distribution: basse
+      expect: 7.5
+
+chauffage.emetteur.temperature_distribution:
+  rule: temperature_distribution
+  cases:
+    - title: Température de distribution saisie → retenue
+      with:
+        temperature_distribution: basse
+      expect: basse
+
+    - title: Température de distribution non saisie → haute par défaut
+      with:
+        temperature_distribution: null
+      expect: haute
+
+chauffage.emetteur.annee_installation:
+  rule: annee_installation
+  cases:
+    - title: Année d'installation saisie → retenue
+      with:
+        annee_installation: 2010
+        annee_construction_batiment: 1975
+      expect: 2010
+
+    - title: Année d'installation absente → année de construction du bâtiment
+      with:
+        annee_installation: null
+        annee_construction_batiment: 1975
+      expect: 1975

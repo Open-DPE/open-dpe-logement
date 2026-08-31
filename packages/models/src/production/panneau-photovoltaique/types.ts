@@ -1,11 +1,11 @@
 import * as z from "zod";
-import { OrientationEnum } from "../../common/enums.js";
+import { Orientation } from "../../common/enums.js";
 import { id, description, inclinaison, surface } from "../../common/types.js";
 
 export const PanneauPhotovoltaique = z.object({
 	id,
 	description,
-	orientation: OrientationEnum,
+	orientation: Orientation,
 	inclinaison,
 	modules: z.number().int().min(1).max(1000),
 	surface: surface.nullable().default(null),

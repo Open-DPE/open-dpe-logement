@@ -1,0 +1,50 @@
+enveloppe.niveau.inertie:
+  rule: inertie
+  cases:
+    - title: Trois composantes lourdes → inertie très lourde
+      with:
+        inertie_paroi_verticale: lourde
+        inertie_plancher_haut: lourde
+        inertie_plancher_bas: lourde
+      expect: tres_lourde
+
+    - title: Deux composantes lourdes → inertie lourde
+      with:
+        inertie_paroi_verticale: lourde
+        inertie_plancher_haut: lourde
+        inertie_plancher_bas: legere
+      expect: lourde
+
+    - title: Une seule composante lourde → inertie moyenne
+      with:
+        inertie_paroi_verticale: legere
+        inertie_plancher_haut: lourde
+        inertie_plancher_bas: legere
+      expect: moyenne
+
+    - title: Aucune composante lourde → inertie légère
+      with:
+        inertie_paroi_verticale: legere
+        inertie_plancher_haut: legere
+        inertie_plancher_bas: legere
+      expect: legere
+
+    - title: Plancher bas lourd seul → inertie moyenne
+      with:
+        inertie_paroi_verticale: legere
+        inertie_plancher_haut: legere
+        inertie_plancher_bas: lourde
+      expect: moyenne
+
+enveloppe.niveau.set_inertie:
+  rule: set_inertie
+  cases:
+    - title: Inertie saisie → retenue
+      with:
+        inertie: lourde
+      expect: lourde
+
+    - title: Inertie non saisie → légère par défaut
+      with:
+        inertie: null
+      expect: legere

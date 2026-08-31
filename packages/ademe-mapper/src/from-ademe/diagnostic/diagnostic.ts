@@ -43,7 +43,7 @@ export function mapDateEtablissement(props: Props): string {
 	}
 }
 
-export function mapType(props: Props): diagnostic.TypeDiagnosticEnum {
+export function mapType(props: Props): diagnostic.TypeDiagnostic {
 	switch (
 		props.logement.caracteristique_generale.enum_methode_application_dpe_log_id
 	) {
@@ -61,8 +61,8 @@ export function mapType(props: Props): diagnostic.TypeDiagnosticEnum {
 		case "28":
 		case "29":
 		case "30":
-			return diagnostic.TYPES_DIAGNOSTIC.batiment;
+			return diagnostic.TypeDiagnostic.enum.batiment;
 		default:
-			return diagnostic.TYPES_DIAGNOSTIC.logement;
+			return diagnostic.TypeDiagnostic.enum.logement;
 	}
 }

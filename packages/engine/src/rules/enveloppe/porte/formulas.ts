@@ -27,7 +27,7 @@ export function calcule_isolation_aiu(): boolean {
 /**
  * @formule enveloppe.porte.u
  * @param props.u_saisi : Coefficient de transmission thermique saisi
- * @param props.taux_vitrage : Taux de vitrage de la porte
+ * @param props.taux_vitrage : Taux de vitrage de la porte en %
  * @param props.presence_sas : Indique la présence d'un sas derrière la porte
  * @see abaques.enveloppe.porte.uporte
  * @throws {ValeurForfaitaireError}
@@ -35,15 +35,16 @@ export function calcule_isolation_aiu(): boolean {
  */
 export function calcule_u(props: {
 	u_saisi: number | null;
-	taux_vitrage: number;
+	taux_vitrage: ReturnType<typeof set_taux_vitrage>;
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
 	isolation: ReturnType<typeof set_isolation>;
 	materiau: ReturnType<typeof set_materiau>;
 	presence_sas: boolean;
 }): number {
 	if (props.u_saisi) return props.u_saisi;
+	const query = { ...props, taux_vitrage: props.taux_vitrage * 100 };
 	const abaque = abaques.enveloppe.porte.uporte;
-	const match = abaque.search(props, abaque.load()).at(0);
+	const match = abaque.search(query, abaque.load()).at(0);
 	if (!match) throw new ValeurForfaitaireError(props);
 	return match.u;
 }
@@ -73,9 +74,9 @@ export function set_isolation(props: { isolation: boolean | null }): boolean {
  * @returns Matériau de la porte retenu
  */
 export function set_materiau(props: {
-	materiau: models.enveloppe.porte.MateriauEnum | null;
-}): models.enveloppe.porte.MateriauEnum {
-	return props.materiau ?? models.enveloppe.porte.MATERIAUX.pvc;
+	materiau: models.enveloppe.porte.MateriauPorte | null;
+}): models.enveloppe.porte.MateriauPorte {
+	return props.materiau ?? models.enveloppe.porte.MateriauPorte.enum.pvc;
 }
 
 /**
@@ -83,9 +84,9 @@ export function set_materiau(props: {
  * @returns Type de vitrage de la porte retenu
  */
 export function set_type_vitrage(props: {
-	type_vitrage: models.enveloppe.porte.TypeVitrageEnum | null;
-}): models.enveloppe.porte.TypeVitrageEnum {
+	type_vitrage: models.enveloppe.porte.TypeVitrage | null;
+}): models.enveloppe.porte.TypeVitrage {
 	return (
-		props.type_vitrage ?? models.enveloppe.porte.TYPES_VITRAGE.simple_vitrage
+		props.type_vitrage ?? models.enveloppe.porte.TypeVitrage.enum.simple_vitrage
 	);
 }

@@ -31,7 +31,7 @@ export function kpt(
 	item: PontThermique,
 ): ReturnType<typeof formulas.calcule_kpt> {
 	return ctx.register(NAMESPACE, RULES.kpt, item, () => {
-		const enums = models.enveloppe.pontThermique.TYPES_LIAISON;
+		const enums = models.enveloppe.pontThermique.TypeLiaison.enum;
 		const mur = models.enveloppe.findMur(
 			item.liaison.mur_id,
 			ctx.diagnostic.enveloppe,

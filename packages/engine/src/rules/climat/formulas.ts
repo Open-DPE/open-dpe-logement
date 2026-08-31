@@ -11,11 +11,11 @@ import { ValeurForfaitaireError } from "../errors.js";
  */
 export function calcule_zone_climatique(props: {
 	code_departement: string;
-}): models.batiment.ZoneClimatiqueEnum {
+}): models.batiment.ZoneClimatique {
 	const abaque = abaques.climat.zoneClimatique;
 	const match = abaque.search(props, abaque.load()).at(0);
 	if (!match) throw new ValeurForfaitaireError(props);
-	return match.zone_climatique as models.batiment.ZoneClimatiqueEnum;
+	return match.zone_climatique as models.batiment.ZoneClimatique;
 }
 
 /**
@@ -71,6 +71,11 @@ export type Sollicitations = models.common.ParMois<{
 
 /**
  * @formule climat.sollicitations
+ * @abaque abaques.climat.sollicitations
+ * @guard Le §18.3 (période de chauffe raccourcie) ne s'applique qu'aux bâtiments
+ * cumulant parois majoritairement anciennes ET inertie lourde ou très lourde.
+ * Toute autre combinaison — dont un bâtiment récent à inertie lourde — relève du
+ * cas général du §18.2.
  * @param props.altitude - Altitude du bâtiment en mètres
  * @returns Sollicitations climatiques pour chaque mois de l'année
  */
@@ -80,8 +85,18 @@ export function calcule_sollicitations(props: {
 	parois_anciennes: boolean;
 	inertie: ReturnType<typeof enveloppe.calcule_inertie>;
 }): Sollicitations {
+	const { zone_climatique, altitude, parois_anciennes, inertie } = props;
 	const abaque = abaques.climat.sollicitations;
-	const matches = abaque.search(props, abaque.load());
+	const inertie_lourde =
+		inertie === models.enveloppe.common.Inertie.enum.lourde ||
+		inertie === models.enveloppe.common.Inertie.enum.tres_lourde;
+	const inertie_lourde_parois_anciennes = parois_anciennes && inertie_lourde;
+	const query = { zone_climatique, altitude, inertie_lourde_parois_anciennes };
+	const matches = abaque.search(query, abaque.load());
+
+	if (!models.common.containsAllMois(matches))
+		throw new ValeurForfaitaireError(props);
+
 	return models.common.createParMoisFrom(matches);
 }
 
@@ -94,7 +109,7 @@ export function calcule_sollicitations(props: {
  */
 export function calcule_c1(props: {
 	zone_climatique: ReturnType<typeof calcule_zone_climatique>;
-	orientation: models.enveloppe.common.OrientationParoiEnum;
+	orientation: models.enveloppe.common.OrientationParoi;
 	inclinaison: number;
 }): models.common.ParMois<number> {
 	const abaque = abaques.climat.c1;
@@ -116,18 +131,18 @@ export function calcule_c1(props: {
  */
 export function calcule_nj(): models.common.ParMois<number> {
 	return {
-		[models.common.MOIS.Janvier]: 31,
-		[models.common.MOIS.Février]: 28,
-		[models.common.MOIS.Mars]: 31,
-		[models.common.MOIS.Avril]: 30,
-		[models.common.MOIS.Mai]: 31,
-		[models.common.MOIS.Juin]: 30,
-		[models.common.MOIS.Juillet]: 31,
-		[models.common.MOIS.Août]: 31,
-		[models.common.MOIS.Septembre]: 30,
-		[models.common.MOIS.Octobre]: 31,
-		[models.common.MOIS.Novembre]: 30,
-		[models.common.MOIS.Décembre]: 24, // convention 3CL : une semaine d'absence est comptée en décembre (arrêté 2021-10-08, annexe 1, §11)
+		[models.common.Mois.enum.Janvier]: 31,
+		[models.common.Mois.enum.Février]: 28,
+		[models.common.Mois.enum.Mars]: 31,
+		[models.common.Mois.enum.Avril]: 30,
+		[models.common.Mois.enum.Mai]: 31,
+		[models.common.Mois.enum.Juin]: 30,
+		[models.common.Mois.enum.Juillet]: 31,
+		[models.common.Mois.enum.Août]: 31,
+		[models.common.Mois.enum.Septembre]: 30,
+		[models.common.Mois.enum.Octobre]: 31,
+		[models.common.Mois.enum.Novembre]: 30,
+		[models.common.Mois.enum.Décembre]: 24, // convention 3CL : une semaine d'absence est comptée en décembre (arrêté 2021-10-08, annexe 1, §11)
 	};
 }
 

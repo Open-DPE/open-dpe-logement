@@ -1,0 +1,868 @@
+enveloppe.gv:
+  rule: gv
+  cases:
+    - title: Somme des déperditions par les parois, les ponts thermiques et le renouvellement d'air
+      with:
+        dp: 200
+        pt: 30
+        dr: 70
+      expect: 300
+
+    - title: Bâtiment sans pont thermique déclaré
+      with:
+        dp: 200
+        pt: 0
+        dr: 70
+      expect: 270
+
+enveloppe.ubat:
+  rule: ubat
+  cases:
+    - title: Déperditions par transmission rapportées à la surface déperditive
+      with:
+        dp: 200
+        pt: 40
+        sdep: 300
+      expect: 0.8
+
+    - title: Le renouvellement d'air n'entre pas dans le Ubât
+      with:
+        dp: 150
+        pt: 0
+        sdep: 300
+      expect: 0.5
+
+enveloppe.dp:
+  rule: dp
+  cases:
+    - title: Somme des déperditions de chaque paroi
+      with:
+        dp: [45, 36, 120, 175]
+      expect: 376
+
+    - title: Aucune paroi → 0
+      with:
+        dp: []
+      expect: 0
+
+enveloppe.dp_murs:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des murs
+      with:
+        dp: [120, 80]
+      expect: 200
+
+enveloppe.dp_baies:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des baies
+      with:
+        dp: [45, 22.5]
+      expect: 67.5
+
+enveloppe.dp_portes:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des portes
+      with:
+        dp: [7]
+      expect: 7
+
+enveloppe.dp_planchers_hauts:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des planchers hauts
+      with:
+        dp: [175]
+      expect: 175
+
+enveloppe.dp_planchers_bas:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des planchers bas
+      with:
+        dp: [120]
+      expect: 120
+
+enveloppe.dr:
+  rule: dr
+  cases:
+    - title: Déperditions par renouvellement d'air = perméabilité + ventilation
+      with:
+        hperm: 12
+        hvent: 40
+      expect: 52
+
+    - title: Aucun système de ventilation → seule la perméabilité subsiste
+      with:
+        hperm: 12
+        hvent: 0
+      expect: 12
+
+enveloppe.pt:
+  rule: pt
+  cases:
+    - title: Somme des ponts thermiques
+      with:
+        pt: [3.9, 3, 7.3]
+      expect: 14.2
+
+    - title: Aucun pont thermique → 0
+      with:
+        pt: []
+      expect: 0
+
+enveloppe.sdep:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives
+      with:
+        sdep: [50, 20, 2, 45, 60]
+      expect: 177
+
+    - title: Aucune paroi → 0
+      with:
+        sdep: []
+      expect: 0
+
+enveloppe.sdep_murs:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des murs
+      with:
+        sdep: [50, 20]
+      expect: 70
+
+enveloppe.sdep_baies:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des baies
+      with:
+        sdep: [2.4, 1.6]
+      expect: 4
+
+enveloppe.sdep_portes:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des portes
+      with:
+        sdep: [2]
+      expect: 2
+
+enveloppe.sdep_planchers_hauts:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des planchers hauts
+      with:
+        sdep: [45]
+      expect: 45
+
+enveloppe.sdep_planchers_bas:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des planchers bas
+      with:
+        sdep: [60]
+      expect: 60
+
+enveloppe.inertie:
+  rule: inertie
+  cases:
+    - title: Aucun niveau renseigné → inertie légère par défaut
+      with:
+        niveaux: []
+      expect: legere
+
+    - title: Niveau unique → inertie du niveau
+      with:
+        niveaux:
+          - inertie: lourde
+            sh: 100
+      expect: lourde
+
+    - title: Inertie majoritaire en surface
+      with:
+        niveaux:
+          - inertie: lourde
+            sh: 100
+          - inertie: legere
+            sh: 40
+      expect: lourde
+
+    - title: Égalité entre inerties non légères → lourde
+      with:
+        niveaux:
+          - inertie: tres_lourde
+            sh: 50
+          - inertie: moyenne
+            sh: 50
+      expect: lourde
+
+    - title: Égalité impliquant l'inertie légère → moyenne
+      with:
+        niveaux:
+          - inertie: lourde
+            sh: 50
+          - inertie: legere
+            sh: 50
+      expect: moyenne
+
+    - title: Niveaux de même inertie cumulés
+      with:
+        niveaux:
+          - inertie: moyenne
+            sh: 30
+          - inertie: moyenne
+            sh: 30
+          - inertie: lourde
+            sh: 50
+      expect: moyenne
+
+enveloppe.hperm:
+  rule: hperm
+  cases:
+    - title: Déperditions par infiltration = 0.34 × débit d'infiltration
+      with:
+        qvinf: 100
+      expect: 34
+
+    - title: Aucune infiltration → aucune déperdition
+      with:
+        qvinf: 0
+      expect: 0
+
+enveloppe.qvinf:
+  rule: qvinf
+  cases:
+    - title: Exposition simple, débits repris et soufflés équilibrés → hsp × sh × 0.02
+      with:
+        exposition: simple
+        sh: 100
+        hsp: 2.5
+        qvarep_conv: 1.2
+        qvasouf_conv: 1.2
+        n50: 5
+      expect: 5
+
+    - title: Exposition multiple, débits équilibrés → hsp × sh × 0.07
+      with:
+        exposition: multiple
+        sh: 100
+        hsp: 2.5
+        qvarep_conv: 1.2
+        qvasouf_conv: 1.2
+        n50: 5
+      expect: 17.5
+
+    - title: Exposition simple, ventilation en dépression → correction du débit d'infiltration
+      with:
+        exposition: simple
+        sh: 100
+        hsp: 2.5
+        qvarep_conv: 1.2
+        qvasouf_conv: 0
+        n50: 5
+      expect: 0.4894
+
+    - title: Surface nulle → aucune infiltration
+      with:
+        exposition: simple
+        sh: 0
+        hsp: 2.5
+        qvarep_conv: 1.2
+        qvasouf_conv: 1.2
+        n50: 5
+      expect: 0
+
+enveloppe.n50:
+  rule: n50
+  cases:
+    - title: Perméabilité 100 m³/h, 100 m² sous 2.5 m de hauteur
+      with:
+        sh: 100
+        hsp: 2.5
+        q4pa: 100
+      expect: 2.1544
+
+    - title: Perméabilité nulle → renouvellement nul
+      with:
+        sh: 100
+        hsp: 2.5
+        q4pa: 0
+      expect: 0
+
+    - title: Surface nulle → 0 (pas de division par zéro)
+      with:
+        sh: 0
+        hsp: 2.5
+        q4pa: 100
+      expect: 0
+
+    - title: Hauteur sous plafond nulle → 0 (pas de division par zéro)
+      with:
+        sh: 100
+        hsp: 0
+        q4pa: 100
+      expect: 0
+
+enveloppe.q4pa:
+  rule: q4pa
+  cases:
+    - title: Perméabilité de l'enveloppe augmentée des entrées d'air
+      with:
+        sh: 100
+        q4paenv: 200
+        smea_conv: 1.2
+      expect: 254
+
+    - title: Aucune entrée d'air → perméabilité de l'enveloppe seule
+      with:
+        sh: 100
+        q4paenv: 200
+        smea_conv: 0
+      expect: 200
+
+enveloppe.q4paenv:
+  rule: q4paenv
+  cases:
+    - title: Les planchers bas sont exclus de la surface prise en compte
+      with:
+        sdep: 300
+        sdep_planchers_bas: 60
+        q4paconv: 1.9
+      expect: 456
+
+    - title: Bâtiment sans plancher bas déperditif
+      with:
+        sdep: 300
+        sdep_planchers_bas: 0
+        q4paconv: 1.9
+      expect: 570
+
+enveloppe.q4paconv:
+  rule: q4paconv
+  cases:
+    - title: Maison 1948-1974 sans isolation des murs et plafonds → 2.2 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 1960
+        isolation_murs_plafonds: false
+        presence_joints_menuiserie: false
+      expect: 2.2
+
+    - title: Maison 1948-1974 avec isolation des murs et plafonds → 1.9 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 1960
+        isolation_murs_plafonds: true
+        presence_joints_menuiserie: false
+      expect: 1.9
+
+    - title: Maison avant 1948, sans isolation ni joints → 3.3 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 1930
+        isolation_murs_plafonds: false
+        presence_joints_menuiserie: false
+      expect: 3.3
+
+    - title: Maison avant 1948 avec isolation → 2 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 1930
+        isolation_murs_plafonds: true
+        presence_joints_menuiserie: false
+      expect: 2
+
+    - title: Maison avant 1948 sans isolation mais avec joints → 2.5 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 1930
+        isolation_murs_plafonds: false
+        presence_joints_menuiserie: true
+      expect: 2.5
+
+    - title: Maison 1975-2005 → 1.9 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 1980
+        isolation_murs_plafonds: true
+        presence_joints_menuiserie: true
+      expect: 1.9
+
+    - title: Maison 2006-2012 → 1.3 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 2008
+        isolation_murs_plafonds: true
+        presence_joints_menuiserie: true
+      expect: 1.3
+
+    - title: Maison à partir de 2013 → 0.6 m³/(h.m²)
+      with:
+        type_batiment: maison
+        annee_construction: 2015
+        isolation_murs_plafonds: true
+        presence_joints_menuiserie: true
+      expect: 0.6
+
+    - title: Immeuble avant 1948 sans isolation ni joints → 4.6 m³/(h.m²)
+      with:
+        type_batiment: immeuble
+        annee_construction: 1930
+        isolation_murs_plafonds: false
+        presence_joints_menuiserie: false
+      expect: 4.6
+
+    - title: Immeuble 1948-1974 sans isolation → 2 m³/(h.m²)
+      with:
+        type_batiment: immeuble
+        annee_construction: 1960
+        isolation_murs_plafonds: false
+        presence_joints_menuiserie: false
+      expect: 2
+
+    - title: Immeuble 1975-2012 → 1.5 m³/(h.m²)
+      with:
+        type_batiment: immeuble
+        annee_construction: 1990
+        isolation_murs_plafonds: true
+        presence_joints_menuiserie: true
+      expect: 1.5
+
+    - title: Immeuble à partir de 2013 → 1 m³/(h.m²)
+      with:
+        type_batiment: immeuble
+        annee_construction: 2020
+        isolation_murs_plafonds: true
+        presence_joints_menuiserie: true
+      expect: 1
+
+    - title: Type de bâtiment inconnu → erreur ValeurForfaitaire
+      with:
+        type_batiment: TYPE_INCONNU
+        annee_construction: 1960
+        isolation_murs_plafonds: false
+        presence_joints_menuiserie: false
+      expectError: true
+
+enveloppe.isolation_murs_plafonds:
+  rule: isolation_murs_plafonds
+  cases:
+    - title: Plus de la moitié de la surface murs + plafonds isolée → isolé
+      with:
+        murs:
+          - surface: 80
+            isolation: true
+        planchers_hauts:
+          - surface: 50
+            isolation: false
+      expect: true
+
+    - title: Exactement la moitié isolée → non isolé (seuil strict)
+      with:
+        murs:
+          - surface: 50
+            isolation: true
+        planchers_hauts:
+          - surface: 50
+            isolation: false
+      expect: false
+
+    - title: Isolation inconnue traitée comme non isolée
+      with:
+        murs:
+          - surface: 80
+            isolation: null
+        planchers_hauts:
+          - surface: 50
+            isolation: true
+      expect: false
+
+    - title: Aucune paroi → non isolé
+      with:
+        murs: []
+        planchers_hauts: []
+      expect: false
+
+enveloppe.presence_joints:
+  rule: presence_joints
+  cases:
+    - title: Plus de la moitié de la surface d'ouvertures équipée de joints → présence
+      with:
+        ouvertures:
+          - surface: 10
+            presence_joint: true
+          - surface: 5
+            presence_joint: false
+      expect: true
+
+    - title: Exactement la moitié équipée → absence (seuil strict)
+      with:
+        ouvertures:
+          - surface: 10
+            presence_joint: true
+          - surface: 10
+            presence_joint: false
+      expect: false
+
+    - title: Présence de joints inconnue traitée comme absence
+      with:
+        ouvertures:
+          - surface: 10
+            presence_joint: null
+      expect: false
+
+    - title: Aucune ouverture → absence
+      with:
+        ouvertures: []
+      expect: false
+
+enveloppe.isolation_planchers_hauts:
+  rule: isolation_planchers_hauts
+  cases:
+    - title: Tous les planchers hauts extérieurs isolés → isolé
+      with:
+        planchers_hauts:
+          - mitoyennete: exterieur
+            isolation: true
+      expect: true
+
+    - title: Un plancher haut extérieur explicitement non isolé → non isolé
+      with:
+        planchers_hauts:
+          - mitoyennete: exterieur
+            isolation: true
+          - mitoyennete: exterieur
+            isolation: false
+      expect: false
+
+    - title: Plancher haut non isolé mais donnant sur un local non chauffé → non bloquant
+      with:
+        planchers_hauts:
+          - mitoyennete: local_non_chauffe
+            isolation: false
+      expect: true
+
+    - title: Isolation inconnue → non bloquante
+      with:
+        planchers_hauts:
+          - mitoyennete: exterieur
+            isolation: null
+      expect: true
+
+    - title: Aucun plancher haut → isolé
+      with:
+        planchers_hauts: []
+      expect: true
+
+enveloppe.presence_protection_solaire:
+  rule: presence_protection_solaire
+  cases:
+    - title: Aucune baie exposée (toutes au nord) → critère satisfait
+      with:
+        baies:
+          - surface: 10
+            orientation: nord
+            mitoyennete: exterieur
+            type_fermeture: sans_fermeture
+      expect: true
+
+    - title: Baie sud protégée → critère satisfait
+      with:
+        baies:
+          - surface: 2
+            orientation: sud
+            mitoyennete: exterieur
+            type_fermeture: volets_roulants_aluminium
+      expect: true
+
+    - title: Baie sud non protégée → critère non satisfait
+      with:
+        baies:
+          - surface: 2
+            orientation: sud
+            mitoyennete: exterieur
+            type_fermeture: sans_fermeture
+      expect: false
+
+    - title: Petite baie non protégée (< 0.7 m² et < 10 % de la surface exposée) → ignorée
+      with:
+        baies:
+          - surface: 10
+            orientation: sud
+            mitoyennete: exterieur
+            type_fermeture: volets_roulants_aluminium
+          - surface: 0.5
+            orientation: est
+            mitoyennete: exterieur
+            type_fermeture: sans_fermeture
+      expect: true
+
+    - title: Petites baies non protégées représentant plus de 10 % → prises en compte
+      with:
+        baies:
+          - surface: 1
+            orientation: sud
+            mitoyennete: exterieur
+            type_fermeture: volets_roulants_aluminium
+          - surface: 0.6
+            orientation: est
+            mitoyennete: exterieur
+            type_fermeture: sans_fermeture
+          - surface: 0.6
+            orientation: ouest
+            mitoyennete: exterieur
+            type_fermeture: sans_fermeture
+      expect: false
+
+    - title: Baie en toiture non protégée → jamais exclue par l'exception des petites baies
+      with:
+        baies:
+          - surface: 4
+            orientation: sud
+            mitoyennete: exterieur
+            type_fermeture: volets_roulants_aluminium
+          - surface: 6
+            orientation: horizontale
+            mitoyennete: exterieur
+            type_fermeture: sans_fermeture
+      expect: false
+
+    - title: Les baies non extérieures ne sont pas prises en compte
+      with:
+        baies:
+          - surface: 10
+            orientation: sud
+            mitoyennete: local_non_chauffe
+            type_fermeture: sans_fermeture
+      expect: true
+
+    - title: Aucune baie → critère satisfait
+      with:
+        baies: []
+      expect: true
+
+enveloppe.logement_traversant:
+  rule: logement_traversant
+  cases:
+    - title: Baies réparties sur deux orientations opposées → traversant
+      with:
+        baies:
+          - surface: 10
+            orientation: sud
+            mitoyennete: exterieur
+          - surface: 10
+            orientation: nord
+            mitoyennete: exterieur
+      expect: true
+
+    - title: Une orientation concentre plus de 75 % des baies → non traversant
+      with:
+        baies:
+          - surface: 10
+            orientation: sud
+            mitoyennete: exterieur
+          - surface: 2
+            orientation: nord
+            mitoyennete: exterieur
+      expect: false
+
+    - title: Orientation unique → non traversant
+      with:
+        baies:
+          - surface: 10
+            orientation: sud
+            mitoyennete: exterieur
+      expect: false
+
+    - title: Répartition exactement à 75 % → traversant (seuil strict)
+      with:
+        baies:
+          - surface: 30
+            orientation: sud
+            mitoyennete: exterieur
+          - surface: 10
+            orientation: nord
+            mitoyennete: exterieur
+      expect: true
+
+    - title: Les baies en toiture sont exclues du critère
+      with:
+        baies:
+          - surface: 100
+            orientation: horizontale
+            mitoyennete: exterieur
+          - surface: 10
+            orientation: sud
+            mitoyennete: exterieur
+          - surface: 10
+            orientation: nord
+            mitoyennete: exterieur
+      expect: true
+
+    - title: Les baies non extérieures sont exclues du critère
+      with:
+        baies:
+          - surface: 100
+            orientation: est
+            mitoyennete: local_non_chauffe
+          - surface: 10
+            orientation: sud
+            mitoyennete: exterieur
+          - surface: 10
+            orientation: nord
+            mitoyennete: exterieur
+      expect: true
+
+    - title: Aucune baie extérieure → traversant par défaut
+      with:
+        baies: []
+      expect: true
+
+enveloppe.sse:
+  rule: sse
+  cases:
+    - title: Cumul des surfaces sud équivalentes des baies et des espaces tampons solarisés
+      with:
+        sse:
+          - &sse2
+            "01": 2
+            "02": 2
+            "03": 2
+            "04": 2
+            "05": 2
+            "06": 2
+            "07": 2
+            "08": 2
+            "09": 2
+            "10": 2
+            "11": 2
+            "12": 2
+          - *sse2
+        sse_ets:
+          - &sse1
+            "01": 1
+            "02": 1
+            "03": 1
+            "04": 1
+            "05": 1
+            "06": 1
+            "07": 1
+            "08": 1
+            "09": 1
+            "10": 1
+            "11": 1
+            "12": 1
+      expect:
+        "01": 5
+        "02": 5
+        "03": 5
+        "04": 5
+        "05": 5
+        "06": 5
+        "07": 5
+        "08": 5
+        "09": 5
+        "10": 5
+        "11": 5
+        "12": 5
+
+    - title: Aucune baie ni espace tampon solarisé → surface sud équivalente nulle
+      with:
+        sse: []
+        sse_ets: []
+      expect:
+        "01": 0
+        "02": 0
+        "03": 0
+        "04": 0
+        "05": 0
+        "06": 0
+        "07": 0
+        "08": 0
+        "09": 0
+        "10": 0
+        "11": 0
+        "12": 0
+
+enveloppe.dp.murs:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des murs
+      with:
+        dp: [120, 80]
+      expect: 200
+
+enveloppe.dp.baies:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des baies
+      with:
+        dp: [45, 22.5]
+      expect: 67.5
+
+enveloppe.dp.portes:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des portes
+      with:
+        dp: [7]
+      expect: 7
+
+enveloppe.dp.planchers_hauts:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des planchers hauts
+      with:
+        dp: [175]
+      expect: 175
+
+enveloppe.dp.planchers_bas:
+  rule: dp
+  cases:
+    - title: Somme des déperditions des planchers bas
+      with:
+        dp: [120]
+      expect: 120
+
+enveloppe.sdep.murs:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des murs
+      with:
+        sdep: [50, 20]
+      expect: 70
+
+enveloppe.sdep.baies:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des baies
+      with:
+        sdep: [2.4, 1.6]
+      expect: 4
+
+enveloppe.sdep.portes:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des portes
+      with:
+        sdep: [2]
+      expect: 2
+
+enveloppe.sdep.planchers_hauts:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des planchers hauts
+      with:
+        sdep: [45]
+      expect: 45
+
+enveloppe.sdep.planchers_bas:
+  rule: sdep
+  cases:
+    - title: Somme des surfaces déperditives des planchers bas
+      with:
+        sdep: [60]
+      expect: 60

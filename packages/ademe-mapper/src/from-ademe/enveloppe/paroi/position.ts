@@ -3,7 +3,7 @@ import type { Input, Paroi, ParoiVitree } from "../types.js";
 import { findReference, resolveId } from "../../common.js";
 import { MappingError } from "../../errors.js";
 
-const MITOYENNETES = enveloppe.common.MITOYENNETES;
+const Mitoyennete = enveloppe.common.Mitoyennete;
 
 export function mapPosition(props: {
 	paroi: Paroi;
@@ -32,27 +32,27 @@ export function mapSurface(props: Paroi): number {
 	return props.donnee_entree.surface_paroi_opaque;
 }
 
-export function mapMitoyennete(props: Paroi): enveloppe.common.MitoyenneteEnum {
+export function mapMitoyennete(props: Paroi): enveloppe.common.Mitoyennete {
 	switch (props.donnee_entree.enum_type_adjacence_id) {
 		case "1":
-			return MITOYENNETES.exterieur;
+			return Mitoyennete.enum.exterieur;
 		case "2":
 		case "5":
-			return MITOYENNETES.enterre;
+			return Mitoyennete.enum.enterre;
 		case "3":
-			return MITOYENNETES.vide_sanitaire;
+			return Mitoyennete.enum.vide_sanitaire;
 		case "4":
-			return MITOYENNETES.local_non_residentiel;
+			return Mitoyennete.enum.local_non_residentiel;
 		case "6":
-			return MITOYENNETES.sous_sol_non_chauffe;
+			return Mitoyennete.enum.sous_sol_non_chauffe;
 		case "7":
-			return MITOYENNETES.local_non_accessible;
+			return Mitoyennete.enum.local_non_accessible;
 		case "20":
-			return MITOYENNETES.local_non_residentiel;
+			return Mitoyennete.enum.local_non_residentiel;
 		case "22":
-			return MITOYENNETES.local_residentiel;
+			return Mitoyennete.enum.local_residentiel;
 		default:
-			return MITOYENNETES.local_non_chauffe;
+			return Mitoyennete.enum.local_non_chauffe;
 	}
 }
 
@@ -63,7 +63,7 @@ export function mapLocalNonChauffeId(props: {
 	const { paroi, input } = props;
 
 	// Absence de local non chauffé mitoyen
-	if (mapMitoyennete(paroi) !== MITOYENNETES.local_non_chauffe) return null;
+	if (mapMitoyennete(paroi) !== Mitoyennete.enum.local_non_chauffe) return null;
 
 	// Cas des espaces tampons solarisés
 	if (paroi.donnee_entree.enum_type_adjacence_id === "10") {

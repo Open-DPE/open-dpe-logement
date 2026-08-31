@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { id, description } from "../../common/types.js";
-import { OrientationCardinaleEnum } from "../../common/enums.js";
-import { TypeLncEnum, TYPES_LNC } from "./enums.js";
+import { OrientationCardinale } from "../../common/enums.js";
+import { TypeLocalNonChauffe } from "./enums.js";
 import { Paroi, ParoiWithData } from "./paroi/types.js";
 import { Baie, BaieWithData } from "./baie/types.js";
 
@@ -12,7 +12,7 @@ export const LocalNonChauffeData = z.object({
 	isolation_aiu: z.boolean(),
 	isolation_aue: z.boolean(),
 	sse: z.number(),
-	orientations: z.array(OrientationCardinaleEnum),
+	orientations: z.array(OrientationCardinale),
 	t: z.number(),
 });
 
@@ -21,18 +21,18 @@ export type LocalNonChauffeData = z.infer<typeof LocalNonChauffeData>;
 export const LocalNonChauffeBase = z.object({
 	id,
 	description,
-	type: TypeLncEnum,
+	type: TypeLocalNonChauffe,
 	parois: z.array(Paroi),
 	baies: z.array(Baie),
 });
 
 export const EspaceTamponSolarise = LocalNonChauffeBase.extend({
-	type: TypeLncEnum.extract([TYPES_LNC.espace_tampon_solarise]),
+	type: TypeLocalNonChauffe.extract(["espace_tampon_solarise"]),
 	baies: z.array(Baie).min(1),
 });
 
 export const LocalNonChauffeAutre = LocalNonChauffeBase.extend({
-	type: TypeLncEnum.exclude([TYPES_LNC.espace_tampon_solarise]),
+	type: TypeLocalNonChauffe.exclude(["espace_tampon_solarise"]),
 });
 
 export const LocalNonChauffe = z

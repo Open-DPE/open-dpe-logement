@@ -3,7 +3,7 @@ import {
 	Production,
 	ProductionData,
 	ProductionWithData,
-	UsageElectriciteEnum,
+	UsageElectricite,
 	panneauPhotovoltaique,
 } from "../../src/production/index.js";
 import type {
@@ -25,7 +25,7 @@ const {
 // Le domaine `production` (photovoltaïque) ne comporte ni union de branches,
 // ni guards, ni helpers (`src/production/` n'expose que enums.ts, types.ts et
 // panneau-photovoltaique/types.ts). Les tests ci-dessous couvrent donc :
-//  - le seul enum du domaine (UsageElectriciteEnum),
+//  - le seul enum du domaine (UsageElectricite),
 //  - les contraintes numériques/enum du schéma feuille PanneauPhotovoltaique,
 //  - les schémas composites Production / ProductionWithData / *WithData,
 // sans forcer le motif it.each par branche qui n'a pas lieu d'être ici.
@@ -63,10 +63,10 @@ const PRODUCTION_WITH_DATA: ProductionWithDataType = {
 };
 
 // ---------------------------------------------------------------------------
-// 1. UsageElectriciteEnum
+// 1. UsageElectricite
 // ---------------------------------------------------------------------------
 
-describe("UsageElectriciteEnum", () => {
+describe("UsageElectricite", () => {
 	it.each([
 		"chauffage",
 		"refroidissement",
@@ -76,11 +76,11 @@ describe("UsageElectriciteEnum", () => {
 		"auxiliaires_distribution",
 		"autres",
 	])("accepte la valeur '%s'", (valeur) => {
-		expect(UsageElectriciteEnum.safeParse(valeur).success).toBe(true);
+		expect(UsageElectricite.safeParse(valeur).success).toBe(true);
 	});
 
 	it("rejette une valeur hors énumération", () => {
-		expect(UsageElectriciteEnum.safeParse("chauffe_eau").success).toBe(false);
+		expect(UsageElectricite.safeParse("chauffe_eau").success).toBe(false);
 	});
 });
 
@@ -214,16 +214,14 @@ describe("Production — schéma racine", () => {
 	});
 
 	it("accepte un tableau de panneaux vide (aucune contrainte de cardinalité minimale)", () => {
-		expect(
-			Production.safeParse({ panneaux_photovoltaiques: [] }).success,
-		).toBe(true);
+		expect(Production.safeParse({ panneaux_photovoltaiques: [] }).success).toBe(
+			true,
+		);
 	});
 
 	it("rejette un panneau invalide dans le tableau (propagation de l'erreur enfant)", () => {
 		const invalide = {
-			panneaux_photovoltaiques: [
-				{ ...PANNEAU_PHOTOVOLTAIQUE, modules: 0 },
-			],
+			panneaux_photovoltaiques: [{ ...PANNEAU_PHOTOVOLTAIQUE, modules: 0 }],
 		};
 		expect(Production.safeParse(invalide).success).toBe(false);
 	});
@@ -236,8 +234,7 @@ describe("Production — schéma racine", () => {
 describe("ProductionData", () => {
 	it("accepte ppv/celec_ac/tapl numériques", () => {
 		expect(
-			ProductionData.safeParse({ ppv: 3.6, celec_ac: 3.4, tapl: 0.9 })
-				.success,
+			ProductionData.safeParse({ ppv: 3.6, celec_ac: 3.4, tapl: 0.9 }).success,
 		).toBe(true);
 	});
 

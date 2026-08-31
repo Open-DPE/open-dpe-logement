@@ -43,7 +43,8 @@ export class RepartitionDeperditions extends BaseIllustration {
 		}
 
 		const dp_menuiseries = dp_baies + dp_portes;
-		const percent = this.hasAttribute("percent") && this.getAttribute("percent") !== "false";
+		const percent =
+			this.hasAttribute("percent") && this.getAttribute("percent") !== "false";
 
 		return `
       <path d='M132.164 89.2268V100.946H141.256V92.9464L162.627 71.5221L160.801 69.6823L157.268 66.1627L156.161 65.0828L132.164 89.2268ZM193.49 27.9003L162.627 58.6569L169.053 65.0828L193.384 40.7655L245.565 92.9464V156.793H141.189V140.888H132.164V165.885H254.724V89.2268L193.49 27.9003Z' fill='#DEDEDE'></path>

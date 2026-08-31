@@ -3,7 +3,7 @@ import { resolveId } from "../common.js";
 import type { Input, Ventilation } from "./types.js";
 import { MappingError } from "../errors.js";
 
-const TYPES_VENTILATION = ventilation.installation.TYPES_VENTILATION;
+const TypeVentilation = ventilation.installation.TypeVentilation;
 
 export function mapInstallation(props: {
 	input: Input;
@@ -50,59 +50,61 @@ export function mapType(
 ): ventilation.installation.Installation["type"] {
 	switch (props.donnee_entree.enum_type_ventilation_id) {
 		case "1":
-			return TYPES_VENTILATION.ventilation_ouverture_fenetres;
+			return TypeVentilation.enum.ventilation_ouverture_fenetres;
 		case "2":
-			return TYPES_VENTILATION.ventilation_entrees_air_hautes_basses;
+			return TypeVentilation.enum.ventilation_entrees_air_hautes_basses;
 		case "3":
 		case "4":
 		case "5":
 		case "6":
-			return TYPES_VENTILATION.vmc_simple_flux_autoreglable;
+			return TypeVentilation.enum.vmc_simple_flux_autoreglable;
 		case "7":
 		case "8":
 		case "9":
-			return TYPES_VENTILATION.vmc_simple_flux_hygroreglable_a;
+			return TypeVentilation.enum.vmc_simple_flux_hygroreglable_a;
 		case "10":
 		case "11":
 		case "12":
-			return TYPES_VENTILATION.vmc_simple_flux_hygroreglable_gaz;
+			return TypeVentilation.enum.vmc_simple_flux_hygroreglable_gaz;
 		case "13":
 		case "14":
 		case "15":
-			return TYPES_VENTILATION.vmc_simple_flux_hygroreglable_b;
+			return TypeVentilation.enum.vmc_simple_flux_hygroreglable_b;
 		case "16":
-			return TYPES_VENTILATION.vmc_basse_pression_autoreglable;
+			return TypeVentilation.enum.vmc_basse_pression_autoreglable;
 		case "17":
-			return TYPES_VENTILATION.vmc_basse_pression_hygroreglable_a;
+			return TypeVentilation.enum.vmc_basse_pression_hygroreglable_a;
 		case "18":
-			return TYPES_VENTILATION.vmc_basse_pression_hygroreglable_b;
+			return TypeVentilation.enum.vmc_basse_pression_hygroreglable_b;
 		case "19":
 		case "20":
 		case "21":
 		case "22":
 		case "23":
 		case "24":
-			return TYPES_VENTILATION.vmc_double_flux;
+			return TypeVentilation.enum.vmc_double_flux;
 		case "25":
-			return TYPES_VENTILATION.ventilation_naturelle_conduit;
+			return TypeVentilation.enum.ventilation_naturelle_conduit;
 		case "26":
 		case "27":
 		case "28":
-			return TYPES_VENTILATION.ventilation_hybride;
+			return TypeVentilation.enum.ventilation_hybride;
 		case "29":
 		case "30":
 		case "31":
-			return TYPES_VENTILATION.ventilation_hybride_entrees_air_hygroreglables;
+			return TypeVentilation.enum
+				.ventilation_hybride_entrees_air_hygroreglables;
 		case "32":
 		case "33":
-			return TYPES_VENTILATION.ventilation_mecanique_conduit;
+			return TypeVentilation.enum.ventilation_mecanique_conduit;
 		case "34":
-			return TYPES_VENTILATION.ventilation_naturelle_conduit_entrees_air_hygroreglables;
+			return TypeVentilation.enum
+				.ventilation_naturelle_conduit_entrees_air_hygroreglables;
 		case "35":
 		case "36":
 		case "37":
 		case "38":
-			return TYPES_VENTILATION.puit_climatique;
+			return TypeVentilation.enum.puit_climatique;
 	}
 }
 

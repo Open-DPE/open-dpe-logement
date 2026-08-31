@@ -1,0 +1,358 @@
+common.fcep:
+  rule: fcep
+  cases:
+    - title: Électricité → 1.9 (arrêté 15/09/2006 annexe 4)
+      with:
+        energie: electricite
+      expect: 1.9
+
+    - title: Électricité renouvelable autoconsommée → 1.9
+      with:
+        energie: electricite_renouvelable
+      expect: 1.9
+
+    - title: Gaz naturel → 1
+      with:
+        energie: gaz_naturel
+      expect: 1
+
+    - title: Fioul → 1
+      with:
+        energie: fioul
+      expect: 1
+
+    - title: Bois bûche → 1
+      with:
+        energie: bois_buche
+      expect: 1
+
+    - title: Réseau de chaleur → 1
+      with:
+        energie: reseau_chaleur
+      expect: 1
+
+common.feges:
+  rule: feges
+  cases:
+    - title: Électricité - chauffage → 0.079 kgCO2eq/kWh
+      with:
+        usage: chauffage
+        energie: electricite
+        reseau_id: null
+      expect: 0.079
+
+    - title: Électricité - ECS → 0.065 kgCO2eq/kWh
+      with:
+        usage: ecs
+        energie: electricite
+        reseau_id: null
+      expect: 0.065
+
+    - title: Électricité - refroidissement → 0.064 kgCO2eq/kWh
+      with:
+        usage: refroidissement
+        energie: electricite
+        reseau_id: null
+      expect: 0.064
+
+    - title: Électricité - éclairage → 0.069 kgCO2eq/kWh
+      with:
+        usage: eclairage
+        energie: electricite
+        reseau_id: null
+      expect: 0.069
+
+    - title: Électricité - auxiliaires → 0.069 kgCO2eq/kWh
+      with:
+        usage: auxiliaire
+        energie: electricite
+        reseau_id: null
+      expect: 0.069
+
+    - title: Électricité renouvelable autoconsommée → 0
+      with:
+        usage: chauffage
+        energie: electricite_renouvelable
+        reseau_id: null
+      expect: 0
+
+    - title: Gaz naturel → 0.227 kgCO2eq/kWh (indépendant de l'usage)
+      with:
+        usage: ecs
+        energie: gaz_naturel
+        reseau_id: null
+      expect: 0.227
+
+    - title: GPL → 0.272 kgCO2eq/kWh
+      with:
+        usage: chauffage
+        energie: gpl
+        reseau_id: null
+      expect: 0.272
+
+    - title: Fioul → 0.324 kgCO2eq/kWh
+      with:
+        usage: chauffage
+        energie: fioul
+        reseau_id: null
+      expect: 0.324
+
+    - title: Charbon → 0.385 kgCO2eq/kWh
+      with:
+        usage: chauffage
+        energie: charbon
+        reseau_id: null
+      expect: 0.385
+
+    - title: Bois bûche → 0.03 kgCO2eq/kWh
+      with:
+        usage: chauffage
+        energie: bois_buche
+        reseau_id: null
+      expect: 0.03
+
+    - title: Bois granulé → 0.03 kgCO2eq/kWh
+      with:
+        usage: chauffage
+        energie: bois_granule
+        reseau_id: null
+      expect: 0.03
+
+    - title: Bois plaquette → 0.024 kgCO2eq/kWh
+      with:
+        usage: chauffage
+        energie: bois_plaquette
+        reseau_id: null
+      expect: 0.024
+
+    - title: Réseau de chaleur sans identifiant → valeur par défaut 0.385
+      with:
+        usage: chauffage
+        energie: reseau_chaleur
+        reseau_id: null
+      expect: 0.385
+
+    - title: Réseau de froid sans identifiant → valeur par défaut 0.385
+      with:
+        usage: refroidissement
+        energie: reseau_froid
+        reseau_id: null
+      expect: 0.385
+
+    - title: Réseau de chaleur identifié → contenu CO2 ACV du réseau
+      with:
+        usage: chauffage
+        energie: reseau_chaleur
+        reseau_id: "0106C"
+      expect: 0.037
+
+    - title: Réseau identifié prioritaire sur l'énergie déclarée
+      with:
+        usage: chauffage
+        energie: gaz_naturel
+        reseau_id: "0108C"
+      expect: 0.081
+
+    - title: Identifiant de réseau inconnu → repli sur l'énergie
+      with:
+        usage: chauffage
+        energie: reseau_chaleur
+        reseau_id: RESEAU-INCONNU
+      expect: 0.385
+
+common.kpcs:
+  rule: kpcs
+  cases:
+    - title: Gaz naturel → 1.11
+      with:
+        energie: gaz_naturel
+      expect: 1.11
+
+    - title: GPL → 1.09
+      with:
+        energie: gpl
+      expect: 1.09
+
+    - title: Fioul → 1.07
+      with:
+        energie: fioul
+      expect: 1.07
+
+    - title: Charbon → 1.04
+      with:
+        energie: charbon
+      expect: 1.04
+
+    - title: Bois bûche → 1.08
+      with:
+        energie: bois_buche
+      expect: 1.08
+
+    - title: Bois plaquette → 1.08
+      with:
+        energie: bois_plaquette
+      expect: 1.08
+
+    - title: Bois granulé → 1.08
+      with:
+        energie: bois_granule
+      expect: 1.08
+
+    - title: Électricité (pas de combustion) → 1
+      with:
+        energie: electricite
+      expect: 1
+
+    - title: Réseau de chaleur (pas de combustion) → 1
+      with:
+        energie: reseau_chaleur
+      expect: 1
+
+common.consommations:
+  rule: consommations
+  cases:
+    - title: Chauffage électrique sans autoconsommation
+      with:
+        cef: 1000
+        cef_enr: 0
+        usage: chauffage
+        energie: electricite
+        reseau_id: null
+      expect:
+        chauffage:
+          electricite:
+            cef: 1000
+            cep: 1900
+            eges: 79
+
+    - title: Chauffage gaz sans autoconsommation
+      with:
+        cef: 1000
+        cef_enr: 0
+        usage: chauffage
+        energie: gaz_naturel
+        reseau_id: null
+      expect:
+        chauffage:
+          gaz_naturel:
+            cef: 1000
+            cep: 1000
+            eges: 227
+
+    - title: Éclairage avec autoconsommation photovoltaïque
+      with:
+        cef: 1000
+        cef_enr: 200
+        usage: eclairage
+        energie: electricite
+        reseau_id: null
+      expect:
+        eclairage:
+          electricite:
+            cef: 800
+            cep: 1520
+            eges: 55.2
+          electricite_renouvelable:
+            cef: 200
+            cep: 380
+            eges: 0
+
+    - title: Autoconsommation supérieure au besoin → consommation résiduelle nulle
+      with:
+        cef: 100
+        cef_enr: 300
+        usage: chauffage
+        energie: electricite
+        reseau_id: null
+      expect:
+        chauffage:
+          electricite:
+            cef: 0
+            cep: 0
+            eges: 0
+          electricite_renouvelable:
+            cef: 300
+            cep: 570
+            eges: 0
+
+    - title: Autoconsommation ignorée si l'énergie n'est pas électrique
+      with:
+        cef: 1000
+        cef_enr: 200
+        usage: chauffage
+        energie: gaz_naturel
+        reseau_id: null
+      expect:
+        chauffage:
+          gaz_naturel:
+            cef: 800
+            cep: 800
+            eges: 181.6
+
+    - title: Réseau de chaleur identifié → EGES au contenu CO2 ACV du réseau
+      with:
+        cef: 1000
+        cef_enr: 0
+        usage: chauffage
+        energie: reseau_chaleur
+        reseau_id: "0106C"
+      expect:
+        chauffage:
+          reseau_chaleur:
+            cef: 1000
+            cep: 1000
+            eges: 37
+
+common.celec:
+  rule: celec
+  cases:
+    - title: Énergie électrique → consommation reportée
+      with:
+        cef: 1200
+        energie: electricite
+      expect: 1200
+
+    - title: Énergie non électrique → 0
+      with:
+        cef: 1200
+        energie: gaz_naturel
+      expect: 0
+
+    - title: Électricité renouvelable non comptabilisée comme électricité consommée
+      with:
+        cef: 1200
+        energie: electricite_renouvelable
+      expect: 0
+
+common.cener:
+  rule: cener
+  cases:
+    - title: Consommation couvrant la totalité de l'usage → autoconsommation entière de l'usage
+      with:
+        celec:
+          chauffage: 1000
+        celec_ac:
+          chauffage: 300
+        usage: chauffage
+        cef: 1000
+      expect: 300
+
+    - title: Consommation partielle → autoconsommation au prorata
+      with:
+        celec:
+          chauffage: 1000
+        celec_ac:
+          chauffage: 300
+        usage: chauffage
+        cef: 400
+      expect: 120
+
+    - title: Aucune consommation d'électricité sur l'usage → 0
+      with:
+        celec:
+          chauffage: 0
+        celec_ac:
+          chauffage: 300
+        usage: chauffage
+        cef: 400
+      expect: 0

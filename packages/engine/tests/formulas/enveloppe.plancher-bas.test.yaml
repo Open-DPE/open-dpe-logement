@@ -1,0 +1,377 @@
+enveloppe.plancher_bas.dp:
+  rule: dp
+  cases:
+    - title: Plancher bas sur vide sanitaire (b = 1)
+      with:
+        sdep: 60
+        b: 1
+        u: 2
+      expect: 120
+
+    - title: Plancher bas sur sous-sol non chauffé (b = 0.85)
+      with:
+        sdep: 60
+        b: 0.85
+        u: 2
+      expect: 102
+
+    - title: Plancher bas sur logement chauffé (b = 0) → aucune déperdition
+      with:
+        sdep: 60
+        b: 0
+        u: 2
+      expect: 0
+
+enveloppe.plancher_bas.isolation_aiu:
+  rule: isolation_aiu
+  cases:
+    - title: Isolation saisie → retenue
+      with:
+        isolation: true
+        mitoyennete: local_non_chauffe
+        annee_construction: 1950
+      expect: true
+
+    - title: Isolation inconnue, construction en 1975 → isolé
+      with:
+        isolation: null
+        mitoyennete: local_non_chauffe
+        annee_construction: 1975
+      expect: true
+
+    - title: Isolation inconnue, construction en 1974 → non isolé
+      with:
+        isolation: null
+        mitoyennete: local_non_chauffe
+        annee_construction: 1974
+      expect: false
+
+    - title: Terre-plein, isolation inconnue, construction en 2001 → isolé (seuil spécifique)
+      with:
+        isolation: null
+        mitoyennete: terre_plein
+        annee_construction: 2001
+      expect: true
+
+    - title: Terre-plein, isolation inconnue, construction en 1990 → non isolé
+      with:
+        isolation: null
+        mitoyennete: terre_plein
+        annee_construction: 1990
+      expect: false
+
+enveloppe.plancher_bas.u:
+  rule: u
+  cases:
+    - title: Méthode Ue applicable → Ue retenu
+      with:
+        uint: 1.43
+        ue: 0.42
+      expect: 0.42
+
+    - title: Méthode Ue non applicable → coefficient intermédiaire retenu
+      with:
+        uint: 1.43
+        ue: null
+      expect: 1.43
+
+    - title: Ue nul → retenu tel quel (0 n'est pas une valeur absente au sens de ??)
+      with:
+        uint: 1.43
+        ue: 0
+      expect: 0
+
+enveloppe.plancher_bas.uint:
+  rule: uint
+  cases:
+    - title: U saisi → retenu tel quel
+      with:
+        u_saisi: 0.75
+        zone_climatique: H1a
+        effet_joule: false
+        u0: 2
+        isolation: true
+        type_isolation: ite
+        epaisseur_isolation: 100
+        resistance_thermique_isolation: null
+        annee_isolation: null
+        annee_construction: 1960
+      expect: 0.75
+
+    - title: Plancher déclaré non isolé → U = U0
+      with:
+        u_saisi: null
+        zone_climatique: H1a
+        effet_joule: false
+        u0: 1.45
+        isolation: false
+        type_isolation: null
+        epaisseur_isolation: null
+        resistance_thermique_isolation: null
+        annee_isolation: null
+        annee_construction: 1960
+      expect: 1.45
+
+    - title: Résistance thermique d'isolant connue → 1 / (1 / U0 + R)
+      with:
+        u_saisi: null
+        zone_climatique: H1a
+        effet_joule: false
+        u0: 2
+        isolation: true
+        type_isolation: ite
+        epaisseur_isolation: null
+        resistance_thermique_isolation: 2.5
+        annee_isolation: null
+        annee_construction: 1960
+      expect: 0.3333
+
+    - title: Épaisseur d'isolant connue → conductivité conventionnelle 0.042 W/(m.K)
+      with:
+        u_saisi: null
+        zone_climatique: H1a
+        effet_joule: false
+        u0: 2
+        isolation: true
+        type_isolation: ite
+        epaisseur_isolation: 100
+        resistance_thermique_isolation: null
+        annee_isolation: null
+        annee_construction: 1960
+      expect: 0.3471
+
+    - title: Isolation inconnue, construction avant 1975 → année conventionnelle 1976 (H1a → 0.9)
+      with:
+        u_saisi: null
+        zone_climatique: H1a
+        effet_joule: false
+        u0: 2
+        isolation: null
+        type_isolation: null
+        epaisseur_isolation: null
+        resistance_thermique_isolation: null
+        annee_isolation: null
+        annee_construction: 1960
+      expect: 0.9
+
+    - title: Effet Joule pénalisant sur la période 1983-1988 (0.55 contre 0.8)
+      with:
+        u_saisi: null
+        zone_climatique: H1a
+        effet_joule: true
+        u0: 2
+        isolation: null
+        type_isolation: null
+        epaisseur_isolation: null
+        resistance_thermique_isolation: null
+        annee_isolation: 1985
+        annee_construction: 1960
+      expect: 0.55
+
+    - title: Construction en 2010 → abaque 2006-2012 (0.27)
+      with:
+        u_saisi: null
+        zone_climatique: H1a
+        effet_joule: false
+        u0: 2
+        isolation: null
+        type_isolation: null
+        epaisseur_isolation: null
+        resistance_thermique_isolation: null
+        annee_isolation: null
+        annee_construction: 2010
+      expect: 0.27
+
+    - title: La valeur forfaitaire ne peut pas dégrader le plancher nu (min avec U0)
+      with:
+        u_saisi: null
+        zone_climatique: H1a
+        effet_joule: false
+        u0: 0.45
+        isolation: null
+        type_isolation: null
+        epaisseur_isolation: null
+        resistance_thermique_isolation: null
+        annee_isolation: null
+        annee_construction: 1960
+      expect: 0.45
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        u_saisi: null
+        zone_climatique: INCONNUE
+        effet_joule: false
+        u0: 2
+        isolation: null
+        type_isolation: null
+        epaisseur_isolation: null
+        resistance_thermique_isolation: null
+        annee_isolation: null
+        annee_construction: 1960
+      expectError: true
+
+enveloppe.plancher_bas.ue:
+  rule: ue
+  cases:
+    - title: Vide sanitaire, 2S/P = 3, Uint = 3.33 → lecture directe 0.45
+      with:
+        mitoyennete: vide_sanitaire
+        annee_construction: 1960
+        uint: 3.33
+        surface_ue: 45
+        perimetre_ue: 30
+      expect: 0.45
+
+    - title: Sous-sol non chauffé, 2S/P = 10, Uint = 1.43 → 0.31
+      with:
+        mitoyennete: sous_sol_non_chauffe
+        annee_construction: 1960
+        uint: 1.43
+        surface_ue: 100
+        perimetre_ue: 20
+      expect: 0.31
+
+    - title: Terre-plein construit avant 2001, 2S/P = 3, Uint = 3.4 → 0.78
+      with:
+        mitoyennete: terre_plein
+        annee_construction: 1990
+        uint: 3.4
+        surface_ue: 45
+        perimetre_ue: 30
+      expect: 0.78
+
+    - title: 2S/P arrondi à l'entier le plus proche (2S/P = 3.2 → 3)
+      with:
+        mitoyennete: vide_sanitaire
+        annee_construction: 1960
+        uint: 3.33
+        surface_ue: 48
+        perimetre_ue: 30
+      expect: 0.45
+
+    - title: Uint intermédiaire → interpolation bilinéaire entre 1.43 et 3.33
+      with:
+        mitoyennete: vide_sanitaire
+        annee_construction: 1960
+        uint: 2.38
+        surface_ue: 45
+        perimetre_ue: 30
+      expect: 0.435
+
+    - title: Mitoyenneté hors périmètre de la méthode Ue → erreur ValeurForfaitaire
+      with:
+        mitoyennete: exterieur
+        annee_construction: 1960
+        uint: 3.33
+        surface_ue: 45
+        perimetre_ue: 30
+      expectError: true
+
+enveloppe.plancher_bas.ue_applicable:
+  rule: ue_applicable
+  cases:
+    - title: Plancher enterré → méthode Ue applicable
+      with:
+        mitoyennete: enterre
+      expect: true
+
+    - title: Plancher sur terre-plein → méthode Ue applicable
+      with:
+        mitoyennete: terre_plein
+      expect: true
+
+    - title: Plancher sur vide sanitaire → méthode Ue applicable
+      with:
+        mitoyennete: vide_sanitaire
+      expect: true
+
+    - title: Plancher sur sous-sol non chauffé → méthode Ue applicable
+      with:
+        mitoyennete: sous_sol_non_chauffe
+      expect: true
+
+    - title: Plancher sur l'extérieur → méthode Ue non applicable
+      with:
+        mitoyennete: exterieur
+      expect: false
+
+    - title: Plancher sur local non chauffé → méthode Ue non applicable
+      with:
+        mitoyennete: local_non_chauffe
+      expect: false
+
+enveloppe.plancher_bas.u0:
+  rule: u0
+  cases:
+    - title: U0 saisi → retenu tel quel
+      with:
+        u0_saisi: 1.2
+        type_plancher_bas: dalle_beton
+      expect: 1.2
+
+    - title: Type de plancher inconnu → valeur par défaut 2 W/m².K
+      with:
+        u0_saisi: null
+        type_plancher_bas: null
+      expect: 2
+
+    - title: Dalle béton → 2 W/m².K
+      with:
+        u0_saisi: null
+        type_plancher_bas: dalle_beton
+      expect: 2
+
+    - title: Plancher entre solives bois → 1.1 W/m².K
+      with:
+        u0_saisi: null
+        type_plancher_bas: plancher_entre_solives_bois
+      expect: 1.1
+
+    - title: Voûtains sur solives métalliques → 1.75 W/m².K
+      with:
+        u0_saisi: null
+        type_plancher_bas: voutains_sur_solives_metalliques
+      expect: 1.75
+
+    - title: Plancher à entrevous isolant → 0.45 W/m².K
+      with:
+        u0_saisi: null
+        type_plancher_bas: plancher_entrevous_isolant
+      expect: 0.45
+
+    - title: Type de plancher hors abaque → erreur ValeurForfaitaire
+      with:
+        u0_saisi: null
+        type_plancher_bas: TYPE_INCONNU
+      expectError: true
+
+enveloppe.plancher_bas.isolation:
+  rule: isolation
+  cases:
+    - title: Isolation saisie → retenue
+      with:
+        mitoyennete: vide_sanitaire
+        isolation: false
+        annee_construction: 2015
+      expect: false
+
+    - title: Isolation inconnue, construction en 1975 → isolé
+      with:
+        mitoyennete: vide_sanitaire
+        isolation: null
+        annee_construction: 1975
+      expect: true
+
+    - title: Terre-plein, isolation inconnue, construction en 2000 → non isolé
+      with:
+        mitoyennete: terre_plein
+        isolation: null
+        annee_construction: 2000
+      expect: false
+
+    - title: Terre-plein, isolation inconnue, construction en 2001 → isolé
+      with:
+        mitoyennete: terre_plein
+        isolation: null
+        annee_construction: 2001
+      expect: true

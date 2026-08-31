@@ -185,8 +185,8 @@ export function mapDescription(props: GenerateurChauffage): string {
 
 export function mapType(
 	props: GenerateurChauffage,
-): chauffage.generateur.TypeGenerateurEnum | null {
-	const Enum = chauffage.generateur.TYPES_GENERATEUR;
+): chauffage.generateur.TypeGenerateur | null {
+	const Enum = chauffage.generateur.TypeGenerateur.enum;
 	switch (props.donnee_entree.enum_type_generateur_ch_id) {
 		case "1":
 		case "2":
@@ -381,9 +381,9 @@ export function mapType(
 
 export function mapEnergie(
 	props: GenerateurChauffage,
-): chauffage.generateur.EnergieChauffageEnum | null {
-	const Enum = common.ENERGIES;
-	
+): chauffage.generateur.EnergieChauffage | null {
+	const Enum = common.Energie.enum;
+
 	// Cas des générateurs hybrides
 	switch (props.donnee_entree.enum_type_generateur_ch_id) {
 		case "145":
@@ -431,7 +431,7 @@ export function mapEnergie(
 
 export function mapBienergie(
 	props: Props,
-): chauffage.generateur.BienergieEnum | null {
+): chauffage.generateur.Bienergie | null {
 	const chaudiere = matchPACHybridePartieChaudiere(props);
 
 	if (!chaudiere) return null;
@@ -439,24 +439,24 @@ export function mapBienergie(
 	switch (chaudiere.donnee_entree.enum_type_generateur_ch_id) {
 		case "148":
 		case "149":
-			return common.ENERGIES.gaz_naturel;
+			return common.Energie.enum.gaz_naturel;
 		case "150":
 		case "151":
-			return common.ENERGIES.fioul;
+			return common.Energie.enum.fioul;
 		case "152":
 		case "153":
-			return common.ENERGIES.bois_granule;
+			return common.Energie.enum.bois_granule;
 		case "154":
 		case "155":
 		case "156":
-			return common.ENERGIES.bois_buche;
+			return common.Energie.enum.bois_buche;
 		case "157":
 		case "158":
 		case "159":
-			return common.ENERGIES.bois_plaquette;
+			return common.Energie.enum.bois_plaquette;
 		case "160":
 		case "161":
-			return common.ENERGIES.gpl;
+			return common.Energie.enum.gpl;
 		default:
 			return null;
 	}
@@ -607,7 +607,7 @@ export namespace position {
 
 	export function mapCascade(
 		props: GenerateurChauffage,
-	): chauffage.generateur.CascadeEnum | null {
+	): chauffage.generateur.Cascade | null {
 		switch (props.donnee_entree.priorite_generateur_cascade) {
 			case null:
 			case undefined:
@@ -628,10 +628,10 @@ export namespace position {
 	 */
 	export function mapPositionChaudiere(
 		props: GenerateurChauffage,
-	): chauffage.generateur.PositionChaudiereEnum {
+	): chauffage.generateur.PositionChaudiere {
 		return props.donnee_intermediaire.pn && props.donnee_intermediaire.pn < 18
-			? chauffage.generateur.POSITIONS_CHAUDIERE.chaudiere_murale
-			: chauffage.generateur.POSITIONS_CHAUDIERE.chaudiere_sol;
+			? chauffage.generateur.PositionChaudiere.enum.chaudiere_murale
+			: chauffage.generateur.PositionChaudiere.enum.chaudiere_sol;
 	}
 
 	export function mapGenerateurCollectif(props: Props): boolean {
@@ -763,7 +763,7 @@ export namespace signaletique {
 
 	export function mapModeCombustion(
 		props: GenerateurChauffage,
-	): chauffage.generateur.ModeCombustionEnum | null {
+	): chauffage.generateur.ModeCombustion | null {
 		switch (props.donnee_entree.enum_type_generateur_ch_id) {
 			case "50":
 			case "51":
@@ -832,7 +832,7 @@ export namespace signaletique {
 			case "158":
 			case "159":
 			case "171":
-				return chauffage.generateur.MODES_COMBUSTION.standard;
+				return chauffage.generateur.ModeCombustion.enum.standard;
 			case "81":
 			case "82":
 			case "91":
@@ -841,7 +841,7 @@ export namespace signaletique {
 			case "133":
 			case "134":
 			case "135":
-				return chauffage.generateur.MODES_COMBUSTION.basse_temperature;
+				return chauffage.generateur.ModeCombustion.enum.basse_temperature;
 			case "52":
 			case "83":
 			case "84":
@@ -859,7 +859,7 @@ export namespace signaletique {
 			case "151":
 			case "160":
 			case "161":
-				return chauffage.generateur.MODES_COMBUSTION.condensation;
+				return chauffage.generateur.ModeCombustion.enum.condensation;
 			default:
 				return null;
 		}
@@ -881,12 +881,12 @@ export namespace signaletique {
 
 	export function mapLabel(
 		props: GenerateurChauffage,
-	): chauffage.generateur.LabelEnum | null {
+	): chauffage.generateur.LabelGenerateur | null {
 		switch (props.donnee_entree.enum_type_generateur_ch_id) {
 			case "98":
 			case "99":
 			case "100":
-				return chauffage.generateur.LABELS.nf_performance;
+				return chauffage.generateur.LabelGenerateur.enum.nf_performance;
 			case "32":
 			case "33":
 			case "34":
@@ -901,7 +901,7 @@ export namespace signaletique {
 			case "43":
 			case "45":
 			case "46":
-				return chauffage.generateur.LABELS.flamme_verte;
+				return chauffage.generateur.LabelGenerateur.enum.flamme_verte;
 			default:
 				return null;
 		}

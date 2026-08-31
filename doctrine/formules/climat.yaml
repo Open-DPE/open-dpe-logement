@@ -28,13 +28,11 @@ climat.epv:
   unite: kWh/m²/mois
   dependances:
     - climat.zone_climatique
-    - enveloppe.inertie
-    - enveloppe.parois_anciennes
 
 climat.sollicitations:
   id: climat.sollicitations
   description: Sollicitations climatiques pour chaque mois de l'année
-  references: Méthode 3CL-DPE 2021 §18.2
+  references: Méthode 3CL-DPE 2021 §18.2, §18.3
   dependances:
     - climat.zone_climatique
     - enveloppe.inertie

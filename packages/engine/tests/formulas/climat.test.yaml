@@ -94,3 +94,265 @@ climat.nj:
         "10": 31
         "11": 30
         "12": 24
+
+climat.epv:
+  rule: epv
+  cases:
+    - title: Zone H1a → ensoleillement mensuel du capteur photovoltaïque
+      with:
+        zone_climatique: H1a
+      expect:
+        "01": 50.1
+        "02": 54.7
+        "03": 123.4
+        "04": 169.3
+        "05": 208.2
+        "06": 217.8
+        "07": 221.9
+        "08": 173.3
+        "09": 163.6
+        "10": 88.9
+        "11": 59.1
+        "12": 43.2
+
+    - title: Zone H3 → ensoleillement nettement supérieur
+      with:
+        zone_climatique: H3
+      expect:
+        "01": 116.1
+        "02": 129.4
+        "03": 181.5
+        "04": 244.1
+        "05": 260.7
+        "06": 296.5
+        "07": 314.5
+        "08": 281
+        "09": 225.8
+        "10": 151.2
+        "11": 113.2
+        "12": 94.8
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: INCONNUE
+      expectError: true
+
+enveloppe.baie.c1:
+  rule: c1
+  cases:
+    - title: Baie verticale au sud en zone H1a → coefficient de référence égal à 1
+      with:
+        zone_climatique: H1a
+        orientation: sud
+        inclinaison: 90
+      expect:
+        "01": 1
+        "02": 1
+        "03": 1
+        "04": 1
+        "05": 1
+        "06": 1
+        "07": 1
+        "08": 1
+        "09": 1
+        "10": 1
+        "11": 1
+        "12": 1
+
+    - title: Baie verticale au nord en zone H1a → apports fortement réduits
+      with:
+        zone_climatique: H1a
+        orientation: nord
+        inclinaison: 90
+      expect:
+        "01": 0.31
+        "02": 0.32
+        "03": 0.37
+        "04": 0.5
+        "05": 0.65
+        "06": 0.75
+        "07": 0.7
+        "08": 0.53
+        "09": 0.41
+        "10": 0.32
+        "11": 0.36
+        "12": 0.25
+
+    - title: Baie horizontale (toiture) en zone H1a → apports maximaux en été
+      with:
+        zone_climatique: H1a
+        orientation: horizontale
+        inclinaison: 0
+      expect:
+        "01": 0.62
+        "02": 0.74
+        "03": 0.98
+        "04": 1.45
+        "05": 1.88
+        "06": 2.19
+        "07": 2.05
+        "08": 1.59
+        "09": 1.15
+        "10": 0.81
+        "11": 0.73
+        "12": 0.51
+
+    - title: Baie inclinée à 45° au sud en zone H1a → apports supérieurs à la verticale
+      with:
+        zone_climatique: H1a
+        orientation: sud
+        inclinaison: 45
+      expect:
+        "01": 1.67
+        "02": 1.78
+        "03": 1.99
+        "04": 2.39
+        "05": 2.74
+        "06": 2.98
+        "07": 2.87
+        "08": 2.52
+        "09": 2.14
+        "10": 1.84
+        "11": 1.74
+        "12": 1.59
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: INCONNUE
+        orientation: sud
+        inclinaison: 90
+      expectError: true
+
+    - title: Orientation inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: H1a
+        orientation: ORIENTATION_INCONNUE
+        inclinaison: 90
+      expectError: true
+
+enveloppe.local_non_chauffe.baie.c1:
+  rule: c1
+  cases:
+    - title: Baie d'espace tampon solarisé au sud en zone H1a → même abaque que les baies du logement
+      with:
+        zone_climatique: H1a
+        orientation: sud
+        inclinaison: 90
+      expect:
+        "01": 1
+        "02": 1
+        "03": 1
+        "04": 1
+        "05": 1
+        "06": 1
+        "07": 1
+        "08": 1
+        "09": 1
+        "10": 1
+        "11": 1
+        "12": 1
+
+climat.sollicitations:
+  rule: sollicitations
+  cases:
+    - title: Zone H1a, altitude 100 m, parois récentes, inertie légère → sollicitations mensuelles
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        parois_anciennes: false
+        inertie: legere
+      expectPartial:
+        "01":
+          tefs: 7.8
+          e: 38.36
+          text: 2.6
+          nref19: 744
+          nref21: 744
+          dh14: 8488
+          dh19: 11712.4
+          dh21: 13200.4
+        "02":
+          tefs: 5.5
+          e: 37.47
+          text: 3.5
+          nref19: 672
+          dh19: 9966.8
+        "03":
+          tefs: 6.9
+          e: 77.61
+          text: 7.7
+          nref19: 738
+          nref21: 741
+
+    - title: Inertie moyenne rattachée à la même ligne d'abaque que l'inertie légère
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        parois_anciennes: false
+        inertie: moyenne
+      expectPartial:
+        "01":
+          tefs: 7.8
+          e: 38.36
+          dh19: 11712.4
+
+    # §18.3 ne s'applique qu'aux bâtiments cumulant parois anciennes ET inertie
+    # lourde. Les trois cas ci-dessous vérifient que les combinaisons croisées
+    # retombent bien sur le cas général du §18.2 (mai : mois discriminant).
+    - title: Parois récentes à inertie lourde → cas général §18.2
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        parois_anciennes: false
+        inertie: lourde
+      expectPartial:
+        "05":
+          e: 53.63
+          text: 13.2
+          nref19: 438
+          dh19: 2762
+
+    - title: Parois anciennes à inertie moyenne → cas général §18.2
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        parois_anciennes: true
+        inertie: moyenne
+      expectPartial:
+        "05":
+          e: 53.63
+          text: 13.2
+          nref19: 438
+          dh19: 2762
+
+    - title: Parois anciennes à inertie lourde → §18.3, période de chauffe raccourcie
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        parois_anciennes: true
+        inertie: lourde
+      expectPartial:
+        "05":
+          e: 19.19
+          text: 12.8
+          nref19: 172
+          dh19: 1069.9
+
+    - title: Parois anciennes à inertie très lourde → §18.3
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        parois_anciennes: true
+        inertie: tres_lourde
+      expectPartial:
+        "05":
+          nref19: 172
+          dh19: 1069.9
+
+    - title: Zone climatique inconnue → aucune ligne d'abaque, erreur sur les mois manquants
+      with:
+        zone_climatique: INCONNUE
+        altitude: 100
+        parois_anciennes: false
+        inertie: legere
+      expectError: true

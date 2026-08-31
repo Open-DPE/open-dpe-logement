@@ -9,9 +9,9 @@ export type MurProps = {
 	input: Input;
 };
 
-const MateriauMurEnum = enveloppe.mur.MATERIAUX_MUR;
-const TypeDoublageEnum = enveloppe.mur.TYPES_DOUBLAGE;
-const InertieEnum = enveloppe.common.INERTIES;
+const MateriauMur = enveloppe.mur.MateriauMur;
+const TypeDoublage = enveloppe.mur.TypeDoublage;
+const Inertie = enveloppe.common.Inertie;
 
 export function mapMur(props: MurProps): enveloppe.mur.Mur {
 	return {
@@ -57,48 +57,49 @@ export function mapMateriau(
 ): enveloppe.mur.Structure["materiau"] {
 	switch (props.donnee_entree.enum_materiaux_structure_mur_id) {
 		case "2":
-			return MateriauMurEnum.pierre_moellons;
+			return MateriauMur.enum.pierre_moellons;
 		case "3":
-			return MateriauMurEnum.pierre_moellons_avec_remplissage;
+			return MateriauMur.enum.pierre_moellons_avec_remplissage;
 		case "4":
-			return MateriauMurEnum.pise_ou_beton_terre;
+			return MateriauMur.enum.pise_ou_beton_terre;
 		case "5":
-			return MateriauMurEnum.pan_bois_sans_remplissage;
+			return MateriauMur.enum.pan_bois_sans_remplissage;
 		case "6":
-			return MateriauMurEnum.pan_bois_avec_remplissage;
+			return MateriauMur.enum.pan_bois_avec_remplissage;
 		case "7":
-			return MateriauMurEnum.bois_rondin;
+			return MateriauMur.enum.bois_rondin;
 		case "8":
-			return MateriauMurEnum.brique_pleine_simple;
+			return MateriauMur.enum.brique_pleine_simple;
 		case "9":
-			return MateriauMurEnum.brique_pleine_double_avec_lame_air;
+			return MateriauMur.enum.brique_pleine_double_avec_lame_air;
 		case "10":
-			return MateriauMurEnum.brique_creuse;
+			return MateriauMur.enum.brique_creuse;
 		case "11":
-			return MateriauMurEnum.bloc_beton_plein;
+			return MateriauMur.enum.bloc_beton_plein;
 		case "12":
-			return MateriauMurEnum.bloc_beton_creux;
+			return MateriauMur.enum.bloc_beton_creux;
 		case "13":
-			return MateriauMurEnum.beton_banche;
+			return MateriauMur.enum.beton_banche;
 		case "14":
-			return MateriauMurEnum.beton_machefer;
+			return MateriauMur.enum.beton_machefer;
 		case "15":
-			return MateriauMurEnum.brique_terre_cuite_alveolaire;
+			return MateriauMur.enum.brique_terre_cuite_alveolaire;
 		case "16":
 		case "17":
-			return MateriauMurEnum.beton_cellulaire;
+			return MateriauMur.enum.beton_cellulaire;
 		case "18":
 		case "24":
 		case "26":
-			return MateriauMurEnum.ossature_bois_avec_remplissage_isolant;
+			return MateriauMur.enum.ossature_bois_avec_remplissage_isolant;
 		case "19":
-			return MateriauMurEnum.sandwich_beton_isolant_beton_sans_isolation_rapportee;
+			return MateriauMur.enum
+				.sandwich_beton_isolant_beton_sans_isolation_rapportee;
 		case "20":
-			return MateriauMurEnum.cloison_platre;
+			return MateriauMur.enum.cloison_platre;
 		case "25":
-			return MateriauMurEnum.ossature_bois_sans_remplissage;
+			return MateriauMur.enum.ossature_bois_sans_remplissage;
 		case "27":
-			return MateriauMurEnum.ossature_bois_avec_remplissage_tout_venant;
+			return MateriauMur.enum.ossature_bois_avec_remplissage_tout_venant;
 		default:
 			return null;
 	}
@@ -120,7 +121,7 @@ export function mapPresenceEnduitIsolant(
 	props: MurProps["paroi"],
 ): enveloppe.mur.Mur["presence_enduit_isolant"] {
 	return "enduit_isolant_paroi_ancienne" in props.donnee_entree
-		? props.donnee_entree.enduit_isolant_paroi_ancienne ?? null
+		? (props.donnee_entree.enduit_isolant_paroi_ancienne ?? null)
 		: null;
 }
 
@@ -137,13 +138,13 @@ export function mapTypeDoublage(
 ): enveloppe.mur.Mur["type_doublage"] {
 	switch (props.donnee_entree.enum_type_doublage_id) {
 		case "2":
-			return TypeDoublageEnum.sans_doublage;
+			return TypeDoublage.enum.sans_doublage;
 		case "3":
-			return TypeDoublageEnum.lame_air_inferieur_15mm;
+			return TypeDoublage.enum.lame_air_inferieur_15mm;
 		case "4":
-			return TypeDoublageEnum.lame_air_superieur_15mm;
+			return TypeDoublage.enum.lame_air_superieur_15mm;
 		case "5":
-			return TypeDoublageEnum.materiaux_connu;
+			return TypeDoublage.enum.materiaux_connu;
 		default:
 			return null;
 	}
@@ -155,9 +156,9 @@ export function inertie(
 	if ("paroi_lourde" in props.donnee_entree) {
 		switch (props.donnee_entree.paroi_lourde) {
 			case true:
-				return InertieEnum.lourde;
+				return Inertie.enum.lourde;
 			case false:
-				return InertieEnum.legere;
+				return Inertie.enum.legere;
 		}
 	}
 	return null;

@@ -32,6 +32,7 @@
   "sideEffects": false,
   "scripts": {
     "generate": "node scripts/generate.mjs",
+    "prepare": "npm run generate",
     "prebuild": "npm run generate",
     "build": "tsc -p tsconfig.json",
     "check-types": "tsc --noEmit",

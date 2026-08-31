@@ -1,5 +1,5 @@
-import { ENERGIES } from "../../common/enums.js";
-import { TYPES_GENERATEUR } from "./enums.js";
+import { Energie } from "../../common/enums.js";
+import { TypeGenerateur } from "./enums.js";
 import {
 	GenerateurBase,
 	Generateur,
@@ -47,26 +47,24 @@ export function isChaudiereCombustion(
 	value: GenerateurBase,
 ): value is ChaudiereCombustion {
 	return (
-		value.type === TYPES_GENERATEUR.chaudiere &&
+		value.type === TypeGenerateur.enum.chaudiere &&
 		value.energie !== null &&
-		value.energie !== ENERGIES.electricite &&
-		value.energie !== ENERGIES.reseau_chaleur
+		value.energie !== Energie.enum.electricite &&
+		value.energie !== Energie.enum.reseau_chaleur
 	);
 }
 
 export function isPoeleBoisBouilleur(
 	value: GenerateurBase,
 ): value is PoeleBoisBouilleur {
-	return value.type === TYPES_GENERATEUR.poele_bouilleur;
+	return value.type === TypeGenerateur.enum.poele_bouilleur;
 }
 
-export function isChauffeEauGaz(
-	value: GenerateurBase,
-): value is ChauffeEauGaz {
+export function isChauffeEauGaz(value: GenerateurBase): value is ChauffeEauGaz {
 	return (
-		value.type === TYPES_GENERATEUR.chauffe_eau &&
-		(value.energie === ENERGIES.gaz_naturel ||
-			value.energie === ENERGIES.gpl)
+		value.type === TypeGenerateur.enum.chauffe_eau &&
+		(value.energie === Energie.enum.gaz_naturel ||
+			value.energie === Energie.enum.gpl)
 	);
 }
 
@@ -80,8 +78,8 @@ export function isChaudiereElectrique(
 	value: GenerateurBase,
 ): value is ChaudiereElectrique {
 	return (
-		value.type === TYPES_GENERATEUR.chaudiere &&
-		value.energie === ENERGIES.electricite
+		value.type === TypeGenerateur.enum.chaudiere &&
+		value.energie === Energie.enum.electricite
 	);
 }
 
@@ -89,8 +87,8 @@ export function isChauffeEauElectrique(
 	value: GenerateurBase,
 ): value is ChauffeEauElectrique {
 	return (
-		value.type === TYPES_GENERATEUR.chauffe_eau &&
-		value.energie === ENERGIES.electricite
+		value.type === TypeGenerateur.enum.chauffe_eau &&
+		value.energie === Energie.enum.electricite
 	);
 }
 
@@ -108,18 +106,18 @@ export function isChauffeEauThermodynamique(
 	value: GenerateurBase,
 ): value is ChauffeEauThermodynamique {
 	return (
-		value.type === TYPES_GENERATEUR.cet_air_ambiant ||
-		value.type === TYPES_GENERATEUR.cet_air_exterieur ||
-		value.type === TYPES_GENERATEUR.cet_air_extrait
+		value.type === TypeGenerateur.enum.cet_air_ambiant ||
+		value.type === TypeGenerateur.enum.cet_air_exterieur ||
+		value.type === TypeGenerateur.enum.cet_air_extrait
 	);
 }
 
 function isTypePac(type: GenerateurBase["type"]): boolean {
 	return (
-		type === TYPES_GENERATEUR.pac_air_eau ||
-		type === TYPES_GENERATEUR.pac_eau_eau ||
-		type === TYPES_GENERATEUR.pac_eau_glycolee_eau ||
-		type === TYPES_GENERATEUR.pac_geothermique
+		type === TypeGenerateur.enum.pac_air_eau ||
+		type === TypeGenerateur.enum.pac_eau_eau ||
+		type === TypeGenerateur.enum.pac_eau_glycolee_eau ||
+		type === TypeGenerateur.enum.pac_geothermique
 	);
 }
 
@@ -135,10 +133,8 @@ export function isPacDoubleServiceHybride(
 	return isTypePac(value.type) && value.bienergie !== null;
 }
 
-export function isReseauChaleur(
-	value: GenerateurBase,
-): value is ReseauChaleur {
-	return value.type === TYPES_GENERATEUR.reseau_chaleur;
+export function isReseauChaleur(value: GenerateurBase): value is ReseauChaleur {
+	return value.type === TypeGenerateur.enum.reseau_chaleur;
 }
 
 export function isGenerateurCollectifInconnu(

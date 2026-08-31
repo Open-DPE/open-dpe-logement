@@ -1,6 +1,10 @@
 import { ecs } from "@open-dpe-logement/models";
 import type { Input, InstallationEcs } from "./types.js";
-import { mapAnneeEtablissement, resolveId, toNonEmptyArray } from "../common.js";
+import {
+	mapAnneeEtablissement,
+	resolveId,
+	toNonEmptyArray,
+} from "../common.js";
 import * as systeme from "./systeme.js";
 
 export { systeme };
@@ -82,7 +86,7 @@ export function mapSolaireThermique(
 export function mapUsageSolaire(
 	props: InstallationEcs,
 ): ecs.installation.SolaireThermique["usage"] | null {
-	const Enum = ecs.installation.USAGES_SOLAIRE;
+	const Enum = ecs.installation.UsageSolaire.enum;
 	switch (props.donnee_entree.enum_type_installation_solaire_id) {
 		case "2":
 		case "3":

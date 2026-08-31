@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { ENERGIES } from "../../common/enums.js";
+import { Energie } from "../../common/enums.js";
 
 import {
 	id,
@@ -13,24 +13,21 @@ import {
 } from "../../common/types.js";
 
 import {
-	TYPES_GENERATEUR,
-	LABELS,
-	BienergieEnum,
-	EnergieChauffageEnum,
-	LabelEnum,
-	ModeCombustionEnum,
-	MODES_COMBUSTION,
-	PositionChaudiereEnum,
-	TypeGenerateurEnum,
-	CascadeEnum,
+	TypeGenerateur,
+	LabelGenerateur,
+	Bienergie,
+	EnergieChauffage,
+	ModeCombustion,
+	PositionChaudiere,
+	Cascade,
 } from "./enums.js";
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/generateur-base#/$defs/position
  */
 export const Position = z.object({
-	position_chaudiere: PositionChaudiereEnum.nullable(),
-	cascade: CascadeEnum.nullable(),
+	position_chaudiere: PositionChaudiere.nullable(),
+	cascade: Cascade.nullable(),
 	generateur_collectif: z.boolean(),
 	generateur_multi_batiment: z.boolean(),
 	position_volume_chauffe: z.boolean(),
@@ -43,9 +40,9 @@ export const Position = z.object({
  */
 export const Signaletique = z.object({
 	pn: nombre_positif.nullable(),
-	label: LabelEnum.nullable(),
+	label: LabelGenerateur.nullable(),
 	scop: nombre_positif.nullable(),
-	mode_combustion: ModeCombustionEnum.nullable(),
+	mode_combustion: ModeCombustion.nullable(),
 	presence_ventouse: z.boolean().nullable(),
 	presence_regulation: z.boolean().nullable(),
 	pveilleuse: nombre.nullable(),
@@ -81,9 +78,9 @@ export const GenerateurBase = z.object({
 	id,
 	description,
 	annee_installation,
-	type: TypeGenerateurEnum.nullable(),
-	energie: EnergieChauffageEnum.nullable(),
-	bienergie: BienergieEnum.nullable(),
+	type: TypeGenerateur.nullable(),
+	energie: EnergieChauffage.nullable(),
+	bienergie: Bienergie.nullable(),
 	position: Position,
 	signaletique: Signaletique,
 });
@@ -105,24 +102,24 @@ export const SignaletiqueCombustion = Signaletique.extend({
 });
 
 export const GenerateurCombustion = GenerateurBase.extend({
-	type: TypeGenerateurEnum.extract([
-		TYPES_GENERATEUR.chaudiere,
-		TYPES_GENERATEUR.generateur_air_chaud,
-		TYPES_GENERATEUR.cuisiniere,
-		TYPES_GENERATEUR.foyer_ferme,
-		TYPES_GENERATEUR.insert,
-		TYPES_GENERATEUR.poele,
-		TYPES_GENERATEUR.poele_bouilleur,
-		TYPES_GENERATEUR.radiateur_gaz,
+	type: TypeGenerateur.extract([
+		"chaudiere",
+		"generateur_air_chaud",
+		"cuisiniere",
+		"foyer_ferme",
+		"insert",
+		"poele",
+		"poele_bouilleur",
+		"radiateur_gaz",
 	]),
-	energie: EnergieChauffageEnum.extract([
-		ENERGIES.gaz_naturel,
-		ENERGIES.gpl,
-		ENERGIES.fioul,
-		ENERGIES.charbon,
-		ENERGIES.bois_buche,
-		ENERGIES.bois_plaquette,
-		ENERGIES.bois_granule,
+	energie: EnergieChauffage.extract([
+		"gaz_naturel",
+		"gpl",
+		"fioul",
+		"charbon",
+		"bois_buche",
+		"bois_plaquette",
+		"bois_granule",
 	]),
 	bienergie: non_applicable,
 	position: PositionCombustion,
@@ -130,7 +127,7 @@ export const GenerateurCombustion = GenerateurBase.extend({
 });
 
 export const ChaudiereCombustion = GenerateurCombustion.extend({
-	type: TypeGenerateurEnum.extract([TYPES_GENERATEUR.chaudiere]),
+	type: TypeGenerateur.extract(["chaudiere"]),
 	signaletique: SignaletiqueCombustion.extend({
 		label: non_applicable,
 	}),
@@ -142,11 +139,11 @@ export const ChaudiereCombustion = GenerateurCombustion.extend({
  * n'y figure pas (seule la branche « Chaudière » sans restriction l'autorise).
  */
 export const PoeleBoisBouilleur = GenerateurCombustion.extend({
-	type: TypeGenerateurEnum.extract([TYPES_GENERATEUR.poele_bouilleur]),
-	energie: EnergieChauffageEnum.extract([
-		ENERGIES.bois_buche,
-		ENERGIES.bois_plaquette,
-		ENERGIES.bois_granule,
+	type: TypeGenerateur.extract(["poele_bouilleur"]),
+	energie: EnergieChauffage.extract([
+		"bois_buche",
+		"bois_plaquette",
+		"bois_granule",
 	]),
 	signaletique: SignaletiqueCombustion.extend({
 		label: non_applicable,
@@ -154,11 +151,11 @@ export const PoeleBoisBouilleur = GenerateurCombustion.extend({
 });
 
 export const PoeleOuInsert = GenerateurCombustion.extend({
-	type: TypeGenerateurEnum.extract([
-		TYPES_GENERATEUR.cuisiniere,
-		TYPES_GENERATEUR.foyer_ferme,
-		TYPES_GENERATEUR.insert,
-		TYPES_GENERATEUR.poele,
+	type: TypeGenerateur.extract([
+		"cuisiniere",
+		"foyer_ferme",
+		"insert",
+		"poele",
 	]),
 	position: PositionCombustion.extend({
 		cascade: non_applicable,
@@ -169,7 +166,7 @@ export const PoeleOuInsert = GenerateurCombustion.extend({
 		generateur_mixte_id: non_applicable,
 	}),
 	signaletique: SignaletiqueCombustion.extend({
-		label: LabelEnum.extract([LABELS.flamme_verte]).nullable(),
+		label: LabelGenerateur.extract(["flamme_verte"]).nullable(),
 		mode_combustion: non_applicable,
 		presence_regulation: non_applicable,
 		pveilleuse: non_applicable,
@@ -182,11 +179,11 @@ export const PoeleOuInsert = GenerateurCombustion.extend({
 });
 
 export const GenerateurAirChaudCombustion = GenerateurCombustion.extend({
-	type: TypeGenerateurEnum.extract([TYPES_GENERATEUR.generateur_air_chaud]),
+	type: TypeGenerateur.extract(["generateur_air_chaud"]),
 	signaletique: SignaletiqueCombustion.extend({
-		mode_combustion: ModeCombustionEnum.extract([
-			MODES_COMBUSTION.standard,
-			MODES_COMBUSTION.condensation,
+		mode_combustion: ModeCombustion.extract([
+			"standard",
+			"condensation",
 		]).nullable(),
 		label: non_applicable,
 		tfonc30: non_applicable,
@@ -200,8 +197,8 @@ export const GenerateurAirChaudCombustion = GenerateurCombustion.extend({
  * radiateur à gaz a donc un `rpn` réel, à la différence d'un poêle/insert.
  */
 export const RadiateurGaz = GenerateurCombustion.extend({
-	type: TypeGenerateurEnum.extract([TYPES_GENERATEUR.radiateur_gaz]),
-	energie: EnergieChauffageEnum.extract([ENERGIES.gaz_naturel, ENERGIES.gpl]),
+	type: TypeGenerateur.extract(["radiateur_gaz"]),
+	energie: EnergieChauffage.extract(["gaz_naturel", "gpl"]),
 	position: PositionCombustion.extend({
 		cascade: non_applicable,
 		position_chaudiere: non_applicable,
@@ -211,7 +208,7 @@ export const RadiateurGaz = GenerateurCombustion.extend({
 		generateur_mixte_id: non_applicable,
 	}),
 	signaletique: SignaletiqueCombustion.extend({
-		label: LabelEnum.extract([LABELS.flamme_verte]).nullable(),
+		label: LabelGenerateur.extract(["flamme_verte"]).nullable(),
 		mode_combustion: non_applicable,
 		presence_regulation: non_applicable,
 		pveilleuse: non_applicable,
@@ -244,18 +241,18 @@ export const SignaletiqueElectrique = Signaletique.extend({
 });
 
 export const GenerateurElectrique = GenerateurBase.extend({
-	type: TypeGenerateurEnum.extract([
-		TYPES_GENERATEUR.chaudiere,
-		TYPES_GENERATEUR.generateur_air_chaud,
-		TYPES_GENERATEUR.convecteur_bi_jonction,
-		TYPES_GENERATEUR.convecteur_electrique,
-		TYPES_GENERATEUR.panneau_rayonnant_electrique,
-		TYPES_GENERATEUR.plafond_rayonnant_electrique,
-		TYPES_GENERATEUR.plancher_rayonnant_electrique,
-		TYPES_GENERATEUR.radiateur_electrique,
-		TYPES_GENERATEUR.radiateur_electrique_accumulation,
+	type: TypeGenerateur.extract([
+		"chaudiere",
+		"generateur_air_chaud",
+		"convecteur_bi_jonction",
+		"convecteur_electrique",
+		"panneau_rayonnant_electrique",
+		"plafond_rayonnant_electrique",
+		"plancher_rayonnant_electrique",
+		"radiateur_electrique",
+		"radiateur_electrique_accumulation",
 	]),
-	energie: EnergieChauffageEnum.extract([ENERGIES.electricite]),
+	energie: EnergieChauffage.extract(["electricite"]),
 	bienergie: non_applicable,
 	position: PositionElectrique,
 	signaletique: SignaletiqueElectrique,
@@ -268,10 +265,7 @@ export const GenerateurElectrique = GenerateurBase.extend({
  * schéma pour cette valeur de `type` (voir commentaire sur `EmetteurElectrique`).
  */
 export const ChaudiereElectrique = GenerateurElectrique.extend({
-	type: TypeGenerateurEnum.extract([
-		TYPES_GENERATEUR.chaudiere,
-		TYPES_GENERATEUR.generateur_air_chaud,
-	]),
+	type: TypeGenerateur.extract(["chaudiere", "generateur_air_chaud"]),
 	signaletique: SignaletiqueElectrique.extend({
 		label: non_applicable,
 	}),
@@ -287,15 +281,15 @@ export const ChaudiereElectrique = GenerateurElectrique.extend({
  * que « émetteur » en cas d'ambiguïté — à confirmer/corriger côté schéma.
  */
 export const EmetteurElectrique = GenerateurElectrique.extend({
-	type: TypeGenerateurEnum.extract([
-		TYPES_GENERATEUR.generateur_air_chaud,
-		TYPES_GENERATEUR.convecteur_bi_jonction,
-		TYPES_GENERATEUR.convecteur_electrique,
-		TYPES_GENERATEUR.panneau_rayonnant_electrique,
-		TYPES_GENERATEUR.plafond_rayonnant_electrique,
-		TYPES_GENERATEUR.plancher_rayonnant_electrique,
-		TYPES_GENERATEUR.radiateur_electrique,
-		TYPES_GENERATEUR.radiateur_electrique_accumulation,
+	type: TypeGenerateur.extract([
+		"generateur_air_chaud",
+		"convecteur_bi_jonction",
+		"convecteur_electrique",
+		"panneau_rayonnant_electrique",
+		"plafond_rayonnant_electrique",
+		"plancher_rayonnant_electrique",
+		"radiateur_electrique",
+		"radiateur_electrique_accumulation",
 	]),
 	position: PositionElectrique.extend({
 		position_chaudiere: non_applicable,
@@ -305,7 +299,7 @@ export const EmetteurElectrique = GenerateurElectrique.extend({
 		generateur_mixte_id: non_applicable,
 	}),
 	signaletique: SignaletiqueElectrique.extend({
-		label: LabelEnum.extract([LABELS.nf_performance]).nullable(),
+		label: LabelGenerateur.extract(["nf_performance"]).nullable(),
 	}),
 });
 
@@ -317,14 +311,14 @@ export const PositionThermodynamique = Position.extend({
 });
 
 export const GenerateurThermodynamique = GenerateurBase.extend({
-	type: TypeGenerateurEnum.extract([
-		TYPES_GENERATEUR.pac_air_air,
-		TYPES_GENERATEUR.pac_air_eau,
-		TYPES_GENERATEUR.pac_eau_eau,
-		TYPES_GENERATEUR.pac_eau_glycolee_eau,
-		TYPES_GENERATEUR.pac_geothermique,
+	type: TypeGenerateur.extract([
+		"pac_air_air",
+		"pac_air_eau",
+		"pac_eau_eau",
+		"pac_eau_glycolee_eau",
+		"pac_geothermique",
 	]),
-	energie: EnergieChauffageEnum.extract([ENERGIES.electricite]),
+	energie: EnergieChauffage.extract(["electricite"]),
 	position: PositionThermodynamique,
 });
 
@@ -357,13 +351,13 @@ export const PacClassique = GenerateurThermodynamique.extend({
  * /`qp0`/... côté appoint combustion.
  */
 export const PacHybride = GenerateurThermodynamique.extend({
-	type: TypeGenerateurEnum.extract([
-		TYPES_GENERATEUR.pac_air_eau,
-		TYPES_GENERATEUR.pac_eau_eau,
-		TYPES_GENERATEUR.pac_eau_glycolee_eau,
-		TYPES_GENERATEUR.pac_geothermique,
+	type: TypeGenerateur.extract([
+		"pac_air_eau",
+		"pac_eau_eau",
+		"pac_eau_glycolee_eau",
+		"pac_geothermique",
 	]),
-	bienergie: BienergieEnum,
+	bienergie: Bienergie,
 	signaletique: Signaletique.extend({
 		label: non_applicable,
 	}),
@@ -373,8 +367,8 @@ export const PacHybride = GenerateurThermodynamique.extend({
  * @see https://schemas.open-dpe.fr/chauffage/reseau-chaleur
  */
 export const ReseauChaleur = GenerateurBase.extend({
-	type: TypeGenerateurEnum.extract([TYPES_GENERATEUR.reseau_chaleur]),
-	energie: EnergieChauffageEnum.extract([ENERGIES.reseau_chaleur]),
+	type: TypeGenerateur.extract(["reseau_chaleur"]),
+	energie: EnergieChauffage.extract(["reseau_chaleur"]),
 	bienergie: non_applicable,
 	position: Position.extend({
 		cascade: non_applicable,

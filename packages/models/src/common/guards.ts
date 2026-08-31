@@ -1,13 +1,13 @@
-import { ENERGIES, EnergieEnum } from "./enums.js";
+import { Energie } from "./enums.js";
 
-export function isGaz(value: EnergieEnum): boolean {
-	return value === ENERGIES.gaz_naturel || value === ENERGIES.gpl;
+export function isGaz(value: Energie): boolean {
+	return value === Energie.enum.gaz_naturel || value === Energie.enum.gpl;
 }
 
-export function isBois(value: EnergieEnum): boolean {
+export function isBois(value: Energie): boolean {
 	return (
-		value === ENERGIES.bois_buche ||
-		value === ENERGIES.bois_plaquette ||
-		value === ENERGIES.bois_granule
+		value === Energie.enum.bois_buche ||
+		value === Energie.enum.bois_plaquette ||
+		value === Energie.enum.bois_granule
 	);
 }

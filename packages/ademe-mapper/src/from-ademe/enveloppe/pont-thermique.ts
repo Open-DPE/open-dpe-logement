@@ -8,7 +8,7 @@ export type Props = {
 	input: Input;
 };
 
-const TYPES_LIAISON = enveloppe.pontThermique.TYPES_LIAISON;
+const TypeLiaison = enveloppe.pontThermique.TypeLiaison;
 
 export function mapPontThermique(
 	props: Props,
@@ -55,20 +55,20 @@ export function mapLiaison(props: Props): enveloppe.pontThermique.Liaison {
 
 export function mapTypeLiaison(
 	props: Props,
-): enveloppe.pontThermique.TypeLiaisonEnum {
+): enveloppe.pontThermique.TypeLiaison {
 	switch (props.pontThermique.donnee_entree.enum_type_liaison_id) {
 		case "1":
-			return TYPES_LIAISON.plancher_bas_mur;
+			return TypeLiaison.enum.plancher_bas_mur;
 		case "2":
-			return TYPES_LIAISON.plancher_intermediaire_mur;
+			return TypeLiaison.enum.plancher_intermediaire_mur;
 		case "3":
-			return TYPES_LIAISON.plancher_haut_mur;
+			return TypeLiaison.enum.plancher_haut_mur;
 		case "4":
-			return TYPES_LIAISON.refend_mur;
+			return TypeLiaison.enum.refend_mur;
 		case "5":
 			return mapBaieId(props)
-				? TYPES_LIAISON.baie_mur
-				: TYPES_LIAISON.porte_mur;
+				? TypeLiaison.enum.baie_mur
+				: TypeLiaison.enum.porte_mur;
 	}
 }
 

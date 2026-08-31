@@ -39,9 +39,9 @@ export function mapEnveloppe(props: Input): enveloppe.Enveloppe {
 export function mapExposition(props: Input): enveloppe.Enveloppe["exposition"] {
 	for (const ventilation of props.logement.ventilation_collection) {
 		if (ventilation.donnee_entree.plusieurs_facade_exposee)
-			return enveloppe.EXPOSITIONS.multiple;
+			return enveloppe.Exposition.enum.multiple;
 	}
-	return enveloppe.EXPOSITIONS.simple;
+	return enveloppe.Exposition.enum.simple;
 }
 
 export function mapQ4paConv(props: Input): number | null {

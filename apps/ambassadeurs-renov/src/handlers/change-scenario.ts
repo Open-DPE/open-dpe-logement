@@ -1,23 +1,19 @@
+import * as models from "@open-dpe-logement/models";
 import { engine } from "@open-dpe-logement/engine";
-import { departements } from "../models/departement";
-import {
-	scenarios,
-	withAltitude,
-	withAnneeConstruction,
-	withDepartement,
-} from "../models/scenario";
+import { scenarios } from "../models/scenario";
+import type { Adresse } from "../models/adresse";
 import { setDiagnostic, clearSimulation } from "../stores/user";
 
 export async function changeScenario(command: {
 	scenarioId: string;
-	departementCode: string | null;
+	adresse: Adresse | null;
 	altitude: string | null;
 	anneeConstruction: string | null;
 }): Promise<{
 	success: boolean;
 	message: string;
 }> {
-	const { scenarioId, departementCode, altitude, anneeConstruction } = command;
+	const { scenarioId, adresse, altitude, anneeConstruction } = command;
 
 	try {
 		const scenario = scenarios.find((s) => s.id === scenarioId);
@@ -30,11 +26,7 @@ export async function changeScenario(command: {
 
 		let { data } = scenario;
 
-		const departement = departements.find(
-			(d) => d.code_departement === departementCode,
-		);
-
-		if (departement) data = withDepartement(data, departement);
+		if (adresse) data = withAdresse(data, adresse);
 		if (altitude) data = withAltitude(data, Number(altitude));
 		if (anneeConstruction)
 			data = withAnneeConstruction(data, Number(anneeConstruction));
@@ -54,4 +46,31 @@ export async function changeScenario(command: {
 			message: "Une erreur est survenue lors de la mise à jour du scénario.",
 		};
 	}
+}
+
+export function withAdresse(
+	diagnostic: models.diagnostic.Diagnostic,
+	adresse: Adresse,
+): models.diagnostic.Diagnostic {
+	const data = structuredClone(diagnostic);
+	data.batiment.adresse = { ...adresse };
+	return data;
+}
+
+export function withAltitude(
+	diagnostic: models.diagnostic.Diagnostic,
+	altitude: number,
+): models.diagnostic.Diagnostic {
+	const data = structuredClone(diagnostic);
+	data.batiment.altitude = altitude;
+	return data;
+}
+
+export function withAnneeConstruction(
+	diagnostic: models.diagnostic.Diagnostic,
+	anneeConstruction: number,
+): models.diagnostic.Diagnostic {
+	const data = structuredClone(diagnostic);
+	data.batiment.annee_construction = anneeConstruction;
+	return data;
 }

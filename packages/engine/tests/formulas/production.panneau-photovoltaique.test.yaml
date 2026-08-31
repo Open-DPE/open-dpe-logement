@@ -1,0 +1,174 @@
+production.panneau_photovoltaique.kpv:
+  rule: kpv
+  cases:
+    - title: Orientation nord → aucune production valorisée
+      with:
+        orientation_pv: nord
+        inclinaison_pv: 30
+      expect: 0
+
+    - title: Orientation nord-est → aucune production valorisée
+      with:
+        orientation_pv: nord_est
+        inclinaison_pv: 30
+      expect: 0
+
+    - title: Panneau quasi horizontal (≤ 15°) → coefficient unitaire quelle que soit l'orientation exposée
+      with:
+        orientation_pv: est
+        inclinaison_pv: 10
+      expect: 1
+
+    - title: Orientation sud, inclinaison optimale (30°) → 1.07
+      with:
+        orientation_pv: sud
+        inclinaison_pv: 30
+      expect: 1.07
+
+    - title: Orientation sud, inclinaison 60° → 0.97
+      with:
+        orientation_pv: sud
+        inclinaison_pv: 60
+      expect: 0.97
+
+    - title: Orientation sud, panneau quasi vertical (> 75°) → 0.73
+      with:
+        orientation_pv: sud
+        inclinaison_pv: 80
+      expect: 0.73
+
+    - title: Orientation sud-est, inclinaison 30° → 1.03
+      with:
+        orientation_pv: sud_est
+        inclinaison_pv: 30
+      expect: 1.03
+
+    - title: Orientation sud-ouest, inclinaison 30° → 1.03 (symétrique du sud-est)
+      with:
+        orientation_pv: sud_ouest
+        inclinaison_pv: 30
+      expect: 1.03
+
+    - title: Orientation est, inclinaison 30° → 0.96
+      with:
+        orientation_pv: est
+        inclinaison_pv: 30
+      expect: 0.96
+
+    - title: Orientation ouest, inclinaison 60° → 0.83
+      with:
+        orientation_pv: ouest
+        inclinaison_pv: 60
+      expect: 0.83
+
+    - title: Orientation inconnue → erreur ValeurForfaitaire
+      with:
+        orientation_pv: ORIENTATION_INCONNUE
+        inclinaison_pv: 30
+      expectError: true
+
+production.panneau_photovoltaique.spv:
+  rule: spv
+  cases:
+    - title: Surface de module connue → surface × nombre de modules
+      with:
+        surface: 2
+        modules: 4
+      expect: 8
+
+    - title: Surface de module inconnue → 1.6 m² par module
+      with:
+        surface: null
+        modules: 4
+      expect: 6.4
+
+    - title: Aucun module → surface nulle
+      with:
+        surface: null
+        modules: 0
+      expect: 0
+
+production.panneau_photovoltaique.ppv:
+  rule: ppv
+  cases:
+    - title: 10 m² de capteurs, orientation optimale (kpv = 1), 100 kWh/m² par mois
+      with:
+        spv: 10
+        kpv: 1
+        epv:
+          &epv100
+          "01": 100
+          "02": 100
+          "03": 100
+          "04": 100
+          "05": 100
+          "06": 100
+          "07": 100
+          "08": 100
+          "09": 100
+          "10": 100
+          "11": 100
+          "12": 100
+      expect:
+        "01": 146.2
+        "02": 146.2
+        "03": 146.2
+        "04": 146.2
+        "05": 146.2
+        "06": 146.2
+        "07": 146.2
+        "08": 146.2
+        "09": 146.2
+        "10": 146.2
+        "11": 146.2
+        "12": 146.2
+
+    - title: Coefficient d'orientation nul (panneau au nord) → production nulle
+      with:
+        spv: 10
+        kpv: 0
+        epv: *epv100
+      expect:
+        "01": 0
+        "02": 0
+        "03": 0
+        "04": 0
+        "05": 0
+        "06": 0
+        "07": 0
+        "08": 0
+        "09": 0
+        "10": 0
+        "11": 0
+        "12": 0
+
+    - title: Ensoleillement variable selon les mois
+      with:
+        spv: 10
+        kpv: 1
+        epv:
+          "01": 50
+          "02": 100
+          "03": 100
+          "04": 100
+          "05": 100
+          "06": 200
+          "07": 200
+          "08": 100
+          "09": 100
+          "10": 100
+          "11": 100
+          "12": 50
+      expect:
+        "01": 73.1
+        "02": 146.2
+        "03": 146.2
+        "04": 146.2
+        "05": 146.2
+        "06": 292.4
+        "07": 292.4
+        "08": 146.2
+        "09": 146.2
+        "10": 146.2
+        "11": 146.2
+        "12": 73.1

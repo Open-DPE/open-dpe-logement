@@ -137,8 +137,8 @@ $defs:
         x-enum: etiquette
       confort_ete:
         title: Confort d'été
-        type: [number, "null"]
-        enum: [1, 2, 3, null]
+        type: [string, "null"]
+        enum: ["bon", "moyen", "insuffisant", null]
         x-enum: confort-ete
     required:
       - consommations

@@ -10,7 +10,7 @@ import { ValeurForfaitaireError } from "../../errors.js";
  * @returns Valeur du pont thermique en W/(m.K)
  */
 export function calcule_pt(props: {
-	type_liaison: models.enveloppe.pontThermique.TypeLiaisonEnum;
+	type_liaison: models.enveloppe.pontThermique.TypeLiaison;
 	kpt: ReturnType<typeof calcule_kpt>;
 	l: number;
 	pont_thermique_partiel: boolean;
@@ -18,7 +18,7 @@ export function calcule_pt(props: {
 	const { type_liaison, kpt, l, pont_thermique_partiel } = props;
 	const c = pont_thermique_partiel ? 0.5 : 1;
 
-	const enums = models.enveloppe.pontThermique.TYPES_LIAISON;
+	const enums = models.enveloppe.pontThermique.TypeLiaison.enum;
 
 	switch (type_liaison) {
 		case enums.refend_mur:
@@ -38,7 +38,7 @@ export function calcule_pt(props: {
  */
 export function calcule_kpt(props: {
 	kpt_saisi: number | null;
-	type_liaison: models.enveloppe.pontThermique.TypeLiaisonEnum;
+	type_liaison: models.enveloppe.pontThermique.TypeLiaison;
 	isolation_mur: boolean;
 	type_isolation_mur: ReturnType<typeof set_type_isolation_mur> | null;
 	isolation_plancher: ReturnType<
@@ -48,7 +48,7 @@ export function calcule_kpt(props: {
 		| typeof set_type_isolation_plancher_bas
 		| typeof set_type_isolation_plancher_haut
 	> | null;
-	type_pose_menuiserie: models.enveloppe.common.TypePoseEnum | null;
+	type_pose_menuiserie: models.enveloppe.common.TypePose | null;
 	presence_retour_isolation: ReturnType<
 		typeof set_presence_retour_isolation
 	> | null;
@@ -96,7 +96,7 @@ export function set_isolation_plancher_haut(props: {
  * @returns État d'isolation du plancher bas retenu
  */
 export function set_isolation_plancher_bas(props: {
-	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 	isolation: boolean | null;
 	annee_construction: number;
 }): boolean {
@@ -104,7 +104,7 @@ export function set_isolation_plancher_bas(props: {
 
 	if (isolation !== null) return isolation;
 
-	return mitoyennete === models.enveloppe.common.MITOYENNETES.terre_plein
+	return mitoyennete === models.enveloppe.common.Mitoyennete.enum.terre_plein
 		? annee_construction >= 2001
 		: annee_construction >= 1975;
 }
@@ -114,9 +114,9 @@ export function set_isolation_plancher_bas(props: {
  * @returns Type d'isolation du mur retenu
  */
 export function set_type_isolation_mur(props: {
-	type_isolation: models.enveloppe.common.TypeIsolationEnum | null;
-}): models.enveloppe.common.TypeIsolationEnum {
-	return props.type_isolation ?? models.enveloppe.common.TYPES_ISOLATION.iti;
+	type_isolation: models.enveloppe.common.TypeIsolation | null;
+}): models.enveloppe.common.TypeIsolation {
+	return props.type_isolation ?? models.enveloppe.common.TypeIsolation.enum.iti;
 }
 
 /**
@@ -124,9 +124,9 @@ export function set_type_isolation_mur(props: {
  * @returns Type d'isolation du plancher haut retenu
  */
 export function set_type_isolation_plancher_haut(props: {
-	type_isolation: models.enveloppe.common.TypeIsolationEnum | null;
-}): models.enveloppe.common.TypeIsolationEnum {
-	return props.type_isolation ?? models.enveloppe.common.TYPES_ISOLATION.ite;
+	type_isolation: models.enveloppe.common.TypeIsolation | null;
+}): models.enveloppe.common.TypeIsolation {
+	return props.type_isolation ?? models.enveloppe.common.TypeIsolation.enum.ite;
 }
 
 /**
@@ -134,9 +134,9 @@ export function set_type_isolation_plancher_haut(props: {
  * @returns Type d'isolation du plancher bas retenu
  */
 export function set_type_isolation_plancher_bas(props: {
-	type_isolation: models.enveloppe.common.TypeIsolationEnum | null;
-}): models.enveloppe.common.TypeIsolationEnum {
-	return props.type_isolation ?? models.enveloppe.common.TYPES_ISOLATION.ite;
+	type_isolation: models.enveloppe.common.TypeIsolation | null;
+}): models.enveloppe.common.TypeIsolation {
+	return props.type_isolation ?? models.enveloppe.common.TypeIsolation.enum.ite;
 }
 
 /**

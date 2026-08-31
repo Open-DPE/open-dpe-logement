@@ -15,7 +15,7 @@ export function MesTravaux() {
   }, [diagnostic, navigate]);
 
   function handleSuccess() {
-    navigate("/apres", { viewTransition: true, state: { toast: "Gestes mis à jour" } });
+    navigate("/apres", { viewTransition: true });
   }
 
   return (

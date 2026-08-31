@@ -153,23 +153,23 @@ export function mapDescription(
 
 export function mapType(props: Props): enveloppe.baie.Baie["type"] {
 	const scope = extract(props);
-	const TypeBaieEnum = enveloppe.baie.TYPES_BAIE;
+	const TypeBaie = enveloppe.baie.TypeBaie;
 	switch (scope.donnee_entree.enum_type_baie_id) {
 		case "1":
-			return TypeBaieEnum.brique_verre_pleine;
+			return TypeBaie.enum.brique_verre_pleine;
 		case "2":
-			return TypeBaieEnum.brique_verre_creuse;
+			return TypeBaie.enum.brique_verre_creuse;
 		case "3":
-			return TypeBaieEnum.polycarbonate;
+			return TypeBaie.enum.polycarbonate;
 		case "4":
-			return TypeBaieEnum.fenetre_battante;
+			return TypeBaie.enum.fenetre_battante;
 		case "5":
-			return TypeBaieEnum.fenetre_coulissante;
+			return TypeBaie.enum.fenetre_coulissante;
 		case "6":
-			return TypeBaieEnum.porte_fenetre_coulissante;
+			return TypeBaie.enum.porte_fenetre_coulissante;
 		case "7":
 		case "8":
-			return TypeBaieEnum.porte_fenetre_battante;
+			return TypeBaie.enum.porte_fenetre_battante;
 	}
 }
 
@@ -194,24 +194,24 @@ export function mapPresenceProtectionSolaire(
 export function mapTypeFermeture(
 	props: Props,
 ): enveloppe.baie.Baie["type_fermeture"] {
-	const TypeFermetureEnum = enveloppe.baie.TYPES_FERMETURE;
+	const TypeFermeture = enveloppe.baie.TypeFermeture;
 	switch (props.baie_vitree.donnee_entree.enum_type_fermeture_id) {
 		case "1":
-			return TypeFermetureEnum.sans_fermeture;
+			return TypeFermeture.enum.sans_fermeture;
 		case "2":
-			return TypeFermetureEnum.volet_battant_avec_ajours_fixes;
+			return TypeFermeture.enum.volet_battant_avec_ajours_fixes;
 		case "3":
-			return TypeFermetureEnum.fermeture_sans_ajours;
+			return TypeFermeture.enum.fermeture_sans_ajours;
 		case "4":
-			return TypeFermetureEnum.volets_roulants_pvc_bois_epaisseur_lte_12mm;
+			return TypeFermeture.enum.volets_roulants_pvc_bois_epaisseur_lte_12mm;
 		case "5":
-			return TypeFermetureEnum.volet_battant_pvc_bois_epaisseur_lte_22mm;
+			return TypeFermeture.enum.volet_battant_pvc_bois_epaisseur_lte_22mm;
 		case "6":
-			return TypeFermetureEnum.volets_roulants_pvc_bois_epaisseur_gt_12mm;
+			return TypeFermeture.enum.volets_roulants_pvc_bois_epaisseur_gt_12mm;
 		case "7":
-			return TypeFermetureEnum.volet_battant_pvc_bois_epaisseur_gt_22mm;
+			return TypeFermeture.enum.volet_battant_pvc_bois_epaisseur_gt_22mm;
 		case "8":
-			return TypeFermetureEnum.fermeture_isolee_sans_ajours;
+			return TypeFermeture.enum.fermeture_isolee_sans_ajours;
 	}
 }
 
@@ -237,14 +237,14 @@ export function mapSw(props: Props): enveloppe.baie.Baie["sw"] {
 export function mapTypePose(
 	props: Props,
 ): enveloppe.baie.Position["type_pose"] | null {
-	const TypePoseEnum = enveloppe.common.TYPES_POSE;
+	const TypePose = enveloppe.common.TypePose;
 	switch (props.baie_vitree.donnee_entree.enum_type_pose_id) {
 		case "1":
-			return TypePoseEnum.nu_exterieur;
+			return TypePose.enum.nu_exterieur;
 		case "2":
-			return TypePoseEnum.nu_interieur;
+			return TypePose.enum.nu_interieur;
 		case "3":
-			return TypePoseEnum.tunnel;
+			return TypePose.enum.tunnel;
 		default:
 			return null;
 	}
@@ -270,13 +270,13 @@ export function mapOrientation(
 ): enveloppe.baie.Position["orientation"] {
 	switch (props.baie_vitree.donnee_entree.enum_orientation_id) {
 		case "1":
-			return common.ORIENTATIONS_CARDINALES.sud;
+			return common.OrientationCardinale.enum.sud;
 		case "2":
-			return common.ORIENTATIONS_CARDINALES.nord;
+			return common.OrientationCardinale.enum.nord;
 		case "3":
-			return common.ORIENTATIONS_CARDINALES.est;
+			return common.OrientationCardinale.enum.est;
 		case "4":
-			return common.ORIENTATIONS_CARDINALES.ouest;
+			return common.OrientationCardinale.enum.ouest;
 		case "5":
 			return enveloppe.common.OrientationHorizontale;
 	}
@@ -312,20 +312,20 @@ export function mapMateriau(
 	props: Props,
 ): enveloppe.baie.Menuiserie["materiau"] {
 	const scope = extract(props);
-	const MateriauEnum = enveloppe.baie.MATERIAUX;
+	const MateriauBaie = enveloppe.baie.MateriauBaie;
 	switch (scope.donnee_entree.enum_type_materiaux_menuiserie_id) {
 		case "1":
 		case "2":
 			return null;
 		case "3":
-			return MateriauEnum.bois;
+			return MateriauBaie.enum.bois;
 		case "4":
-			return MateriauEnum.bois_metal;
+			return MateriauBaie.enum.bois_metal;
 		case "5":
-			return MateriauEnum.pvc;
+			return MateriauBaie.enum.pvc;
 		case "6":
 		case "7":
-			return MateriauEnum.metal;
+			return MateriauBaie.enum.metal;
 	}
 }
 
@@ -385,23 +385,23 @@ export function mapPresenceRupteurPontThermique(
 
 export function mapTypeVitrage(props: Props): enveloppe.baie.Vitrage["type"] {
 	const scope = extract(props);
-	const TypeVitrageEnum = enveloppe.baie.TYPES_VITRAGE;
+	const TypeVitrage = enveloppe.baie.TypeVitrage;
 	switch (scope.donnee_entree.enum_type_vitrage_id) {
 		case "1":
 		case "4":
-			return TypeVitrageEnum.simple_vitrage;
+			return TypeVitrage.enum.simple_vitrage;
 		case "2":
 			return scope.donnee_entree.vitrage_vir
-				? TypeVitrageEnum.double_vitrage_fe
-				: TypeVitrageEnum.double_vitrage;
+				? TypeVitrage.enum.double_vitrage_fe
+				: TypeVitrage.enum.double_vitrage;
 		case "3":
 			return scope.donnee_entree.vitrage_vir
-				? TypeVitrageEnum.triple_vitrage_fe
-				: TypeVitrageEnum.triple_vitrage;
+				? TypeVitrage.enum.triple_vitrage_fe
+				: TypeVitrage.enum.triple_vitrage;
 		case "5":
-			return TypeVitrageEnum.brique_verre;
+			return TypeVitrage.enum.brique_verre;
 		case "6":
-			return TypeVitrageEnum.polycarbonate;
+			return TypeVitrage.enum.polycarbonate;
 	}
 }
 
@@ -409,12 +409,12 @@ export function mapNatureLame(
 	props: Props,
 ): enveloppe.baie.Vitrage["nature_lame"] {
 	const scope = extract(props);
-	const NatureLameEnum = enveloppe.baie.NATURES_LAME;
+	const NatureLameAir = enveloppe.baie.NatureLameAir;
 	switch (scope.donnee_entree.enum_type_gaz_lame_id) {
 		case "1":
-			return NatureLameEnum.air;
+			return NatureLameAir.enum.air;
 		case "2":
-			return NatureLameEnum.argon;
+			return NatureLameAir.enum.argon;
 		default:
 			return null;
 	}
@@ -447,8 +447,8 @@ export function mapTypeSurvitrage(
 ): enveloppe.baie.Survitrage["type"] {
 	if (!hasSurvitrage(props)) return null;
 	return extract(props).donnee_entree.vitrage_vir
-		? enveloppe.baie.TYPES_SURVITRAGE.survitrage_fe
-		: enveloppe.baie.TYPES_SURVITRAGE.survitrage_simple;
+		? enveloppe.baie.TypeSurvitrage.enum.survitrage_fe
+		: enveloppe.baie.TypeSurvitrage.enum.survitrage_simple;
 }
 
 export function mapEpaisseurSurvitrage(

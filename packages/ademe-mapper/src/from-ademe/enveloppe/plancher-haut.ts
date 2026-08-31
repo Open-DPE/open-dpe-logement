@@ -9,9 +9,10 @@ export type PlancherHautProps = {
 	input: Input;
 };
 
-const CONFIGURATIONS = enveloppe.plancherHaut.CONFIGURATIONS;
-const TYPES_PLANCHER_HAUT = enveloppe.plancherHaut.TYPES_PLANCHER_HAUT;
-const INERTIES = enveloppe.common.INERTIES;
+const ConfigurationPlancherHaut =
+	enveloppe.plancherHaut.ConfigurationPlancherHaut;
+const TypePlancherHaut = enveloppe.plancherHaut.TypePlancherHaut;
+const Inertie = enveloppe.common.Inertie;
 
 export function mapPlancherHaut(
 	props: PlancherHautProps,
@@ -50,11 +51,11 @@ export function mapConfiguration(
 		case "8":
 		case "11":
 		case "16":
-			return CONFIGURATIONS.terrasse;
+			return ConfigurationPlancherHaut.enum.terrasse;
 
 		case "12":
 		case "13":
-			return CONFIGURATIONS.rampants;
+			return ConfigurationPlancherHaut.enum.rampants;
 	}
 	switch (props.donnee_entree.enum_type_adjacence_id) {
 		case "1":
@@ -62,9 +63,9 @@ export function mapConfiguration(
 		case "3":
 		case "5":
 		case "6":
-			return CONFIGURATIONS.rampants;
+			return ConfigurationPlancherHaut.enum.rampants;
 		default:
-			return CONFIGURATIONS.plancher;
+			return ConfigurationPlancherHaut.enum.plancher;
 	}
 }
 
@@ -73,33 +74,33 @@ export function mapType(
 ): enveloppe.plancherHaut.PlancherHaut["type"] {
 	switch (props.donnee_entree.enum_type_plancher_haut_id) {
 		case "1":
-			return TYPES_PLANCHER_HAUT.plafond_avec_ou_sans_remplissage;
+			return TypePlancherHaut.enum.plafond_avec_ou_sans_remplissage;
 		case "2":
-			return TYPES_PLANCHER_HAUT.plafond_entre_solives_metalliques;
+			return TypePlancherHaut.enum.plafond_entre_solives_metalliques;
 		case "3":
-			return TYPES_PLANCHER_HAUT.plafond_entre_solives_bois;
+			return TypePlancherHaut.enum.plafond_entre_solives_bois;
 		case "4":
-			return TYPES_PLANCHER_HAUT.plafond_bois_sur_solives_metalliques;
+			return TypePlancherHaut.enum.plafond_bois_sur_solives_metalliques;
 		case "5":
-			return TYPES_PLANCHER_HAUT.plafond_bois_sous_solives_metalliques;
+			return TypePlancherHaut.enum.plafond_bois_sous_solives_metalliques;
 		case "6":
-			return TYPES_PLANCHER_HAUT.bardeaux_et_remplissage;
+			return TypePlancherHaut.enum.bardeaux_et_remplissage;
 		case "7":
-			return TYPES_PLANCHER_HAUT.plafond_bois_sur_solives_bois;
+			return TypePlancherHaut.enum.plafond_bois_sur_solives_bois;
 		case "8":
-			return TYPES_PLANCHER_HAUT.plafond_bois_sous_solives_bois;
+			return TypePlancherHaut.enum.plafond_bois_sous_solives_bois;
 		case "9":
-			return TYPES_PLANCHER_HAUT.dalle_beton;
+			return TypePlancherHaut.enum.dalle_beton;
 		case "10":
-			return TYPES_PLANCHER_HAUT.plafond_lourd;
+			return TypePlancherHaut.enum.plafond_lourd;
 		case "11":
-			return TYPES_PLANCHER_HAUT.combles_amenages_sous_rampant;
+			return TypePlancherHaut.enum.combles_amenages_sous_rampant;
 		case "12":
-			return TYPES_PLANCHER_HAUT.toiture_chaume;
+			return TypePlancherHaut.enum.toiture_chaume;
 		case "13":
-			return TYPES_PLANCHER_HAUT.plafond_patre;
+			return TypePlancherHaut.enum.plafond_patre;
 		case "14":
-			return TYPES_PLANCHER_HAUT.bac_acier;
+			return TypePlancherHaut.enum.bac_acier;
 		default:
 			return null;
 	}
@@ -123,9 +124,9 @@ export function inertie(
 	if ("paroi_lourde" in props.donnee_entree) {
 		switch (props.donnee_entree.paroi_lourde) {
 			case true:
-				return INERTIES.lourde;
+				return Inertie.enum.lourde;
 			case false:
-				return INERTIES.legere;
+				return Inertie.enum.legere;
 		}
 	}
 	return null;

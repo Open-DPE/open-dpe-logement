@@ -1,18 +1,24 @@
 import * as z from "zod";
 import { nombre, nombre_positif, non_applicable } from "../common/types.js";
-import { ExpositionEnum } from "./enums.js";
-import { InertieEnum } from "./common/enums.js";
+import { Exposition } from "./enums.js";
+import { Inertie } from "./common/enums.js";
 import { Niveau, NiveauWithData } from "./niveau/types.js";
-import { LocalNonChauffe, LocalNonChauffeWithData } from "./local-non-chauffe/types.js";
+import {
+	LocalNonChauffe,
+	LocalNonChauffeWithData,
+} from "./local-non-chauffe/types.js";
 import { Mur, MurWithData } from "./mur/types.js";
 import { PlancherBas, PlancherBasWithData } from "./plancher-bas/types.js";
 import { PlancherHaut, PlancherHautWithData } from "./plancher-haut/types.js";
 import { Baie, BaieWithData } from "./baie/types.js";
 import { Porte, PorteWithData } from "./porte/types.js";
-import { PontThermique, PontThermiqueWithData } from "./pont-thermique/types.js";
+import {
+	PontThermique,
+	PontThermiqueWithData,
+} from "./pont-thermique/types.js";
 
 export const Enveloppe = z.object({
-	exposition: ExpositionEnum,
+	exposition: Exposition,
 	q4pa_conv: z.union([nombre_positif, non_applicable]),
 	presence_brasseurs_air: z.boolean(),
 	niveaux: z.array(Niveau).min(1),
@@ -42,7 +48,7 @@ export const EnveloppeData = z.object({
 	sdep_planchers_hauts: nombre,
 	sdep_baies: nombre,
 	sdep_portes: nombre,
-	inertie: InertieEnum,
+	inertie: Inertie,
 	hperm: nombre,
 	hvent: nombre,
 	// NOTE écart schéma : `q4pa_conv` est une propriété de `enveloppe.yaml#/$defs/data`

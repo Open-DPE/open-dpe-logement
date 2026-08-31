@@ -1,0 +1,332 @@
+enveloppe.local_non_chauffe.baie.aue:
+  rule: aue
+  cases:
+    - title: Baie du local donnant sur l'extérieur → surface comptée
+      with:
+        mitoyennete: exterieur
+        surface: 4
+      expect: 4
+
+    - title: Baie du local enterrée → surface comptée
+      with:
+        mitoyennete: enterre
+        surface: 4
+      expect: 4
+
+    - title: Baie du local donnant sur un local non accessible → surface comptée
+      with:
+        mitoyennete: local_non_accessible
+        surface: 4
+      expect: 4
+
+    - title: Baie du local donnant sur un logement chauffé → 0
+      with:
+        mitoyennete: local_residentiel
+        surface: 4
+      expect: 0
+
+    - title: Baie du local donnant sur un autre local non chauffé → 0
+      with:
+        mitoyennete: local_non_chauffe
+        surface: 4
+      expect: 0
+
+enveloppe.local_non_chauffe.baie.aiu:
+  rule: aiu
+  cases:
+    - title: Baie du local donnant sur un logement chauffé → surface comptée
+      with:
+        mitoyennete: local_residentiel
+        surface: 4
+      expect: 4
+
+    - title: Baie du local donnant sur un local non résidentiel → surface comptée
+      with:
+        mitoyennete: local_non_residentiel
+        surface: 4
+      expect: 4
+
+    - title: Baie du local donnant sur l'extérieur → 0
+      with:
+        mitoyennete: exterieur
+        surface: 4
+      expect: 0
+
+enveloppe.local_non_chauffe.baie.t:
+  rule: t
+  cases:
+    - title: Simple vitrage bois → 0.62
+      with:
+        type_vitrage: simple_vitrage
+        materiau: bois
+        presence_rupteur_pont_thermique: false
+      expect: 0.62
+
+    - title: Double vitrage bois → 0.55
+      with:
+        type_vitrage: double_vitrage
+        materiau: bois
+        presence_rupteur_pont_thermique: false
+      expect: 0.55
+
+    - title: Double vitrage à faible émissivité bois → 0.48
+      with:
+        type_vitrage: double_vitrage_fe
+        materiau: bois
+        presence_rupteur_pont_thermique: false
+      expect: 0.48
+
+    - title: Triple vitrage bois → 0.49
+      with:
+        type_vitrage: triple_vitrage
+        materiau: bois
+        presence_rupteur_pont_thermique: false
+      expect: 0.49
+
+    - title: Simple vitrage PVC → 0.5
+      with:
+        type_vitrage: simple_vitrage
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+      expect: 0.5
+
+    - title: Double vitrage PVC → 0.45
+      with:
+        type_vitrage: double_vitrage
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+      expect: 0.45
+
+    - title: Simple vitrage métal avec rupteur de pont thermique → 0.63
+      with:
+        type_vitrage: simple_vitrage
+        materiau: metal
+        presence_rupteur_pont_thermique: true
+      expect: 0.63
+
+    - title: Simple vitrage métal sans rupteur de pont thermique → 0.64
+      with:
+        type_vitrage: simple_vitrage
+        materiau: metal
+        presence_rupteur_pont_thermique: false
+      expect: 0.64
+
+    - title: Triple vitrage à faible émissivité métal sans rupteur → 0.47
+      with:
+        type_vitrage: triple_vitrage_fe
+        materiau: metal
+        presence_rupteur_pont_thermique: false
+      expect: 0.47
+
+    - title: Polycarbonate → 0.4 (indépendant du matériau de menuiserie)
+      with:
+        type_vitrage: polycarbonate
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+      expect: 0.4
+
+    - title: Brique de verre → 0.4
+      with:
+        type_vitrage: brique_verre
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+      expect: 0.4
+
+    - title: Type de vitrage inconnu → erreur ValeurForfaitaire
+      with:
+        type_vitrage: INCONNU
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+      expectError: true
+
+enveloppe.local_non_chauffe.baie.sst:
+  rule: sst
+  cases:
+    - title: Surface 10 m², coefficient de transparence 0.5, c1 = 1 → 10 × (0.8 × 0.5 + 0.024)
+      with:
+        surface: 10
+        t: 0.5
+        c1:
+          &c1_unitaire
+          "01": 1
+          "02": 1
+          "03": 1
+          "04": 1
+          "05": 1
+          "06": 1
+          "07": 1
+          "08": 1
+          "09": 1
+          "10": 1
+          "11": 1
+          "12": 1
+      expect:
+        "01": 4.24
+        "02": 4.24
+        "03": 4.24
+        "04": 4.24
+        "05": 4.24
+        "06": 4.24
+        "07": 4.24
+        "08": 4.24
+        "09": 4.24
+        "10": 4.24
+        "11": 4.24
+        "12": 4.24
+
+    - title: Coefficient de transparence nul → terme résiduel 0.024 conservé
+      with:
+        surface: 10
+        t: 0
+        c1: *c1_unitaire
+      expect:
+        "01": 0.24
+        "02": 0.24
+        "03": 0.24
+        "04": 0.24
+        "05": 0.24
+        "06": 0.24
+        "07": 0.24
+        "08": 0.24
+        "09": 0.24
+        "10": 0.24
+        "11": 0.24
+        "12": 0.24
+
+    - title: Coefficient d'orientation mensuel appliqué mois par mois
+      with:
+        surface: 10
+        t: 0.5
+        c1:
+          "01": 0
+          "02": 0.5
+          "03": 1
+          "04": 1
+          "05": 1
+          "06": 1
+          "07": 1
+          "08": 1
+          "09": 1
+          "10": 1
+          "11": 1
+          "12": 2
+      expect:
+        "01": 0
+        "02": 2.12
+        "03": 4.24
+        "04": 4.24
+        "05": 4.24
+        "06": 4.24
+        "07": 4.24
+        "08": 4.24
+        "09": 4.24
+        "10": 4.24
+        "11": 4.24
+        "12": 8.48
+
+    - title: Surface nulle → apports nuls
+      with:
+        surface: 0
+        t: 0.5
+        c1: *c1_unitaire
+      expect:
+        "01": 0
+        "02": 0
+        "03": 0
+        "04": 0
+        "05": 0
+        "06": 0
+        "07": 0
+        "08": 0
+        "09": 0
+        "10": 0
+        "11": 0
+        "12": 0
+
+enveloppe.local_non_chauffe.baie.isolation:
+  rule: isolation
+  cases:
+    - title: Triple vitrage → isolée
+      with:
+        type_vitrage: triple_vitrage
+      expect: true
+
+    - title: Triple vitrage à faible émissivité → isolée
+      with:
+        type_vitrage: triple_vitrage_fe
+      expect: true
+
+    - title: Double vitrage → non isolée
+      with:
+        type_vitrage: double_vitrage
+      expect: false
+
+    - title: Simple vitrage → non isolée
+      with:
+        type_vitrage: simple_vitrage
+      expect: false
+
+enveloppe.local_non_chauffe.baie.type_vitrage:
+  rule: type_vitrage
+  cases:
+    - title: Type de vitrage saisi → retenu
+      with:
+        type_vitrage: double_vitrage
+      expect: double_vitrage
+
+    - title: Type de vitrage non saisi → simple vitrage par défaut
+      with:
+        type_vitrage: null
+      expect: simple_vitrage
+
+enveloppe.local_non_chauffe.baie.materiau:
+  rule: materiau
+  cases:
+    - title: Matériau saisi → retenu
+      with:
+        materiau: bois
+      expect: bois
+
+    - title: Matériau non saisi → PVC par défaut
+      with:
+        materiau: null
+      expect: pvc
+
+enveloppe.local_non_chauffe.baie.presence_rupteur_pont_thermique:
+  rule: presence_rupteur_pont_thermique
+  cases:
+    - title: Présence saisie → retenue
+      with:
+        presence_rupteur_pont_thermique: true
+      expect: true
+
+    - title: Présence non saisie → absence par défaut
+      with:
+        presence_rupteur_pont_thermique: null
+      expect: false
+
+enveloppe.local_non_chauffe.baie.isolation_aiu:
+  rule: isolation
+  cases:
+    - title: Baie en triple vitrage côté espace chauffé → isolée
+      with:
+        type_vitrage: triple_vitrage
+      expect: true
+
+    - title: Baie en double vitrage côté espace chauffé → non isolée
+      with:
+        type_vitrage: double_vitrage
+      expect: false
+
+enveloppe.local_non_chauffe.baie.isolation_aue:
+  rule: isolation
+  cases:
+    - title: Baie en triple vitrage côté extérieur → isolée
+      with:
+        type_vitrage: triple_vitrage_fe
+      expect: true
+
+    - title: Baie en simple vitrage côté extérieur → non isolée
+      with:
+        type_vitrage: simple_vitrage
+      expect: false

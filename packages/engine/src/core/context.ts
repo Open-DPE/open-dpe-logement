@@ -7,7 +7,7 @@ export type Thunk<T> = () => T;
 
 export interface Context {
 	readonly diagnostic: diagnostic.Diagnostic;
-	readonly scenario: common.ScenarioEnum;
+	readonly scenario: common.Scenario;
 
 	register<N extends Namespace, K extends Key<N>>(
 		ns: N,
@@ -41,7 +41,7 @@ export interface Context {
 
 export function createContext(
 	diagnostic: diagnostic.Diagnostic,
-	scenario: common.ScenarioEnum = common.SCENARIOS.conventionnel,
+	scenario: common.Scenario = common.Scenario.enum.conventionnel,
 ): Context {
 	const cache = new Cache();
 	const pending = new Set<string>();

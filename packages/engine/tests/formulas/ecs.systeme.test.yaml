@@ -1,3 +1,46 @@
+ecs.systeme.cef:
+  rule: consommations
+  cases:
+    - title: Ballon électrique avec auxiliaire de distribution
+      with:
+        cecs: 2000
+        cecs_enr: 0
+        caux_dist: 100
+        caux_dist_enr: 0
+        energie: electricite
+        reseau_id: null
+      expect:
+        ecs:
+          electricite: { cef: 2000, cep: 3800, eges: 130 }
+        auxiliaire:
+          electricite: { cef: 100, cep: 190, eges: 6.9 }
+
+    - title: Chaudière gaz sans auxiliaire de distribution
+      with:
+        cecs: 3000
+        cecs_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: gaz_naturel
+        reseau_id: null
+      expect:
+        ecs:
+          gaz_naturel: { cef: 3000, cep: 3000, eges: 681 }
+        auxiliaire:
+          electricite: { cef: 0, cep: 0, eges: 0 }
+
+    - title: Réseau de chaleur identifié → EGES au contenu CO2 ACV du réseau
+      with:
+        cecs: 3000
+        cecs_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: reseau_chaleur
+        reseau_id: "0106C"
+      expectPartial:
+        ecs:
+          reseau_chaleur: { cef: 3000, cep: 3000, eges: 111 }
+
 ecs.systeme.cecs:
   rule: cecs
   cases:
@@ -10,6 +53,80 @@ ecs.systeme.cecs:
         iecs: 2
       expect: 50
 
+    - title: Aucune couverture solaire, rendement unitaire, système unique → besoins reportés
+      with:
+        becs:
+          &becs100
+          "01": 100
+          "02": 100
+          "03": 100
+          "04": 100
+          "05": 100
+          "06": 100
+          "07": 100
+          "08": 100
+          "09": 100
+          "10": 100
+          "11": 100
+          "12": 100
+        fecs: 0
+        rdim: 1
+        iecs: 1
+      expect: 1200
+
+    - title: Couverture solaire totale → aucune consommation
+      with:
+        becs: *becs100
+        fecs: 1
+        rdim: 1
+        iecs: 1
+      expect: 0
+
+ecs.systeme.cecs_elec:
+  rule: cecs_elec
+  cases:
+    - title: Générateur électrique → consommation reportée en électricité
+      with:
+        cecs: 2000
+        energie_generateur: electricite
+      expect: 2000
+
+    - title: Générateur gaz → aucune consommation électrique d'ECS
+      with:
+        cecs: 2000
+        energie_generateur: gaz_naturel
+      expect: 0
+
+ecs.systeme.cecs_enr:
+  rule: cecs_enr
+  cases:
+    - title: Part d'électricité autoconsommée affectée à l'ECS au prorata de la consommation
+      with:
+        celec:
+          ecs: 1000
+        celec_ac:
+          ecs: 200
+        cecs_elec: 1000
+      expect: 200
+
+    - title: Consommation partielle → autoconsommation au prorata
+      with:
+        celec:
+          ecs: 1000
+        celec_ac:
+          ecs: 200
+        cecs_elec: 500
+      expect: 100
+
+    - title: Aucune consommation électrique d'ECS → aucune part renouvelable
+      with:
+        celec:
+          ecs: 1000
+        celec_ac:
+          ecs: 200
+        cecs_elec: 0
+      expect: 0
+
 ecs.systeme.caux_dist:
   rule: caux_dist
   cases:
@@ -18,6 +135,158 @@ ecs.systeme.caux_dist:
         qcirb: 1000
         qtrac: 1000
       expect: 2
+
+    - title: Aucun auxiliaire de distribution → 0
+      with:
+        qcirb: 0
+        qtrac: 0
+      expect: 0
+
+ecs.systeme.caux_dist_enr:
+  rule: caux_dist_enr
+  cases:
+    - title: Part d'électricité autoconsommée affectée aux auxiliaires de distribution
+      with:
+        celec:
+          auxiliaires_distribution: 1000
+        celec_ac:
+          auxiliaires_distribution: 200
+        caux_dist: 500
+      expect: 100
+
+    - title: Aucune consommation d'auxiliaire → aucune part renouvelable
+      with:
+        celec:
+          auxiliaires_distribution: 1000
+        celec_ac:
+          auxiliaires_distribution: 200
+        caux_dist: 0
+      expect: 0
+
+ecs.systeme.qcirb:
+  rule: qcirb
+  cases:
+    - title: Installation individuelle → aucun circulateur de bouclage
+      with:
+        installation_collective: false
+        bouclage: boucle
+        sh: 100
+        qdw: 288000
+        niveaux_desservis: 1
+        nj:
+          &nj30
+          "01": 30
+          "02": 30
+          "03": 30
+          "04": 30
+          "05": 30
+          "06": 30
+          "07": 30
+          "08": 30
+          "09": 30
+          "10": 30
+          "11": 30
+          "12": 30
+      expect: 0
+
+    - title: Réseau collectif non bouclé → aucun circulateur de bouclage
+      with:
+        installation_collective: true
+        bouclage: non_boucle
+        sh: 100
+        qdw: 288000
+        niveaux_desservis: 1
+        nj: *nj30
+      expect: 0
+
+    - title: Réseau collectif tracé → aucun circulateur de bouclage
+      with:
+        installation_collective: true
+        bouclage: trace
+        sh: 100
+        qdw: 288000
+        niveaux_desservis: 1
+        nj: *nj30
+      expect: 0
+
+    - title: Réseau collectif bouclé de faible puissance hydraulique → circulateur au plancher de 20 W
+      with:
+        installation_collective: true
+        bouclage: boucle
+        sh: 100
+        qdw: 0.2857142857142857
+        niveaux_desservis: 1
+        nj: *nj30
+      expect: 172800
+
+ecs.systeme.qtrac:
+  rule: qtrac
+  cases:
+    - title: Installation individuelle → aucun traçage
+      with:
+        installation_collective: false
+        bouclage: trace
+        becs: *becs100
+      expect: 0
+
+    - title: Réseau collectif non tracé → aucun traçage
+      with:
+        installation_collective: true
+        bouclage: boucle
+        becs: *becs100
+      expect: 0
+
+    - title: Réseau collectif tracé → 14 % des besoins annuels
+      with:
+        installation_collective: true
+        bouclage: trace
+        becs: *becs100
+      expect: 168000
+
+ecs.systeme.rdim:
+  rule: rdim
+  cases:
+    - title: Système unique → dimensionnement complet
+      with:
+        n_systemes: 1
+      expect: 1
+
+    - title: Deux systèmes → répartition à parts égales
+      with:
+        n_systemes: 2
+      expect: 0.5
+
+    - title: Aucun système → 0 (pas de division par zéro)
+      with:
+        n_systemes: 0
+      expect: 0
+
+ecs.systeme.iecs:
+  rule: iecs
+  cases:
+    - title: Rendements unitaires → inverse égal à 1
+      with:
+        rd: 1
+        rg: 1
+        rs: 1
+        rgs: 1
+      expect: 1
+
+    - title: Inverse du produit des rendements
+      with:
+        rd: 0.8
+        rg: 1
+        rs: 1
+        rgs: 0.9
+      expect: 1.3889
+
+    - title: Système thermodynamique (rgs = COP) → inverse inférieur à 1
+      with:
+        rd: 0.8
+        rg: 1
+        rs: 1
+        rgs: 3
+      expect: 0.4167
 
 ecs.systeme.rd:
   rule: rd
@@ -30,13 +299,152 @@ ecs.systeme.rd:
         production_volume_habitable: false
       expect: 0.26
 
+    - title: Réseau collectif, alimentation contiguë → 0.28
+      with:
+        installation_collective: true
+        bouclage_reseau: non_boucle
+        alimentation_contigue: true
+        production_volume_habitable: false
+      expect: 0.28
+
+    # ⚠ Écart abaque : dans `ecs/rd.csv`, les lignes collectives génériques
+    # (`1;;1;;0.28` et `1;;0;;0.26`, bouclage laissé vide donc joker) précèdent
+    # les lignes spécifiques au bouclage (`boucle` → 0.52/0.55, `trace` → 0.83).
+    # La recherche retenant la première correspondance, ces dernières ne sont
+    # jamais atteintes. Ces cas documentent le comportement actuel — voir le
+    # recensement des écarts.
+    - title: Réseau collectif bouclé, alimentation contiguë → 0.28 (ligne 0.55 inatteignable)
+      with:
+        installation_collective: true
+        bouclage_reseau: boucle
+        alimentation_contigue: true
+        production_volume_habitable: false
+      expect: 0.28
+
+    - title: Réseau collectif tracé → 0.83
+      with:
+        installation_collective: true
+        bouclage_reseau: trace
+        alimentation_contigue: false
+        production_volume_habitable: false
+      expect: 0.83
+
+    - title: Installation individuelle en volume habitable, alimentation contiguë → 0.93
+      with:
+        installation_collective: false
+        bouclage_reseau: null
+        alimentation_contigue: true
+        production_volume_habitable: true
+      expect: 0.93
+
+    - title: Installation individuelle en volume habitable, alimentation non contiguë → 0.87
+      with:
+        installation_collective: false
+        bouclage_reseau: null
+        alimentation_contigue: false
+        production_volume_habitable: true
+      expect: 0.87
+
+    - title: Installation individuelle hors volume habitable → 0.83
+      with:
+        installation_collective: false
+        bouclage_reseau: null
+        alimentation_contigue: null
+        production_volume_habitable: false
+      expect: 0.83
+
     - title: Erreur
       with:
         installation_collective: null
         bouclage_reseau: null
         alimentation_contigue: null
         production_volume_habitable: null
-      expect_error: true
+      expectError: true
+
+ecs.systeme.rg:
+  rule: rendements_reseau_chaleur
+  cases:
+    - title: Réseau de chaleur isolé → rendement de génération et stockage de 0.9
+      with:
+        rd: 0.83
+        isolation_reseau: true
+      expect:
+        rd: 0.83
+        rgs: 0.9
+        rg: 1
+        rs: 1
+
+    - title: Réseau de chaleur non isolé → rendement de génération et stockage de 0.75
+      with:
+        rd: 0.83
+        isolation_reseau: false
+      expect:
+        rd: 0.83
+        rgs: 0.75
+        rg: 1
+        rs: 1
+
+ecs.systeme.rendements_chaudiere_mixte:
+  rule: rendements_chaudiere_mixte
+  cases:
+    - title: Chaudière parfaite sans pertes → rendement unitaire
+      with:
+        rd: 0.9
+        becs: *becs100
+        qgw: 0
+        rpn: 1
+        qp0: 0
+        pveilleuse: 0
+      expect:
+        rd: 0.9
+        rgs: 1
+        rg: 1
+        rs: 1
+
+    - title: Chaudière réelle avec pertes à l'arrêt et pertes de stockage
+      with:
+        rd: 0.9
+        becs: *becs100
+        qgw: 200000
+        rpn: 0.9
+        qp0: 1
+        pveilleuse: 0
+      expect:
+        rd: 0.9
+        rgs: 0.3611
+        rg: 1
+        rs: 1
+
+ecs.systeme.rendements_chauffe_eau_gaz:
+  rule: rendements_chauffe_eau_gaz
+  cases:
+    - title: Chauffe-eau instantané parfait → rendement de génération unitaire
+      with:
+        rd: 0.9
+        becs: *becs100
+        qgw: 0
+        rpn: 1
+        qp0: 0
+        pveilleuse: 0
+      expect:
+        rd: 0.9
+        rgs: 1
+        rg: 1
+        rs: 1
+
+    - title: Accumulateur gaz dont les pertes de stockage égalent les besoins → rendement de 0.5
+      with:
+        rd: 0.9
+        becs: *becs100
+        qgw: 1200000
+        rpn: 1
+        qp0: 0
+        pveilleuse: 0
+      expect:
+        rd: 0.9
+        rgs: 0.5
+        rg: 1
+        rs: 1
 
 ecs.systeme.rendements_systeme_thermodynamique:
   rule: rendements_systeme_thermodynamique
@@ -67,3 +475,128 @@ ecs.systeme.rendements_systeme_electrique:
         rg: 1
         rs: 0.815
         rd: 0.8
+
+    - title: Chauffe-eau vertical catégorie C dont les pertes égalent les besoins → bonus de 8 %
+      with:
+        rd: 1
+        type_generateur: chauffe_eau
+        becs: *becs100
+        qgw: 1200000
+        position_chauffe_eau: chauffe_eau_vertical
+        label_generateur: ne_performance_c
+      expect:
+        rgs: 1
+        rg: 1
+        rs: 0.54
+        rd: 1
+
+    - title: Chauffe-eau horizontal dont les pertes égalent les besoins → aucun bonus
+      with:
+        rd: 1
+        type_generateur: chauffe_eau
+        becs: *becs100
+        qgw: 1200000
+        position_chauffe_eau: chauffe_eau_horizontal
+        label_generateur: null
+      expect:
+        rgs: 1
+        rg: 1
+        rs: 0.5
+        rd: 1
+
+    - title: Chaudière électrique → rendement de génération de 0.97
+      with:
+        rd: 1
+        type_generateur: chaudiere
+        becs: *becs100
+        qgw: 0
+        position_chauffe_eau: null
+        label_generateur: null
+      expect:
+        rgs: 1
+        rg: 0.97
+        rs: 1
+        rd: 1
+
+ecs.systeme.bouclage_reseau:
+  rule: bouclage_reseau
+  cases:
+    - title: Bouclage saisi → retenu
+      with:
+        bouclage_reseau: boucle
+      expect: boucle
+
+    - title: Bouclage non saisi → réseau non bouclé par défaut
+      with:
+        bouclage_reseau: null
+      expect: non_boucle
+
+ecs.systeme.isolation_reseau:
+  rule: isolation_reseau
+  cases:
+    - title: Isolation saisie → retenue
+      with:
+        isolation_reseau: true
+      expect: true
+
+    - title: Isolation non saisie → réseau non isolé par défaut
+      with:
+        isolation_reseau: null
+      expect: false
+
+ecs.systeme.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire de l'ECS électrique (× 1.9)
+      with:
+        cecs: 2000
+        cecs_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: electricite
+        reseau_id: null
+      expectPartial:
+        ecs:
+          electricite: { cep: 3800 }
+
+ecs.systeme.eges:
+  rule: consommations
+  cases:
+    - title: Émissions de l'ECS électrique (0.065 kgCO2eq/kWh)
+      with:
+        cecs: 2000
+        cecs_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: electricite
+        reseau_id: null
+      expectPartial:
+        ecs:
+          electricite: { eges: 130 }
+
+ecs.systeme.rs:
+  rule: rendements_reseau_chaleur
+  cases:
+    - title: Réseau de chaleur → rendement de stockage unitaire
+      with:
+        rd: 0.83
+        isolation_reseau: true
+      expectPartial:
+        rs: 1
+
+ecs.systeme.rgs:
+  rule: rendements_reseau_chaleur
+  cases:
+    - title: Réseau de chaleur isolé → rendement de génération et stockage de 0.9
+      with:
+        rd: 0.83
+        isolation_reseau: true
+      expectPartial:
+        rgs: 0.9
+
+    - title: Réseau de chaleur non isolé → rendement de génération et stockage de 0.75
+      with:
+        rd: 0.83
+        isolation_reseau: false
+      expectPartial:
+        rgs: 0.75

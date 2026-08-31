@@ -1,24 +1,20 @@
 import * as z from "zod";
 
-export const TYPES_EMETTEUR = {
+export const TypeEmetteur = z.enum({
 	plancher_chauffant: "plancher_chauffant",
 	plafond_chauffant: "plafond_chauffant",
 	radiateur_monotube: "radiateur_monotube",
 	radiateur_bitube: "radiateur_bitube",
 	radiateur: "radiateur",
 	autres: "autres",
-} as const;
+});
 
-export const TypeEmetteurEnum = z.enum(TYPES_EMETTEUR);
-export type TypeEmetteurEnum = z.infer<typeof TypeEmetteurEnum>;
+export type TypeEmetteur = z.infer<typeof TypeEmetteur>;
 
-export const TEMPERATURES_DISTRIBUTION = {
+export const TemperatureDistribution = z.enum({
 	basse: "basse",
 	moyenne: "moyenne",
 	haute: "haute",
-} as const;
+});
 
-export const TemperatureDistributionEnum = z.enum(TEMPERATURES_DISTRIBUTION);
-export type TemperatureDistributionEnum = z.infer<
-	typeof TemperatureDistributionEnum
->;
+export type TemperatureDistribution = z.infer<typeof TemperatureDistribution>;

@@ -23,3 +23,824 @@ chauffage.systeme.rg_combustion:
         tfonc30: 52.5
         tfonc100: 70
       expect: 0.747
+
+chauffage.systeme.cef:
+  rule: consommations
+  cases:
+    - title: Chaudière gaz avec circulateur → consommations de chauffage et d'auxiliaires
+      with:
+        cch: 10000
+        cch_enr: 0
+        caux_dist: 500
+        caux_dist_enr: 0
+        energie: gaz_naturel
+        reseau_id: null
+      expect:
+        chauffage:
+          gaz_naturel: { cef: 10000, cep: 10000, eges: 2270 }
+        auxiliaire:
+          electricite: { cef: 500, cep: 950, eges: 34.5 }
+
+    - title: Système électrique sans auxiliaire de distribution
+      with:
+        cch: 5000
+        cch_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: electricite
+        reseau_id: null
+      expect:
+        chauffage:
+          electricite: { cef: 5000, cep: 9500, eges: 395 }
+        auxiliaire:
+          electricite: { cef: 0, cep: 0, eges: 0 }
+
+    - title: Système raccordé à un réseau de chaleur identifié
+      with:
+        cch: 10000
+        cch_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: reseau_chaleur
+        reseau_id: "0106C"
+      expectPartial:
+        chauffage:
+          reseau_chaleur: { cef: 10000, cep: 10000, eges: 370 }
+
+chauffage.systeme.cch:
+  rule: cch
+  cases:
+    - title: Générateur simple → seule la part principale est comptée
+      with:
+        cch1: 8000
+        cch2: null
+      expect: 8000
+
+    - title: PAC hybride → somme des deux parts
+      with:
+        cch1: 6400
+        cch2: 1600
+      expect: 8000
+
+chauffage.systeme.cch1:
+  rule: cch1
+  cases:
+    - title: Somme des consommations des émissions rattachées au système
+      with:
+        cch1: [3000, 2000]
+      expect: 5000
+
+    - title: Aucune émission → 0
+      with:
+        cch1: []
+      expect: 0
+
+chauffage.systeme.cch2:
+  rule: cch2
+  cases:
+    - title: Somme des consommations de la partie chaudière des PAC hybrides
+      with:
+        cch2: [800, 800]
+      expect: 1600
+
+    - title: Aucune émission → 0
+      with:
+        cch2: []
+      expect: 0
+
+chauffage.systeme.cch_elec:
+  rule: cch_elec
+  cases:
+    - title: Générateur électrique → consommation reportée en électricité
+      with:
+        cch1: 5000
+        energie_generateur: electricite
+      expect: 5000
+
+    - title: Générateur gaz → aucune consommation électrique de chauffage
+      with:
+        cch1: 5000
+        energie_generateur: gaz_naturel
+      expect: 0
+
+chauffage.systeme.cch_enr:
+  rule: cch_enr
+  cases:
+    - title: Part d'électricité autoconsommée affectée au chauffage au prorata de la consommation
+      with:
+        celec:
+          chauffage: 1000
+        celec_ac:
+          chauffage: 300
+        cch_elec: 1000
+      expect: 300
+
+    - title: Consommation partielle → autoconsommation au prorata
+      with:
+        celec:
+          chauffage: 1000
+        celec_ac:
+          chauffage: 300
+        cch_elec: 500
+      expect: 150
+
+    - title: Aucune consommation électrique de chauffage → aucune part renouvelable
+      with:
+        celec:
+          chauffage: 1000
+        celec_ac:
+          chauffage: 300
+        cch_elec: 0
+      expect: 0
+
+chauffage.systeme.caux_dist:
+  rule: caux_dist
+  cases:
+    - title: Circulateur de 100 W fonctionnant 8928 h/an → 892.8 kWh/an
+      with:
+        pcircem: 100
+        nref:
+          &nref744
+          "01": 744
+          "02": 744
+          "03": 744
+          "04": 744
+          "05": 744
+          "06": 744
+          "07": 744
+          "08": 744
+          "09": 744
+          "10": 744
+          "11": 744
+          "12": 744
+      expect: 892.8
+
+    - title: Aucun circulateur → aucune consommation d'auxiliaire
+      with:
+        pcircem: 0
+        nref: *nref744
+      expect: 0
+
+chauffage.systeme.caux_dist_enr:
+  rule: caux_dist_enr
+  cases:
+    - title: Part d'électricité autoconsommée affectée aux auxiliaires de distribution
+      with:
+        celec:
+          auxiliaires_distribution: 1000
+        celec_ac:
+          auxiliaires_distribution: 200
+        caux_dist: 500
+      expect: 100
+
+    - title: Aucune consommation d'auxiliaire → aucune part renouvelable
+      with:
+        celec:
+          auxiliaires_distribution: 1000
+        celec_ac:
+          auxiliaires_distribution: 200
+        caux_dist: 0
+      expect: 0
+
+chauffage.systeme.int:
+  rule: int
+  cases:
+    - title: Moyenne des facteurs d'intermittence des émissions
+      with:
+        int: [0.9, 0.8]
+      expect: 0.85
+
+    - title: Émission unique → son facteur d'intermittence
+      with:
+        int: [0.95]
+      expect: 0.95
+
+chauffage.systeme.ich:
+  rule: ich
+  cases:
+    - title: Moyenne des inverses de rendement des émissions
+      with:
+        ich: [1.5, 2.5]
+      expect: 2
+
+    - title: Émission unique → son inverse de rendement
+      with:
+        ich: [1.6]
+      expect: 1.6
+
+chauffage.systeme.rd:
+  rule: rd
+  cases:
+    - title: Aucune distribution (émetteur direct) → rendement unitaire
+      with:
+        type_distribution: null
+        temperature_distribution: null
+        presence_fluide_frigorigene: null
+        reseau_collectif: null
+        isolation_reseau: null
+      expect: 1
+
+    - title: Distribution par fluide frigorigène → rendement unitaire
+      with:
+        type_distribution: hydraulique
+        temperature_distribution: haute
+        presence_fluide_frigorigene: true
+        reseau_collectif: false
+        isolation_reseau: false
+      expect: 1
+
+    - title: Hydraulique haute température, réseau individuel isolé → 0.92
+      with:
+        type_distribution: hydraulique
+        temperature_distribution: haute
+        presence_fluide_frigorigene: false
+        reseau_collectif: false
+        isolation_reseau: true
+      expect: 0.92
+
+    - title: Hydraulique basse température, réseau individuel isolé → 0.95
+      with:
+        type_distribution: hydraulique
+        temperature_distribution: basse
+        presence_fluide_frigorigene: false
+        reseau_collectif: false
+        isolation_reseau: true
+      expect: 0.95
+
+    - title: Hydraulique haute température, réseau collectif isolé → 0.87
+      with:
+        type_distribution: hydraulique
+        temperature_distribution: haute
+        presence_fluide_frigorigene: false
+        reseau_collectif: true
+        isolation_reseau: true
+      expect: 0.87
+
+    - title: Hydraulique haute température, réseau individuel non isolé → 0.88
+      with:
+        type_distribution: hydraulique
+        temperature_distribution: haute
+        presence_fluide_frigorigene: false
+        reseau_collectif: false
+        isolation_reseau: false
+      expect: 0.88
+
+    - title: Hydraulique haute température, réseau collectif non isolé → 0.85
+      with:
+        type_distribution: hydraulique
+        temperature_distribution: haute
+        presence_fluide_frigorigene: false
+        reseau_collectif: true
+        isolation_reseau: false
+      expect: 0.85
+
+    - title: Aéraulique isolé → 0.85
+      with:
+        type_distribution: aeraulique
+        temperature_distribution: null
+        presence_fluide_frigorigene: false
+        reseau_collectif: null
+        isolation_reseau: true
+      expect: 0.85
+
+    - title: Aéraulique non isolé → 0.8
+      with:
+        type_distribution: aeraulique
+        temperature_distribution: null
+        presence_fluide_frigorigene: false
+        reseau_collectif: null
+        isolation_reseau: false
+      expect: 0.8
+
+    - title: Type de distribution inconnu → erreur ValeurForfaitaire
+      with:
+        type_distribution: DISTRIBUTION_INCONNUE
+        temperature_distribution: haute
+        presence_fluide_frigorigene: false
+        reseau_collectif: false
+        isolation_reseau: true
+      expectError: true
+
+chauffage.systeme.re:
+  rule: re
+  cases:
+    - title: Moyenne des rendements d'émission
+      with:
+        re: [0.95, 1]
+      expect: 0.975
+
+    - title: Émission unique → son rendement
+      with:
+        re: [0.95]
+      expect: 0.95
+
+chauffage.systeme.rr:
+  rule: rr
+  cases:
+    - title: Moyenne des rendements de régulation
+      with:
+        rr: [0.9, 0.96]
+      expect: 0.93
+
+    - title: Émission unique → son rendement
+      with:
+        rr: [0.95]
+      expect: 0.95
+
+chauffage.systeme.rg:
+  rule: rg_pac
+  cases:
+    - title: Pompe à chaleur classique → rendement de génération unitaire (le SCOP porte la performance)
+      with: {}
+      expect: 1
+
+chauffage.systeme.rg_reseau_chaleur:
+  rule: rg_reseau_chaleur
+  cases:
+    - title: Réseau de chaleur ou générateur multi-bâtiment → 0.97
+      with: {}
+      expect: 0.97
+
+chauffage.systeme.rg_autres:
+  rule: rg_autres
+  cases:
+    - title: Poêle bois bûche labellisé Flamme Verte installé en 2010 → 0.7
+      with:
+        type_generateur: poele
+        energie_generateur: bois_buche
+        label_generateur: flamme_verte
+        annee_installation_generateur: 2010
+      expect: 0.7
+
+    - title: Poêle bois bûche labellisé installé à partir de 2018 → 0.75
+      with:
+        type_generateur: poele
+        energie_generateur: bois_buche
+        label_generateur: flamme_verte
+        annee_installation_generateur: 2020
+      expect: 0.75
+
+    - title: Poêle bois bûche non labellisé installé avant 1990 → 0.5
+      with:
+        type_generateur: poele
+        energie_generateur: bois_buche
+        label_generateur: null
+        annee_installation_generateur: 1985
+      expect: 0.5
+
+    - title: Poêle bois bûche non labellisé installé entre 1990 et 2004 → 0.6
+      with:
+        type_generateur: poele
+        energie_generateur: bois_buche
+        label_generateur: null
+        annee_installation_generateur: 1995
+      expect: 0.6
+
+    - title: Poêle à granulés non labellisé → 0.8
+      with:
+        type_generateur: poele
+        energie_generateur: bois_granule
+        label_generateur: null
+        annee_installation_generateur: 2020
+      expect: 0.8
+
+    - title: Poêle à granulés labellisé installé à partir de 2020 → 0.87
+      with:
+        type_generateur: poele
+        energie_generateur: bois_granule
+        label_generateur: flamme_verte
+        annee_installation_generateur: 2021
+      expect: 0.87
+
+    - title: Insert non labellisé installé en 1995 → 0.6
+      with:
+        type_generateur: insert
+        energie_generateur: bois_buche
+        label_generateur: null
+        annee_installation_generateur: 1995
+      expect: 0.6
+
+    - title: Émetteur électrique → rendement de génération unitaire
+      with:
+        type_generateur: convecteur_electrique
+        energie_generateur: electricite
+        label_generateur: null
+        annee_installation_generateur: 2000
+      expect: 1
+
+    - title: Chaudière électrique → 0.97
+      with:
+        type_generateur: chaudiere
+        energie_generateur: electricite
+        label_generateur: null
+        annee_installation_generateur: 2000
+      expect: 0.97
+
+    - title: Réseau de chaleur → 0.97
+      with:
+        type_generateur: reseau_chaleur
+        energie_generateur: reseau_chaleur
+        label_generateur: null
+        annee_installation_generateur: 2000
+      expect: 0.97
+
+    - title: Générateur hors abaque → erreur ValeurForfaitaire
+      with:
+        type_generateur: GENERATEUR_INCONNU
+        energie_generateur: gaz_naturel
+        label_generateur: null
+        annee_installation_generateur: 2000
+      expectError: true
+
+chauffage.systeme.pe:
+  rule: pe
+  cases:
+    - title: Puissance émise utile = puissance nominale × rendements
+      with:
+        pn: 30
+        rd: 0.9
+        re: 0.95
+        rr: 0.9
+      expect: 23.085
+
+    - title: Rendements unitaires → puissance émise égale à la puissance nominale
+      with:
+        pn: 30
+        rd: 1
+        re: 1
+        rr: 1
+      expect: 30
+
+chauffage.systeme.t:
+  rule: t
+  cases:
+    - title: Température de dimensionnement du système collectif
+      with:
+        pe: 0.5
+        bch:
+          &bch600
+          "01": 600
+          "02": 600
+          "03": 600
+          "04": 600
+          "05": 600
+          "06": 600
+          "07": 600
+          "08": 600
+          "09": 600
+          "10": 600
+          "11": 600
+          "12": 600
+        sollicitations:
+          &sollicitations_dh14_8488
+          "01": { dh14: 8488, text: 2.6 }
+          "02": { dh14: 8488, text: 2.6 }
+          "03": { dh14: 8488, text: 2.6 }
+          "04": { dh14: 8488, text: 2.6 }
+          "05": { dh14: 8488, text: 2.6 }
+          "06": { dh14: 8488, text: 2.6 }
+          "07": { dh14: 8488, text: 2.6 }
+          "08": { dh14: 8488, text: 2.6 }
+          "09": { dh14: 8488, text: 2.6 }
+          "10": { dh14: 8488, text: 2.6 }
+          "11": { dh14: 8488, text: 2.6 }
+          "12": { dh14: 8488, text: 2.6 }
+      expect:
+        "01": 6.9267
+        "02": 6.9267
+        "03": 6.9267
+        "04": 6.9267
+        "05": 6.9267
+        "06": 6.9267
+        "07": 6.9267
+        "08": 6.9267
+        "09": 6.9267
+        "10": 6.9267
+        "11": 6.9267
+        "12": 6.9267
+
+    - title: Aucun besoin de chauffage sur le mois → température nulle
+      with:
+        pe: 0.5
+        bch:
+          &bch0
+          "01": 0
+          "02": 0
+          "03": 0
+          "04": 0
+          "05": 0
+          "06": 0
+          "07": 0
+          "08": 0
+          "09": 0
+          "10": 0
+          "11": 0
+          "12": 0
+        sollicitations: *sollicitations_dh14_8488
+      expect: *bch0
+
+chauffage.systeme.dht:
+  rule: dht
+  cases:
+    - title: Température de dimensionnement égale à la température extérieure moyenne
+      with:
+        tbase: -9.5
+        t:
+          &t26
+          "01": 2.6
+          "02": 2.6
+          "03": 2.6
+          "04": 2.6
+          "05": 2.6
+          "06": 2.6
+          "07": 2.6
+          "08": 2.6
+          "09": 2.6
+          "10": 2.6
+          "11": 2.6
+          "12": 2.6
+        sollicitations: *sollicitations_dh14_8488
+        nref: *nref744
+      expect:
+        "01": 1230.796875
+        "02": 1230.796875
+        "03": 1230.796875
+        "04": 1230.796875
+        "05": 1230.796875
+        "06": 1230.796875
+        "07": 1230.796875
+        "08": 1230.796875
+        "09": 1230.796875
+        "10": 1230.796875
+        "11": 1230.796875
+        "12": 1230.796875
+
+    - title: Température de dimensionnement égale à la température de base → 0
+      with:
+        tbase: -9.5
+        t:
+          "01": -9.5
+          "02": -9.5
+          "03": -9.5
+          "04": -9.5
+          "05": -9.5
+          "06": -9.5
+          "07": -9.5
+          "08": -9.5
+          "09": -9.5
+          "10": -9.5
+          "11": -9.5
+          "12": -9.5
+        sollicitations: *sollicitations_dh14_8488
+        nref: *nref744
+      expect: *bch0
+
+    - title: Température extérieure moyenne inconnue → 0
+      with:
+        tbase: -9.5
+        t: *t26
+        sollicitations:
+          "01": { dh14: 8488, text: null }
+          "02": { dh14: 8488, text: null }
+          "03": { dh14: 8488, text: null }
+          "04": { dh14: 8488, text: null }
+          "05": { dh14: 8488, text: null }
+          "06": { dh14: 8488, text: null }
+          "07": { dh14: 8488, text: null }
+          "08": { dh14: 8488, text: null }
+          "09": { dh14: 8488, text: null }
+          "10": { dh14: 8488, text: null }
+          "11": { dh14: 8488, text: null }
+          "12": { dh14: 8488, text: null }
+        nref: *nref744
+      expect: *bch0
+
+chauffage.systeme.bch:
+  rule: bch
+  cases:
+    - title: Installation individuelle → besoins de l'installation inchangés
+      with:
+        installation_collective: false
+        generateur_individuel: false
+        systemes: []
+        bch: *bch600
+        dht:
+          &dht4244
+          "01": 4244
+          "02": 4244
+          "03": 4244
+          "04": 4244
+          "05": 4244
+          "06": 4244
+          "07": 4244
+          "08": 4244
+          "09": 4244
+          "10": 4244
+          "11": 4244
+          "12": 4244
+        sollicitations: *sollicitations_dh14_8488
+      expect: *bch600
+
+    - title: Installation collective sans générateur individuel ni autre système → besoins inchangés
+      with:
+        installation_collective: true
+        generateur_individuel: false
+        systemes: []
+        bch: *bch600
+        dht: *dht4244
+        sollicitations: *sollicitations_dh14_8488
+      expect: *bch600
+
+    - title: Installation collective, générateur individuel d'appoint → part au prorata des degrés-heures
+      with:
+        installation_collective: true
+        generateur_individuel: true
+        systemes: []
+        bch: *bch600
+        dht: *dht4244
+        sollicitations: *sollicitations_dh14_8488
+      expect:
+        "01": 300
+        "02": 300
+        "03": 300
+        "04": 300
+        "05": 300
+        "06": 300
+        "07": 300
+        "08": 300
+        "09": 300
+        "10": 300
+        "11": 300
+        "12": 300
+
+    - title: Installation collective, générateur collectif en présence d'un appoint individuel → part complémentaire
+      with:
+        installation_collective: true
+        generateur_individuel: false
+        systemes:
+          - generateur_individuel: false
+        bch: *bch600
+        dht: *dht4244
+        sollicitations: *sollicitations_dh14_8488
+      expect:
+        "01": 300
+        "02": 300
+        "03": 300
+        "04": 300
+        "05": 300
+        "06": 300
+        "07": 300
+        "08": 300
+        "09": 300
+        "10": 300
+        "11": 300
+        "12": 300
+
+chauffage.systeme.pch:
+  rule: pch
+  cases:
+    - title: Système unique d'une installation individuelle → puissance de l'installation
+      with:
+        pch_installation: 12
+        installation_collective: false
+        generateur_individuel: false
+        systemes: []
+      expect: 12
+
+    - title: Générateur individuel d'une installation collective → moitié de la puissance
+      with:
+        pch_installation: 12
+        installation_collective: true
+        generateur_individuel: true
+        systemes: []
+      expect: 6
+
+    - title: Deux générateurs individuels d'une installation collective → moitié répartie
+      with:
+        pch_installation: 12
+        installation_collective: true
+        generateur_individuel: true
+        systemes:
+          - generateur_individuel: true
+      expect: 3
+
+    - title: Trois systèmes de même nature → puissance répartie à parts égales
+      with:
+        pch_installation: 12
+        installation_collective: false
+        generateur_individuel: false
+        systemes:
+          - generateur_individuel: false
+          - generateur_individuel: false
+      expect: 4
+
+chauffage.systeme.pcircem:
+  rule: pcircem
+  cases:
+    - title: Aucun émetteur → aucun circulateur
+      with:
+        gv: 100
+        tbase: -9.5
+        sh: 100
+        niveaux_desservis: 1
+        presence_circulateur_externe: true
+        rdim: 1
+        emetteurs: []
+      expect: 0
+
+    - title: Absence de circulateur externe → puissance nulle
+      with:
+        gv: 100
+        tbase: -9.5
+        sh: 100
+        niveaux_desservis: 1
+        presence_circulateur_externe: false
+        rdim: 1
+        emetteurs:
+          - delta_pem: 10
+            fcot: 0.802
+            dtheta_dim: 15
+      expect: 0
+
+    - title: Petite installation → puissance plancher de 30 W
+      with:
+        gv: 100
+        tbase: -9.5
+        sh: 100
+        niveaux_desservis: 1
+        presence_circulateur_externe: true
+        rdim: 1
+        emetteurs:
+          - delta_pem: 10
+            fcot: 0.802
+            dtheta_dim: 15
+      expect: 30
+
+chauffage.systeme.presence_circulateur_externe:
+  rule: presence_circulateur_externe
+  cases:
+    - title: Présence saisie → retenue
+      with:
+        presence_circulateur_externe: true
+      expect: true
+
+    - title: Présence non saisie → absence par défaut
+      with:
+        presence_circulateur_externe: null
+      expect: false
+
+chauffage.systeme.temperature_distribution:
+  rule: temperature_distribution
+  cases:
+    - title: Température de distribution saisie → retenue
+      with:
+        temperature_distribution: basse
+      expect: basse
+
+    - title: Température de distribution non saisie → haute par défaut
+      with:
+        temperature_distribution: null
+      expect: haute
+
+chauffage.systeme.isolation_reseau:
+  rule: isolation_reseau
+  cases:
+    - title: Isolation saisie → retenue
+      with:
+        isolation_reseau: true
+      expect: true
+
+    - title: Isolation non saisie → réseau non isolé par défaut
+      with:
+        isolation_reseau: null
+      expect: false
+
+chauffage.systeme.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire du chauffage électrique (× 1.9)
+      with:
+        cch: 5000
+        cch_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: electricite
+        reseau_id: null
+      expectPartial:
+        chauffage:
+          electricite: { cep: 9500 }
+
+chauffage.systeme.eges:
+  rule: consommations
+  cases:
+    - title: Émissions du chauffage électrique (0.079 kgCO2eq/kWh)
+      with:
+        cch: 5000
+        cch_enr: 0
+        caux_dist: 0
+        caux_dist_enr: 0
+        energie: electricite
+        reseau_id: null
+      expectPartial:
+        chauffage:
+          electricite: { eges: 395 }

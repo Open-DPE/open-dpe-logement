@@ -6,8 +6,8 @@ import {
 	annee_construction,
 	annee_renovation,
 } from "../../common/types.js";
-import { InertieParoiEnum, Isolation, Position } from "../common/index.js";
-import { ConfigurationEnum, TypePlancherHautEnum } from "./enums.js";
+import { InertieParoi, Isolation, Position } from "../common/index.js";
+import { ConfigurationPlancherHaut, TypePlancherHaut } from "./enums.js";
 
 export const PlancherHautData = z.object({
 	sdep: z.number(),
@@ -27,9 +27,9 @@ export type PlancherHautData = z.infer<typeof PlancherHautData>;
 export const PlancherHaut = z.object({
 	id,
 	description,
-	configuration: ConfigurationEnum,
-	type: TypePlancherHautEnum.nullable().default(null),
-	inertie: InertieParoiEnum.nullable().default(null),
+	configuration: ConfigurationPlancherHaut,
+	type: TypePlancherHaut.nullable().default(null),
+	inertie: InertieParoi.nullable().default(null),
 	annee_construction,
 	annee_renovation,
 	u0: nombre_positif.nullable().default(null),

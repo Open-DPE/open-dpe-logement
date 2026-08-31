@@ -43,9 +43,9 @@ describe(TAG, () => {
       ["usage", "auxiliaire", "Auxiliaire"],
       ["etiquette", "A", "A"],
       ["etiquette", "G", "G"],
-      ["confort-ete", "1", "Bon"],
-      ["confort-ete", "2", "Moyen"],
-      ["confort-ete", "3", "Insuffisant"],
+      ["confort-ete", "bon", "Bon"],
+      ["confort-ete", "moyen", "Moyen"],
+      ["confort-ete", "insuffisant", "Insuffisant"],
       ["type-batiment", "maison", "Maison individuelle"],
       ["energie", "electricite", "Électricité"],
     ];

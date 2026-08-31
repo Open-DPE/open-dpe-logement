@@ -1,14 +1,14 @@
 import type { BatimentBase, Batiment, Maison, Immeuble } from "./types.js";
-import { TYPES_BATIMENT } from "./enums.js";
+import { TypeBatiment } from "./enums.js";
 
 export function isBatiment(value: BatimentBase): value is Batiment {
 	return isMaison(value) || isImmeuble(value);
 }
 
 export function isMaison(value: BatimentBase): value is Maison {
-	return value.type === TYPES_BATIMENT.maison;
+	return value.type === TypeBatiment.enum.maison;
 }
 
 export function isImmeuble(value: BatimentBase): value is Immeuble {
-	return value.type === TYPES_BATIMENT.immeuble;
+	return value.type === TypeBatiment.enum.immeuble;
 }

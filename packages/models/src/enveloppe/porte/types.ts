@@ -6,8 +6,8 @@ import {
 	non_applicable,
 	annee_installation,
 } from "../../common/types.js";
-import { MITOYENNETES, MitoyenneteEnum, TypePoseEnum } from "../common/enums.js";
-import { MateriauEnum, TypeVitrageEnum } from "./enums.js";
+import { Mitoyennete, TypePose } from "../common/enums.js";
+import { MateriauPorte, TypeVitrage } from "./enums.js";
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/porte#/$defs/position
@@ -15,20 +15,20 @@ import { MateriauEnum, TypeVitrageEnum } from "./enums.js";
  */
 export const PositionBase = z.object({
 	surface: nombre_positif,
-	mitoyennete: MitoyenneteEnum,
+	mitoyennete: Mitoyennete,
 	local_non_chauffe_id: id.nullable().default(null),
 	paroi_id: id.nullable().default(null),
 	presence_sas: z.boolean(),
-	type_pose: TypePoseEnum,
+	type_pose: TypePose,
 });
 
 export const PositionLocalNonChauffe = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.extract([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.extract(["local_non_chauffe"]),
 	local_non_chauffe_id: id,
 });
 
 export const PositionAutres = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.exclude([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.exclude(["local_non_chauffe"]),
 	local_non_chauffe_id: non_applicable,
 });
 
@@ -62,7 +62,7 @@ export type Menuiserie = z.infer<typeof Menuiserie>;
  */
 export const VitrageBase = z.object({
 	surface: z.number().min(0),
-	type: TypeVitrageEnum.nullable().default(null),
+	type: TypeVitrage.nullable().default(null),
 });
 
 export const VitrageSansVitrage = VitrageBase.extend({
@@ -99,7 +99,7 @@ export const Porte = z.object({
 	id,
 	description,
 	isolation: z.boolean().nullable().default(null),
-	materiau: MateriauEnum.nullable().default(null),
+	materiau: MateriauPorte.nullable().default(null),
 	annee_installation,
 	u: nombre_positif.nullable().default(null),
 	position: Position,

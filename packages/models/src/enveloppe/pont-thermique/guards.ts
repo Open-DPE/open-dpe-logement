@@ -1,4 +1,4 @@
-import { TYPES_LIAISON } from "./enums.js";
+import { TypeLiaison } from "./enums.js";
 import {
 	LiaisonBase,
 	Liaison,
@@ -19,8 +19,8 @@ export function isLiaisonPlancher(
 	value: LiaisonBase,
 ): value is LiaisonPlancher {
 	return (
-		value.type === TYPES_LIAISON.plancher_bas_mur ||
-		value.type === TYPES_LIAISON.plancher_haut_mur
+		value.type === TypeLiaison.enum.plancher_bas_mur ||
+		value.type === TypeLiaison.enum.plancher_haut_mur
 	);
 }
 
@@ -28,8 +28,8 @@ export function isLiaisonMenuiserie(
 	value: LiaisonBase,
 ): value is LiaisonMenuiserie {
 	return (
-		value.type === TYPES_LIAISON.porte_mur ||
-		value.type === TYPES_LIAISON.baie_mur
+		value.type === TypeLiaison.enum.porte_mur ||
+		value.type === TypeLiaison.enum.baie_mur
 	);
 }
 
@@ -37,7 +37,7 @@ export function isLiaisonRefendOuIntermediaire(
 	value: LiaisonBase,
 ): value is LiaisonRefendOuIntermediaire {
 	return (
-		value.type === TYPES_LIAISON.plancher_intermediaire_mur ||
-		value.type === TYPES_LIAISON.refend_mur
+		value.type === TypeLiaison.enum.plancher_intermediaire_mur ||
+		value.type === TypeLiaison.enum.refend_mur
 	);
 }

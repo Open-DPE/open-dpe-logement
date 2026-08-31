@@ -36,14 +36,14 @@ export namespace position {
 		};
 	}
 
-	export function mapTypePose(props: Porte): enveloppe.common.TypePoseEnum {
+	export function mapTypePose(props: Porte): enveloppe.common.TypePose {
 		switch (props.donnee_entree.enum_type_pose_id) {
 			case "1":
-				return enveloppe.common.TYPES_POSE.nu_exterieur;
+				return enveloppe.common.TypePose.enum.nu_exterieur;
 			case "2":
-				return enveloppe.common.TYPES_POSE.nu_interieur;
+				return enveloppe.common.TypePose.enum.nu_interieur;
 			case "3":
-				return enveloppe.common.TYPES_POSE.tunnel;
+				return enveloppe.common.TypePose.enum.tunnel;
 			default:
 				throw new MappingError("enum_type_pose_id", props);
 		}
@@ -71,9 +71,7 @@ export namespace vitrage {
 		return value;
 	}
 
-	export function mapType(
-		props: Porte,
-	): enveloppe.porte.TypeVitrageEnum | null {
+	export function mapType(props: Porte): enveloppe.porte.TypeVitrage | null {
 		switch (props.donnee_entree.enum_type_porte_id) {
 			case "2":
 			case "3":
@@ -81,13 +79,13 @@ export namespace vitrage {
 			case "7":
 			case "10":
 			case "11":
-				return enveloppe.porte.TYPES_VITRAGE.simple_vitrage;
+				return enveloppe.porte.TypeVitrage.enum.simple_vitrage;
 
 			case "4":
 			case "8":
 			case "12":
 			case "15":
-				return enveloppe.porte.TYPES_VITRAGE.double_vitrage;
+				return enveloppe.porte.TypeVitrage.enum.double_vitrage;
 
 			default:
 				return null;
@@ -147,25 +145,27 @@ export namespace menuiserie {
 	}
 }
 
-export function mapMateriau(props: Porte): enveloppe.porte.MateriauEnum | null {
+export function mapMateriau(
+	props: Porte,
+): enveloppe.porte.MateriauPorte | null {
 	switch (props.donnee_entree.enum_type_porte_id) {
 		case "1":
 		case "2":
 		case "3":
 		case "4":
-			return enveloppe.porte.MATERIAUX.bois;
+			return enveloppe.porte.MateriauPorte.enum.bois;
 
 		case "5":
 		case "6":
 		case "7":
 		case "8":
-			return enveloppe.porte.MATERIAUX.pvc;
+			return enveloppe.porte.MateriauPorte.enum.pvc;
 
 		case "9":
 		case "10":
 		case "11":
 		case "12":
-			return enveloppe.porte.MATERIAUX.metal;
+			return enveloppe.porte.MateriauPorte.enum.metal;
 
 		default:
 			return null;

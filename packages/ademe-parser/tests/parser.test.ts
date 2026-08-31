@@ -6,7 +6,6 @@ import {
 	isReferenceTag,
 	isStringOnlyTag,
 	parse,
-	round,
 	toBooleanValue,
 	toEnumValue,
 	toReferenceValue,
@@ -185,21 +184,6 @@ describe("toBooleanValue", () => {
 	});
 });
 
-describe("round", () => {
-	it("arrondit à deux décimales", () => {
-		expect(round(75.456)).toBe(75.46);
-	});
-
-	it("laisse un nombre à 2 décimales ou moins inchangé", () => {
-		expect(round(75.5)).toBe(75.5);
-		expect(round(75)).toBe(75);
-	});
-
-	it("arrondit 0 à 0 (et pas à null/undefined)", () => {
-		expect(round(0)).toBe(0);
-	});
-});
-
 describe("parser normalize() — STRING_ONLY_TAGS", () => {
 	it("préserve une valeur décimale (enum_version_id) en string plutôt que number", () => {
 		const dpe = parseRaw("<dpe><enum_version_id>2.6</enum_version_id></dpe>");
@@ -268,16 +252,6 @@ describe("parser normalize() — BOOLEAN_TAGS (bout en bout)", () => {
 		const dpe = parseRaw("<dpe><presence_joint></presence_joint></dpe>");
 
 		expect(dpe["presence_joint"]).toBeNull();
-	});
-});
-
-describe("parser normalize() — arrondi à 2 décimales", () => {
-	it("arrondit un nombre à plus de 2 décimales", () => {
-		const dpe = parseRaw(
-			"<dpe><surface_habitable_logement>75.456</surface_habitable_logement></dpe>",
-		);
-
-		expect(dpe["surface_habitable_logement"]).toBe(75.46);
 	});
 });
 

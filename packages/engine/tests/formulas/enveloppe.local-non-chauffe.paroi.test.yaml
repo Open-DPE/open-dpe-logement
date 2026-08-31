@@ -1,0 +1,109 @@
+enveloppe.local_non_chauffe.paroi.aue:
+  rule: aue
+  cases:
+    - title: Paroi du local donnant sur l'extérieur → surface comptée
+      with:
+        mitoyennete: exterieur
+        surface: 15
+      expect: 15
+
+    - title: Paroi du local enterrée → surface comptée (contact avec le sol)
+      with:
+        mitoyennete: enterre
+        surface: 15
+      expect: 15
+
+    - title: Paroi du local donnant sur un local non accessible → surface comptée
+      with:
+        mitoyennete: local_non_accessible
+        surface: 15
+      expect: 15
+
+    - title: Paroi du local donnant sur un logement chauffé → 0
+      with:
+        mitoyennete: local_residentiel
+        surface: 15
+      expect: 0
+
+    - title: Paroi du local donnant sur un local non résidentiel → 0
+      with:
+        mitoyennete: local_non_residentiel
+        surface: 15
+      expect: 0
+
+    - title: Paroi du local sur terre-plein → 0
+      with:
+        mitoyennete: terre_plein
+        surface: 15
+      expect: 0
+
+enveloppe.local_non_chauffe.paroi.aiu:
+  rule: aiu
+  cases:
+    - title: Paroi du local donnant sur un logement chauffé → surface comptée
+      with:
+        mitoyennete: local_residentiel
+        surface: 15
+      expect: 15
+
+    - title: Paroi du local donnant sur un local non résidentiel → surface comptée
+      with:
+        mitoyennete: local_non_residentiel
+        surface: 15
+      expect: 15
+
+    - title: Paroi du local donnant sur l'extérieur → 0
+      with:
+        mitoyennete: exterieur
+        surface: 15
+      expect: 0
+
+    - title: Paroi du local enterrée → 0
+      with:
+        mitoyennete: enterre
+        surface: 15
+      expect: 0
+
+enveloppe.local_non_chauffe.paroi.isolation:
+  rule: isolation
+  cases:
+    - title: Isolation saisie à vrai → isolée
+      with:
+        isolation: true
+      expect: true
+
+    - title: Isolation saisie à faux → non isolée
+      with:
+        isolation: false
+      expect: false
+
+    - title: Isolation non renseignée → non isolée par défaut
+      with:
+        isolation: null
+      expect: false
+
+enveloppe.local_non_chauffe.paroi.isolation_aiu:
+  rule: isolation
+  cases:
+    - title: Paroi isolée côté espace chauffé
+      with:
+        isolation: true
+      expect: true
+
+    - title: Isolation inconnue côté espace chauffé → non isolée
+      with:
+        isolation: null
+      expect: false
+
+enveloppe.local_non_chauffe.paroi.isolation_aue:
+  rule: isolation
+  cases:
+    - title: Paroi isolée côté extérieur
+      with:
+        isolation: true
+      expect: true
+
+    - title: Isolation inconnue côté extérieur → non isolée
+      with:
+        isolation: null
+      expect: false

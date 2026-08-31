@@ -1,8 +1,4 @@
-import {
-	TYPES_GENERATEUR,
-	TypeGenerateurEnum,
-	TypeGenerateurPacEnum,
-} from "./enums.js";
+import { TypeGenerateur, TypeGenerateurPac } from "./enums.js";
 
 import {
 	Generateur,
@@ -27,24 +23,24 @@ export function isGenerateurPAC(value: GenerateurBase): value is GenerateurPAC {
 export function isGenerateurClimatiseur(
 	value: GenerateurBase,
 ): value is GenerateurClimatiseur {
-	return value.type === TYPES_GENERATEUR.autre;
+	return value.type === TypeGenerateur.enum.autre;
 }
 
 export function isGenerateurReseauFroid(
 	value: GenerateurBase,
 ): value is GenerateurReseauFroid {
-	return value.type === TYPES_GENERATEUR.reseau_froid;
+	return value.type === TypeGenerateur.enum.reseau_froid;
 }
 
 export function isTypeGenerateurPac(
-	value: TypeGenerateurEnum,
-): value is TypeGenerateurPacEnum {
+	value: TypeGenerateur,
+): value is TypeGenerateurPac {
 	return (
-		value === TYPES_GENERATEUR.pac_air_air ||
-		value === TYPES_GENERATEUR.pac_air_eau ||
-		value === TYPES_GENERATEUR.pac_eau_eau ||
-		value === TYPES_GENERATEUR.pac_eau_glycolee_eau ||
-		value === TYPES_GENERATEUR.pac_geothermique ||
-		value === TYPES_GENERATEUR.autre_systeme_thermodynamique
+		value === TypeGenerateur.enum.pac_air_air ||
+		value === TypeGenerateur.enum.pac_air_eau ||
+		value === TypeGenerateur.enum.pac_eau_eau ||
+		value === TypeGenerateur.enum.pac_eau_glycolee_eau ||
+		value === TypeGenerateur.enum.pac_geothermique ||
+		value === TypeGenerateur.enum.autre_systeme_thermodynamique
 	);
 }

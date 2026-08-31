@@ -5,19 +5,19 @@ import { chauffage } from "@open-dpe-logement/models";
  * @returns Perte de charge de l'émetteur en kPa
  */
 export function calcule_delta_pem(props: {
-	type_emetteur: chauffage.emetteur.TypeEmetteurEnum;
+	type_emetteur: chauffage.emetteur.TypeEmetteur;
 }): number {
 	const { type_emetteur } = props;
 	switch (type_emetteur) {
-		case chauffage.emetteur.TYPES_EMETTEUR.plancher_chauffant:
-		case chauffage.emetteur.TYPES_EMETTEUR.plafond_chauffant:
+		case chauffage.emetteur.TypeEmetteur.enum.plancher_chauffant:
+		case chauffage.emetteur.TypeEmetteur.enum.plafond_chauffant:
 			return 15;
-		case chauffage.emetteur.TYPES_EMETTEUR.radiateur_monotube:
+		case chauffage.emetteur.TypeEmetteur.enum.radiateur_monotube:
 			return 30;
-		case chauffage.emetteur.TYPES_EMETTEUR.radiateur_bitube:
-		case chauffage.emetteur.TYPES_EMETTEUR.radiateur:
+		case chauffage.emetteur.TypeEmetteur.enum.radiateur_bitube:
+		case chauffage.emetteur.TypeEmetteur.enum.radiateur:
 			return 10;
-		case chauffage.emetteur.TYPES_EMETTEUR.autres:
+		case chauffage.emetteur.TypeEmetteur.enum.autres:
 			return 35;
 	}
 }
@@ -27,11 +27,11 @@ export function calcule_delta_pem(props: {
  * @returns Facteur de correction
  */
 export function calcule_fcot(props: {
-	type_emetteur: chauffage.emetteur.TypeEmetteurEnum;
+	type_emetteur: chauffage.emetteur.TypeEmetteur;
 }): number {
 	const { type_emetteur } = props;
 	switch (type_emetteur) {
-		case chauffage.emetteur.TYPES_EMETTEUR.plancher_chauffant:
+		case chauffage.emetteur.TypeEmetteur.enum.plancher_chauffant:
 			return 0.156;
 		default:
 			return 0.802;
@@ -47,7 +47,7 @@ export function calcule_dtheta_dim(props: {
 }): number {
 	const { temperature_distribution } = props;
 	switch (temperature_distribution) {
-		case chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute:
+		case chauffage.emetteur.TemperatureDistribution.enum.haute:
 			return 15;
 		default:
 			return 7.5;
@@ -59,12 +59,12 @@ export function calcule_dtheta_dim(props: {
  * @returns Température de distribution de l'émetteur de chauffage retenue
  */
 export function set_temperature_distribution(props: {
-	temperature_distribution: chauffage.emetteur.TemperatureDistributionEnum | null;
-}): chauffage.emetteur.TemperatureDistributionEnum {
+	temperature_distribution: chauffage.emetteur.TemperatureDistribution | null;
+}): chauffage.emetteur.TemperatureDistribution {
 	const { temperature_distribution } = props;
 	return (
 		temperature_distribution ??
-		chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute
+		chauffage.emetteur.TemperatureDistribution.enum.haute
 	);
 }
 

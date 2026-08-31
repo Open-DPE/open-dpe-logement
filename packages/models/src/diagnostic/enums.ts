@@ -1,11 +1,13 @@
 import * as z from "zod";
 
-export const TYPES_DIAGNOSTIC = {
+export const TypeDiagnostic = z.enum({
 	batiment: "batiment",
 	logement: "logement",
-} as const;
+});
 
-export const ETIQUETTES = {
+export type TypeDiagnostic = z.infer<typeof TypeDiagnostic>;
+
+export const Etiquette = z.enum({
 	A: "A",
 	B: "B",
 	C: "C",
@@ -13,18 +15,14 @@ export const ETIQUETTES = {
 	E: "E",
 	F: "F",
 	G: "G",
-} as const;
+});
 
-export const CONFORTS_ETE = {
-	bon: "1",
-	moyen: "2",
-	insuffisant: "3",
-} as const;
+export type Etiquette = z.infer<typeof Etiquette>;
 
-export const TypeDiagnosticEnum = z.enum(TYPES_DIAGNOSTIC);
-export const EtiquetteEnum = z.enum(ETIQUETTES);
-export const ConfortEteEnum = z.enum(CONFORTS_ETE);
+export const ConfortEte = z.enum({
+	bon: "bon",
+	moyen: "moyen",
+	insuffisant: "insuffisant",
+});
 
-export type TypeDiagnosticEnum = z.infer<typeof TypeDiagnosticEnum>;
-export type EtiquetteEnum = z.infer<typeof EtiquetteEnum>;
-export type ConfortEteEnum = z.infer<typeof ConfortEteEnum>;
+export type ConfortEte = z.infer<typeof ConfortEte>;

@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-import { UsageSolaireEnum } from "./enums.js";
+import { UsageSolaire } from "./enums.js";
 
 import { Systeme, SystemeWithData } from "../systeme/types.js";
 
@@ -16,7 +16,7 @@ import {
  * `fecs` porte un `maximum: 1` en plus de son `oneOf[nombre, const null]`.
  */
 export const SolaireThermique = z.object({
-	usage: UsageSolaireEnum,
+	usage: UsageSolaire,
 	annee_installation: annee_installation,
 	fecs: z.number().max(1).nullable(),
 });

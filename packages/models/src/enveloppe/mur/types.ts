@@ -6,14 +6,14 @@ import {
 	annee_construction,
 	annee_renovation,
 } from "../../common/types.js";
-import { InertieParoiEnum, Isolation, Position } from "../common/index.js";
-import { MateriauMurEnum, TypeDoublageEnum } from "./enums.js";
+import { InertieParoi, Isolation, Position } from "../common/index.js";
+import { MateriauMur, TypeDoublage } from "./enums.js";
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/mur#/$defs/structure
  */
 export const Structure = z.object({
-	materiau: MateriauMurEnum.nullable().default(null),
+	materiau: MateriauMur.nullable().default(null),
 	epaisseur: nombre_positif.nullable().default(null),
 	materiau_ancien: z.boolean().nullable().default(null),
 });
@@ -40,9 +40,9 @@ export const Mur = z.object({
 	id,
 	description,
 	structures: z.array(Structure),
-	type_doublage: TypeDoublageEnum.nullable().default(null),
+	type_doublage: TypeDoublage.nullable().default(null),
 	presence_enduit_isolant: z.boolean().nullable().default(null),
-	inertie: InertieParoiEnum.nullable().default(null),
+	inertie: InertieParoi.nullable().default(null),
 	annee_construction,
 	annee_renovation,
 	u0: nombre_positif.nullable().default(null),

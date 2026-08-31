@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const TYPES_LNC = {
+export const TypeLocalNonChauffe = z.enum({
 	garage: "garage",
 	cellier: "cellier",
 	espace_tampon_solarise: "espace_tampon_solarise",
@@ -19,6 +19,6 @@ export const TYPES_LNC = {
 		"hall_entree_sans_fermeture_automatique",
 	garage_collectif: "garage_collectif",
 	autres: "autres",
-} as const;
-export const TypeLncEnum = z.enum(TYPES_LNC);
-export type TypeLncEnum = z.infer<typeof TypeLncEnum>;
+});
+
+export type TypeLocalNonChauffe = z.infer<typeof TypeLocalNonChauffe>;

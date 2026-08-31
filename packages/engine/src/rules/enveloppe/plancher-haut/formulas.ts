@@ -48,10 +48,10 @@ export function calcule_u(props: {
 	u_saisi: number | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	effet_joule: ReturnType<typeof chauffage.calcule_effet_joule>;
-	configuration: models.enveloppe.plancherHaut.ConfigurationEnum;
+	configuration: models.enveloppe.plancherHaut.ConfigurationPlancherHaut;
 	u0: ReturnType<typeof calcule_u0>;
 	isolation: boolean | null;
-	type_isolation: models.enveloppe.common.TypeIsolationEnum | null;
+	type_isolation: models.enveloppe.common.TypeIsolation | null;
 	epaisseur_isolation: number | null;
 	resistance_thermique_isolation: number | null;
 	annee_isolation: number | null;
@@ -97,7 +97,7 @@ export function calcule_u(props: {
  */
 export function calcule_u0(props: {
 	u0_saisi: number | null;
-	type_plancher_haut: models.enveloppe.plancherHaut.TypePlancherHautEnum | null;
+	type_plancher_haut: models.enveloppe.plancherHaut.TypePlancherHaut | null;
 }): number {
 	const { u0_saisi, type_plancher_haut } = props;
 

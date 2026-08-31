@@ -125,7 +125,7 @@ export function calcule_qdw_col_hvc(props: {
  * @returns Besoins d'eau chaude sanitaire en kWh/mois
  */
 export function calcule_becs(props: {
-	scenario: models.common.ScenarioEnum;
+	scenario: models.common.Scenario;
 	nadeq: ReturnType<typeof calcule_nadeq>;
 	nj: ReturnType<typeof climat.calcule_nj>;
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
@@ -135,9 +135,9 @@ export function calcule_becs(props: {
 		const tefs = props.sollicitations[mois].tefs;
 		const nj = props.nj[mois];
 		switch (scenario) {
-			case models.common.SCENARIOS.conventionnel:
+			case models.common.Scenario.enum.conventionnel:
 				return (1.163 * nadeq * 56 * (40 - tefs) * nj) / 1000;
-			case models.common.SCENARIOS.depensier:
+			case models.common.Scenario.enum.depensier:
 				return (1.163 * nadeq * 79 * (40 - tefs) * nj) / 1000;
 		}
 	});
@@ -164,7 +164,7 @@ export function calcule_nadeq(props: {
  * @returns Coefficient d'occupation maximal
  */
 export function calcule_nmax(props: {
-	type_batiment: models.batiment.TypeBatimentEnum;
+	type_batiment: models.batiment.TypeBatiment;
 	logements: number;
 	sh: ReturnType<typeof batiment.calcule_sh>;
 }): number {
@@ -172,12 +172,12 @@ export function calcule_nmax(props: {
 	const shmoy = sh / logements;
 
 	switch (type_batiment) {
-		case models.batiment.TYPES_BATIMENT.maison:
+		case models.batiment.TypeBatiment.enum.maison:
 			if (shmoy < 30) return 1;
 			if (shmoy < 70) return 1.75 - 0.01875 * (70 - shmoy);
 			return 0.025 * shmoy;
 
-		case models.batiment.TYPES_BATIMENT.immeuble:
+		case models.batiment.TypeBatiment.enum.immeuble:
 			if (shmoy < 10) return 1;
 			if (shmoy < 50) return 1.75 - 0.01875 * (50 - shmoy);
 			return 0.035 * shmoy;

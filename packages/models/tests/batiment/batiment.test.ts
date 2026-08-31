@@ -9,9 +9,12 @@ import {
 	Logement,
 } from "../../src/batiment/types.js";
 import { isBatiment, isMaison, isImmeuble } from "../../src/batiment/guards.js";
-import { ZONES_CLIMATIQUES } from "../../src/batiment/enums.js";
+import { ZoneClimatique } from "../../src/batiment/enums.js";
 import { Appartement } from "../../src/batiment/appartement/types.js";
-import { POSITIONS, TYPOLOGIES } from "../../src/batiment/appartement/enums.js";
+import {
+	PositionAppartement,
+	TypologieAppartement,
+} from "../../src/batiment/appartement/enums.js";
 import { MAISON, IMMEUBLE, LOGEMENT } from "./fixtures.js";
 import { APPARTEMENT } from "./appartement/fixtures.js";
 
@@ -182,9 +185,9 @@ describe("BatimentBase.altitude — bornes [-1000, 10000]", () => {
 	});
 
 	it("rejette une altitude non entière", () => {
-		expect(
-			Maison.safeParse({ ...MAISON, altitude: 100.5 }).success,
-		).toBe(false);
+		expect(Maison.safeParse({ ...MAISON, altitude: 100.5 }).success).toBe(
+			false,
+		);
 	});
 });
 
@@ -194,9 +197,9 @@ describe("BatimentBase.altitude — bornes [-1000, 10000]", () => {
 
 describe("BatimentBase.surface_habitable / hauteur_sous_plafond — strictement positifs", () => {
 	it("rejette surface_habitable = 0", () => {
-		expect(
-			Maison.safeParse({ ...MAISON, surface_habitable: 0 }).success,
-		).toBe(false);
+		expect(Maison.safeParse({ ...MAISON, surface_habitable: 0 }).success).toBe(
+			false,
+		);
 	});
 
 	it("rejette surface_habitable négative", () => {
@@ -294,9 +297,9 @@ describe("BatimentBase.rnb_id — nullable", () => {
 	});
 
 	it("accepte une chaîne", () => {
-		expect(
-			Maison.safeParse({ ...MAISON, rnb_id: "RNB-12345" }).success,
-		).toBe(true);
+		expect(Maison.safeParse({ ...MAISON, rnb_id: "RNB-12345" }).success).toBe(
+			true,
+		);
 	});
 });
 
@@ -306,15 +309,13 @@ describe("BatimentBase.rnb_id — nullable", () => {
 
 describe("BatimentBase.logement — Logement | null, requis", () => {
 	it("accepte logement = null", () => {
-		expect(Maison.safeParse({ ...MAISON, logement: null }).success).toBe(
-			true,
-		);
+		expect(Maison.safeParse({ ...MAISON, logement: null }).success).toBe(true);
 	});
 
 	it("accepte un Logement valide", () => {
-		expect(
-			Maison.safeParse({ ...MAISON, logement: LOGEMENT }).success,
-		).toBe(true);
+		expect(Maison.safeParse({ ...MAISON, logement: LOGEMENT }).success).toBe(
+			true,
+		);
 	});
 
 	it("rejette un Logement incomplet (surface_habitable manquante)", () => {
@@ -364,17 +365,14 @@ describe("adresse.code_insee — 1 chiffre + 1 alphanumérique majuscule + 3 chi
 		).toBe(true);
 	});
 
-	it.each(["7505", "AB123", "2a004", "750560"])(
-		"rejette %s",
-		(code_insee) => {
-			expect(
-				Maison.safeParse({
-					...MAISON,
-					adresse: { ...MAISON.adresse, code_insee },
-				}).success,
-			).toBe(false);
-		},
-	);
+	it.each(["7505", "AB123", "2a004", "750560"])("rejette %s", (code_insee) => {
+		expect(
+			Maison.safeParse({
+				...MAISON,
+				adresse: { ...MAISON.adresse, code_insee },
+			}).success,
+		).toBe(false);
+	});
 });
 
 // ---------------------------------------------------------------------------
@@ -419,26 +417,28 @@ describe("Appartement.id — UUID requis", () => {
 });
 
 describe("Appartement.position — énumération", () => {
-	it.each(Object.values(POSITIONS))("accepte position = %s", (position) => {
-		expect(
-			Appartement.safeParse({ ...APPARTEMENT, position }).success,
-		).toBe(true);
+	it.each(PositionAppartement.options)("accepte position = %s", (position) => {
+		expect(Appartement.safeParse({ ...APPARTEMENT, position }).success).toBe(
+			true,
+		);
 	});
 
 	it("rejette une position hors énumération", () => {
 		expect(
-			Appartement.safeParse({ ...APPARTEMENT, position: "sous_sol" })
-				.success,
+			Appartement.safeParse({ ...APPARTEMENT, position: "sous_sol" }).success,
 		).toBe(false);
 	});
 });
 
 describe("Appartement.typologie — énumération T1 à T7", () => {
-	it.each(Object.values(TYPOLOGIES))("accepte typologie = %s", (typologie) => {
-		expect(
-			Appartement.safeParse({ ...APPARTEMENT, typologie }).success,
-		).toBe(true);
-	});
+	it.each(TypologieAppartement.options)(
+		"accepte typologie = %s",
+		(typologie) => {
+			expect(Appartement.safeParse({ ...APPARTEMENT, typologie }).success).toBe(
+				true,
+			);
+		},
+	);
 
 	it("rejette une typologie hors énumération", () => {
 		expect(
@@ -450,8 +450,7 @@ describe("Appartement.typologie — énumération T1 à T7", () => {
 describe("Appartement.surface_habitable / hauteur_sous_plafond — strictement positifs", () => {
 	it("rejette surface_habitable = 0", () => {
 		expect(
-			Appartement.safeParse({ ...APPARTEMENT, surface_habitable: 0 })
-				.success,
+			Appartement.safeParse({ ...APPARTEMENT, surface_habitable: 0 }).success,
 		).toBe(false);
 	});
 
@@ -475,12 +474,11 @@ const BATIMENT_DATA: BatimentData = {
 };
 
 describe("BatimentData.zone_climatique — énumération", () => {
-	it.each(Object.values(ZONES_CLIMATIQUES))(
+	it.each(ZoneClimatique.options)(
 		"accepte zone_climatique = %s",
 		(zone_climatique) => {
 			expect(
-				BatimentData.safeParse({ ...BATIMENT_DATA, zone_climatique })
-					.success,
+				BatimentData.safeParse({ ...BATIMENT_DATA, zone_climatique }).success,
 			).toBe(true);
 		},
 	);
@@ -502,8 +500,7 @@ describe("BatimentWithData — intersection Batiment & { data: BatimentData }", 
 
 	it("accepte un Immeuble avec data", () => {
 		expect(
-			BatimentWithData.safeParse({ ...IMMEUBLE, data: BATIMENT_DATA })
-				.success,
+			BatimentWithData.safeParse({ ...IMMEUBLE, data: BATIMENT_DATA }).success,
 		).toBe(true);
 	});
 

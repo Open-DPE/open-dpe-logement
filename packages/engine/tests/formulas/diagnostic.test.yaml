@@ -1,0 +1,351 @@
+diagnostic.consommations:
+  rule: consommations
+  cases:
+    - title: Agrégation des cinq usages réglementaires
+      with:
+        chauffage:
+          chauffage:
+            gaz_naturel: { cef: 10000, cep: 10000, eges: 2270 }
+        eclairage:
+          eclairage:
+            electricite: { cef: 200, cep: 380, eges: 13.8 }
+        ecs:
+          ecs:
+            electricite: { cef: 1500, cep: 2850, eges: 97.5 }
+        refroidissement:
+          refroidissement:
+            electricite: { cef: 300, cep: 570, eges: 19.2 }
+        ventilation:
+          auxiliaire:
+            electricite: { cef: 400, cep: 760, eges: 27.6 }
+      expect:
+        chauffage:
+          gaz_naturel: { cef: 10000, cep: 10000, eges: 2270 }
+        eclairage:
+          electricite: { cef: 200, cep: 380, eges: 13.8 }
+        ecs:
+          electricite: { cef: 1500, cep: 2850, eges: 97.5 }
+        refroidissement:
+          electricite: { cef: 300, cep: 570, eges: 19.2 }
+        auxiliaire:
+          electricite: { cef: 400, cep: 760, eges: 27.6 }
+
+    - title: Deux usages partageant la même énergie sont cumulés énergie par énergie
+      with:
+        chauffage:
+          chauffage:
+            electricite: { cef: 1000, cep: 1900, eges: 79 }
+        eclairage: {}
+        ecs:
+          chauffage:
+            electricite: { cef: 500, cep: 950, eges: 39.5 }
+        refroidissement: {}
+        ventilation: {}
+      expect:
+        chauffage:
+          electricite: { cef: 1500, cep: 2850, eges: 118.5 }
+
+diagnostic.cef:
+  rule: cef
+  cases:
+    - title: Somme des consommations rapportée à la surface habitable
+      with:
+        consommations:
+          chauffage:
+            gaz_naturel: { cef: 9000, cep: 9000, eges: 2043 }
+          ecs:
+            electricite: { cef: 1000, cep: 1900, eges: 65 }
+        sh: 100
+      expect: 100
+
+    - title: Plusieurs énergies sur un même usage
+      with:
+        consommations:
+          chauffage:
+            gaz_naturel: { cef: 4000, cep: 4000, eges: 908 }
+            electricite: { cef: 1000, cep: 1900, eges: 79 }
+        sh: 50
+      expect: 100
+
+    - title: Aucune consommation → 0
+      with:
+        consommations: {}
+        sh: 80
+      expect: 0
+
+diagnostic.cep:
+  rule: cep
+  cases:
+    - title: Somme des énergies primaires rapportée à la surface habitable
+      with:
+        consommations:
+          chauffage:
+            gaz_naturel: { cef: 9000, cep: 9000, eges: 2043 }
+          ecs:
+            electricite: { cef: 1000, cep: 1900, eges: 65 }
+        sh: 100
+      expect: 109
+
+    - title: Tout électrique → énergie primaire = 1.9 × énergie finale
+      with:
+        consommations:
+          chauffage:
+            electricite: { cef: 5000, cep: 9500, eges: 395 }
+        sh: 100
+      expect: 95
+
+diagnostic.eges:
+  rule: eges
+  cases:
+    - title: Somme des émissions rapportée à la surface habitable
+      with:
+        consommations:
+          chauffage:
+            gaz_naturel: { cef: 9000, cep: 9000, eges: 2043 }
+          ecs:
+            electricite: { cef: 1000, cep: 1900, eges: 65 }
+        sh: 100
+      expect: 21.08
+
+    - title: Aucune consommation → 0
+      with:
+        consommations: {}
+        sh: 120
+      expect: 0
+
+diagnostic.etiquette_energie:
+  rule: etiquette_energie
+  cases:
+    - title: Cep 50 / Eges 5 → A
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        cep: 50
+        eges: 5
+      expect: A
+
+    - title: Cep 100 / Eges 10 → B
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        cep: 100
+        eges: 10
+      expect: B
+
+    - title: Cep 150 / Eges 20 → C
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        cep: 150
+        eges: 20
+      expect: C
+
+    - title: Cep 200 / Eges 40 → D
+      with:
+        zone_climatique: H2b
+        altitude: 100
+        cep: 200
+        eges: 40
+      expect: D
+
+    - title: Cep 300 / Eges 60 → E
+      with:
+        zone_climatique: H2b
+        altitude: 100
+        cep: 300
+        eges: 60
+      expect: E
+
+    - title: Cep 400 / Eges 90 → F
+      with:
+        zone_climatique: H3
+        altitude: 100
+        cep: 400
+        eges: 90
+      expect: F
+
+    - title: Cep 500 / Eges 120 → G
+      with:
+        zone_climatique: H3
+        altitude: 100
+        cep: 500
+        eges: 120
+      expect: G
+
+    - title: Classe déclassée par les émissions (Cep classe A, Eges > 6) → B
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        cep: 50
+        eges: 10
+      expect: B
+
+    - title: Le seuil s'applique sur la partie entière (Cep 69.9 → 69)
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        cep: 69.9
+        eges: 5.9
+      expect: A
+
+    - title: Zone H1b au-dessus de 800 m → seuils rehaussés (Cep 340 / Eges 60 → E)
+      with:
+        zone_climatique: H1b
+        altitude: 900
+        cep: 340
+        eges: 60
+      expect: E
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: INCONNUE
+        altitude: 100
+        cep: 150
+        eges: 20
+      expectError: true
+
+diagnostic.etiquette_climat:
+  rule: etiquette_climat
+  cases:
+    - title: Eges 5 → A
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        eges: 5
+      expect: A
+
+    - title: Eges 10 → B
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        eges: 10
+      expect: B
+
+    - title: Eges 20 → C
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        eges: 20
+      expect: C
+
+    - title: Eges 40 → D
+      with:
+        zone_climatique: H1a
+        altitude: 100
+        eges: 40
+      expect: D
+
+    - title: Eges 60 → E
+      with:
+        zone_climatique: H2a
+        altitude: 100
+        eges: 60
+      expect: E
+
+    - title: Eges 90 → F
+      with:
+        zone_climatique: H2a
+        altitude: 100
+        eges: 90
+      expect: F
+
+    - title: Eges 120 → G
+      with:
+        zone_climatique: H2a
+        altitude: 100
+        eges: 120
+      expect: G
+
+    - title: Zone H2d au-dessus de 800 m → seuil E relevé à 80 (Eges 75 → E)
+      with:
+        zone_climatique: H2d
+        altitude: 900
+        eges: 75
+      expect: E
+
+    - title: Zone H2d au-dessous de 800 m → Eges 75 → F
+      with:
+        zone_climatique: H2d
+        altitude: 400
+        eges: 75
+      expect: F
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        zone_climatique: INCONNUE
+        altitude: 100
+        eges: 20
+      expectError: true
+
+diagnostic.confort_ete:
+  rule: confort_ete
+  cases:
+    - title: Absence de protection solaire → insuffisant
+      with:
+        type_diagnostic: logement
+        presence_protection_solaire: false
+        isolation_planchers_hauts: true
+        inertie: tres_lourde
+        logement_traversant: true
+        presence_brasseur_air: true
+      expect: insuffisant
+
+    - title: Plancher haut non isolé → insuffisant
+      with:
+        type_diagnostic: logement
+        presence_protection_solaire: true
+        isolation_planchers_hauts: false
+        inertie: tres_lourde
+        logement_traversant: true
+        presence_brasseur_air: true
+      expect: insuffisant
+
+    - title: Trois critères favorables (inertie lourde, traversant, brasseur) → bon
+      with:
+        type_diagnostic: logement
+        presence_protection_solaire: true
+        isolation_planchers_hauts: true
+        inertie: lourde
+        logement_traversant: true
+        presence_brasseur_air: true
+      expect: bon
+
+    - title: Deux critères favorables sur trois → bon
+      with:
+        type_diagnostic: logement
+        presence_protection_solaire: true
+        isolation_planchers_hauts: true
+        inertie: tres_lourde
+        logement_traversant: true
+        presence_brasseur_air: false
+      expect: bon
+
+    - title: Un seul critère favorable → moyen
+      with:
+        type_diagnostic: logement
+        presence_protection_solaire: true
+        isolation_planchers_hauts: true
+        inertie: legere
+        logement_traversant: true
+        presence_brasseur_air: false
+      expect: moyen
+
+    - title: Aucun critère favorable → moyen
+      with:
+        type_diagnostic: logement
+        presence_protection_solaire: true
+        isolation_planchers_hauts: true
+        inertie: moyenne
+        logement_traversant: false
+        presence_brasseur_air: false
+      expect: moyen
+
+    - title: Inertie moyenne non comptée comme inertie lourde
+      with:
+        type_diagnostic: logement
+        presence_protection_solaire: true
+        isolation_planchers_hauts: true
+        inertie: moyenne
+        logement_traversant: true
+        presence_brasseur_air: false
+      expect: moyen

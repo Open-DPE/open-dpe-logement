@@ -24,7 +24,7 @@ export type Emission = {
 	id: string;
 	systeme_id: string;
 	emetteur_id: string | null;
-	type_distribution: models.chauffage.systeme.TypeDistributionEnum | null;
+	type_distribution: models.chauffage.systeme.TypeDistribution | null;
 	presence_robinet_thermostatique: boolean | null;
 };
 

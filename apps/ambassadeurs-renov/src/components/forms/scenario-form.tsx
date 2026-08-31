@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { scenarios } from "../../models/scenario";
-import { departement } from "../../models/departement";
+import { formatAdresse, fromBAN, type Adresse } from "../../models/adresse";
 import { useUserStore } from "../../stores/user";
 import { changeScenario } from "../../handlers/change-scenario";
+import { type Adresse as AdresseBAN } from "@/services/search-adresse";
+import { AdresseAutocomplete } from "./adresse-autocomplete";
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
 import {
@@ -15,11 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { toast } from "sonner";
-
-function toDepartement(code: string | null | undefined): string {
-  if (!code) return departement.all()[0].code_departement;
-  return code.substring(0, 2);
-}
 
 function toAltitude(altitude: number | null | undefined): string {
   if (altitude === null || altitude === undefined) return "0";
@@ -53,8 +50,8 @@ export function ScenarioForm({ onSuccess }: Props) {
   const [scenarioId, setScenarioId] = useState<string>(
     scenario ?? scenarios[0].id
   );
-  const [departementCode, setDepartementCode] = useState<string>(
-    toDepartement(diagnostic?.batiment.adresse.code_insee)
+  const [adresse, setAdresse] = useState<Adresse | null>(
+    diagnostic?.batiment.adresse ?? null
   );
   const [altitude, setAltitude] = useState<string>(
     toAltitude(diagnostic?.batiment.altitude)
@@ -64,6 +61,10 @@ export function ScenarioForm({ onSuccess }: Props) {
   );
   const [error, setError] = useState<string>();
 
+  function handleAdresseChange(value: AdresseBAN | null) {
+    setAdresse(value ? fromBAN(value) : null);
+  }
+
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setPending(true);
@@ -71,7 +72,7 @@ export function ScenarioForm({ onSuccess }: Props) {
 
     const { success, message } = await changeScenario({
       scenarioId,
-      departementCode,
+      adresse,
       altitude,
       anneeConstruction,
     });
@@ -88,6 +89,12 @@ export function ScenarioForm({ onSuccess }: Props) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+      <AdresseAutocomplete
+        className="w-full bg-white"
+        defaultValue={adresse ? formatAdresse(adresse) : undefined}
+        onChange={handleAdresseChange}
+      />
+
       <Select value={scenarioId} onValueChange={setScenarioId}>
         <SelectTrigger className="w-full bg-white">
           <SelectValue placeholder="Sélectionnez un scénario" />
@@ -97,20 +104,6 @@ export function ScenarioForm({ onSuccess }: Props) {
             <SelectLabel>Chauffage</SelectLabel>
             {scenarios.map(({ id, titre }) => (
               <SelectItem key={id} value={id}>{titre}</SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-
-      <Select value={departementCode} onValueChange={setDepartementCode}>
-        <SelectTrigger className="w-full bg-white">
-          <SelectValue placeholder="Sélectionnez un département" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Départements</SelectLabel>
-            {departement.all().map(({ code_departement, departement }) => (
-              <SelectItem key={code_departement} value={code_departement}>{`${code_departement} - ${departement}`}</SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>

@@ -1,12 +1,12 @@
 import * as z from "zod";
 import { id, description, surface } from "../../../common/types.js";
-import { MitoyenneteEnum } from "../../common/enums.js";
+import { Mitoyennete } from "../../common/enums.js";
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/local-non-chauffe/paroi#/$defs/position
  */
 export const Position = z.object({
-	mitoyennete: MitoyenneteEnum,
+	mitoyennete: Mitoyennete,
 	surface,
 });
 

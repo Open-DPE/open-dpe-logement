@@ -27,8 +27,8 @@ export function calcule_consommations(props: {
 		common.calcule_consommations({
 			cef: props.caux_gen,
 			cef_enr: props.caux_gen_enr,
-			usage: models.common.USAGES.auxiliaire,
-			energie: models.common.ENERGIES.electricite,
+			usage: models.common.Usage.enum.auxiliaire,
+			energie: models.common.Energie.enum.electricite,
 			reseau_id: null,
 		}),
 	);
@@ -82,7 +82,7 @@ export function calcule_caux_gen_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.USAGES_ELECTRICITE.chauffage,
+		usage: models.production.UsageElectricite.enum.chauffage,
 		cef: props.caux_gen,
 	});
 }
@@ -200,7 +200,7 @@ export function calcule_combustion(props: {
 	pveilleuse_saisi: number | null;
 	type_generateur: ReturnType<typeof set_type_generateur>;
 	energie_generateur: ReturnType<typeof set_energie_generateur>;
-	bienergie_generateur: models.chauffage.generateur.BienergieEnum | null;
+	bienergie_generateur: models.chauffage.generateur.Bienergie | null;
 	mode_combustion: ReturnType<typeof set_mode_combustion>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
 	pn: ReturnType<typeof calcule_pn>;
@@ -263,7 +263,7 @@ export function calcule_scop(props: {
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	type_generateur: ReturnType<typeof set_type_generateur>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
-	types_emetteur: models.chauffage.emetteur.TypeEmetteurEnum[];
+	types_emetteur: models.chauffage.emetteur.TypeEmetteur[];
 }): number {
 	const { scop_saisi } = props;
 	if (scop_saisi) return scop_saisi;
@@ -323,7 +323,7 @@ export function calcule_tfonc30(props: {
 		const query = {
 			mode_combustion,
 			temperature_distribution:
-				models.chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute,
+				models.chauffage.emetteur.TemperatureDistribution.enum.haute,
 			annee_installation_emetteur: annee_installation_generateur,
 			annee_installation_generateur,
 		};
@@ -376,7 +376,7 @@ export function calcule_tfonc100(props: {
 	if (props.emetteurs.length === 0) {
 		const query = {
 			temperature_distribution:
-				models.chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute,
+				models.chauffage.emetteur.TemperatureDistribution.enum.haute,
 			annee_installation_emetteur: props.annee_installation_generateur,
 		};
 		const match = abaque.search(query, abaque.load()).at(0);
@@ -465,7 +465,7 @@ export function calcule_qpx_chaudiere_combustion(props: {
 	tfonc100: ReturnType<typeof calcule_tfonc100>;
 }): Pick<QPx, "qp30" | "qp100"> {
 	switch (props.mode_combustion) {
-		case models.chauffage.generateur.MODES_COMBUSTION.standard: {
+		case models.chauffage.generateur.ModeCombustion.enum.standard: {
 			const { pn, tfonc30, tfonc100, presence_regulation, kpcs } = props;
 			const rpint = (props.rpint * 100) / kpcs;
 			const rpn = (props.rpn * 100) / kpcs;
@@ -484,8 +484,8 @@ export function calcule_qpx_chaudiere_combustion(props: {
 
 			return { qp30, qp100 };
 		}
-		case models.chauffage.generateur.MODES_COMBUSTION.basse_temperature:
-		case models.chauffage.generateur.MODES_COMBUSTION.condensation: {
+		case models.chauffage.generateur.ModeCombustion.enum.basse_temperature:
+		case models.chauffage.generateur.ModeCombustion.enum.condensation: {
 			const { pn, tfonc30, tfonc100, presence_regulation, kpcs } = props;
 			const rpint = (props.rpint * 100) / kpcs;
 			const rpn = (props.rpn * 100) / kpcs;
@@ -533,11 +533,11 @@ export function calcule_qpx_autres(props: {
  * @return Type de générateur de chauffage retenu
  */
 export function set_type_generateur(props: {
-	type_generateur: models.chauffage.generateur.TypeGenerateurEnum | null;
-}): models.chauffage.generateur.TypeGenerateurEnum {
+	type_generateur: models.chauffage.generateur.TypeGenerateur | null;
+}): models.chauffage.generateur.TypeGenerateur {
 	const { type_generateur } = props;
 	return (
-		type_generateur ?? models.chauffage.generateur.TYPES_GENERATEUR.chaudiere
+		type_generateur ?? models.chauffage.generateur.TypeGenerateur.enum.chaudiere
 	);
 }
 
@@ -546,10 +546,10 @@ export function set_type_generateur(props: {
  * @return Energie du générateur de chauffage retenue
  */
 export function set_energie_generateur(props: {
-	energie_generateur: models.chauffage.generateur.EnergieChauffageEnum | null;
-}): models.chauffage.generateur.EnergieChauffageEnum {
+	energie_generateur: models.chauffage.generateur.EnergieChauffage | null;
+}): models.chauffage.generateur.EnergieChauffage {
 	const { energie_generateur } = props;
-	return energie_generateur ?? models.common.ENERGIES.fioul;
+	return energie_generateur ?? models.common.Energie.enum.fioul;
 }
 
 /**
@@ -557,11 +557,11 @@ export function set_energie_generateur(props: {
  * @return Mode de combustion du générateur de chauffage retenu
  */
 export function set_mode_combustion(props: {
-	mode_combustion: models.chauffage.generateur.ModeCombustionEnum | null;
-}): models.chauffage.generateur.ModeCombustionEnum {
+	mode_combustion: models.chauffage.generateur.ModeCombustion | null;
+}): models.chauffage.generateur.ModeCombustion {
 	const { mode_combustion } = props;
 	return (
-		mode_combustion ?? models.chauffage.generateur.MODES_COMBUSTION.standard
+		mode_combustion ?? models.chauffage.generateur.ModeCombustion.enum.standard
 	);
 }
 

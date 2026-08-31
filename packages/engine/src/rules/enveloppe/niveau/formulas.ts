@@ -7,15 +7,15 @@ export function calcule_inertie(props: {
 	inertie_paroi_verticale: ReturnType<typeof set_inertie>;
 	inertie_plancher_haut: ReturnType<typeof set_inertie>;
 	inertie_plancher_bas: ReturnType<typeof set_inertie>;
-}): models.enveloppe.common.InertieEnum {
+}): models.enveloppe.common.Inertie {
 	const values = Object.values(props);
 	const count = values.filter(
-		(value) => value === models.enveloppe.common.INERTIES.lourde,
+		(value) => value === models.enveloppe.common.Inertie.enum.lourde,
 	).length;
-	if (count === 3) return models.enveloppe.common.INERTIES.tres_lourde;
-	if (count === 2) return models.enveloppe.common.INERTIES.lourde;
-	if (count === 1) return models.enveloppe.common.INERTIES.moyenne;
-	return models.enveloppe.common.INERTIES.legere;
+	if (count === 3) return models.enveloppe.common.Inertie.enum.tres_lourde;
+	if (count === 2) return models.enveloppe.common.Inertie.enum.lourde;
+	if (count === 1) return models.enveloppe.common.Inertie.enum.moyenne;
+	return models.enveloppe.common.Inertie.enum.legere;
 }
 
 /**
@@ -23,7 +23,7 @@ export function calcule_inertie(props: {
  * @returns État d'inertie retenu
  */
 export function set_inertie(props: {
-	inertie: models.enveloppe.common.InertieEnum | null;
-}): models.enveloppe.common.InertieEnum {
-	return props.inertie ?? models.enveloppe.common.INERTIES.legere;
+	inertie: models.enveloppe.common.Inertie | null;
+}): models.enveloppe.common.Inertie {
+	return props.inertie ?? models.enveloppe.common.Inertie.enum.legere;
 }

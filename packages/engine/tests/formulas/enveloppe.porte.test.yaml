@@ -1,0 +1,218 @@
+enveloppe.porte.dp:
+  rule: dp
+  cases:
+    - title: Porte extérieure non isolée (b = 1)
+      with:
+        sdep: 2
+        b: 1
+        u: 3.5
+      expect: 7
+
+    - title: Porte donnant sur un local non chauffé (b = 0.8)
+      with:
+        sdep: 2
+        b: 0.8
+        u: 3.5
+      expect: 5.6
+
+    - title: Porte palière sur logement chauffé (b = 0) → aucune déperdition
+      with:
+        sdep: 2
+        b: 0
+        u: 3.5
+      expect: 0
+
+enveloppe.porte.isolation_aiu:
+  rule: isolation_aiu
+  cases:
+    - title: Une porte donnant sur un local non chauffé n'est jamais considérée isolée
+      with: {}
+      expect: false
+
+enveloppe.porte.u:
+  rule: u
+  cases:
+    - title: U saisi → retenu tel quel
+      with:
+        u_saisi: 2
+        taux_vitrage: 0
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: pvc
+        presence_sas: false
+      expect: 2
+
+    - title: Présence d'un sas → 1.5 W/m².K quelles que soient les caractéristiques
+      with:
+        u_saisi: null
+        taux_vitrage: 0.2
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: metal
+        presence_sas: true
+      expect: 1.5
+
+    - title: Porte isolée pleine (sans vitrage) → 1.5 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0
+        type_vitrage: simple_vitrage
+        isolation: true
+        materiau: pvc
+        presence_sas: false
+      expect: 1.5
+
+    - title: Porte isolée en double vitrage → 1.5 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0.2
+        type_vitrage: double_vitrage
+        isolation: true
+        materiau: pvc
+        presence_sas: false
+      expect: 1.5
+
+    - title: Porte PVC pleine non isolée → 3.5 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: pvc
+        presence_sas: false
+      expect: 3.5
+
+    - title: Porte bois pleine non isolée → 3.5 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: bois
+        presence_sas: false
+      expect: 3.5
+
+    - title: Porte PVC partiellement vitrée en simple vitrage → 4 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0.2
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: pvc
+        presence_sas: false
+      expect: 4
+
+    - title: Porte bois partiellement vitrée en double vitrage → 3.3 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0.2
+        type_vitrage: double_vitrage
+        isolation: false
+        materiau: bois
+        presence_sas: false
+      expect: 3.3
+
+    - title: Porte métallique pleine non isolée → 5.8 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: metal
+        presence_sas: false
+      expect: 5.8
+
+    - title: Porte métallique partiellement vitrée en simple vitrage → 5.8 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0.2
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: metal
+        presence_sas: false
+      expect: 5.8
+
+    - title: Porte métallique partiellement vitrée en triple vitrage → 5.5 W/m².K
+      with:
+        u_saisi: null
+        taux_vitrage: 0.2
+        type_vitrage: triple_vitrage
+        isolation: false
+        materiau: metal
+        presence_sas: false
+      expect: 5.5
+
+    - title: Matériau hors abaque → erreur ValeurForfaitaire
+      with:
+        u_saisi: null
+        taux_vitrage: 0.2
+        type_vitrage: simple_vitrage
+        isolation: false
+        materiau: MATERIAU_INCONNU
+        presence_sas: false
+      expectError: true
+
+enveloppe.porte.taux_vitrage:
+  rule: taux_vitrage
+  cases:
+    - title: Porte pleine → taux de vitrage nul
+      with:
+        surface: 2
+        surface_vitrage: 0
+      expect: 0
+
+    - title: Porte à moitié vitrée → 0.5
+      with:
+        surface: 2
+        surface_vitrage: 1
+      expect: 0.5
+
+    - title: Surface de porte nulle → 0 (pas de division par zéro)
+      with:
+        surface: 0
+        surface_vitrage: 1
+      expect: 0
+
+enveloppe.porte.isolation:
+  rule: isolation
+  cases:
+    - title: Isolation saisie à vrai → isolée
+      with:
+        isolation: true
+      expect: true
+
+    - title: Isolation saisie à faux → non isolée
+      with:
+        isolation: false
+      expect: false
+
+    - title: Isolation non renseignée → non isolée par défaut
+      with:
+        isolation: null
+      expect: false
+
+enveloppe.porte.materiau:
+  rule: materiau
+  cases:
+    - title: Matériau saisi → retenu
+      with:
+        materiau: metal
+      expect: metal
+
+    - title: Matériau non saisi → PVC par défaut
+      with:
+        materiau: null
+      expect: pvc
+
+enveloppe.porte.type_vitrage:
+  rule: type_vitrage
+  cases:
+    - title: Type de vitrage saisi → retenu
+      with:
+        type_vitrage: double_vitrage
+      expect: double_vitrage
+
+    - title: Type de vitrage non saisi → simple vitrage par défaut
+      with:
+        type_vitrage: null
+      expect: simple_vitrage

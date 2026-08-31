@@ -7,13 +7,9 @@ import {
 	annee_construction,
 	annee_renovation,
 } from "../../common/types.js";
-import {
-	MITOYENNETES,
-	MitoyenneteEnum,
-	InertieParoiEnum,
-} from "../common/enums.js";
+import { Mitoyennete, InertieParoi } from "../common/enums.js";
 import { Isolation } from "../common/index.js";
-import { TypePlancherBasEnum } from "./enums.js";
+import { TypePlancherBas } from "./enums.js";
 
 /**
  * Position du plancher bas — croise le patron paroi (`mitoyennete`) et le
@@ -22,40 +18,40 @@ import { TypePlancherBasEnum } from "./enums.js";
  */
 export const PositionBase = z.object({
 	surface: nombre_positif,
-	mitoyennete: MitoyenneteEnum,
+	mitoyennete: Mitoyennete,
 	local_non_chauffe_id: id.nullable().default(null),
 	surface_ue: nombre_positif.nullable().default(null),
 	perimetre_ue: nombre_positif.nullable().default(null),
 });
 
 export const PositionMitoyenneteLocalNonChauffe = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.extract([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.extract(["local_non_chauffe"]),
 	local_non_chauffe_id: id,
 });
 
 export const PositionMitoyenneteAutres = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.exclude([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.exclude(["local_non_chauffe"]),
 	local_non_chauffe_id: non_applicable,
 });
 
 export const PositionTerrePlein = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.extract([
-		MITOYENNETES.enterre,
-		MITOYENNETES.vide_sanitaire,
-		MITOYENNETES.terre_plein,
-		MITOYENNETES.sous_sol_non_chauffe,
+	mitoyennete: Mitoyennete.extract([
+		"enterre",
+		"vide_sanitaire",
+		"terre_plein",
+		"sous_sol_non_chauffe",
 	]),
 	surface_ue: nombre_positif,
 	perimetre_ue: nombre_positif,
 });
 
 export const PositionAutres = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.extract([
-		MITOYENNETES.exterieur,
-		MITOYENNETES.local_non_chauffe,
-		MITOYENNETES.local_non_residentiel,
-		MITOYENNETES.local_residentiel,
-		MITOYENNETES.local_non_accessible,
+	mitoyennete: Mitoyennete.extract([
+		"exterieur",
+		"local_non_chauffe",
+		"local_non_residentiel",
+		"local_residentiel",
+		"local_non_accessible",
 	]),
 	surface_ue: non_applicable,
 	perimetre_ue: non_applicable,
@@ -97,8 +93,8 @@ export type PlancherBasData = z.infer<typeof PlancherBasData>;
 export const PlancherBas = z.object({
 	id,
 	description,
-	type: TypePlancherBasEnum.nullable().default(null),
-	inertie: InertieParoiEnum.nullable().default(null),
+	type: TypePlancherBas.nullable().default(null),
+	inertie: InertieParoi.nullable().default(null),
 	annee_construction,
 	annee_renovation,
 	u0: nombre_positif.nullable().default(null),

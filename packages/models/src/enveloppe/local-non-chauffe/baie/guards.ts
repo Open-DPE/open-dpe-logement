@@ -1,4 +1,4 @@
-import { TYPES_VITRAGE } from "../../baie/enums.js";
+import { TypeVitrage } from "../../baie/enums.js";
 import {
 	PositionBase,
 	Position,
@@ -32,14 +32,14 @@ export function isBaie(value: BaieBase): value is Baie {
 
 export function isBaieVitree(value: BaieBase): value is BaieVitree {
 	return (
-		value.type_vitrage === TYPES_VITRAGE.polycarbonate ||
-		value.type_vitrage === TYPES_VITRAGE.brique_verre
+		value.type_vitrage === TypeVitrage.enum.polycarbonate ||
+		value.type_vitrage === TypeVitrage.enum.brique_verre
 	);
 }
 
 export function isBaieAutre(value: BaieBase): value is BaieAutre {
 	return (
-		value.type_vitrage !== TYPES_VITRAGE.polycarbonate &&
-		value.type_vitrage !== TYPES_VITRAGE.brique_verre
+		value.type_vitrage !== TypeVitrage.enum.polycarbonate &&
+		value.type_vitrage !== TypeVitrage.enum.brique_verre
 	);
 }

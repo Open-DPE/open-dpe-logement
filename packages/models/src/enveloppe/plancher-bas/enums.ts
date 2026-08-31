@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const TYPES_PLANCHER_BAS = {
+export const TypePlancherBas = z.enum({
 	plancher_avec_ou_sans_remplissage: "plancher_avec_ou_sans_remplissage",
 	plancher_entre_solives_metalliques: "plancher_entre_solives_metalliques",
 	plancher_entre_solives_bois: "plancher_entre_solives_bois",
@@ -14,6 +14,6 @@ export const TYPES_PLANCHER_BAS = {
 	plancher_lourd_type_entrevous_terre_cuite_ou_poutrelles_beton:
 		"plancher_lourd_type_entrevous_terre_cuite_ou_poutrelles_beton",
 	plancher_entrevous_isolant: "plancher_entrevous_isolant",
-} as const;
-export const TypePlancherBasEnum = z.enum(TYPES_PLANCHER_BAS);
-export type TypePlancherBasEnum = z.infer<typeof TypePlancherBasEnum>;
+});
+
+export type TypePlancherBas = z.infer<typeof TypePlancherBas>;

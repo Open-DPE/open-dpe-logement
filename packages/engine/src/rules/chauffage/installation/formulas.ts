@@ -65,9 +65,9 @@ export function calcule_pch(props: {
  */
 export function calcule_fch(props: {
 	fch_saisi: number | null;
-	usage: models.chauffage.installation.UsageSolaireEnum | null;
+	usage: models.chauffage.installation.UsageSolaire | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
-	type_batiment: models.batiment.TypeBatimentEnum;
+	type_batiment: models.batiment.TypeBatiment;
 }): number {
 	const { fch_saisi, usage, ...query } = props;
 	if (null === usage) return 0;
@@ -83,25 +83,25 @@ export function calcule_fch(props: {
  * @returns Installation chauffée par effet de joule
  */
 export function calcule_effet_joule(props: {
-	type_installation: models.chauffage.TypeChauffageEnum;
+	type_installation: models.chauffage.TypeChauffage;
 	systemes: {
-		type_systeme: models.chauffage.TypeChauffageEnum;
+		type_systeme: models.chauffage.TypeChauffage;
 		energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
 	}[];
 }): boolean {
 	switch (props.type_installation) {
-		case models.chauffage.TYPES_CHAUFFAGE.central:
+		case models.chauffage.TypeChauffage.enum.central:
 			return props.systemes.some(({ type_systeme, energie_generateur }) => {
 				return (
-					type_systeme === models.chauffage.TYPES_CHAUFFAGE.central &&
-					energie_generateur === models.common.ENERGIES.electricite
+					type_systeme === models.chauffage.TypeChauffage.enum.central &&
+					energie_generateur === models.common.Energie.enum.electricite
 				);
 			});
-		case models.chauffage.TYPES_CHAUFFAGE.divise:
+		case models.chauffage.TypeChauffage.enum.divise:
 			return (
 				props.systemes.filter(
 					({ energie_generateur }) =>
-						energie_generateur === models.common.ENERGIES.electricite,
+						energie_generateur === models.common.Energie.enum.electricite,
 				).length >
 				props.systemes.length / 2
 			);

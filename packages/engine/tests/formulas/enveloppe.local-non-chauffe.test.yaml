@@ -1,0 +1,510 @@
+enveloppe.local_non_chauffe.uvue:
+  rule: uvue
+  cases:
+    - title: Garage → 3 W/(m².K)
+      with:
+        type_local_non_chauffe: garage
+      expect: 3
+
+    - title: Cellier → 3 W/(m².K)
+      with:
+        type_local_non_chauffe: cellier
+      expect: 3
+
+    - title: Comble fortement ventilé → 9 W/(m².K)
+      with:
+        type_local_non_chauffe: comble_fortement_ventile
+      expect: 9
+
+    - title: Comble faiblement ventilé → 3 W/(m².K)
+      with:
+        type_local_non_chauffe: comble_faiblement_ventile
+      expect: 3
+
+    - title: Comble très faiblement ventilé → 0.3 W/(m².K)
+      with:
+        type_local_non_chauffe: comble_tres_faiblement_ventile
+      expect: 0.3
+
+    - title: Circulation sans ouverture extérieure → 0 W/(m².K)
+      with:
+        type_local_non_chauffe: circulation_sans_ouverture_exterieure
+      expect: 0
+
+    - title: Circulation avec ouverture extérieure → 0.3 W/(m².K)
+      with:
+        type_local_non_chauffe: circulation_avec_ouverture_exterieure
+      expect: 0.3
+
+    - title: Hall d'entrée avec fermeture automatique → 0.3 W/(m².K)
+      with:
+        type_local_non_chauffe: hall_entree_avec_fermeture_automatique
+      expect: 0.3
+
+    - title: Hall d'entrée sans fermeture automatique → 3 W/(m².K)
+      with:
+        type_local_non_chauffe: hall_entree_sans_fermeture_automatique
+      expect: 3
+
+    - title: Autres locaux non chauffés → 3 W/(m².K)
+      with:
+        type_local_non_chauffe: autres
+      expect: 3
+
+    - title: Espace tampon solarisé (hors périmètre de l'abaque) → erreur ValeurForfaitaire
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+      expectError: true
+
+enveloppe.local_non_chauffe.b:
+  rule: blnc
+  cases:
+    - title: Garage isolé côté intérieur, aiu/aue = 0.2 → 1
+      with:
+        aue: 50
+        aiu: 10
+        isolation_aue: false
+        isolation_aiu: true
+        uvue: 3
+      expect: 1
+
+    - title: Garage isolé côté intérieur, aiu/aue = 1.5 → 0.9
+      with:
+        aue: 20
+        aiu: 30
+        isolation_aue: false
+        isolation_aiu: true
+        uvue: 3
+      expect: 0.9
+
+    - title: Garage isolé côté intérieur, aiu/aue = 5 → 0.7
+      with:
+        aue: 10
+        aiu: 50
+        isolation_aue: false
+        isolation_aiu: true
+        uvue: 3
+      expect: 0.7
+
+    - title: Garage non isolé côté intérieur, aiu/aue = 0.2 → 0.9
+      with:
+        aue: 50
+        aiu: 10
+        isolation_aue: false
+        isolation_aiu: false
+        uvue: 3
+      expect: 0.9
+
+    - title: Garage isolé des deux côtés, aiu/aue = 0.6 → 0.9
+      with:
+        aue: 50
+        aiu: 30
+        isolation_aue: true
+        isolation_aiu: true
+        uvue: 3
+      expect: 0.9
+
+    - title: Garage isolé seulement côté extérieur, aiu/aue = 0.9 → 0.55
+      with:
+        aue: 50
+        aiu: 45
+        isolation_aue: true
+        isolation_aiu: false
+        uvue: 3
+      expect: 0.55
+
+    - title: Comble fortement ventilé (uvue 9), isolé côté intérieur, aiu/aue = 0.6 → 1
+      with:
+        aue: 50
+        aiu: 30
+        isolation_aue: false
+        isolation_aiu: true
+        uvue: 9
+      expect: 1
+
+    - title: Comble très faiblement ventilé (uvue 0.3), isolé côté intérieur, aiu/aue = 0.9 → 0.9
+      with:
+        aue: 50
+        aiu: 45
+        isolation_aue: false
+        isolation_aiu: true
+        uvue: 0.3
+      expect: 0.9
+
+    - title: Surface extérieure nulle → ratio ramené à 0, première tranche de l'abaque
+      with:
+        aue: 0
+        aiu: 30
+        isolation_aue: false
+        isolation_aiu: true
+        uvue: 3
+      expect: 1
+
+    - title: Coefficient uvue hors abaque → erreur ValeurForfaitaire
+      with:
+        aue: 50
+        aiu: 10
+        isolation_aue: false
+        isolation_aiu: true
+        uvue: 42
+      expectError: true
+
+enveloppe.local_non_chauffe.bver:
+  rule: bver
+  cases:
+    - title: Paroi unique → b de la paroi
+      with:
+        parois:
+          - surface: 10
+            b: 0.58
+      expect: 0.58
+
+    - title: Deux parois de surfaces égales → moyenne arithmétique
+      with:
+        parois:
+          - surface: 10
+            b: 0.6
+          - surface: 10
+            b: 0.8
+      expect: 0.7
+
+    - title: Pondération par les surfaces
+      with:
+        parois:
+          - surface: 30
+            b: 0.6
+          - surface: 10
+            b: 1
+      expect: 0.7
+
+    - title: Aucune paroi → 0
+      with:
+        parois: []
+      expect: 0
+
+enveloppe.local_non_chauffe.aue:
+  rule: aue
+  cases:
+    - title: Somme des surfaces extérieures des baies et des parois
+      with:
+        baies:
+          - aue: 2
+          - aue: 1.5
+        parois:
+          - aue: 12
+          - aue: 8
+      expect: 23.5
+
+    - title: Local sans paroi extérieure → 0
+      with:
+        baies: []
+        parois: []
+      expect: 0
+
+    - title: Parois non déperditives (aue = 0) ignorées
+      with:
+        baies:
+          - aue: 0
+        parois:
+          - aue: 10
+          - aue: 0
+      expect: 10
+
+enveloppe.local_non_chauffe.isolation_aue:
+  rule: isolation_aue
+  cases:
+    - title: Plus de la moitié de la surface extérieure isolée → isolé
+      with:
+        baies:
+          - aue: 2
+            isolation: true
+        parois:
+          - aue: 10
+            isolation: true
+          - aue: 5
+            isolation: false
+      expect: true
+
+    - title: Exactement la moitié isolée → non isolé (seuil strict)
+      with:
+        baies: []
+        parois:
+          - aue: 10
+            isolation: true
+          - aue: 10
+            isolation: false
+      expect: false
+
+    - title: Aucune paroi isolée → non isolé
+      with:
+        baies: []
+        parois:
+          - aue: 10
+            isolation: false
+      expect: false
+
+    - title: Aucune paroi extérieure → non isolé
+      with:
+        baies: []
+        parois: []
+      expect: false
+
+enveloppe.local_non_chauffe.aiu:
+  rule: aiu
+  cases:
+    - title: Somme des surfaces donnant sur l'espace chauffé (baies, parois et parois mitoyennes)
+      with:
+        parois_mitoyennes:
+          - aiu: 20
+        baies:
+          - aiu: 2
+        parois:
+          - aiu: 8
+      expect: 30
+
+    - title: Local sans contact avec l'espace chauffé → 0
+      with:
+        parois_mitoyennes: []
+        baies: []
+        parois: []
+      expect: 0
+
+enveloppe.local_non_chauffe.isolation_aiu:
+  rule: isolation_aiu
+  cases:
+    - title: Plus de la moitié de la surface intérieure isolée → isolé
+      with:
+        parois_mitoyennes:
+          - aiu: 20
+            isolation: true
+        baies:
+          - aiu: 2
+            isolation: false
+        parois:
+          - aiu: 8
+            isolation: false
+      expect: true
+
+    - title: Exactement la moitié isolée → non isolé (seuil strict)
+      with:
+        parois_mitoyennes:
+          - aiu: 10
+            isolation: true
+          - aiu: 10
+            isolation: false
+        baies: []
+        parois: []
+      expect: false
+
+    - title: Aucune paroi isolée → non isolé
+      with:
+        parois_mitoyennes:
+          - aiu: 20
+            isolation: false
+        baies: []
+        parois: []
+      expect: false
+
+enveloppe.local_non_chauffe.t:
+  rule: t
+  cases:
+    - title: Local non chauffé qui n'est pas un espace tampon solarisé → 0
+      with:
+        type_local_non_chauffe: garage
+        baies:
+          - mitoyennete: exterieur
+            surface: 5
+            t: 0.5
+      expect: 0
+
+    - title: ETS avec une seule baie extérieure → coefficient de la baie
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        baies:
+          - mitoyennete: exterieur
+            surface: 5
+            t: 0.5
+      expect: 0.5
+
+    - title: ETS, moyenne pondérée par les surfaces des baies extérieures
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        baies:
+          - mitoyennete: exterieur
+            surface: 30
+            t: 0.6
+          - mitoyennete: exterieur
+            surface: 10
+            t: 0.4
+      expect: 0.55
+
+    - title: ETS, les baies non extérieures sont exclues du calcul
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        baies:
+          - mitoyennete: exterieur
+            surface: 10
+            t: 0.5
+          - mitoyennete: local_residentiel
+            surface: 90
+            t: 0.1
+      expect: 0.5
+
+    - title: ETS sans baie extérieure → 0
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        baies:
+          - mitoyennete: local_residentiel
+            surface: 10
+            t: 0.5
+      expect: 0
+
+enveloppe.local_non_chauffe.orientations:
+  rule: orientations
+  cases:
+    - title: Une seule orientation → orientation majoritaire unique
+      with:
+        baies:
+          - mitoyennete: exterieur
+            surface: 10
+            orientation: sud
+      expect: [sud]
+
+    - title: Orientation majoritaire en surface
+      with:
+        baies:
+          - mitoyennete: exterieur
+            surface: 10
+            orientation: sud
+          - mitoyennete: exterieur
+            surface: 4
+            orientation: est
+      expect: [sud]
+
+    - title: Deux orientations à égalité → les deux sont retenues
+      with:
+        baies:
+          - mitoyennete: exterieur
+            surface: 10
+            orientation: sud
+          - mitoyennete: exterieur
+            surface: 10
+            orientation: nord
+      expect: [sud, nord]
+
+    - title: Les baies horizontales sont ignorées
+      with:
+        baies:
+          - mitoyennete: exterieur
+            surface: 50
+            orientation: horizontale
+          - mitoyennete: exterieur
+            surface: 5
+            orientation: est
+      expect: [est]
+
+    - title: Les baies non extérieures sont ignorées
+      with:
+        baies:
+          - mitoyennete: local_residentiel
+            surface: 50
+            orientation: nord
+          - mitoyennete: exterieur
+            surface: 5
+            orientation: ouest
+      expect: [ouest]
+
+    - title: Aucune baie extérieure orientée → liste vide
+      with:
+        baies: []
+      expect: []
+
+enveloppe.local_non_chauffe.sse:
+  rule: sse
+  cases:
+    - title: Surface sud équivalente de l'ETS nette des apports déjà comptés sur les baies intérieures
+      with:
+        baies:
+          - sst:
+              &sst10
+              "01": 10
+              "02": 10
+              "03": 10
+              "04": 10
+              "05": 10
+              "06": 10
+              "07": 10
+              "08": 10
+              "09": 10
+              "10": 10
+              "11": 10
+              "12": 10
+        sse:
+          - &sse2
+            "01": 2
+            "02": 2
+            "03": 2
+            "04": 2
+            "05": 2
+            "06": 2
+            "07": 2
+            "08": 2
+            "09": 2
+            "10": 2
+            "11": 2
+            "12": 2
+        b: 0.5
+      expect:
+        "01": 4
+        "02": 4
+        "03": 4
+        "04": 4
+        "05": 4
+        "06": 4
+        "07": 4
+        "08": 4
+        "09": 4
+        "10": 4
+        "11": 4
+        "12": 4
+
+    - title: Deux baies extérieures cumulées, aucune baie intérieure
+      with:
+        baies:
+          - sst: *sst10
+          - sst: *sst10
+        sse: []
+        b: 1
+      expect:
+        "01": 20
+        "02": 20
+        "03": 20
+        "04": 20
+        "05": 20
+        "06": 20
+        "07": 20
+        "08": 20
+        "09": 20
+        "10": 20
+        "11": 20
+        "12": 20
+
+    - title: Coefficient de réduction nul → surface sud équivalente nulle
+      with:
+        baies:
+          - sst: *sst10
+        sse: [*sse2]
+        b: 0
+      expect:
+        "01": 0
+        "02": 0
+        "03": 0
+        "04": 0
+        "05": 0
+        "06": 0
+        "07": 0
+        "08": 0
+        "09": 0
+        "10": 0
+        "11": 0
+        "12": 0

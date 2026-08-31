@@ -143,3 +143,100 @@ refroidissement.generateur.cfr:
         rdim: 1
         eer: 3.6
       expect: 0
+
+refroidissement.generateur.cef:
+  rule: consommations
+  cases:
+    - title: Climatiseur électrique sans auxiliaire
+      with:
+        cfr: 500
+        cfr_enr: 0
+        caux: 0
+        energie: electricite
+        reseau_id: null
+      expect:
+        refroidissement:
+          electricite: { cef: 500, cep: 950, eges: 32 }
+        auxiliaire:
+          electricite: { cef: 0, cep: 0, eges: 0 }
+
+    - title: Climatiseur partiellement couvert par l'autoconsommation photovoltaique
+      with:
+        cfr: 500
+        cfr_enr: 100
+        caux: 0
+        energie: electricite
+        reseau_id: null
+      expectPartial:
+        refroidissement:
+          electricite: { cef: 400, cep: 760, eges: 25.6 }
+          electricite_renouvelable: { cef: 100, cep: 190, eges: 0 }
+
+    - title: Raccordement a un reseau de froid identifie
+      with:
+        cfr: 500
+        cfr_enr: 0
+        caux: 0
+        energie: reseau_froid
+        reseau_id: "0106C"
+      expectPartial:
+        refroidissement:
+          reseau_froid: { cef: 500, cep: 500, eges: 18.5 }
+
+refroidissement.generateur.cfr_enr:
+  rule: cfr_enr
+  cases:
+    - title: Part d'electricite autoconsommee affectee au refroidissement
+      with:
+        celec:
+          refroidissement: 1000
+        celec_ac:
+          refroidissement: 250
+        cfr_elec: 1000
+      expect: 250
+
+    - title: Consommation partielle -> autoconsommation au prorata
+      with:
+        celec:
+          refroidissement: 1000
+        celec_ac:
+          refroidissement: 250
+        cfr_elec: 400
+      expect: 100
+
+    - title: Aucune consommation electrique de refroidissement -> aucune part renouvelable
+      with:
+        celec:
+          refroidissement: 1000
+        celec_ac:
+          refroidissement: 250
+        cfr_elec: 0
+      expect: 0
+
+refroidissement.generateur.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire du refroidissement électrique (× 1.9)
+      with:
+        cfr: 500
+        cfr_enr: 0
+        caux: 0
+        energie: electricite
+        reseau_id: null
+      expectPartial:
+        refroidissement:
+          electricite: { cep: 950 }
+
+refroidissement.generateur.eges:
+  rule: consommations
+  cases:
+    - title: Émissions du refroidissement électrique (0.064 kgCO2eq/kWh)
+      with:
+        cfr: 500
+        cfr_enr: 0
+        caux: 0
+        energie: electricite
+        reseau_id: null
+      expectPartial:
+        refroidissement:
+          electricite: { eges: 32 }

@@ -82,4 +82,4 @@ export type BaieEts =
 	| from.dpe.v26.BaieEts
 	| from.audit.BaieEts;
 
-export type OrientationEnum = from.dpe.enums.OrientationEnum;
+export type Orientation = from.dpe.enums.OrientationEnum;

@@ -158,13 +158,13 @@ export function calcule_f(props: {
 		const x = (as + ai) / (gv * dh);
 
 		switch (inertie) {
-			case models.enveloppe.common.INERTIES.tres_lourde:
+			case models.enveloppe.common.Inertie.enum.tres_lourde:
 				return (x - x ** 3.6) / (1 - x ** 3.6);
-			case models.enveloppe.common.INERTIES.lourde:
+			case models.enveloppe.common.Inertie.enum.lourde:
 				return (x - x ** 3.6) / (1 - x ** 3.6);
-			case models.enveloppe.common.INERTIES.moyenne:
+			case models.enveloppe.common.Inertie.enum.moyenne:
 				return (x - x ** 2.9) / (1 - x ** 2.9);
-			case models.enveloppe.common.INERTIES.legere:
+			case models.enveloppe.common.Inertie.enum.legere:
 				return (x - x ** 2.5) / (1 - x ** 2.5);
 		}
 	});
@@ -288,14 +288,14 @@ export function calcule_effet_joule(props: {
  */
 export function calcule_nref(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.ScenarioEnum;
+	scenario: models.common.Scenario;
 }): models.common.ParMois<number> {
 	const { sollicitations, scenario } = props;
 	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.SCENARIOS.conventionnel:
+			case models.common.Scenario.enum.conventionnel:
 				return sollicitations[mois].nref19;
-			case models.common.SCENARIOS.depensier:
+			case models.common.Scenario.enum.depensier:
 				return sollicitations[mois].nref21;
 		}
 	});
@@ -307,14 +307,14 @@ export function calcule_nref(props: {
  */
 export function calcule_dh(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.ScenarioEnum;
+	scenario: models.common.Scenario;
 }): models.common.ParMois<number> {
 	const { sollicitations, scenario } = props;
 	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.SCENARIOS.conventionnel:
+			case models.common.Scenario.enum.conventionnel:
 				return sollicitations[mois].dh19;
-			case models.common.SCENARIOS.depensier:
+			case models.common.Scenario.enum.depensier:
 				return sollicitations[mois].dh21;
 		}
 	});

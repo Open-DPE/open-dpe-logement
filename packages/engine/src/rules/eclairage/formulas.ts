@@ -19,8 +19,8 @@ export function calcule_consommations(props: {
 	return common.calcule_consommations({
 		cef: props.cecl,
 		cef_enr: props.celec_ac.eclairage,
-		usage: models.common.USAGES.eclairage,
-		energie: models.common.ENERGIES.electricite,
+		usage: models.common.Usage.enum.eclairage,
+		energie: models.common.Energie.enum.electricite,
 		reseau_id: null,
 	});
 }

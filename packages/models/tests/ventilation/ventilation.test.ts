@@ -170,7 +170,7 @@ describe("InstallationMecanique — chaque branche mécanique valide aussi l'uni
 // Guards
 // ===========================================================================
 
-describe("Guards de type (TypeVentilationEnum)", () => {
+describe("Guards de type (TypeVentilation)", () => {
 	it("isTypeVentilationNaturelle reconnaît les 4 types naturels", () => {
 		expect(isTypeVentilationNaturelle("ventilation_ouverture_fenetres")).toBe(
 			true,
@@ -224,9 +224,7 @@ describe("Guards d'installation — discriminent les branches entre elles", () =
 	});
 
 	it("isVentilationVMCDoubleFlux / isVentilationPuitClimatique / isVentilationMecaniqueAutres se distinguent par le type", () => {
-		expect(isVentilationVMCDoubleFlux(INSTALLATION_VMC_DOUBLE_FLUX)).toBe(
-			true,
-		);
+		expect(isVentilationVMCDoubleFlux(INSTALLATION_VMC_DOUBLE_FLUX)).toBe(true);
 		expect(isVentilationVMCDoubleFlux(INSTALLATION_PUIT_CLIMATIQUE)).toBe(
 			false,
 		);
@@ -241,9 +239,9 @@ describe("Guards d'installation — discriminent les branches entre elles", () =
 			false,
 		);
 
-		expect(
-			isVentilationMecaniqueAutres(INSTALLATION_MECANIQUE_AUTRES),
-		).toBe(true);
+		expect(isVentilationMecaniqueAutres(INSTALLATION_MECANIQUE_AUTRES)).toBe(
+			true,
+		);
 		expect(isVentilationMecaniqueAutres(INSTALLATION_VMC_DOUBLE_FLUX)).toBe(
 			false,
 		);
@@ -262,7 +260,7 @@ describe("Guards d'installation — discriminent les branches entre elles", () =
 });
 
 // ===========================================================================
-// Contraintes de type par branche (extract / exclude sur TypeVentilationEnum)
+// Contraintes de type par branche (extract / exclude sur TypeVentilation)
 // ===========================================================================
 
 describe("Régression — chaque branche restreint `type` à son propre sous-ensemble", () => {
@@ -355,9 +353,7 @@ describe("Régression — InstallationMecaniqueAutres force presence_echangeur_t
 			...INSTALLATION_MECANIQUE_AUTRES,
 			presence_echangeur_thermique: true,
 		};
-		expect(InstallationMecaniqueAutres.safeParse(invalide).success).toBe(
-			false,
-		);
+		expect(InstallationMecaniqueAutres.safeParse(invalide).success).toBe(false);
 	});
 });
 
@@ -370,8 +366,7 @@ describe("Point de vigilance schéma — presence_echangeur_thermique reste un b
 	// pas traité comme un bug — ce test documente et verrouille ce choix.
 	it("InstallationVMCDoubleFlux accepte presence_echangeur_thermique: true et null", () => {
 		expect(
-			InstallationVMCDoubleFlux.safeParse(INSTALLATION_VMC_DOUBLE_FLUX)
-				.success,
+			InstallationVMCDoubleFlux.safeParse(INSTALLATION_VMC_DOUBLE_FLUX).success,
 		).toBe(true);
 		expect(
 			InstallationVMCDoubleFlux.safeParse({
@@ -401,9 +396,7 @@ describe("Régression — InstallationVMCDoubleFlux / InstallationPuitClimatique
 			...INSTALLATION_VMC_DOUBLE_FLUX,
 			installation_collective: null,
 		};
-		expect(InstallationVMCDoubleFlux.safeParse(invalide).success).toBe(
-			false,
-		);
+		expect(InstallationVMCDoubleFlux.safeParse(invalide).success).toBe(false);
 	});
 
 	it("InstallationVMCDoubleFlux accepte true et false", () => {
@@ -426,9 +419,7 @@ describe("Régression — InstallationVMCDoubleFlux / InstallationPuitClimatique
 			...INSTALLATION_PUIT_CLIMATIQUE,
 			installation_collective: null,
 		};
-		expect(InstallationPuitClimatique.safeParse(invalide).success).toBe(
-			false,
-		);
+		expect(InstallationPuitClimatique.safeParse(invalide).success).toBe(false);
 	});
 
 	it("InstallationMecaniqueAutres, elle, accepte installation_collective: null (hérité, pas de restriction à ce niveau)", () => {
@@ -467,19 +458,18 @@ describe("Régression — Ventilation.installations (min 1)", () => {
 // ===========================================================================
 
 describe("Régression — VentilationData, tous les champs sont bornés à min(0)", () => {
-	it.each([
-		"qvarep_conv",
-		"qvasouf_conv",
-		"smea_conv",
-	] as const)("%s accepte 0 et rejette une valeur négative", (champ) => {
-		expect(
-			VentilationData.safeParse({ ...VENTILATION_DATA, [champ]: 0 }).success,
-		).toBe(true);
-		expect(
-			VentilationData.safeParse({ ...VENTILATION_DATA, [champ]: -0.01 })
-				.success,
-		).toBe(false);
-	});
+	it.each(["qvarep_conv", "qvasouf_conv", "smea_conv"] as const)(
+		"%s accepte 0 et rejette une valeur négative",
+		(champ) => {
+			expect(
+				VentilationData.safeParse({ ...VENTILATION_DATA, [champ]: 0 }).success,
+			).toBe(true);
+			expect(
+				VentilationData.safeParse({ ...VENTILATION_DATA, [champ]: -0.01 })
+					.success,
+			).toBe(false);
+		},
+	);
 });
 
 describe("Régression — InstallationData, tous les champs numériques sont bornés à min(0)", () => {
@@ -492,8 +482,7 @@ describe("Régression — InstallationData, tous les champs numériques sont bor
 		"smea_conv",
 	] as const)("%s accepte 0 et rejette une valeur négative", (champ) => {
 		expect(
-			InstallationData.safeParse({ ...INSTALLATION_DATA, [champ]: 0 })
-				.success,
+			InstallationData.safeParse({ ...INSTALLATION_DATA, [champ]: 0 }).success,
 		).toBe(true);
 		expect(
 			InstallationData.safeParse({ ...INSTALLATION_DATA, [champ]: -0.01 })

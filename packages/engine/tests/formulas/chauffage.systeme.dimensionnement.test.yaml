@@ -1,0 +1,244 @@
+chauffage.systeme.configuration:
+  rule: configuration
+  cases:
+    - title: Système unique → toute la couverture en base
+      with:
+        systemes:
+          - &chaudiere_gaz
+            type_systeme: central
+            type_generateur: chaudiere
+            energie_generateur: gaz_naturel
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: false
+            pn_saisi: null
+      expect:
+        base: 1
+        releve: 0
+        appoint: 0
+
+    - title: Aucun système → toute la couverture en base
+      with:
+        systemes: []
+      expect:
+        base: 1
+        releve: 0
+        appoint: 0
+
+    - title: Deux chaudières gaz centrales → aucune relève ni appoint
+      with:
+        systemes: [*chaudiere_gaz, *chaudiere_gaz]
+      expect:
+        base: 1
+        releve: 0
+        appoint: 0
+
+    - title: Chaudière centrale + système divisé → appoint de 25 %
+      with:
+        systemes:
+          - *chaudiere_gaz
+          - &poele_divise
+            type_systeme: divise
+            type_generateur: poele
+            energie_generateur: bois_buche
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: false
+            pn_saisi: null
+      expect:
+        base: 0.75
+        releve: 0
+        appoint: 0.25
+
+    - title: PAC air/eau + chaudière gaz → chaudière en relève de PAC (20 %)
+      with:
+        systemes:
+          - &pac_air_eau
+            type_systeme: central
+            type_generateur: pac_air_eau
+            energie_generateur: electricite
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: false
+            pn_saisi: null
+          - *chaudiere_gaz
+      expect:
+        base: 0.8
+        releve: 0.2
+        appoint: 0
+
+    - title: Chaudière bois + PAC → relève de chaudière bois (25 %)
+      with:
+        systemes:
+          - &chaudiere_bois
+            type_systeme: central
+            type_generateur: chaudiere
+            energie_generateur: bois_buche
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: false
+            pn_saisi: null
+          - *pac_air_eau
+      expect:
+        base: 0.75
+        releve: 0.25
+        appoint: 0
+
+    - title: Chaudière bois + PAC + système divisé → appoint seul (la présence d'un système divisé rompt la relève)
+      with:
+        systemes: [*chaudiere_bois, *pac_air_eau, *poele_divise]
+      expect:
+        base: 0.75
+        releve: 0
+        appoint: 0.25
+
+chauffage.systeme.role:
+  rule: role
+  cases:
+    - title: Système unique → base
+      with:
+        systeme: *chaudiere_gaz
+        systemes: []
+      expect: base
+
+    - title: Système divisé aux côtés d'un système central → appoint
+      with:
+        systeme: *poele_divise
+        systemes: [*chaudiere_gaz]
+      expect: appoint
+
+    - title: Chaudière gaz aux côtés d'une PAC → relève
+      with:
+        systeme: *chaudiere_gaz
+        systemes: [*pac_air_eau]
+      expect: releve
+
+    - title: PAC aux côtés d'une chaudière gaz → base
+      with:
+        systeme: *pac_air_eau
+        systemes: [*chaudiere_gaz]
+      expect: base
+
+    - title: PAC aux côtés d'une chaudière bois → relève de chaudière bois
+      with:
+        systeme: *pac_air_eau
+        systemes: [*chaudiere_bois]
+      expect: releve
+
+    - title: Chaudière bois aux côtés d'une PAC → base
+      with:
+        systeme: *chaudiere_bois
+        systemes: [*pac_air_eau]
+      expect: base
+
+    - title: Deux chaudières gaz → base
+      with:
+        systeme: *chaudiere_gaz
+        systemes: [*chaudiere_gaz]
+      expect: base
+
+    - title: Les systèmes collectifs et individuels sont dimensionnés séparément
+      with:
+        systeme: *chaudiere_gaz
+        systemes:
+          - type_systeme: central
+            type_generateur: pac_air_eau
+            energie_generateur: electricite
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: true
+            pn_saisi: null
+      expect: base
+
+chauffage.systeme.rdim:
+  rule: rdim
+  cases:
+    - title: Système unique sans puissance nominale saisie → dimensionnement complet
+      with:
+        systeme: &chaudiere_gaz_base
+          type_systeme: central
+          type_generateur: chaudiere
+          energie_generateur: gaz_naturel
+          bienergie_generateur: null
+          generateur_multi_batiment: false
+          generateur_collectif: false
+          pn_saisi: null
+          role: base
+        systemes: []
+      expect: 1
+
+    - title: Système unique avec puissance nominale saisie → dimensionnement complet
+      with:
+        systeme: &chaudiere_gaz_base_pn20
+          type_systeme: central
+          type_generateur: chaudiere
+          energie_generateur: gaz_naturel
+          bienergie_generateur: null
+          generateur_multi_batiment: false
+          generateur_collectif: false
+          pn_saisi: 20
+          role: base
+        systemes: []
+      expect: 1
+
+    - title: Deux systèmes de même rôle sans puissance saisie → répartition à parts égales
+      with:
+        systeme: *chaudiere_gaz_base
+        systemes: [*chaudiere_gaz_base]
+      expect: 0.5
+
+    - title: Deux systèmes de même rôle avec puissances saisies → répartition au prorata des puissances
+      with:
+        systeme: *chaudiere_gaz_base_pn20
+        systemes:
+          - type_systeme: central
+            type_generateur: chaudiere
+            energie_generateur: gaz_naturel
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: false
+            pn_saisi: 10
+            role: base
+      expect: 0.6667
+
+    - title: Système en appoint → part d'appoint de la configuration
+      with:
+        systeme:
+          type_systeme: divise
+          type_generateur: poele
+          energie_generateur: bois_buche
+          bienergie_generateur: null
+          generateur_multi_batiment: false
+          generateur_collectif: false
+          pn_saisi: null
+          role: appoint
+        systemes: [*chaudiere_gaz_base]
+      expect: 0.25
+
+    - title: Système en base aux côtés d'un appoint → part de base de la configuration
+      with:
+        systeme: *chaudiere_gaz_base
+        systemes:
+          - type_systeme: divise
+            type_generateur: poele
+            energie_generateur: bois_buche
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: false
+            pn_saisi: null
+            role: appoint
+      expect: 0.75
+
+    - title: Un système collectif n'entre pas dans le dimensionnement des systèmes individuels
+      with:
+        systeme: *chaudiere_gaz_base
+        systemes:
+          - type_systeme: central
+            type_generateur: chaudiere
+            energie_generateur: gaz_naturel
+            bienergie_generateur: null
+            generateur_multi_batiment: false
+            generateur_collectif: true
+            pn_saisi: null
+            role: base
+      expect: 1

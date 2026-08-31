@@ -1,0 +1,686 @@
+ecs.generateur.cef:
+  rule: consommations
+  cases:
+    - title: Consommations des systèmes complétées par l'auxiliaire de génération
+      with:
+        consommations:
+          - ecs:
+              gaz_naturel: { cef: 3000, cep: 3000, eges: 681 }
+        caux_gen: 100
+        caux_gen_enr: 0
+      expect:
+        ecs:
+          gaz_naturel: { cef: 3000, cep: 3000, eges: 681 }
+        auxiliaire:
+          electricite: { cef: 100, cep: 190, eges: 6.9 }
+
+    - title: Générateur sans système rattaché → seul l'auxiliaire de génération est compté
+      with:
+        consommations: []
+        caux_gen: 100
+        caux_gen_enr: 0
+      expect:
+        auxiliaire:
+          electricite: { cef: 100, cep: 190, eges: 6.9 }
+
+ecs.generateur.cecs:
+  rule: cecs
+  cases:
+    - title: Somme des consommations des systèmes du générateur
+      with:
+        cecs: [1500, 500]
+      expect: 2000
+
+    - title: Aucun système → 0
+      with:
+        cecs: []
+      expect: 0
+
+ecs.generateur.cecs_elec:
+  rule: cecs_elec
+  cases:
+    - title: Somme des consommations électriques des systèmes du générateur
+      with:
+        cecs_elec: [1500, 0]
+      expect: 1500
+
+    - title: Aucun système électrique → 0
+      with:
+        cecs_elec: []
+      expect: 0
+
+ecs.generateur.caux_gen:
+  rule: caux_gen
+  cases:
+    - title: Auxiliaire de 100 W, besoins annuels de 1200 kWh, générateur de 20 kW
+      with:
+        pn: 20
+        paux: 100
+        rdim: 1
+        becs:
+          &becs100
+          "01": 100
+          "02": 100
+          "03": 100
+          "04": 100
+          "05": 100
+          "06": 100
+          "07": 100
+          "08": 100
+          "09": 100
+          "10": 100
+          "11": 100
+          "12": 100
+      expect: 6
+
+    - title: Générateur couvrant la moitié des besoins → consommation d'auxiliaire réduite de moitié
+      with:
+        pn: 20
+        paux: 100
+        rdim: 0.5
+        becs: *becs100
+      expect: 3
+
+    - title: Aucun auxiliaire → aucune consommation
+      with:
+        pn: 20
+        paux: 0
+        rdim: 1
+        becs: *becs100
+      expect: 0
+
+ecs.generateur.caux_gen_enr:
+  rule: caux_gen_enr
+  cases:
+    - title: Part d'électricité autoconsommée affectée à l'auxiliaire de génération ECS
+      with:
+        celec:
+          ecs: 1000
+        celec_ac:
+          ecs: 200
+        caux_gen: 500
+      expect: 100
+
+    - title: Aucune consommation d'auxiliaire → aucune part renouvelable
+      with:
+        celec:
+          ecs: 1000
+        celec_ac:
+          ecs: 200
+        caux_gen: 0
+      expect: 0
+
+ecs.generateur.rdim:
+  rule: rdim
+  cases:
+    - title: Cumul des dimensionnements système × installation
+      with:
+        systemes:
+          - rdim: 0.5
+            rdim_installation: 0.4
+          - rdim: 1
+            rdim_installation: 0.6
+      expect: 0.8
+
+    - title: Aucun système → 0
+      with:
+        systemes: []
+      expect: 0
+
+ecs.generateur.pn:
+  rule: pn
+  cases:
+    - title: Puissance nominale saisie → retenue
+      with:
+        pn_saisi: 25
+        pdim: 5
+      expect: 25
+
+    - title: Puissance nominale non saisie → puissance de dimensionnement
+      with:
+        pn_saisi: null
+        pdim: 5
+      expect: 5
+
+ecs.generateur.pdim:
+  rule: pdim
+  cases:
+    - title: Générateur dédié à l'ECS → puissance ECS
+      with:
+        pecs: 5
+        pch: null
+      expect: 5
+
+    - title: Générateur mixte → maximum des puissances ECS et chauffage
+      with:
+        pecs: 5
+        pch: 20
+      expect: 20
+
+    - title: Générateur mixte dont l'ECS est dimensionnante
+      with:
+        pecs: 25
+        pch: 20
+      expect: 25
+
+ecs.generateur.pecs:
+  rule: pecs
+  cases:
+    - title: Puissance nominale saisie → retenue
+      with:
+        pn_saisi: 18
+        volume_stockage: 200
+      expect: 18
+
+    - title: Production instantanée (aucun stockage) → 21 kW
+      with:
+        pn_saisi: null
+        volume_stockage: 0
+      expect: 21
+
+    - title: Petit ballon de 10 litres → 21 - 0.8 × V
+      with:
+        pn_saisi: null
+        volume_stockage: 10
+      expect: 13
+
+    - title: Ballon de 20 litres → borne haute du régime des petits ballons
+      with:
+        pn_saisi: null
+        volume_stockage: 20
+      expect: 5
+
+    - title: Ballon de 100 litres → régime intermédiaire
+      with:
+        pn_saisi: null
+        volume_stockage: 100
+      expect: 2.8449
+
+    - title: Ballon de 150 litres → borne haute du régime intermédiaire
+      with:
+        pn_saisi: null
+        volume_stockage: 150
+      expect: 1.498
+
+    - title: Ballon de 200 litres → régime des grands ballons
+      with:
+        pn_saisi: null
+        volume_stockage: 200
+      expect: 1.856
+
+ecs.generateur.paux:
+  rule: paux
+  cases:
+    - title: Chaudière gaz de 20 kW → 20 + 1.6 × Pn
+      with:
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expect: 52
+
+    - title: Puissance écrêtée au plafond de l'abaque (400 kW)
+      with:
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 500
+      expect: 660
+
+    - title: Chauffe-eau → aucun auxiliaire de génération
+      with:
+        type_generateur: chauffe_eau
+        energie_generateur: electricite
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 5
+      expect: 0
+
+    - title: Chauffe-eau thermodynamique sur air extérieur → aucun auxiliaire
+      with:
+        type_generateur: cet_air_exterieur
+        energie_generateur: electricite
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 5
+      expect: 0
+
+    - title: Chaudière bois avec ventouse → 73.3 + 10.5 × Pn
+      with:
+        type_generateur: chaudiere
+        energie_generateur: bois_buche
+        generateur_multi_batiment: false
+        presence_ventouse: true
+        pn: 20
+      expect: 283.3
+
+    - title: Générateur multi-bâtiment → auxiliaire non imputé au logement
+      with:
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: true
+        presence_ventouse: false
+        pn: 20
+      expect: 0
+
+    - title: Type de générateur hors abaque → erreur ValeurForfaitaire
+      with:
+        type_generateur: GENERATEUR_INCONNU
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expectError: true
+
+ecs.generateur.cop:
+  rule: cop
+  cases:
+    - title: COP saisi → retenu tel quel
+      with:
+        cop_saisi: 3.1
+        type_generateur: cet_air_exterieur
+        zone_climatique: H1a
+        annee_installation: 2020
+      expect: 3.1
+
+    - title: Chauffe-eau thermodynamique sur air extérieur, zone H1a, installé en 2020 → 2.5
+      with:
+        cop_saisi: null
+        type_generateur: cet_air_exterieur
+        zone_climatique: H1a
+        annee_installation: 2020
+      expect: 2.5
+
+    - title: Chauffe-eau thermodynamique sur air extérieur, zone H1a, installé en 2005 → 2
+      with:
+        cop_saisi: null
+        type_generateur: cet_air_exterieur
+        zone_climatique: H1a
+        annee_installation: 2005
+      expect: 2
+
+    - title: Chauffe-eau thermodynamique sur air extrait, zone H3, installé en 2020 → 2.9
+      with:
+        cop_saisi: null
+        type_generateur: cet_air_extrait
+        zone_climatique: H3
+        annee_installation: 2020
+      expect: 2.9
+
+    - title: PAC double service en zone H1a installée en 2020 → 2.3
+      with:
+        cop_saisi: null
+        type_generateur: pac_air_eau
+        zone_climatique: H1a
+        annee_installation: 2020
+      expect: 2.3
+
+    - title: Générateur non thermodynamique → erreur ValeurForfaitaire
+      with:
+        cop_saisi: null
+        type_generateur: chaudiere
+        zone_climatique: H1a
+        annee_installation: 2020
+      expectError: true
+
+ecs.generateur.rpn:
+  rule: combustion
+  cases:
+    - title: Toutes les performances saisies → aucune lecture d'abaque
+      with:
+        rpn_saisi: 0.85
+        qp0_saisi: 0.3
+        pveilleuse_saisi: 150
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        volume_stockage: 0
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpn: 0.85
+        qp0: 0.3
+        pveilleuse: 150
+
+    - title: Chaudière gaz standard installée en 1995, 100 kW → performances forfaitaires
+      with:
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        volume_stockage: 0
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpn: 0.88
+        qp0: 1.2
+        pveilleuse: 120
+
+    - title: Chaudière gaz standard installée en 1975 → pertes à l'arrêt plus élevées
+      with:
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        volume_stockage: 0
+        annee_installation: 1975
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpn: 0.88
+        qp0: 4
+        pveilleuse: 240
+
+    - title: Chaudière gaz basse température installée en 1995 → 0.905
+      with:
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: basse_temperature
+        volume_stockage: 0
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpn: 0.905
+        qp0: 1.2
+        pveilleuse: 120
+
+    - title: Bi-énergie → l'énergie d'appoint prime pour la lecture de l'abaque
+      with:
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: electricite
+        bienergie_generateur: gaz_naturel
+        mode_combustion: standard
+        volume_stockage: 0
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpn: 0.88
+        qp0: 1.2
+        pveilleuse: 120
+
+    - title: Générateur hors abaque de combustion → erreur ValeurForfaitaire
+      with:
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: cet_air_exterieur
+        energie_generateur: electricite
+        bienergie_generateur: null
+        mode_combustion: standard
+        volume_stockage: 0
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expectError: true
+
+ecs.generateur.cr:
+  rule: cr
+  cases:
+    - title: Aucun stockage → aucun coefficient de perte
+      with:
+        type_generateur: chauffe_eau
+        energie_generateur: electricite
+        position_chauffe_eau: chauffe_eau_vertical
+        label_generateur: ne_performance_b
+        volume_stockage: 0
+      expect: 0
+
+    - title: Chauffe-eau vertical NE Performance B de 50 litres → 0.27
+      with:
+        type_generateur: chauffe_eau
+        energie_generateur: electricite
+        position_chauffe_eau: chauffe_eau_vertical
+        label_generateur: ne_performance_b
+        volume_stockage: 50
+      expect: 0.27
+
+    - title: Chauffe-eau vertical NE Performance B de 150 litres → 0.22
+      with:
+        type_generateur: chauffe_eau
+        energie_generateur: electricite
+        position_chauffe_eau: chauffe_eau_vertical
+        label_generateur: ne_performance_b
+        volume_stockage: 150
+      expect: 0.22
+
+    - title: Chauffe-eau vertical NE Performance A de 50 litres → 0.32
+      with:
+        type_generateur: chauffe_eau
+        energie_generateur: electricite
+        position_chauffe_eau: chauffe_eau_vertical
+        label_generateur: ne_performance_a
+        volume_stockage: 50
+      expect: 0.32
+
+    - title: Chauffe-eau horizontal de 50 litres → 0.39
+      with:
+        type_generateur: chauffe_eau
+        energie_generateur: electricite
+        position_chauffe_eau: chauffe_eau_horizontal
+        label_generateur: null
+        volume_stockage: 50
+      expect: 0.39
+
+    - title: Combinaison hors abaque → erreur ValeurForfaitaire
+      with:
+        type_generateur: GENERATEUR_INCONNU
+        energie_generateur: electricite
+        position_chauffe_eau: chauffe_eau_vertical
+        label_generateur: ne_performance_b
+        volume_stockage: 50
+      expectError: true
+
+ecs.generateur.qgw:
+  rule: qgw
+  cases:
+    - title: Aucun stockage → aucune perte
+      with:
+        energie_generateur: electricite
+        cr: 0.3
+        volume_stockage: 0
+      expect: 0
+
+    - title: Ballon électrique de 200 litres, coefficient de perte 0.3
+      with:
+        energie_generateur: electricite
+        cr: 0.3
+        volume_stockage: 200
+      expect: 966600
+
+    - title: Ballon électrique de 100 litres, coefficient de perte 0.27
+      with:
+        energie_generateur: electricite
+        cr: 0.27
+        volume_stockage: 100
+      expect: 434970
+
+ecs.generateur.qgen:
+  rule: qgen
+  cases:
+    - title: Générateur dédié à l'ECS → pertes de génération non imputées
+      with:
+        generateur_mixte: false
+        presence_ventouse: false
+        qp0: 0.3
+      expect: 0
+
+    - title: Générateur mixte sans ventouse → coefficient de pertes de 5
+      with:
+        generateur_mixte: true
+        presence_ventouse: false
+        qp0: 0.3
+      expect: 720
+
+    - title: Générateur mixte avec ventouse → coefficient de pertes de 0.75
+      with:
+        generateur_mixte: true
+        presence_ventouse: true
+        qp0: 0.3
+      expect: 108
+
+ecs.generateur.type_generateur:
+  rule: type_generateur
+  cases:
+    - title: Type de générateur saisi → retenu
+      with:
+        type_generateur: cet_air_exterieur
+      expect: cet_air_exterieur
+
+    - title: Type de générateur non saisi → chaudière par défaut
+      with:
+        type_generateur: null
+      expect: chaudiere
+
+ecs.generateur.energie_generateur:
+  rule: energie_generateur
+  cases:
+    - title: Énergie saisie → retenue
+      with:
+        energie_generateur: electricite
+      expect: electricite
+
+    - title: Énergie non saisie → fioul par défaut
+      with:
+        energie_generateur: null
+      expect: fioul
+
+ecs.generateur.mode_combustion:
+  rule: mode_combustion
+  cases:
+    - title: Mode de combustion saisi → retenu
+      with:
+        mode_combustion: condensation
+      expect: condensation
+
+    - title: Mode de combustion non saisi → standard par défaut
+      with:
+        mode_combustion: null
+      expect: standard
+
+ecs.generateur.presence_ventouse:
+  rule: presence_ventouse
+  cases:
+    - title: Présence saisie → retenue
+      with:
+        presence_ventouse: true
+      expect: true
+
+    - title: Présence non saisie → absence par défaut
+      with:
+        presence_ventouse: null
+      expect: false
+
+ecs.generateur.annee_installation:
+  rule: annee_installation
+  cases:
+    - title: Année d'installation saisie → retenue
+      with:
+        annee_installation: 2015
+        annee_construction_batiment: 1975
+      expect: 2015
+
+    - title: Année d'installation absente → année de construction du bâtiment
+      with:
+        annee_installation: null
+        annee_construction_batiment: 1975
+      expect: 1975
+
+ecs.generateur.volume_stockage:
+  rule: volume_stockage
+  cases:
+    - title: Volume de stockage saisi → retenu
+      with:
+        volume_stockage: 200
+      expect: 200
+
+    - title: Volume de stockage non saisi → 50 litres par défaut
+      with:
+        volume_stockage: null
+      expect: 50
+
+    - title: Absence de stockage explicitement déclarée → 0
+      with:
+        volume_stockage: 0
+      expect: 0
+
+ecs.generateur.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire de l'auxiliaire de génération (× 1.9)
+      with:
+        consommations: []
+        caux_gen: 100
+        caux_gen_enr: 0
+      expectPartial:
+        auxiliaire:
+          electricite: { cep: 190 }
+
+ecs.generateur.eges:
+  rule: consommations
+  cases:
+    - title: Émissions de l'auxiliaire de génération (0.069 kgCO2eq/kWh)
+      with:
+        consommations: []
+        caux_gen: 100
+        caux_gen_enr: 0
+      expectPartial:
+        auxiliaire:
+          electricite: { eges: 6.9 }
+
+ecs.generateur.qp0:
+  rule: combustion
+  cases:
+    - title: Pertes à l'arrêt d'une chaudière gaz standard de 100 kW installée en 1995
+      with:
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        volume_stockage: 0
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expectPartial:
+        qp0: 1.2
+
+ecs.generateur.pveilleuse:
+  rule: combustion
+  cases:
+    - title: Puissance de veilleuse d'une chaudière gaz standard installée en 1995
+      with:
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        volume_stockage: 0
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expectPartial:
+        pveilleuse: 120

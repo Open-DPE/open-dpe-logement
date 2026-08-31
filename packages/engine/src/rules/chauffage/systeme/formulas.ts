@@ -26,22 +26,22 @@ export function calcule_consommations(props: {
 	cch_enr: ReturnType<typeof calcule_cch_enr>;
 	caux_dist: ReturnType<typeof calcule_caux_dist>;
 	caux_dist_enr: ReturnType<typeof calcule_caux_dist_enr>;
-	energie: models.chauffage.generateur.EnergieChauffageEnum;
+	energie: models.chauffage.generateur.EnergieChauffage;
 	reseau_id: string | null;
 }): models.common.Consommations {
 	return models.common.mergeConsommations(
 		common.calcule_consommations({
 			cef: props.cch,
 			cef_enr: props.cch_enr,
-			usage: models.common.USAGES.chauffage,
+			usage: models.common.Usage.enum.chauffage,
 			energie: props.energie,
 			reseau_id: props.reseau_id,
 		}),
 		common.calcule_consommations({
 			cef: props.caux_dist,
 			cef_enr: props.caux_dist_enr,
-			usage: models.common.USAGES.auxiliaire,
-			energie: models.common.ENERGIES.electricite,
+			usage: models.common.Usage.enum.auxiliaire,
+			energie: models.common.Energie.enum.electricite,
 			reseau_id: null,
 		}),
 	);
@@ -84,7 +84,7 @@ export function calcule_cch_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.USAGES_ELECTRICITE.chauffage,
+		usage: models.production.UsageElectricite.enum.chauffage,
 		cef: props.cch_elec,
 	});
 }
@@ -134,7 +134,7 @@ export function calcule_caux_dist_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.USAGES_ELECTRICITE.auxiliaires_distribution,
+		usage: models.production.UsageElectricite.enum.auxiliaires_distribution,
 		cef: props.caux_dist,
 	});
 }
@@ -285,7 +285,7 @@ export function calcule_t(props: {
  * @returns Rendement de distribution du système de chauffage
  */
 export function calcule_rd(props: {
-	type_distribution: models.chauffage.systeme.TypeDistributionEnum | null;
+	type_distribution: models.chauffage.systeme.TypeDistribution | null;
 	temperature_distribution: ReturnType<
 		typeof set_temperature_distribution
 	> | null;
@@ -380,7 +380,7 @@ export function calcule_rg_reseau_chaleur(): number {
 export function calcule_rg_autres(props: {
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	energie_generateur: ReturnType<typeof generateur.set_energie_generateur>;
-	label_generateur: models.chauffage.generateur.LabelEnum | null;
+	label_generateur: models.chauffage.generateur.LabelGenerateur | null;
 	annee_installation_generateur: ReturnType<
 		typeof generateur.set_annee_installation
 	>;
@@ -451,12 +451,12 @@ export function set_presence_circulateur_externe(props: {
  * @returns Température de distribution du réseau de chauffage retenue
  */
 export function set_temperature_distribution(props: {
-	temperature_distribution: models.chauffage.emetteur.TemperatureDistributionEnum | null;
-}): models.chauffage.emetteur.TemperatureDistributionEnum {
+	temperature_distribution: models.chauffage.emetteur.TemperatureDistribution | null;
+}): models.chauffage.emetteur.TemperatureDistribution {
 	const { temperature_distribution } = props;
 	return (
 		temperature_distribution ??
-		models.chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute
+		models.chauffage.emetteur.TemperatureDistribution.enum.haute
 	);
 }
 

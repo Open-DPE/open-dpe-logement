@@ -1,0 +1,423 @@
+enveloppe.pont_thermique.pt:
+  rule: pt
+  cases:
+    - title: Liaison plancher bas / mur → longueur × kpt (aucun abattement)
+      with:
+        type_liaison: plancher_bas_mur
+        kpt: 0.39
+        l: 10
+        pont_thermique_partiel: false
+      expect: 3.9
+
+    - title: Liaison plancher haut / mur → longueur × kpt
+      with:
+        type_liaison: plancher_haut_mur
+        kpt: 0.3
+        l: 10
+        pont_thermique_partiel: false
+      expect: 3
+
+    - title: Liaison baie / mur → longueur × kpt
+      with:
+        type_liaison: baie_mur
+        kpt: 0.43
+        l: 6
+        pont_thermique_partiel: false
+      expect: 2.58
+
+    - title: Liaison refend / mur totale → longueur × kpt
+      with:
+        type_liaison: refend_mur
+        kpt: 0.73
+        l: 10
+        pont_thermique_partiel: false
+      expect: 7.3
+
+    - title: Liaison refend / mur partielle → abattement de 50 %
+      with:
+        type_liaison: refend_mur
+        kpt: 0.73
+        l: 10
+        pont_thermique_partiel: true
+      expect: 3.65
+
+    - title: Liaison plancher intermédiaire / mur partielle → abattement de 50 %
+      with:
+        type_liaison: plancher_intermediaire_mur
+        kpt: 0.86
+        l: 10
+        pont_thermique_partiel: true
+      expect: 4.3
+
+    - title: L'abattement partiel ne s'applique pas aux liaisons plancher bas / mur
+      with:
+        type_liaison: plancher_bas_mur
+        kpt: 0.39
+        l: 10
+        pont_thermique_partiel: true
+      expect: 3.9
+
+    - title: L'abattement partiel ne s'applique pas aux liaisons baie / mur
+      with:
+        type_liaison: baie_mur
+        kpt: 0.43
+        l: 6
+        pont_thermique_partiel: true
+      expect: 2.58
+
+    - title: Longueur nulle → aucune déperdition
+      with:
+        type_liaison: refend_mur
+        kpt: 0.73
+        l: 0
+        pont_thermique_partiel: false
+      expect: 0
+
+enveloppe.pont_thermique.kpt:
+  rule: kpt
+  cases:
+    - title: kpt saisi → retenu tel quel
+      with:
+        kpt_saisi: 0.55
+        type_liaison: refend_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.55
+
+    - title: Refend / mur, mur non isolé → 0.73
+      with:
+        kpt_saisi: null
+        type_liaison: refend_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.73
+
+    - title: Refend / mur, mur isolé par l'intérieur → 0.82
+      with:
+        kpt_saisi: null
+        type_liaison: refend_mur
+        isolation_mur: true
+        type_isolation_mur: iti
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.82
+
+    - title: Refend / mur, mur isolé par l'extérieur → 0.13
+      with:
+        kpt_saisi: null
+        type_liaison: refend_mur
+        isolation_mur: true
+        type_isolation_mur: ite
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.13
+
+    - title: Plancher intermédiaire / mur, mur non isolé → 0.86
+      with:
+        kpt_saisi: null
+        type_liaison: plancher_intermediaire_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.86
+
+    - title: Plancher bas / mur, ni mur ni plancher isolés → 0.39
+      with:
+        kpt_saisi: null
+        type_liaison: plancher_bas_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: false
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.39
+
+    - title: Plancher bas / mur, mur non isolé et plancher isolé par l'intérieur → 0.47
+      with:
+        kpt_saisi: null
+        type_liaison: plancher_bas_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: true
+        type_isolation_plancher: iti
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.47
+
+    - title: Plancher bas / mur, mur et plancher isolés par l'intérieur → 0.08
+      with:
+        kpt_saisi: null
+        type_liaison: plancher_bas_mur
+        isolation_mur: true
+        type_isolation_mur: iti
+        isolation_plancher: true
+        type_isolation_plancher: iti
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.08
+
+    - title: Plancher haut / mur, ni mur ni plancher isolés → 0.3
+      with:
+        kpt_saisi: null
+        type_liaison: plancher_haut_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: false
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.3
+
+    - title: Plancher haut / mur, mur non isolé et plancher isolé par l'extérieur → 0.4
+      with:
+        kpt_saisi: null
+        type_liaison: plancher_haut_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: true
+        type_isolation_plancher: ite
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expect: 0.4
+
+    - title: Baie / mur, mur non isolé, pose au nu extérieur, dormant 50 mm → 0.43
+      with:
+        kpt_saisi: null
+        type_liaison: baie_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: nu_exterieur
+        presence_retour_isolation: false
+        largeur_dormant: 50
+      expect: 0.43
+
+    - title: Baie / mur, mur non isolé, pose en tunnel → 0.31
+      with:
+        kpt_saisi: null
+        type_liaison: baie_mur
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: tunnel
+        presence_retour_isolation: false
+        largeur_dormant: 50
+      expect: 0.31
+
+    - title: Baie / mur, mur isolé par l'intérieur avec retour d'isolation, pose au nu extérieur → 0.22
+      with:
+        kpt_saisi: null
+        type_liaison: baie_mur
+        isolation_mur: true
+        type_isolation_mur: iti
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: nu_exterieur
+        presence_retour_isolation: true
+        largeur_dormant: 50
+      expect: 0.22
+
+    - title: Baie / mur, mur isolé par l'intérieur sans retour d'isolation, pose au nu extérieur → 0.43
+      with:
+        kpt_saisi: null
+        type_liaison: baie_mur
+        isolation_mur: true
+        type_isolation_mur: iti
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: nu_exterieur
+        presence_retour_isolation: false
+        largeur_dormant: 50
+      expect: 0.43
+
+    - title: Porte / mur, mur isolé par l'extérieur sans retour d'isolation, pose au nu intérieur → 0.9
+      with:
+        kpt_saisi: null
+        type_liaison: porte_mur
+        isolation_mur: true
+        type_isolation_mur: ite
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: nu_interieur
+        presence_retour_isolation: false
+        largeur_dormant: 50
+      expect: 0.9
+
+    - title: Type de liaison inconnu → erreur ValeurForfaitaire
+      with:
+        kpt_saisi: null
+        type_liaison: LIAISON_INCONNUE
+        isolation_mur: false
+        type_isolation_mur: null
+        isolation_plancher: null
+        type_isolation_plancher: null
+        type_pose_menuiserie: null
+        presence_retour_isolation: null
+        largeur_dormant: null
+      expectError: true
+
+enveloppe.pont_thermique.isolation_mur:
+  rule: isolation_mur
+  cases:
+    - title: Isolation saisie → retenue
+      with:
+        isolation: false
+        annee_construction: 2010
+      expect: false
+
+    - title: Isolation inconnue, construction en 1975 → isolé
+      with:
+        isolation: null
+        annee_construction: 1975
+      expect: true
+
+    - title: Isolation inconnue, construction en 1974 → non isolé
+      with:
+        isolation: null
+        annee_construction: 1974
+      expect: false
+
+enveloppe.pont_thermique.isolation_plancher_haut:
+  rule: isolation_plancher_haut
+  cases:
+    - title: Isolation saisie → retenue
+      with:
+        isolation: true
+        annee_construction: 1950
+      expect: true
+
+    - title: Isolation inconnue, construction en 1975 → isolé
+      with:
+        isolation: null
+        annee_construction: 1975
+      expect: true
+
+    - title: Isolation inconnue, construction en 1974 → non isolé
+      with:
+        isolation: null
+        annee_construction: 1974
+      expect: false
+
+enveloppe.pont_thermique.isolation_plancher_bas:
+  rule: isolation_plancher_bas
+  cases:
+    - title: Isolation saisie → retenue
+      with:
+        mitoyennete: vide_sanitaire
+        isolation: true
+        annee_construction: 1950
+      expect: true
+
+    - title: Vide sanitaire, isolation inconnue, construction en 1975 → isolé
+      with:
+        mitoyennete: vide_sanitaire
+        isolation: null
+        annee_construction: 1975
+      expect: true
+
+    - title: Terre-plein, isolation inconnue, construction en 1975 → non isolé (seuil 2001)
+      with:
+        mitoyennete: terre_plein
+        isolation: null
+        annee_construction: 1975
+      expect: false
+
+    - title: Terre-plein, isolation inconnue, construction en 2001 → isolé
+      with:
+        mitoyennete: terre_plein
+        isolation: null
+        annee_construction: 2001
+      expect: true
+
+enveloppe.pont_thermique.type_isolation_mur:
+  rule: type_isolation_mur
+  cases:
+    - title: Type d'isolation saisi → retenu
+      with:
+        type_isolation: ite
+      expect: ite
+
+    - title: Type d'isolation non saisi → ITI par défaut
+      with:
+        type_isolation: null
+      expect: iti
+
+enveloppe.pont_thermique.type_isolation_plancher_haut:
+  rule: type_isolation_plancher_haut
+  cases:
+    - title: Type d'isolation saisi → retenu
+      with:
+        type_isolation: iti
+      expect: iti
+
+    - title: Type d'isolation non saisi → ITE par défaut
+      with:
+        type_isolation: null
+      expect: ite
+
+enveloppe.pont_thermique.type_isolation_plancher_bas:
+  rule: type_isolation_plancher_bas
+  cases:
+    - title: Type d'isolation saisi → retenu
+      with:
+        type_isolation: iti
+      expect: iti
+
+    - title: Type d'isolation non saisi → ITE par défaut
+      with:
+        type_isolation: null
+      expect: ite
+
+enveloppe.pont_thermique.largeur_dormant:
+  rule: largeur_dormant
+  cases:
+    - title: Largeur de dormant saisie → retenue
+      with:
+        largeur_dormant: 80
+      expect: 80
+
+    - title: Largeur de dormant non saisie → 50 mm par défaut
+      with:
+        largeur_dormant: null
+      expect: 50
+
+enveloppe.pont_thermique.presence_retour_isolation:
+  rule: presence_retour_isolation
+  cases:
+    - title: Présence saisie → retenue
+      with:
+        presence_retour_isolation: true
+      expect: true
+
+    - title: Présence non saisie → absence par défaut
+      with:
+        presence_retour_isolation: null
+      expect: false

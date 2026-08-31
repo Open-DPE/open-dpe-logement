@@ -21,8 +21,7 @@ export function mapLocalNonChauffe(
 }
 
 export type LocalNonChauffeProps =
-	| LocalNonChauffeFromEts
-	| LocalNonChauffeFromParoi;
+	LocalNonChauffeFromEts | LocalNonChauffeFromParoi;
 
 export interface LocalNonChauffeFromEts {
 	id: "ets";
@@ -44,7 +43,8 @@ export namespace fromEts {
 		const value: enveloppe.localNonChauffe.LocalNonChauffeBase = {
 			id: resolveId(ets.donnee_entree.reference),
 			description: ets.donnee_entree.description ?? "Non renseigné",
-			type: enveloppe.localNonChauffe.TYPES_LNC.espace_tampon_solarise,
+			type: enveloppe.localNonChauffe.TypeLocalNonChauffe.enum
+				.espace_tampon_solarise,
 			parois: [],
 			baies: ets.baie_ets_collection.map((baieEts) =>
 				baie.mapBaie({ baie: baieEts, ets }),
@@ -69,7 +69,7 @@ export namespace fromParoi {
 		const surface_aiu = surfaceAiu(paroi);
 
 		if (
-			mitoyennete !== enveloppe.common.MITOYENNETES.local_non_chauffe ||
+			mitoyennete !== enveloppe.common.Mitoyennete.enum.local_non_chauffe ||
 			!surface_aue ||
 			!surface_aiu
 		)
@@ -93,7 +93,7 @@ export namespace fromParoi {
 			description: "Paroi reconstituée",
 			isolation,
 			position: {
-				mitoyennete: enveloppe.common.MITOYENNETES.exterieur,
+				mitoyennete: enveloppe.common.Mitoyennete.enum.exterieur,
 				surface: surface_aue,
 			},
 		});
@@ -104,7 +104,7 @@ export namespace fromParoi {
 				description: "Paroi reconstituée",
 				isolation,
 				position: {
-					mitoyennete: enveloppe.common.MITOYENNETES.local_residentiel,
+					mitoyennete: enveloppe.common.Mitoyennete.enum.local_residentiel,
 					surface: surface_aiu - surface_paroi,
 				},
 			});
@@ -119,33 +119,34 @@ export namespace fromParoi {
 	export function mapType(
 		props: Paroi,
 	): enveloppe.localNonChauffe.LocalNonChauffe["type"] | null {
-		const TypeLncEnum = enveloppe.localNonChauffe.TYPES_LNC;
+		const TypeLocalNonChauffe = enveloppe.localNonChauffe.TypeLocalNonChauffe;
 
 		switch (props.donnee_entree.enum_type_adjacence_id) {
 			case "8":
-				return TypeLncEnum.garage;
+				return TypeLocalNonChauffe.enum.garage;
 			case "9":
-				return TypeLncEnum.cellier;
+				return TypeLocalNonChauffe.enum.cellier;
 			case "11":
-				return TypeLncEnum.comble_fortement_ventile;
+				return TypeLocalNonChauffe.enum.comble_fortement_ventile;
 			case "12":
-				return TypeLncEnum.comble_faiblement_ventile;
+				return TypeLocalNonChauffe.enum.comble_faiblement_ventile;
 			case "13":
-				return TypeLncEnum.comble_tres_faiblement_ventile;
+				return TypeLocalNonChauffe.enum.comble_tres_faiblement_ventile;
 			case "14":
-				return TypeLncEnum.circulation_sans_ouverture_exterieure;
+				return TypeLocalNonChauffe.enum.circulation_sans_ouverture_exterieure;
 			case "15":
-				return TypeLncEnum.circulation_avec_ouverture_exterieure;
+				return TypeLocalNonChauffe.enum.circulation_avec_ouverture_exterieure;
 			case "16":
-				return TypeLncEnum.circulation_avec_bouche_ou_gaine_desenfumage_ouverte;
+				return TypeLocalNonChauffe.enum
+					.circulation_avec_bouche_ou_gaine_desenfumage_ouverte;
 			case "17":
-				return TypeLncEnum.hall_entree_avec_fermeture_automatique;
+				return TypeLocalNonChauffe.enum.hall_entree_avec_fermeture_automatique;
 			case "18":
-				return TypeLncEnum.hall_entree_sans_fermeture_automatique;
+				return TypeLocalNonChauffe.enum.hall_entree_sans_fermeture_automatique;
 			case "19":
-				return TypeLncEnum.garage_collectif;
+				return TypeLocalNonChauffe.enum.garage_collectif;
 			case "21":
-				return TypeLncEnum.autres;
+				return TypeLocalNonChauffe.enum.autres;
 			default:
 				return null;
 		}

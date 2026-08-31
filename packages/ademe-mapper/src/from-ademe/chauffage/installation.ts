@@ -66,13 +66,13 @@ export function mapSurface(props: InstallationChauffage): number {
 	return props.donnee_entree.surface_chauffee - salleDeBain.mapSurface(props);
 }
 
-export function mapType(props: Props): chauffage.TypeChauffageEnum {
+export function mapType(props: Props): chauffage.TypeChauffage {
 	for (const s of mapSystemes(props)) {
-		if (s.type === chauffage.TYPES_CHAUFFAGE.central) {
-			return chauffage.TYPES_CHAUFFAGE.central;
+		if (s.type === chauffage.TypeChauffage.enum.central) {
+			return chauffage.TypeChauffage.enum.central;
 		}
 	}
-	return chauffage.TYPES_CHAUFFAGE.divise;
+	return chauffage.TypeChauffage.enum.divise;
 }
 
 export function mapInstallationCollective(
@@ -125,28 +125,29 @@ export function mapRegulationTerminale(props: InstallationChauffage): boolean {
 
 export function mapProgrammation(
 	props: InstallationChauffage,
-): chauffage.installation.TypeProgrammationEnum {
-	const TypeProgrammationEnum = chauffage.installation.TYPES_PROGRAMMATION;
+): chauffage.installation.TypeProgrammation {
+	const TypeProgrammation = chauffage.installation.TypeProgrammation;
 	const emetteur = fetchEmetteurs(props)[0];
-	if (!emetteur) return TypeProgrammationEnum.absent;
+	if (!emetteur) return TypeProgrammation.enum.absent;
 
 	switch (emetteur.donnee_entree.enum_equipement_intermittence_id) {
 		case "1":
-			return TypeProgrammationEnum.absent;
+			return TypeProgrammation.enum.absent;
 		case "2":
-			return TypeProgrammationEnum.central_sans_minimum_temperature;
+			return TypeProgrammation.enum.central_sans_minimum_temperature;
 		case "3":
-			return TypeProgrammationEnum.central_avec_minimum_temperature;
+			return TypeProgrammation.enum.central_avec_minimum_temperature;
 		case "4":
-			return TypeProgrammationEnum.terminal_avec_minimum_temperature;
+			return TypeProgrammation.enum.terminal_avec_minimum_temperature;
 		case "5":
-			return TypeProgrammationEnum.terminal_avec_minimum_temperature_detection_presence;
+			return TypeProgrammation.enum
+				.terminal_avec_minimum_temperature_detection_presence;
 		case "6":
-			return TypeProgrammationEnum.central_collectif_sans_detection_presence;
+			return TypeProgrammation.enum.central_collectif_sans_detection_presence;
 		case "7":
-			return TypeProgrammationEnum.central_collectif_avec_detection_presence;
+			return TypeProgrammation.enum.central_collectif_avec_detection_presence;
 		default:
-			return TypeProgrammationEnum.absent;
+			return TypeProgrammation.enum.absent;
 	}
 }
 
@@ -165,11 +166,11 @@ export function mapSolaireThermique(
 
 export function mapUsageSolaire(
 	props: InstallationChauffage,
-): chauffage.installation.UsageSolaireEnum | null {
+): chauffage.installation.UsageSolaire | null {
 	switch (props.donnee_entree.enum_cfg_installation_ch_id) {
 		case "2":
 		case "7":
-			return chauffage.installation.USAGES_SOLAIRE.chauffage;
+			return chauffage.installation.UsageSolaire.enum.chauffage;
 		default:
 			return null;
 	}
@@ -212,7 +213,7 @@ export namespace salleDeBain {
 			id: mapID(props.installation),
 			description: "Salle de bain",
 			surface: mapSurface(props.installation),
-			type: chauffage.TYPES_CHAUFFAGE.divise,
+			type: chauffage.TypeChauffage.enum.divise,
 			installation_collective: false,
 			comptage_individuel: null,
 			regulation_terminale: null,
@@ -253,24 +254,25 @@ export namespace salleDeBain {
 
 	export function mapProgrammation(
 		props: InstallationChauffage,
-	): chauffage.installation.TypeProgrammationEnum {
-		const TypeProgrammationEnum = chauffage.installation.TYPES_PROGRAMMATION;
+	): chauffage.installation.TypeProgrammation {
+		const TypeProgrammation = chauffage.installation.TypeProgrammation;
 		const emetteur = fetchEmetteurs(props)[0];
-		if (!emetteur) return TypeProgrammationEnum.absent;
+		if (!emetteur) return TypeProgrammation.enum.absent;
 
 		switch (emetteur.donnee_entree.enum_equipement_intermittence_id) {
 			case "1":
-				return TypeProgrammationEnum.absent;
+				return TypeProgrammation.enum.absent;
 			case "2":
-				return TypeProgrammationEnum.central_sans_minimum_temperature;
+				return TypeProgrammation.enum.central_sans_minimum_temperature;
 			case "3":
-				return TypeProgrammationEnum.central_avec_minimum_temperature;
+				return TypeProgrammation.enum.central_avec_minimum_temperature;
 			case "4":
-				return TypeProgrammationEnum.terminal_avec_minimum_temperature;
+				return TypeProgrammation.enum.terminal_avec_minimum_temperature;
 			case "5":
-				return TypeProgrammationEnum.terminal_avec_minimum_temperature_detection_presence;
+				return TypeProgrammation.enum
+					.terminal_avec_minimum_temperature_detection_presence;
 			default:
-				return TypeProgrammationEnum.absent;
+				return TypeProgrammation.enum.absent;
 		}
 	}
 

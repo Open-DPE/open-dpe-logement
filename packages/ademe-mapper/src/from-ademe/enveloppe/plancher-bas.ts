@@ -13,8 +13,8 @@ export type PlancherBasProps = {
 	input: Input;
 };
 
-const TYPES_PLANCHER_BAS = enveloppe.plancherBas.TYPES_PLANCHER_BAS;
-const INERTIES = enveloppe.common.INERTIES;
+const TypePlancherBas = enveloppe.plancherBas.TypePlancherBas;
+const Inertie = enveloppe.common.Inertie;
 
 export function mapPlancherBas(
 	props: PlancherBasProps,
@@ -74,29 +74,30 @@ export function mapType(
 ): enveloppe.plancherBas.PlancherBas["type"] {
 	switch (props.donnee_entree.enum_type_plancher_bas_id) {
 		case "1":
-			return TYPES_PLANCHER_BAS.plancher_avec_ou_sans_remplissage;
+			return TypePlancherBas.enum.plancher_avec_ou_sans_remplissage;
 		case "2":
-			return TYPES_PLANCHER_BAS.plancher_entre_solives_metalliques;
+			return TypePlancherBas.enum.plancher_entre_solives_metalliques;
 		case "3":
-			return TYPES_PLANCHER_BAS.plancher_entre_solives_bois;
+			return TypePlancherBas.enum.plancher_entre_solives_bois;
 		case "4":
-			return TYPES_PLANCHER_BAS.plancher_bois_sur_solives_metalliques;
+			return TypePlancherBas.enum.plancher_bois_sur_solives_metalliques;
 		case "5":
-			return TYPES_PLANCHER_BAS.bardeaux_et_remplissage;
+			return TypePlancherBas.enum.bardeaux_et_remplissage;
 		case "6":
-			return TYPES_PLANCHER_BAS.voutains_sur_solives_metalliques;
+			return TypePlancherBas.enum.voutains_sur_solives_metalliques;
 		case "7":
-			return TYPES_PLANCHER_BAS.voutains_briques_ou_moellons;
+			return TypePlancherBas.enum.voutains_briques_ou_moellons;
 		case "8":
-			return TYPES_PLANCHER_BAS.dalle_beton;
+			return TypePlancherBas.enum.dalle_beton;
 		case "9":
-			return TYPES_PLANCHER_BAS.plancher_bois_sur_solives_bois;
+			return TypePlancherBas.enum.plancher_bois_sur_solives_bois;
 		case "10":
-			return TYPES_PLANCHER_BAS.plancher_lourd_type_entrevous_terre_cuite_ou_poutrelles_beton;
+			return TypePlancherBas.enum
+				.plancher_lourd_type_entrevous_terre_cuite_ou_poutrelles_beton;
 		case "11":
-			return TYPES_PLANCHER_BAS.plancher_entrevous_isolant;
+			return TypePlancherBas.enum.plancher_entrevous_isolant;
 		case "12":
-			return TYPES_PLANCHER_BAS.plancher_entrevous_isolant;
+			return TypePlancherBas.enum.plancher_entrevous_isolant;
 		default:
 			return null;
 	}
@@ -120,9 +121,9 @@ export function mapInertie(
 	if ("paroi_lourde" in props.donnee_entree) {
 		switch (props.donnee_entree.paroi_lourde) {
 			case true:
-				return INERTIES.lourde;
+				return Inertie.enum.lourde;
 			case false:
-				return INERTIES.legere;
+				return Inertie.enum.legere;
 		}
 	}
 	return null;
@@ -133,10 +134,10 @@ export function mapSurfaceUe(
 ): enveloppe.plancherBas.Position["surface_ue"] {
 	const mitoyennete = mapMitoyennete(props);
 	switch (mitoyennete) {
-		case enveloppe.common.MITOYENNETES.enterre:
-		case enveloppe.common.MITOYENNETES.vide_sanitaire:
-		case enveloppe.common.MITOYENNETES.terre_plein:
-		case enveloppe.common.MITOYENNETES.sous_sol_non_chauffe:
+		case enveloppe.common.Mitoyennete.enum.enterre:
+		case enveloppe.common.Mitoyennete.enum.vide_sanitaire:
+		case enveloppe.common.Mitoyennete.enum.terre_plein:
+		case enveloppe.common.Mitoyennete.enum.sous_sol_non_chauffe:
 			return (
 				props.donnee_entree.surface_ue ||
 				props.donnee_entree.surface_paroi_opaque
@@ -151,10 +152,10 @@ export function mapPerimetreUe(
 ): enveloppe.plancherBas.Position["perimetre_ue"] {
 	const mitoyennete = mapMitoyennete(props);
 	switch (mitoyennete) {
-		case enveloppe.common.MITOYENNETES.enterre:
-		case enveloppe.common.MITOYENNETES.vide_sanitaire:
-		case enveloppe.common.MITOYENNETES.terre_plein:
-		case enveloppe.common.MITOYENNETES.sous_sol_non_chauffe: {
+		case enveloppe.common.Mitoyennete.enum.enterre:
+		case enveloppe.common.Mitoyennete.enum.vide_sanitaire:
+		case enveloppe.common.Mitoyennete.enum.terre_plein:
+		case enveloppe.common.Mitoyennete.enum.sous_sol_non_chauffe: {
 			if (props.donnee_entree.perimetre_ue)
 				return props.donnee_entree.perimetre_ue;
 

@@ -26,8 +26,8 @@ export function calcule_consommations(props: {
 		common.calcule_consommations({
 			cef: props.caux_gen,
 			cef_enr: props.caux_gen_enr,
-			usage: models.common.USAGES.auxiliaire,
-			energie: models.common.ENERGIES.electricite,
+			usage: models.common.Usage.enum.auxiliaire,
+			energie: models.common.Energie.enum.electricite,
 			reseau_id: null,
 		}),
 	);
@@ -81,7 +81,7 @@ export function calcule_caux_gen_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.USAGES_ELECTRICITE.ecs,
+		usage: models.production.UsageElectricite.enum.ecs,
 		cef: props.caux_gen,
 	});
 }
@@ -230,7 +230,7 @@ export function calcule_combustion(props: {
 	pveilleuse_saisi: number | null;
 	type_generateur: ReturnType<typeof set_type_generateur>;
 	energie_generateur: ReturnType<typeof set_energie_generateur>;
-	bienergie_generateur: models.ecs.generateur.BienergieEnum | null;
+	bienergie_generateur: models.ecs.generateur.Bienergie | null;
 	mode_combustion: ReturnType<typeof set_mode_combustion>;
 	volume_stockage: ReturnType<typeof set_volume_stockage>;
 	annee_installation: ReturnType<typeof set_annee_installation>;
@@ -280,10 +280,10 @@ export function calcule_combustion(props: {
  * @returns Coefficient de perte du ballon de stockage en Wh/l.°C.jour
  */
 export function calcule_cr(props: {
-	type_generateur: models.ecs.generateur.TypeGenerateurEnum;
-	energie_generateur: models.ecs.generateur.EnergieEcsEnum;
-	position_chauffe_eau: models.ecs.generateur.PositionChauffeEauEnum | null;
-	label_generateur: models.ecs.generateur.LabelEnum | null;
+	type_generateur: models.ecs.generateur.TypeGenerateur;
+	energie_generateur: models.ecs.generateur.EnergieEcs;
+	position_chauffe_eau: models.ecs.generateur.PositionChauffeEau | null;
+	label_generateur: models.ecs.generateur.LabelGenerateur | null;
 	volume_stockage: ReturnType<typeof set_volume_stockage>;
 }): number {
 	if (0 === props.volume_stockage) return 0;
@@ -298,13 +298,13 @@ export function calcule_cr(props: {
  * @returns Pertes de stockage en Wh/an
  */
 export function calcule_qgw(props: {
-	energie_generateur: models.ecs.generateur.EnergieEcsEnum;
+	energie_generateur: models.ecs.generateur.EnergieEcs;
 	cr: ReturnType<typeof calcule_cr>;
 	volume_stockage: ReturnType<typeof set_volume_stockage>;
 }): number {
 	const { energie_generateur, cr, volume_stockage } = props;
 	if (volume_stockage === 0) return 0;
-	return energie_generateur === models.common.ENERGIES.electricite
+	return energie_generateur === models.common.Energie.enum.electricite
 		? 8592 * (45 / 24) * volume_stockage * cr
 		: 67662 * volume_stockage ** 0.55;
 }
@@ -331,10 +331,10 @@ export function calcule_qgen(props: {
  * @returns Type de générateur d'eau chaude sanitaire retenu
  */
 export function set_type_generateur(props: {
-	type_generateur: models.ecs.generateur.TypeGenerateurEnum | null;
-}): models.ecs.generateur.TypeGenerateurEnum {
+	type_generateur: models.ecs.generateur.TypeGenerateur | null;
+}): models.ecs.generateur.TypeGenerateur {
 	const { type_generateur } = props;
-	return type_generateur ?? models.ecs.generateur.TYPES_GENERATEUR.chaudiere;
+	return type_generateur ?? models.ecs.generateur.TypeGenerateur.enum.chaudiere;
 }
 
 /**
@@ -342,10 +342,10 @@ export function set_type_generateur(props: {
  * @returns Energie du générateur d'eau chaude sanitaire retenue
  */
 export function set_energie_generateur(props: {
-	energie_generateur: models.ecs.generateur.EnergieEcsEnum | null;
-}): models.ecs.generateur.EnergieEcsEnum {
+	energie_generateur: models.ecs.generateur.EnergieEcs | null;
+}): models.ecs.generateur.EnergieEcs {
 	const { energie_generateur } = props;
-	return energie_generateur ?? models.common.ENERGIES.fioul;
+	return energie_generateur ?? models.common.Energie.enum.fioul;
 }
 
 /**
@@ -353,10 +353,10 @@ export function set_energie_generateur(props: {
  * @returns Mode de combustion du générateur d'eau chaude sanitaire retenu
  */
 export function set_mode_combustion(props: {
-	mode_combustion: models.ecs.generateur.ModeCombustionEnum | null;
-}): models.ecs.generateur.ModeCombustionEnum {
+	mode_combustion: models.ecs.generateur.ModeCombustion | null;
+}): models.ecs.generateur.ModeCombustion {
 	const { mode_combustion } = props;
-	return mode_combustion ?? models.ecs.generateur.MODES_COMBUSTION.standard;
+	return mode_combustion ?? models.ecs.generateur.ModeCombustion.enum.standard;
 }
 
 /**

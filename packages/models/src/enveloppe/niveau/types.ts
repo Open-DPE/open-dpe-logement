@@ -1,9 +1,9 @@
 import * as z from "zod";
 import { id, description, surface } from "../../common/types.js";
-import { InertieEnum, InertieParoiEnum } from "../common/enums.js";
+import { Inertie, InertieParoi } from "../common/enums.js";
 
 export const NiveauData = z.object({
-	inertie: InertieEnum,
+	inertie: Inertie,
 });
 
 export type NiveauData = z.infer<typeof NiveauData>;
@@ -15,9 +15,9 @@ export const Niveau = z.object({
 	id,
 	description,
 	surface,
-	inertie_paroi_verticale: InertieParoiEnum.nullable().default(null),
-	inertie_plancher_bas: InertieParoiEnum.nullable().default(null),
-	inertie_plancher_haut: InertieParoiEnum.nullable().default(null),
+	inertie_paroi_verticale: InertieParoi.nullable().default(null),
+	inertie_plancher_bas: InertieParoi.nullable().default(null),
+	inertie_plancher_haut: InertieParoi.nullable().default(null),
 });
 
 export const NiveauWithData = z.intersection(

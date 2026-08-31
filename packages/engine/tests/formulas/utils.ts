@@ -11,6 +11,7 @@ export type Tests = Record<
 			title: string;
 			with: Input;
 			expect?: Expect;
+			expectPartial?: Expect;
 			expectError?: boolean;
 		}>;
 	}
@@ -18,11 +19,7 @@ export type Tests = Record<
 
 export type Input = Record<string, unknown>;
 export type Expect =
-	| number
-	| string
-	| Record<string, unknown>
-	| Array<unknown>
-	| null;
+	number | string | Record<string, unknown> | Array<unknown> | null;
 export type Formulas = Record<string, Function>;
 
 export function runTests(path: string, formulas: Formulas) {
@@ -32,11 +29,23 @@ export function runTests(path: string, formulas: Formulas) {
 		describe(id, () => {
 			it.each(test.cases)(
 				"$title",
-				({ title: _, with: input, expect: expected, expectError }) => {
+				({
+					title: _,
+					with: input,
+					expect: expected,
+					expectPartial,
+					expectError,
+				}) => {
 					if (expectError) {
 						expect(() => formulas[test.rule](input)).toThrow();
 					} else if (expected !== undefined) {
-						expect(formulas[test.rule](input)).toEqual(toCloseMatcher(expected));
+						expect(formulas[test.rule](input)).toEqual(
+							toCloseMatcher(expected),
+						);
+					} else if (expectPartial !== undefined) {
+						expect(formulas[test.rule](input)).toEqual(
+							toPartialMatcher(expectPartial),
+						);
 					}
 				},
 			);
@@ -62,6 +71,29 @@ function toCloseMatcher(expected: Expect): unknown {
 				key,
 				toCloseMatcher(value as Expect),
 			]),
+		);
+	}
+	return expected;
+}
+
+/**
+ * Variante de {@link toCloseMatcher} qui n'impose que les clés déclarées :
+ * chaque objet devient un `expect.objectContaining`. Utile pour les formules
+ * qui retournent des structures larges (sollicitations climatiques mensuelles,
+ * consommations par usage et par énergie) dont seules quelques valeurs sont
+ * significatives pour le cas de test.
+ */
+function toPartialMatcher(expected: Expect): unknown {
+	if (typeof expected === "number") return expect.closeTo(expected);
+	if (Array.isArray(expected)) return expected.map(toPartialMatcher);
+	if (expected !== null && typeof expected === "object") {
+		return expect.objectContaining(
+			Object.fromEntries(
+				Object.entries(expected).map(([key, value]) => [
+					key,
+					toPartialMatcher(value as Expect),
+				]),
+			),
 		);
 	}
 	return expected;

@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { USAGES_ELECTRICITE } from "./enums.js";
+import { UsageElectricite } from "./enums.js";
 import {
 	PanneauPhotovoltaique,
 	PanneauPhotovoltaiqueWithData,
@@ -21,7 +21,7 @@ export const ProductionWithData = Production.extend({
 });
 
 export type ParUsageElectricite<T> = {
-	[usage in (typeof USAGES_ELECTRICITE)[keyof typeof USAGES_ELECTRICITE]]: T;
+	[usage in UsageElectricite]: T;
 };
 
 export type Production = z.infer<typeof Production>;

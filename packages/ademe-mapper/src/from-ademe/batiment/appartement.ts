@@ -56,35 +56,35 @@ export function mapHauteurSousPlafond(
 export function mapPosition(
 	props: Props["logement_visite"],
 ): batiment.appartement.Appartement["position"] {
-	const POSITIONS = batiment.appartement.POSITIONS;
+	const PositionAppartement = batiment.appartement.PositionAppartement;
 	switch (props.enum_position_etage_logement_id) {
 		case "1":
-			return POSITIONS.rdc;
+			return PositionAppartement.enum.rdc;
 		case "2":
-			return POSITIONS.etage_intermediaire;
+			return PositionAppartement.enum.etage_intermediaire;
 		case "3":
-			return POSITIONS.dernier_etage;
+			return PositionAppartement.enum.dernier_etage;
 	}
 }
 
 export function mapTypologie(
 	props: Props["logement_visite"],
 ): batiment.appartement.Appartement["typologie"] {
-	const TYPOLOGIES = batiment.appartement.TYPOLOGIES;
+	const TypologieAppartement = batiment.appartement.TypologieAppartement;
 	switch (props.enum_typologie_logement_id) {
 		case "1":
-			return TYPOLOGIES.T1;
+			return TypologieAppartement.enum.T1;
 		case "2":
-			return TYPOLOGIES.T2;
+			return TypologieAppartement.enum.T2;
 		case "3":
-			return TYPOLOGIES.T3;
+			return TypologieAppartement.enum.T3;
 		case "4":
-			return TYPOLOGIES.T4;
+			return TypologieAppartement.enum.T4;
 		case "5":
-			return TYPOLOGIES.T5;
+			return TypologieAppartement.enum.T5;
 		case "6":
-			return TYPOLOGIES.T6;
+			return TypologieAppartement.enum.T6;
 		case "7":
-			return TYPOLOGIES.T7;
+			return TypologieAppartement.enum.T7;
 	}
 }

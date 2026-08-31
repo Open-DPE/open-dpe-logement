@@ -1,12 +1,12 @@
 import * as z from "zod";
-import { BouclageEnum } from "./enums.js";
+import { BouclageReseau } from "./enums.js";
 import { id, description, Consommations } from "../../common/types.js";
 
 export const Reseau = z.object({
 	alimentation_contigue: z.boolean(),
 	niveaux_desservis: z.number().int().min(1),
 	isolation: z.boolean().nullable(),
-	bouclage: BouclageEnum.nullable(),
+	bouclage: BouclageReseau.nullable(),
 });
 
 export const Systeme = z.object({

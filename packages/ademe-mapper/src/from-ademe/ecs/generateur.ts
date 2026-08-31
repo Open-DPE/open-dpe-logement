@@ -140,22 +140,22 @@ export function mapType(
 		case "1":
 		case "2":
 		case "3":
-			return ecs.generateur.TYPES_GENERATEUR.cet_air_ambiant;
+			return ecs.generateur.TypeGenerateur.enum.cet_air_ambiant;
 		case "4":
 		case "5":
 		case "6":
-			return ecs.generateur.TYPES_GENERATEUR.cet_air_exterieur;
+			return ecs.generateur.TypeGenerateur.enum.cet_air_exterieur;
 		case "7":
 		case "8":
 		case "9":
-			return ecs.generateur.TYPES_GENERATEUR.cet_air_extrait;
+			return ecs.generateur.TypeGenerateur.enum.cet_air_extrait;
 		case "10":
 		case "11":
 		case "12":
-			return ecs.generateur.TYPES_GENERATEUR.pac_air_eau;
+			return ecs.generateur.TypeGenerateur.enum.pac_air_eau;
 		case "13":
 		case "14":
-			return ecs.generateur.TYPES_GENERATEUR.poele_bouilleur;
+			return ecs.generateur.TypeGenerateur.enum.poele_bouilleur;
 		case "15":
 		case "16":
 		case "17":
@@ -199,7 +199,7 @@ export function mapType(
 		case "55":
 		case "56":
 		case "57":
-			return ecs.generateur.TYPES_GENERATEUR.chaudiere;
+			return ecs.generateur.TypeGenerateur.enum.chaudiere;
 		case "58":
 		case "59":
 		case "60":
@@ -214,16 +214,16 @@ export function mapType(
 		case "69":
 		case "70":
 		case "71":
-			return ecs.generateur.TYPES_GENERATEUR.chauffe_eau;
+			return ecs.generateur.TypeGenerateur.enum.chauffe_eau;
 		case "72":
 		case "73":
-			return ecs.generateur.TYPES_GENERATEUR.reseau_chaleur;
+			return ecs.generateur.TypeGenerateur.enum.reseau_chaleur;
 		case "74":
 		case "75":
 		case "76":
-			return ecs.generateur.TYPES_GENERATEUR.chaudiere;
+			return ecs.generateur.TypeGenerateur.enum.chaudiere;
 		case "77":
-			return ecs.generateur.TYPES_GENERATEUR.pac_air_eau;
+			return ecs.generateur.TypeGenerateur.enum.pac_air_eau;
 		case "78":
 		case "79":
 		case "80":
@@ -253,7 +253,7 @@ export function mapType(
 		case "102":
 		case "103":
 		case "104":
-			return ecs.generateur.TYPES_GENERATEUR.chaudiere;
+			return ecs.generateur.TypeGenerateur.enum.chaudiere;
 		case "105":
 		case "106":
 		case "107":
@@ -264,16 +264,16 @@ export function mapType(
 		case "112":
 		case "113":
 		case "114":
-			return ecs.generateur.TYPES_GENERATEUR.chauffe_eau;
+			return ecs.generateur.TypeGenerateur.enum.chauffe_eau;
 		case "115":
 		case "116":
-			return ecs.generateur.TYPES_GENERATEUR.poele_bouilleur;
+			return ecs.generateur.TypeGenerateur.enum.poele_bouilleur;
 		case "117":
-			return ecs.generateur.TYPES_GENERATEUR.chauffe_eau;
+			return ecs.generateur.TypeGenerateur.enum.chauffe_eau;
 		case "118":
-			return ecs.generateur.TYPES_GENERATEUR.chaudiere;
+			return ecs.generateur.TypeGenerateur.enum.chaudiere;
 		case "119":
-			return ecs.generateur.TYPES_GENERATEUR.reseau_chaleur;
+			return ecs.generateur.TypeGenerateur.enum.reseau_chaleur;
 		case "120":
 		case "121":
 		case "122":
@@ -288,14 +288,14 @@ export function mapType(
 		case "131":
 		case "132":
 		case "133":
-			return ecs.generateur.TYPES_GENERATEUR.pac_air_eau;
+			return ecs.generateur.TypeGenerateur.enum.pac_air_eau;
 		case "134":
-			return ecs.generateur.TYPES_GENERATEUR.chaudiere;
+			return ecs.generateur.TypeGenerateur.enum.chaudiere;
 	}
 }
 
-export function mapEnergie(props: GenerateurEcs): ecs.generateur.EnergieEcsEnum {
-	const Enum = common.ENERGIES;
+export function mapEnergie(props: GenerateurEcs): ecs.generateur.EnergieEcs {
+	const Enum = common.Energie.enum;
 	// Cas des générateurs hybrides
 	switch (props.donnee_entree.enum_type_generateur_ecs_id) {
 		case "120":
@@ -349,24 +349,24 @@ export function mapBienergie(
 	switch (props.donnee_entree.enum_type_generateur_ecs_id) {
 		case "120":
 		case "121":
-			return common.ENERGIES.gaz_naturel;
+			return common.Energie.enum.gaz_naturel;
 		case "122":
 		case "123":
-			return common.ENERGIES.fioul;
+			return common.Energie.enum.fioul;
 		case "124":
 		case "125":
-			return common.ENERGIES.bois_granule;
+			return common.Energie.enum.bois_granule;
 		case "126":
 		case "127":
-			return common.ENERGIES.bois_buche;
+			return common.Energie.enum.bois_buche;
 		case "128":
 		case "129":
 		case "130":
 		case "131":
-			return common.ENERGIES.bois_plaquette;
+			return common.Energie.enum.bois_plaquette;
 		case "132":
 		case "133":
-			return common.ENERGIES.gpl;
+			return common.Energie.enum.gpl;
 		default:
 			return null;
 	}
@@ -481,7 +481,7 @@ export namespace stockage {
 					volume,
 					type:
 						mapType(props.generateur) ??
-						ecs.generateur.TYPES_STOCKAGE.integre,
+						ecs.generateur.TypeStockage.enum.integre,
 					position_volume_chauffe: mapPositionVolumeChauffe(props) ?? false,
 				};
 	}
@@ -499,11 +499,11 @@ export namespace stockage {
 			case "1":
 				return null;
 			case "2":
-				return ecs.generateur.TYPES_STOCKAGE.independant;
+				return ecs.generateur.TypeStockage.enum.independant;
 			case "3":
-				return ecs.generateur.TYPES_STOCKAGE.integre;
+				return ecs.generateur.TypeStockage.enum.integre;
 			default:
-				return ecs.generateur.TYPES_STOCKAGE.integre;
+				return ecs.generateur.TypeStockage.enum.integre;
 		}
 	}
 
@@ -513,7 +513,7 @@ export namespace stockage {
 		const type = mapType(props.generateur);
 
 		switch (type) {
-			case ecs.generateur.TYPES_STOCKAGE.integre:
+			case ecs.generateur.TypeStockage.enum.integre:
 				return position.mapPositionVolumeChauffe(props);
 			default:
 				return (
@@ -624,12 +624,12 @@ export namespace position {
 	): ecs.generateur.Position["position_chauffe_eau"] {
 		switch (props.donnee_entree.enum_type_generateur_ecs_id) {
 			case "68":
-				return ecs.generateur.POSITIONS_CHAUFFE_EAU.chauffe_eau_horizontal;
+				return ecs.generateur.PositionChauffeEau.enum.chauffe_eau_horizontal;
 			case "69":
 			case "70":
 			case "71":
 			case "117":
-				return ecs.generateur.POSITIONS_CHAUFFE_EAU.chauffe_eau_vertical;
+				return ecs.generateur.PositionChauffeEau.enum.chauffe_eau_vertical;
 			default:
 				return null;
 		}
@@ -673,9 +673,9 @@ export namespace signaletique {
 	): ecs.generateur.Signaletique["label"] {
 		switch (props.donnee_entree.enum_type_generateur_ecs_id) {
 			case "70":
-				return ecs.generateur.LABELS.ne_performance_b;
+				return ecs.generateur.LabelGenerateur.enum.ne_performance_b;
 			case "71":
-				return ecs.generateur.LABELS.ne_performance_c;
+				return ecs.generateur.LabelGenerateur.enum.ne_performance_c;
 			default:
 				return null;
 		}
@@ -756,7 +756,7 @@ export namespace signaletique {
 			case "129":
 			case "130":
 			case "131":
-				return ecs.generateur.MODES_COMBUSTION.standard;
+				return ecs.generateur.ModeCombustion.enum.standard;
 			case "41":
 			case "42":
 			case "51":
@@ -765,7 +765,7 @@ export namespace signaletique {
 			case "98":
 			case "99":
 			case "100":
-				return ecs.generateur.MODES_COMBUSTION.basse_temperature;
+				return ecs.generateur.ModeCombustion.enum.basse_temperature;
 			case "43":
 			case "44":
 			case "54":
@@ -786,7 +786,7 @@ export namespace signaletique {
 			case "123":
 			case "132":
 			case "133":
-				return ecs.generateur.MODES_COMBUSTION.condensation;
+				return ecs.generateur.ModeCombustion.enum.condensation;
 			default:
 				return null;
 		}

@@ -25,7 +25,7 @@ export function calcule_ppv(props: {
  * @returns Coefficient de pondération prenant en compte l'altération par rapport à l'orientation optimale du panneau photovoltaïque
  */
 export function calcule_kpv(props: {
-	orientation_pv: models.common.OrientationEnum;
+	orientation_pv: models.common.Orientation;
 	inclinaison_pv: number;
 }): number {
 	const abaque = abaques.production.kpv;

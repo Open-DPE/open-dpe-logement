@@ -6,12 +6,8 @@ import {
 	non_applicable,
 	annee_installation,
 } from "../../common/types.js";
-import { TYPES_CHAUFFAGE, TypeChauffageEnum } from "../enums.js";
-import {
-	TYPES_PROGRAMMATION,
-	TypeProgrammationEnum,
-	UsageSolaireEnum,
-} from "./enums.js";
+import { TypeChauffage } from "../enums.js";
+import { TypeProgrammation, UsageSolaire } from "./enums.js";
 import { Systeme, SystemeWithData } from "../systeme/types.js";
 
 /**
@@ -19,7 +15,7 @@ import { Systeme, SystemeWithData } from "../systeme/types.js";
  * `fch` porte un `maximum: 1` en plus de son `oneOf[nombre, const null]`.
  */
 export const SolaireThermique = z.object({
-	usage: UsageSolaireEnum,
+	usage: UsageSolaire,
 	annee_installation,
 	fch: z.number().max(1).nullable(),
 });
@@ -62,52 +58,52 @@ export const InstallationBase = z.object({
 	id,
 	description,
 	surface,
-	type: TypeChauffageEnum,
+	type: TypeChauffage,
 	installation_collective: z.boolean(),
 	comptage_individuel: z.boolean().nullable(),
 	regulation_terminale: z.boolean().nullable(),
-	programmation: TypeProgrammationEnum,
+	programmation: TypeProgrammation,
 	solaire_thermique: SolaireThermique.nullable(),
 	systemes: z.array(Systeme).min(1),
 });
 
 export const InstallationChauffageCentralCollectif = InstallationBase.extend({
-	type: TypeChauffageEnum.extract([TYPES_CHAUFFAGE.central]),
+	type: TypeChauffage.extract(["central"]),
 	installation_collective: z.literal(true),
 	comptage_individuel: z.boolean(),
 	regulation_terminale: z.boolean(),
-	programmation: TypeProgrammationEnum.extract([
-		TYPES_PROGRAMMATION.absent,
-		TYPES_PROGRAMMATION.central_collectif_sans_detection_presence,
-		TYPES_PROGRAMMATION.central_collectif_avec_detection_presence,
+	programmation: TypeProgrammation.extract([
+		"absent",
+		"central_collectif_sans_detection_presence",
+		"central_collectif_avec_detection_presence",
 	]),
 });
 
 export const InstallationChauffageCentralIndividuel = InstallationBase.extend({
-	type: TypeChauffageEnum.extract([TYPES_CHAUFFAGE.central]),
+	type: TypeChauffage.extract(["central"]),
 	installation_collective: z.literal(false),
 	comptage_individuel: non_applicable,
 	regulation_terminale: z.boolean(),
-	programmation: TypeProgrammationEnum.extract([
-		TYPES_PROGRAMMATION.absent,
-		TYPES_PROGRAMMATION.central_sans_minimum_temperature,
-		TYPES_PROGRAMMATION.central_avec_minimum_temperature,
-		TYPES_PROGRAMMATION.terminal_avec_minimum_temperature,
-		TYPES_PROGRAMMATION.terminal_avec_minimum_temperature_detection_presence,
+	programmation: TypeProgrammation.extract([
+		"absent",
+		"central_sans_minimum_temperature",
+		"central_avec_minimum_temperature",
+		"terminal_avec_minimum_temperature",
+		"terminal_avec_minimum_temperature_detection_presence",
 	]),
 });
 
 export const InstallationChauffageDivise = InstallationBase.extend({
-	type: TypeChauffageEnum.extract([TYPES_CHAUFFAGE.divise]),
+	type: TypeChauffage.extract(["divise"]),
 	installation_collective: z.literal(false),
 	comptage_individuel: non_applicable,
 	regulation_terminale: non_applicable,
-	programmation: TypeProgrammationEnum.extract([
-		TYPES_PROGRAMMATION.absent,
-		TYPES_PROGRAMMATION.central_sans_minimum_temperature,
-		TYPES_PROGRAMMATION.central_avec_minimum_temperature,
-		TYPES_PROGRAMMATION.terminal_avec_minimum_temperature,
-		TYPES_PROGRAMMATION.terminal_avec_minimum_temperature_detection_presence,
+	programmation: TypeProgrammation.extract([
+		"absent",
+		"central_sans_minimum_temperature",
+		"central_avec_minimum_temperature",
+		"terminal_avec_minimum_temperature",
+		"terminal_avec_minimum_temperature_detection_presence",
 	]),
 });
 
@@ -126,10 +122,10 @@ const InstallationUnion = z.union([
  */
 export const Installation = InstallationUnion.superRefine(
 	(installation, ctx) => {
-		if (installation.type === TYPES_CHAUFFAGE.central) {
+		if (installation.type === TypeChauffage.enum.central) {
 			if (
 				!installation.systemes.some(
-					(s) => s.type === TYPES_CHAUFFAGE.central,
+					(s) => s.type === TypeChauffage.enum.central,
 				)
 			) {
 				ctx.addIssue({
@@ -142,7 +138,7 @@ export const Installation = InstallationUnion.superRefine(
 		} else {
 			if (
 				!installation.systemes.every(
-					(s) => s.type === TYPES_CHAUFFAGE.divise,
+					(s) => s.type === TypeChauffage.enum.divise,
 				)
 			) {
 				ctx.addIssue({

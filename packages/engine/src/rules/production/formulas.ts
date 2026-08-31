@@ -12,13 +12,13 @@ import type * as panneauPhotovoltaique from "./panneau-photovoltaique/formulas.j
  * la production d'électricité renouvelable augmente
  */
 export const TAPLP = {
-	[models.production.USAGES_ELECTRICITE.chauffage]: 0.02,
-	[models.production.USAGES_ELECTRICITE.refroidissement]: 0.25,
-	[models.production.USAGES_ELECTRICITE.ecs]: 0.05,
-	[models.production.USAGES_ELECTRICITE.eclairage]: 0.02,
-	[models.production.USAGES_ELECTRICITE.auxiliaires_ventilation]: 0.5,
-	[models.production.USAGES_ELECTRICITE.auxiliaires_distribution]: 0.1,
-	[models.production.USAGES_ELECTRICITE.autres]: 0.45,
+	[models.production.UsageElectricite.enum.chauffage]: 0.02,
+	[models.production.UsageElectricite.enum.refroidissement]: 0.25,
+	[models.production.UsageElectricite.enum.ecs]: 0.05,
+	[models.production.UsageElectricite.enum.eclairage]: 0.05,
+	[models.production.UsageElectricite.enum.auxiliaires_ventilation]: 0.5,
+	[models.production.UsageElectricite.enum.auxiliaires_distribution]: 0.1,
+	[models.production.UsageElectricite.enum.autres]: 0.45,
 };
 
 /**
@@ -31,15 +31,21 @@ export function calcule_ppv(props: {
 }
 
 /**
+ * @formule production.tapl
  * @returns Coefficient de calage représentant le taux d'auto-production maximum pouvant être atteint lorsque la production d'électricité renouvelable augmente
  */
 export function calcule_tapl(props: {
 	celec: ReturnType<typeof calcule_celec>;
 }): number {
-	return Object.keys(props.celec).reduce((tapl, key) => {
+	const celec_total = calcule_celec_total(props);
+	if (celec_total === 0) return 0;
+
+	const somme = Object.keys(props.celec).reduce((tapl, key) => {
 		const k = key as models.production.UsageElectricite;
 		return tapl + props.celec[k] * TAPLP[k];
 	}, 0);
+
+	return somme / celec_total;
 }
 
 /**
@@ -67,7 +73,7 @@ export function calcule_celec_ac(props: {
 	tapl: ReturnType<typeof calcule_tapl>;
 }): models.production.ParUsageElectricite<number> {
 	const { celec, celec_total, celec_ac_total, tapl } = props;
-	const usages = models.production.USAGES_ELECTRICITE;
+	const usages = models.production.UsageElectricite.enum;
 
 	const celec_ac = (usage: models.production.UsageElectricite) => {
 		return (
@@ -111,7 +117,7 @@ export function calcule_celec(props: {
 	celec_aux_vent: ReturnType<typeof ventiletion.calcule_caux>;
 	celec_autres: ReturnType<typeof calcule_celec_autres>;
 }): models.production.ParUsageElectricite<number> {
-	const usages = models.production.USAGES_ELECTRICITE;
+	const usages = models.production.UsageElectricite.enum;
 	return {
 		[usages.chauffage]: props.celec_ch + props.celec_aux_gen_ch,
 		[usages.ecs]: props.celec_ecs + props.celec_aux_gen_ecs,
@@ -128,14 +134,14 @@ export function calcule_celec(props: {
  * @returns Électricité consommée pour les autres usages en kWh/an
  */
 export function calcule_celec_autres(props: {
-	type_batiment: models.batiment.TypeBatimentEnum;
+	type_batiment: models.batiment.TypeBatiment;
 	sh: ReturnType<typeof batiment.calcule_sh>;
 }): number {
 	const { type_batiment, sh } = props;
 	switch (type_batiment) {
-		case models.batiment.TYPES_BATIMENT.maison:
+		case models.batiment.TypeBatiment.enum.maison:
 			return sh * 29;
-		case models.batiment.TYPES_BATIMENT.immeuble:
+		case models.batiment.TypeBatiment.enum.immeuble:
 			return sh * (27 + 1.1);
 	}
 }

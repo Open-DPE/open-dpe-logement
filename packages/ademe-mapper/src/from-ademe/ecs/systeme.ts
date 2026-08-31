@@ -74,7 +74,7 @@ export function mapIsolation(
 export function mapBouclage(
 	props: InstallationEcs,
 ): ecs.systeme.Reseau["bouclage"] {
-	const Enum = ecs.systeme.BOUCLAGES;
+	const Enum = ecs.systeme.BouclageReseau.enum;
 	switch (props.donnee_entree.enum_bouclage_reseau_ecs_id) {
 		case "1":
 			return Enum.non_boucle;

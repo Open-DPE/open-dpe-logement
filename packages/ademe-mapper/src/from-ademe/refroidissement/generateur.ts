@@ -38,47 +38,48 @@ export function mapDescription(
 
 export function mapType(
 	props: Props,
-): refroidissement.generateur.TypeGenerateurEnum {
+): refroidissement.generateur.TypeGenerateur {
 	switch (props.donnee_entree.enum_type_generateur_fr_id) {
 		case "1":
 		case "2":
 		case "3":
-			return refroidissement.generateur.TYPES_GENERATEUR.pac_air_air;
+			return refroidissement.generateur.TypeGenerateur.enum.pac_air_air;
 
 		case "4":
 		case "5":
 		case "6":
 		case "7":
-			return refroidissement.generateur.TYPES_GENERATEUR.pac_air_eau;
+			return refroidissement.generateur.TypeGenerateur.enum.pac_air_eau;
 
 		case "8":
 		case "9":
 		case "10":
 		case "11":
-			return refroidissement.generateur.TYPES_GENERATEUR.pac_eau_eau;
+			return refroidissement.generateur.TypeGenerateur.enum.pac_eau_eau;
 
 		case "12":
 		case "13":
 		case "14":
 		case "15":
-			return refroidissement.generateur.TYPES_GENERATEUR.pac_eau_glycolee_eau;
+			return refroidissement.generateur.TypeGenerateur.enum
+				.pac_eau_glycolee_eau;
 
 		case "16":
 		case "17":
 		case "18":
 		case "19":
-			return refroidissement.generateur.TYPES_GENERATEUR.pac_geothermique;
+			return refroidissement.generateur.TypeGenerateur.enum.pac_geothermique;
 
 		case "20":
 		case "21":
-			return refroidissement.generateur.TYPES_GENERATEUR
+			return refroidissement.generateur.TypeGenerateur.enum
 				.autre_systeme_thermodynamique;
 
 		case "22":
-			return refroidissement.generateur.TYPES_GENERATEUR.autre;
+			return refroidissement.generateur.TypeGenerateur.enum.autre;
 
 		case "23":
-			return refroidissement.generateur.TYPES_GENERATEUR.reseau_froid;
+			return refroidissement.generateur.TypeGenerateur.enum.reseau_froid;
 
 		default:
 			throw new MappingError("refroidissement.generateur.type", props);
@@ -87,28 +88,28 @@ export function mapType(
 
 export function mapEnergie(
 	props: Props,
-): refroidissement.generateur.EnergieRefroidissementEnum {
+): refroidissement.generateur.EnergieRefroidissement {
 	switch (props.donnee_entree.enum_type_energie_id) {
 		case "1":
 		case "12":
-			return common.ENERGIES.electricite;
+			return common.Energie.enum.electricite;
 		case "2":
-			return common.ENERGIES.gaz_naturel;
+			return common.Energie.enum.gaz_naturel;
 		case "9":
 		case "10":
 		case "13":
-			return common.ENERGIES.gpl;
+			return common.Energie.enum.gpl;
 		case "15":
-			return common.ENERGIES.reseau_froid;
+			return common.Energie.enum.reseau_froid;
 	}
 
 	switch (props.donnee_entree.enum_type_generateur_fr_id) {
 		case "21":
-			return common.ENERGIES.gaz_naturel;
+			return common.Energie.enum.gaz_naturel;
 		case "23":
-			return common.ENERGIES.reseau_froid;
+			return common.Energie.enum.reseau_froid;
 		default:
-			return common.ENERGIES.electricite;
+			return common.Energie.enum.electricite;
 	}
 }
 

@@ -1,9 +1,4 @@
-import {
-	type UsageEnum,
-	type EnergieEnum,
-	type MoisEnum,
-	MOIS,
-} from "./enums.js";
+import { Usage, Energie, Mois } from "./enums.js";
 
 import type {
 	Consommation,
@@ -26,11 +21,9 @@ function addConsommation(a: Consommation, b: Consommation): Consommation {
 /**
  * Fonction pour créer une collection de valeurs pour chaque mois de l'année.
  */
-export function createParMois<T>(
-	fn: (mois: MoisEnum) => T,
-): Record<MoisEnum, T> {
-	const result = {} as Record<MoisEnum, T>;
-	for (const mois of Object.values(MOIS)) {
+export function createParMois<T>(fn: (mois: Mois) => T): Record<Mois, T> {
+	const result = {} as Record<Mois, T>;
+	for (const mois of Mois.options) {
 		result[mois] = fn(mois);
 	}
 	return result;
@@ -40,12 +33,12 @@ export function createParMois<T>(
  * Fonction de création d'un collection de valeurs pour chaque mois de l'année à partir d'un tableau d'objets contenant les valeurs et le mois correspondant.
  */
 export function createParMoisFrom<T extends object>(
-	values: Array<T & { mois: string | MoisEnum }>,
+	values: Array<T & { mois: string | Mois }>,
 ): ParMois<T> {
-	const map = new Map(values.map((item) => [item.mois as MoisEnum, item]));
+	const map = new Map(values.map((item) => [item.mois as Mois, item]));
 	const result: Partial<ParMois<T>> = {};
 
-	for (const mois of Object.values(MOIS)) {
+	for (const mois of Mois.options) {
 		const match = map.get(mois);
 
 		if (!match) {
@@ -69,7 +62,7 @@ export function reduceParMois(values: ParMois<number>): number {
  */
 export function mergeParMois(values: ParMois<number>[]): ParMois<number> {
 	const result: ParMois<number> = {} as ParMois<number>;
-	for (const mois of Object.values(MOIS)) {
+	for (const mois of Mois.options) {
 		result[mois] = values.reduce((acc, v) => acc + v[mois], 0);
 	}
 	return result;
@@ -79,10 +72,10 @@ export function mergeParMois(values: ParMois<number>[]): ParMois<number> {
  * Vérifie que toutes les valeurs mensuelles sont présentes pour chaque mois de l'année
  */
 export function containsAllMois<T extends object>(
-	values: Array<T & { mois: string | MoisEnum }>,
+	values: Array<T & { mois: string | Mois }>,
 ): boolean {
 	const moisSet = new Set(values.map((item) => item.mois));
-	return Object.values(MOIS).every((mois) => moisSet.has(mois));
+	return Mois.options.every((mois) => moisSet.has(mois));
 }
 
 export function mapParMois<T, U>(
@@ -90,7 +83,7 @@ export function mapParMois<T, U>(
 	fn: (value: T) => U,
 ): ParMois<U> {
 	return Object.fromEntries(
-		Object.values(MOIS).map((mois) => [mois, fn(parMois[mois])]),
+		Mois.options.map((mois) => [mois, fn(parMois[mois])]),
 	) as ParMois<U>;
 }
 
@@ -117,7 +110,7 @@ export function reduceConsommationsParEnergie(
 
 	for (const parEnergie of Object.values(values)) {
 		for (const [energie, valeurs] of Object.entries(parEnergie) as [
-			EnergieEnum,
+			Energie,
 			Consommation,
 		][]) {
 			result[energie] = addConsommation(
@@ -139,7 +132,7 @@ export function reduceConsommationsParUsage(
 	const result: ConsommationParUsage = {};
 
 	for (const [usage, parEnergie] of Object.entries(values) as [
-		UsageEnum,
+		Usage,
 		ConsommationParEnergie,
 	][]) {
 		for (const valeurs of Object.values(parEnergie) as Consommation[]) {
@@ -161,12 +154,12 @@ export function mergeConsommations(...values: Consommations[]): Consommations {
 
 	for (const consommations of values) {
 		for (const [usage, parEnergie] of Object.entries(consommations) as [
-			UsageEnum,
+			Usage,
 			ConsommationParEnergie,
 		][]) {
 			result[usage] ??= {};
 			for (const [energie, valeurs] of Object.entries(parEnergie) as [
-				EnergieEnum,
+				Energie,
 				Consommation,
 			][]) {
 				result[usage]![energie] = addConsommation(

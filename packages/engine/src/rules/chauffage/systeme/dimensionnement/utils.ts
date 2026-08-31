@@ -1,15 +1,15 @@
 import * as models from "@open-dpe-logement/models";
 
 type Systeme = {
-	type_systeme: models.chauffage.TypeChauffageEnum;
-	type_generateur: models.chauffage.generateur.TypeGenerateurEnum;
-	energie_generateur: models.chauffage.generateur.EnergieChauffageEnum;
-	bienergie_generateur: models.chauffage.generateur.BienergieEnum | null;
+	type_systeme: models.chauffage.TypeChauffage;
+	type_generateur: models.chauffage.generateur.TypeGenerateur;
+	energie_generateur: models.chauffage.generateur.EnergieChauffage;
+	bienergie_generateur: models.chauffage.generateur.Bienergie | null;
 	generateur_multi_batiment: boolean;
 };
 
-const TYPES_CHAUFFAGE = models.chauffage.TYPES_CHAUFFAGE;
-const TYPES_GENERATEUR = models.chauffage.generateur.TYPES_GENERATEUR;
+const TypeChauffage = models.chauffage.TypeChauffage;
+const TypeGenerateur = models.chauffage.generateur.TypeGenerateur;
 
 export function filter_chaudieres_bois<T extends Systeme>(systemes: T[]): T[] {
 	return systemes.filter((s) => is_chaudiere_bois(s));
@@ -97,17 +97,17 @@ export function has_appoint(systemes: Systeme[]): boolean {
 }
 
 export function is_systeme_central(systeme: Systeme): boolean {
-	return systeme.type_systeme === TYPES_CHAUFFAGE.central;
+	return systeme.type_systeme === TypeChauffage.enum.central;
 }
 
 export function is_systeme_divise(systeme: Systeme): boolean {
-	return systeme.type_systeme === TYPES_CHAUFFAGE.divise;
+	return systeme.type_systeme === TypeChauffage.enum.divise;
 }
 
 export function is_chaudiere_bois(systeme: Systeme): boolean {
 	return (
 		is_systeme_central(systeme) &&
-		systeme.type_generateur === TYPES_GENERATEUR.chaudiere &&
+		systeme.type_generateur === TypeGenerateur.enum.chaudiere &&
 		models.common.isBois(systeme.energie_generateur)
 	);
 }
@@ -115,7 +115,7 @@ export function is_chaudiere_bois(systeme: Systeme): boolean {
 export function is_chaudiere(systeme: Systeme): boolean {
 	return (
 		is_systeme_central(systeme) &&
-		systeme.type_generateur === TYPES_GENERATEUR.chaudiere &&
+		systeme.type_generateur === TypeGenerateur.enum.chaudiere &&
 		false === models.common.isBois(systeme.energie_generateur)
 	);
 }
@@ -123,11 +123,11 @@ export function is_chaudiere(systeme: Systeme): boolean {
 export function is_pac(systeme: Systeme): boolean {
 	return (
 		(is_systeme_central(systeme) &&
-			systeme.type_generateur === TYPES_GENERATEUR.pac_air_air) ||
-		systeme.type_generateur === TYPES_GENERATEUR.pac_air_eau ||
-		systeme.type_generateur === TYPES_GENERATEUR.pac_eau_eau ||
-		systeme.type_generateur === TYPES_GENERATEUR.pac_eau_glycolee_eau ||
-		systeme.type_generateur === TYPES_GENERATEUR.pac_geothermique
+			systeme.type_generateur === TypeGenerateur.enum.pac_air_air) ||
+		systeme.type_generateur === TypeGenerateur.enum.pac_air_eau ||
+		systeme.type_generateur === TypeGenerateur.enum.pac_eau_eau ||
+		systeme.type_generateur === TypeGenerateur.enum.pac_eau_glycolee_eau ||
+		systeme.type_generateur === TypeGenerateur.enum.pac_geothermique
 	);
 }
 

@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { ConfortEteEnum, EtiquetteEnum, TypeDiagnosticEnum } from "./enums.js";
+import { ConfortEte, Etiquette, TypeDiagnostic } from "./enums.js";
 import { Consommations } from "../common/types.js";
 import { Chauffage, ChauffageWithData } from "../chauffage/types.js";
 import { Ecs, EcsWithData } from "../ecs/types.js";
@@ -15,7 +15,7 @@ import { Batiment, BatimentWithData } from "../batiment/types.js";
 export const Diagnostic = z.object({
 	date_visite: z.string(),
 	date_etablissement: z.string(),
-	type: TypeDiagnosticEnum,
+	type: TypeDiagnostic,
 	batiment: Batiment,
 	enveloppe: Enveloppe,
 	chauffage: Chauffage,
@@ -30,9 +30,9 @@ export const DiagnosticData = z.object({
 	cep: z.number(),
 	eges: z.number(),
 	consommations: Consommations,
-	etiquette_energie: EtiquetteEnum,
-	etiquette_climat: EtiquetteEnum,
-	confort_ete: ConfortEteEnum.nullable(),
+	etiquette_energie: Etiquette,
+	etiquette_climat: Etiquette,
+	confort_ete: ConfortEte.nullable(),
 });
 
 export const DiagnosticWithData = Diagnostic.extend({

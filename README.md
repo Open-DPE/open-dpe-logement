@@ -10,10 +10,12 @@ Monorepo communautaire pour la transparence, la fiabilité et la compréhension 
 
 ## Support
 
-- [x] Maison individuelle
-- [x] Immeuble collectif
-- [x] Appartement
-- [ ] Appartement depuis les données d'un immeuble collectif  
+- ✅ Logement existant - Maison individuelle
+- ✅ Logement existant - Immeuble collectif
+- ✅ Logement existant - Appartement
+- ⏳ Logement existant - Appartement depuis les données d'un immeuble collectif  
+- ❌ Logement neuf
+- ❌ Tertiaire
 
 ## Organisation
 

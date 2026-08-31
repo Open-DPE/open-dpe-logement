@@ -7,10 +7,10 @@ import type * as generateur from "../generateur/formulas.js";
 import type * as installation from "../installation/formulas.js";
 import { ValeurForfaitaireError } from "../../errors.js";
 
-const BOUCLAGES = models.ecs.systeme.BOUCLAGES;
-const TYPES_GENERATEUR = models.ecs.generateur.TYPES_GENERATEUR;
-const LABELS = models.ecs.generateur.LABELS;
-const POSITIONS_CHAUFFE_EAU = models.ecs.generateur.POSITIONS_CHAUFFE_EAU;
+const BouclageReseau = models.ecs.systeme.BouclageReseau;
+const TypeGenerateur = models.ecs.generateur.TypeGenerateur;
+const LabelGenerateur = models.ecs.generateur.LabelGenerateur;
+const PositionChauffeEau = models.ecs.generateur.PositionChauffeEau;
 
 /**
  * @formule ecs.systeme.cef
@@ -23,22 +23,22 @@ export function calcule_consommations(props: {
 	cecs_enr: ReturnType<typeof calcule_cecs_enr>;
 	caux_dist: ReturnType<typeof calcule_caux_dist>;
 	caux_dist_enr: ReturnType<typeof calcule_caux_dist_enr>;
-	energie: models.ecs.generateur.EnergieEcsEnum;
+	energie: models.ecs.generateur.EnergieEcs;
 	reseau_id: string | null;
 }): models.common.Consommations {
 	return models.common.mergeConsommations(
 		common.calcule_consommations({
 			cef: props.cecs,
 			cef_enr: props.cecs_enr,
-			usage: models.common.USAGES.ecs,
+			usage: models.common.Usage.enum.ecs,
 			energie: props.energie,
 			reseau_id: props.reseau_id,
 		}),
 		common.calcule_consommations({
 			cef: props.caux_dist,
 			cef_enr: props.caux_dist_enr,
-			usage: models.common.USAGES.auxiliaire,
-			energie: models.common.ENERGIES.electricite,
+			usage: models.common.Usage.enum.auxiliaire,
+			energie: models.common.Energie.enum.electricite,
 			reseau_id: null,
 		}),
 	);
@@ -85,7 +85,7 @@ export function calcule_cecs_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.USAGES_ELECTRICITE.ecs,
+		usage: models.production.UsageElectricite.enum.ecs,
 		cef: props.cecs_elec,
 	});
 }
@@ -113,7 +113,7 @@ export function calcule_caux_dist_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.USAGES_ELECTRICITE.auxiliaires_distribution,
+		usage: models.production.UsageElectricite.enum.auxiliaires_distribution,
 		cef: props.caux_dist,
 	});
 }
@@ -135,7 +135,7 @@ export function calcule_qcirb(props: {
 }): number {
 	const { installation_collective, bouclage } = props;
 	if (false === installation_collective) return 0;
-	if (bouclage !== BOUCLAGES.boucle) return 0;
+	if (bouclage !== BouclageReseau.enum.boucle) return 0;
 
 	const { sh, qdw, niveaux_desservis } = props;
 	const nj = models.common.reduceParMois(props.nj);
@@ -160,7 +160,7 @@ export function calcule_qtrac(props: {
 }): number {
 	const { installation_collective, bouclage } = props;
 	if (false === installation_collective) return 0;
-	if (bouclage !== BOUCLAGES.trace) return 0;
+	if (bouclage !== BouclageReseau.enum.trace) return 0;
 	const becs = models.common.reduceParMois(props.becs) * 1000;
 	return becs * 0.14;
 }
@@ -306,15 +306,15 @@ export function calcule_rendements_systeme_electrique(props: {
 	type_generateur: ReturnType<typeof generateur.set_type_generateur>;
 	becs: ReturnType<typeof installation.calcule_becs>;
 	qgw: ReturnType<typeof generateur.calcule_qgw>;
-	position_chauffe_eau: models.ecs.generateur.PositionChauffeEauEnum | null;
-	label_generateur: models.ecs.generateur.LabelEnum | null;
+	position_chauffe_eau: models.ecs.generateur.PositionChauffeEau | null;
+	label_generateur: models.ecs.generateur.LabelGenerateur | null;
 }): Rendements {
 	const { position_chauffe_eau, label_generateur, rd, qgw } = props;
 	const becs = models.common.reduceParMois(props.becs) * 1000;
-	const rg = props.type_generateur === TYPES_GENERATEUR.chaudiere ? 0.97 : 1;
+	const rg = props.type_generateur === TypeGenerateur.enum.chaudiere ? 0.97 : 1;
 	const rs =
-		position_chauffe_eau === POSITIONS_CHAUFFE_EAU.chauffe_eau_vertical &&
-		label_generateur === LABELS.ne_performance_c
+		position_chauffe_eau === PositionChauffeEau.enum.chauffe_eau_vertical &&
+		label_generateur === LabelGenerateur.enum.ne_performance_c
 			? 1.08 / (1 + (qgw * rd) / becs)
 			: 1 / (1 + (qgw * rd) / becs);
 
@@ -338,10 +338,10 @@ export function calcule_rendements_systeme_thermodynamique(props: {
  * @returns Bouclage du réseau de distribution d'eau chaude sanitaire retenu
  */
 export function set_bouclage_reseau(props: {
-	bouclage_reseau: models.ecs.systeme.BouclageEnum | null;
-}): models.ecs.systeme.BouclageEnum {
+	bouclage_reseau: models.ecs.systeme.BouclageReseau | null;
+}): models.ecs.systeme.BouclageReseau {
 	const { bouclage_reseau } = props;
-	return bouclage_reseau ?? BOUCLAGES.non_boucle;
+	return bouclage_reseau ?? BouclageReseau.enum.non_boucle;
 }
 
 /**

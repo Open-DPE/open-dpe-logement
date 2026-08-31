@@ -1,0 +1,417 @@
+# Formules partagées par toutes les parois (mur, plancher bas, plancher haut, baie, porte).
+# La doctrine décline un identifiant par type de paroi (enveloppe.mur.aiu,
+# enveloppe.baie.aiu, …) pour une implémentation unique : les cas exhaustifs sont
+# portés par l'identifiant « mur », les autres identifiants vérifient le rattachement.
+
+enveloppe.mur.aiu:
+  rule: aiu
+  cases:
+    - title: Paroi donnant sur un local non chauffé → surface intégralement comptée
+      with:
+        mitoyennete: local_non_chauffe
+        surface: 12.5
+      expect: 12.5
+
+    - title: Paroi donnant sur l'extérieur → 0
+      with:
+        mitoyennete: exterieur
+        surface: 12.5
+      expect: 0
+
+    - title: Paroi enterrée → 0
+      with:
+        mitoyennete: enterre
+        surface: 12.5
+      expect: 0
+
+    - title: Paroi mitoyenne d'un local résidentiel → 0
+      with:
+        mitoyennete: local_residentiel
+        surface: 12.5
+      expect: 0
+
+    - title: Paroi mitoyenne d'un local non résidentiel → 0
+      with:
+        mitoyennete: local_non_residentiel
+        surface: 12.5
+      expect: 0
+
+    - title: Paroi sur vide sanitaire → 0
+      with:
+        mitoyennete: vide_sanitaire
+        surface: 12.5
+      expect: 0
+
+    - title: Paroi sur terre-plein → 0
+      with:
+        mitoyennete: terre_plein
+        surface: 12.5
+      expect: 0
+
+    - title: Paroi sur sous-sol non chauffé → 0 (mitoyenneté distincte de local_non_chauffe)
+      with:
+        mitoyennete: sous_sol_non_chauffe
+        surface: 12.5
+      expect: 0
+
+enveloppe.baie.aiu:
+  rule: aiu
+  cases:
+    - title: Baie sur local non chauffé → surface comptée
+      with:
+        mitoyennete: local_non_chauffe
+        surface: 2.4
+      expect: 2.4
+
+    - title: Baie sur l'extérieur → 0
+      with:
+        mitoyennete: exterieur
+        surface: 2.4
+      expect: 0
+
+enveloppe.porte.aiu:
+  rule: aiu
+  cases:
+    - title: Porte sur local non chauffé → surface comptée
+      with:
+        mitoyennete: local_non_chauffe
+        surface: 1.8
+      expect: 1.8
+
+    - title: Porte sur l'extérieur → 0
+      with:
+        mitoyennete: exterieur
+        surface: 1.8
+      expect: 0
+
+enveloppe.plancher_bas.aiu:
+  rule: aiu
+  cases:
+    - title: Plancher bas sur local non chauffé → surface comptée
+      with:
+        mitoyennete: local_non_chauffe
+        surface: 40
+      expect: 40
+
+    - title: Plancher bas sur terre-plein → 0
+      with:
+        mitoyennete: terre_plein
+        surface: 40
+      expect: 0
+
+enveloppe.plancher_haut.aiu:
+  rule: aiu
+  cases:
+    - title: Plancher haut sous combles non chauffés → surface comptée
+      with:
+        mitoyennete: local_non_chauffe
+        surface: 45
+      expect: 45
+
+    - title: Toiture terrasse sur l'extérieur → 0
+      with:
+        mitoyennete: exterieur
+        surface: 45
+      expect: 0
+
+enveloppe.mur.sdep:
+  rule: sdep
+  cases:
+    - title: Paroi extérieure → surface déperditive = surface
+      with:
+        surface: 20
+        mitoyennete: exterieur
+      expect: 20
+
+    - title: Paroi sur local non chauffé → surface déperditive = surface
+      with:
+        surface: 20
+        mitoyennete: local_non_chauffe
+      expect: 20
+
+    - title: Paroi sur terre-plein → surface déperditive = surface
+      with:
+        surface: 20
+        mitoyennete: terre_plein
+      expect: 20
+
+    - title: Paroi enterrée → surface déperditive = surface
+      with:
+        surface: 20
+        mitoyennete: enterre
+      expect: 20
+
+    - title: Paroi mitoyenne d'un local non résidentiel → déperditive
+      with:
+        surface: 20
+        mitoyennete: local_non_residentiel
+      expect: 20
+
+    - title: Paroi mitoyenne d'un local non accessible → déperditive
+      with:
+        surface: 20
+        mitoyennete: local_non_accessible
+      expect: 20
+
+    - title: Paroi mitoyenne d'un local résidentiel chauffé → non déperditive
+      with:
+        surface: 20
+        mitoyennete: local_residentiel
+      expect: 0
+
+enveloppe.baie.sdep:
+  rule: sdep
+  cases:
+    - title: Baie extérieure → surface déperditive = surface
+      with:
+        surface: 2.4
+        mitoyennete: exterieur
+      expect: 2.4
+
+    - title: Baie mitoyenne d'un logement chauffé → 0
+      with:
+        surface: 2.4
+        mitoyennete: local_residentiel
+      expect: 0
+
+enveloppe.porte.sdep:
+  rule: sdep
+  cases:
+    - title: Porte extérieure → surface déperditive = surface
+      with:
+        surface: 1.8
+        mitoyennete: exterieur
+      expect: 1.8
+
+    - title: Porte palière donnant sur un logement chauffé → 0
+      with:
+        surface: 1.8
+        mitoyennete: local_residentiel
+      expect: 0
+
+enveloppe.plancher_bas.sdep:
+  rule: sdep
+  cases:
+    - title: Plancher bas sur vide sanitaire → surface déperditive = surface
+      with:
+        surface: 40
+        mitoyennete: vide_sanitaire
+      expect: 40
+
+    - title: Plancher bas sur logement chauffé → 0
+      with:
+        surface: 40
+        mitoyennete: local_residentiel
+      expect: 0
+
+enveloppe.plancher_haut.sdep:
+  rule: sdep
+  cases:
+    - title: Plancher haut sur comble non chauffé → surface déperditive = surface
+      with:
+        surface: 45
+        mitoyennete: local_non_chauffe
+      expect: 45
+
+    - title: Plancher haut sous logement chauffé → 0
+      with:
+        surface: 45
+        mitoyennete: local_residentiel
+      expect: 0
+
+enveloppe.mur.b:
+  rule: b_lnc
+  cases:
+    - title: Le coefficient de la paroi reprend celui du local non chauffé
+      with:
+        blnc: 0.85
+      expect: 0.85
+
+    - title: Local non chauffé totalement déperditif (b = 1)
+      with:
+        blnc: 1
+      expect: 1
+
+    - title: Local non chauffé non déperditif (b = 0)
+      with:
+        blnc: 0
+      expect: 0
+
+enveloppe.baie.b:
+  rule: b_lnc
+  cases:
+    - title: Baie sur local non chauffé → b du local
+      with:
+        blnc: 0.75
+      expect: 0.75
+
+enveloppe.porte.b:
+  rule: b_lnc
+  cases:
+    - title: Porte sur local non chauffé → b du local
+      with:
+        blnc: 0.9
+      expect: 0.9
+
+enveloppe.plancher-bas.b:
+  rule: b_lnc
+  cases:
+    - title: Plancher bas sur local non chauffé → b du local
+      with:
+        blnc: 0.8
+      expect: 0.8
+
+enveloppe.plancher-haut.b:
+  rule: b_lnc
+  cases:
+    - title: Plancher haut sur local non chauffé → b du local
+      with:
+        blnc: 0.95
+      expect: 0.95
+
+enveloppe.paroi.b_ets:
+  rule: b_ets
+  cases:
+    - title: ETS orienté sud, zone H1a, paroi isolée → 0.58
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        zone_climatique: H1a
+        orientations_ets: [sud]
+        isolation_paroi: true
+      expect: 0.58
+
+    - title: ETS orienté sud, zone H1a, paroi non isolée → 0.55
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        zone_climatique: H1a
+        orientations_ets: [sud]
+        isolation_paroi: false
+      expect: 0.55
+
+    - title: ETS orienté nord, zone H2b, paroi isolée → 0.95
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        zone_climatique: H2b
+        orientations_ets: [nord]
+        isolation_paroi: true
+      expect: 0.95
+
+    - title: ETS orienté est, zone H3, paroi isolée → 0.53
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        zone_climatique: H3
+        orientations_ets: [est]
+        isolation_paroi: true
+      expect: 0.53
+
+    - title: ETS orienté ouest, zone H2d, paroi non isolée → 0.58
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        zone_climatique: H2d
+        orientations_ets: [ouest]
+        isolation_paroi: false
+      expect: 0.58
+
+    - title: Deux orientations majoritaires (nord et sud, H1a, isolée) → moyenne (0.95 + 0.58) / 2
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        zone_climatique: H1a
+        orientations_ets: [nord, sud]
+        isolation_paroi: true
+      expect: 0.765
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        type_local_non_chauffe: espace_tampon_solarise
+        zone_climatique: INCONNUE
+        orientations_ets: [sud]
+        isolation_paroi: true
+      expectError: true
+
+enveloppe.paroi.b_autres:
+  rule: b_autres
+  cases:
+    - title: Extérieur → 1
+      with:
+        mitoyennete: exterieur
+      expect: 1
+
+    - title: Terre-plein → 1
+      with:
+        mitoyennete: terre_plein
+      expect: 1
+
+    - title: Vide sanitaire → 1
+      with:
+        mitoyennete: vide_sanitaire
+      expect: 1
+
+    - title: Local non résidentiel → 0.2
+      with:
+        mitoyennete: local_non_residentiel
+      expect: 0.2
+
+    - title: Local non accessible → 0.95
+      with:
+        mitoyennete: local_non_accessible
+      expect: 0.95
+
+    - title: Local résidentiel chauffé → 0 (aucune déperdition)
+      with:
+        mitoyennete: local_residentiel
+      expect: 0
+
+enveloppe.paroi.annee_installation:
+  rule: annee_installation
+  cases:
+    - title: Année d'installation saisie → retenue
+      with:
+        annee_installation: 2005
+        annee_construction_batiment: 1970
+      expect: 2005
+
+    - title: Année d'installation absente → année de construction du bâtiment
+      with:
+        annee_installation: null
+        annee_construction_batiment: 1970
+      expect: 1970
+
+enveloppe.paroi.annee_construction:
+  rule: annee_construction
+  cases:
+    - title: Année de construction de la paroi saisie → retenue
+      with:
+        annee_construction: 1985
+        annee_renovation: 2010
+        annee_construction_batiment: 1960
+      expect: 1985
+
+    - title: À défaut, l'année de rénovation de la paroi
+      with:
+        annee_construction: null
+        annee_renovation: 2010
+        annee_construction_batiment: 1960
+      expect: 2010
+
+    - title: À défaut, l'année de construction du bâtiment
+      with:
+        annee_construction: null
+        annee_renovation: null
+        annee_construction_batiment: 1960
+      expect: 1960
+
+enveloppe.plancher_bas.b:
+  rule: b_lnc
+  cases:
+    - title: Plancher bas sur local non chauffé → b du local
+      with:
+        blnc: 0.8
+      expect: 0.8
+
+enveloppe.plancher_haut.b:
+  rule: b_lnc
+  cases:
+    - title: Plancher haut sur local non chauffé → b du local
+      with:
+        blnc: 0.95
+      expect: 0.95

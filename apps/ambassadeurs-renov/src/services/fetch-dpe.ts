@@ -36,7 +36,20 @@ export async function fetchDpe(numero: string): Promise<dpe.DPELogementExistant 
 	}
 
 	if (response.status === 404) return null;
-	if (response.status === 200) return response.json();
+
+	if (response.status === 200) {
+		// Un 200 non-JSON signifie que `/api/dpe` n'a pas été servi par la
+		// fonction serverless (dev sans middleware, déploiement mal configuré) :
+		// on renvoie une erreur explicite plutôt qu'un `SyntaxError` de JSON.parse.
+		if (!response.headers.get("content-type")?.includes("application/json")) {
+			throw new APIError(
+				500,
+				"invalid_response",
+				"Réponse inattendue du proxy /api/dpe.",
+			);
+		}
+		return response.json();
+	}
 
 	const body: ErrorBody | undefined = await response.json().catch(() => undefined);
 

@@ -1,0 +1,830 @@
+enveloppe.baie.dp:
+  rule: dp
+  cases:
+    - title: Baie extérieure simple (b = 1)
+      with:
+        sdep: 10
+        b: 1
+        u: 4.5
+        double_fenetre: false
+      expect: 45
+
+    - title: Double fenêtre → déperditions divisées par deux
+      with:
+        sdep: 10
+        b: 1
+        u: 4.5
+        double_fenetre: true
+      expect: 22.5
+
+    - title: Baie sur local non chauffé (b = 0.8)
+      with:
+        sdep: 10
+        b: 0.8
+        u: 4.5
+        double_fenetre: false
+      expect: 36
+
+    - title: Baie mitoyenne d'un logement chauffé (b = 0) → aucune déperdition
+      with:
+        sdep: 10
+        b: 0
+        u: 4.5
+        double_fenetre: false
+      expect: 0
+
+enveloppe.baie.isolation_aiu:
+  rule: isolation_aiu
+  cases:
+    - title: Triple vitrage → considéré isolant
+      with:
+        type_vitrage: triple_vitrage
+      expect: true
+
+    - title: Triple vitrage à faible émissivité → considéré isolant
+      with:
+        type_vitrage: triple_vitrage_fe
+      expect: true
+
+    - title: Double vitrage → non isolant
+      with:
+        type_vitrage: double_vitrage
+      expect: false
+
+    - title: Double vitrage à faible émissivité → non isolant
+      with:
+        type_vitrage: double_vitrage_fe
+      expect: false
+
+    - title: Simple vitrage → non isolant
+      with:
+        type_vitrage: simple_vitrage
+      expect: false
+
+enveloppe.baie.u:
+  rule: u
+  cases:
+    - title: Ujn saisi → retenu tel quel
+      with:
+        ujn_saisi: 2
+        uw: 2.7
+        deltar: 0.15
+      expect: 2
+
+    - title: Aucune fermeture (deltar nul) → U = Uw
+      with:
+        ujn_saisi: null
+        uw: 2.7
+        deltar: 0
+      expect: 2.7
+
+    - title: Fermeture sans ajours (deltar 0.15), Uw 2.7 → Ujn 2.3
+      with:
+        ujn_saisi: null
+        uw: 2.7
+        deltar: 0.15
+      expect: 2.3
+
+    - title: Volets roulants PVC épais (deltar 0.19), Uw 2.7 → Ujn 2.2
+      with:
+        ujn_saisi: null
+        uw: 2.7
+        deltar: 0.19
+      expect: 2.2
+
+    - title: Uw intermédiaire → interpolation linéaire entre deux lignes d'abaque
+      with:
+        ujn_saisi: null
+        uw: 2.75
+        deltar: 0.15
+      expect: 2.35
+
+    - title: Deltar hors abaque → erreur ValeurForfaitaire
+      with:
+        ujn_saisi: null
+        uw: 2.7
+        deltar: 0.42
+      expectError: true
+
+enveloppe.baie.deltar:
+  rule: deltar
+  cases:
+    - title: Aucune fermeture déclarée → 0
+      with:
+        types_fermetures: []
+      expect: 0
+
+    - title: Fermeture explicitement absente → 0
+      with:
+        types_fermetures: [sans_fermeture]
+      expect: 0
+
+    - title: Jalousie accordéon → 0.08 m².K/W
+      with:
+        types_fermetures: [jalousie_accordeon]
+      expect: 0.08
+
+    - title: Fermeture sans ajours → 0.15 m².K/W
+      with:
+        types_fermetures: [fermeture_sans_ajours]
+      expect: 0.15
+
+    - title: Volets roulants PVC/bois d'épaisseur inférieure à 12 mm → 0.19 m².K/W
+      with:
+        types_fermetures: [volets_roulants_pvc_bois_epaisseur_lte_12mm]
+      expect: 0.19
+
+    - title: Fermeture isolée sans ajours → 0.25 m².K/W
+      with:
+        types_fermetures: [fermeture_isolee_sans_ajours]
+      expect: 0.25
+
+    - title: Plusieurs fermetures → la plus performante est retenue
+      with:
+        types_fermetures: [jalousie_accordeon, fermeture_isolee_sans_ajours]
+      expect: 0.25
+
+    - title: Doublons ignorés
+      with:
+        types_fermetures: [fermeture_sans_ajours, fermeture_sans_ajours]
+      expect: 0.15
+
+    - title: Type de fermeture inconnu → erreur ValeurForfaitaire
+      with:
+        types_fermetures: [FERMETURE_INCONNUE]
+      expectError: true
+
+enveloppe.baie.uw:
+  rule: uw
+  cases:
+    - title: Fenêtre simple → Uw de la menuiserie
+      with:
+        uw1: 2.7
+        uw2: null
+      expect: 2.7
+
+    - title: Double fenêtre → résistances en série avec lame d'air de 0.07 m².K/W
+      with:
+        uw1: 2.7
+        uw2: 2.7
+      expect: 1.2334
+
+    - title: Double fenêtre avec une menuiserie performante
+      with:
+        uw1: 4.5
+        uw2: 1.5
+      expect: 1.0429
+
+enveloppe.baie.uw0:
+  rule: uw0
+  cases:
+    - title: Uw saisi → retenu tel quel
+      with:
+        uw_saisi: 1.4
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+        ug: 2.9
+      expect: 1.4
+
+    - title: Fenêtre battante PVC, Ug 2.9 → Uw 2.7
+      with:
+        uw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+        ug: 2.9
+      expect: 2.7
+
+    - title: Fenêtre battante PVC, Ug 0.5 → Uw 0.9
+      with:
+        uw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+        ug: 0.5
+      expect: 0.9
+
+    - title: Fenêtre battante métal avec rupteur, Ug 0.5 → Uw 1.3
+      with:
+        uw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: metal
+        presence_rupteur_pont_thermique: true
+        ug: 0.5
+      expect: 1.3
+
+    - title: Ug intermédiaire → interpolation linéaire entre deux lignes d'abaque
+      with:
+        uw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+        ug: 0.55
+      expect: 0.95
+
+    - title: Brique de verre pleine → valeur unique 3.5 (Ug non discriminant)
+      with:
+        uw_saisi: null
+        type_baie: brique_verre_pleine
+        presence_soubassement: null
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+        ug: 3.5
+      expect: 3.5
+
+    - title: Polycarbonate → valeur unique 3
+      with:
+        uw_saisi: null
+        type_baie: polycarbonate
+        presence_soubassement: null
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+        ug: 3
+      expect: 3
+
+    - title: Type de baie inconnu → erreur ValeurForfaitaire
+      with:
+        uw_saisi: null
+        type_baie: TYPE_INCONNU
+        presence_soubassement: null
+        materiau: pvc
+        presence_rupteur_pont_thermique: false
+        ug: 2.9
+      expectError: true
+
+enveloppe.baie.ug:
+  rule: ug
+  cases:
+    - title: Ug saisi → retenu tel quel
+      with:
+        ug_saisi: 1.1
+        type_baie: fenetre_battante
+        type_vitrage: double_vitrage
+        type_survitrage: null
+        nature_lame_air: air
+        epaisseur_lame_air: 12
+        inclinaison_vitrage: 90
+      expect: 1.1
+
+    - title: Simple vitrage → 5.8 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: simple_vitrage
+        type_survitrage: null
+        nature_lame_air: null
+        epaisseur_lame_air: null
+        inclinaison_vitrage: 90
+      expect: 5.8
+
+    - title: Double vitrage air 12 mm, vitrage vertical (≥ 75°) → 2.8 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: double_vitrage
+        type_survitrage: null
+        nature_lame_air: air
+        epaisseur_lame_air: 12
+        inclinaison_vitrage: 90
+      expect: 2.8
+
+    - title: Double vitrage air 12 mm, vitrage incliné (< 75°) → 3.1 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: double_vitrage
+        type_survitrage: null
+        nature_lame_air: air
+        epaisseur_lame_air: 12
+        inclinaison_vitrage: 30
+      expect: 3.1
+
+    - title: Double vitrage air 6 mm, vitrage vertical → 3.3 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: double_vitrage
+        type_survitrage: null
+        nature_lame_air: air
+        epaisseur_lame_air: 6
+        inclinaison_vitrage: 90
+      expect: 3.3
+
+    - title: Triple vitrage air 12 mm, vitrage vertical → 1.9 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: triple_vitrage
+        type_survitrage: null
+        nature_lame_air: air
+        epaisseur_lame_air: 12
+        inclinaison_vitrage: 90
+      expect: 1.9
+
+    - title: Brique de verre pleine → 3.5 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: brique_verre_pleine
+        type_vitrage: brique_verre
+        type_survitrage: null
+        nature_lame_air: null
+        epaisseur_lame_air: null
+        inclinaison_vitrage: 90
+      expect: 3.5
+
+    - title: Brique de verre creuse → 2 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: brique_verre_creuse
+        type_vitrage: brique_verre
+        type_survitrage: null
+        nature_lame_air: null
+        epaisseur_lame_air: null
+        inclinaison_vitrage: 90
+      expect: 2
+
+    - title: Polycarbonate → 3 W/m².K
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: polycarbonate
+        type_survitrage: null
+        nature_lame_air: null
+        epaisseur_lame_air: null
+        inclinaison_vitrage: 90
+      expect: 3
+
+    - title: Épaisseur de lame d'air absente de l'abaque (13 mm) → erreur ValeurForfaitaire
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: double_vitrage
+        type_survitrage: null
+        nature_lame_air: air
+        epaisseur_lame_air: 13
+        inclinaison_vitrage: 90
+      expectError: true
+
+    - title: Type de vitrage inconnu → erreur ValeurForfaitaire
+      with:
+        ug_saisi: null
+        type_baie: fenetre_battante
+        type_vitrage: VITRAGE_INCONNU
+        type_survitrage: null
+        nature_lame_air: air
+        epaisseur_lame_air: 12
+        inclinaison_vitrage: 90
+      expectError: true
+
+enveloppe.baie.sw0:
+  rule: sw0
+  cases:
+    - title: Sw saisi → retenu tel quel
+      with:
+        sw_saisi: 0.6
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: double_vitrage
+        type_pose: nu_exterieur
+        type_survitrage: null
+      expect: 0.6
+
+    - title: Fenêtre battante PVC simple vitrage posée au nu extérieur → 0.58
+      with:
+        sw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: simple_vitrage
+        type_pose: nu_exterieur
+        type_survitrage: null
+      expect: 0.58
+
+    - title: Fenêtre battante PVC double vitrage posée au nu extérieur → 0.52
+      with:
+        sw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: double_vitrage
+        type_pose: nu_exterieur
+        type_survitrage: null
+      expect: 0.52
+
+    - title: Fenêtre battante PVC double vitrage à faible émissivité, nu extérieur → 0.45
+      with:
+        sw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: double_vitrage_fe
+        type_pose: nu_exterieur
+        type_survitrage: null
+      expect: 0.45
+
+    - title: Pose au nu intérieur plus pénalisante que la pose au nu extérieur → 0.47
+      with:
+        sw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: double_vitrage
+        type_pose: nu_interieur
+        type_survitrage: null
+      expect: 0.47
+
+    - title: Pose en tunnel alignée sur la pose au nu intérieur → 0.47
+      with:
+        sw_saisi: null
+        type_baie: fenetre_battante
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: double_vitrage
+        type_pose: tunnel
+        type_survitrage: null
+      expect: 0.47
+
+    - title: Brique de verre pleine → 0.4 (indépendant de la menuiserie)
+      with:
+        sw_saisi: null
+        type_baie: brique_verre_pleine
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: brique_verre
+        type_pose: nu_exterieur
+        type_survitrage: null
+      expect: 0.4
+
+    - title: Type de baie inconnu → erreur ValeurForfaitaire
+      with:
+        sw_saisi: null
+        type_baie: TYPE_INCONNU
+        presence_soubassement: null
+        materiau: pvc
+        type_vitrage: double_vitrage
+        type_pose: nu_exterieur
+        type_survitrage: null
+      expectError: true
+
+enveloppe.baie.sw:
+  rule: sw
+  cases:
+    - title: Fenêtre simple → Sw de la menuiserie
+      with:
+        sw1: 0.52
+        sw2: null
+      expect: 0.52
+
+    - title: Double fenêtre → produit des deux facteurs solaires
+      with:
+        sw1: 0.52
+        sw2: 0.58
+      expect: 0.3016
+
+    - title: Seconde menuiserie opaque → apports solaires nuls
+      with:
+        sw1: 0.52
+        sw2: 0
+      expect: 0
+
+enveloppe.baie.fe:
+  rule: fe
+  cases:
+    - title: Aucun masque → facteur d'ensoleillement unitaire
+      with:
+        fe1: 1
+        fe2: 1
+      expect: 1
+
+    - title: Masque proche et masque lointain → produit des deux facteurs
+      with:
+        fe1: 0.8
+        fe2: 0.5
+      expect: 0.4
+
+    - title: Masque proche seul
+      with:
+        fe1: 0.4
+        fe2: 1
+      expect: 0.4
+
+enveloppe.baie.fe1:
+  rule: fe1
+  cases:
+    - title: Aucun masque proche → 1
+      with:
+        fe1: []
+      expect: 1
+
+    - title: Masque proche unique → son facteur
+      with:
+        fe1: [0.4]
+      expect: 0.4
+
+    - title: Plusieurs masques proches → le plus pénalisant est retenu
+      with:
+        fe1: [0.8, 0.4, 0.7]
+      expect: 0.4
+
+enveloppe.baie.fe2:
+  rule: fe2
+  cases:
+    - title: Aucun masque lointain → 1
+      with:
+        fe2: []
+        omb: 0
+      expect: 1
+
+    - title: Masque lointain homogène unique → son facteur
+      with:
+        fe2: [0.5]
+        omb: 0
+      expect: 0.5
+
+    - title: Plusieurs masques homogènes → le plus pénalisant est retenu
+      with:
+        fe2: [0.8, 0.5]
+        omb: 0
+      expect: 0.5
+
+    - title: Masque lointain non homogène (ombrage 35 %) → 0.65
+      with:
+        fe2: []
+        omb: 35
+      expect: 0.65
+
+    - title: Masques homogènes et non homogènes → le plus pénalisant des deux
+      with:
+        fe2: [0.5]
+        omb: 20
+      expect: 0.5
+
+    - title: Ombrage total (100 %) → facteur nul
+      with:
+        fe2: []
+        omb: 100
+      expect: 0
+
+enveloppe.baie.omb:
+  rule: omb
+  cases:
+    - title: Aucun masque non homogène → 0
+      with:
+        omb: []
+      expect: 0
+
+    - title: Masque unique → son coefficient d'ombrage
+      with:
+        omb: [35]
+      expect: 35
+
+    - title: Plusieurs masques → cumul des coefficients
+      with:
+        omb: [13, 14]
+      expect: 27
+
+    - title: Cumul plafonné à 100 %
+      with:
+        omb: [40, 45, 40]
+      expect: 100
+
+enveloppe.baie.sse:
+  rule: sse
+  cases:
+    - title: Baie extérieure sans masque, c1 unitaire → surface × Sw × Fe
+      with:
+        surface: 5
+        mitoyennete: exterieur
+        double_fenetre: false
+        sw: 0.5
+        fe: 0.8
+        t: null
+        c1:
+          &c1_unitaire
+          "01": 1
+          "02": 1
+          "03": 1
+          "04": 1
+          "05": 1
+          "06": 1
+          "07": 1
+          "08": 1
+          "09": 1
+          "10": 1
+          "11": 1
+          "12": 1
+      expect:
+        "01": 2
+        "02": 2
+        "03": 2
+        "04": 2
+        "05": 2
+        "06": 2
+        "07": 2
+        "08": 2
+        "09": 2
+        "10": 2
+        "11": 2
+        "12": 2
+
+    - title: Double fenêtre → apports divisés par deux
+      with:
+        surface: 5
+        mitoyennete: exterieur
+        double_fenetre: true
+        sw: 0.5
+        fe: 0.8
+        t: null
+        c1: *c1_unitaire
+      expect:
+        "01": 1
+        "02": 1
+        "03": 1
+        "04": 1
+        "05": 1
+        "06": 1
+        "07": 1
+        "08": 1
+        "09": 1
+        "10": 1
+        "11": 1
+        "12": 1
+
+    - title: Baie donnant sur un espace tampon solarisé → apports pondérés par la transparence du local
+      with:
+        surface: 5
+        mitoyennete: local_non_chauffe
+        double_fenetre: false
+        sw: 0.5
+        fe: 0.8
+        t: 0.5
+        c1: *c1_unitaire
+      expect:
+        "01": 1
+        "02": 1
+        "03": 1
+        "04": 1
+        "05": 1
+        "06": 1
+        "07": 1
+        "08": 1
+        "09": 1
+        "10": 1
+        "11": 1
+        "12": 1
+
+    - title: Baie mitoyenne d'un logement chauffé → aucun apport solaire
+      with:
+        surface: 5
+        mitoyennete: local_residentiel
+        double_fenetre: false
+        sw: 0.5
+        fe: 0.8
+        t: null
+        c1: *c1_unitaire
+      expect:
+        "01": 0
+        "02": 0
+        "03": 0
+        "04": 0
+        "05": 0
+        "06": 0
+        "07": 0
+        "08": 0
+        "09": 0
+        "10": 0
+        "11": 0
+        "12": 0
+
+    - title: Coefficient d'orientation mensuel appliqué mois par mois
+      with:
+        surface: 5
+        mitoyennete: exterieur
+        double_fenetre: false
+        sw: 0.5
+        fe: 0.8
+        t: null
+        c1:
+          "01": 0.5
+          "02": 1
+          "03": 1
+          "04": 1
+          "05": 1
+          "06": 1
+          "07": 1
+          "08": 1
+          "09": 1
+          "10": 1
+          "11": 1
+          "12": 2
+      expect:
+        "01": 1
+        "02": 2
+        "03": 2
+        "04": 2
+        "05": 2
+        "06": 2
+        "07": 2
+        "08": 2
+        "09": 2
+        "10": 2
+        "11": 2
+        "12": 4
+
+enveloppe.baie.type_vitrage:
+  rule: type_vitrage
+  cases:
+    - title: Type de vitrage saisi → retenu
+      with:
+        type_vitrage: triple_vitrage
+      expect: triple_vitrage
+
+    - title: Type de vitrage non saisi → simple vitrage par défaut
+      with:
+        type_vitrage: null
+      expect: simple_vitrage
+
+enveloppe.baie.type_survitrage:
+  rule: type_survitrage
+  cases:
+    - title: Type de survitrage saisi → retenu
+      with:
+        type_survitrage: survitrage_fe
+      expect: survitrage_fe
+
+    - title: Type de survitrage non saisi → survitrage simple par défaut
+      with:
+        type_survitrage: null
+      expect: survitrage_simple
+
+enveloppe.baie.materiau:
+  rule: materiau
+  cases:
+    - title: Matériau saisi → retenu
+      with:
+        materiau: bois_metal
+      expect: bois_metal
+
+    - title: Matériau non saisi → PVC par défaut
+      with:
+        materiau: null
+      expect: pvc
+
+enveloppe.baie.nature_lame_air:
+  rule: nature_lame_air
+  cases:
+    - title: Nature de lame saisie → retenue
+      with:
+        nature_lame_air: argon
+      expect: argon
+
+    - title: Nature de lame non saisie → air par défaut
+      with:
+        nature_lame_air: null
+      expect: air
+
+enveloppe.baie.epaisseur_lame_air:
+  rule: epaisseur_lame_air
+  cases:
+    - title: Épaisseur saisie → retenue
+      with:
+        epaisseur_lame_air: 16
+      expect: 16
+
+    - title: Épaisseur non saisie → 6 mm par défaut
+      with:
+        epaisseur_lame_air: null
+      expect: 6
+
+enveloppe.baie.presence_rupteur_pont_thermique:
+  rule: presence_rupteur_pont_thermique
+  cases:
+    - title: Présence saisie → retenue
+      with:
+        presence_rupteur_pont_thermique: true
+      expect: true
+
+    - title: Présence non saisie → absence par défaut
+      with:
+        presence_rupteur_pont_thermique: null
+      expect: false
+
+enveloppe.baie.isolation:
+  rule: isolation
+  cases:
+    - title: Triple vitrage → isolée
+      with:
+        type_vitrage: triple_vitrage
+      expect: true
+
+    - title: Double vitrage → non isolée
+      with:
+        type_vitrage: double_vitrage
+      expect: false

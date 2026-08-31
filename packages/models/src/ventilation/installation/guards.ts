@@ -1,9 +1,8 @@
 import {
-	TYPES_VENTILATION,
-	TypeVentilationEnum,
-	TypeVentilationNaturelleEnum,
-	TypeVentilationMecaniqueEnum,
-	TypeVentilationHybrideEnum,
+	TypeVentilation,
+	TypeVentilationNaturelle,
+	TypeVentilationMecanique,
+	TypeVentilationHybride,
 } from "./enums.js";
 
 import {
@@ -39,13 +38,13 @@ export function isVentilationMecanique(
 export function isVentilationVMCDoubleFlux(
 	value: InstallationBase,
 ): value is InstallationVMCDoubleFlux {
-	return value.type === TYPES_VENTILATION.vmc_double_flux;
+	return value.type === TypeVentilation.enum.vmc_double_flux;
 }
 
 export function isVentilationPuitClimatique(
 	value: InstallationBase,
 ): value is InstallationPuitClimatique {
-	return value.type === TYPES_VENTILATION.puit_climatique;
+	return value.type === TypeVentilation.enum.puit_climatique;
 }
 
 export function isVentilationMecaniqueAutres(
@@ -53,34 +52,36 @@ export function isVentilationMecaniqueAutres(
 ): value is InstallationMecaniqueAutres {
 	return (
 		isTypeVentilationMecanique(value.type) &&
-		value.type !== TYPES_VENTILATION.vmc_double_flux &&
-		value.type !== TYPES_VENTILATION.puit_climatique
+		value.type !== TypeVentilation.enum.vmc_double_flux &&
+		value.type !== TypeVentilation.enum.puit_climatique
 	);
 }
 
 export function isTypeVentilationNaturelle(
-	value: TypeVentilationEnum,
-): value is TypeVentilationNaturelleEnum {
+	value: TypeVentilation,
+): value is TypeVentilationNaturelle {
 	return (
-		value === TYPES_VENTILATION.ventilation_ouverture_fenetres ||
-		value === TYPES_VENTILATION.ventilation_entrees_air_hautes_basses ||
+		value === TypeVentilation.enum.ventilation_ouverture_fenetres ||
+		value === TypeVentilation.enum.ventilation_entrees_air_hautes_basses ||
 		value ===
-			TYPES_VENTILATION.ventilation_naturelle_conduit_entrees_air_hygroreglables ||
-		value === TYPES_VENTILATION.ventilation_naturelle_conduit
+			TypeVentilation.enum
+				.ventilation_naturelle_conduit_entrees_air_hygroreglables ||
+		value === TypeVentilation.enum.ventilation_naturelle_conduit
 	);
 }
 
 export function isTypeVentilationMecanique(
-	value: TypeVentilationEnum,
-): value is TypeVentilationMecaniqueEnum {
+	value: TypeVentilation,
+): value is TypeVentilationMecanique {
 	return !isTypeVentilationNaturelle(value);
 }
 
 export function isTypeVentilationHybride(
-	value: TypeVentilationEnum,
-): value is TypeVentilationHybrideEnum {
+	value: TypeVentilation,
+): value is TypeVentilationHybride {
 	return (
-		value === TYPES_VENTILATION.ventilation_hybride ||
-		value === TYPES_VENTILATION.ventilation_hybride_entrees_air_hygroreglables
+		value === TypeVentilation.enum.ventilation_hybride ||
+		value ===
+			TypeVentilation.enum.ventilation_hybride_entrees_air_hygroreglables
 	);
 }

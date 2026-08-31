@@ -1,4 +1,4 @@
-import { TYPES_MASQUE } from "./enums.js";
+import { TypeMasque } from "./enums.js";
 import {
 	MasqueBase,
 	Masque,
@@ -16,9 +16,7 @@ export function isMasque(value: MasqueBase): value is Masque {
 }
 
 export function isMasqueLointain(value: MasqueBase): value is MasqueLointain {
-	return (
-		isMasqueLointainHomogene(value) || isMasqueLointainNonHomogene(value)
-	);
+	return isMasqueLointainHomogene(value) || isMasqueLointainNonHomogene(value);
 }
 
 export function isMasqueProche(value: MasqueBase): value is MasqueProche {
@@ -32,21 +30,21 @@ export function isMasqueProche(value: MasqueBase): value is MasqueProche {
 export function isMasqueLointainHomogene(
 	value: MasqueBase,
 ): value is MasqueLointainHomogene {
-	return value.type === TYPES_MASQUE.homogene;
+	return value.type === TypeMasque.enum.homogene;
 }
 
 export function isMasqueLointainNonHomogene(
 	value: MasqueBase,
 ): value is MasqueLointainNonHomogene {
-	return value.type === TYPES_MASQUE.non_homogene;
+	return value.type === TypeMasque.enum.non_homogene;
 }
 
 export function isMasqueProcheParoiLaterale(
 	value: MasqueBase,
 ): value is MasqueProcheParoiLaterale {
 	return (
-		value.type === TYPES_MASQUE.paroi_laterale_sans_obstacle_au_sud ||
-		value.type === TYPES_MASQUE.paroi_laterale_avec_obstacle_au_sud
+		value.type === TypeMasque.enum.paroi_laterale_sans_obstacle_au_sud ||
+		value.type === TypeMasque.enum.paroi_laterale_avec_obstacle_au_sud
 	);
 }
 
@@ -54,13 +52,13 @@ export function isMasqueProcheFondBalconOuLoggias(
 	value: MasqueBase,
 ): value is MasqueProcheFondBalconOuLoggias {
 	return (
-		value.type === TYPES_MASQUE.fond_balcon ||
-		value.type === TYPES_MASQUE.fond_et_flanc_loggias
+		value.type === TypeMasque.enum.fond_balcon ||
+		value.type === TypeMasque.enum.fond_et_flanc_loggias
 	);
 }
 
 export function isMasqueProcheBalconOuAuvent(
 	value: MasqueBase,
 ): value is MasqueProcheBalconOuAuvent {
-	return value.type === TYPES_MASQUE.balcon_ou_auvent;
+	return value.type === TypeMasque.enum.balcon_ou_auvent;
 }

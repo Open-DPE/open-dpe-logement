@@ -88,13 +88,13 @@ export function mapType(
 		case "13":
 		case "14":
 		case "43":
-			return chauffage.emetteur.TYPES_EMETTEUR.plancher_chauffant;
+			return chauffage.emetteur.TypeEmetteur.enum.plancher_chauffant;
 		case "15":
 		case "16":
 		case "17":
 		case "18":
 		case "44":
-			return chauffage.emetteur.TYPES_EMETTEUR.plafond_chauffant;
+			return chauffage.emetteur.TypeEmetteur.enum.plafond_chauffant;
 		case "24":
 		case "25":
 		case "26":
@@ -103,7 +103,7 @@ export function mapType(
 		case "29":
 		case "30":
 		case "31":
-			return chauffage.emetteur.TYPES_EMETTEUR.radiateur_monotube;
+			return chauffage.emetteur.TypeEmetteur.enum.radiateur_monotube;
 		case "32":
 		case "33":
 		case "34":
@@ -112,10 +112,10 @@ export function mapType(
 		case "37":
 		case "38":
 		case "39":
-			return chauffage.emetteur.TYPES_EMETTEUR.radiateur_bitube;
+			return chauffage.emetteur.TypeEmetteur.enum.radiateur_bitube;
 		case "41":
 		case "45":
-			return chauffage.emetteur.TYPES_EMETTEUR.radiateur;
+			return chauffage.emetteur.TypeEmetteur.enum.radiateur;
 
 		default:
 			throw new MappingError("chauffage.emetteur.type", props);
@@ -127,11 +127,11 @@ export function mapTemperatureDistribution(
 ): chauffage.emetteur.Emetteur["temperature_distribution"] {
 	switch (props.donnee_entree.enum_temp_distribution_ch_id) {
 		case "2":
-			return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.basse;
+			return chauffage.emetteur.TemperatureDistribution.enum.basse;
 		case "3":
-			return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.moyenne;
+			return chauffage.emetteur.TemperatureDistribution.enum.moyenne;
 		case "4":
-			return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute;
+			return chauffage.emetteur.TemperatureDistribution.enum.haute;
 	}
 
 	switch (props.donnee_entree.enum_type_emission_distribution_id) {
@@ -147,7 +147,7 @@ export function mapTemperatureDistribution(
 		case "35":
 		case "37":
 		case "39":
-			return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.moyenne;
+			return chauffage.emetteur.TemperatureDistribution.enum.moyenne;
 		case "11":
 		case "13":
 		case "15":
@@ -160,7 +160,7 @@ export function mapTemperatureDistribution(
 		case "34":
 		case "36":
 		case "38":
-			return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute;
+			return chauffage.emetteur.TemperatureDistribution.enum.haute;
 		default:
 			return null;
 	}

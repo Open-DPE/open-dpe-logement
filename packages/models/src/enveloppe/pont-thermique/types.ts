@@ -1,12 +1,17 @@
 import * as z from "zod";
-import { id, description, nombre_positif, non_applicable } from "../../common/types.js";
-import { TYPES_LIAISON, TypeLiaisonEnum } from "./enums.js";
+import {
+	id,
+	description,
+	nombre_positif,
+	non_applicable,
+} from "../../common/types.js";
+import { TypeLiaison } from "./enums.js";
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/pont-thermique#/$defs/liaison
  */
 export const LiaisonBase = z.object({
-	type: TypeLiaisonEnum,
+	type: TypeLiaison,
 	mur_id: id,
 	plancher_id: id.nullable().default(null),
 	ouverture_id: id.nullable().default(null),
@@ -14,30 +19,21 @@ export const LiaisonBase = z.object({
 });
 
 export const LiaisonPlancher = LiaisonBase.extend({
-	type: TypeLiaisonEnum.extract([
-		TYPES_LIAISON.plancher_bas_mur,
-		TYPES_LIAISON.plancher_haut_mur,
-	]),
+	type: TypeLiaison.extract(["plancher_bas_mur", "plancher_haut_mur"]),
 	pont_thermique_partiel: z.literal(false),
 	plancher_id: id,
 	ouverture_id: non_applicable,
 });
 
 export const LiaisonMenuiserie = LiaisonBase.extend({
-	type: TypeLiaisonEnum.extract([
-		TYPES_LIAISON.porte_mur,
-		TYPES_LIAISON.baie_mur,
-	]),
+	type: TypeLiaison.extract(["porte_mur", "baie_mur"]),
 	pont_thermique_partiel: z.literal(false),
 	ouverture_id: id,
 	plancher_id: non_applicable,
 });
 
 export const LiaisonRefendOuIntermediaire = LiaisonBase.extend({
-	type: TypeLiaisonEnum.extract([
-		TYPES_LIAISON.plancher_intermediaire_mur,
-		TYPES_LIAISON.refend_mur,
-	]),
+	type: TypeLiaison.extract(["plancher_intermediaire_mur", "refend_mur"]),
 	ouverture_id: non_applicable,
 	plancher_id: non_applicable,
 });

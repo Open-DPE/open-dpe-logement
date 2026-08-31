@@ -1,5 +1,5 @@
-import { TYPES_CHAUFFAGE } from "../enums.js";
-import { TYPES_DISTRIBUTION } from "./enums.js";
+import { TypeChauffage } from "../enums.js";
+import { TypeDistribution } from "./enums.js";
 import {
 	SystemeBase,
 	Systeme,
@@ -16,11 +16,11 @@ export function isSysteme(value: SystemeBase): value is Systeme {
 }
 
 export function isSystemeCentral(value: SystemeBase): value is SystemeCentral {
-	return value.type === TYPES_CHAUFFAGE.central;
+	return value.type === TypeChauffage.enum.central;
 }
 
 export function isSystemeDivise(value: SystemeBase): value is SystemeDivise {
-	return value.type === TYPES_CHAUFFAGE.divise;
+	return value.type === TypeChauffage.enum.divise;
 }
 
 export function isReseau(value: ReseauBase): value is Reseau {
@@ -30,11 +30,11 @@ export function isReseau(value: ReseauBase): value is Reseau {
 export function isReseauHydraulique(
 	value: ReseauBase,
 ): value is ReseauHydraulique {
-	return value.type_distribution === TYPES_DISTRIBUTION.hydraulique;
+	return value.type_distribution === TypeDistribution.enum.hydraulique;
 }
 
 export function isReseauAeraulique(
 	value: ReseauBase,
 ): value is ReseauAeraulique {
-	return value.type_distribution === TYPES_DISTRIBUTION.aeraulique;
+	return value.type_distribution === TypeDistribution.enum.aeraulique;
 }

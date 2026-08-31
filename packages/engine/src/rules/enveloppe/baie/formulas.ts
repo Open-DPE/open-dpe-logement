@@ -31,8 +31,8 @@ export function calcule_isolation_aiu(props: {
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
 }): boolean {
 	switch (props.type_vitrage) {
-		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage:
-		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage_fe:
+		case models.enveloppe.baie.TypeVitrage.enum.triple_vitrage:
+		case models.enveloppe.baie.TypeVitrage.enum.triple_vitrage_fe:
 			return true;
 		default:
 			return false;
@@ -78,7 +78,7 @@ export function calcule_u(props: {
  * @returns Résistance thermique additionnelle de la baie en m².K/W
  */
 export function calcule_deltar(props: {
-	types_fermetures: models.enveloppe.baie.TypeFermetureEnum[];
+	types_fermetures: models.enveloppe.baie.TypeFermeture[];
 }): number {
 	const types_fermetures = [...new Set(props.types_fermetures)];
 	const abaque = abaques.enveloppe.baie.deltar;
@@ -115,7 +115,7 @@ export function calcule_uw(props: {
  */
 export function calcule_uw0(props: {
 	uw_saisi: number | null;
-	type_baie: models.enveloppe.baie.TypeBaieEnum;
+	type_baie: models.enveloppe.baie.TypeBaie;
 	presence_soubassement: boolean | null;
 	materiau: ReturnType<typeof set_materiau>;
 	presence_rupteur_pont_thermique: ReturnType<
@@ -151,7 +151,7 @@ export function calcule_uw0(props: {
  */
 export function calcule_ug(props: {
 	ug_saisi: number | null;
-	type_baie: models.enveloppe.baie.TypeBaieEnum;
+	type_baie: models.enveloppe.baie.TypeBaie;
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
 	type_survitrage: ReturnType<typeof set_type_survitrage> | null;
 	nature_lame_air: ReturnType<typeof set_nature_lame_air> | null;
@@ -173,7 +173,7 @@ export function calcule_ug(props: {
  */
 export function calcule_sse(props: {
 	surface: number;
-	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 	double_fenetre: boolean;
 	sw: ReturnType<typeof calcule_sw>;
 	fe: ReturnType<typeof calcule_fe>;
@@ -184,8 +184,8 @@ export function calcule_sse(props: {
 	const t = props.t === null ? 1 : props.t;
 
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MITOYENNETES.exterieur:
-		case models.enveloppe.common.MITOYENNETES.local_non_chauffe: {
+		case models.enveloppe.common.Mitoyennete.enum.exterieur:
+		case models.enveloppe.common.Mitoyennete.enum.local_non_chauffe: {
 			return models.common.createParMois((mois) => {
 				const sse = surface * sw * fe * c1[mois] * t;
 				return props.double_fenetre ? sse / 2 : sse;
@@ -222,11 +222,11 @@ export function calcule_sw(props: {
  */
 export function calcule_sw0(props: {
 	sw_saisi: number | null;
-	type_baie: models.enveloppe.baie.TypeBaieEnum;
+	type_baie: models.enveloppe.baie.TypeBaie;
 	presence_soubassement: boolean | null;
 	materiau: ReturnType<typeof set_materiau>;
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
-	type_pose: models.enveloppe.common.TypePoseEnum | null;
+	type_pose: models.enveloppe.common.TypePose | null;
 	type_survitrage: ReturnType<typeof set_type_survitrage> | null;
 }): number {
 	const { sw_saisi, ...query } = props;
@@ -289,11 +289,11 @@ export function calcule_omb(props: {
  * @returns Type de vitrage retenu
  */
 export function set_type_vitrage(props: {
-	type_vitrage: models.enveloppe.baie.TypeVitrageEnum | null;
-}): models.enveloppe.baie.TypeVitrageEnum {
+	type_vitrage: models.enveloppe.baie.TypeVitrage | null;
+}): models.enveloppe.baie.TypeVitrage {
 	const { type_vitrage } = props;
 	return type_vitrage === null
-		? models.enveloppe.baie.TYPES_VITRAGE.simple_vitrage
+		? models.enveloppe.baie.TypeVitrage.enum.simple_vitrage
 		: type_vitrage;
 }
 
@@ -302,11 +302,11 @@ export function set_type_vitrage(props: {
  * @returns Type de survitrage retenu
  */
 export function set_type_survitrage(props: {
-	type_survitrage: models.enveloppe.baie.TypeSurvitrageEnum | null;
-}): models.enveloppe.baie.TypeSurvitrageEnum {
+	type_survitrage: models.enveloppe.baie.TypeSurvitrage | null;
+}): models.enveloppe.baie.TypeSurvitrage {
 	return (
 		props.type_survitrage ??
-		models.enveloppe.baie.TYPES_SURVITRAGE.survitrage_simple
+		models.enveloppe.baie.TypeSurvitrage.enum.survitrage_simple
 	);
 }
 
@@ -315,9 +315,9 @@ export function set_type_survitrage(props: {
  * @returns Matériau retenu
  */
 export function set_materiau(props: {
-	materiau: models.enveloppe.baie.MateriauEnum | null;
-}): models.enveloppe.baie.MateriauEnum {
-	return props.materiau ?? models.enveloppe.baie.MATERIAUX.pvc;
+	materiau: models.enveloppe.baie.MateriauBaie | null;
+}): models.enveloppe.baie.MateriauBaie {
+	return props.materiau ?? models.enveloppe.baie.MateriauBaie.enum.pvc;
 }
 
 /**
@@ -325,9 +325,9 @@ export function set_materiau(props: {
  * @returns Nature de la lame d'air retenue
  */
 export function set_nature_lame_air(props: {
-	nature_lame_air: models.enveloppe.baie.NatureLameEnum | null;
-}): models.enveloppe.baie.NatureLameEnum {
-	return props.nature_lame_air ?? models.enveloppe.baie.NATURES_LAME.air;
+	nature_lame_air: models.enveloppe.baie.NatureLameAir | null;
+}): models.enveloppe.baie.NatureLameAir {
+	return props.nature_lame_air ?? models.enveloppe.baie.NatureLameAir.enum.air;
 }
 
 /**
@@ -357,8 +357,8 @@ export function set_isolation(props: {
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
 }): boolean {
 	switch (props.type_vitrage) {
-		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage:
-		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage_fe:
+		case models.enveloppe.baie.TypeVitrage.enum.triple_vitrage:
+		case models.enveloppe.baie.TypeVitrage.enum.triple_vitrage_fe:
 			return true;
 		default:
 			return false;

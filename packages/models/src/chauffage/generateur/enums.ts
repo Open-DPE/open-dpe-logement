@@ -1,7 +1,7 @@
 import * as z from "zod";
-import { ENERGIES, EnergieEnum } from "../../common/enums.js";
+import { Energie } from "../../common/enums.js";
 
-export const TYPES_GENERATEUR = {
+export const TypeGenerateur = z.enum({
 	chaudiere: "chaudiere",
 	convecteur_bi_jonction: "convecteur_bi_jonction",
 	convecteur_electrique: "convecteur_electrique",
@@ -23,63 +23,57 @@ export const TYPES_GENERATEUR = {
 	poele_bouilleur: "poele_bouilleur",
 	radiateur_gaz: "radiateur_gaz",
 	reseau_chaleur: "reseau_chaleur",
-} as const;
+});
 
-export const TypeGenerateurEnum = z.enum(TYPES_GENERATEUR);
-export type TypeGenerateurEnum = z.infer<typeof TypeGenerateurEnum>;
+export type TypeGenerateur = z.infer<typeof TypeGenerateur>;
 
-export const POSITIONS_CHAUDIERE = {
+export const PositionChaudiere = z.enum({
 	chaudiere_murale: "chaudiere_murale",
 	chaudiere_sol: "chaudiere_sol",
-} as const;
+});
 
-export const PositionChaudiereEnum = z.enum(POSITIONS_CHAUDIERE);
-export type PositionChaudiereEnum = z.infer<typeof PositionChaudiereEnum>;
+export type PositionChaudiere = z.infer<typeof PositionChaudiere>;
 
-export const LABELS = {
+export const LabelGenerateur = z.enum({
 	flamme_verte: "flamme_verte",
 	nf_performance: "nf_performance",
-} as const;
+});
 
-export const LabelEnum = z.enum(LABELS);
-export type LabelEnum = z.infer<typeof LabelEnum>;
+export type LabelGenerateur = z.infer<typeof LabelGenerateur>;
 
-export const MODES_COMBUSTION = {
+export const ModeCombustion = z.enum({
 	standard: "standard",
 	basse_temperature: "basse_temperature",
 	condensation: "condensation",
-} as const;
+});
 
-export const ModeCombustionEnum = z.enum(MODES_COMBUSTION);
-export type ModeCombustionEnum = z.infer<typeof ModeCombustionEnum>;
+export type ModeCombustion = z.infer<typeof ModeCombustion>;
 
-export const CASCADES = [0, 1, 2] as const;
-export const CascadeEnum = z.union([
-	z.literal(0),
-	z.literal(1),
-	z.literal(2),
+export const Cascade = z.union([z.literal(0), z.literal(1), z.literal(2)]);
+
+export type Cascade = z.infer<typeof Cascade>;
+
+export const EnergieChauffage = Energie.extract([
+	"electricite",
+	"gaz_naturel",
+	"gpl",
+	"fioul",
+	"charbon",
+	"bois_buche",
+	"bois_plaquette",
+	"bois_granule",
+	"reseau_chaleur",
 ]);
-export type CascadeEnum = z.infer<typeof CascadeEnum>;
 
-export const EnergieChauffageEnum = EnergieEnum.extract([
-	ENERGIES.electricite,
-	ENERGIES.gaz_naturel,
-	ENERGIES.gpl,
-	ENERGIES.fioul,
-	ENERGIES.charbon,
-	ENERGIES.bois_buche,
-	ENERGIES.bois_plaquette,
-	ENERGIES.bois_granule,
-	ENERGIES.reseau_chaleur,
-]);
-export type EnergieChauffageEnum = z.infer<typeof EnergieChauffageEnum>;
+export type EnergieChauffage = z.infer<typeof EnergieChauffage>;
 
-export const BienergieEnum = EnergieEnum.extract([
-	ENERGIES.gaz_naturel,
-	ENERGIES.gpl,
-	ENERGIES.fioul,
-	ENERGIES.bois_buche,
-	ENERGIES.bois_plaquette,
-	ENERGIES.bois_granule,
+export const Bienergie = Energie.extract([
+	"gaz_naturel",
+	"gpl",
+	"fioul",
+	"bois_buche",
+	"bois_plaquette",
+	"bois_granule",
 ]);
-export type BienergieEnum = z.infer<typeof BienergieEnum>;
+
+export type Bienergie = z.infer<typeof Bienergie>;

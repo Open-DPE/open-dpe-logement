@@ -4,8 +4,7 @@ import { REGISTRY as _REGISTRY } from "../rules/rules.js";
 export type Item = { id: string; [key: string]: unknown };
 
 export type Rule<I extends Item = Item, R = unknown> =
-	| ((ctx: Context) => R)
-	| ((ctx: Context, item: I) => R);
+	((ctx: Context) => R) | ((ctx: Context, item: I) => R);
 
 type IsValidRule<F> = F extends (ctx: Context) => any
 	? true

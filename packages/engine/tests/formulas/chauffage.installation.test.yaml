@@ -1,0 +1,225 @@
+chauffage.installation.caux_dist:
+  rule: caux_dist
+  cases:
+    - title: Somme des auxiliaires de distribution des systèmes de l'installation
+      with:
+        caux_dist: [30, 20]
+      expect: 50
+
+    - title: Aucun système → 0
+      with:
+        caux_dist: []
+      expect: 0
+
+chauffage.installation.rdim:
+  rule: rdim
+  cases:
+    - title: Installation unique couvrant tout le logement → 1
+      with:
+        surface_installation: 100
+        surface_installations: 100
+      expect: 1
+
+    - title: Installation couvrant 40 % de la surface chauffée → 0.4
+      with:
+        surface_installation: 40
+        surface_installations: 100
+      expect: 0.4
+
+    - title: Aucune surface chauffée → 0 (pas de division par zéro)
+      with:
+        surface_installation: 40
+        surface_installations: 0
+      expect: 0
+
+chauffage.installation.bch:
+  rule: bch
+  cases:
+    - title: Besoins du logement proratisés au dimensionnement de l'installation
+      with:
+        rdim: 0.4
+        bch:
+          &bch600
+          "01": 600
+          "02": 600
+          "03": 600
+          "04": 600
+          "05": 600
+          "06": 600
+          "07": 600
+          "08": 600
+          "09": 600
+          "10": 600
+          "11": 600
+          "12": 600
+      expect:
+        "01": 240
+        "02": 240
+        "03": 240
+        "04": 240
+        "05": 240
+        "06": 240
+        "07": 240
+        "08": 240
+        "09": 240
+        "10": 240
+        "11": 240
+        "12": 240
+
+    - title: Installation unique → besoins inchangés
+      with:
+        rdim: 1
+        bch: *bch600
+      expect: *bch600
+
+chauffage.installation.pch:
+  rule: pch
+  cases:
+    - title: Puissance du logement proratisée au dimensionnement de l'installation
+      with:
+        pch: 12
+        rdim: 0.4
+      expect: 4.8
+
+    - title: Installation unique → puissance inchangée
+      with:
+        pch: 12
+        rdim: 1
+      expect: 12
+
+chauffage.installation.fch:
+  rule: fch
+  cases:
+    - title: Aucun usage solaire déclaré → couverture solaire nulle
+      with:
+        fch_saisi: null
+        usage: null
+        zone_climatique: H1a
+        type_batiment: maison
+      expect: 0
+
+    - title: Facteur de couverture saisi → retenu tel quel
+      with:
+        fch_saisi: 0.4
+        usage: chauffage
+        zone_climatique: H1a
+        type_batiment: maison
+      expect: 0.4
+
+    - title: Maison en zone H1a → 0.25
+      with:
+        fch_saisi: null
+        usage: chauffage
+        zone_climatique: H1a
+        type_batiment: maison
+      expect: 0.25
+
+    - title: Maison en zone H1b → 0.22
+      with:
+        fch_saisi: null
+        usage: chauffage
+        zone_climatique: H1b
+        type_batiment: maison
+      expect: 0.22
+
+    - title: Maison en zone H2d → 0.39
+      with:
+        fch_saisi: null
+        usage: chauffage
+        zone_climatique: H2d
+        type_batiment: maison
+      expect: 0.39
+
+    - title: Maison en zone H3 → 0.52
+      with:
+        fch_saisi: null
+        usage: chauffage
+        zone_climatique: H3
+        type_batiment: maison
+      expect: 0.52
+
+    - title: Usage mixte chauffage + ECS → même abaque
+      with:
+        fch_saisi: null
+        usage: chauffage_ecs
+        zone_climatique: H3
+        type_batiment: maison
+      expect: 0.52
+
+    # ⚠ L'abaque `chauffage/fch.csv` ne comporte que des lignes `maison` :
+    # un immeuble collectif équipé de solaire thermique lève une erreur.
+    # Voir le recensement des écarts.
+    - title: Immeuble collectif → aucune ligne d'abaque, erreur ValeurForfaitaire
+      with:
+        fch_saisi: null
+        usage: chauffage
+        zone_climatique: H1a
+        type_batiment: immeuble
+      expectError: true
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        fch_saisi: null
+        usage: chauffage
+        zone_climatique: INCONNUE
+        type_batiment: maison
+      expectError: true
+
+chauffage.installation.effet_joule:
+  rule: effet_joule
+  cases:
+    - title: Installation centrale avec un générateur électrique central → effet Joule
+      with:
+        type_installation: central
+        systemes:
+          - type_systeme: central
+            energie_generateur: electricite
+      expect: true
+
+    - title: Installation centrale au gaz → pas d'effet Joule
+      with:
+        type_installation: central
+        systemes:
+          - type_systeme: central
+            energie_generateur: gaz_naturel
+      expect: false
+
+    - title: Installation centrale avec appoint divisé électrique → pas d'effet Joule
+      with:
+        type_installation: central
+        systemes:
+          - type_systeme: central
+            energie_generateur: gaz_naturel
+          - type_systeme: divise
+            energie_generateur: electricite
+      expect: false
+
+    - title: Installation divisée majoritairement électrique → effet Joule
+      with:
+        type_installation: divise
+        systemes:
+          - type_systeme: divise
+            energie_generateur: electricite
+          - type_systeme: divise
+            energie_generateur: electricite
+          - type_systeme: divise
+            energie_generateur: bois_buche
+      expect: true
+
+    - title: Installation divisée à parts égales → pas d'effet Joule (seuil strict)
+      with:
+        type_installation: divise
+        systemes:
+          - type_systeme: divise
+            energie_generateur: electricite
+          - type_systeme: divise
+            energie_generateur: bois_buche
+      expect: false
+
+    - title: Installation divisée sans générateur électrique → pas d'effet Joule
+      with:
+        type_installation: divise
+        systemes:
+          - type_systeme: divise
+            energie_generateur: gaz_naturel
+      expect: false

@@ -72,7 +72,7 @@ export function calcule_bver(props: {
  * @returns Coefficient de transmission thermique équivalent du local non chauffé en W/m².K
  */
 export function calcule_uvue(props: {
-	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLncEnum;
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLocalNonChauffe;
 }): number {
 	const abaque = abaques.enveloppe.localNonChauffe.uvue;
 	const match = abaque.search(props, abaque.load()).at(0);
@@ -190,22 +190,23 @@ export function calcule_sse(props: {
  * @returns Coefficient de transparence moyen du local non chauffé
  */
 export function calcule_t(props: {
-	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLncEnum;
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLocalNonChauffe;
 	baies: {
-		mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+		mitoyennete: models.enveloppe.common.Mitoyennete;
 		surface: number;
 		t: ReturnType<typeof baie.calcule_t>;
 	}[];
 }): number {
 	if (
 		props.type_local_non_chauffe !==
-		models.enveloppe.localNonChauffe.TYPES_LNC.espace_tampon_solarise
+		models.enveloppe.localNonChauffe.TypeLocalNonChauffe.enum
+			.espace_tampon_solarise
 	)
 		return 0;
 
 	const baies = props.baies.filter(
 		({ mitoyennete }) =>
-			mitoyennete === models.enveloppe.common.MITOYENNETES.exterieur,
+			mitoyennete === models.enveloppe.common.Mitoyennete.enum.exterieur,
 	);
 	const s = baies.reduce((acc, baie) => acc + baie.surface, 0);
 	const w = baies.reduce((acc, baie) => acc + baie.surface * baie.t, 0);
@@ -219,20 +220,17 @@ export function calcule_t(props: {
  */
 export function calcule_orientations(props: {
 	baies: {
-		mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+		mitoyennete: models.enveloppe.common.Mitoyennete;
 		surface: number;
-		orientation: models.enveloppe.common.OrientationParoiEnum;
+		orientation: models.enveloppe.common.OrientationParoi;
 	}[];
-}): models.common.OrientationCardinaleEnum[] {
+}): models.common.OrientationCardinale[] {
 	const baies = props.baies.filter(
 		({ mitoyennete }) =>
-			mitoyennete === models.enveloppe.common.MITOYENNETES.exterieur,
+			mitoyennete === models.enveloppe.common.Mitoyennete.enum.exterieur,
 	);
 
-	const parOrientation = new Map<
-		models.common.OrientationCardinaleEnum,
-		number
-	>();
+	const parOrientation = new Map<models.common.OrientationCardinale, number>();
 	for (const baie of baies) {
 		if (baie.orientation === models.enveloppe.common.OrientationHorizontale)
 			continue;

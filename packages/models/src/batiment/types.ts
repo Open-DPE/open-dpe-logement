@@ -6,7 +6,7 @@ import {
 	surface,
 	hauteur,
 } from "../common/types.js";
-import { TypeBatimentEnum, ZoneClimatiqueEnum } from "./enums.js";
+import { TypeBatiment, ZoneClimatique } from "./enums.js";
 import { Appartement } from "./appartement/types.js";
 
 export const Logement = z.object({
@@ -16,7 +16,7 @@ export const Logement = z.object({
 });
 
 export const BatimentBase = z.object({
-	type: TypeBatimentEnum,
+	type: TypeBatiment,
 	annee_construction: annee,
 	annee_renovation: annee.nullable().default(null),
 	altitude: z.number().int().min(-1000).max(10000),
@@ -31,13 +31,13 @@ export const BatimentBase = z.object({
 });
 
 export const Maison = BatimentBase.extend({
-	type: TypeBatimentEnum.extract(["maison"]),
+	type: TypeBatiment.extract(["maison"]),
 	logements: z.union([z.literal(1), z.literal(2)]),
 	appartements_visites: z.array(z.never()),
 });
 
 export const Immeuble = BatimentBase.extend({
-	type: TypeBatimentEnum.extract(["immeuble"]),
+	type: TypeBatiment.extract(["immeuble"]),
 	logements: z.number().int().min(3),
 });
 
@@ -47,7 +47,7 @@ export const BatimentData = z.object({
 	sh: z.number(),
 	hsp: z.number(),
 	ratio_proratisation: z.number(),
-	zone_climatique: ZoneClimatiqueEnum,
+	zone_climatique: ZoneClimatique,
 });
 
 export const BatimentWithData = z.intersection(

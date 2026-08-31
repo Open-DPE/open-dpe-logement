@@ -3,15 +3,15 @@ import type { Ets, BaieEts } from "../types.js";
 import { MappingError } from "../../errors.js";
 import { resolveId } from "../../common.js";
 
-const TYPES_VITRAGE = enveloppe.baie.TYPES_VITRAGE;
-const MATERIAUX = enveloppe.baie.MATERIAUX;
+const TypeVitrage = enveloppe.baie.TypeVitrage;
+const MateriauBaie = enveloppe.baie.MateriauBaie;
 
 export function mapBaie(props: {
 	baie: BaieEts;
 	ets: Ets;
 }): enveloppe.localNonChauffe.baie.Baie {
 	const position: enveloppe.localNonChauffe.baie.PositionBase = {
-		mitoyennete: enveloppe.common.MITOYENNETES.exterieur,
+		mitoyennete: enveloppe.common.Mitoyennete.enum.exterieur,
 		surface: mapSurface(props.baie),
 		inclinaison: mapInclinaison(props.baie),
 		orientation: mapOrientation(props.baie),
@@ -52,37 +52,37 @@ export function mapTypeVitrage(
 ): enveloppe.localNonChauffe.baie.Baie["type_vitrage"] {
 	switch (props.donnee_entree.tv_coef_transparence_ets_id) {
 		case 1:
-			return TYPES_VITRAGE.polycarbonate;
+			return TypeVitrage.enum.polycarbonate;
 
 		case 2:
 		case 7:
 		case 12:
 		case 17:
-			return TYPES_VITRAGE.simple_vitrage;
+			return TypeVitrage.enum.simple_vitrage;
 
 		case 3:
 		case 8:
 		case 13:
 		case 18:
-			return TYPES_VITRAGE.double_vitrage;
+			return TypeVitrage.enum.double_vitrage;
 
 		case 4:
 		case 9:
 		case 14:
 		case 19:
-			return TYPES_VITRAGE.double_vitrage_fe;
+			return TypeVitrage.enum.double_vitrage_fe;
 
 		case 5:
 		case 10:
 		case 15:
 		case 20:
-			return TYPES_VITRAGE.triple_vitrage;
+			return TypeVitrage.enum.triple_vitrage;
 
 		case 6:
 		case 11:
 		case 16:
 		case 21:
-			return TYPES_VITRAGE.triple_vitrage_fe;
+			return TypeVitrage.enum.triple_vitrage_fe;
 
 		default:
 			return null;
@@ -127,14 +127,14 @@ export function mapMateriauMenuiserie(
 		case 4:
 		case 5:
 		case 6:
-			return MATERIAUX.bois;
+			return MateriauBaie.enum.bois;
 
 		case 7:
 		case 8:
 		case 9:
 		case 10:
 		case 11:
-			return MATERIAUX.pvc;
+			return MateriauBaie.enum.pvc;
 
 		case 12:
 		case 13:
@@ -146,7 +146,7 @@ export function mapMateriauMenuiserie(
 		case 19:
 		case 20:
 		case 21:
-			return MATERIAUX.metal;
+			return MateriauBaie.enum.metal;
 
 		default:
 			return null;
@@ -179,13 +179,13 @@ export function mapOrientation(
 ): enveloppe.localNonChauffe.baie.Position["orientation"] {
 	switch (props.donnee_entree.enum_orientation_id) {
 		case "1":
-			return common.ORIENTATIONS_CARDINALES.sud;
+			return common.OrientationCardinale.enum.sud;
 		case "2":
-			return common.ORIENTATIONS_CARDINALES.nord;
+			return common.OrientationCardinale.enum.nord;
 		case "3":
-			return common.ORIENTATIONS_CARDINALES.est;
+			return common.OrientationCardinale.enum.est;
 		case "4":
-			return common.ORIENTATIONS_CARDINALES.ouest;
+			return common.OrientationCardinale.enum.ouest;
 		case "5":
 			return enveloppe.common.OrientationHorizontale;
 	}

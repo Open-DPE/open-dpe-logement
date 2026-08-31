@@ -21,7 +21,7 @@ class Engine {
 
 	calcule(
 		diagnostic: diagnostic.Diagnostic,
-		scenario: common.ScenarioEnum = common.SCENARIOS.conventionnel,
+		scenario: common.Scenario = common.Scenario.enum.conventionnel,
 	): CalculeResponse {
 		if (!this.initialized) throw new Error("Call init() first.");
 

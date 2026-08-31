@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { ENERGIES } from "../../common/enums.js";
+import { Energie } from "../../common/enums.js";
 import {
 	id,
 	description,
@@ -9,37 +9,36 @@ import {
 	Consommations,
 } from "../../common/types.js";
 import {
-	TYPES_GENERATEUR,
-	EnergieRefroidissementEnum,
-	TypeGenerateurEnum,
-	TypeGenerateurPacEnum,
+	TypeGenerateur,
+	EnergieRefroidissement,
+	TypeGenerateurPac,
 } from "./enums.js";
 
 export const GenerateurBase = z.object({
 	id,
 	description,
-	type: TypeGenerateurEnum,
-	energie: EnergieRefroidissementEnum,
+	type: TypeGenerateur,
+	energie: EnergieRefroidissement,
 	annee_installation,
 	seer: nombre_positif.nullable().default(null),
 	reseau_froid_id: z.string().nullable().default(null),
 });
 
 export const GenerateurPAC = GenerateurBase.extend({
-	type: TypeGenerateurPacEnum,
-	energie: EnergieRefroidissementEnum.extract([ENERGIES.electricite]),
+	type: TypeGenerateurPac,
+	energie: EnergieRefroidissement.extract(["electricite"]),
 	reseau_froid_id: non_applicable,
 });
 
 export const GenerateurClimatiseur = GenerateurBase.extend({
-	type: TypeGenerateurEnum.extract([TYPES_GENERATEUR.autre]),
-	energie: EnergieRefroidissementEnum.exclude([ENERGIES.reseau_froid]),
+	type: TypeGenerateur.extract(["autre"]),
+	energie: EnergieRefroidissement.exclude(["reseau_froid"]),
 	reseau_froid_id: non_applicable,
 });
 
 export const GenerateurReseauFroid = GenerateurBase.extend({
-	type: TypeGenerateurEnum.extract([TYPES_GENERATEUR.reseau_froid]),
-	energie: EnergieRefroidissementEnum.extract([ENERGIES.reseau_froid]),
+	type: TypeGenerateur.extract(["reseau_froid"]),
+	energie: EnergieRefroidissement.extract(["reseau_froid"]),
 });
 
 export const Generateur = z.union([

@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const MATERIAUX_MUR = {
+export const MateriauMur = z.enum({
 	pierre_moellons: "pierre_moellons",
 	pierre_moellons_avec_remplissage: "pierre_moellons_avec_remplissage",
 	pise_ou_beton_terre: "pise_ou_beton_terre",
@@ -24,16 +24,16 @@ export const MATERIAUX_MUR = {
 	ossature_bois_avec_remplissage_isolant:
 		"ossature_bois_avec_remplissage_isolant",
 	beton_cellulaire: "beton_cellulaire",
-} as const;
-export const MateriauMurEnum = z.enum(MATERIAUX_MUR);
-export type MateriauMurEnum = z.infer<typeof MateriauMurEnum>;
+});
 
-export const TYPES_DOUBLAGE = {
+export type MateriauMur = z.infer<typeof MateriauMur>;
+
+export const TypeDoublage = z.enum({
 	sans_doublage: "sans_doublage",
 	indetermine: "indetermine",
 	lame_air_inferieur_15mm: "lame_air_inferieur_15mm",
 	lame_air_superieur_15mm: "lame_air_superieur_15mm",
 	materiaux_connu: "materiaux_connu",
-} as const;
-export const TypeDoublageEnum = z.enum(TYPES_DOUBLAGE);
-export type TypeDoublageEnum = z.infer<typeof TypeDoublageEnum>;
+});
+
+export type TypeDoublage = z.infer<typeof TypeDoublage>;

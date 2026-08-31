@@ -17,22 +17,22 @@ export function calcule_consommations(props: {
 	cfr: ReturnType<typeof calcule_cfr>;
 	cfr_enr: ReturnType<typeof calcule_cfr_enr>;
 	caux: ReturnType<typeof calcule_caux>;
-	energie: models.refroidissement.generateur.EnergieRefroidissementEnum;
+	energie: models.refroidissement.generateur.EnergieRefroidissement;
 	reseau_id: string | null;
 }): models.common.Consommations {
 	return models.common.mergeConsommations(
 		common.calcule_consommations({
 			cef: props.cfr,
 			cef_enr: props.cfr_enr,
-			usage: models.common.USAGES.refroidissement,
+			usage: models.common.Usage.enum.refroidissement,
 			energie: props.energie,
 			reseau_id: props.reseau_id,
 		}),
 		common.calcule_consommations({
 			cef: props.caux,
 			cef_enr: 0,
-			usage: models.common.USAGES.auxiliaire,
-			energie: models.common.ENERGIES.electricite,
+			usage: models.common.Usage.enum.auxiliaire,
+			energie: models.common.Energie.enum.electricite,
 			reseau_id: null,
 		}),
 	);
@@ -64,7 +64,7 @@ export function calcule_cfr_enr(props: {
 	return common.calcule_cener({
 		celec: props.celec,
 		celec_ac: props.celec_ac,
-		usage: models.production.USAGES_ELECTRICITE.refroidissement,
+		usage: models.production.UsageElectricite.enum.refroidissement,
 		cef: props.cfr_elec,
 	});
 }
@@ -75,7 +75,7 @@ export function calcule_cfr_enr(props: {
  */
 export function calcule_cfr_elec(props: {
 	cfr: ReturnType<typeof calcule_cfr>;
-	energie_generateur: models.refroidissement.generateur.EnergieRefroidissementEnum;
+	energie_generateur: models.refroidissement.generateur.EnergieRefroidissement;
 }): number {
 	return common.calcule_celec({
 		cef: props.cfr,

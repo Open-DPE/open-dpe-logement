@@ -3,7 +3,7 @@ import { mapAnneeEtablissement } from "../../common.js";
 import type { Input, ParoiOpaque } from "../types.js";
 import { MappingError } from "../../errors.js";
 
-const TYPES_ISOLATION = enveloppe.common.TYPES_ISOLATION;
+const TypeIsolation = enveloppe.common.TypeIsolation;
 
 export type IsolationProps = {
 	paroi: ParoiOpaque;
@@ -66,17 +66,17 @@ export function mapType(
 		case "9":
 			return null;
 		case "3":
-			return TYPES_ISOLATION.iti;
+			return TypeIsolation.enum.iti;
 		case "4":
-			return TYPES_ISOLATION.ite;
+			return TypeIsolation.enum.ite;
 		case "5":
-			return TYPES_ISOLATION.itr;
+			return TypeIsolation.enum.itr;
 		case "6":
-			return TYPES_ISOLATION.iti_ite;
+			return TypeIsolation.enum.iti_ite;
 		case "7":
-			return TYPES_ISOLATION.itr_iti;
+			return TypeIsolation.enum.itr_iti;
 		case "8":
-			return TYPES_ISOLATION.itr_ite;
+			return TypeIsolation.enum.itr_ite;
 	}
 }
 

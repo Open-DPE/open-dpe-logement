@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ressource, tag } from '@/models/ressource';
+import { ressources, tags } from '@/models/ressource';
 import { ChevronRightIcon } from "lucide-react"
 import { Layout } from "@/components/layout/layout";
 import { Button } from '@/components/ui/button';
@@ -14,14 +14,14 @@ import {
 export function Ressources() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const filters = tag.all().map((tag) => ({
+  const filters = tags.map((tag) => ({
     label: tag,
-    count: ressource.all().filter((r) => r.tags.includes(tag)).length,
+    count: ressources.filter((r) => r.tags.includes(tag)).length,
   }));
 
-  const ressources = selectedTags.length === 0
-    ? ressource.all()
-    : ressource.byTags(selectedTags);
+  const filteredRessources = selectedTags.length === 0
+    ? ressources
+    : ressources.filter((r) => selectedTags.every((tag) => r.tags.includes(tag)));
 
   function toggleTag(tag: string) {
     setSelectedTags((prev) =>
@@ -62,7 +62,7 @@ export function Ressources() {
 
         <div className="flex w-full flex-col gap-4">
           {
-            ressources.map((r) => (
+            filteredRessources.map((r) => (
               <Item key={r.titre} variant="outline" className="white bg-white hover:bg-gray-50">
                 <ItemContent>
                   <ItemTitle>{r.titre}</ItemTitle>

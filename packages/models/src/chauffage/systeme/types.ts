@@ -1,15 +1,20 @@
 import * as z from "zod";
-import { id, description, non_applicable, Consommations } from "../../common/types.js";
-import { TYPES_CHAUFFAGE, TypeChauffageEnum } from "../enums.js";
-import { TemperatureDistributionEnum } from "../emetteur/enums.js";
-import { TYPES_DISTRIBUTION, TypeDistributionEnum } from "./enums.js";
+import {
+	id,
+	description,
+	non_applicable,
+	Consommations,
+} from "../../common/types.js";
+import { TypeChauffage } from "../enums.js";
+import { TemperatureDistribution } from "../emetteur/enums.js";
+import { TypeDistribution } from "./enums.js";
 
 /**
  * @see https://schemas.open-dpe.fr/chauffage/systeme#/$defs/reseau
  */
 export const ReseauBase = z.object({
-	type_distribution: TypeDistributionEnum,
-	temperature_distribution: TemperatureDistributionEnum.nullable(),
+	type_distribution: TypeDistribution,
+	temperature_distribution: TemperatureDistribution.nullable(),
 	presence_fluide_frigorigene: z.boolean(),
 	presence_circulateur_externe: z.boolean(),
 	niveaux_desservis: z.number().int().min(1),
@@ -18,16 +23,12 @@ export const ReseauBase = z.object({
 });
 
 export const ReseauHydraulique = ReseauBase.extend({
-	type_distribution: TypeDistributionEnum.extract([
-		TYPES_DISTRIBUTION.hydraulique,
-	]),
+	type_distribution: TypeDistribution.extract(["hydraulique"]),
 	emetteurs: z.array(id).min(1),
 });
 
 export const ReseauAeraulique = ReseauBase.extend({
-	type_distribution: TypeDistributionEnum.extract([
-		TYPES_DISTRIBUTION.aeraulique,
-	]),
+	type_distribution: TypeDistribution.extract(["aeraulique"]),
 	temperature_distribution: non_applicable,
 	emetteurs: z.array(id).max(0),
 });
@@ -60,18 +61,18 @@ export type SystemeData = z.infer<typeof SystemeData>;
 export const SystemeBase = z.object({
 	id,
 	description,
-	type: TypeChauffageEnum,
+	type: TypeChauffage,
 	generateur_id: id,
 	reseau: z.union([Reseau, non_applicable]),
 });
 
 export const SystemeCentral = SystemeBase.extend({
-	type: TypeChauffageEnum.extract([TYPES_CHAUFFAGE.central]),
+	type: TypeChauffage.extract(["central"]),
 	reseau: Reseau,
 });
 
 export const SystemeDivise = SystemeBase.extend({
-	type: TypeChauffageEnum.extract([TYPES_CHAUFFAGE.divise]),
+	type: TypeChauffage.extract(["divise"]),
 	reseau: non_applicable,
 });
 

@@ -1,0 +1,229 @@
+ecs.installation.becs:
+  rule: becs
+  cases:
+    - title: Besoins du logement proratisés au dimensionnement de l'installation
+      with:
+        rdim: 0.4
+        becs:
+          &becs100
+          "01": 100
+          "02": 100
+          "03": 100
+          "04": 100
+          "05": 100
+          "06": 100
+          "07": 100
+          "08": 100
+          "09": 100
+          "10": 100
+          "11": 100
+          "12": 100
+      expect:
+        "01": 40
+        "02": 40
+        "03": 40
+        "04": 40
+        "05": 40
+        "06": 40
+        "07": 40
+        "08": 40
+        "09": 40
+        "10": 40
+        "11": 40
+        "12": 40
+
+    - title: Installation unique → besoins inchangés
+      with:
+        rdim: 1
+        becs: *becs100
+      expect: *becs100
+
+ecs.installation.caux_dist:
+  rule: caux_dist
+  cases:
+    - title: Somme des auxiliaires de distribution des systèmes de l'installation
+      with:
+        caux_dist: [15, 10]
+      expect: 25
+
+    - title: Aucun système → 0
+      with:
+        caux_dist: []
+      expect: 0
+
+ecs.installation.rdim:
+  rule: rdim
+  cases:
+    - title: Installation unique → 1
+      with:
+        surface_installation: 100
+        surface_installations: 100
+      expect: 1
+
+    - title: Installation couvrant 40 % de la surface → 0.4
+      with:
+        surface_installation: 40
+        surface_installations: 100
+      expect: 0.4
+
+    - title: Aucune surface desservie → 0 (pas de division par zéro)
+      with:
+        surface_installation: 40
+        surface_installations: 0
+      expect: 0
+
+ecs.installation.fecs:
+  rule: fecs
+  cases:
+    - title: Aucune installation solaire → couverture nulle
+      with:
+        fecs_saisi: null
+        zone_climatique: H1a
+        type_batiment: maison
+        installation_solaire: null
+      expect: 0
+
+    - title: Facteur de couverture saisi → retenu tel quel
+      with:
+        fecs_saisi: 0.55
+        zone_climatique: H1a
+        type_batiment: maison
+        installation_solaire:
+          usage: ecs
+          anciennete: 10
+      expect: 0.55
+
+    - title: Maison en zone H1a, installation de plus de 5 ans → 0.49
+      with:
+        fecs_saisi: null
+        zone_climatique: H1a
+        type_batiment: maison
+        installation_solaire:
+          usage: ecs
+          anciennete: 10
+      expect: 0.49
+
+    - title: Maison en zone H1a, installation de moins de 5 ans → 0.63
+      with:
+        fecs_saisi: null
+        zone_climatique: H1a
+        type_batiment: maison
+        installation_solaire:
+          usage: ecs
+          anciennete: 3
+      expect: 0.63
+
+    - title: Maison en zone H3, installation de plus de 5 ans → 0.64
+      with:
+        fecs_saisi: null
+        zone_climatique: H3
+        type_batiment: maison
+        installation_solaire:
+          usage: ecs
+          anciennete: 10
+      expect: 0.64
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        fecs_saisi: null
+        zone_climatique: INCONNUE
+        type_batiment: maison
+        installation_solaire:
+          usage: ecs
+          anciennete: 10
+      expectError: true
+
+ecs.installation.qdw:
+  rule: qdw
+  cases:
+    - title: Somme des trois postes de pertes de distribution
+      with:
+        qdw_ind_vc: 120000
+        qdw_col_vc: 134400
+        qdw_col_hvc: 33600
+      expect: 288000
+
+    - title: Installation individuelle → seules les pertes individuelles subsistent
+      with:
+        qdw_ind_vc: 120000
+        qdw_col_vc: 0
+        qdw_col_hvc: 0
+      expect: 120000
+
+ecs.installation.qdw_ind_vc:
+  rule: qdw_ind_vc
+  cases:
+    - title: Système unique → 10 % des besoins annuels perdus en distribution individuelle
+      with:
+        sh: 100
+        ns: 1
+        becs: *becs100
+      expect: 120000
+
+    - title: Deux systèmes → pertes réparties
+      with:
+        sh: 100
+        ns: 2
+        becs: *becs100
+      expect: 60000
+
+    - title: Pertes indépendantes de la surface desservie
+      with:
+        sh: 250
+        ns: 1
+        becs: *becs100
+      expect: 120000
+
+ecs.installation.qdw_col_vc:
+  rule: qdw_col_vc
+  cases:
+    - title: Réseau collectif → 11.2 % des besoins annuels
+      with:
+        reseau_collectif: true
+        becs: *becs100
+      expect: 134400
+
+    - title: Réseau individuel → aucune perte collective
+      with:
+        reseau_collectif: false
+        becs: *becs100
+      expect: 0
+
+ecs.installation.qdw_col_hvc:
+  rule: qdw_col_hvc
+  cases:
+    - title: Réseau collectif → 2.8 % des besoins annuels hors volume chauffé
+      with:
+        reseau_collectif: true
+        becs: *becs100
+      expect: 33600
+
+    - title: Réseau individuel → aucune perte collective
+      with:
+        reseau_collectif: false
+        becs: *becs100
+      expect: 0
+
+ecs.installation.anciennete_installation_solaire:
+  rule: anciennete_installation_solaire
+  cases:
+    - title: Année d'installation saisie → ancienneté par rapport à l'année de référence
+      with:
+        annee_reference: 2025
+        annee_installation: 2015
+        annee_construction_batiment: 1990
+      expect: 10
+
+    - title: Année d'installation absente → repli sur l'année de construction du bâtiment
+      with:
+        annee_reference: 2025
+        annee_installation: null
+        annee_construction_batiment: 1990
+      expect: 35
+
+    - title: Installation de l'année → ancienneté nulle
+      with:
+        annee_reference: 2025
+        annee_installation: 2025
+        annee_construction_batiment: 1990
+      expect: 0

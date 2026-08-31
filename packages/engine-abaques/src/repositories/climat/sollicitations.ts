@@ -7,8 +7,7 @@ export type Schema = {
 	"altitude/gte": number | null;
 	"altitude/lt": number | null;
 	"altitude/lte": number | null;
-	parois_anciennes: boolean;
-	inertie: string;
+	inertie_lourde_parois_anciennes: boolean;
 	mois: string;
 	tefs: number;
 	e: number;
@@ -31,8 +30,8 @@ export type Schema = {
 export type Query = {
 	zone_climatique: string;
 	altitude: number;
-	parois_anciennes: boolean;
-	inertie: string;
+	/** Bâtiment à inertie lourde constitué de parois anciennes (3CL-DPE 2021 §18.3) */
+	inertie_lourde_parois_anciennes: boolean;
 };
 
 const TABLE_KEY = "climat/sollicitations";

@@ -11,13 +11,13 @@ const G = `<path d="M16.8612 18.5947H16.7191C16.4348 20.5327 14.6154 22 11.6304 
 
 export class IconEtiquette extends DynamicIcon {
 	protected registry: Record<string, string> = {
-		[models.diagnostic.ETIQUETTES.A]: A,
-		[models.diagnostic.ETIQUETTES.B]: B,
-		[models.diagnostic.ETIQUETTES.C]: C,
-		[models.diagnostic.ETIQUETTES.D]: D,
-		[models.diagnostic.ETIQUETTES.E]: E,
-		[models.diagnostic.ETIQUETTES.F]: F,
-		[models.diagnostic.ETIQUETTES.G]: G,
+		[models.diagnostic.Etiquette.enum.A]: A,
+		[models.diagnostic.Etiquette.enum.B]: B,
+		[models.diagnostic.Etiquette.enum.C]: C,
+		[models.diagnostic.Etiquette.enum.D]: D,
+		[models.diagnostic.Etiquette.enum.E]: E,
+		[models.diagnostic.Etiquette.enum.F]: F,
+		[models.diagnostic.Etiquette.enum.G]: G,
 	};
 }
 

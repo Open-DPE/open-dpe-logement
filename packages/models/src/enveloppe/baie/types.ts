@@ -6,23 +6,15 @@ import {
 	nombre_positif,
 	non_applicable,
 } from "../../common/types.js";
-import {
-	MITOYENNETES,
-	MitoyenneteEnum,
-	OrientationParoiEnum,
-	TypePoseEnum,
-} from "../common/enums.js";
+import { Mitoyennete, OrientationParoi, TypePose } from "../common/enums.js";
 import { Masque } from "../masque/types.js";
 import {
-	TYPES_BAIE,
-	TypeBaieEnum,
-	TYPES_FERMETURE,
-	TypeFermetureEnum,
-	TYPES_VITRAGE,
-	TypeVitrageEnum,
-	NatureLameEnum,
-	TypeSurvitrageEnum,
-	MateriauEnum,
+	TypeBaie,
+	TypeFermeture,
+	TypeVitrage,
+	NatureLameAir,
+	TypeSurvitrage,
+	MateriauBaie,
 } from "./enums.js";
 
 /**
@@ -38,23 +30,23 @@ import {
  */
 export const PositionBase = z.object({
 	surface: nombre_positif,
-	mitoyennete: MitoyenneteEnum,
+	mitoyennete: Mitoyennete,
 	local_non_chauffe_id: id.nullable().default(null),
 	paroi_id: id.nullable().default(null),
 	baie_id: id.nullable().default(null),
-	type_pose: TypePoseEnum.nullable().default(null),
+	type_pose: TypePose.nullable().default(null),
 	inclinaison,
-	orientation: OrientationParoiEnum,
+	orientation: OrientationParoi,
 	masques: z.array(Masque),
 });
 
 export const PositionMitoyenneteLocalNonChauffe = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.extract([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.extract(["local_non_chauffe"]),
 	local_non_chauffe_id: id,
 });
 
 export const PositionMitoyenneteAutres = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.exclude([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.exclude(["local_non_chauffe"]),
 	local_non_chauffe_id: non_applicable,
 });
 
@@ -78,14 +70,19 @@ export const PositionOrientation = z.union([
 	PositionHorizontale,
 ]);
 
-export const Position = z.intersection(PositionMitoyennete, PositionOrientation);
+export const Position = z.intersection(
+	PositionMitoyennete,
+	PositionOrientation,
+);
 
 export type Position = z.infer<typeof Position>;
 export type PositionBase = z.infer<typeof PositionBase>;
 export type PositionMitoyenneteLocalNonChauffe = z.infer<
 	typeof PositionMitoyenneteLocalNonChauffe
 >;
-export type PositionMitoyenneteAutres = z.infer<typeof PositionMitoyenneteAutres>;
+export type PositionMitoyenneteAutres = z.infer<
+	typeof PositionMitoyenneteAutres
+>;
 export type PositionVerticale = z.infer<typeof PositionVerticale>;
 export type PositionHorizontale = z.infer<typeof PositionHorizontale>;
 
@@ -93,7 +90,7 @@ export type PositionHorizontale = z.infer<typeof PositionHorizontale>;
  * @see https://schemas.open-dpe.fr/enveloppe/baie#/$defs/menuiserie
  */
 export const Menuiserie = z.object({
-	materiau: MateriauEnum.nullable().default(null),
+	materiau: MateriauBaie.nullable().default(null),
 	largeur_dormant: nombre_positif.nullable().default(null),
 	presence_soubassement: z.boolean(),
 	presence_joint: z.boolean().nullable().default(null),
@@ -111,34 +108,34 @@ export type Menuiserie = z.infer<typeof Menuiserie>;
  * de documents validés que le schéma).
  */
 export const VitrageBase = z.object({
-	type: TypeVitrageEnum.nullable().default(null),
-	nature_lame: NatureLameEnum.nullable().default(null),
+	type: TypeVitrage.nullable().default(null),
+	nature_lame: NatureLameAir.nullable().default(null),
 	epaisseur_lame: nombre_positif.nullable().default(null),
 });
 
 export const VitrageSimple = VitrageBase.extend({
-	type: TypeVitrageEnum.extract([TYPES_VITRAGE.simple_vitrage]),
+	type: TypeVitrage.extract(["simple_vitrage"]),
 	nature_lame: non_applicable,
 	epaisseur_lame: non_applicable,
 });
 
 export const VitrageComplexe = VitrageBase.extend({
-	type: TypeVitrageEnum.extract([
-		TYPES_VITRAGE.double_vitrage,
-		TYPES_VITRAGE.double_vitrage_fe,
-		TYPES_VITRAGE.triple_vitrage,
-		TYPES_VITRAGE.triple_vitrage_fe,
+	type: TypeVitrage.extract([
+		"double_vitrage",
+		"double_vitrage_fe",
+		"triple_vitrage",
+		"triple_vitrage_fe",
 	]),
 });
 
 export const VitrageBriqueVerre = VitrageBase.extend({
-	type: TypeVitrageEnum.extract([TYPES_VITRAGE.brique_verre]),
+	type: TypeVitrage.extract(["brique_verre"]),
 	nature_lame: non_applicable,
 	epaisseur_lame: non_applicable,
 });
 
 export const VitragePolycarbonate = VitrageBase.extend({
-	type: TypeVitrageEnum.extract([TYPES_VITRAGE.polycarbonate]),
+	type: TypeVitrage.extract(["polycarbonate"]),
 	nature_lame: non_applicable,
 	epaisseur_lame: non_applicable,
 });
@@ -176,7 +173,7 @@ export type VitrageInconnu = z.infer<typeof VitrageInconnu>;
  * @see https://schemas.open-dpe.fr/enveloppe/baie#/$defs/survitrage
  */
 export const Survitrage = z.object({
-	type: TypeSurvitrageEnum.nullable().default(null),
+	type: TypeSurvitrage.nullable().default(null),
 	epaisseur_lame: nombre_positif.nullable().default(null),
 });
 
@@ -211,9 +208,9 @@ export type BaieData = z.infer<typeof BaieData>;
 export const BaieBase = z.object({
 	id,
 	description,
-	type: TypeBaieEnum,
+	type: TypeBaie,
 	presence_protection_solaire: z.boolean(),
-	type_fermeture: TypeFermetureEnum,
+	type_fermeture: TypeFermeture,
 	annee_installation: z.number().int().nullable().default(null),
 	ug: nombre_positif.nullable().default(null),
 	uw: nombre_positif.nullable().default(null),
@@ -226,26 +223,23 @@ export const BaieBase = z.object({
 });
 
 export const BaieBriqueVerre = BaieBase.extend({
-	type: TypeBaieEnum.extract([
-		TYPES_BAIE.brique_verre_pleine,
-		TYPES_BAIE.brique_verre_creuse,
-	]),
+	type: TypeBaie.extract(["brique_verre_pleine", "brique_verre_creuse"]),
 	vitrage: VitrageBriqueVerre,
 	menuiserie: non_applicable,
 });
 
 export const BaiePolycarbonate = BaieBase.extend({
-	type: TypeBaieEnum.extract([TYPES_BAIE.polycarbonate]),
+	type: TypeBaie.extract(["polycarbonate"]),
 	vitrage: VitragePolycarbonate,
 	menuiserie: non_applicable,
 });
 
 export const BaieFenetreOuPorteFenetre = BaieBase.extend({
-	type: TypeBaieEnum.extract([
-		TYPES_BAIE.fenetre_battante,
-		TYPES_BAIE.fenetre_coulissante,
-		TYPES_BAIE.porte_fenetre_coulissante,
-		TYPES_BAIE.porte_fenetre_battante,
+	type: TypeBaie.extract([
+		"fenetre_battante",
+		"fenetre_coulissante",
+		"porte_fenetre_coulissante",
+		"porte_fenetre_battante",
 	]),
 	vitrage: VitrageFenetre,
 	menuiserie: Menuiserie,

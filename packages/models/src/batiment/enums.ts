@@ -1,13 +1,13 @@
 import * as z from "zod";
 
-export const TYPES_BATIMENT = {
+export const TypeBatiment = z.enum({
 	maison: "maison",
 	immeuble: "immeuble",
-} as const;
-export const TypeBatimentEnum = z.enum(TYPES_BATIMENT);
-export type TypeBatimentEnum = z.infer<typeof TypeBatimentEnum>;
+});
 
-export const ZONES_CLIMATIQUES = {
+export type TypeBatiment = z.infer<typeof TypeBatiment>;
+
+export const ZoneClimatique = z.enum({
 	H1a: "H1a",
 	H1b: "H1b",
 	H1c: "H1c",
@@ -16,6 +16,6 @@ export const ZONES_CLIMATIQUES = {
 	H2c: "H2c",
 	H2d: "H2d",
 	H3: "H3",
-} as const;
-export const ZoneClimatiqueEnum = z.enum(ZONES_CLIMATIQUES);
-export type ZoneClimatiqueEnum = z.infer<typeof ZoneClimatiqueEnum>;
+});
+
+export type ZoneClimatique = z.infer<typeof ZoneClimatique>;

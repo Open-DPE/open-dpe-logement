@@ -13,11 +13,11 @@ import { ValeurForfaitaireError } from "../../errors.js";
  * @returns Surface de la paroi donnant sur un local non chauffé en m²
  */
 export function calcule_aiu(props: {
-	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 	surface: number;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MITOYENNETES.local_non_chauffe:
+		case models.enveloppe.common.Mitoyennete.enum.local_non_chauffe:
 			return props.surface;
 		default:
 			return 0;
@@ -36,11 +36,11 @@ export function calcule_aiu(props: {
  */
 export function calcule_sdep(props: {
 	surface: number;
-	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 }): number {
 	const { surface, mitoyennete } = props;
 	return mitoyennete !==
-		models.enveloppe.common.MITOYENNETES.local_residentiel
+		models.enveloppe.common.Mitoyennete.enum.local_residentiel
 		? surface
 		: 0;
 }
@@ -74,7 +74,7 @@ export function calcule_b_lnc(props: { blnc: localNonChauffe.b }): b {
  * @returns Coefficient de réduction des déperditions thermiques de la paroi donnant sur un espace tampon solarisé
  */
 export function calcule_b_ets(props: {
-	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLncEnum;
+	type_local_non_chauffe: models.enveloppe.localNonChauffe.TypeLocalNonChauffe;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
 	orientations_ets: ReturnType<typeof localNonChauffe.calcule_orientations>;
 	isolation_paroi: boolean;
@@ -97,14 +97,14 @@ export function calcule_b_ets(props: {
  * @returns Coefficient de réduction des déperditions thermiques de la paroi ne donnant pas sur un local non chauffé
  */
 export function calcule_b_autres(props: {
-	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MITOYENNETES.local_non_residentiel:
+		case models.enveloppe.common.Mitoyennete.enum.local_non_residentiel:
 			return 0.2;
-		case models.enveloppe.common.MITOYENNETES.local_non_accessible:
+		case models.enveloppe.common.Mitoyennete.enum.local_non_accessible:
 			return 0.95;
-		case models.enveloppe.common.MITOYENNETES.local_residentiel:
+		case models.enveloppe.common.Mitoyennete.enum.local_residentiel:
 			return 0;
 		default:
 			return 1;

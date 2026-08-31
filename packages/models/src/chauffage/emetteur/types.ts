@@ -1,6 +1,6 @@
 import * as z from "zod";
 import { id, description, annee_installation } from "../../common/types.js";
-import { TypeEmetteurEnum, TemperatureDistributionEnum } from "./enums.js";
+import { TypeEmetteur, TemperatureDistribution } from "./enums.js";
 
 export const EmetteurData = z.object({
 	delta_pem: z.number(),
@@ -17,8 +17,8 @@ export type EmetteurData = z.infer<typeof EmetteurData>;
 export const Emetteur = z.object({
 	id,
 	description,
-	type: TypeEmetteurEnum,
-	temperature_distribution: TemperatureDistributionEnum.nullable(),
+	type: TypeEmetteur,
+	temperature_distribution: TemperatureDistribution.nullable(),
 	presence_robinet_thermostatique: z.boolean(),
 	annee_installation,
 });

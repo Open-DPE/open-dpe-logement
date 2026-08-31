@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const TYPES_MASQUE = {
+export const TypeMasque = z.enum({
 	homogene: "homogene",
 	non_homogene: "non_homogene",
 	fond_balcon: "fond_balcon",
@@ -8,15 +8,15 @@ export const TYPES_MASQUE = {
 	balcon_ou_auvent: "balcon_ou_auvent",
 	paroi_laterale_sans_obstacle_au_sud: "paroi_laterale_sans_obstacle_au_sud",
 	paroi_laterale_avec_obstacle_au_sud: "paroi_laterale_avec_obstacle_au_sud",
-} as const;
-export const TypeMasqueEnum = z.enum(TYPES_MASQUE);
-export type TypeMasqueEnum = z.infer<typeof TypeMasqueEnum>;
+});
 
-export const SECTEURS = {
+export type TypeMasque = z.infer<typeof TypeMasque>;
+
+export const SecteurMasque = z.enum({
 	lateral: "lateral",
 	lateral_sud: "lateral_sud",
 	central: "central",
 	central_sud: "central_sud",
-} as const;
-export const SecteurEnum = z.enum(SECTEURS);
-export type SecteurEnum = z.infer<typeof SecteurEnum>;
+});
+
+export type SecteurMasque = z.infer<typeof SecteurMasque>;

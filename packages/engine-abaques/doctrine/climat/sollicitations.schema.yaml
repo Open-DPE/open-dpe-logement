@@ -23,15 +23,14 @@ fields:
     title: Altitude (inférieure ou égale à)
     type: number
     required: false
-  - name: parois_anciennes
-    title: Présence majoritaire de parois composées de matériaux anciens
+  # Critère unique du §18.3 : le bâtiment doit être constitué majoritairement de
+  # parois en matériaux anciens ET avoir une inertie lourde. Les deux conditions
+  # sont indissociables (conjonction), d'où une colonne unique plutôt qu'un
+  # couple `parois_anciennes` / `inertie` : toute autre combinaison relève du
+  # cas général du §18.2 (valeur 0).
+  - name: inertie_lourde_parois_anciennes
+    title: Bâtiment à inertie lourde constitué de parois anciennes (§18.3)
     type: boolean
-    required: true
-  - name: inertie
-    title: Inertie du bâtiment
-    type: string
-    format: enums
-    x-enum: enveloppe:inertie
     required: true
   - name: mois
     title: Mois

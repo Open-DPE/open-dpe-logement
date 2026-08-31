@@ -1,6 +1,12 @@
 import * as z from "zod";
-import { id, non_applicable, surface, nombre_positif, annee_installation } from "../../common/types.js";
-import { MITOYENNETES, MitoyenneteEnum, TypeIsolationEnum } from "./enums.js";
+import {
+	id,
+	non_applicable,
+	surface,
+	nombre_positif,
+	annee_installation,
+} from "../../common/types.js";
+import { Mitoyennete, TypeIsolation } from "./enums.js";
 
 /**
  * Position d'une paroi (mur, plancher bas/haut...) — patron B (discriminant interne `mitoyennete`).
@@ -8,17 +14,17 @@ import { MITOYENNETES, MitoyenneteEnum, TypeIsolationEnum } from "./enums.js";
  */
 export const PositionBase = z.object({
 	surface,
-	mitoyennete: MitoyenneteEnum,
+	mitoyennete: Mitoyennete,
 	local_non_chauffe_id: id.nullable().default(null),
 });
 
 export const PositionLocalNonChauffe = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.extract([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.extract(["local_non_chauffe"]),
 	local_non_chauffe_id: id,
 });
 
 export const PositionAutres = PositionBase.extend({
-	mitoyennete: MitoyenneteEnum.exclude([MITOYENNETES.local_non_chauffe]),
+	mitoyennete: Mitoyennete.exclude(["local_non_chauffe"]),
 	local_non_chauffe_id: non_applicable,
 });
 
@@ -35,7 +41,7 @@ export type PositionAutres = z.infer<typeof PositionAutres>;
  */
 export const IsolationBase = z.object({
 	etat: z.boolean().nullable().default(null),
-	type: TypeIsolationEnum.nullable().default(null),
+	type: TypeIsolation.nullable().default(null),
 	annee_installation,
 	epaisseur: nombre_positif.nullable().default(null),
 	resistance_thermique: nombre_positif.nullable().default(null),
@@ -67,7 +73,7 @@ export const TypeIsolationInconnue = IsolationBase.extend({
 
 export const IsolationConnue = IsolationBase.extend({
 	etat: z.literal(true),
-	type: TypeIsolationEnum,
+	type: TypeIsolation,
 });
 
 export const Isolation = z.union([

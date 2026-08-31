@@ -1,4 +1,4 @@
-import { TYPES_CHAUFFAGE } from "../enums.js";
+import { TypeChauffage } from "../enums.js";
 import {
 	InstallationBase,
 	Installation,
@@ -19,7 +19,7 @@ export function isInstallationChauffageCentralCollectif(
 	value: InstallationBase,
 ): value is InstallationChauffageCentralCollectif {
 	return (
-		value.type === TYPES_CHAUFFAGE.central &&
+		value.type === TypeChauffage.enum.central &&
 		value.installation_collective === true
 	);
 }
@@ -28,7 +28,7 @@ export function isInstallationChauffageCentralIndividuel(
 	value: InstallationBase,
 ): value is InstallationChauffageCentralIndividuel {
 	return (
-		value.type === TYPES_CHAUFFAGE.central &&
+		value.type === TypeChauffage.enum.central &&
 		value.installation_collective === false
 	);
 }
@@ -36,5 +36,5 @@ export function isInstallationChauffageCentralIndividuel(
 export function isInstallationChauffageDivise(
 	value: InstallationBase,
 ): value is InstallationChauffageDivise {
-	return value.type === TYPES_CHAUFFAGE.divise;
+	return value.type === TypeChauffage.enum.divise;
 }

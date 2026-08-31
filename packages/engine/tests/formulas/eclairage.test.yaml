@@ -11,9 +11,29 @@ eclairage.nhecl:
         zone_climatique: H1b
       expect: 1445
 
+    - title: Zone H1c → 1476 h/an
+      with:
+        zone_climatique: H1c
+      expect: 1476
+
+    - title: Zone H2a → 1500 h/an
+      with:
+        zone_climatique: H2a
+      expect: 1500
+
+    - title: Zone H2b → 1531 h/an
+      with:
+        zone_climatique: H2b
+      expect: 1531
+
     - title: Zone H2c → 1566 h/an
       with:
         zone_climatique: H2c
+      expect: 1566
+
+    - title: Zone H2d → 1566 h/an
+      with:
+        zone_climatique: H2d
       expect: 1566
 
     - title: Zone H3 → 1506 h/an
@@ -40,3 +60,82 @@ eclairage.cecl:
         sh: 50
         nhecl: 1445
       expect: 91.035
+
+    - title: Surface nulle → consommation nulle
+      with:
+        sh: 0
+        nhecl: 1500
+      expect: 0
+
+eclairage.cef:
+  rule: consommations
+  cases:
+    - title: Éclairage sans production photovoltaïque autoconsommée
+      with:
+        cecl: 189
+        celec_ac:
+          eclairage: 0
+      expect:
+        eclairage:
+          electricite:
+            cef: 189
+            cep: 359.1
+            eges: 13.041
+
+    - title: Éclairage partiellement couvert par l'autoconsommation photovoltaïque
+      with:
+        cecl: 189
+        celec_ac:
+          eclairage: 39
+      expect:
+        eclairage:
+          electricite:
+            cef: 150
+            cep: 285
+            eges: 10.35
+          electricite_renouvelable:
+            cef: 39
+            cep: 74.1
+            eges: 0
+
+    - title: Autoconsommation couvrant la totalité de l'éclairage
+      with:
+        cecl: 189
+        celec_ac:
+          eclairage: 189
+      expect:
+        eclairage:
+          electricite:
+            cef: 0
+            cep: 0
+            eges: 0
+          electricite_renouvelable:
+            cef: 189
+            cep: 359.1
+            eges: 0
+
+eclairage.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire de l'éclairage = 1.9 × énergie finale
+      with:
+        cecl: 200
+        celec_ac:
+          eclairage: 0
+      expectPartial:
+        eclairage:
+          electricite:
+            cep: 380
+
+eclairage.eges:
+  rule: consommations
+  cases:
+    - title: Émissions de l'éclairage au facteur électricité usage éclairage (0.069)
+      with:
+        cecl: 200
+        celec_ac:
+          eclairage: 0
+      expectPartial:
+        eclairage:
+          electricite:
+            eges: 13.8

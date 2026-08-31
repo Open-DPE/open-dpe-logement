@@ -50,9 +50,9 @@ export function mapType(props: Input): batiment.Batiment["type"] {
 		case "1":
 		case "14":
 		case "18":
-			return batiment.TYPES_BATIMENT.maison;
+			return batiment.TypeBatiment.enum.maison;
 		default:
-			return batiment.TYPES_BATIMENT.immeuble;
+			return batiment.TypeBatiment.enum.immeuble;
 	}
 }
 
@@ -108,12 +108,14 @@ export function mapAltitude(props: Input): batiment.Batiment["altitude"] {
 export function mapLogements(props: Input): batiment.Batiment["logements"] {
 	const type = mapType(props);
 	switch (type) {
-		case batiment.TYPES_BATIMENT.maison:
+		case batiment.TypeBatiment.enum.maison:
 			return 1;
-		case batiment.TYPES_BATIMENT.immeuble: {
-			const nombre_appartement = props.logement.caracteristique_generale.nombre_appartement;
-			if (nombre_appartement && nombre_appartement >= 3) return nombre_appartement;
-			return 3
+		case batiment.TypeBatiment.enum.immeuble: {
+			const nombre_appartement =
+				props.logement.caracteristique_generale.nombre_appartement;
+			if (nombre_appartement && nombre_appartement >= 3)
+				return nombre_appartement;
+			return 3;
 		}
 	}
 }
@@ -173,31 +175,32 @@ export namespace logement {
 			description: "Logement principal",
 			surface_habitable: mapSurfaceHabitable(props),
 			hauteur_sous_plafond: mapHauteurSousPlafond(props),
-		}
+		};
 	}
 
 	export function supports(props: Input): boolean {
 		switch (
-				props.logement.caracteristique_generale.enum_methode_application_dpe_log_id
-			) {
-				case "1":
-				case "6":
-				case "7":
-				case "8":
-				case "9":
-				case "14":
-				case "17":
-				case "18":
-				case "21":
-				case "26":
-				case "27":
-				case "28":
-				case "29":
-				case "30":
-					return false
-				default:
-					return true;
-			}
+			props.logement.caracteristique_generale
+				.enum_methode_application_dpe_log_id
+		) {
+			case "1":
+			case "6":
+			case "7":
+			case "8":
+			case "9":
+			case "14":
+			case "17":
+			case "18":
+			case "21":
+			case "26":
+			case "27":
+			case "28":
+			case "29":
+			case "30":
+				return false;
+			default:
+				return true;
+		}
 	}
 
 	export function mapSurfaceHabitable(props: Input): number {

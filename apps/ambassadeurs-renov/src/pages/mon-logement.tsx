@@ -8,7 +8,7 @@ export function MonLogement() {
   const navigate = useNavigate();
 
   function handleSuccess() {
-    navigate("/", { viewTransition: true, state: { toast: "Logement mis à jour" } });
+    navigate("/", { viewTransition: true });
   }
 
   return (
@@ -18,23 +18,21 @@ export function MonLogement() {
         <p>Évaluez la performance énergétique de votre logement.</p>
       </header>
 
-      <div className="hidden">
-        <Card>
-          <CardHeader>
-            <CardTitle>Rechercher un Diagnostic de Performance Énergétique (DPE) existant</CardTitle>
-            <CardDescription>Renseignez votre adresse et sélectionnez un DPE dans la liste.</CardDescription>
-          </CardHeader>
+      <Card>
+        <CardHeader>
+          <CardTitle>Rechercher un Diagnostic de Performance Énergétique (DPE) existant</CardTitle>
+          <CardDescription>Renseignez votre adresse et sélectionnez un DPE dans la liste.</CardDescription>
+        </CardHeader>
 
-          <CardContent>
-            <RechercheDpeForm onSuccess={handleSuccess} />
-          </CardContent>
+        <CardContent>
+          <RechercheDpeForm onSuccess={handleSuccess} />
+        </CardContent>
 
-        </Card>
+      </Card>
 
-        <Marker variant="separator" className="my-8">
-          <MarkerContent>ou</MarkerContent>
-        </Marker>
-      </div>
+      <Marker variant="separator" className="my-8">
+        <MarkerContent>ou</MarkerContent>
+      </Marker>
 
       <Card>
         <CardHeader>

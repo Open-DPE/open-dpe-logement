@@ -1,0 +1,233 @@
+enveloppe.masque.fe1:
+  rule: fe1
+  cases:
+    - title: Fond de balcon au nord, avancée 0.5 m → 0.4
+      with:
+        type_masque: fond_balcon
+        orientation_facade: nord
+        avancee_masque: 0.5
+      expect: 0.4
+
+    - title: Fond de balcon au nord, avancée 1.5 m → 0.3
+      with:
+        type_masque: fond_balcon
+        orientation_facade: nord
+        avancee_masque: 1.5
+      expect: 0.3
+
+    - title: Fond de balcon au nord, avancée 4 m → 0.1
+      with:
+        type_masque: fond_balcon
+        orientation_facade: nord
+        avancee_masque: 4
+      expect: 0.1
+
+    - title: Fond et flanc de loggia au sud, avancée 0.5 m → 0.5
+      with:
+        type_masque: fond_et_flanc_loggias
+        orientation_facade: sud
+        avancee_masque: 0.5
+      expect: 0.5
+
+    - title: Fond de balcon à l'est, avancée 2.5 m → 0.25
+      with:
+        type_masque: fond_balcon
+        orientation_facade: est
+        avancee_masque: 2.5
+      expect: 0.25
+
+    - title: Fond de balcon à l'ouest, avancée 2.5 m → 0.25 (identique à l'est)
+      with:
+        type_masque: fond_balcon
+        orientation_facade: ouest
+        avancee_masque: 2.5
+      expect: 0.25
+
+    - title: Balcon ou auvent, avancée 0.5 m → 0.8 (toutes orientations)
+      with:
+        type_masque: balcon_ou_auvent
+        orientation_facade: nord
+        avancee_masque: 0.5
+      expect: 0.8
+
+    - title: Balcon ou auvent, avancée 4 m → 0.4
+      with:
+        type_masque: balcon_ou_auvent
+        orientation_facade: sud
+        avancee_masque: 4
+      expect: 0.4
+
+    - title: Paroi latérale sans obstacle au sud → 0.7 (indépendant de l'avancée)
+      with:
+        type_masque: paroi_laterale_sans_obstacle_au_sud
+        orientation_facade: est
+        avancee_masque: null
+      expect: 0.7
+
+    - title: Paroi latérale avec obstacle au sud → 0.5
+      with:
+        type_masque: paroi_laterale_avec_obstacle_au_sud
+        orientation_facade: est
+        avancee_masque: null
+      expect: 0.5
+
+    - title: Baie horizontale (toiture) → aucun masque proche, 1
+      with:
+        type_masque: balcon_ou_auvent
+        orientation_facade: horizontale
+        avancee_masque: 1.5
+      expect: 1
+
+    - title: Type de masque hors périmètre des masques proches → erreur ValeurForfaitaire
+      with:
+        type_masque: homogene
+        orientation_facade: sud
+        avancee_masque: 1
+      expectError: true
+
+enveloppe.masque.fe2:
+  rule: fe2
+  cases:
+    - title: Masque homogène au nord, hauteur 7.5° → 1
+      with:
+        type_masque: homogene
+        orientation_facade: nord
+        hauteur_alpha_masque: 7.5
+      expect: 1
+
+    - title: Masque homogène au nord, hauteur 22.5° → 0.82
+      with:
+        type_masque: homogene
+        orientation_facade: nord
+        hauteur_alpha_masque: 22.5
+      expect: 0.82
+
+    - title: Masque homogène au nord, hauteur 45° → 0.5
+      with:
+        type_masque: homogene
+        orientation_facade: nord
+        hauteur_alpha_masque: 45
+      expect: 0.5
+
+    - title: Masque homogène au nord, hauteur 70° → 0.3
+      with:
+        type_masque: homogene
+        orientation_facade: nord
+        hauteur_alpha_masque: 70
+      expect: 0.3
+
+    - title: Masque homogène au sud, hauteur 45° → 0.3
+      with:
+        type_masque: homogene
+        orientation_facade: sud
+        hauteur_alpha_masque: 45
+      expect: 0.3
+
+    - title: Masque homogène au sud, hauteur 70° → 0.1
+      with:
+        type_masque: homogene
+        orientation_facade: sud
+        hauteur_alpha_masque: 70
+      expect: 0.1
+
+    - title: Masque homogène à l'est, hauteur 22.5° → 0.77
+      with:
+        type_masque: homogene
+        orientation_facade: est
+        hauteur_alpha_masque: 22.5
+      expect: 0.77
+
+    - title: Masque homogène à l'ouest, hauteur 45° → 0.4 (identique à l'est)
+      with:
+        type_masque: homogene
+        orientation_facade: ouest
+        hauteur_alpha_masque: 45
+      expect: 0.4
+
+    - title: Baie horizontale (toiture) → 1
+      with:
+        type_masque: homogene
+        orientation_facade: horizontale
+        hauteur_alpha_masque: 45
+      expect: 1
+
+    - title: Borne inférieure incluse (15° → tranche 15-30)
+      with:
+        type_masque: homogene
+        orientation_facade: sud
+        hauteur_alpha_masque: 15
+      expect: 0.8
+
+    - title: Type de masque non homogène → erreur ValeurForfaitaire
+      with:
+        type_masque: non_homogene
+        orientation_facade: sud
+        hauteur_alpha_masque: 45
+      expectError: true
+
+enveloppe.masque.omb:
+  rule: omb
+  cases:
+    - title: Masque non homogène au sud, secteur latéral, hauteur 7.5° → 0
+      with:
+        type_masque: non_homogene
+        orientation_facade: sud
+        secteur_orientation: lateral
+        hauteur_alpha_masque: 7.5
+      expect: 0
+
+    - title: Masque non homogène au sud, secteur latéral, hauteur 22.5° → 4 %
+      with:
+        type_masque: non_homogene
+        orientation_facade: sud
+        secteur_orientation: lateral
+        hauteur_alpha_masque: 22.5
+      expect: 4
+
+    - title: Masque non homogène au sud, secteur central, hauteur 45° → 35 %
+      with:
+        type_masque: non_homogene
+        orientation_facade: sud
+        secteur_orientation: central
+        hauteur_alpha_masque: 45
+      expect: 35
+
+    - title: Masque non homogène au sud, secteur central, hauteur 70° → 40 %
+      with:
+        type_masque: non_homogene
+        orientation_facade: sud
+        secteur_orientation: central
+        hauteur_alpha_masque: 70
+      expect: 40
+
+    - title: Masque non homogène à l'est, secteur latéral sud, hauteur 45° → 27 %
+      with:
+        type_masque: non_homogene
+        orientation_facade: est
+        secteur_orientation: lateral_sud
+        hauteur_alpha_masque: 45
+      expect: 27
+
+    - title: Masque non homogène à l'est, secteur central sud, hauteur 45° → 40 %
+      with:
+        type_masque: non_homogene
+        orientation_facade: est
+        secteur_orientation: central_sud
+        hauteur_alpha_masque: 45
+      expect: 40
+
+    - title: Masque non homogène au nord, secteur latéral, hauteur 45° → 13 %
+      with:
+        type_masque: non_homogene
+        orientation_facade: nord
+        secteur_orientation: lateral
+        hauteur_alpha_masque: 45
+      expect: 13
+
+    - title: Type de masque homogène → erreur ValeurForfaitaire
+      with:
+        type_masque: homogene
+        orientation_facade: sud
+        secteur_orientation: central
+        hauteur_alpha_masque: 45
+      expectError: true

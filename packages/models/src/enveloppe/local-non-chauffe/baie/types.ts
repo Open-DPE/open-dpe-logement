@@ -1,15 +1,24 @@
 import * as z from "zod";
-import { id, description, non_applicable, surface, inclinaison } from "../../../common/types.js";
-import { MitoyenneteEnum } from "../../common/enums.js";
-import { TYPES_VITRAGE, TypeVitrageEnum, MateriauEnum } from "../../baie/enums.js";
+import {
+	id,
+	description,
+	non_applicable,
+	surface,
+	inclinaison,
+} from "../../../common/types.js";
+import { Mitoyennete } from "../../common/enums.js";
+import { TypeVitrage, MateriauBaie } from "../../baie/enums.js";
 
 /**
  * @see https://schemas.open-dpe.fr/enveloppe/local-non-chauffe/baie#/$defs/position
  */
 export const PositionBase = z.object({
 	surface,
-	mitoyennete: MitoyenneteEnum,
-	orientation: z.union([z.enum(["nord", "est", "sud", "ouest"]), z.literal("horizontale")]),
+	mitoyennete: Mitoyennete,
+	orientation: z.union([
+		z.enum(["nord", "est", "sud", "ouest"]),
+		z.literal("horizontale"),
+	]),
 	inclinaison,
 });
 
@@ -49,27 +58,24 @@ export type BaieData = z.infer<typeof BaieData>;
 export const BaieBase = z.object({
 	id,
 	description,
-	type_vitrage: TypeVitrageEnum.nullable().default(null),
-	materiau_menuiserie: MateriauEnum.nullable().default(null),
+	type_vitrage: TypeVitrage.nullable().default(null),
+	materiau_menuiserie: MateriauBaie.nullable().default(null),
 	presence_rupteur_pont_thermique: z.boolean().nullable().default(null),
 	position: Position,
 });
 
 export const BaieVitree = BaieBase.extend({
-	type_vitrage: TypeVitrageEnum.extract([
-		TYPES_VITRAGE.brique_verre,
-		TYPES_VITRAGE.polycarbonate,
-	]),
+	type_vitrage: TypeVitrage.extract(["brique_verre", "polycarbonate"]),
 	materiau_menuiserie: non_applicable,
 });
 
 export const BaieAutre = BaieBase.extend({
-	type_vitrage: TypeVitrageEnum.extract([
-		TYPES_VITRAGE.simple_vitrage,
-		TYPES_VITRAGE.double_vitrage,
-		TYPES_VITRAGE.double_vitrage_fe,
-		TYPES_VITRAGE.triple_vitrage,
-		TYPES_VITRAGE.triple_vitrage_fe,
+	type_vitrage: TypeVitrage.extract([
+		"simple_vitrage",
+		"double_vitrage",
+		"double_vitrage_fe",
+		"triple_vitrage",
+		"triple_vitrage_fe",
 	]).nullable(),
 });
 

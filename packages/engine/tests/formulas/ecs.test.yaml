@@ -1,0 +1,363 @@
+ecs.cef:
+  rule: consommations
+  cases:
+    - title: Un seul générateur → consommations reportées telles quelles
+      with:
+        consommations:
+          - ecs:
+              electricite: { cef: 2000, cep: 3800, eges: 130 }
+      expect:
+        ecs:
+          electricite: { cef: 2000, cep: 3800, eges: 130 }
+
+    - title: Deux générateurs d'énergies différentes → consommations ventilées par énergie
+      with:
+        consommations:
+          - ecs:
+              electricite: { cef: 1000, cep: 1900, eges: 65 }
+          - ecs:
+              gaz_naturel: { cef: 3000, cep: 3000, eges: 681 }
+      expect:
+        ecs:
+          electricite: { cef: 1000, cep: 1900, eges: 65 }
+          gaz_naturel: { cef: 3000, cep: 3000, eges: 681 }
+
+    - title: Aucun générateur → aucune consommation
+      with:
+        consommations: []
+      expect: {}
+
+ecs.cecs:
+  rule: cecs
+  cases:
+    - title: Somme des consommations des générateurs
+      with:
+        cecs: [1500, 500]
+      expect: 2000
+
+    - title: Aucun générateur → 0
+      with:
+        cecs: []
+      expect: 0
+
+ecs.cecs_elec:
+  rule: cecs_elec
+  cases:
+    - title: Somme des consommations électriques des générateurs
+      with:
+        cecs_elec: [1500, 0]
+      expect: 1500
+
+    - title: Aucun générateur électrique → 0
+      with:
+        cecs_elec: []
+      expect: 0
+
+ecs.caux:
+  rule: caux
+  cases:
+    - title: Auxiliaires d'ECS = génération + distribution
+      with:
+        caux_gen: 60
+        caux_dist: 40
+      expect: 100
+
+    - title: Aucun auxiliaire → 0
+      with:
+        caux_gen: 0
+        caux_dist: 0
+      expect: 0
+
+ecs.caux_gen:
+  rule: caux_gen
+  cases:
+    - title: Somme des auxiliaires de génération
+      with:
+        caux_gen: [40, 20]
+      expect: 60
+
+    - title: Aucun générateur → 0
+      with:
+        caux_gen: []
+      expect: 0
+
+ecs.caux_dist:
+  rule: caux_dist
+  cases:
+    - title: Somme des auxiliaires de distribution des installations
+      with:
+        caux_dist: [25, 15]
+      expect: 40
+
+    - title: Aucune installation → 0
+      with:
+        caux_dist: []
+      expect: 0
+
+ecs.qgw:
+  rule: qgw
+  cases:
+    - title: Somme des pertes de stockage des générateurs
+      with:
+        qgw: [800000, 200000]
+      expect: 1000000
+
+    - title: Aucun ballon de stockage → aucune perte
+      with:
+        qgw: []
+      expect: 0
+
+ecs.qgen:
+  rule: qgen
+  cases:
+    - title: Somme des pertes de génération des générateurs
+      with:
+        qgen: [500000, 100000]
+      expect: 600000
+
+    - title: Aucun générateur → aucune perte
+      with:
+        qgen: []
+      expect: 0
+
+ecs.qdw_ind_vc:
+  rule: qdw_ind_vc
+  cases:
+    - title: Somme des pertes de distribution individuelle en volume chauffé
+      with:
+        qdw_ind_vc: [300000, 100000]
+      expect: 400000
+
+    - title: Aucune installation → aucune perte
+      with:
+        qdw_ind_vc: []
+      expect: 0
+
+ecs.qdw_col_vc:
+  rule: qdw_col_vc
+  cases:
+    - title: Somme des pertes de distribution collective en volume chauffé
+      with:
+        qdw_col_vc: [200000, 50000]
+      expect: 250000
+
+    - title: Aucune installation collective → aucune perte
+      with:
+        qdw_col_vc: []
+      expect: 0
+
+ecs.qdw_col_hvc:
+  rule: qdw_col_hvc
+  cases:
+    - title: Somme des pertes de distribution collective hors volume chauffé
+      with:
+        qdw_col_hvc: [150000, 50000]
+      expect: 200000
+
+    - title: Aucune installation collective → aucune perte
+      with:
+        qdw_col_hvc: []
+      expect: 0
+
+ecs.nmax:
+  rule: nmax
+  cases:
+    - title: Maison de moins de 30 m² → 1 adulte équivalent maximal
+      with:
+        type_batiment: maison
+        logements: 1
+        sh: 25
+      expect: 1
+
+    - title: Maison de 50 m² → régime linéaire intermédiaire (1.375)
+      with:
+        type_batiment: maison
+        logements: 1
+        sh: 50
+      expect: 1.375
+
+    - title: Maison de 100 m² → 0.025 × surface (2.5)
+      with:
+        type_batiment: maison
+        logements: 1
+        sh: 100
+      expect: 2.5
+
+    - title: Immeuble, logements de moins de 10 m² → 1
+      with:
+        type_batiment: immeuble
+        logements: 10
+        sh: 80
+      expect: 1
+
+    - title: Immeuble, logements moyens de 30 m² → régime linéaire intermédiaire (1.375)
+      with:
+        type_batiment: immeuble
+        logements: 10
+        sh: 300
+      expect: 1.375
+
+    - title: Immeuble, logements moyens de 60 m² → 0.035 × surface moyenne (2.1)
+      with:
+        type_batiment: immeuble
+        logements: 10
+        sh: 600
+      expect: 2.1
+
+ecs.nadeq:
+  rule: nadeq
+  cases:
+    - title: Occupation maximale inférieure à 1.75 → proportionnelle au nombre de logements
+      with:
+        logements: 1
+        nmax: 1.375
+      expect: 1.375
+
+    - title: Occupation maximale inférieure à 1.75, immeuble de 10 logements
+      with:
+        logements: 10
+        nmax: 1.375
+      expect: 13.75
+
+    - title: Occupation maximale supérieure à 1.75 → correction de foisonnement
+      with:
+        logements: 1
+        nmax: 2.5
+      expect: 1.975
+
+    - title: Occupation maximale supérieure à 1.75, immeuble de 10 logements
+      with:
+        logements: 10
+        nmax: 2.5
+      expect: 19.75
+
+    - title: Occupation maximale au seuil de 1.75 → aucune correction
+      with:
+        logements: 4
+        nmax: 1.75
+      expect: 7
+
+ecs.becs:
+  rule: becs
+  cases:
+    - title: Scénario conventionnel → 56 litres par adulte équivalent et par jour
+      with:
+        scenario: conventionnel
+        nadeq: 2
+        nj:
+          &nj31
+          "01": 31
+          "02": 31
+          "03": 31
+          "04": 31
+          "05": 31
+          "06": 31
+          "07": 31
+          "08": 31
+          "09": 31
+          "10": 31
+          "11": 31
+          "12": 31
+        sollicitations:
+          &tefs78
+          "01": { tefs: 7.8 }
+          "02": { tefs: 7.8 }
+          "03": { tefs: 7.8 }
+          "04": { tefs: 7.8 }
+          "05": { tefs: 7.8 }
+          "06": { tefs: 7.8 }
+          "07": { tefs: 7.8 }
+          "08": { tefs: 7.8 }
+          "09": { tefs: 7.8 }
+          "10": { tefs: 7.8 }
+          "11": { tefs: 7.8 }
+          "12": { tefs: 7.8 }
+      expect:
+        "01": 130.0215
+        "02": 130.0215
+        "03": 130.0215
+        "04": 130.0215
+        "05": 130.0215
+        "06": 130.0215
+        "07": 130.0215
+        "08": 130.0215
+        "09": 130.0215
+        "10": 130.0215
+        "11": 130.0215
+        "12": 130.0215
+
+    - title: Scénario dépensier → 79 litres par adulte équivalent et par jour
+      with:
+        scenario: depensier
+        nadeq: 2
+        nj: *nj31
+        sollicitations: *tefs78
+      expect:
+        "01": 183.4232
+        "02": 183.4232
+        "03": 183.4232
+        "04": 183.4232
+        "05": 183.4232
+        "06": 183.4232
+        "07": 183.4232
+        "08": 183.4232
+        "09": 183.4232
+        "10": 183.4232
+        "11": 183.4232
+        "12": 183.4232
+
+    - title: Eau froide à 40 °C → aucun besoin de réchauffage
+      with:
+        scenario: conventionnel
+        nadeq: 2
+        nj: *nj31
+        sollicitations:
+          "01": { tefs: 40 }
+          "02": { tefs: 40 }
+          "03": { tefs: 40 }
+          "04": { tefs: 40 }
+          "05": { tefs: 40 }
+          "06": { tefs: 40 }
+          "07": { tefs: 40 }
+          "08": { tefs: 40 }
+          "09": { tefs: 40 }
+          "10": { tefs: 40 }
+          "11": { tefs: 40 }
+          "12": { tefs: 40 }
+      expect:
+        "01": 0
+        "02": 0
+        "03": 0
+        "04": 0
+        "05": 0
+        "06": 0
+        "07": 0
+        "08": 0
+        "09": 0
+        "10": 0
+        "11": 0
+        "12": 0
+
+ecs.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire de l'ECS électrique (× 1.9)
+      with:
+        consommations:
+          - ecs:
+              electricite: { cef: 2000, cep: 3800, eges: 130 }
+      expectPartial:
+        ecs:
+          electricite: { cep: 3800 }
+
+ecs.eges:
+  rule: consommations
+  cases:
+    - title: Émissions de l'ECS électrique
+      with:
+        consommations:
+          - ecs:
+              electricite: { cef: 2000, cep: 3800, eges: 130 }
+      expectPartial:
+        ecs:
+          electricite: { eges: 130 }

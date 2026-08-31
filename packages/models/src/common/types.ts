@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { EnergieEnum, MoisEnum, UsageEnum } from "./enums.js";
+import { Energie, Mois, Usage } from "./enums.js";
 
 export const id = z.uuid();
 
@@ -38,27 +38,27 @@ export const Adresse = z.object({
 export type Adresse = z.infer<typeof Adresse>;
 
 export type ParMois<T> = {
-	[K in MoisEnum]: T;
+	[K in Mois]: T;
 };
 
 export type ParUsage<T> = {
-	[K in UsageEnum]?: T;
+	[K in Usage]?: T;
 };
 
 export type ParEnergie<T> = {
-	[K in EnergieEnum]?: T;
+	[K in Energie]?: T;
 };
 
 export function ParMois<T extends z.ZodType>(valeur: T) {
-	return z.record(MoisEnum, valeur);
+	return z.record(Mois, valeur);
 }
 
 export function ParUsage<T extends z.ZodType>(valeur: T) {
-	return z.partialRecord(UsageEnum, valeur);
+	return z.partialRecord(Usage, valeur);
 }
 
 export function ParEnergie<T extends z.ZodType>(valeur: T) {
-	return z.partialRecord(EnergieEnum, valeur);
+	return z.partialRecord(Energie, valeur);
 }
 
 export const Consommation = z.object({

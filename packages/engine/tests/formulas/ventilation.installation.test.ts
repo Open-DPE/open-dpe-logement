@@ -2,6 +2,8 @@ import * as formulas from "../../src/rules/ventilation/installation/formulas.js"
 import { runTests } from "./utils.js";
 
 runTests("ventilation.installation.test.yaml", {
+	consommations: formulas.calcule_consommations,
+	caux_enr: formulas.calcule_caux_enr,
 	rdim: formulas.calcule_rdim,
 	rut: formulas.calcule_rut,
 	hvent: formulas.calcule_hvent,

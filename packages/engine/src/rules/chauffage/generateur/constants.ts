@@ -24,4 +24,3 @@ export const RULES = {
 	presence_regulation: "presence_regulation",
 	annee_installation: "annee_installation",
 } as const;
-

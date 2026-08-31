@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const USAGES_ELECTRICITE = {
+export const UsageElectricite = z.enum({
 	chauffage: "chauffage",
 	refroidissement: "refroidissement",
 	ecs: "ecs",
@@ -8,6 +8,6 @@ export const USAGES_ELECTRICITE = {
 	auxiliaires_ventilation: "auxiliaires_ventilation",
 	auxiliaires_distribution: "auxiliaires_distribution",
 	autres: "autres",
-} as const;
-export const UsageElectriciteEnum = z.enum(USAGES_ELECTRICITE);
-export type UsageElectricite = z.infer<typeof UsageElectriciteEnum>;
+});
+
+export type UsageElectricite = z.infer<typeof UsageElectricite>;

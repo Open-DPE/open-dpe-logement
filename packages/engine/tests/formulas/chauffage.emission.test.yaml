@@ -1,0 +1,666 @@
+chauffage.systeme.emission.cch:
+  rule: cch
+  cases:
+    - title: Générateur simple → seule la part principale est comptée
+      with:
+        cch1: 1200
+        cch2: null
+      expect: 1200
+
+    - title: PAC hybride → somme des parts PAC et chaudière
+      with:
+        cch1: 960
+        cch2: 240
+      expect: 1200
+
+chauffage.systeme.emission.cch1:
+  rule: cch1
+  cases:
+    - title: Système unique, rendement unitaire, sans solaire → besoins annuels reportés
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich1: 1
+        n: 1
+        bch:
+          &bch100
+          "01": 100
+          "02": 100
+          "03": 100
+          "04": 100
+          "05": 100
+          "06": 100
+          "07": 100
+          "08": 100
+          "09": 100
+          "10": 100
+          "11": 100
+          "12": 100
+      expect: 1200
+
+    - title: Couverture solaire de 25 % → besoins résiduels de 75 %
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        fch: 0.25
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich1: 1
+        n: 1
+        bch: *bch100
+      expect: 900
+
+    - title: Deux émissions rattachées au système → besoins répartis à parts égales
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich1: 1
+        n: 2
+        bch: *bch100
+      expect: 600
+
+    - title: Système couvrant la moitié de l'installation, elle-même sur la moitié du logement
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        fch: 0
+        rdim_i: 0.5
+        rdim: 0.5
+        int: 1
+        ich1: 1
+        n: 1
+        bch: *bch100
+      expect: 300
+
+    - title: Intermittence et rendement pris en compte
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 0.9
+        ich1: 1.5
+        n: 1
+        bch: *bch100
+      expect: 1620
+
+    - title: PAC hybride en zone H1a → 80 % des besoins couverts par la PAC
+      with:
+        zone_climatique: H1a
+        pac_hybride: true
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich1: 1
+        n: 1
+        bch: *bch100
+      expect: 960
+
+    - title: PAC hybride en zone H3 → 88 % des besoins couverts par la PAC
+      with:
+        zone_climatique: H3
+        pac_hybride: true
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich1: 1
+        n: 1
+        bch: *bch100
+      expect: 1056
+
+chauffage.systeme.emission.cch2:
+  rule: cch2
+  cases:
+    - title: PAC hybride en zone H1a → 20 % des besoins couverts par la chaudière
+      with:
+        zone_climatique: H1a
+        pac_hybride: true
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich2: 1
+        n: 1
+        bch: *bch100
+      expect: 240
+
+    - title: PAC hybride en zone H2a → 17 % des besoins couverts par la chaudière
+      with:
+        zone_climatique: H2a
+        pac_hybride: true
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich2: 1
+        n: 1
+        bch: *bch100
+      expect: 204
+
+    - title: Générateur non hybride → aucun abattement appliqué
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        fch: 0
+        rdim_i: 1
+        rdim: 1
+        int: 1
+        ich2: 1
+        n: 1
+        bch: *bch100
+      expect: 1200
+
+chauffage.systeme.emission.int:
+  rule: int
+  cases:
+    - title: Coefficient volumique de déperdition inférieur à 1 → intermittence corrigée à la hausse
+      with:
+        gv: 100
+        sh: 100
+        hsp: 2.5
+        i0: 0.9
+      expect: 0.9574
+
+    - title: Coefficient volumique égal à 1 → intermittence égale au coefficient de base
+      with:
+        gv: 250
+        sh: 100
+        hsp: 2.5
+        i0: 0.9
+      expect: 0.9
+
+    - title: Coefficient volumique supérieur à 1 → intermittence corrigée à la baisse
+      with:
+        gv: 500
+        sh: 100
+        hsp: 2.5
+        i0: 0.9
+      expect: 0.8182
+
+chauffage.systeme.emission.i0:
+  rule: i0
+  cases:
+    - title: Maison, chauffage divisé, radiateurs, inertie légère, sans programmation → 0.84
+      with:
+        type_batiment: maison
+        type_chauffage: divise
+        type_emission: radiateur
+        inertie: legere
+        installation_collective: false
+        comptage_individuel: null
+        regulation_terminale: null
+        type_programmation: absent
+        type_generateur: convecteur_electrique
+      expect: 0.84
+
+    - title: Maison, chauffage divisé, plancher chauffant, inertie légère → 0.9
+      with:
+        type_batiment: maison
+        type_chauffage: divise
+        type_emission: plancher_chauffant
+        inertie: legere
+        installation_collective: false
+        comptage_individuel: null
+        regulation_terminale: null
+        type_programmation: absent
+        type_generateur: plancher_rayonnant_electrique
+      expect: 0.9
+
+    - title: Maison, inertie lourde → intermittence dégradée (0.86)
+      with:
+        type_batiment: maison
+        type_chauffage: divise
+        type_emission: radiateur
+        inertie: lourde
+        installation_collective: false
+        comptage_individuel: null
+        regulation_terminale: null
+        type_programmation: absent
+        type_generateur: convecteur_electrique
+      expect: 0.86
+
+    - title: Maison, chauffage central, régulation terminale présente → 0.88
+      with:
+        type_batiment: maison
+        type_chauffage: central
+        type_emission: radiateur
+        inertie: moyenne
+        installation_collective: false
+        comptage_individuel: null
+        regulation_terminale: true
+        type_programmation: absent
+        type_generateur: chaudiere
+      expect: 0.88
+
+    - title: Maison, chauffage central, sans régulation terminale → 0.91
+      with:
+        type_batiment: maison
+        type_chauffage: central
+        type_emission: radiateur
+        inertie: moyenne
+        installation_collective: false
+        comptage_individuel: null
+        regulation_terminale: false
+        type_programmation: absent
+        type_generateur: chaudiere
+      expect: 0.91
+
+    - title: Immeuble, chauffage divisé, radiateurs, sans programmation → 0.9
+      with:
+        type_batiment: immeuble
+        type_chauffage: divise
+        type_emission: radiateur
+        inertie: legere
+        installation_collective: false
+        comptage_individuel: null
+        regulation_terminale: null
+        type_programmation: absent
+        type_generateur: convecteur_electrique
+      expect: 0.9
+
+    - title: Immeuble, chauffage collectif avec comptage individuel et régulation → 0.95
+      with:
+        type_batiment: immeuble
+        type_chauffage: central
+        type_emission: radiateur
+        inertie: legere
+        installation_collective: true
+        comptage_individuel: true
+        regulation_terminale: true
+        type_programmation: absent
+        type_generateur: chaudiere
+      expect: 0.95
+
+    - title: Convecteur bi-jonction → moyenne pondérée 60 % collectif / 40 % individuel
+      with:
+        type_batiment: immeuble
+        type_chauffage: central
+        type_emission: radiateur
+        inertie: legere
+        installation_collective: false
+        comptage_individuel: false
+        regulation_terminale: false
+        type_programmation: absent
+        type_generateur: convecteur_bi_jonction
+      expect: 1.014
+
+    - title: Combinaison absente de l'abaque → erreur ValeurForfaitaire
+      with:
+        type_batiment: TYPE_INCONNU
+        type_chauffage: divise
+        type_emission: radiateur
+        inertie: legere
+        installation_collective: false
+        comptage_individuel: null
+        regulation_terminale: null
+        type_programmation: absent
+        type_generateur: convecteur_electrique
+      expectError: true
+
+chauffage.systeme.emission.ich1:
+  rule: ich1
+  cases:
+    - title: Générateur à combustion → inverse du produit des rendements
+      with:
+        rd: 0.9
+        rg: 0.8
+        re: 0.95
+        rr: 0.9
+        scop: null
+      expect: 1.6244
+
+    - title: Pompe à chaleur → le SCOP remplace le rendement de génération
+      with:
+        rd: 0.9
+        rg: 0.8
+        re: 0.95
+        rr: 0.9
+        scop: 3
+      expect: 0.4332
+
+    - title: Rendements unitaires → inverse égal à 1
+      with:
+        rd: 1
+        rg: 1
+        re: 1
+        rr: 1
+        scop: null
+      expect: 1
+
+chauffage.systeme.emission.ich2:
+  rule: ich2
+  cases:
+    - title: Partie chaudière d'une PAC hybride → inverse du produit des rendements
+      with:
+        rd: 0.9
+        rg: 0.8
+        re: 0.95
+        rr: 0.9
+      expect: 1.6244
+
+    - title: Rendements unitaires → inverse égal à 1
+      with:
+        rd: 1
+        rg: 1
+        re: 1
+        rr: 1
+      expect: 1
+
+chauffage.systeme.emission.ich:
+  rule: ich
+  cases:
+    - title: Générateur simple (pas de seconde part) → ich1
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        ich1: 1.6244
+        ich2: null
+      expect: 1.6244
+
+    - title: Générateur non hybride avec une seconde part renseignée → ich1 seul
+      with:
+        zone_climatique: H1a
+        pac_hybride: false
+        ich1: 1
+        ich2: 2
+      expect: 1
+
+    - title: PAC hybride en zone H1a → pondération 80 / 20
+      with:
+        zone_climatique: H1a
+        pac_hybride: true
+        ich1: 1
+        ich2: 2
+      expect: 1.2
+
+    - title: PAC hybride en zone H3 → pondération 88 / 12
+      with:
+        zone_climatique: H3
+        pac_hybride: true
+        ich1: 1
+        ich2: 2
+      expect: 1.12
+
+chauffage.systeme.emission.re:
+  rule: re
+  cases:
+    - title: Convecteur électrique NF Performance sur radiateur → 0.95
+      with:
+        type_emission: radiateur
+        type_generateur: convecteur_electrique
+        label_generateur: nf_performance
+      expect: 0.95
+
+    - title: Panneau rayonnant électrique NF Performance → 0.97
+      with:
+        type_emission: radiateur
+        type_generateur: panneau_rayonnant_electrique
+        label_generateur: nf_performance
+      expect: 0.97
+
+    - title: Radiateur électrique sans label → 0.95
+      with:
+        type_emission: radiateur
+        type_generateur: radiateur_electrique
+        label_generateur: null
+      expect: 0.95
+
+    - title: Émission par air soufflé → 0.95
+      with:
+        type_emission: air_souffle
+        type_generateur: pac_air_air
+        label_generateur: null
+      expect: 0.95
+
+    - title: Plancher chauffant hydraulique → rendement d'émission unitaire
+      with:
+        type_emission: plancher_chauffant
+        type_generateur: chaudiere
+        label_generateur: null
+      expect: 1
+
+    - title: Plafond chauffant hydraulique → 0.98
+      with:
+        type_emission: plafond_chauffant
+        type_generateur: chaudiere
+        label_generateur: null
+      expect: 0.98
+
+    - title: Radiateur hydraulique → 0.95
+      with:
+        type_emission: radiateur
+        type_generateur: chaudiere
+        label_generateur: null
+      expect: 0.95
+
+    - title: Type d'émission inconnu → erreur ValeurForfaitaire
+      with:
+        type_emission: EMISSION_INCONNUE
+        type_generateur: chaudiere
+        label_generateur: null
+      expectError: true
+
+chauffage.systeme.emission.rr:
+  rule: rr
+  cases:
+    - title: Convecteur électrique NF Performance → 0.99
+      with:
+        type_emission: radiateur
+        type_generateur: convecteur_electrique
+        label_generateur: nf_performance
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.99
+
+    - title: Radiateur électrique sans label → 0.96
+      with:
+        type_emission: radiateur
+        type_generateur: radiateur_electrique
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.96
+
+    - title: Plancher rayonnant électrique avec régulation terminale → 0.98
+      with:
+        type_emission: plancher_chauffant
+        type_generateur: plancher_rayonnant_electrique
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: true
+      expect: 0.98
+
+    - title: Plancher rayonnant électrique sans régulation terminale → 0.96
+      with:
+        type_emission: plancher_chauffant
+        type_generateur: plancher_rayonnant_electrique
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: false
+      expect: 0.96
+
+    - title: Plancher chauffant hydraulique individuel → 0.95
+      with:
+        type_emission: plancher_chauffant
+        type_generateur: chaudiere
+        label_generateur: null
+        reseau_collectif: false
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.95
+
+    - title: Plancher chauffant hydraulique collectif → 0.9
+      with:
+        type_emission: plancher_chauffant
+        type_generateur: chaudiere
+        label_generateur: null
+        reseau_collectif: true
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.9
+
+    - title: Radiateur gaz → 0.96
+      with:
+        type_emission: radiateur
+        type_generateur: radiateur_gaz
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.96
+
+    - title: Poêle → 0.8
+      with:
+        type_emission: radiateur
+        type_generateur: poele
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.8
+
+    - title: Radiateur hydraulique sans robinet thermostatique → 0.9
+      with:
+        type_emission: radiateur
+        type_generateur: chaudiere
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: false
+        presence_regulation_terminale: null
+      expect: 0.9
+
+    - title: Radiateur hydraulique avec robinet thermostatique → 0.95
+      with:
+        type_emission: radiateur
+        type_generateur: chaudiere
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: true
+        presence_regulation_terminale: null
+      expect: 0.95
+
+    - title: Convecteur bi-jonction → 0.9
+      with:
+        type_emission: radiateur
+        type_generateur: convecteur_bi_jonction
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.9
+
+    - title: Émission par air soufflé → 0.96
+      with:
+        type_emission: air_souffle
+        type_generateur: pac_air_air
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expect: 0.96
+
+    - title: Type d'émission inconnu → erreur ValeurForfaitaire
+      with:
+        type_emission: EMISSION_INCONNUE
+        type_generateur: chaudiere
+        label_generateur: null
+        reseau_collectif: null
+        presence_robinet_thermostatique: null
+        presence_regulation_terminale: null
+      expectError: true
+
+chauffage.systeme.emission.type_emission:
+  rule: type_emission
+  cases:
+    - title: Chaudière hydraulique sur plancher chauffant → émission par plancher chauffant
+      with:
+        type_generateur: chaudiere
+        type_distribution: hydraulique
+        type_emetteur: plancher_chauffant
+      expect: plancher_chauffant
+
+    - title: Chaudière hydraulique sur radiateurs bitube → émission par radiateur
+      with:
+        type_generateur: chaudiere
+        type_distribution: hydraulique
+        type_emetteur: radiateur_bitube
+      expect: radiateur
+
+    - title: PAC air/eau hydraulique sur radiateurs monotube → émission par radiateur
+      with:
+        type_generateur: pac_air_eau
+        type_distribution: hydraulique
+        type_emetteur: radiateur_monotube
+      expect: radiateur
+
+    - title: Émetteur non caractérisé sur distribution hydraulique → émission par radiateur
+      with:
+        type_generateur: chaudiere
+        type_distribution: hydraulique
+        type_emetteur: autres
+      expect: radiateur
+
+    - title: PAC air/air → émission par air soufflé
+      with:
+        type_generateur: pac_air_air
+        type_distribution: null
+        type_emetteur: null
+      expect: air_souffle
+
+    - title: Réseau de chaleur aéraulique → émission par air soufflé
+      with:
+        type_generateur: reseau_chaleur
+        type_distribution: aeraulique
+        type_emetteur: null
+      expect: air_souffle
+
+    - title: Convecteur électrique → émission par radiateur
+      with:
+        type_generateur: convecteur_electrique
+        type_distribution: null
+        type_emetteur: null
+      expect: radiateur
+
+    - title: Plafond rayonnant électrique → émission par plafond chauffant
+      with:
+        type_generateur: plafond_rayonnant_electrique
+        type_distribution: null
+        type_emetteur: null
+      expect: plafond_chauffant
+
+    - title: Plancher rayonnant électrique → émission par plancher chauffant
+      with:
+        type_generateur: plancher_rayonnant_electrique
+        type_distribution: null
+        type_emetteur: null
+      expect: plancher_chauffant
+
+    - title: Poêle → émission par radiateur
+      with:
+        type_generateur: poele
+        type_distribution: null
+        type_emetteur: null
+      expect: radiateur
+
+    - title: Type de générateur inconnu → erreur ValeurForfaitaire
+      with:
+        type_generateur: GENERATEUR_INCONNU
+        type_distribution: null
+        type_emetteur: null
+      expectError: true

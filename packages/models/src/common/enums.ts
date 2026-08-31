@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export const ORIENTATIONS = {
+export const Orientation = z.enum({
 	nord: "nord",
 	sud: "sud",
 	est: "est",
@@ -9,37 +9,37 @@ export const ORIENTATIONS = {
 	sud_est: "sud_est",
 	nord_ouest: "nord_ouest",
 	sud_ouest: "sud_ouest",
-} as const;
-export const OrientationEnum = z.enum(ORIENTATIONS);
-export type OrientationEnum = z.infer<typeof OrientationEnum>;
+});
 
-export const ORIENTATIONS_CARDINALES = {
-	nord: ORIENTATIONS.nord,
-	sud: ORIENTATIONS.sud,
-	est: ORIENTATIONS.est,
-	ouest: ORIENTATIONS.ouest,
-} as const;
-export const OrientationCardinaleEnum = z.enum(ORIENTATIONS_CARDINALES);
-export type OrientationCardinaleEnum = z.infer<typeof OrientationCardinaleEnum>;
+export type Orientation = z.infer<typeof Orientation>;
 
-export const USAGES = {
+export const OrientationCardinale = Orientation.extract([
+	"nord",
+	"sud",
+	"est",
+	"ouest",
+]);
+
+export type OrientationCardinale = z.infer<typeof OrientationCardinale>;
+
+export const Usage = z.enum({
 	chauffage: "chauffage",
 	ecs: "ecs",
 	refroidissement: "refroidissement",
 	eclairage: "eclairage",
 	auxiliaire: "auxiliaire",
-} as const;
-export const UsageEnum = z.enum(USAGES);
-export type UsageEnum = z.infer<typeof UsageEnum>;
+});
 
-export const SCENARIOS = {
+export type Usage = z.infer<typeof Usage>;
+
+export const Scenario = z.enum({
 	conventionnel: "conventionnel",
 	depensier: "depensier",
-} as const;
-export const ScenarioEnum = z.enum(SCENARIOS);
-export type ScenarioEnum = z.infer<typeof ScenarioEnum>;
+});
 
-export const MOIS = {
+export type Scenario = z.infer<typeof Scenario>;
+
+export const Mois = z.enum({
 	Janvier: "01",
 	Février: "02",
 	Mars: "03",
@@ -52,12 +52,11 @@ export const MOIS = {
 	Octobre: "10",
 	Novembre: "11",
 	Décembre: "12",
-} as const;
+});
 
-export const MoisEnum = z.enum(MOIS);
-export type MoisEnum = z.infer<typeof MoisEnum>;
+export type Mois = z.infer<typeof Mois>;
 
-export const ENERGIES = {
+export const Energie = z.enum({
 	electricite_renouvelable: "electricite_renouvelable",
 	electricite: "electricite",
 	gaz_naturel: "gaz_naturel",
@@ -69,6 +68,6 @@ export const ENERGIES = {
 	charbon: "charbon",
 	reseau_chaleur: "reseau_chaleur",
 	reseau_froid: "reseau_froid",
-} as const;
-export const EnergieEnum = z.enum(ENERGIES);
-export type EnergieEnum = z.infer<typeof EnergieEnum>;
+});
+
+export type Energie = z.infer<typeof Energie>;

@@ -50,9 +50,9 @@ export function calcule_rdim(props: {
 export function calcule_fecs(props: {
 	fecs_saisi: number | null;
 	zone_climatique: ReturnType<typeof climat.calcule_zone_climatique>;
-	type_batiment: models.batiment.TypeBatimentEnum;
+	type_batiment: models.batiment.TypeBatiment;
 	installation_solaire: {
-		usage: models.ecs.installation.UsageSolaireEnum;
+		usage: models.ecs.installation.UsageSolaire;
 		anciennete: ReturnType<typeof set_anciennete_installation_solaire>;
 	} | null;
 }): number {

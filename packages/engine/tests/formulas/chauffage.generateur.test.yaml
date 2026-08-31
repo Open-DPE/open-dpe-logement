@@ -1,0 +1,958 @@
+chauffage.generateur.cef:
+  rule: consommations
+  cases:
+    - title: Consommations des systèmes complétées par l'auxiliaire de génération
+      with:
+        consommations:
+          - chauffage:
+              gaz_naturel: { cef: 10000, cep: 10000, eges: 2270 }
+            auxiliaire:
+              electricite: { cef: 500, cep: 950, eges: 34.5 }
+        caux_gen: 200
+        caux_gen_enr: 0
+      expect:
+        chauffage:
+          gaz_naturel: { cef: 10000, cep: 10000, eges: 2270 }
+        auxiliaire:
+          electricite: { cef: 700, cep: 1330, eges: 48.3 }
+
+    - title: Générateur sans système rattaché → seul l'auxiliaire de génération est compté
+      with:
+        consommations: []
+        caux_gen: 200
+        caux_gen_enr: 0
+      expect:
+        auxiliaire:
+          electricite: { cef: 200, cep: 380, eges: 13.8 }
+
+chauffage.generateur.cch:
+  rule: cch
+  cases:
+    - title: Somme des consommations des systèmes du générateur
+      with:
+        cch: [6000, 2000]
+      expect: 8000
+
+    - title: Aucun système → 0
+      with:
+        cch: []
+      expect: 0
+
+chauffage.generateur.cch_elec:
+  rule: cch_elec
+  cases:
+    - title: Somme des consommations électriques des systèmes du générateur
+      with:
+        cch_elec: [3000, 0]
+      expect: 3000
+
+    - title: Aucun système électrique → 0
+      with:
+        cch_elec: []
+      expect: 0
+
+chauffage.generateur.caux_gen:
+  rule: caux_gen
+  cases:
+    - title: Auxiliaire de 100 W, besoins annuels de 1200 kWh, générateur de 20 kW
+      with:
+        pn: 20
+        paux: 100
+        rdim: 1
+        bch:
+          &bch100
+          "01": 100
+          "02": 100
+          "03": 100
+          "04": 100
+          "05": 100
+          "06": 100
+          "07": 100
+          "08": 100
+          "09": 100
+          "10": 100
+          "11": 100
+          "12": 100
+      expect: 6
+
+    - title: Générateur couvrant la moitié des besoins → consommation d'auxiliaire réduite de moitié
+      with:
+        pn: 20
+        paux: 100
+        rdim: 0.5
+        bch: *bch100
+      expect: 3
+
+    - title: Aucun auxiliaire → aucune consommation
+      with:
+        pn: 20
+        paux: 0
+        rdim: 1
+        bch: *bch100
+      expect: 0
+
+chauffage.generateur.caux_gen_enr:
+  rule: caux_gen_enr
+  cases:
+    - title: Part d'électricité autoconsommée affectée à l'auxiliaire de génération
+      with:
+        celec:
+          chauffage: 1000
+        celec_ac:
+          chauffage: 300
+        caux_gen: 500
+      expect: 150
+
+    - title: Aucune consommation d'auxiliaire → aucune part renouvelable
+      with:
+        celec:
+          chauffage: 1000
+        celec_ac:
+          chauffage: 300
+        caux_gen: 0
+      expect: 0
+
+chauffage.generateur.rdim:
+  rule: rdim
+  cases:
+    - title: Cumul des dimensionnements système × installation
+      with:
+        systemes:
+          - rdim: 0.5
+            rdim_installation: 0.4
+          - rdim: 1
+            rdim_installation: 0.6
+      expect: 0.8
+
+    - title: Générateur unique couvrant tout le logement → 1
+      with:
+        systemes:
+          - rdim: 1
+            rdim_installation: 1
+      expect: 1
+
+    - title: Aucun système → 0
+      with:
+        systemes: []
+      expect: 0
+
+chauffage.generateur.pn:
+  rule: pn
+  cases:
+    - title: Puissance nominale saisie → retenue
+      with:
+        pn_saisi: 25
+        pdim: 12
+      expect: 25
+
+    - title: Puissance nominale non saisie → puissance de dimensionnement
+      with:
+        pn_saisi: null
+        pdim: 12
+      expect: 12
+
+chauffage.generateur.pdim:
+  rule: pdim
+  cases:
+    - title: Générateur dédié au chauffage → puissance de chauffage
+      with:
+        pch: 12
+        pecs: null
+      expect: 12
+
+    - title: Générateur mixte → maximum des puissances chauffage et ECS
+      with:
+        pch: 12
+        pecs: 20
+      expect: 20
+
+    - title: Générateur mixte dont le chauffage est dimensionnant
+      with:
+        pch: 25
+        pecs: 20
+      expect: 25
+
+chauffage.generateur.pch:
+  rule: pch
+  cases:
+    - title: Puissance nominale saisie → retenue
+      with:
+        pn_saisi: 30
+        pch_systemes: [8, 4]
+      expect: 30
+
+    - title: Puissance non saisie → somme des puissances des systèmes
+      with:
+        pn_saisi: null
+        pch_systemes: [8, 4]
+      expect: 12
+
+    - title: Aucun système → puissance nulle
+      with:
+        pn_saisi: null
+        pch_systemes: []
+      expect: 0
+
+chauffage.generateur.paux:
+  rule: paux
+  cases:
+    - title: Chaudière gaz de 20 kW → 20 + 1.6 × Pn
+      with:
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expect: 52
+
+    - title: Chaudière fioul de 20 kW → 20 + 1.6 × Pn
+      with:
+        type_generateur: chaudiere
+        energie_generateur: fioul
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expect: 52
+
+    - title: Puissance écrêtée au plafond de l'abaque (400 kW)
+      with:
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 500
+      expect: 660
+
+    - title: Chaudière bois avec ventouse → 73.3 + 10.5 × Pn
+      with:
+        type_generateur: chaudiere
+        energie_generateur: bois_buche
+        generateur_multi_batiment: false
+        presence_ventouse: true
+        pn: 20
+      expect: 283.3
+
+    - title: Chaudière bois sans ventouse → aucun auxiliaire de génération
+      with:
+        type_generateur: chaudiere
+        energie_generateur: bois_buche
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expect: 0
+
+    - title: Chaudière électrique → aucun auxiliaire de génération
+      with:
+        type_generateur: chaudiere
+        energie_generateur: electricite
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expect: 0
+
+    - title: Pompe à chaleur → aucun auxiliaire de génération
+      with:
+        type_generateur: pac_air_eau
+        energie_generateur: electricite
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expect: 0
+
+    - title: Générateur multi-bâtiment → auxiliaire non imputé au logement
+      with:
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: true
+        presence_ventouse: false
+        pn: 20
+      expect: 0
+
+    - title: Type de générateur hors abaque → erreur ValeurForfaitaire
+      with:
+        type_generateur: GENERATEUR_INCONNU
+        energie_generateur: gaz_naturel
+        generateur_multi_batiment: false
+        presence_ventouse: false
+        pn: 20
+      expectError: true
+
+chauffage.generateur.rpn:
+  rule: combustion
+  cases:
+    - title: Toutes les performances saisies → aucune lecture d'abaque
+      with:
+        rpint_saisi: 0.8
+        rpn_saisi: 0.85
+        qp0_saisi: 0.3
+        pveilleuse_saisi: 150
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpint: 0.8
+        rpn: 0.85
+        qp0: 0.3
+        pveilleuse: 150
+
+    - title: Chaudière gaz standard installée en 1995, 100 kW → performances forfaitaires
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpn: 0.88
+        rpint: 0.86
+        qp0: 1.2
+        pveilleuse: 120
+
+    - title: Chaudière gaz standard récente (2020) de 10 kW sans ventouse
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 2020
+        pn: 10
+        presence_ventouse: false
+      expect:
+        rpn: 0.86
+        rpint: 0.83
+        qp0: 0.17
+        pveilleuse: 0
+
+    - title: Chaudière gaz standard récente de 10 kW avec ventouse → pertes à l'arrêt réduites
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 2020
+        pn: 10
+        presence_ventouse: true
+      expect:
+        rpn: 0.86
+        rpint: 0.83
+        qp0: 0.12
+        pveilleuse: 0
+
+    - title: Bi-énergie → l'énergie d'appoint prime pour la lecture de l'abaque
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: electricite
+        bienergie_generateur: gaz_naturel
+        mode_combustion: standard
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expect:
+        rpn: 0.88
+        rpint: 0.86
+        qp0: 1.2
+        pveilleuse: 120
+
+    - title: Générateur hors abaque de combustion → erreur ValeurForfaitaire
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: convecteur_electrique
+        energie_generateur: electricite
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expectError: true
+
+chauffage.generateur.scop:
+  rule: scop
+  cases:
+    - title: SCOP saisi → retenu tel quel
+      with:
+        scop_saisi: 4.2
+        zone_climatique: H1a
+        type_generateur: pac_air_eau
+        annee_installation: 2020
+        types_emetteur: [radiateur]
+      expect: 4.2
+
+    - title: PAC air/air en zone H1a installée à partir de 2015 → 3
+      with:
+        scop_saisi: null
+        zone_climatique: H1a
+        type_generateur: pac_air_air
+        annee_installation: 2020
+        types_emetteur: []
+      expect: 3
+
+    - title: PAC air/air en zone H1a installée avant 2008 → 2.2
+      with:
+        scop_saisi: null
+        zone_climatique: H1a
+        type_generateur: pac_air_air
+        annee_installation: 2005
+        types_emetteur: []
+      expect: 2.2
+
+    - title: PAC air/air en zone H3 installée à partir de 2015 → 3.3
+      with:
+        scop_saisi: null
+        zone_climatique: H3
+        type_generateur: pac_air_air
+        annee_installation: 2020
+        types_emetteur: []
+      expect: 3.3
+
+    - title: PAC air/eau sur radiateurs en zone H1a installée en 2020 → 2.8
+      with:
+        scop_saisi: null
+        zone_climatique: H1a
+        type_generateur: pac_air_eau
+        annee_installation: 2020
+        types_emetteur: [radiateur]
+      expect: 2.8
+
+    - title: PAC air/eau sur plancher chauffant en zone H1a installée en 2020 → 3.2
+      with:
+        scop_saisi: null
+        zone_climatique: H1a
+        type_generateur: pac_air_eau
+        annee_installation: 2020
+        types_emetteur: [plancher_chauffant]
+      expect: 3.2
+
+    - title: Émetteurs hétérogènes → le SCOP le plus défavorable est retenu
+      with:
+        scop_saisi: null
+        zone_climatique: H1a
+        type_generateur: pac_air_eau
+        annee_installation: 2020
+        types_emetteur: [plancher_chauffant, radiateur]
+      expect: 2.8
+
+    - title: Doublons d'émetteurs ignorés
+      with:
+        scop_saisi: null
+        zone_climatique: H1a
+        type_generateur: pac_air_eau
+        annee_installation: 2020
+        types_emetteur: [radiateur, radiateur]
+      expect: 2.8
+
+    - title: Zone climatique inconnue → erreur ValeurForfaitaire
+      with:
+        scop_saisi: null
+        zone_climatique: INCONNUE
+        type_generateur: pac_air_air
+        annee_installation: 2020
+        types_emetteur: []
+      expectError: true
+
+chauffage.generateur.tfonc30:
+  rule: tfonc30
+  cases:
+    - title: Température de fonctionnement saisie → retenue
+      with:
+        tfonc30_saisi: 45
+        mode_combustion: standard
+        annee_installation_generateur: 2010
+        emetteurs: []
+      expect: 45
+
+    - title: Aucun émetteur → hypothèse haute température, année du générateur
+      with:
+        tfonc30_saisi: null
+        mode_combustion: standard
+        annee_installation_generateur: 2010
+        emetteurs: []
+      expect: 52.5
+
+    - title: Générateur standard antérieur à 1991 avec émetteurs récents haute température → 56
+      with:
+        tfonc30_saisi: null
+        mode_combustion: standard
+        annee_installation_generateur: 1985
+        emetteurs:
+          - temperature_distribution: haute
+            annee_installation: 2010
+      expect: 56
+
+    - title: Chaudière à condensation, émetteurs basse température récents → 24.5
+      with:
+        tfonc30_saisi: null
+        mode_combustion: condensation
+        annee_installation_generateur: 2010
+        emetteurs:
+          - temperature_distribution: basse
+            annee_installation: 2010
+      expect: 24.5
+
+    - title: Chaudière basse température, émetteurs haute température anciens → 48.5
+      with:
+        tfonc30_saisi: null
+        mode_combustion: basse_temperature
+        annee_installation_generateur: 2010
+        emetteurs:
+          - temperature_distribution: haute
+            annee_installation: 1975
+      expect: 48.5
+
+    - title: Plusieurs émetteurs → la température la plus contraignante est retenue
+      with:
+        tfonc30_saisi: null
+        mode_combustion: condensation
+        annee_installation_generateur: 2010
+        emetteurs:
+          - temperature_distribution: basse
+            annee_installation: 2010
+          - temperature_distribution: haute
+            annee_installation: 2010
+      expect: 35
+
+chauffage.generateur.tfonc100:
+  rule: tfonc100
+  cases:
+    - title: Température de fonctionnement saisie → retenue
+      with:
+        tfonc100_saisi: 65
+        annee_installation_generateur: 2010
+        emetteurs: []
+      expect: 65
+
+    - title: Aucun émetteur → hypothèse haute température, année du générateur
+      with:
+        tfonc100_saisi: null
+        annee_installation_generateur: 2010
+        emetteurs: []
+      expect: 70
+
+    - title: Émetteurs haute température antérieurs à 1981 → 80
+      with:
+        tfonc100_saisi: null
+        annee_installation_generateur: 1975
+        emetteurs:
+          - temperature_distribution: haute
+            annee_installation: 1975
+      expect: 80
+
+    - title: Émetteurs basse température récents → 35
+      with:
+        tfonc100_saisi: null
+        annee_installation_generateur: 2010
+        emetteurs:
+          - temperature_distribution: basse
+            annee_installation: 2010
+      expect: 35
+
+    - title: Émetteurs moyenne température récents → 60
+      with:
+        tfonc100_saisi: null
+        annee_installation_generateur: 2010
+        emetteurs:
+          - temperature_distribution: moyenne
+            annee_installation: 2010
+      expect: 60
+
+    - title: Plusieurs émetteurs → la température la plus contraignante est retenue
+      with:
+        tfonc100_saisi: null
+        annee_installation_generateur: 2010
+        emetteurs:
+          - temperature_distribution: basse
+            annee_installation: 2010
+          - temperature_distribution: haute
+            annee_installation: 2010
+      expect: 70
+
+chauffage.generateur.qgen:
+  rule: qgen
+  cases:
+    - title: Générateur sans ventouse → coefficient de pertes de 5
+      with:
+        presence_ventouse: false
+        qp0: 0.3
+      expect: 720
+
+    - title: Générateur avec ventouse → coefficient de pertes de 0.75
+      with:
+        presence_ventouse: true
+        qp0: 0.3
+      expect: 108
+
+    - title: Aucune perte à l'arrêt (générateur non à combustion) → aucune perte de génération
+      with:
+        presence_ventouse: false
+        qp0: null
+      expect: 0
+
+chauffage.generateur.qgen_rec:
+  rule: qgen_rec
+  cases:
+    - title: Générateur dédié au chauffage → durée de fonctionnement limitée par les besoins
+      with:
+        generateur_mixte: false
+        qgen: 720
+        pn: 20
+        nref:
+          &nref744
+          "01": 744
+          "02": 744
+          "03": 744
+          "04": 744
+          "05": 744
+          "06": 744
+          "07": 744
+          "08": 744
+          "09": 744
+          "10": 744
+          "11": 744
+          "12": 744
+        bch_hp:
+          &bch_hp600
+          "01": 600
+          "02": 600
+          "03": 600
+          "04": 600
+          "05": 600
+          "06": 600
+          "07": 600
+          "08": 600
+          "09": 600
+          "10": 600
+          "11": 600
+          "12": 600
+      expect:
+        "01": 93600
+        "02": 93600
+        "03": 93600
+        "04": 93600
+        "05": 93600
+        "06": 93600
+        "07": 93600
+        "08": 93600
+        "09": 93600
+        "10": 93600
+        "11": 93600
+        "12": 93600
+
+    - title: Générateur mixte → durée de fonctionnement augmentée de la part ECS
+      with:
+        generateur_mixte: true
+        qgen: 720
+        pn: 20
+        nref: *nref744
+        bch_hp: *bch_hp600
+      expect:
+        "01": 203059.726
+        "02": 203059.726
+        "03": 203059.726
+        "04": 203059.726
+        "05": 203059.726
+        "06": 203059.726
+        "07": 203059.726
+        "08": 203059.726
+        "09": 203059.726
+        "10": 203059.726
+        "11": 203059.726
+        "12": 203059.726
+
+    - title: Durée de fonctionnement plafonnée au nombre d'heures de chauffe
+      with:
+        generateur_mixte: false
+        qgen: 1
+        pn: 1
+        nref: *nref744
+        bch_hp: *bch_hp600
+      expect:
+        "01": 744
+        "02": 744
+        "03": 744
+        "04": 744
+        "05": 744
+        "06": 744
+        "07": 744
+        "08": 744
+        "09": 744
+        "10": 744
+        "11": 744
+        "12": 744
+
+    - title: Aucune perte de génération → aucune récupération
+      with:
+        generateur_mixte: false
+        qgen: 0
+        pn: 20
+        nref: *nref744
+        bch_hp: *bch_hp600
+      expect:
+        "01": 0
+        "02": 0
+        "03": 0
+        "04": 0
+        "05": 0
+        "06": 0
+        "07": 0
+        "08": 0
+        "09": 0
+        "10": 0
+        "11": 0
+        "12": 0
+
+chauffage.generateur.qpx_chaudiere_combustion:
+  rule: qpx_chaudiere_combustion
+  cases:
+    - title: Chaudière gaz standard 20 kW avec régulation
+      with:
+        pn: 20
+        rpn: 0.85
+        rpint: 0.8
+        kpcs: 1.11
+        mode_combustion: standard
+        presence_regulation: true
+        tfonc30: 52.5
+        tfonc100: 70
+      expect:
+        qp30: 2.354
+        qp100: 6.1177
+
+    - title: Chaudière gaz standard 20 kW sans régulation → tfonc100 utilisé à 30 % de charge
+      with:
+        pn: 20
+        rpn: 0.85
+        rpint: 0.8
+        kpcs: 1.11
+        mode_combustion: standard
+        presence_regulation: false
+        tfonc30: 52.5
+        tfonc100: 70
+      expect:
+        qp30: 2.5629
+        qp100: 6.1177
+
+chauffage.generateur.qpx_autres:
+  rule: qpx_autres
+  cases:
+    - title: Chaudière bois 20 kW (PCI/PCS 1.08)
+      with:
+        pn: 20
+        rpn: 0.85
+        rpint: 0.8
+        kpcs: 1.08
+      expect:
+        qp50: 3.5
+        qp100: 5.4117
+
+    - title: Rendements parfaits → aucune perte
+      with:
+        pn: 20
+        rpn: 1
+        rpint: 1
+        kpcs: 1
+      expect:
+        qp50: 0
+        qp100: 0
+
+chauffage.generateur.type_generateur:
+  rule: type_generateur
+  cases:
+    - title: Type de générateur saisi → retenu
+      with:
+        type_generateur: pac_air_eau
+      expect: pac_air_eau
+
+    - title: Type de générateur non saisi → chaudière par défaut
+      with:
+        type_generateur: null
+      expect: chaudiere
+
+chauffage.generateur.energie_generateur:
+  rule: energie_generateur
+  cases:
+    - title: Énergie saisie → retenue
+      with:
+        energie_generateur: gaz_naturel
+      expect: gaz_naturel
+
+    - title: Énergie non saisie → fioul par défaut
+      with:
+        energie_generateur: null
+      expect: fioul
+
+chauffage.generateur.mode_combustion:
+  rule: mode_combustion
+  cases:
+    - title: Mode de combustion saisi → retenu
+      with:
+        mode_combustion: condensation
+      expect: condensation
+
+    - title: Mode de combustion non saisi → standard par défaut
+      with:
+        mode_combustion: null
+      expect: standard
+
+chauffage.generateur.presence_ventouse:
+  rule: presence_ventouse
+  cases:
+    - title: Présence saisie → retenue
+      with:
+        presence_ventouse: true
+      expect: true
+
+    - title: Présence non saisie → absence par défaut
+      with:
+        presence_ventouse: null
+      expect: false
+
+chauffage.generateur.presence_regulation:
+  rule: presence_regulation
+  cases:
+    - title: Présence saisie → retenue
+      with:
+        presence_regulation: true
+      expect: true
+
+    - title: Présence non saisie → absence par défaut
+      with:
+        presence_regulation: null
+      expect: false
+
+chauffage.generateur.annee_installation:
+  rule: annee_installation
+  cases:
+    - title: Année d'installation saisie → retenue
+      with:
+        annee_installation: 2015
+        annee_construction_batiment: 1975
+      expect: 2015
+
+    - title: Année d'installation absente → année de construction du bâtiment
+      with:
+        annee_installation: null
+        annee_construction_batiment: 1975
+      expect: 1975
+
+# Identifiants doctrinaux portés par la même implémentation que
+# `chauffage.generateur.cef` / `chauffage.generateur.rpn`.
+chauffage.generateur.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire de l'auxiliaire de génération (× 1.9)
+      with:
+        consommations: []
+        caux_gen: 200
+        caux_gen_enr: 0
+      expectPartial:
+        auxiliaire:
+          electricite: { cep: 380 }
+
+chauffage.generateur.eges:
+  rule: consommations
+  cases:
+    - title: Émissions de l'auxiliaire de génération (0.069 kgCO2eq/kWh)
+      with:
+        consommations: []
+        caux_gen: 200
+        caux_gen_enr: 0
+      expectPartial:
+        auxiliaire:
+          electricite: { eges: 13.8 }
+
+chauffage.generateur.rpint:
+  rule: combustion
+  cases:
+    - title: Rendement à charge intermédiaire d'une chaudière gaz standard de 100 kW
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expectPartial:
+        rpint: 0.86
+
+chauffage.generateur.qp0:
+  rule: combustion
+  cases:
+    - title: Pertes à l'arrêt d'une chaudière gaz standard de 100 kW installée en 1995
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expectPartial:
+        qp0: 1.2
+
+chauffage.generateur.pveilleuse:
+  rule: combustion
+  cases:
+    - title: Puissance de veilleuse d'une chaudière gaz standard installée en 1995
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 1995
+        pn: 100
+        presence_ventouse: false
+      expectPartial:
+        pveilleuse: 120
+
+    - title: Aucune veilleuse sur une chaudière récente
+      with:
+        rpint_saisi: null
+        rpn_saisi: null
+        qp0_saisi: null
+        pveilleuse_saisi: null
+        type_generateur: chaudiere
+        energie_generateur: gaz_naturel
+        bienergie_generateur: null
+        mode_combustion: standard
+        annee_installation: 2020
+        pn: 10
+        presence_ventouse: false
+      expectPartial:
+        pveilleuse: 0

@@ -3,8 +3,8 @@ import { createId } from "../common.js";
 import type { BaieVitree, MasqueLointainNonHomogene } from "./types.js";
 import { MappingError } from "../errors.js";
 
-const TypeMasqueEnum = enveloppe.masque.TYPES_MASQUE;
-const SecteurEnum = enveloppe.masque.SECTEURS;
+const TypeMasque = enveloppe.masque.TypeMasque;
+const SecteurMasque = enveloppe.masque.SecteurMasque;
 
 export type MasqueProps =
 	| MasqueProcheProps
@@ -79,19 +79,19 @@ export namespace masqueProche {
 			case 10:
 			case 11:
 			case 12:
-				return TypeMasqueEnum.fond_balcon;
+				return TypeMasque.enum.fond_balcon;
 
 			case 13:
 			case 14:
 			case 15:
 			case 16:
-				return TypeMasqueEnum.balcon_ou_auvent;
+				return TypeMasque.enum.balcon_ou_auvent;
 
 			case 17:
-				return TypeMasqueEnum.paroi_laterale_sans_obstacle_au_sud;
+				return TypeMasque.enum.paroi_laterale_sans_obstacle_au_sud;
 
 			case 18:
-				return TypeMasqueEnum.paroi_laterale_avec_obstacle_au_sud;
+				return TypeMasque.enum.paroi_laterale_avec_obstacle_au_sud;
 
 			default:
 				return null;
@@ -159,7 +159,7 @@ export namespace masqueLointainHomogene {
 		props: BaieVitree,
 	): enveloppe.masque.Masque["type"] | null {
 		return props.donnee_entree.tv_coef_masque_lointain_homogene_id
-			? TypeMasqueEnum.homogene
+			? TypeMasque.enum.homogene
 			: null;
 	}
 
@@ -200,7 +200,7 @@ export namespace masqueLointainNonHomogene {
 		const value: enveloppe.masque.MasqueBase = {
 			id: createId(),
 			description: "Masque lointain non homogène",
-			type: TypeMasqueEnum.non_homogene,
+			type: TypeMasque.enum.non_homogene,
 			hauteur: mapHauteur(props),
 			profondeur: null,
 			secteur: mapSecteur(props),
@@ -257,31 +257,31 @@ export namespace masqueLointainNonHomogene {
 			case 2:
 			case 3:
 			case 4:
-				return SecteurEnum.lateral;
+				return SecteurMasque.enum.lateral;
 
 			case 5:
 			case 6:
 			case 7:
 			case 8:
-				return SecteurEnum.central;
+				return SecteurMasque.enum.central;
 
 			case 9:
 			case 10:
 			case 11:
 			case 12:
-				return SecteurEnum.lateral_sud;
+				return SecteurMasque.enum.lateral_sud;
 
 			case 13:
 			case 14:
 			case 15:
 			case 16:
-				return SecteurEnum.central_sud;
+				return SecteurMasque.enum.central_sud;
 
 			case 17:
 			case 18:
 			case 19:
 			case 20:
-				return SecteurEnum.lateral;
+				return SecteurMasque.enum.lateral;
 
 			default:
 				return null;

@@ -23,7 +23,7 @@ export async function fetchDPE(
 	id: string,
 	config: Config,
 ): Promise<dpe.DPELogementExistant | null> {
-	const url = `https://prd-x-ademe-externe-api.de-c1.eu1.cloudhub.io/api/v1/pub/dpe/${encodeURIComponent(id)}/xml`;
+	const url = `https://api-externe.ademe.fr/api/v1/pub/dpe/${encodeURIComponent(id)}/xml`;
 	const xml = await call(url, config);
 	if (null === xml) return null;
 	const parsed = parse(xml);
@@ -39,7 +39,7 @@ export async function fetchAudit(
 	id: string,
 	config: Config,
 ): Promise<audit.Audit | null> {
-	const url = `https://prd-x-ademe-externe-api.de-c1.eu1.cloudhub.io/api/v1/pub/audit/${encodeURIComponent(id)}/xml`;
+	const url = `https://api-externe.ademe.fr/api/v1/pub/audit/${encodeURIComponent(id)}/xml`;
 	const xml = await call(url, config);
 	if (null === xml) return null;
 	const parsed = parse(xml);

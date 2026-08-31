@@ -158,15 +158,15 @@ export function calcule_ai(props: {
  * @returns Ensoleillement reçu en période de refroidissement en kWh/m²/mois
  */
 export function calcule_e(props: {
-	scenario: models.common.ScenarioEnum;
+	scenario: models.common.Scenario;
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
 }): models.common.ParMois<number> {
 	const { scenario, sollicitations } = props;
 	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.SCENARIOS.conventionnel:
+			case models.common.Scenario.enum.conventionnel:
 				return sollicitations[mois].efr28;
-			case models.common.SCENARIOS.depensier:
+			case models.common.Scenario.enum.depensier:
 				return sollicitations[mois].efr26;
 		}
 	});
@@ -178,14 +178,14 @@ export function calcule_e(props: {
  */
 export function calcule_textmoy(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.ScenarioEnum;
+	scenario: models.common.Scenario;
 }): models.common.ParMois<number | null> {
 	const { sollicitations, scenario } = props;
 	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.SCENARIOS.conventionnel:
+			case models.common.Scenario.enum.conventionnel:
 				return sollicitations[mois].textmoy28;
-			case models.common.SCENARIOS.depensier:
+			case models.common.Scenario.enum.depensier:
 				return sollicitations[mois].textmoy26;
 		}
 	});
@@ -197,14 +197,14 @@ export function calcule_textmoy(props: {
  */
 export function calcule_nref(props: {
 	sollicitations: ReturnType<typeof climat.calcule_sollicitations>;
-	scenario: models.common.ScenarioEnum;
+	scenario: models.common.Scenario;
 }): models.common.ParMois<number> {
 	const { sollicitations, scenario } = props;
 	return models.common.createParMois((mois) => {
 		switch (scenario) {
-			case models.common.SCENARIOS.conventionnel:
+			case models.common.Scenario.enum.conventionnel:
 				return sollicitations[mois].nref28;
-			case models.common.SCENARIOS.depensier:
+			case models.common.Scenario.enum.depensier:
 				return sollicitations[mois].nref26;
 		}
 	});
@@ -215,13 +215,13 @@ export function calcule_nref(props: {
  * @returns Température de consigne en froid en °C
  */
 export function calcule_tint(props: {
-	scenario: models.common.ScenarioEnum;
+	scenario: models.common.Scenario;
 }): number {
 	const { scenario } = props;
 	switch (scenario) {
-		case models.common.SCENARIOS.conventionnel:
+		case models.common.Scenario.enum.conventionnel:
 			return 28;
-		case models.common.SCENARIOS.depensier:
+		case models.common.Scenario.enum.depensier:
 			return 26;
 	}
 }
@@ -249,13 +249,13 @@ export function calcule_cin(props: {
 	const { sh, inertie } = props;
 
 	switch (inertie) {
-		case models.enveloppe.common.INERTIES.legere:
+		case models.enveloppe.common.Inertie.enum.legere:
 			return 110000 * sh;
-		case models.enveloppe.common.INERTIES.moyenne:
+		case models.enveloppe.common.Inertie.enum.moyenne:
 			return 165000 * sh;
-		case models.enveloppe.common.INERTIES.lourde:
+		case models.enveloppe.common.Inertie.enum.lourde:
 			return 260000 * sh;
-		case models.enveloppe.common.INERTIES.tres_lourde:
+		case models.enveloppe.common.Inertie.enum.tres_lourde:
 			return 260000 * sh;
 	}
 }

@@ -48,10 +48,10 @@ export function mapDescription(props: GenerateurChauffage): string {
 	return props.donnee_entree.description ?? "Non renseigné";
 }
 
-export function mapType(props: Props): chauffage.TypeChauffageEnum {
+export function mapType(props: Props): chauffage.TypeChauffage {
 	return reseau.mapTypeDistribution(props)
-		? chauffage.TYPES_CHAUFFAGE.central
-		: chauffage.TYPES_CHAUFFAGE.divise;
+		? chauffage.TypeChauffage.enum.central
+		: chauffage.TypeChauffage.enum.divise;
 }
 
 export function mapGenerateurID(props: GenerateurChauffage): string {
@@ -90,7 +90,7 @@ export namespace reseau {
 
 	export function mapTypeDistribution(
 		props: Props,
-	): chauffage.systeme.TypeDistributionEnum | null {
+	): chauffage.systeme.TypeDistribution | null {
 		for (const emetteur of fetchEmetteurs(props)) {
 			switch (emetteur.donnee_entree.enum_type_emission_distribution_id) {
 				case "11":
@@ -120,7 +120,7 @@ export namespace reseau {
 				case "43":
 				case "44":
 				case "45":
-					return chauffage.systeme.TYPES_DISTRIBUTION.hydraulique;
+					return chauffage.systeme.TypeDistribution.enum.hydraulique;
 
 				case "5":
 				case "42":
@@ -128,7 +128,7 @@ export namespace reseau {
 				case "47":
 				case "48":
 				case "49":
-					return chauffage.systeme.TYPES_DISTRIBUTION.aeraulique;
+					return chauffage.systeme.TypeDistribution.enum.aeraulique;
 
 				default:
 					continue;
@@ -167,7 +167,7 @@ export namespace reseau {
 
 	export function mapTemperatureDistribution(
 		props: Props,
-	): chauffage.emetteur.TemperatureDistributionEnum | null {
+	): chauffage.emetteur.TemperatureDistribution | null {
 		let values = fetchEmetteurs(props)
 			.map((emetteur) => emetteur.donnee_entree.enum_temp_distribution_ch_id)
 			.filter((value) => value !== null && value !== undefined);
@@ -176,11 +176,11 @@ export namespace reseau {
 
 		switch (true) {
 			case values.includes("4"):
-				return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.haute;
+				return chauffage.emetteur.TemperatureDistribution.enum.haute;
 			case values.includes("3"):
-				return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.moyenne;
+				return chauffage.emetteur.TemperatureDistribution.enum.moyenne;
 			case values.includes("2"):
-				return chauffage.emetteur.TEMPERATURES_DISTRIBUTION.basse;
+				return chauffage.emetteur.TemperatureDistribution.enum.basse;
 			default:
 				return null;
 		}

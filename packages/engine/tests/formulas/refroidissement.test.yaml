@@ -86,3 +86,462 @@ refroidissement.caux:
       with:
         caux: [0, 0]
       expect: 0
+
+refroidissement.cef:
+  rule: consommations
+  cases:
+    - title: Un seul générateur → consommations reportées telles quelles
+      with:
+        consommations:
+          - refroidissement:
+              electricite: { cef: 500, cep: 950, eges: 32 }
+      expect:
+        refroidissement:
+          electricite: { cef: 500, cep: 950, eges: 32 }
+
+    - title: Deux générateurs → consommations cumulées
+      with:
+        consommations:
+          - refroidissement:
+              electricite: { cef: 300, cep: 570, eges: 19.2 }
+          - refroidissement:
+              electricite: { cef: 200, cep: 380, eges: 12.8 }
+      expect:
+        refroidissement:
+          electricite: { cef: 500, cep: 950, eges: 32 }
+
+    - title: Aucun générateur → aucune consommation
+      with:
+        consommations: []
+      expect: {}
+
+refroidissement.e:
+  rule: e
+  cases:
+    - title: Scénario conventionnel → ensoleillement à 28 °C de consigne
+      with:
+        scenario: conventionnel
+        sollicitations: &sollicitations_fr
+          "01": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "02": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "03": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "04": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "05": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "06": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "07": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "08": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "09": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "10": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "11": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+          "12": { efr26: 10, efr28: 5, textmoy26: 20, textmoy28: 30, nref26: 200, nref28: 100 }
+      expect: &parmois5
+        "01": 5
+        "02": 5
+        "03": 5
+        "04": 5
+        "05": 5
+        "06": 5
+        "07": 5
+        "08": 5
+        "09": 5
+        "10": 5
+        "11": 5
+        "12": 5
+
+    - title: Scénario dépensier → ensoleillement à 26 °C de consigne
+      with:
+        scenario: depensier
+        sollicitations: *sollicitations_fr
+      expect: &parmois10
+        "01": 10
+        "02": 10
+        "03": 10
+        "04": 10
+        "05": 10
+        "06": 10
+        "07": 10
+        "08": 10
+        "09": 10
+        "10": 10
+        "11": 10
+        "12": 10
+
+refroidissement.textmoy:
+  rule: textmoy
+  cases:
+    - title: Scénario conventionnel → température extérieure moyenne à 28 °C de consigne
+      with:
+        scenario: conventionnel
+        sollicitations: *sollicitations_fr
+      expect: &parmois30
+        "01": 30
+        "02": 30
+        "03": 30
+        "04": 30
+        "05": 30
+        "06": 30
+        "07": 30
+        "08": 30
+        "09": 30
+        "10": 30
+        "11": 30
+        "12": 30
+
+    - title: Scénario dépensier → température extérieure moyenne à 26 °C de consigne
+      with:
+        scenario: depensier
+        sollicitations: *sollicitations_fr
+      expect:
+        "01": 20
+        "02": 20
+        "03": 20
+        "04": 20
+        "05": 20
+        "06": 20
+        "07": 20
+        "08": 20
+        "09": 20
+        "10": 20
+        "11": 20
+        "12": 20
+
+    - title: Température extérieure moyenne inconnue → valeur nulle conservée
+      with:
+        scenario: conventionnel
+        sollicitations:
+          "01": { textmoy26: null, textmoy28: null }
+          "02": { textmoy26: null, textmoy28: null }
+          "03": { textmoy26: null, textmoy28: null }
+          "04": { textmoy26: null, textmoy28: null }
+          "05": { textmoy26: null, textmoy28: null }
+          "06": { textmoy26: null, textmoy28: null }
+          "07": { textmoy26: null, textmoy28: null }
+          "08": { textmoy26: null, textmoy28: null }
+          "09": { textmoy26: null, textmoy28: null }
+          "10": { textmoy26: null, textmoy28: null }
+          "11": { textmoy26: null, textmoy28: null }
+          "12": { textmoy26: null, textmoy28: null }
+      expect: &parmoisnull
+        "01": null
+        "02": null
+        "03": null
+        "04": null
+        "05": null
+        "06": null
+        "07": null
+        "08": null
+        "09": null
+        "10": null
+        "11": null
+        "12": null
+
+refroidissement.nref:
+  rule: nref
+  cases:
+    - title: Scénario conventionnel → heures de refroidissement à 28 °C
+      with:
+        scenario: conventionnel
+        sollicitations: *sollicitations_fr
+      expect: &parmois100
+        "01": 100
+        "02": 100
+        "03": 100
+        "04": 100
+        "05": 100
+        "06": 100
+        "07": 100
+        "08": 100
+        "09": 100
+        "10": 100
+        "11": 100
+        "12": 100
+
+    - title: Scénario dépensier → heures de refroidissement à 26 °C
+      with:
+        scenario: depensier
+        sollicitations: *sollicitations_fr
+      expect:
+        "01": 200
+        "02": 200
+        "03": 200
+        "04": 200
+        "05": 200
+        "06": 200
+        "07": 200
+        "08": 200
+        "09": 200
+        "10": 200
+        "11": 200
+        "12": 200
+
+refroidissement.as:
+  rule: as
+  cases:
+    - title: Apports solaires = surface sud équivalente × ensoleillement (converti en Wh)
+      with:
+        sse: *parmois10
+        e: *parmois5
+      expect:
+        "01": 50000
+        "02": 50000
+        "03": 50000
+        "04": 50000
+        "05": 50000
+        "06": 50000
+        "07": 50000
+        "08": 50000
+        "09": 50000
+        "10": 50000
+        "11": 50000
+        "12": 50000
+
+    - title: Aucun ensoleillement → aucun apport solaire
+      with:
+        sse: *parmois10
+        e: &parmois0
+          "01": 0
+          "02": 0
+          "03": 0
+          "04": 0
+          "05": 0
+          "06": 0
+          "07": 0
+          "08": 0
+          "09": 0
+          "10": 0
+          "11": 0
+          "12": 0
+      expect: *parmois0
+
+refroidissement.ai:
+  rule: ai
+  cases:
+    - title: Apports internes = (3.52 W/m² × Sh + 70.71 W × Nadeq) × heures de refroidissement
+      with:
+        sh: 100
+        nadeq: 2
+        nref: *parmois100
+      expect:
+        "01": 49342.857
+        "02": 49342.857
+        "03": 49342.857
+        "04": 49342.857
+        "05": 49342.857
+        "06": 49342.857
+        "07": 49342.857
+        "08": 49342.857
+        "09": 49342.857
+        "10": 49342.857
+        "11": 49342.857
+        "12": 49342.857
+
+    - title: Aucune heure de refroidissement → aucun apport interne
+      with:
+        sh: 100
+        nadeq: 2
+        nref: *parmois0
+      expect: *parmois0
+
+refroidissement.rbth:
+  rule: rbth
+  cases:
+    - title: Apports égaux aux déperditions → ratio unitaire
+      with:
+        gv: 100
+        tint: 28
+        cin: 11000000
+        as: &parmois10000
+          "01": 10000
+          "02": 10000
+          "03": 10000
+          "04": 10000
+          "05": 10000
+          "06": 10000
+          "07": 10000
+          "08": 10000
+          "09": 10000
+          "10": 10000
+          "11": 10000
+          "12": 10000
+        ai: *parmois10000
+        textmoy: *parmois30
+        nref: *parmois100
+      expect: &parmois1
+        "01": 1
+        "02": 1
+        "03": 1
+        "04": 1
+        "05": 1
+        "06": 1
+        "07": 1
+        "08": 1
+        "09": 1
+        "10": 1
+        "11": 1
+        "12": 1
+
+    - title: Température extérieure inférieure à la consigne → ratio nul
+      with:
+        gv: 100
+        tint: 28
+        cin: 11000000
+        as: *parmois10000
+        ai: *parmois10000
+        textmoy: *parmois10
+        nref: *parmois100
+      expect: *parmois0
+
+    - title: Température extérieure moyenne inconnue → ratio nul
+      with:
+        gv: 100
+        tint: 28
+        cin: 11000000
+        as: *parmois10000
+        ai: *parmois10000
+        textmoy: *parmoisnull
+        nref: *parmois100
+      expect: *parmois0
+
+refroidissement.fut:
+  rule: fut
+  cases:
+    - title: Ratio de bilan thermique unitaire → a / (a + 1)
+      with:
+        t: 0
+        rbth: *parmois1
+      expect: &parmois05
+        "01": 0.5
+        "02": 0.5
+        "03": 0.5
+        "04": 0.5
+        "05": 0.5
+        "06": 0.5
+        "07": 0.5
+        "08": 0.5
+        "09": 0.5
+        "10": 0.5
+        "11": 0.5
+        "12": 0.5
+
+    - title: Ratio de bilan thermique de 2, constante de temps nulle → 2/3
+      with:
+        t: 0
+        rbth: &parmois2
+          "01": 2
+          "02": 2
+          "03": 2
+          "04": 2
+          "05": 2
+          "06": 2
+          "07": 2
+          "08": 2
+          "09": 2
+          "10": 2
+          "11": 2
+          "12": 2
+      expect:
+        "01": 0.6667
+        "02": 0.6667
+        "03": 0.6667
+        "04": 0.6667
+        "05": 0.6667
+        "06": 0.6667
+        "07": 0.6667
+        "08": 0.6667
+        "09": 0.6667
+        "10": 0.6667
+        "11": 0.6667
+        "12": 0.6667
+
+    - title: Ratio de bilan thermique nul → facteur d'utilisation nul
+      with:
+        t: 0
+        rbth: *parmois0
+      expect: *parmois0
+
+refroidissement.bfr:
+  rule: bfr
+  cases:
+    - title: Ratio de bilan thermique inférieur à 0.5 → aucun besoin de refroidissement
+      with:
+        gv: 100
+        tint: 28
+        as: *parmois10000
+        ai: *parmois10000
+        textmoy: *parmois30
+        nref: *parmois100
+        fut: *parmois05
+        rbth:
+          "01": 0.4
+          "02": 0.4
+          "03": 0.4
+          "04": 0.4
+          "05": 0.4
+          "06": 0.4
+          "07": 0.4
+          "08": 0.4
+          "09": 0.4
+          "10": 0.4
+          "11": 0.4
+          "12": 0.4
+      expect: *parmois0
+
+    - title: Apports non compensés par les déperditions → besoins de refroidissement
+      with:
+        gv: 100
+        tint: 28
+        as: *parmois10000
+        ai: *parmois10000
+        textmoy: *parmois30
+        nref: *parmois100
+        fut: *parmois05
+        rbth: *parmois1
+      expect:
+        "01": 10
+        "02": 10
+        "03": 10
+        "04": 10
+        "05": 10
+        "06": 10
+        "07": 10
+        "08": 10
+        "09": 10
+        "10": 10
+        "11": 10
+        "12": 10
+
+    - title: Température extérieure moyenne inconnue → aucun besoin
+      with:
+        gv: 100
+        tint: 28
+        as: *parmois10000
+        ai: *parmois10000
+        textmoy: *parmoisnull
+        nref: *parmois100
+        fut: *parmois05
+        rbth: *parmois1
+      expect: *parmois0
+
+refroidissement.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire du refroidissement électrique (× 1.9)
+      with:
+        consommations:
+          - refroidissement:
+              electricite: { cef: 500, cep: 950, eges: 32 }
+      expectPartial:
+        refroidissement:
+          electricite: { cep: 950 }
+
+refroidissement.eges:
+  rule: consommations
+  cases:
+    - title: Émissions du refroidissement électrique
+      with:
+        consommations:
+          - refroidissement:
+              electricite: { cef: 500, cep: 950, eges: 32 }
+      expectPartial:
+        refroidissement:
+          electricite: { eges: 32 }

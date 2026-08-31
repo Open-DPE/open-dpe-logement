@@ -1,0 +1,272 @@
+production.ppv:
+  rule: ppv
+  cases:
+    - title: Un seul panneau → production annuelle = somme des productions mensuelles
+      with:
+        ppv:
+          - &ppv10
+            "01": 10
+            "02": 10
+            "03": 10
+            "04": 10
+            "05": 10
+            "06": 10
+            "07": 10
+            "08": 10
+            "09": 10
+            "10": 10
+            "11": 10
+            "12": 10
+      expect: 120
+
+    - title: Deux panneaux → productions cumulées
+      with:
+        ppv: [*ppv10, *ppv10]
+      expect: 240
+
+    - title: Aucun panneau → production nulle
+      with:
+        ppv: []
+      expect: 0
+
+production.celec_autres:
+  rule: celec_autres
+  cases:
+    - title: Maison individuelle → 29 kWh/m².an (usages mobiliers seuls)
+      with:
+        type_batiment: maison
+        sh: 100
+      expect: 2900
+
+    - title: Immeuble collectif → 27 + 1.1 kWh/m².an (usages mobiliers et éclairage des communs)
+      with:
+        type_batiment: immeuble
+        sh: 100
+      expect: 2810
+
+    - title: Surface nulle → consommation nulle
+      with:
+        type_batiment: maison
+        sh: 0
+      expect: 0
+
+production.celec:
+  rule: celec
+  cases:
+    - title: Répartition des consommations d'électricité par usage
+      with:
+        celec_ch: 900
+        celec_aux_gen_ch: 100
+        celec_aux_dist_ch: 30
+        celec_ecs: 450
+        celec_aux_dist_ecs: 20
+        celec_aux_gen_ecs: 50
+        celec_ecl: 200
+        celec_fr: 300
+        celec_aux_vent: 120
+        celec_autres: 2900
+      expect:
+        chauffage: 1000
+        ecs: 500
+        refroidissement: 300
+        eclairage: 200
+        auxiliaires_ventilation: 120
+        auxiliaires_distribution: 50
+        autres: 2900
+
+    - title: Installation non électrique → seuls les usages mobiliers subsistent
+      with:
+        celec_ch: 0
+        celec_aux_gen_ch: 0
+        celec_aux_dist_ch: 0
+        celec_ecs: 0
+        celec_aux_dist_ecs: 0
+        celec_aux_gen_ecs: 0
+        celec_ecl: 0
+        celec_fr: 0
+        celec_aux_vent: 0
+        celec_autres: 2900
+      expect:
+        chauffage: 0
+        ecs: 0
+        refroidissement: 0
+        eclairage: 0
+        auxiliaires_ventilation: 0
+        auxiliaires_distribution: 0
+        autres: 2900
+
+production.celec_total:
+  rule: celec_total
+  cases:
+    - title: Somme des consommations d'électricité de tous les usages
+      with:
+        celec:
+          chauffage: 1000
+          ecs: 500
+          refroidissement: 300
+          eclairage: 200
+          auxiliaires_ventilation: 120
+          auxiliaires_distribution: 50
+          autres: 2900
+      expect: 5070
+
+    - title: Aucune consommation d'électricité → 0
+      with:
+        celec:
+          chauffage: 0
+          ecs: 0
+          refroidissement: 0
+          eclairage: 0
+          auxiliaires_ventilation: 0
+          auxiliaires_distribution: 0
+          autres: 0
+      expect: 0
+
+production.tapl:
+  rule: tapl
+  cases:
+    # Méthode 3CL-DPE 2021 §16.2 : Tapl = Σ(Taplp_i × Celec_tot_i) / Celec_tot.
+    - title: Moyenne des coefficients d'autoproduction partielle pondérée par les consommations
+      with:
+        celec:
+          chauffage: 1000
+          ecs: 0
+          refroidissement: 0
+          eclairage: 0
+          auxiliaires_ventilation: 0
+          auxiliaires_distribution: 0
+          autres: 1000
+      expect: 0.235
+
+    - title: Consommations égales sur tous les usages → moyenne arithmétique des coefficients
+      with:
+        celec:
+          chauffage: 100
+          ecs: 100
+          refroidissement: 100
+          eclairage: 100
+          auxiliaires_ventilation: 100
+          auxiliaires_distribution: 100
+          autres: 100
+      expect: 0.2029
+
+    - title: Usage unique → coefficient de cet usage
+      with:
+        celec:
+          chauffage: 0
+          ecs: 0
+          refroidissement: 0
+          eclairage: 0
+          auxiliaires_ventilation: 0
+          auxiliaires_distribution: 0
+          autres: 1000
+      expect: 0.45
+
+    - title: Aucune consommation d'électricité → 0 (pas de division par zéro)
+      with:
+        celec:
+          chauffage: 0
+          ecs: 0
+          refroidissement: 0
+          eclairage: 0
+          auxiliaires_ventilation: 0
+          auxiliaires_distribution: 0
+          autres: 0
+      expect: 0
+
+    - title: Le coefficient reste borné par les coefficients extrêmes des usages présents
+      with:
+        celec:
+          chauffage: 0
+          ecs: 0
+          refroidissement: 0
+          eclairage: 0
+          auxiliaires_ventilation: 500
+          auxiliaires_distribution: 500
+          autres: 0
+      expect: 0.3
+
+production.celec_ac_total:
+  rule: celec_ac_total
+  cases:
+    - title: Taux de couverture 0.5 et coefficient de calage 1 → un tiers de la consommation
+      with:
+        ppv: 1000
+        celec_total: 2000
+        tapl: 1
+      expect: 666.6667
+
+    - title: Production photovoltaïque nulle → aucune autoconsommation
+      with:
+        ppv: 0
+        celec_total: 2000
+        tapl: 1
+      expect: 0
+
+    - title: Aucune consommation d'électricité → aucune autoconsommation
+      with:
+        ppv: 1000
+        celec_total: 0
+        tapl: 1
+      expect: 0
+
+    - title: Production égale à la consommation, coefficient de calage 0.45
+      with:
+        ppv: 2000
+        celec_total: 2000
+        tapl: 0.45
+      expect: 620.6897
+
+    - title: Scénario réaliste (2000 kWh photovoltaïques pour 4850 kWh consommés)
+      with:
+        ppv: 2000
+        celec_total: 4850
+        tapl: 0.30103092783505155
+      expect: 843.9306
+
+production.celec_ac:
+  rule: celec_ac
+  cases:
+    - title: Répartition au prorata de Taplp × Celec par usage (21.2766 + 478.7234 = Celec_ac total)
+      with:
+        celec:
+          chauffage: 1000
+          ecs: 0
+          refroidissement: 0
+          eclairage: 0
+          auxiliaires_ventilation: 0
+          auxiliaires_distribution: 0
+          autres: 1000
+        celec_total: 2000
+        celec_ac_total: 500
+        tapl: 0.235
+      expect:
+        chauffage: 21.2766
+        ecs: 0
+        refroidissement: 0
+        eclairage: 0
+        auxiliaires_ventilation: 0
+        auxiliaires_distribution: 0
+        autres: 478.7234
+
+    - title: Usage unique → toute l'autoconsommation lui est affectée
+      with:
+        celec:
+          chauffage: 0
+          ecs: 0
+          refroidissement: 0
+          eclairage: 0
+          auxiliaires_ventilation: 0
+          auxiliaires_distribution: 0
+          autres: 1000
+        celec_total: 1000
+        celec_ac_total: 300
+        tapl: 0.45
+      expect:
+        chauffage: 0
+        ecs: 0
+        refroidissement: 0
+        eclairage: 0
+        auxiliaires_ventilation: 0
+        auxiliaires_distribution: 0
+        autres: 300

@@ -13,13 +13,13 @@ export { calcule_c1 } from "../../../climat/formulas.js";
  * @returns Surface de la paroi du local non chauffé donnant sur l'extérieur ou en contact avec le sol en m²
  */
 export function calcule_aue(props: {
-	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 	surface: number;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MITOYENNETES.exterieur:
-		case models.enveloppe.common.MITOYENNETES.enterre:
-		case models.enveloppe.common.MITOYENNETES.local_non_accessible:
+		case models.enveloppe.common.Mitoyennete.enum.exterieur:
+		case models.enveloppe.common.Mitoyennete.enum.enterre:
+		case models.enveloppe.common.Mitoyennete.enum.local_non_accessible:
 			return props.surface;
 		default:
 			return 0;
@@ -33,12 +33,12 @@ export function calcule_aue(props: {
  * @returns Surface de la paroi du local non chauffé donnant sur un espace chauffé en m²
  */
 export function calcule_aiu(props: {
-	mitoyennete: models.enveloppe.common.MitoyenneteEnum;
+	mitoyennete: models.enveloppe.common.Mitoyennete;
 	surface: number;
 }): number {
 	switch (props.mitoyennete) {
-		case models.enveloppe.common.MITOYENNETES.local_residentiel:
-		case models.enveloppe.common.MITOYENNETES.local_non_residentiel:
+		case models.enveloppe.common.Mitoyennete.enum.local_residentiel:
+		case models.enveloppe.common.Mitoyennete.enum.local_non_residentiel:
 			return props.surface;
 		default:
 			return 0;
@@ -89,8 +89,8 @@ export function set_isolation(props: {
 	type_vitrage: ReturnType<typeof set_type_vitrage>;
 }): boolean {
 	switch (props.type_vitrage) {
-		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage:
-		case models.enveloppe.baie.TYPES_VITRAGE.triple_vitrage_fe:
+		case models.enveloppe.baie.TypeVitrage.enum.triple_vitrage:
+		case models.enveloppe.baie.TypeVitrage.enum.triple_vitrage_fe:
 			return true;
 		default:
 			return false;
@@ -102,10 +102,10 @@ export function set_isolation(props: {
  * @returns Type de vitrage de la baie séparant le local non chauffé de l'extérieur retenu
  */
 export function set_type_vitrage(props: {
-	type_vitrage: models.enveloppe.baie.TypeVitrageEnum | null;
-}): models.enveloppe.baie.TypeVitrageEnum {
+	type_vitrage: models.enveloppe.baie.TypeVitrage | null;
+}): models.enveloppe.baie.TypeVitrage {
 	return (
-		props.type_vitrage ?? models.enveloppe.baie.TYPES_VITRAGE.simple_vitrage
+		props.type_vitrage ?? models.enveloppe.baie.TypeVitrage.enum.simple_vitrage
 	);
 }
 
@@ -114,9 +114,9 @@ export function set_type_vitrage(props: {
  * @returns Matériau de la baie séparant le local non chauffé de l'extérieur retenu
  */
 export function set_materiau(props: {
-	materiau: models.enveloppe.baie.MateriauEnum | null;
-}): models.enveloppe.baie.MateriauEnum {
-	return props.materiau ?? models.enveloppe.baie.MATERIAUX.pvc;
+	materiau: models.enveloppe.baie.MateriauBaie | null;
+}): models.enveloppe.baie.MateriauBaie {
+	return props.materiau ?? models.enveloppe.baie.MateriauBaie.enum.pvc;
 }
 
 /**

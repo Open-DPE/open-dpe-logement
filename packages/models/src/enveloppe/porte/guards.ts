@@ -1,4 +1,4 @@
-import { MITOYENNETES } from "../common/enums.js";
+import { Mitoyennete } from "../common/enums.js";
 import {
 	PositionBase,
 	Position,
@@ -17,11 +17,11 @@ export function isPosition(value: PositionBase): value is Position {
 export function isPositionLocalNonChauffe(
 	value: PositionBase,
 ): value is PositionLocalNonChauffe {
-	return value.mitoyennete === MITOYENNETES.local_non_chauffe;
+	return value.mitoyennete === Mitoyennete.enum.local_non_chauffe;
 }
 
 export function isPositionAutres(value: PositionBase): value is PositionAutres {
-	return value.mitoyennete !== MITOYENNETES.local_non_chauffe;
+	return value.mitoyennete !== Mitoyennete.enum.local_non_chauffe;
 }
 
 export function isVitrage(value: VitrageBase): value is Vitrage {

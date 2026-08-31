@@ -1,9 +1,8 @@
 import * as z from "zod";
 
-export const TYPES_DISTRIBUTION = {
+export const TypeDistribution = z.enum({
 	hydraulique: "hydraulique",
 	aeraulique: "aeraulique",
-} as const;
+});
 
-export const TypeDistributionEnum = z.enum(TYPES_DISTRIBUTION);
-export type TypeDistributionEnum = z.infer<typeof TypeDistributionEnum>;
+export type TypeDistribution = z.infer<typeof TypeDistribution>;

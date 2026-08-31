@@ -28,22 +28,22 @@ export function mapInertieParoiVerticale(
 	props: Input,
 ): enveloppe.niveau.Niveau["inertie_paroi_verticale"] {
 	return props.logement.enveloppe.inertie.inertie_paroi_verticale_lourd
-		? enveloppe.common.INERTIES_PAROI.lourde
-		: enveloppe.common.INERTIES_PAROI.legere;
+		? enveloppe.common.InertieParoi.enum.lourde
+		: enveloppe.common.InertieParoi.enum.legere;
 }
 
 export function mapInertiePlancherHaut(
 	props: Input,
 ): enveloppe.niveau.Niveau["inertie_plancher_haut"] {
 	return props.logement.enveloppe.inertie.inertie_plancher_haut_lourd
-		? enveloppe.common.INERTIES_PAROI.lourde
-		: enveloppe.common.INERTIES_PAROI.legere;
+		? enveloppe.common.InertieParoi.enum.lourde
+		: enveloppe.common.InertieParoi.enum.legere;
 }
 
 export function mapInertiePlancherBas(
 	props: Input,
 ): enveloppe.niveau.Niveau["inertie_plancher_bas"] {
 	return props.logement.enveloppe.inertie.inertie_plancher_bas_lourd
-		? enveloppe.common.INERTIES_PAROI.lourde
-		: enveloppe.common.INERTIES_PAROI.legere;
+		? enveloppe.common.InertieParoi.enum.lourde
+		: enveloppe.common.InertieParoi.enum.legere;
 }

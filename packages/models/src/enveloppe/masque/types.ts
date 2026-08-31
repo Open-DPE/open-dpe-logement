@@ -1,6 +1,11 @@
 import * as z from "zod";
-import { id, description, nombre_positif, non_applicable } from "../../common/types.js";
-import { TYPES_MASQUE, TypeMasqueEnum, SecteurEnum } from "./enums.js";
+import {
+	id,
+	description,
+	nombre_positif,
+	non_applicable,
+} from "../../common/types.js";
+import { TypeMasque, SecteurMasque } from "./enums.js";
 
 const hauteurConnue = nombre_positif.lt(90);
 const profondeurConnue = nombre_positif;
@@ -8,30 +13,30 @@ const profondeurConnue = nombre_positif;
 export const MasqueBase = z.object({
 	id,
 	description,
-	type: TypeMasqueEnum,
+	type: TypeMasque,
 	hauteur: hauteurConnue.nullable().default(null),
 	profondeur: profondeurConnue.nullable().default(null),
-	secteur: SecteurEnum.nullable().default(null),
+	secteur: SecteurMasque.nullable().default(null),
 });
 
 export const MasqueLointainHomogene = MasqueBase.extend({
-	type: TypeMasqueEnum.extract([TYPES_MASQUE.homogene]),
+	type: TypeMasque.extract(["homogene"]),
 	hauteur: hauteurConnue,
 	profondeur: non_applicable,
 	secteur: non_applicable,
 });
 
 export const MasqueLointainNonHomogene = MasqueBase.extend({
-	type: TypeMasqueEnum.extract([TYPES_MASQUE.non_homogene]),
+	type: TypeMasque.extract(["non_homogene"]),
 	hauteur: hauteurConnue,
-	secteur: SecteurEnum,
+	secteur: SecteurMasque,
 	profondeur: non_applicable,
 });
 
 export const MasqueProcheParoiLaterale = MasqueBase.extend({
-	type: TypeMasqueEnum.extract([
-		TYPES_MASQUE.paroi_laterale_sans_obstacle_au_sud,
-		TYPES_MASQUE.paroi_laterale_avec_obstacle_au_sud,
+	type: TypeMasque.extract([
+		"paroi_laterale_sans_obstacle_au_sud",
+		"paroi_laterale_avec_obstacle_au_sud",
 	]),
 	hauteur: non_applicable,
 	profondeur: non_applicable,
@@ -39,17 +44,14 @@ export const MasqueProcheParoiLaterale = MasqueBase.extend({
 });
 
 export const MasqueProcheFondBalconOuLoggias = MasqueBase.extend({
-	type: TypeMasqueEnum.extract([
-		TYPES_MASQUE.fond_balcon,
-		TYPES_MASQUE.fond_et_flanc_loggias,
-	]),
+	type: TypeMasque.extract(["fond_balcon", "fond_et_flanc_loggias"]),
 	profondeur: profondeurConnue,
 	hauteur: non_applicable,
 	secteur: non_applicable,
 });
 
 export const MasqueProcheBalconOuAuvent = MasqueBase.extend({
-	type: TypeMasqueEnum.extract([TYPES_MASQUE.balcon_ou_auvent]),
+	type: TypeMasque.extract(["balcon_ou_auvent"]),
 	profondeur: profondeurConnue,
 	hauteur: non_applicable,
 	secteur: non_applicable,

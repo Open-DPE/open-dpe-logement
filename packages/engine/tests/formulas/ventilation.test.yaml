@@ -111,3 +111,55 @@ ventilation.smea_conv:
       with:
         installations: []
       expect: 0
+
+ventilation.cef:
+  rule: consommations
+  cases:
+    - title: Une seule installation → consommations reportées telles quelles
+      with:
+        consommations:
+          - auxiliaire:
+              electricite: { cef: 400, cep: 760, eges: 27.6 }
+      expect:
+        auxiliaire:
+          electricite: { cef: 400, cep: 760, eges: 27.6 }
+
+    - title: Deux installations → consommations cumulées
+      with:
+        consommations:
+          - auxiliaire:
+              electricite: { cef: 250, cep: 475, eges: 17.25 }
+          - auxiliaire:
+              electricite: { cef: 150, cep: 285, eges: 10.35 }
+      expect:
+        auxiliaire:
+          electricite: { cef: 400, cep: 760, eges: 27.6 }
+
+    - title: Aucune installation → aucune consommation
+      with:
+        consommations: []
+      expect: {}
+
+ventilation.cep:
+  rule: consommations
+  cases:
+    - title: Énergie primaire des auxiliaires de ventilation (× 1.9)
+      with:
+        consommations:
+          - auxiliaire:
+              electricite: { cef: 400, cep: 760, eges: 27.6 }
+      expectPartial:
+        auxiliaire:
+          electricite: { cep: 760 }
+
+ventilation.eges:
+  rule: consommations
+  cases:
+    - title: Émissions des auxiliaires de ventilation (0.069 kgCO2eq/kWh)
+      with:
+        consommations:
+          - auxiliaire:
+              electricite: { cef: 400, cep: 760, eges: 27.6 }
+      expectPartial:
+        auxiliaire:
+          electricite: { eges: 27.6 }

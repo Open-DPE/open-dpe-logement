@@ -13,8 +13,8 @@ describe(TAG, () => {
     expect(customElements.get(TAG)).toBeDefined();
   });
 
-  describe("smoke : rend du SVG pour chaque valeur 1/2/3", () => {
-    for (const value of ["1", "2", "3"]) {
+  describe("smoke : rend du SVG pour chaque valeur bon/moyen/insuffisant", () => {
+    for (const value of ["bon", "moyen", "insuffisant"]) {
       it(`value='${value}' → shadowRoot contient <path`, () => {
         const el = document.createElement(TAG);
         el.setAttribute("value", value);
@@ -27,7 +27,7 @@ describe(TAG, () => {
 
   it("value inconnue → shadowRoot sans <path", () => {
     const el = document.createElement(TAG);
-    el.setAttribute("value", "4");
+    el.setAttribute("value", "inconnu");
     const { unmount } = mount(el);
     expect(shadow(el)).not.toContain("<path");
     unmount();

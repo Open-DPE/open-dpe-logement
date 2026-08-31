@@ -26,9 +26,10 @@ import { SCHEMAS, MAP } from "@open-dpe-logement/schemas";
 ## Organisation
 
 ```text
-data/
-schemas/
+data/                 # Schémas publiés au format JSON
+schemas/              # Schémas au format YAML
 scripts/
+tests/
 ```
 
 ## Versionnage
@@ -39,7 +40,6 @@ Les schémas publics sont **contractuels et stables**.
 
 - JSON Schéma 2020-12
 - Schémas sources en YAML
-- Compilation en YAML et JSON
 - UTF-8
 
 ## Schémas publics et privés
